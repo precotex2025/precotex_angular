@@ -1,0 +1,387 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+  
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 640px;
+    //position: absolute;  
+}
+   
+.title {
+    background-color: #3f51b5;
+    color: #ffffff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+ 
+    grid-template:
+        "fila1" 20px
+        "fila2" 70px
+        "fila3" 439px
+        //"fila4" 144px
+        "foot" 55px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.container-cuerpo-fila3 {
+    grid-area: fila3;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.container-cuerpo-foot {
+    grid-area: foot; 
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+//fila 1 
+.container-cuerpo-fila1 {
+    display: grid;
+
+    grid-template:
+    "col1 col2 col3 col4 col5 col6" auto/
+    265px 200px 200px 200px 200px 200px
+}
+
+
+// .fila1-maquina {
+//     grid-area: col1;
+//     //font-size: 32px;
+     
+// }
+
+// .fila1-ot {
+//     grid-area: col2;
+//     //font-size: 32px;
+     
+// }
+
+
+.fila1-fecha {
+    grid-area: col1;
+    //font-size: 32px;
+}
+
+.fila1-fecha2 {
+    grid-area: col2;
+    //font-size: 32px;
+}
+
+
+
+.fila1-buscar {
+    width: 100%;
+    grid-area: col3;
+    display: inline-block;
+
+    height: 40px;
+    max-width: 350px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #1f51b8;
+    color: #ffffff;
+}
+
+
+
+.fila1-excel{
+
+    width: 100%;
+    grid-area: col4;
+    display: inline-block;
+
+    height: 40px;
+    max-width: 180px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #0e740e;
+    color: #ffffff;
+}
+
+
+.fila1-agregar {
+    width: 100%;
+    grid-area: col5;
+    display: inline-block;
+
+    height: 40px;
+    max-width: 180px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+
+
+.container-cuerpo-fila2 {
+    display: grid;
+
+    grid-template:
+        "col1" 500px/450px ;
+}
+
+
+
+
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot .button-agregar,
+.button-cancelar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+
+
+
+/*.button-cancelar {
+    grid-area: fcol2;
+    background-color: #d32f2f;
+    color: #ffffff;
+}*/
+
+
+.mat-column-select,
+.mat-column-Cod_Tarea,
+.mat-column-Cod_Maquina,
+.mat-column-Dni,
+
+.mat-column-Acciones,
+.mat-column-Estado
+
+//.mat-column-eliminar 
+// {
+// 	text-align: center;
+// 	font-size: 13px;
+//     font-family: arial;
+//     padding: 10px;
+// }
+
+
+.mat-column-select {width: 30px !important;text-align: center;}
+.mat-column-Cod_Tarea {width: 30px !important;text-align: center; display: none; }
+.mat-column-Cod_Maquina {width: 30px !important;text-align:center; display: none;}
+.mat-column-Dni {width: 30px !important;text-align: center; display: none; }
+
+.mat-column-Acciones {width: 10px}
+.mat-column-Estado {width: 30px !important;text-align: center;display: none;}
+
+.mat-column-Num_Mante {text-align: center;}
+.mat-column-Fec_Registro {text-align: center;}
+.mat-column-Nombre_Tarea_Mante {text-align: center;}
+.mat-column-Dni {text-align: center;}
+.mat-column-Trabajador {text-align: center;}
+.mat-column-Fec_Hora_Inicio {text-align: center;}
+.mat-column-Fec_Hora_Fin {text-align: center;}
+.mat-column-Minutos {text-align: center;}
+.mat-column-OT_ {text-align: center;}
+.mat-column-Observacion {text-align: center;}
+.mat-column-OT_ {text-align: center;}
+.mat-column-Turno {text-align: center;}
+
+//.mat-header-cell {text-align: center; }
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+ 
+}
+.paginador{
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+.mat-header-cell {
+    background-color: #4caf50; /* Cambia el color a tu preferencia */
+    color: white; /* Cambia el color del texto */
+    font-weight: bold;
+    padding: 0.5rem;
+  }
+
+  .mat-cell, .mat-header-cell { border-right: 1px solid #e0e0e0;  /* Color y estilo de la línea */ }
+
+
+
+
+  @media screen and (max-width: 600px){
+
+    .grid-container{
+        height: 680px;
+    }
+    .container-cuerpo {
+        display: grid;
+
+        grid-template:  
+        "fila1" 158px
+        //"fila2" 230px
+        "fila3" 460px
+        "fila4" 0px
+        "foot" 55px /
+        99%;
+    }
+
+
+
+    .container-cuerpo-fila1{
+        display: grid;
+        grid-template:
+        "col1 col2" 45px
+        "col3 col4" 45px
+        "col5 col5" 45px/
+        155px 190px
+    }
+
+    .container-cuerpo-fila2{
+      margin-top: 110px;
+    }
+
+
+    // .fila1-maquina {
+    //     grid-area: col1;
+    //     width: 350px;
+
+    // }
+    // .fila1-ot {
+    //     grid-area: col2;
+    //     width: 350px;
+    // }
+
+    .fila1-fecha {
+      grid-area: col1;
+      
+    }
+
+    .fila1-fecha2 {
+        grid-area: col2;
+      
+      }
+
+    //     .fila1-tarea {
+    //     grid-area: col4;
+    //     width: 90%;
+    //     margin-left: 5px;
+    // }
+
+ 
+
+    .fila1-buscar {
+        grid-area: col3;
+    }
+
+    .fila1-excel{
+        grid-area: col4;
+       
+    }
+
+    .fila1-agregar{
+        grid-area: col5;
+        
+    }
+
+   
+  
+    th.mat-cell{
+        width: 50x;
+        min-width: 50px;
+    }
+
+    // td.mat-cell{
+    //     width: 120px;
+    //     min-width: 120px;
+    // }
+
+    //.mat-column-Acciones {width: 5px}
+
+    .maticon-date{
+        position: absolute;
+        float: right;
+        top: -6px;
+        margin-left: 270px;
+        cursor: pointer;
+        color: rgba(0, 0, 0, 0.54);
+    }
+}
+
+
+
+

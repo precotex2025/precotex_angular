@@ -1,0 +1,264 @@
+
+
+.container {
+    box-sizing: border-box;
+    width: 1450px;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+  
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 600px;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #ffffff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 500px;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 470px
+        "foot" 55px / 
+        99%;
+}
+
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2 fcol3" auto /
+        200px 200px auto;
+}
+
+
+.container-cuerpo-foot .button-agregar,
+.button-cancelar,.button-procesar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+.button-procesar{
+    grid-area: fcol1;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+.button-agregar {
+    grid-area: fcol2;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+.button-cancelar {
+    grid-area: fcol3;
+    background-color: #d32f2f;
+    color: #ffffff;
+}
+.mat-column-Foto,
+.mat-column-Num_Auditoria_Detalle,
+.mat-column-Nom_Inspector,
+.mat-column-Cod_OrdCor,
+.mat-column-Cod_OrdPro, 
+.mat-column-Nom_Cliente,
+.mat-column-Cod_EstCli,
+.mat-column-Cod_Present,
+.mat-column-Can_Lote,
+.mat-column-Can_Muestra,
+.mat-column-Can_Defecto,
+.mat-column-Flg_Status,
+.mat-column-Acciones
+//.mat-column-eliminar 
+{
+	text-align: center;
+	font-size: 13px;
+    font-family: arial;
+    padding: 10px;
+   
+}
+
+.mat-column-Foto{
+    width: 10px;
+}
+.mat-column-Num_Auditoria_Detalle{
+    width: 10px;
+}
+.mat-column-Nom_Inspector{
+    width: 140px;
+}
+.mat-column-Cod_OrdPro{
+    width: 40px;
+}
+.mat-column-Nom_Cliente{
+    width: 90px;
+}
+.mat-column-Cod_EstCli{
+    width: 140px;
+}
+.mat-column-Cod_Present{
+    width: 40px;
+}
+.mat-column-Can_Lote{
+    width: 10px;
+}
+.mat-column-Can_Muestra{
+    width: 10px;
+}
+.mat-column-Can_Defecto{
+    width: 10px;
+}
+.mat-column-Flg_Status{
+    width: 50px;
+}
+.mat-column-Acciones{
+    width: 70px;
+}
+
+
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+ 
+}
+.paginador{
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+::ng-deep mat-dialog-container{
+    padding: 5px;
+    height: auto;
+}
+
+    ::ng-deep .my-class .mat-dialog-container{
+    padding: 5px;
+    height: auto;
+    }
+
+@media screen and (max-width: 1500px){
+    
+    .container{
+        width: 1120px;
+    }
+    .grid-container{
+        height: 530px;
+    }
+    .container-cuerpo {
+        display: grid;
+    
+        grid-template:
+        "fila1" 410px
+        "foot" 55px /
+        99%;
+    }
+  
+}
+
+
+@media screen and (max-width: 868px){
+    .grid-container{
+        height: 730px;
+    }
+    .container-cuerpo {
+        display: grid;
+    
+        grid-template:
+        "fila1" 330px
+        "foot" 55px /
+        99%;
+    }
+    
+
+  }
+
+
+  @media screen and (max-width: 600px){
+   .grid-container{
+       height: 640px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila1" 400px
+        "foot" 55px /
+        99%; 
+    } 
+  } 
+  
+  .fijar-row {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }

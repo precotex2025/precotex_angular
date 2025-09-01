@@ -1,0 +1,73 @@
+/* Título del diálogo */
+h2[mat-dialog-title] {
+  background-color: #1267b6;
+  color: #fff;
+  margin: 0;
+  padding: 1rem;
+  font-size: 1.125rem; /* 18px */
+  font-weight: 600;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+/* Contenido del diálogo */
+mat-dialog-content {
+  padding: 1.25rem 1rem;
+  font-size: 1rem;
+  color: #333;
+  background-color: #fff;
+}
+
+/* Texto del mensaje */
+mat-dialog-content p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Contenedor de acciones */
+mat-dialog-actions {
+  padding: 1rem;
+  border-top: 1px solid #e5e5e5;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Botones base */
+mat-dialog-actions button {
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.15s ease;
+  outline: none;
+}
+
+mat-dialog-actions button:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* Botón cancelar */
+mat-dialog-actions button:first-child {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+mat-dialog-actions button:first-child:hover {
+  background-color: #5a6268;
+}
+
+/* Botón eliminar (color="warn") */
+mat-dialog-actions button[color="warn"] {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+mat-dialog-actions button[color="warn"]:hover {
+  background-color: #c82333;
+}

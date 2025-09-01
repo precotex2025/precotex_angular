@@ -1,0 +1,112 @@
+<!--DefectosAlamacenDerivados-->
+
+
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title">INSPECCION PRENDA - HABILITADOR</div>
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+
+
+
+                <mat-form-field class="fila1-Modulo" appearance="fill">
+                    <mat-label>Modulo</mat-label>
+                    <mat-select formControlName="Modulo">
+                        <mat-option *ngFor="let Modulo of listar_operacionModulo" [value]="Modulo.Cod_Modulo">
+                            {{Modulo.Des_Modulo}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="fila1-Tipo_Proceso" appearance="fill">
+                    <mat-label>Tipo Proceso</mat-label>
+                    <mat-select formControlName="Tipo_Proceso">
+                        <mat-option *ngFor="let Tipo_Proceso of listar_operacionTipo_Proceso" (click)="TicketFocus()"
+                            [value]="Tipo_Proceso.Cod_Familia">
+                            {{Tipo_Proceso.Des_Familia}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="fila1-Ticket">
+                    <mat-label>Ticket</mat-label>
+                    <input matInput type="text" placeholder="Ticket" value="" autocomplete="off" formControlName="Ticket"
+                        #Ticket (input)="ValidarTicket()">
+                </mat-form-field>
+
+
+                <button type="button" [disabled]="Flg_Habilitar_btn_Finalizar" class="button-finalizar" mat-button
+                    mat-flat-button (click)="FinalizarProceso()">
+                    <mat-icon aria-label="person">save
+                    </mat-icon> Finalizar
+                </button>
+
+
+            </div>
+
+            <div class="container-cuerpo-fila2">
+
+                <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+
+                
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="Sec">
+                        <th mat-header-cell *matHeaderCellDef> SEC </th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.SEC}} </td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="Cod_OrdPro">
+                        <th mat-header-cell *matHeaderCellDef> OP </th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.COD_ORDPRO}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Des_Present">
+                        <th mat-header-cell *matHeaderCellDef> COLOR </th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.DES_PRESENT}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Talla">
+                        <th mat-header-cell *matHeaderCellDef> TALLA </th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.COD_TALLA}} </td>
+                    </ng-container>                    
+
+                    <ng-container matColumnDef="Cantidad">
+                        <th mat-header-cell *matHeaderCellDef> CANTIDAD </th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.CANTIDAD}} </td>
+                    </ng-container> 
+
+                    <ng-container matColumnDef="Acciones">
+                        <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <a mat-icon-button *ngIf="data_det.COD_ORDPRO.length>0"
+                                (click)="EliminarRegistro(data_det.ID_R,data_det.SEC)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+                        </td>
+                        
+                    </ng-container>
+            
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;">
+                    </tr>
+                </table>
+                <mat-paginator  class="paginador" #MatPaginator2 [pageSizeOptions]="[5]" showFirstLastButtons aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </div>
+
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

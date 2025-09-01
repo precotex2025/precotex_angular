@@ -1,0 +1,40 @@
+<!--DefectosAlamacenDerivados-->
+
+
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title">INSPECCION PRENDA - LECTURA DERIVADOS</div>
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+
+
+                <mat-form-field class="fila1-Ticket">
+                    <mat-label>Ticket</mat-label>
+                    <input matInput type="text" placeholder="Ticket" maxlength="12" value="" autocomplete="off" formControlName="Ticket"
+                        #Ticket (input)="ValidarTicket()">
+                </mat-form-field>
+
+
+                <button type="button" [disabled]="Flg_Habilitar_btn_Finalizar" class="button-finalizar" mat-button
+                    mat-flat-button (click)="FinalizarProceso()">
+                    <mat-icon aria-label="person">save
+                    </mat-icon> Finalizar
+                </button>
+
+
+            </div>
+
+ 
+
+        </form>
+
+
+    </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

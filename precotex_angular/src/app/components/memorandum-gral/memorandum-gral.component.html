@@ -1,0 +1,221 @@
+<div class="container">
+    <div class="grid-container">
+      <div class="title">
+        <strong> GESTIÓN DE MEMORÁNDUMS </strong>
+      </div>     
+      <div class="body">
+        <form  [formGroup]="formulario" #formDirective="ngForm">
+            <mat-card class="full-width-card">
+                <mat-card-content>
+                    <div class="container-cuerpo-fila1">
+
+                        <mat-form-field class="fila1-fecha" appearance="fill">
+                            <mat-label>Rango de Fecha de Colgadores</mat-label>
+                            <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                            <input matStartDate formControlName="start" placeholder="Fecha Inicio">
+                            <input matEndDate formControlName="end" placeholder="Fecha Final">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                            <mat-icon (click)="clearDate($event)" style=" position: absolute;
+                                        float: right;
+                                        top: -6px;
+                                        margin-left: 190px;
+                                        cursor: pointer;
+                                        color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+                            <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Fecha Invalida</mat-error>
+                            <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Fecha Invalida</mat-error>
+                        </mat-form-field>
+
+                        <div class="fila1-OT">
+                            <mat-form-field  appearance="fill">
+                                <mat-label>N° Memo</mat-label>
+                                <input matInput type="text" formControlName="NroMemo">
+                            </mat-form-field>
+                        </div>  
+                        
+                        <button #btnBuscar type="button" class="fila1-BtnBuscar" mat-flat-button  (click)="onGetMemorandums()">
+                            <mat-icon aria-label="create_new_folder">search
+                            </mat-icon> Buscar
+                        </button>    
+                        
+                        <button type="button" class="fila1-BtnCrear" mat-flat-button (click)="onCreate()" [disabled]="bBotonCrear">
+                            <mat-icon aria-label="create_new_folder">create_new_folder
+                            </mat-icon> Crear
+                        </button>    
+
+                        <button type="button" class="fila1-BtnListo" mat-flat-button (click)="onUpdateListo()" [disabled]="bBotonProcesoSiguiente">
+                            <mat-icon aria-label="create_new_folder">settings
+                            </mat-icon> Procesar
+                        </button>     
+
+                        <button type="button" class="fila1-BtnRevertir" mat-flat-button (click)="onRevertir()">
+                            <mat-icon aria-label="create_new_folder">rotate_left
+                            </mat-icon> Revertir
+                        </button>                            
+                        
+                        <button type="button" class="fila1-BtnDevolver" mat-flat-button (click)="onDevolverMemo()"  *ngIf="bBotonProcesoDevolver">
+                            <mat-icon aria-label="create_new_folder">settings_backup_restore
+                            </mat-icon> Devolver
+                        </button>                            
+                                               
+
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <br>
+
+            <mat-card class="full-width-card-low">
+                <!-- <mat-card-header>
+                    Listado de Información de Memorándum's
+                </mat-card-header>   -->
+                
+                <mat-card-content>
+                    <div class="container-cuerpo-fila2">
+                        <!-- Filtro -->
+                        <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Buscar</mat-label>
+                        <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar memorándums...">
+                        </mat-form-field>
+
+                        <!-- Contenedor scroll vertical -->
+                        <div class="tabla-scroll-vertical">                        
+
+                        <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource" matSort>
+
+
+                            <ng-container matColumnDef="select">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <!-- <mat-checkbox
+                                    (change)="toggleAllRows($event)"
+                                    [checked]="isAllSelected()"
+                                    [indeterminate]="isIndeterminate()">
+                                    </mat-checkbox> -->
+                                </th> 
+                                <td mat-cell *matCellDef="let row">
+                                    <mat-checkbox
+                                    (click)="$event.stopPropagation()"
+                                    (change)="toggleRow($event, row)"
+                                    [checked]="selection.isSelected(row)">
+                                    </mat-checkbox>
+                                </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="num_memo">
+                                <th mat-header-cell *matHeaderCellDef> # Memo </th>
+                                <td mat-cell *matCellDef="let data_det" class="memo-cell"> {{data_det.num_Memo}}</td>
+                            </ng-container>      
+                            
+                            <ng-container matColumnDef="emisor">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Emisor </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.emisor}}</td>
+                            </ng-container>   
+                            
+                            <ng-container matColumnDef="fecha_Emisor">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Fch. Emisor </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.fecha_Emisor | date: 'dd/MM/yyyy hh:mm' }}</td>
+                            </ng-container>  
+                            
+                            <ng-container matColumnDef="receptor">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Receptor </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.receptor}}</td>
+                            </ng-container>    
+                            
+                            <!-- <ng-container matColumnDef="fecha_Receptor">
+                                <th mat-header-cell *matHeaderCellDef> Fch. Receptor </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.fecha_Receptor | date: 'dd/MM/yyyy' }}</td>
+                            </ng-container>    -->
+
+                            <ng-container matColumnDef="descripcion_Tipo_Memorandum">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.descripcion_Tipo_Memorandum}}</td>
+                            </ng-container>                               
+                            
+                            <ng-container matColumnDef="planta_Origen">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Planta Origen </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.planta_Origen}}</td>
+                            </ng-container>       
+                            
+                            <ng-container matColumnDef="planta_Destino">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Planta Destino </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.planta_Destino}}</td>
+                            </ng-container>      
+                            
+                            <!--
+                            <ng-container matColumnDef="usuario_Seg_Origen">
+                                <th mat-header-cell *matHeaderCellDef> Seg. Origen </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.usuario_Seg_Origen}}</td>
+                            </ng-container>     
+                            
+                            <ng-container matColumnDef="fecha_Seguridad_Emisor">
+                                <th mat-header-cell *matHeaderCellDef> Fch. Seg. origen </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.fecha_Seguridad_Emisor | date: 'dd/MM/yyyy' }}</td>
+                            </ng-container>     
+                            
+                            <ng-container matColumnDef="usuario_Seg_Destino">
+                                <th mat-header-cell *matHeaderCellDef> Seg. Destino </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.usuario_Seg_Destino}}</td>
+                            </ng-container>       
+                            
+                            <ng-container matColumnDef="fecha_Seguridad_Receptor">
+                                <th mat-header-cell *matHeaderCellDef> Fch. Seg. Destino </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.fecha_Seguridad_Receptor | date: 'dd/MM/yyyy' }}</td>
+                            </ng-container>                             
+                            -->
+
+                            <!-- <ng-container matColumnDef="descripcion_Estado_Memo">
+                                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.descripcion_Estado_Memo}}</td>
+                            </ng-container>   -->
+                            
+                            <ng-container matColumnDef="descripcion_Estado_Memo">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                                <td mat-cell *matCellDef="let data_det">
+
+                                       <span style="background-color: green; color: white; padding: 2px;" >{{data_det.descripcion_Estado_Memo}}</span> 
+
+                                  </td>                                
+                            </ng-container>                                
+                            
+                            <ng-container matColumnDef="opciones">
+                               <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                               <td mat-cell *matCellDef="let data_det">
+  
+                                  <a mat-icon-button style="margin-right:5px;">
+                                    <mat-icon color="success" (click)="onSeg(data_det)">timeline</mat-icon>
+                                  </a>   
+                                  <a mat-icon-button style="margin-right:5px;">
+                                    <mat-icon color="success" (click)="onEdit(data_det)">edit</mat-icon>
+                                  </a>                             
+
+                                  <!-- <a mat-icon-button color="warn" style="margin-right:5px;">
+                                    <mat-icon color="warn" (click)="onDelete(data_det)">delete</mat-icon>
+                                  </a> -->
+
+                               </td>
+
+                    
+                            </ng-container>    
+                            
+                            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                            <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>                                 
+
+                        </table>
+
+                        </div>
+
+                    </div>
+                </mat-card-content>
+
+            </mat-card>
+
+        </form>
+      </div>   
+    </div> 
+</div>
+
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

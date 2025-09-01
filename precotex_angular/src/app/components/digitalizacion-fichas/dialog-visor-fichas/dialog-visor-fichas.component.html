@@ -1,0 +1,17 @@
+<div class="container"> 
+  <div class="grid-container">  
+      <div class="title">Seleccionar Ficha</div>
+
+      <form class="container-cuerpo">
+        <div class="container-cuerpo-lista">
+          <mat-list-item list-item-two-line-container-height *ngFor="let formato of formatos">
+            <div class="container-cuerpo-item">
+              <button mat-raised-button class="button-agregar" [mat-dialog-close]="formato" matListItemTitle>
+                <mat-icon>double_arrow</mat-icon>{{formato.Nom_Ficha}}
+              </button>
+            </div>
+          </mat-list-item>
+        </div>
+      </form>
+  </div>
+</div>

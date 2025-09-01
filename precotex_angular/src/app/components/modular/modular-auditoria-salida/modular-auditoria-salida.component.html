@@ -1,0 +1,253 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <form class="grid-container" [style]="grid_border" [formGroup]="formulario">
+
+        <div class="title" [style]='background'>AUDITORÍA DE PRENDA - SALIDA
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <mat-card>
+                    <mat-card-content>
+                        <div class="row" style="margin-top: 20px; padding: 5px;">
+                            <div class="col-md-331">
+                                <div class="col-md-12">
+                                    <mat-form-field class="fila1-Codigo">
+                                        <mat-label>Ticket</mat-label>
+                                        <input matInput type="text" placeholder="Nro Ticket" autocomplete="off"
+                                            [readonly]="Id_Auditoria_Modular != 0" formControlName="Ticket">
+                                    </mat-form-field>
+
+                                    <button mat-flat-button color="primary" class="primary" style="margin-left: 5px;"
+                                        (click)="agregarTicket()"
+                                        [disabled]="dataPaquetes.length > 0"><mat-icon>add</mat-icon> Agregar</button>
+                                </div>
+                                <div class="col-md-12">
+                                    <button mat-flat-button class="button-green" (click)="iniciarAuditoria()"
+                                        [disabled]="dataPaquetes.length == 0"
+                                        *ngIf="Id_Auditoria_Modular == 0"><mat-icon>check</mat-icon>Iniciar
+                                        Auditoría</button>
+                                    <button mat-flat-button color="primary" class="button-primary" (click)="limpiarAuditoria()"
+                                        *ngIf="dataPaquetes.length > 0"
+                                        [disabled]="dataPaquetes.length == 0"><mat-icon>refresh</mat-icon>Nueva
+                                        Auditoría</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="tabla2">
+                                    <table class="styled-table">
+                                        <thead>
+
+                                            <tr>
+                                                <th>Ticket</th>
+                                                <th>N° Paquete</th>
+                                                <th>Cantidad</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of dataPaquetes">
+                                                <td>{{item.Ticket}}</td>
+                                                <td>{{item.Num_Paquete}}</td>
+                                                <td>{{item.Cantidad}}</td>
+                                                <td>
+                                                    <button mat-icon-button (click)="deletePaquete(item.Ticket)"
+                                                        [disabled]="Id_Auditoria_Modular != 0"
+                                                        class="boton-icon-red"><mat-icon>delete</mat-icon></button>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="dataPaquetes.length == 0">
+                                                <td colspan="4">Sin Registros</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+
+
+        <div class="row" style="margin-top: 20px; padding: 5px;" *ngIf="Id_Auditoria_Modular != 0">
+            <div class="col-md-4">
+                <div class="row">
+                    <mat-form-field class="fila1-OP">
+                        <mat-label>OP</mat-label>
+                        <input matInput type="text" placeholder="OP" value="" autocomplete="off" formControlName="OP"
+                            readonly maxlength="5">
+                    </mat-form-field>
+                    <mat-form-field class="fila1-Codigo">
+                        <mat-label>COLOR</mat-label>
+                        <input matInput type="text" autocomplete="off" formControlName="Color" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <mat-form-field class="fila1-Codigo">
+                        <mat-label>TALLA</mat-label>
+                        <input matInput type="text" autocomplete="off" formControlName="Talla" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="fila1-Codigo">
+                        <mat-label>Cantidad</mat-label>
+                        <input matInput type="text" autocomplete="off" formControlName="Cantidad" readonly>
+                    </mat-form-field>
+                </div>
+
+                <div class="row" style="margin-top: 10px;">
+                    <mat-form-field class="fila1-Cantidad">
+                        <mat-label>Muestra</mat-label>
+                        <!--<input matInput type="text" placeholder="Muestra" autocomplete="off" formControlName="Muestra" readonly>-->
+                        <input matInput type="text" placeholder="Muestra" autocomplete="off" formControlName="Muestra" [readonly]="noAgregar" (change)="onValidaMuestra($event)">
+                    </mat-form-field>
+
+                    <div class="buttons">
+                        <button type="button" class="button-2" mat-button mat-flat-button [disabled]="calificar"
+                            (click)="finalizarAuditoria('A')">
+                            <mat-icon aria-label="person" class="icon">check
+                            </mat-icon> Aprobar
+                        </button>
+                        <button type="button" class="button-3" mat-flat-button [disabled]="calificar"
+                            (click)="finalizarAuditoria('D')">
+                            <mat-icon aria-label="person" class="icon">cancel
+                            </mat-icon> Rechazar
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="caja">
+                    <p class="titulo-prenda">Prenda</p>
+                    <img [src]="ImagePath" style="width: 100%;height: 150px; object-fit: contain;" alt="">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="caja2">
+                    <p class="titulo-efi">Eficiencia</p>
+                    <p class="subtitulo">Minutos Asistidos: {{Min_Trabajados}}min</p>
+                    <p class="subtitulo">Minutos Trabajados: {{Min_Asistidos}}min</p>
+                    <p class="subtitulo">Eficiencia: {{Eficiencia}}%</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- <div class="row" *ngIf="Id_Auditoria_Modular != 0">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="caja1">
+                    <p class="texto">Primeras</p>
+                    <p class="texto">50</p>
+                </div>
+                <div class="caja1">
+                    <p class="texto">Total</p>
+                    <p class="texto">50</p>
+                </div>
+                <div class="caja1">
+                    <p class="texto">Derivadas</p>
+                    <p class="texto">0</p>
+                </div>
+                <div class="caja1">
+                    <p class="texto">Recogidas</p>
+                    <p class="texto">0</p>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div> -->
+        <div class="row" *ngIf="Id_Auditoria_Modular != 0">
+            <div class="col-md-3">
+                <button style="margin-left: 10px;" (click)="agregarPrenda()" [disabled]="noAgregar" mat-flat-button
+                    class="button-warning"><mat-icon>add</mat-icon>
+                    Agregar Prenda</button>
+            </div>
+        </div>
+        <div class="row" *ngIf="Id_Auditoria_Modular != 0">
+            <!-- <div class="col-md-2"></div> -->
+            <div class="col-md-12">
+                <div class="tabla" id="tabla">
+                    <table class="styled-table">
+                        <thead style=" position: sticky; top:-11px; z-index: 999;">
+                            <tr>
+                                <th>Fila</th>
+                                <th>Costura</th>
+                                <th>Acabados</th>
+                                <th>Procesos</th>
+                                <th>Textil</th>
+                                <th>Estampado y Bordado</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of dataPrendas">
+                                <td>Prenda {{item.Num_Prenda}}</td>
+                                <td>
+                                    <div class="opciones">
+                                        <span>{{item.Tipo_Sub_Proceso_01}}</span>
+                                        <button [disabled]="deshabilitar" mat-icon-button class="boton-icon"
+                                            (click)="agregarDefecto(item, '01')"><mat-icon>add</mat-icon></button>
+                                        <button [disabled]="deshabilitar" mat-icon-button
+                                            (click)="quitarDefecto(item, '01')"
+                                            class="boton-icon-red"><mat-icon>remove</mat-icon></button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="opciones">
+                                        <span>{{item.Tipo_Sub_Proceso_02}}</span>
+                                        <button [disabled]="deshabilitar" mat-icon-button class="boton-icon"
+                                            (click)="agregarDefecto(item, '02')"><mat-icon>add</mat-icon></button>
+                                        <button [disabled]="deshabilitar" mat-icon-button
+                                            (click)="quitarDefecto(item, '02')"
+                                            class="boton-icon-red"><mat-icon>remove</mat-icon></button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="opciones">
+                                        <span>{{item.Tipo_Sub_Proceso_03}}</span>
+                                        <button mat-icon-button [disabled]="deshabilitar" class="boton-icon"
+                                            (click)="agregarDefecto(item, '03')"><mat-icon>add</mat-icon></button>
+                                        <button mat-icon-button [disabled]="deshabilitar"
+                                            (click)="quitarDefecto(item, '03')"
+                                            class="boton-icon-red"><mat-icon>remove</mat-icon></button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="opciones">
+                                        <span>{{item.Tipo_Sub_Proceso_04}}</span>
+                                        <button [disabled]="deshabilitar" mat-icon-button class="boton-icon"
+                                            (click)="agregarDefecto(item, '04')"><mat-icon>add</mat-icon></button>
+                                        <button [disabled]="deshabilitar" mat-icon-button
+                                            (click)="quitarDefecto(item, '04')"
+                                            class="boton-icon-red"><mat-icon>remove</mat-icon></button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="opciones">
+                                        <span>{{item.Tipo_Sub_Proceso_05}}</span>
+                                        <button [disabled]="deshabilitar" mat-icon-button class="boton-icon"
+                                            (click)="agregarDefecto(item, '05')"><mat-icon>add</mat-icon></button>
+                                        <button [disabled]="deshabilitar" mat-icon-button
+                                            (click)="quitarDefecto(item, '05')"
+                                            class="boton-icon-red"><mat-icon>remove</mat-icon></button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button mat-icon-button class="boton-icon-red" [disabled]="deshabilitar"
+                                        (click)="eliminarPrenda(item)"><mat-icon>delete</mat-icon></button>
+                                </td>
+                            </tr>
+                            <tr *ngIf="dataPrendas.length == 0">
+                                <td colspan="7">Aún no has agregado prendas</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- <div class="col-md-2"></div> -->
+        </div>
+    </form>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

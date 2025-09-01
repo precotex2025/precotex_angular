@@ -1,0 +1,140 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title">Mantenimiento Usuarios</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+
+                <mat-form-field class="fila1-nombres" appearance="fill">
+                    <mat-label>Nombres o Apellidos</mat-label>
+                    <input matInput type="text" placeholder="Busca por nombres o apellidos" autocomplete="off"
+                        formControlName="Nombres" />
+
+                </mat-form-field>
+
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="MostrarCabeceraUsuarios()">
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+
+                <button type="button" class="fila1-roles" mat-flat-button routerLink="/rolesUsuarioWeb">
+                    <mat-icon aria-label="person">verified_user</mat-icon>Mantenimiento de Roles
+                </button>
+
+
+            </div>
+
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+                    <ng-container matColumnDef="Cod_Usuario">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod. Usuario</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.Cod_Usuario}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Nom_usuario">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nom. Usuario</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.Nom_usuario}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Tip_Trabajador">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tip. Trab.</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.Tip_Trabajador}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Trabajador">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod. Trabajador</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.Cod_Trabajador}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Empresa">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Empresa</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.Empresa}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Fecha_Registro">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha Registro.</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.Fecha_Registro.date
+                            | date: 'dd/MM/Y'}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Flg_Activo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estado</th>
+                        <td class="mat-header-cell acciones" mat-cell *matCellDef="let data_det"> <button
+                                *ngIf="data_det.Flg_Activo == '1'; else btnerr" type="button"
+                                style="background:#3f51b5; width: 80px;" class="button-agregar" mat-flat-button
+                                (click)="OpenDialogConfirmacion(data_det.Id_Usuario, 0)">Activo</button>
+                            <ng-template #btnerr><button type="button" style="background:#f44336; width: 80px;"
+                                    class="button-agregar" mat-flat-button
+                                    (click)="OpenDialogConfirmacion(data_det.Id_Usuario, 1)">Inactivo</button></ng-template>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Password">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Pass</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.Password}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Des_Rol">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Rol</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.Des_Rol}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det">
+
+                            <a mat-icon-button style="margin-right:5px;"
+                                (click)="openDialogModificar(data_det)">
+                                <mat-icon color="success">create</mat-icon>
+                            </a>
+<!-- 
+                            <a mat-icon-button (click)="EliminarRegistro(data_det.Cod_Usuario,data_det.Trabajador)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a> -->
+                        </td>
+                    </ng-container>
+
+                    <!--<ng-container matColumnDef="eliminar">
+                        <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <a mat-icon-button *ngIf="data_det.Nro_DocIde.length>0"
+                                (click)="EliminarRegistro(data_det.Nro_DocIde,data_det.Cod_Conductor)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>-->
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+
+                </table>
+
+                <mat-paginator class="paginador" #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+
+            </div>
+
+
+
+
+            <div class="container-cuerpo-foot">
+                <button type="button" class="button-agregar" mat-flat-button (click)="openDialog();">
+                    <mat-icon aria-label="person">add
+                    </mat-icon> Agregar
+                </button>
+
+                <!--<button type="button" class="button-cancelar" [routerLink]="['/SeguridadControlVehiculoAccion']" mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Regresar
+                </button> -->
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

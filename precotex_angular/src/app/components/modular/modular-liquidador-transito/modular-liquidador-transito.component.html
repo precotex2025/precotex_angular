@@ -1,0 +1,118 @@
+<div class="container">
+  <!-- ventana nro 4 - historial -->
+  <div class="grid-container" [style]="grid_border">
+
+    <div class="title" [style]='background'>LIQUIDADOR TRÁNSITO
+    </div>
+
+    <div class="row" style="margin-top: 20px; padding: 5px;">
+      <div class="col-md-12">
+        <mat-card>
+          <mat-card-content>
+            <div class="row">
+              <div class="col-md-2">
+                <mat-form-field class="fila1-Codigo">
+                  <mat-label>OP</mat-label>
+                  <input matInput maxlength="5" type="text" [(ngModel)]="Cod_OrdPro" placeholder="Ingrese la OP"
+                    (input)="muestraOP()" autocomplete="off">
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field class="fila1-Codigo">
+                  <mat-label>Descripción</mat-label>
+                  <input matInput readonly type="text" [(ngModel)]="Des_OP" autocomplete="off">
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <button type="button" class="button-Agregar" (click)="GuardarCabecera()" [disabled]="Des_OP == ''" mat-button mat-flat-button>
+                  <mat-icon aria-label="person">search
+                  </mat-icon> Buscar
+                </button>
+              </div>
+
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <mat-card>
+          <mat-card-content>
+            <div class="row">
+              <div class="col-md-3">
+                <button type="button" color="primary" [disabled]="Des_OP == ''" mat-button mat-flat-button (click)="generarPaquetes()">
+                  <mat-icon aria-label="dashboard">dashboard </mat-icon> Generar Paquete </button>
+              </div>
+              <div class="col-md-4">
+                <button type="button" [disabled]="Des_OP == ''" color="warn" (click)="generarTickets()" mat-button mat-flat-button >
+                  <mat-icon aria-label="person">print
+                  </mat-icon> Imprimir Ticket Módulo y Vapor
+                </button>
+              </div>
+            </div>
+            
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <mat-card>
+          <mat-card-content>
+            <div class="row">
+              <div class="col-md-12">
+                <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+
+                  <ng-container matColumnDef="Cod_OrdPro">
+                    <th mat-header-cell *matHeaderCellDef> N/P </th>
+                    <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_OrdPro}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Cod_Present">
+                    <th mat-header-cell *matHeaderCellDef> Cod_Present </th>
+                    <td mat-cell *matCellDef="let data_det"> {{ data_det.Cod_Present }}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="Color">
+                    <th mat-header-cell *matHeaderCellDef> Color </th>
+                    <td mat-cell *matCellDef="let data_det"> {{ data_det.Color }}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="Cantidad_Ticket">
+                    <th mat-header-cell *matHeaderCellDef> Disponibles </th>
+                    <td mat-cell *matCellDef="let data_det"> {{ data_det.Cantidad_Ticket }}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="Prendas_Paq">
+                    <th mat-header-cell *matHeaderCellDef> Prendas Paq </th>
+                    <td mat-cell *matCellDef="let data_det"> {{ data_det.Prendas_Paq }}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="Paq_Generados">
+                    <th mat-header-cell *matHeaderCellDef> Paq. Generados </th>
+                    <td mat-cell *matCellDef="let data_det"> {{ data_det.Paq_Generados }}</td>
+                  </ng-container>
+
+
+                  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                  <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"
+                      [ngClass]="{'highlight': selectedRowIndex == row.Cod_Present}" (click)="highlight(row)">
+                  </tr>
+                  <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">Aún no has agregado Registros</td>
+                  </tr>
+                
+                </table>
+                <mat-paginator #MatPaginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+                  aria-label="Select page of periodic elements">
+                </mat-paginator>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

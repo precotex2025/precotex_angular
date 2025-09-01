@@ -1,0 +1,161 @@
+/*
+ * Page: Login & Register
+ * ----------------------
+ */
+ @import url('https://fonts.googleapis.com/css2?family=Varela&display=swap');
+ 
+ .login-form_background {
+    position : absolute;
+      width : 100%;
+      height : 100%;
+    background: #ffffff;
+    background-image: url('../assets/bk.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  
+  
+  .login-form,
+  .login-form * {
+    box-sizing: border-box;
+   
+   
+  }
+  
+  .login-form {
+    max-width: 350px;
+    margin: 100px auto;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+  
+  }
+  
+  .login-form__logo-container {
+    padding: 40px;
+    background:#ffffff;
+    border-bottom: solid 1px #ececec;
+  }
+  
+  
+  
+  .login-form__logo {
+    display: block;
+    max-width: 250px;
+    margin: 0 auto;
+  }
+  
+  .login-form__content {
+    padding: 40px 40px 60px 40px;
+    background: #ffffff;
+  }
+  
+  .login-form__header {
+    font-family: 'Varela', sans-serif;
+    margin-bottom: 7px;
+    text-align: center;
+    color: #2f2f2f;
+    font-weight: bold;
+    font-size: 19px;
+  }
+  .login-form__header_sub{
+    font-family: 'Varela', sans-serif;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #2f2f2f;
+    font-size: 14px;
+  }
+  
+  .login-form__input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid #dddddd;
+    background: #ffffff;
+    outline: none;
+    transition: border-color 0.5s;
+  }
+  
+  .login-form__input:focus {
+    border-color: #777777;
+  }
+  
+  .login-form__input::placeholder {
+    color: #aaaaaa;
+  }
+  
+  .login-form__button {
+    padding: 10px;
+    color: #ffffff;
+    font-weight: bold;
+    background: #3d3d3d;
+    width: 100%;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .login-form__button:active {
+    background: #2f2f2f;
+  }
+  
+  .login-form__links {
+    margin-top: 15px;
+    text-align: center;
+  }
+  
+  .login-form__link {
+    font-size: 0.9em;
+    color: #2f2f2f;
+    text-decoration: none;
+  }
+  
+  .example-full-width {
+    width: 100%;
+    margin: 3px;
+    padding: 0px;
+  }
+ 
+  .login-form__button{
+    margin-top: 15px;
+  }
+  /* ANIMATIONS */
+  
+  /* Simple CSS3 Fade-in-down Animation */
+  .fadeInDown {
+    -webkit-animation-name: fadeInDown;
+    animation-name: fadeInDown;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+  }
+  
+  @-webkit-keyframes fadeInDown {
+    0% {
+      opacity: 0;
+      -webkit-transform: translate3d(0, -100%, 0);
+      transform: translate3d(0, -100%, 0);
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: none;
+      transform: none;
+    }
+  }
+  
+  @keyframes fadeInDown {
+    0% {
+      opacity: 0;
+      -webkit-transform: translate3d(0, -100%, 0);
+      transform: translate3d(0, -100%, 0);
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: none;
+      transform: none;
+    }
+  }

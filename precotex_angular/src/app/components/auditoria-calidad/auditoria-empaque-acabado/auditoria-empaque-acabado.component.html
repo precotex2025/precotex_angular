@@ -1,0 +1,140 @@
+<div class="container"> 
+    <div class="grid-container"> 
+        <div class="title">Auditoria Empaque Acabado</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+                
+                <mat-form-field  class="fila1-fecha" appearance="fill">
+                    <mat-label>Rango de Fecha</mat-label>
+                    <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                      <input matStartDate formControlName="start" placeholder="Fecha Inicio" >
+                      <input matEndDate formControlName="end" placeholder="Fecha Final" >
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                    <mat-icon  (click)="clearDate($event)" style=" position: absolute;
+                        float: right;
+                        top: -6px;
+                        margin-left: 180px;
+                        cursor: pointer;
+                        color: rgba(0, 0, 0, 0.54);">close
+                    </mat-icon>
+                    <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Fecha Invalida</mat-error>
+                    <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Fecha Invalida</mat-error>
+                </mat-form-field>
+
+                <mat-form-field> 
+                    <mat-label>Estilo</mat-label>
+                    <input matInput type="text" name="Cod_EstCli" placeholder="Estilo" value="" autocomplete="off" formControlName="Cod_EstCli" >
+                    <button matSuffix mat-icon-button aria-label="Limpiar" (click)="clearEstilo()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+                
+                <button type="button" class="boton-buscar" mat-flat-button (click)="onListarCabeceraEmpaqueAcabados()">
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+                
+                <button type="button" class="boton-agregar" mat-flat-button (click)="onInsertarAuditoria()">
+                    <mat-icon aria-label="person">add</mat-icon>Agregar
+                </button>
+
+                <button type="button" class="boton-excel" mat-flat-button (click)="onGenerarReporteAuditoria()">
+                    <mat-icon aria-label="create_new_folder">create_new_folder</mat-icon> Reporte Excel
+                </button>
+            </div>
+
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8" >
+
+                    <ng-container matColumnDef="Num_Auditoria">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Nº Auditoria </th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Num_Auditoria}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Fecha_Auditoria">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Fecha </th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Fecha_Auditoria}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Nom_Cliente">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Cliente </th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Nom_Cliente}} </td>
+                    </ng-container>
+  
+                    <ng-container matColumnDef="Cod_EstCli">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Estilo </th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_EstCli}} </td>
+                    </ng-container>
+  
+                    <ng-container matColumnDef="Cod_TemCli">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Temporada </th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_TemCli}} </td>
+                    </ng-container>
+  
+                    <ng-container matColumnDef="Lote">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Lote </th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Lote}} </td>
+                    </ng-container>
+  
+                    <ng-container matColumnDef="Tamano_Muestra">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Tamaño de Muestra </th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Tamano_Muestra}} </td>
+                    </ng-container>
+  
+                    <ng-container matColumnDef="Observacion">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Observación </th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Observacion}} </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="Flg_Status">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estado</th>
+                        <td mat-cell *matCellDef="let data_det" >    
+                            <button *ngIf="data_det.Flg_Status == '0';" type="button" style="background:#0e740e; color:#ffffff; width: 110px;" mat-flat-button>Pendiente</button>
+                            <button *ngIf="data_det.Flg_Status == '1';" type="button" style="background:#3f51b5; color:#ffffff; width: 110px;" mat-flat-button>Aprobado</button>
+                            <button *ngIf="data_det.Flg_Status == '2';" type="button" style="background:#f44336; color:#ffffff; width: 110px;" (click)="onDuplicarAuditoria(data_det)" mat-flat-button>Rechazado</button>
+                        </td>
+                    </ng-container> 
+                    
+                    <ng-container matColumnDef="Acciones">
+                        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                        <td mat-cell *matCellDef="let data_det">    
+                            <a mat-icon-button 
+                                (click)="onEditarAuditoria(data_det)">
+                                <mat-icon color="success">create</mat-icon>
+                            </a> 
+
+                            <a mat-icon-button                            
+                                (click)="onEliminarAuditoria(data_det)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+
+                            <a mat-icon-button 
+                                (click)="onDefectosAuditoria(data_det)">
+                                <mat-icon color="primary">assignment</mat-icon>
+                            </a>
+
+                            <a mat-icon-button color="accent" 
+                                (click)="onVistaPreviaAuditoria(data_det)">
+                                <mat-icon color="info">receipt</mat-icon>
+                            </a>            
+                        </td>
+                    </ng-container> 
+                
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                </table>
+
+                <mat-paginator  class="paginador" #paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons aria-label="Select page of periodic elements">
+                </mat-paginator>
+
+            </div>
+        </form>
+    </div> 
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner> 

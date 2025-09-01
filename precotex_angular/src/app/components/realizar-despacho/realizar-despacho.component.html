@@ -1,0 +1,46 @@
+<div class="registro-container">
+  <div class="title">ENVIAR PARTIDAS A DESPACHO</div>
+
+    <div class="filtros">
+
+    </div>
+
+  <!-- Defectos registrados -->
+  <div class="panel defectos-registrados">
+    <h3>PARTIDAS</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Seleccionar.</th>
+          <th>Tela</th>
+          <th>Rollo</th>
+          <th>Motivo</th>
+          <th>Metros</th>
+          <th>Grado</th>
+          <th>Accion</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!--<tr *ngFor="let defecto of defectosRegistrados; let i = index; trackBy: trackByFn ">
+          <td>
+            <input type="checkbox" [checked]="defecto.sel"
+            />
+          </td>
+          <td>{{ defecto.codTela }}</td>
+          <td>{{ defecto.codRollo }}</td>
+          <td>{{ defecto.codMotivo }}</td>
+          <td>{{ defecto.metros }}</td>
+          <td>{{ defecto.grado }}</td>
+          <td>
+            <button class="delete-btn" (click)="eliminarDefecto(defecto, i)">🗑️</button>
+          </td>
+        </tr>-->
+      </tbody>
+    </table>
+    <div class="acciones-finales">
+      <button class="defecto-btn" >Enviar despacho</button>
+
+      <button class="defecto-btn" >Limpiar</button>
+    </div>
+  </div>
+</div>

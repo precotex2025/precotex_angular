@@ -1,0 +1,187 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: rgb(60, 255, 0);
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 16px;
+    margin: 0;
+}
+
+.grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: 93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0;
+    padding: 0;
+    //position: absolute;
+    min-width: 320px;
+}
+
+button {
+    //width: 100%;
+    border-bottom: 1px solid #2f528f;
+    margin-top: 5px;
+    height: 37px;
+    font-size: 14px;
+    // padding: 0;
+    // margin: 0;
+
+    color: #fcffff;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555555;
+    color: white;
+}
+
+mat-flat-button {
+    padding: 0px;
+    margin: 0px;
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 0px 10px 0px;
+}
+
+.find,
+.main {
+    margin: 5px 5px 0px 5px;
+}
+
+.title {
+    background-color: #337ab7;
+    color: #fcffff;
+    padding: 8px 0px 10px 0px;
+    text-align: center;
+}
+
+.find {
+    padding-bottom: 5px;
+    //background-color: yellow;
+}
+
+.main {
+    //border: 1px solid #bbd2e6;
+    border-width: 0px 0px 1px 0px;
+    padding-bottom: 5px;
+}
+
+.button_añadir {
+    background-color: #155724;
+}
+
+.button_eliminar {
+    background-color: #e91919;
+}
+
+.button_regresar {
+    background-color: #222a35;
+}
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.tabla_cabecera {
+    width: 100%;
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: whitesmoke;
+}
+
+tr:active {
+    background: #efefef;
+}
+
+.mat-column-secuencia {
+    width: 80px !important;
+    text-align: center;
+    font-size: 13px;
+}
+
+.mat-column-tela {
+    width: 200px !important;
+    text-align: left;
+    font-size: 13px;
+}
+
+.mat-column-peso {
+    width: 80px !important;
+    text-align: center;
+    font-size: 13px;
+}
+
+.mat-column-bulto {
+    width: 80px !important;
+    text-align: center;
+    font-size: 13px;
+}
+
+// /* ------------------------- */
+// /* RESPONSIVE */
+// /* ------------------------- */
+.grid-container {
+    display: grid;
+    gap: 10px;
+    grid-template:
+        "title" 35px
+        "find" 110px
+        "main" auto / 100%;
+}
+
+.title {
+    grid-area: title;
+}
+.main {
+    grid-area: main;
+}
+.footer {
+    grid-area: footer;
+}
+
+@media screen and (max-width: 370px) {
+    // .grid-container {
+    //     background: red;
+    // }
+
+    .detalleForm {
+        display: grid;
+        gap: 10px;
+        grid-template:
+            "findcol1 findcol1 findcol6 findcol6" 50px
+            "findcol2 findcol3 findcol4 findcol5 " 50px /
+            95px 55px 95px 55px 55px;
+    }
+
+    .findcol1 {
+        grid-area: findcol1;
+    }
+    .findcol2 {
+        grid-area: findcol2;
+    }
+    .findcol3 {
+        grid-area: findcol3;
+    }
+    .findcol4 {
+        grid-area: findcol4;
+    }
+    .findcol5 {
+        grid-area: findcol5;
+    }
+    .findcol6 {
+        grid-area: findcol6;
+    }
+
+}

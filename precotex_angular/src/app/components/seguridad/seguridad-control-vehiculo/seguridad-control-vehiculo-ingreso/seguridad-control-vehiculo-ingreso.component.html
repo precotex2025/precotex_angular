@@ -1,0 +1,196 @@
+<div class="container">
+    <!-- ventana nro 3 - salida -->
+    <div class="grid-container">
+
+        <div class="title">.:: {{ des_planta }} ::. - Registro Ingreso de Vehiculo</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+        
+
+            <div class="container-cuerpo-fila1">
+                <mat-form-field class="fila1-cod-vehiculo">
+                    <mat-label>Vehiculo</mat-label>
+                    <input matInput type="text" (keyup)="BuscarVehiculo()"  placeholder="Vehiculo" value=""
+                        autocomplete="off" formControlName="vehiculo" >
+                </mat-form-field>
+
+                <mat-form-field class="fila1-des-vehiculo">
+                    <mat-label>Descripcion</mat-label>
+                    <input matInput disabled value='{{ des_vehiculo }}'>
+                </mat-form-field>
+            </div>
+ 
+     
+            <div class="container-cuerpo-fila2">
+                <mat-form-field class="fila2-codcond-vehiculo">
+                    <mat-label>Conductor</mat-label>
+                    <input matInput  #conductor type="text" (keyup)="BuscarConductor()" placeholder="Conductor" value=""
+                        autocomplete="off" formControlName="conductor" >
+                </mat-form-field>
+
+                <mat-form-field class="fila2-nomcond-vehiculo">
+                    <mat-label>Nombre</mat-label>
+                    <input matInput  type="text"  placeholder="Nombre" value=""
+                        autocomplete="off" formControlName="nombre" >
+                </mat-form-field>
+                <!--<mat-form-field class="fila2-nomcond-vehiculo">
+                    <mat-label>Nombre</mat-label>
+                    <input matInput disabled value='{{ des_conductor }}'>
+                </mat-form-field>-->
+            </div>
+
+           
+            <div class="container-cuerpo-fila3">
+                
+                <mat-form-field class="fila3-origen-vehiculo">
+                    <mat-label>Origen</mat-label>
+                    <mat-select  formControlName="origen" name="listar_origen">
+                        <mat-option *ngFor="let listar_origen of listar_origenes" [value]="listar_origen.Planta">
+                            {{listar_origen.Descripcion}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>  
+
+               <mat-form-field class="fila3-km-vehiculo">
+                    <mat-label>Kilometraje</mat-label>
+                    <input matInput #kilometraje type="number"  placeholder="Kilometraje" value="" 
+                        autocomplete="off" formControlName="kilometraje" >
+                </mat-form-field>
+            
+            <!--<mat-form-field class="fila2-destino">
+                <mat-label>Origen</mat-label>
+                <input matInput disabled value='{{ origen_selectt }}' />
+            </mat-form-field>-->
+            </div>  
+
+            <div class="container-cuerpo-fila4">
+
+                
+                <label class="fila4-lbl-vehiculo">Operacion a realizar:</label>
+            
+               <mat-radio-group
+                  aria-labelledby="example-radio-group-label"
+                  class="fila4-opcion-vehiculo" formControlName="ope">
+                  <mat-radio-button  class="example-radio-button" *ngFor="let ope of listes" [value]="ope.cod">
+                    {{ope.name}}
+                  </mat-radio-button>
+                </mat-radio-group> 
+         
+               <!-- <mat-radio-group
+                  aria-labelledby="example-radio-group-label"
+                  class="fila4-opcion-vehiculo" formControlName="ope" [value]="selected">
+              
+                  
+                    <mat-radio-button value="1" color="primary">
+                        Primary Theme radio button
+                      </mat-radio-button>
+                        
+                      <mat-radio-button value="2" color="warn">
+                        Warn Theme Radio button 
+                      </mat-radio-button>
+                        
+                      <mat-radio-button value="3" color="accent">
+                        Accent Theme Radio button 
+                      </mat-radio-button> 
+            
+           
+                </mat-radio-group>-->
+                
+                
+
+            </div>
+
+            <div class="container-cuerpo-fila5">
+                <mat-form-field class="fila5-glosa-vehiculo" appearance="fill">
+                    <mat-label>Glosa</mat-label>
+                    <textarea matInput type="text"  placeholder="Glosa" value=""
+                    autocomplete="off" formControlName="glosa"></textarea>
+                </mat-form-field>
+
+                <!-- <div class="container mt-5">
+                    <h2>Angular Webcam Capture Image from Camera</h2>
+                    <div class="col-md-12">
+                      <webcam
+                        [trigger]="invokeObservable"
+                        (initError)="handleInitError($event)"
+                        (imageCapture)="captureImg($event)"
+                      ></webcam>
+                    </div>
+                    <div class="col-md-12">
+                      <button class="btn btn-danger" (click)="getSnapshot()">
+                        Capture Image
+                      </button>
+                    </div>
+                    <div class="col-12">
+                      <div id="results">Your taken image manifests here...</div>
+                      <img [src]="webcamImage?.imageAsDataUrl" height="400px" />
+                    </div>
+                  </div> -->
+                <!--<mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Leave a comment</mat-label>
+                    <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+                  </mat-form-field>-->
+                  <div class="row mt-2">
+                    <div class="col-md-3">
+                        <input type="file" (change)="onChangeFile($event)" autocomplete="off" accept="image/*"
+                            class="form-control d-none" #inputFile>
+                        <button (click)="inputFile.click()" type="button" class="button-info"
+                            mat-flat-button>Foto 1 <mat-icon>upload</mat-icon></button>
+                    </div>
+                    <div class="col-md-3"  *ngIf="file != undefined && file != null">
+                        <span *ngIf="file != undefined && file != null" class="text-success">Archivo Seleccionado</span><br>
+                        <button *ngIf="file != undefined && file != null" (click)="eliminarArchivo()" mat-flat-button color="warn"> Foto <mat-icon>delete</mat-icon></button>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="file" (change)="onChangeFile2($event)" autocomplete="off" accept="image/*"
+                            class="form-control d-none" #inputFile2>
+                        <button (click)="inputFile2.click()" type="button" class="button-info"
+                            mat-flat-button>Foto 2<mat-icon>upload</mat-icon></button>
+                    </div>
+                    <div class="col-md-3"  *ngIf="file2 != undefined && file2 != null">
+                        <span *ngIf="file2 != undefined && file2 != null" class="text-success">Archivo Seleccionado 2</span><br>
+                        <button *ngIf="file2 != undefined && file2 != null" (click)="eliminarArchivo2()" mat-flat-button color="warn"> Foto <mat-icon>delete</mat-icon></button>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="fila4-datos">
+                <h4><b><u>Ultima Operacion</u></b></h4>
+                <p><b>Fecha: </b>{{this.Ultimo_Fec_Registro}}</p>
+                <p><b>Planta Base: </b>{{this.Planta}}</p>
+                <p><b>Accion: </b>{{this.Accion}}</p>
+                <p><b>Origen: </b>{{this.Origen}}</p>
+                <p><b>Destino: </b>{{this.Destino}}</p>
+                <p><b>Ultimo km: </b>{{this.Ultimo_Km}}</p>
+                <p><b>Usuario: </b>{{this.Usuario}}</p>
+                <!--<button type="button" class="button-registrar" mat-flat-button color="primary" (click)="CompletarInfo()" >
+                    <mat-icon aria-label="person">create
+                    </mat-icon>Modificar km.
+                </button>-->
+            </div>
+
+ 
+            <div class="container-cuerpo-foot">
+
+                <button type="button" class="button-registrar" mat-flat-button color="primary" (click)="Guardar()" >
+                    <mat-icon aria-label="person">check_circle_outline
+                    </mat-icon>Registrar
+                </button>
+                <button type="button" class="button-cancelar" mat-flat-button color="primary"
+                    [routerLink]="['/SeguridadControlVehiculoAccion']">
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+
+ 
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>
+ 

@@ -1,0 +1,148 @@
+<div class="container">
+
+    <div class="grid-container">
+
+        <div class="title"><strong>Modificar </strong></div>
+<!--[formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)"-->
+            <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)"  >
+            <div class="container-cuerpo-fila1">
+
+                            <!--<mat-form-field class="fila1-fecha">
+                                <mat-label>Fecha</mat-label>
+                                <input matInput [matDatepicker]="Fec_Registro"
+                                    formControlName="Fec_Registro" >
+                                <mat-datepicker-toggle matSuffix [for]="Fec_Registro"></mat-datepicker-toggle>
+                                <mat-datepicker #Fec_Registro></mat-datepicker>
+                            </mat-form-field>-->
+                            <mat-form-field class="fila1-fecha">
+                                <mat-label>Fecha</mat-label>
+                                <input matInput formControlName="Fec_Registro">
+                            </mat-form-field>
+
+                            <mat-form-field class="fila1-codmaquina">
+                                    <mat-label>Maquina</mat-label>
+                                <mat-select  formControlName="Cod_Maquina" name="listar_operacionConductor">
+                                    <mat-option *ngFor="let listar_origen of listar_operacionConductor" [value]="listar_origen.Codigo">
+                                        {{listar_origen.Descripcion}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field class="fila0-Color">
+                                <mat-label>Motivo</mat-label>
+                                    <mat-select  formControlName="Cod_Motivo" name="listar_operacionmotivos">
+                                        <mat-option *ngFor="let listar_motivos of listar_operacionmotivos" [value]="listar_motivos.Codigo">
+                                            {{listar_motivos.Descripcion}}
+                                        </mat-option>
+                                    </mat-select>
+                            </mat-form-field>
+
+                            <!--<mat-form-field class="fila1-fecha2">
+                                <mat-label>Fecha Inicio</mat-label>
+                                <input matInput [matDatepicker]="Fec_Inicio" autocomplete="off" formControlName="Fec_Inicio">
+                                <mat-datepicker-toggle matSuffix [for]="Fec_Inicio"></mat-datepicker-toggle>
+                                <mat-datepicker #Fec_Inicio></mat-datepicker>
+                            </mat-form-field>    -->
+
+                            <mat-form-field class="fila1-fecha2">
+                                <mat-label>Fecha Inicio</mat-label>
+                                <input matInput formControlName="Fec_Inicio">
+                            </mat-form-field>
+
+                            <mat-form-field class="fila1-Color">
+                                <mat-label>Hora Inicio (00:00 a 24:00)</mat-label>
+                                <input matInput [textMask]="{mask: num_guiaMascara}" formControlName="hini">
+                            </mat-form-field>
+
+                            <!--<mat-form-field class="fila1-fecha3">
+                                <mat-label>Fecha Fin</mat-label>
+                                <input matInput [matDatepicker]="Fec_Fin" autocomplete="off"
+                                    formControlName="Fec_Fin" >
+                                <mat-datepicker-toggle matSuffix [for]="Fec_Fin"></mat-datepicker-toggle>
+                                <mat-datepicker #Fec_Fin></mat-datepicker>
+                            </mat-form-field> -->
+
+                            <mat-form-field class="fila1-fecha3">
+                                <mat-label>Fecha Fin</mat-label>
+                                <input matInput mask='99/99/9999' formControlName="Fec_Fin">
+                            </mat-form-field>
+
+                            <mat-form-field class="fila2-Color">
+                                <mat-label>Hora Fin (00:00 a 24:00)</mat-label>
+                                <input matInput [textMask]="{mask: num_guiaMascara}" formControlName="hfin">
+                            </mat-form-field>
+
+
+                            <mat-form-field class="fila1-excel">
+                                    <mat-label>Observaciones</mat-label>
+                                     <textarea matInput formControlName="observaciones" autocomplete="off"></textarea>
+                            </mat-form-field>
+
+                            <mat-form-field class="dni-tejedor" >
+                              <mat-label></mat-label>
+                              <input matInput placeholder="DNI TEJEDOR" #dnitejedor id="dnitejedor" (input)="mostrarTejedor()" formControlName="dnitejedor">
+                              <input  type="hidden"  formControlName="feccrea" >
+                            </mat-form-field>
+
+                            <mat-form-field class="nombre-tejedor" >
+                              <mat-label>NOMBRE TEJEDOR</mat-label>
+                              <input matInput formControlName="nomtejedor">
+                            </mat-form-field>
+
+
+                   <!-- <div class="sub-container-cuerpo2">
+                        <mat-card class="example-card">
+                            <mat-card-title>Prenda</mat-card-title>
+
+                            <mat-card-content>
+
+                            </mat-card-content>
+                        </mat-card>
+                    </div>-->
+
+
+            </div>
+            <div class="container-cuerpo-foot">
+
+
+              <button type="submit" class="button-agregar"   mat-dialog-close="true" [disabled]="!formulario.valid"  mat-flat-button>
+                <mat-icon aria-label="person" >create
+                </mat-icon>  Modificar
+              </button>
+
+
+            <button type="button" class="button-cancelar"  mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                <mat-icon aria-label="person">highlight_off
+                </mat-icon>  Cancelar
+            </button>
+
+                <!--<button  type="submit" class="button-agregar"  [disabled]="!formulario.valid"  mat-dialog-close="true"  mat-flat-button>
+                    <mat-icon aria-label="person" >check
+                    </mat-icon>  Aceptar
+                </button>
+
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>   -->
+
+              <!--  <button type="submit" class="button-agregar"  [disabled]="!formulario.valid"  mat-flat-button>
+                    <mat-icon aria-label="person" >add
+                    </mat-icon>  Registrar
+                </button>-->
+
+                <!--<ng-template #btnmodificar><button type="submit" class="button-agregar" mat-dialog-close="false" [disabled]="!formulario.valid"  mat-flat-button>
+                    <mat-icon aria-label="person" >create
+                    </mat-icon>  Modificar
+                </button></ng-template>-->
+
+                <!--<button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>-->
+            </div>
+        </form>
+
+    </div>
+
+</div>

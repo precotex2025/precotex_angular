@@ -1,0 +1,39 @@
+<form [formGroup]="formulario">
+    <div class="division">
+        <div class="Tipo">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Tip. Trabajador</mat-label>
+                <input matInput [readonly]="data.tipo == 2" placeholder="Ingrese el Código" maxlength="1" formControlName="Tip_Trabajador">
+            </mat-form-field>
+            </div>
+            
+        <div class="Codigo">
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Cod. Trabajador</mat-label>
+            <input matInput (change)="obtenerTrabajador($event)" [readonly]="data.tipo == 2" placeholder="Ingrese el Código" maxlength="4" formControlName="Cod_Trabajador">
+        </mat-form-field>
+        </div>
+
+        <div class="Nombre">
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Apellidos y Nombres del Trab.</mat-label>
+            <input matInput formControlName="Nom_Usuario" [readonly]="data.tipo == 2">
+        </mat-form-field>
+        </div>
+    </div>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Seleccionar Módulo</mat-label>
+        <mat-select formControlName="Cod_Modulo" placeholder="Seleccione">
+            <mat-option *ngFor="let item of listar_modulo" [value]="item.Cod_Modulo">{{ item.Des_Modulo }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+
+    <button mat-flat-button class="button-registrar" color="primary" (click)="guardar()"><mat-icon>save</mat-icon> Guardar</button>
+    <button mat-flat-button class="button-cancelar" mat-dialog-close><mat-icon>cancel</mat-icon> Cancelar</button>
+</form>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

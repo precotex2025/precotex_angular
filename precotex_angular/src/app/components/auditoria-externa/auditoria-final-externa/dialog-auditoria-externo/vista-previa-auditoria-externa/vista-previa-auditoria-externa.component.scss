@@ -1,0 +1,54 @@
+.strong {
+    font-weight: bold;
+}
+
+.row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.caja {
+    width: 16%;
+    padding: 0px;
+    font-size: 12px;
+    max-height: 74px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.caja2 {
+    width: 49%;
+    padding: 0px;
+    font-size: 12px;
+    max-height: 130px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+.body-tabla, mat-card, table {
+    width: 100%;
+
+}
+
+table,
+th,
+td {
+    border: 1px solid;
+    padding: 0px;
+    font-size: 10px;
+    text-align: center;
+}
+
+table:not([cellpadding]) td, table:not([cellpadding]) th{
+    padding: 0rem;
+}
+
+.cerrar {
+    cursor: pointer;
+    font-size: 20px;
+    padding: 5px;
+    background-color: red;
+    color: white;
+}

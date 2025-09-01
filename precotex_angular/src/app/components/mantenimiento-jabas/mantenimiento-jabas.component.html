@@ -1,0 +1,134 @@
+
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container"> 
+  
+        <div class="title">Mantenimiento de Jabas</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+                
+                    <mat-form-field class="fila1-dni"> 
+                        <mat-label>Codigo de Barras</mat-label>
+                        <input matInput type="text"  placeholder="DNI" value=""
+                            autocomplete="off" formControlName="sDni" >
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-nombres" appearance="fill">
+                        <mat-label>Conductor</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Conductor" formControlName="sConductor"  [matAutocomplete]="autoDataConductor" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataConductor="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionConductor | async" [value]="option.Nombres">
+                                {{option.Nombres}}
+                            </mat-option> 
+                        </mat-autocomplete>                            
+                    </mat-form-field>    
+            
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="MostrarCabeceraConductor()"
+                    >                    
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+ 
+
+            </div>   
+ 
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                    <ng-container matColumnDef="Cod_Conductor">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nº Conductor</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_Conductor}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Nro_DocIde">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">DNI</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Nro_DocIde}}  </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Nombres">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nombres</th>
+                        <td mat-cell *matCellDef="let data_det">  {{data_det.Nombres}} </td>
+                    </ng-container>
+
+                     <ng-container matColumnDef="Num_Licencia_Cond">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nº Licencia</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{data_det.Num_Licencia_Cond}} </td>
+                    </ng-container>
+  
+                    <ng-container matColumnDef="Categoria_Licencia">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Categoria</th>
+                         <td mat-cell *matCellDef="let data_det"> {{data_det.Categoria_Licencia}} </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="Fec_Fin_Licencia">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha Venc.</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Fec_Fin_Licencia}} </td>
+                    </ng-container>                     
+                    
+                    <ng-container matColumnDef="Flg_Status">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estado</th>
+                        <td mat-cell *matCellDef="let data_det" > <button *ngIf="data_det.Flg_Status == 'S'; else btnerr" type="button"style="background:#3f51b5; width: 80px;" class="button-agregar" mat-flat-button (click)="OpenDialogConfirmacion(data_det.Cod_Conductor)">Activo</button>   
+                            <ng-template #btnerr><button type="button" style="background:#f44336; width: 80px;" class="button-agregar" mat-flat-button (click)="OpenDialogConfirmacion(data_det.Cod_Conductor)">Inactivo</button></ng-template>
+                        </td>
+                    </ng-container> 
+
+                  
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let data_det">
+
+                            <a mat-icon-button style="margin-right:5px;" *ngIf="data_det.Nro_DocIde.length>0"
+                                (click)="openDialogModificar(data_det.Cod_Conductor,data_det.Nro_DocIde)">
+                                <mat-icon color="success">create</mat-icon>
+                            </a>
+
+                            <a mat-icon-button *ngIf="data_det.Nro_DocIde.length>0"
+                                (click)="EliminarRegistro(data_det.Nro_DocIde,data_det.Cod_Conductor)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a> 
+                        </td>
+                    </ng-container> 
+
+                    <!--<ng-container matColumnDef="eliminar">
+                        <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <a mat-icon-button *ngIf="data_det.Nro_DocIde.length>0"
+                                (click)="EliminarRegistro(data_det.Nro_DocIde,data_det.Cod_Conductor)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>--> 
+ 
+                
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+
+                </table>
+
+                <mat-paginator  class="paginador" #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+                </mat-paginator>
+
+            </div>
+
+            
+
+
+            <div class="container-cuerpo-foot">
+                <button type="button" class="button-agregar" mat-flat-button (click)="openDialog();"
+                    >
+                    <mat-icon aria-label="person">add
+                    </mat-icon>  Agregar
+                </button>
+
+                <!--<button type="button" class="button-cancelar" [routerLink]="['/SeguridadControlVehiculoAccion']" mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Regresar
+                </button> -->              
+            </div>
+        </form>
+
+    </div>
+ 
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>       

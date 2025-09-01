@@ -1,0 +1,129 @@
+.container-fluid {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100%;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 16px;
+    margin: 0;
+}
+
+.grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #494040;
+    margin: 0;
+    padding: 0;
+    //min-width: 320px;
+}
+
+.title {
+    background-color: #494040;
+    color: #fcffff;
+    padding: 8px 0px 10px 0px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.find, .main, .footer {
+    margin: 5px 5px 0px 5px;    
+}
+
+.find {
+    padding: 15px 15px;
+    border-width: 0px 0px 1px 0px;
+    width: 99%;
+    margin: 0%;
+}
+
+.list-form {
+    padding-bottom: 8px;
+    width: 99%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+/*
+
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0; 
+}
+
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: 100%;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    min-width: 320px;
+    min-height: 320px;
+}
+
+.title {
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.example-button-row .mat-button-base {
+    height: 60px;
+    margin: 8px 8px 8px 8px;
+}
+
+.example-flex-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+*/  
+//
+
+:host {
+    padding: 1rem;
+    display: block;
+}
+
+canvas {
+    background-color: white;
+    border: 3px solid #170b80;
+    border-radius: 7px;
+    box-shadow: 
+        0 0px 3.3px rgba(0, 0, 0, 0.017),
+        0 0px 7.9px rgba(0, 0, 0, 0.024),
+        0 0px 14.9px rgba(0, 0, 0, 0.03),
+        0 0px 26.6px rgba(0, 0, 0, 0.036),
+        0 0px 49.7px rgba(0, 0, 0, 0.043),
+        0 0px 119px rgba(0, 0, 0, 0.06);
+}
+/*
+.zone-btn {
+    width: 100%;
+    display: flex;
+    margin-top: .5rem;
+}
+
+.zone-btn button {
+    background-color: red;    
+    border: solid 1px red;
+    padding: .5rem;
+    border-radius: .25rem;
+    margin-right: .5rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    box-shadow: 0 0 10px #e2e2e2;
+}
+
+*/

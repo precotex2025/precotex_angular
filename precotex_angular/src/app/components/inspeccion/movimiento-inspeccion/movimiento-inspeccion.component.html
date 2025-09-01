@@ -1,0 +1,114 @@
+ 
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container"> 
+ 
+        <div class="title">Generar Movimiento Transito Costura</div>
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)" >
+            <div class="container-cuerpo-fila1">
+                
+                    <mat-form-field class="fila1-Op"> 
+                        <mat-label>OP</mat-label>
+                        <input matInput type="text"  placeholder="OP" value="" 
+                            autocomplete="off" formControlName="op" (input)="ValidarActivarBuscar()" maxlength="5" minlength="1" >
+                    </mat-form-field> 
+                    
+                    <!--<mat-form-field class="fila1-Color" appearance="fill">
+                        <mat-label>Color</mat-label>
+                        <mat-select formControlName="color" multiple>
+                          <mat-option *ngFor="let option of listar_operacionColor" [value]="option.Codigo"> 
+                            {{option.Descripcion}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>-->
+
+                    <!--<button type="submit" class="button-agregar"  [disabled]="!formulario.valid"  mat-flat-button>
+                        <mat-icon aria-label="person" >add
+                        </mat-icon>  Registrar
+                    </button>-->   
+
+                    <button type="button" (click)="llenarColorPorOp()" class="button-buscar"  [disabled]="!Flg_Btn_Buscar" mat-flat-button >
+                        <mat-icon aria-label="person">search
+                        </mat-icon> Buscar
+                    </button>
+
+                    <button type="submit"  class="button-registrar"  *ngIf="this.selection.selected?.length > 0" mat-flat-button >
+                        <mat-icon aria-label="person">save
+                        </mat-icon> Registrar
+                    </button>
+
+            </div>    
+
+            <div class="container-cuerpo-fila2">
+                
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                    <!-- Checkbox Column -->
+                    <ng-container matColumnDef="Sel">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                      [checked]="selection.hasValue() && isAllSelected()"
+                                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                      [aria-label]="checkboxLabel()">
+                        </mat-checkbox>
+                      </th>
+                      <td mat-cell *matCellDef="let row">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                                      (change)="$event ? selection.toggle(row) : null"
+                                      [checked]="selection.isSelected(row)"
+                                      [aria-label]="checkboxLabel(row)">
+                        </mat-checkbox>
+                      </td>
+                    </ng-container>
+                  
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="Codigo">
+                      <th mat-header-cell *matHeaderCellDef> Codigo </th>
+                      <td mat-cell *matCellDef="let element"> {{element.Codigo}} </td>
+                    </ng-container>
+                  
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="Color">
+                      <th mat-header-cell *matHeaderCellDef> Color </th>
+                      <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Stock">
+                        <th mat-header-cell *matHeaderCellDef> Stock </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Stock_Color}} </td>
+                      </ng-container>
+                  
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                        (click)="selection.toggle(row)">
+                    </tr>
+                  </table>
+
+            </div>    
+
+
+ 
+        </form>
+
+    </div>
+
+
+
+
+ 
+ 
+   
+
+
+
+ 
+
+
+
+</div>
+
+
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>       

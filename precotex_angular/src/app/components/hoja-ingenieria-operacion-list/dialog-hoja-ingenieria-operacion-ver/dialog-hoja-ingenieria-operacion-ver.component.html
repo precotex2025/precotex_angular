@@ -1,0 +1,165 @@
+<div class="container-dialog">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container-dialog">
+
+      <div class="title-dialog"><span class="numhoja">{{Titulo}}</span></div>
+      <form class="container-cuerpo-dialog" [formGroup]="formulario">
+
+        <div class="container-cuerpo-fila1">
+
+            <mat-card>
+                <mat-card-header>
+                    Registro de método
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="container-cuerpo-fila1-content">
+
+                        <mat-form-field class="fila1-estilo-propio">
+                            <mat-label>Estilo Propio</mat-label>
+                            <input matInput type="text" maxlength="15" placeholder="Estilo Propio" value="" autocomplete="off" formControlName="sCodEstPro" (input)="buscarxEstiloPropio()"/>
+                        </mat-form-field>
+
+                        <mat-form-field class="fila1-tipo-estilo">
+                            <mat-label>Tipo de Estilo</mat-label>
+                            <mat-select formControlName="sTipoEstilo">
+                                <mat-option *ngFor="let option of lstOptTipoEstilo" [value]="option.id">
+                                    {{option.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>     
+
+                        <mat-form-field class="fila1-cliente">
+                            <mat-label>Cliente</mat-label>
+                            <input matInput type="text" placeholder="Cliente" value="" autocomplete="off" formControlName="sDesCliente"/>
+                        </mat-form-field>
+
+                        <mat-form-field class="fila1-prenda">
+                            <mat-label>Prenda</mat-label>
+                            <input matInput type="text" placeholder="Prenda" value="" autocomplete="off" formControlName="sTipoPrenda"/>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="fila1-version">
+                            <mat-label>Version</mat-label>
+                            <mat-select formControlName="sCodVersion" (selectionChange)="onVersionChange($event)">
+                                <mat-option *ngFor="let option of lstOptVersiones" [value]="option.Cod_Version">
+                                    {{option.Cod_Version}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="fila1-estcli">
+                            <mat-label>Estilo cliente</mat-label>
+                            <mat-select formControlName="sCodEstCli">
+                                <mat-option *ngFor="let option of itemsEstiloCliente" [value]="option.Cod_EstCli">
+                                    {{option.Cod_EstCli}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="fila1-grupo" class="fila1-grupo">
+                            <mat-label>Grupo</mat-label>
+                            <input matInput type="text" placeholder="Grupo" value="" autocomplete="off" formControlName="sGrupo"/>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="fila1-complejidad">
+                            <mat-label>Complejidad</mat-label>
+                            <mat-select formControlName="sComplejidad">
+                                <mat-option *ngFor="let option of lstOptComplejidad" [value]="option.id">
+                                    {{option.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="fila1-analista">
+                            <mat-label>Analista</mat-label>
+                            <input matInput type="text" #trigger="matAutocompleteTrigger" placeholder="Analista" formControlName="sAnalista" [matAutocomplete]="autoDataAnalista" />
+                            <mat-autocomplete autoActiveFirstOption #autoDataAnalista="matAutocomplete">
+                                <mat-option *ngFor="let option of filtroOperacionAnalista | async" [value]="option.Nom_Analista">
+                                    {{option.Nom_Analista}}
+                                </mat-option> 
+                            </mat-autocomplete>                            
+                        </mat-form-field>
+
+                        <mat-form-field class="fila1-fecha">
+                            <mat-label>Fecha</mat-label>
+                            <input matInput type="datetime-local" formControlName="sFechaHoraIngreso">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="fila1-tipo-tela">
+                            <mat-label>Tipo de tela</mat-label>
+                            <mat-select formControlName="sTipoTela">
+                                <mat-option *ngFor="let option of lstOptTipoTela" [value]="option.DES_TELA">
+                                    {{option.DES_TELA | slice:0:250}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <div class="fila1-adjuntar" *ngIf="btnUploadFileVisible">
+
+                            <a [href]="URLArchivo" mat-button color="primary" [disabled]="!ExisteArchivo" target="_blank" download>
+                                <mat-icon>cloud_download</mat-icon>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+          
+        </div>
+
+        <div class="container-cuerpo-fila2">
+
+            <mat-card>
+                <mat-card-header>
+                    Paso a paso de operaciones
+                </mat-card-header>
+                <mat-card-content>
+                    
+                        <div class="container-cuerpo-fila2-content">
+                            <mat-list>
+                                <mat-list-item *ngFor="let item of dataItemsPasos; index as i">
+                                    <mat-icon matListIcon>folder</mat-icon>
+                                    <h4 matLine>{{item.Orden}}. {{item.Titulo}}</h4>
+                                    <p matLine [innerHTML]="item.Descripcion"></p>
+                                    <p matLine> 
+                                        <b>Observaciones: </b><br>
+                                        <span [innerHTML]="item.Observaciones"></span>
+                                    </p>
+                                    <p matLine> 
+                                        <b>Accesorios:</b><br>
+                                        <span [innerHTML]="item.Accesorios"></span>
+                                    </p>
+                                    
+                                    <p matLine *ngIf="item.UrlVideo !=''">  
+                                        <a href="{{item.UrlVideo}}" mat-button color="primary" target="_blank">
+                                            <mat-icon>videocam</mat-icon> Video
+                                        </a> 
+                                    </p>
+                                 </mat-list-item>
+                              </mat-list>
+                        </div>
+
+                </mat-card-content>
+            </mat-card>
+          
+        </div> 
+
+
+        <div class="container-cuerpo-foot-dialog">
+    
+            <button mat-dialog-close type="button" class="button-cancel-dialog" mat-button mat-dialog-close
+              mat-dialog-close="false">
+              <mat-icon aria-label="person">cancel
+              </mat-icon> Cerrar
+            </button>
+        </div>
+          
+       </form>
+
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

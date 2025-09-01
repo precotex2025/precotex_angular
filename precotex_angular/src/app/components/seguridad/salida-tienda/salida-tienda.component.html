@@ -1,0 +1,231 @@
+<div class="container-fluid">
+    <div class="grid-container">
+        <div class="title">Control Salida Tienda</div>
+
+        <div class="find">
+            <div *ngIf="ll_listado">
+                <mat-card class="list-form">
+                    <mat-card-header>
+                        <mat-card-subtitle>Listado de Documentos</mat-card-subtitle>
+                    </mat-card-header>
+
+                    <mat-card-content>
+                        <div>
+                            <mat-form-field>
+                                <mat-label>Fecha</mat-label>
+                                <input matInput [matDatepicker]="picker" name="ld_Fecha" [(ngModel)]="fecha" placeholder="Fecha">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>                   
+
+                            <mat-form-field>
+                                <mat-label>Filtrar</mat-label>
+                                <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar busqueda" #input>
+                            </mat-form-field>
+
+                            <button mat-button type="button" color="primary" (click)="listarSalidaTienda()"><mat-icon>search</mat-icon>Buscar</button>
+                            <button mat-button type="button" color="primary" (click)="onInsertarRegistro()"><mat-icon>add</mat-icon>Nuevo</button>
+                            <button mat-button type="button" color="primary" (click)="onExportarRegistro()"><mat-icon>file_download</mat-icon>Descargar</button>
+                        </div>
+
+                        <div class="col-md-12 tabla">
+                            <table mat-table [dataSource]='dataSource1' matSort #sortData1="matSort" matSortActive="Fec_Inicio" matSortDirection="desc" class="mat-elevation-z8">
+                                <ng-container matColumnDef="fec_Registro">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Registro </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.fec_Registro | date: 'dd-MM-yyyy HH:mm' }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="clp_numdoc">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Doc.Identidad </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.clp_numdoc }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="clp_razsoc">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellidos y Nombres </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.clp_razsoc }} </td>
+                                </ng-container>
+                                
+                                <ng-container matColumnDef="ser_Sunat">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Serie </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.ser_Sunat }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="doc_Numero">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Número </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.doc_Numero }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="usu_Registro">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Responsable </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.usu_Registro }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="flg_Estado">
+                                    <th mat-header-cell *matHeaderCellDef> Estado </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <span [ngClass]="{'flg_green':element.flg_Estado=='1', 'flg_red':element.flg_Estado=='2'}">{{ element.flg_Estado == '1' ? 'NORMAL' : 'OBSERVADO' }}</span>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Acciones">
+                                    <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                    <td class="mat-header-cell" mat-cell *matCellDef="let element">
+                                        <a mat-icon-button (click)="onDetalleRegistro(element)" matTooltip="Detalle documento">
+                                            <mat-icon color="primary">list</mat-icon>
+                                        </a>
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+                            </table>
+
+                            <mat-paginator #paginatorData1 [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>                        
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+
+            <div *ngIf="!ll_listado">
+                <mat-card class="list-form" [formGroup]="formulario">
+                    <mat-card-header>
+                        <mat-card-subtitle>Consultar Documento</mat-card-subtitle>
+                    </mat-card-header>
+
+                    <mat-card-content>
+
+                        <div>
+                            <video #videoElement width="300" height="200" *ngIf="camaraActiva"></video>
+                            <p *ngIf="qrInvalido">Resultado: {{ qrResult }}</p>
+                        </div>
+
+                        <div>
+                            <p>
+                                <!-- CON ngx-scanner-qrcode -->
+                                <!--<mat-form-field appearance="fill">
+                                    <select #select1 (change)="action.playDevice(select1.value)" class="form-select form-select-md">
+                                        <option [value]="null" selected>Select device</option>
+                                        <option *ngFor="let c of action.devices.value; let i = index" [value]="c.deviceId" [selected]="i == action.deviceIndexActive">{{c.label}}</option>
+                                    </select>
+                                </mat-form-field>-->
+
+                                <!--<mat-form-field appearance="outline">
+                                    <select matNativeControl matInput (change)="onDeviceSelectChange($event)">
+                                        <option value="" [selected]="!currentDevice">No Device Selected</option>
+                                        <option *ngFor="let device of availableDevices" [value]="device.deviceId"
+                                        [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{device.label}}</option>
+                                    </select>
+                                </mat-form-field>-->
+
+                                <mat-form-field class="example-full-width" appearance="outline" *ngIf="leerPDA">
+                                    <mat-label>Leer QR (PDA)</mat-label>
+                                    <input matInput type="text" value="" autocomplete="off" formControlName="qrLectura" placeholder="Leer QR (PDA)" (change)="onLecturaQR($any($event).target.value)">
+                                </mat-form-field>
+
+                                <mat-form-field class="example-width-45" appearance="outline" *ngIf="!leerPDA">
+                                    <mat-label>Tipo</mat-label>
+                                    <mat-select formControlName="Tipo">
+                                        <mat-option *ngFor="let item of dataTipo" [value]="item.tipo">
+                                            {{ item.documento }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field class="example-width-15" appearance="outline" *ngIf="!leerPDA">
+                                    <mat-label>Serie</mat-label>
+                                    <input matInput type="text" value="" autocomplete="off" formControlName="Serie" placeholder="Serie">
+                                </mat-form-field>
+
+                                <mat-form-field class="example-width-45" appearance="outline" *ngIf="!leerPDA">
+                                    <mat-label>Número</mat-label>
+                                    <input matInput type="text" value="" autocomplete="off" formControlName="Numero" placeholder="Numero">
+                                </mat-form-field>
+
+                                <mat-form-field class="example-width-45" appearance="outline" *ngIf="ll_obsSalida">
+                                    <mat-label>Doc.Identidad</mat-label>
+                                    <input matInput type="text" value="" autocomplete="off" formControlName="Dni" placeholder="Doc.Identidad">
+                                </mat-form-field>
+
+                                <mat-form-field class="example-full-width" appearance="outline" *ngIf="!leerPDA">
+                                    <mat-label>Cliente</mat-label>
+                                    <input matInput type="text" value="" autocomplete="off" formControlName="Cliente" placeholder="Cliente">
+                                </mat-form-field>
+
+                                <mat-form-field class="example-width-45" appearance="outline" *ngIf="!leerPDA">
+                                    <mat-label>Doc.Identidad</mat-label>
+                                    <input matInput type="text" value="" autocomplete="off" formControlName="DniValida" placeholder="Doc.Identidad" (blur)="onValidaDocumento($any($event).target.value)">
+                                </mat-form-field>
+
+                                <mat-form-field class="example-full-width" appearance="outline" *ngIf="!leerPDA">
+                                    <mat-label>Observacion</mat-label>
+                                    <input matInput type="text" value="" autocomplete="off" formControlName="Observacion" placeholder="Observacion">
+                                </mat-form-field>
+                            </p>
+                            <div *ngIf="ll_obsSalida">
+                                <p class="flg_red">
+                                    Documento de Identidad NO corresponde al Comprobante...!
+                                </p>
+                            </div>
+                        </div>
+                        <mat-divider></mat-divider>
+                    </mat-card-content>
+
+                    <mat-card-actions>
+                        <button mat-button type="button" color="primary" *ngIf="ll_nuevo" (click)="onScannerQR()"><mat-icon>qr_code_scanner</mat-icon>Codigo QR</button>
+                        <button mat-button type="button" color="primary" *ngIf="ll_nuevo" (click)="onScannerPDA()"><mat-icon>qr_code</mat-icon>PDA</button>
+                        <button mat-button type="button" color="primary" *ngIf="ll_nuevo" (click)="onBuscarRegistro()"><mat-icon>search</mat-icon>Buscar</button>
+                        <button mat-button type="button" color="primary" *ngIf="ll_nuevo" [disabled]="formulario.invalid" (click)="onGrabarRegistro()"><mat-icon>done</mat-icon>Confirmar</button>
+                        <button mat-button type="button" color="primary" (click)="onCerrarRegistro()"><mat-icon>undo</mat-icon>Cerrar</button>
+                    </mat-card-actions>
+
+                </mat-card>
+
+                <mat-card class="list-form">
+                    <mat-card-header>
+                        <mat-card-subtitle>Listado de Registros</mat-card-subtitle>
+                    </mat-card-header>
+
+                    <mat-card-content>
+                        <div class="col-md-12 tabla">
+                            <table mat-table [dataSource]='dataSource2' matSort #sortData2="matSort" matSortActive="art_codigo" matSortDirection="desc" class="mat-elevation-z8">
+                                <ng-container matColumnDef="art_codigo">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Codigo </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.art_codigo }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="art_descrip">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.art_descrip }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="par_desccolor">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Color </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.par_desccolor }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="uni_codigo">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Unidad </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.uni_codigo }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="mod_cantreal">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad </th>
+                                    <td mat-cell *matCellDef="let element"> {{ element.mod_cantreal }} </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+                            </table>
+
+                            <mat-paginator #paginatorData2 [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>                        
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner> 

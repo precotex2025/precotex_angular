@@ -1,0 +1,616 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+   
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 500px;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 8px 10px 10px;
+    text-align: center;
+    border-radius: 4px 4px 0 0;
+    border-bottom: 1px solid #337ab7;
+    font-weight: 700;
+    font-family: sans-serif;
+    font-size: 18px;
+}
+
+.container-cuerpo {
+    width: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 250px
+        "fila2" 190px
+        "fila3" 0px
+        "foot" 0px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    margin-top: 15px;
+}
+
+.container-cuerpo-fila3 {
+    grid-area: fila3;
+    margin-top: 15px;
+
+}
+/*.container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}*/
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+
+
+
+/*.fila1-btn_anadir {
+    grid-area: col2;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #155724;
+    color: #ffffff;
+    width: 70px; 
+}
+
+.fila1-btn_eliminar {
+    grid-area: col4;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #e91919;
+    color: #ffffff;
+    width: 70px; 
+    margin-left: -5px;
+}
+
+.fila1-btn_finalizar {
+    grid-area: col7;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 150px; 
+}
+
+.fila1-btn_regresar {
+    grid-area: col8;
+    width: 100%;
+    height: 40px;
+    max-width: 280px; 
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 70px; 
+}*/
+
+.sub-container{
+   display: flex;
+   width: 100%;
+}
+
+    .sub-container-cuerpo1{
+        width: 33%;
+    }
+
+
+        //fila 1 
+        .container-cuerpo-fila1 {
+            display: grid;
+
+            grid-template:
+            "col1 col2" 85px
+            "col3 col4" 85px
+            "col5 col6" 85px/
+            49% 49%;
+        }
+
+        .fila1-Codigo {
+            grid-area: col1;
+            width: 100%; 
+            
+        }
+
+        .fila1-OP {
+            grid-area: col2;
+            width: 100%; 
+            
+        }
+
+        .fila1-Color {
+            grid-area: col3;
+            width: 100%; 
+            
+            
+        }
+
+        .fila1-Talla {
+            grid-area: col4;
+            width: 100%; 
+            
+        }
+
+        
+        .fila1-Cantidad {
+            grid-area: col5;
+            width: 100%; 
+            
+        }
+
+        .fila1-button-container{
+            grid-area: col6;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .button-Agregar{
+            height: 40px;
+            margin: 3px 5px 0px 0px;
+            background-color: #3f51b5;
+            color: #ffffff;
+        }
+        .button-Rechazar{
+            height: 40px;
+            margin: 3px 5px 0px 0px;
+            background-color: #d32f2f;
+            color: #ffffff;
+        }
+
+        .button-Limpiar{
+            height: 40px;
+            margin: 3px 5px 0px 0px;
+            background-color: #3f51b5;
+            color: #ffffff;
+        }
+
+        .button-Agregar-xs{
+            height: 40px;
+            margin: 3px 5px 0px 0px;
+            background-color: #3f51b5;
+            color: #ffffff;
+            display: none;
+        }
+        .button-Rechazar-xs{
+            height: 40px;
+            margin: 3px 5px 0px 0px;
+            background-color: #d32f2f;
+            color: #ffffff;
+            display: none;
+        }
+
+        .button-Limpiar-xs{
+            height: 40px;
+            margin: 3px 5px 0px 0px;
+            background-color: #3f51b5;
+            color: #ffffff;
+            display: none;
+        }
+
+
+        .button-Agregar {
+            width: 45%; 
+            max-width: 49%;
+        }
+
+        .button-Limpiar {
+            width: 45%; 
+            max-width: 49%;  
+        }
+
+
+    .sub-container-cuerpo2{
+        width: 33%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+        .example-card{
+            max-width: 100%;
+            width: 80%;
+            max-height: 200px;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+    .sub-container-cuerpo3{
+        width: 33%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+        .example-card1{
+            max-width: 100%;
+            width: 100%;
+            max-height: 200px;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+
+.card-container-fila2{
+    display: flex;
+    margin-top: 10px;
+}
+.example-card2{
+    max-width: 100%;
+    width: 100%;
+    //max-width: 250px;
+    max-height: 250px;
+    //width: 165px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+mat-card-title{
+    font-size: 16px;
+}
+
+mat-card-content {
+    margin-bottom: 18px;
+    margin-top: 6px;
+}
+mat-card-actions{
+    display: flex;
+}
+
+.card-content-fila2{
+    margin: 0px;
+}
+
+.sub-card {
+    display: flex;
+}
+
+.sub-card-container {
+    margin: 0 15px 0 15px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-size: 15px;
+}
+
+
+
+
+
+.card-btn {
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: 3px 2px auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 75px; 
+    font-size: 16px;
+}
+
+p{
+    font-size: 17px;
+    //font-weight: bold;
+}
+
+
+
+/*.container-cuerpo-fila2 {
+ display:  flex;
+}
+
+.sub-container-fila2{
+    width: 100%;
+    height: 150px;
+    margin: 1px;
+    border: solid 1px black;
+}
+
+.sub-div-container1-fila2{
+    background: yellow;
+}
+
+.sub-button-container2-fila2{
+    display: flex;
+    background: red;
+}
+
+.add-button-container-fila2{
+ background: blue;
+}
+
+.res-button-container-fila2{
+ background: green;
+}*/
+
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot{
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+@media screen and (max-width: 1500px){
+    .button-Agregar{
+        display: none;
+    }
+
+    .button-Limpiar{
+        display: none;
+    }
+
+    .button-Agregar-xs{
+        display: block;
+    }
+
+    .button-Limpiar-xs{
+        display: block;
+    }
+}
+
+@media screen and (max-width: 1120px){
+    .sub-card-container{
+        margin: 0 5px;
+        font-size: 14px;
+    }
+}
+
+
+@media screen and (max-width: 1009px){
+    
+    .grid-container{
+        height: 455px;
+    }
+    .container-cuerpo {
+       
+        display: grid;
+    
+        grid-template:
+        "fila1" 220px
+        "fila2" 190px
+        "fila3" 0px
+        "foot" 0px /
+        99%;
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        
+        grid-template:
+        "col1 col2" 70px 
+        "col3 col4" 70px
+        "col5 col6" 70px/
+        49% 49%;
+    }
+
+    .fila1-Codigo {
+        grid-area: col1;
+        
+    }
+ 
+    .fila1-OP {
+        grid-area: col2;
+        
+    }
+  
+
+    .fila1-Color {
+        grid-area: col3;
+        
+    }
+
+    .fila1-Talla {
+        grid-area: col4;
+        
+    }
+    .fila1-Cantidad {
+        grid-area: col5;        
+    }
+
+    .fila1-button-container{
+        grid-area: col6;
+    }
+        
+}
+
+
+
+
+  @media screen and (max-width: 900px){
+   .grid-container{
+       height: 530px;
+   } 
+
+   /*.card-container-fila2{
+   flex-wrap: wrap;
+    }*/
+   
+    .card-container-fila2{
+      width: 100%;
+    }
+
+    .example-card2{
+        height: 180px;
+    }
+  
+    mat-card-title{
+        font-size: 13px;
+    }
+
+    mat-card-actions{
+        flex-direction: column;
+    }
+    
+    .card-btn {
+        width: 45px; 
+        font-size: 16px;
+    }
+    
+    p{
+        font-size: 14px;
+    }
+  }
+
+
+  @media screen and (max-width: 900px){
+    .grid-container{
+        height: 1670px;
+    } 
+
+    .container-cuerpo {
+        display: grid;
+    
+        grid-template:
+            "fila1" 665px
+            "fila2" 190px
+            "fila3" 0px
+            "foot" 0px / 
+            99%;
+    }
+
+    .sub-container{
+        flex-wrap: wrap;
+     }
+
+     .sub-container-cuerpo1{
+        width: 100%;
+    }
+    .sub-container-cuerpo2{
+        width: 100%;
+        margin-top: 30px;
+    }
+    .sub-container-cuerpo3{
+        width: 100%;
+        margin-top: 30px;
+    }
+
+    .example-card{
+        width: 100%;
+    }
+    .card-container-fila2{
+        flex-wrap: wrap;
+    }
+    .example-card2{
+        max-height: 150px;
+        border: solid 0.1px lightgrey;
+        margin: 2px;
+    }
+
+    .sub-card-container {
+        margin: 0 15px 0 15px;
+        font-size: 15px;
+    }
+
+    mat-card-title{
+        font-size: 17px;
+    }
+
+    mat-card-actions{
+        flex-direction: row;
+    }
+    
+    .card-btn {
+        width: 45px; 
+        font-size: 17px;
+    }
+    
+    p{
+        font-size: 16px;
+    }
+
+   }
+
+ /* ::ng-deep mat-dialog-container{
+    padding: 5px;
+    height: auto;
+}
+
+::ng-deep .my-class .mat-dialog-container{
+   padding: 5px;
+   height: auto;
+}*/
+
+    ::ng-deep .mat-input-element:disabled{
+        color: #222;
+    }
+    ::ng-deep .mat-select-value-text{
+        color: #222,
+    }

@@ -1,0 +1,37 @@
+<form [formGroup]="formulario">
+
+    <ng-select 
+            [ngStyle]="{ 'max-width': '100%'}"
+            [items]="listar_operacionConductor" 
+             bindLabel="Nombres" 
+             bindValue="Cod_Trabajador"
+             (change)="Seleccionados($event)"
+             [multiple]="false"
+             [searchable]="searchable"
+             placeholder="Seleccione Trabajador *"
+             formControlName="codTrabajador">
+    </ng-select>
+
+    <ng-select 
+            [ngStyle]="{ 'max-width': '100%'}"
+            [items]="dataAreas" 
+             bindLabel="RH_des_area" 
+             bindValue="RH_Cod_Area"
+             [multiple]="false"
+             [searchable]="searchable"
+             placeholder="Seleccione Area *"
+             formControlName="RH_Cod_Area">
+    </ng-select>
+  
+    <mat-form-field class="fila2-codcond-vehiculo" appearance="fill" >
+        <mat-label>Tipo</mat-label>
+        <mat-select formControlName="Tipo" placeholder="Seleccione *">
+          <mat-option value="T">CREAR Y APROBAR PERMISOS</mat-option>
+          <mat-option value="C">CREAR PERMISOS</mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+    <button mat-flat-button (click)="guardar()" class="button-registrar"  color="primary">Agregar Permiso</button>
+    <button mat-flat-button class="button-cancelar" mat-dialog-close>Cancelar</button>  
+  </form>
+  

@@ -1,0 +1,126 @@
+
+<div class="container">
+
+    <div class="grid-container">
+
+        <div class="title">SALDOS POR DEVOLVER</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+        
+            <div class="container-cuerpo-fila1">
+
+
+            <div class="container-tables">
+                <div class="container-table">
+
+                    <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                        <ng-container matColumnDef="ESTILO_CLIENTE">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estilo</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.ESTILO_CLIENTE}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="ORDEN_CORTE">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">ORDEN CORTE</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.ORDEN_CORTE}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="PRESENTACION">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Presentación</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.PRESENTACION}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="OP">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">OP</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.OP}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="CLIENTE">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cliente</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.CLIENTE}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="COMPONENTE">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">F. Creacion</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.COMPONENTE}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="FECHA_LIQUIDACION">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">F. Liquidación</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.FECHA_LIQUIDACION.date | date: 'dd/MM/Y' }} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="PARTIDA">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Partida</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.PARTIDA}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="GRUPO_TEXTIL">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Grupo Textil</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.GRUPO_TEXTIL}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="TELA_CODIGO">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tela Cód.</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.TELA_CODIGO}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="NOM_TELA">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nom. Tela</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.NOM_TELA}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="COLOR">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Color</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.COLOR}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="DEVOLUCION_LIQUIDACION">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Dev. Liquidación</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.DEVOLUCION_LIQUIDACION}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="STOCK_TELA_ATE">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Stock Tela ATE</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.STOCK_TELA_ATE}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="STOCK_TELA_HUACHIPA">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Stock Tela HUACHIPA</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.STOCK_TELA_HUACHIPA}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="STOCK_TELA_ATE_SALDOS">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Stock Tela ATE Saldos</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.STOCK_TELA_ATE_SALDOS}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="FEC_MOVSTK">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">F. Movstk</th>
+                            <td mat-cell *matCellDef="let data_det"> 
+                                <ng-container *ngIf="data_det.FEC_MOVSTK != null">
+                                    {{data_det.FEC_MOVSTK.date | date: 'dd/MM/Y' }} 
+                                </ng-container>
+                                <ng-container *ngIf="data_det.FEC_MOVSTK == null">
+                                     
+                                </ng-container>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="KGS_DEVUELTO">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Kgs. Devuelto</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.KGS_DEVUELTO}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="KGS_DIFERENCIA">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Kgs. Diferencia</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.KGS_DIFERENCIA}} </td>
+                        </ng-container>
+    
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns_cab; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;">
+                        </tr>
+                    </table>
+                    <mat-paginator  class="paginador" #MatPaginator1 [pageSizeOptions]="[10]" showFirstLastButtons aria-label="Select page of periodic elements">
+                    </mat-paginator>
+                </div>
+            </div>
+          
+
+            </div>
+
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

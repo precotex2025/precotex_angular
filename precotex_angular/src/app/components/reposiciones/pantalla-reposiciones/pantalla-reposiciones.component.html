@@ -1,0 +1,111 @@
+
+<div class="container">
+
+    <div class="grid-container">
+
+        <div class="title">REPOSICIONES</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+        
+            <div class="container-cuerpo-fila1">
+
+
+            <div class="container-tables">
+                <div class="container-table">
+
+                    <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                        <ng-container matColumnDef="Num_Solicitud">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">N° Solicitud</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Num_Solicitud}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Num_Linea">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Linea</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Num_Linea}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Cod_usuario">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Supervisor</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_usuario}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="OP">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">OP</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.OP}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Color">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Color</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Color}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Estilo_Cliente">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estilo Cliente</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Estilo_Cliente}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="OC">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">O/C</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.OC}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Pieza">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Pieza</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Pieza}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Cantidad">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cantidad</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Cantidad}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Fec_Alta">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha Ingreso a Costura 
+                            </th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Fec_Alta}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Fecha_Solicitud">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha y Hora de la Solicitud 
+                            </th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Fecha_Solicitud}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Fecha_Salida">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fec. Hora Salida Seguridad</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Fecha_Salida}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Fecha_Ingreso">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fec. Ingreso Seguridad Sta Rosa</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Fecha_Ingreso}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Aprobacion_Calidad">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Aprobación Calidad</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Aprobacion_Calidad}} </td>
+                        </ng-container>
+     
+    
+                        <ng-container matColumnDef="Fec_Aprob_Calidad">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha Aprobación Calidad</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Fec_Aprob_Calidad}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Fecha_Salida_Despacho">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha Salida Sta Rosa</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Fecha_Salida_Despacho}} </td>
+                        </ng-container>
+
+    
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns_cab; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;">
+                        </tr>
+                    </table>
+                    <mat-paginator  class="paginador" #MatPaginator1 [pageSizeOptions]="[10]" showFirstLastButtons aria-label="Select page of periodic elements">
+                    </mat-paginator>
+                </div>
+            </div>
+          
+
+            </div>
+
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

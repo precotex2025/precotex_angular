@@ -1,0 +1,79 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container"> 
+
+        <div class="title">.:: {{ des_planta }} ::. - Historial</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+                <mat-form-field class="fila1-fecha">
+                    <mat-label>Fec. Registro</mat-label>
+                    <input matInput [matDatepicker]="fec_registro" autocomplete="off" formControlName="fec_registro">
+                    <mat-datepicker-toggle matSuffix [for]="fec_registro"></mat-datepicker-toggle>
+                    <mat-datepicker #fec_registro></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field class="fila1-guia">
+                    <mat-label>N° Guía</mat-label>
+                    <input matInput type="text" placeholder="Guia" value="" autocomplete="off" formControlName="guia">
+                </mat-form-field>
+
+
+                <button type="button" class="fila1-buscar" mat-flat-button color="primary"
+                    (click)="ListarHistorial()">                    
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+            </div> 
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+                <table mat-table [dataSource]="data_det" class="mat-elevation-z8">
+                    <ng-container matColumnDef="hora">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Hora</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.hora}} </td>
+                    </ng-container>
+
+                     <ng-container matColumnDef="tipo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tipo</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.tipo}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="num_guia">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Guia</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.num_guia}} </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="proveedor">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Proveedor</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.des_proveedor}} </td>
+                    </ng-container>  
+                    
+                    <ng-container matColumnDef="num_peso">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Peso</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.num_peso}} </td>
+                    </ng-container>  
+                    
+                    <ng-container matColumnDef="detalle">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Eliminar</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <a mat-icon-button *ngIf="data_det.num_guia.length>0"
+                                (click)="EliminarRegistro(data_det.num_guia, data_det.cod_proveedor)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>
+   
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let fila; columns: displayedColumns_cab;" class="example-element-row"></tr>
+                </table>
+            </div>
+            <div class="container-cuerpo-foot">
+                <button type="button" class="button-cancelar" mat-flat-button color="primary"
+                    [routerLink]="['/SeguridadControlGuiaAccion']">
+                    <mat-icon aria-label="person">reply_all
+                    </mat-icon>Regresar
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>

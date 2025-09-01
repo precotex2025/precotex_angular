@@ -1,0 +1,14 @@
+<form [formGroup]="formulario">
+
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Ubicación</mat-label>
+        <input matInput placeholder="Ingrese la Ubicación" maxlength="150" formControlName="Ubicacion">
+    </mat-form-field>
+
+    <button mat-flat-button (click)="guardar()" class="button-registrar" color="primary">Guardar</button>
+    <button mat-flat-button class="button-cancelar" mat-dialog-close>Cancelar</button>
+</form>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

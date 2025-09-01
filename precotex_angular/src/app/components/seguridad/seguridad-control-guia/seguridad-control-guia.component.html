@@ -1,0 +1,43 @@
+<div class="container">
+    <!-- ventana nro 1 - selecciona la planta -->
+    
+
+    <div class="grid-container">
+        <div class="principal-title">Control de Guias</div>
+
+        <div class="title">Indique la Planta donde Usted se Ubica</div>
+
+        <div class="container-cuerpo">
+            <button type = "button" class="button-establecimiento1" mat-flat-button color="primary" (click)="ActualizarPlanta(1)"
+                [routerLink]="['/SeguridadControlGuiaAccion']" >Santa Maria
+            </button>
+            <button type = "button" class="button-establecimiento2" mat-flat-button color="primary" (click)="ActualizarPlanta(2)"
+                [routerLink]="['/SeguridadControlGuiaAccion']" >Santa Cecilia
+            </button>
+            <button type = "button" class="button-establecimiento3" mat-flat-button color="primary" (click)="ActualizarPlanta(3)"
+                [routerLink]="['/SeguridadControlGuiaAccion']" >Huachipa Sede I
+            </button>
+            <button type = "button" class="button-establecimiento4" mat-flat-button color="primary" (click)="ActualizarPlanta(4)"
+                [routerLink]="['/SeguridadControlGuiaAccion']" >Huachipa Sede II
+            </button>
+            <button type = "button" class="button-establecimiento5" mat-flat-button color="primary" (click)="ActualizarPlanta(5)"
+                [routerLink]="['/SeguridadControlGuiaAccion']" >Independencia
+            </button>
+            <button type = "button" class="button-establecimiento5" mat-flat-button color="primary" (click)="ActualizarPlanta(14)"
+                [routerLink]="['/SeguridadControlGuiaAccion']" >Independencia II
+            </button>
+            <button type = "button" class="button-establecimiento6" mat-flat-button color="primary" (click)="ActualizarPlanta(13)"
+                [routerLink]="['/SeguridadControlGuiaAccion' ]" >Santa Rosa
+            </button>
+            <button type = "button" class="button-establecimiento7" mat-flat-button color="primary" (click)="ActualizarPlanta(15)"
+                [routerLink]="['/SeguridadControlGuiaAccion' ]" >Faraday
+            </button>
+            <button type = "button" class="button-establecimiento11" mat-flat-button color="primary" (click)="ActualizarPlanta(17)"
+                [routerLink]="['/SeguridadControlGuiaAccion' ]" >Huachipa Sede III
+            </button>
+        </div>
+    </div> 
+</div>
+  
+<!-- <button type = "button" class="button-establecimiento1" mat-flat-button color="primary" (click)="ActualizarPlanta(1)"
+[routerLink]="['/SeguridadControlGuiaAccion']" *ngIf="mostrar_sede_1">Santa Maria -->

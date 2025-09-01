@@ -1,0 +1,46 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+        <!-- *ngIf="Titulo == undefined; else titulomodificar" -->
+        <div class="title"><strong>OBSERVACION GIRADO / CALIDAD DE TELA</strong></div>
+        <div class="body">
+            <mat-card >
+                <mat-card-content>
+                    <p style="font-weight: bold;">OBSERVACIONES :</p>
+                    <p>{{this.datos[0]['OBSERVACION']}}</p>
+                </mat-card-content>
+            </mat-card>
+            
+            <mat-card>
+                <mat-card-content>
+                    <p style="font-weight: bold;">OBSERVACIONES DE INSPECCION :</p>
+                    <p>{{this.datos[0].OBSERVACION1}}</p>
+                </mat-card-content>
+            </mat-card>
+            
+            <mat-card>
+                <mat-card-content>
+                    <p style="font-weight: bold;">OBSERVACIONES DE CALIDAD - LAVANDERIA :</p>
+                    <p>{{this.datos[0].OBSERVACION2}}</p>
+                </mat-card-content>
+            </mat-card>
+            
+            <mat-card>
+                <mat-card-content>
+                    <p style="font-weight: bold;">OBSERVACIONES DE CALIDAD - ATE :</p>
+                    <p>{{this.datos[0].OBSERVACION3}}</p>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div class="footer">
+
+            <button class="button-cancelar" (click)="closeModal()"  mat-flat-button type="button" mat-dialog-close>
+                <mat-icon aria-label="person">highlight_off
+                </mat-icon>
+                CERRAR</button>
+        </div>
+    </div>
+  
+  </div>
+  

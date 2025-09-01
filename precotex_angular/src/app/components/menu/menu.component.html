@@ -1,0 +1,94 @@
+<div class="example-container">
+    <mat-toolbar  class="example-toolbar">
+        <button mat-icon-button (click)="sidenav.toggle()">
+            <mat-icon *ngIf="!sidenav.opened">menu</mat-icon>
+            <mat-icon *ngIf="sidenav.opened">close</mat-icon>
+        </button>
+
+        <!--<h1 class="example-app-name">MEDIAPP</h1>-->
+        <span class="example-spacer1"></span>
+
+        <img class="logo" src="assets/logo.jpg" >
+
+
+        <span class="example-spacer2"></span>
+
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>person</mat-icon>
+        </button>
+
+        <mat-menu #menu="matMenu">
+
+            <button mat-menu-item >
+                <mat-icon>account_box</mat-icon>
+                <span><strong class="user">{{this.sCod_Usuario}}</strong></span>
+            </button>
+            <!--<button mat-menu-item >
+                <mat-icon>account_box</mat-icon>
+                <span>Mi Perfil</span>
+            </button>-->
+            <button mat-menu-item  (click)="CerrarSession()">
+                <mat-icon>exit_to_app</mat-icon>
+                <span>Cerrar Sesión</span>
+            </button>
+        </mat-menu>
+    </mat-toolbar>
+
+    <mat-sidenav-container class="example-sidenav-container">
+        <mat-sidenav #sidenav  mode="over">
+            <!--<img src="assets/faviconprecotex.png" width="128" style="margin-left: 20px">-->
+
+
+            <!--<ng-container *ngFor="let item of menus">
+                <button class="item" mat-menu-item  (click)="sidenav.toggle()" style="margin-top:10px;cursor: pointer">
+                    <mat-icon>assignment</mat-icon>
+                    <span>{{item.Des_Menu }}</span>
+                </button>
+                <mat-divider></mat-divider>
+            </ng-container>-->
+
+
+            <!--<div *ngFor="let item of menu">
+                <button class="dropdown-btn">{{item.Des_Menu}}
+                  <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-container">
+                  <a class="link" routerLink="{{item.Ruta_Opcion}}">{{item.Des_Opcion }}</a>
+                </div>
+            </div>-->
+
+
+
+           <ng-container *ngFor="let mainItem of objectKeys(Menu)">
+                <button class="item" mat-menu-item [matMenuTriggerFor]="sub_menu">
+                <span>{{ mainItem }}</span>
+                </button>
+                <mat-divider></mat-divider>
+
+                <mat-menu #sub_menu="matMenu">
+                   <ng-container *ngFor="let subItem of Menu[mainItem]">
+                        <button class="sub-item"  routerLink="{{subItem.Ruta_Opcion}}" (click)="sidenav.toggle()" mat-menu-item>
+                            <mat-icon>assessment</mat-icon>
+                            <span>{{subItem.Opcion}}</span>
+                        </button>
+                        <mat-divider></mat-divider>
+                    </ng-container>
+                </mat-menu>
+              </ng-container>
+
+
+
+
+        </mat-sidenav>
+
+
+        <mat-sidenav-content>
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+
+
+    </mat-sidenav-container>
+
+</div>
+
+

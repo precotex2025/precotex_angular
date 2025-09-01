@@ -1,0 +1,76 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+  
+      <div class="title">Trabajadores Crear Permisos</div>
+  
+      <form class="container-cuerpo" [formGroup]="formulario">
+        <div class="container-cuerpo-fila1">
+  
+          <button type="button" class="fila1-agregar" mat-flat-button (click)="openDialogTipos()">
+            <mat-icon aria-label="person">person</mat-icon>Crear Nuevo
+          </button>
+  
+          <button type="button" class="fila1-aprobacion" mat-flat-button routerLink="/FormAprobacionPermisos">
+            <mat-icon aria-label="check">cancel</mat-icon>Regresar
+          </button>
+  
+        </div>
+  
+        <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+        <div class="container-cuerpo-fila2">
+  
+  
+          <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+  
+            <ng-container matColumnDef="RH_des_area">
+              <th mat-header-cell *matHeaderCellDef> Area </th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.RH_des_area}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="Nombre_Trabajador">
+              <th mat-header-cell *matHeaderCellDef> Trabajador </th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Nombre_Trabajador}}</td>
+            </ng-container>
+  
+            <ng-container matColumnDef="Tipo">
+              <th mat-header-cell *matHeaderCellDef> Tipo </th>
+                <td mat-cell *matCellDef="let data_det"> 
+                    <ng-container *ngIf="data_det.Tipo == 'T'">
+                        <span style="background-color: green; color: white; padding: 5px;">CREACIÓN Y APROBACIÓN DE PERMISOS</span>
+                    </ng-container>
+
+                    <ng-container *ngIf="data_det.Tipo == 'C'">
+                        <span style="background-color: #FFAB00; padding: 5px;">CREACIÓN DE PERMISOS</span>
+                    </ng-container>
+
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <td class="mat-header-cell" mat-cell *matCellDef="let data_det">
+
+                  <a mat-icon-button (click)="EliminarRegistro(data_det)">
+                      <mat-icon color="warn">delete</mat-icon>
+                  </a>
+              </td>
+          </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+          </table>
+          <mat-paginator #MatPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+  
+      </form>
+  
+    </div>
+  
+  
+  </div>
+  
+  <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+  </ngx-spinner>

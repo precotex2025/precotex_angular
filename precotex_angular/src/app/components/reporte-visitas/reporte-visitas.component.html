@@ -1,0 +1,136 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title">.:: {{ des_planta }} ::. - Historial</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+
+
+                <mat-form-field class="fila1-fecha">
+                    <mat-label>Fec. Registro</mat-label>
+                    <input matInput [matDatepicker]="fec_registro" autocomplete="off" formControlName="fec_registro">
+                    <mat-datepicker-toggle matSuffix [for]="fec_registro"></mat-datepicker-toggle>
+                    <mat-icon (click)="clearDate($event)" style=" position: absolute;
+                    float: right;
+                    top: 5px;
+                    margin-left: -26px;
+                    cursor: pointer;
+                    color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+                    <mat-datepicker #fec_registro></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="fila1-vehi">
+                    <mat-label>DNI</mat-label>
+                    <input matInput type="text" value="" autocomplete="off"
+                        formControlName="nDni_Conductor">
+                </mat-form-field>
+                <button type="button" class="fila1-cond" mat-flat-button color="primary" (click)="ListarHistorial()">
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+                <button type="button" class="fila1-buscar" mat-flat-button color="warn" (click)="exportarRegistros()">
+                    <mat-icon aria-label="person">file</mat-icon>Exportar
+                </button>
+            </div>
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+                <table mat-table [dataSource]="data_det" class="mat-elevation-z8">
+                    <ng-container matColumnDef="Fecha_Registro">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha de Registro</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Fec_Registro}}
+                        </td>
+                    </ng-container>Fec_Registro
+                    <ng-container matColumnDef="Cod_Empresa">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Empresa Visitada</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <span *ngIf="data_det.Cod_Empresa == '07'">PRECOTEX SAC</span>
+                            <span *ngIf="data_det.Cod_Empresa == '56'">VYD</span>
+                            <span *ngIf="data_det.Cod_Empresa == '77'">SABOR CRIOLLO</span>
+                            <span *ngIf="data_det.Cod_Empresa == '78'">KAPRA</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Tipo_Documento">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Documento Visitante</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Tipo_Documento}} - {{data_det.Nro_DNI}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="hora">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Hora</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.hora}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Nombres_Visita">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nombres Visitante</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Nombres_Visita}} - {{data_det.Empresa}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Hora_Ingreso">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Hora Ingreso</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Hora_Ingreso}} 
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Hora_Salida">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Hora Salida</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Hora_Salida}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Horas_Planta">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tiempo en Planta</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <span *ngIf="data_det.Horas_Planta != null"> {{data_det.Horas_Planta}} min </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Area_Visitada">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Área Visitada</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Area_Visitada}} -
+                            {{data_det.Persona_Visitada}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Persona_Visitada">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Persona Visitada</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Persona_Visitada}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Motivo_Visita">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Motivo Visita</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Motivo_Visita}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Observaciones">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Observaciones</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Observaciones}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Cod_Usuario">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod. Usuario</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_Usuario}} </td>
+                    </ng-container>
+                    <!-- 
+                  
+                      
+                    <ng-container matColumnDef="detalle">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Modificar Km.</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <a mat-icon-button *ngIf="data_det.Cod_Barras.length>0"
+                                (click)="EliminarRegistro(data_det.Cod_Barras, data_det.Cod_Accion,data_det.Cod_Vehiculo,data_det.Num_Kilometraje,data_det.Num_Planta_Destino,data_det.Dni_Conductor, data_det.Num_Planta)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+
+                        </td> 
+                    </ng-container>  -->
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let fila; columns: displayedColumns_cab;" class="example-element-row"></tr>
+                </table>
+            </div>
+            <div class="container-cuerpo-foot">
+                <button type="button" class="button-cancelar" mat-flat-button color="primary"
+                    [routerLink]="['/gestionVisitas']">
+                    <mat-icon aria-label="person">reply_all
+                    </mat-icon>Regresar
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>

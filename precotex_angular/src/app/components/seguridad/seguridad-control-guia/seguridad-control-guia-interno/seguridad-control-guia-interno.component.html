@@ -1,0 +1,328 @@
+<div class="container">
+    <!-- ventana nro 3 - salida -->
+    <div class="grid-container">
+
+        <div class="title">.:: {{ des_planta }} ::. - Ingreso Interno</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <!-- <div class="container-cuerpo-fila1">
+                <ng-select 
+                class="fila1-guia"
+                [items]="listar_guias" 
+                bindLabel="num_guia" 
+                bindValue="num_guia"
+                (change)="DatosGuia()"
+                placeholder="Numero de Guía"
+                formControlName="num_guia">
+                </ng-select>
+                
+            </div>   -->
+
+            <div class="container-cuerpo-fila1">
+                <mat-form-field class="fila1-guia">
+                    <mat-label>Ingresa el N° de Guía</mat-label>
+                    <input matInput (input)="changeData($event)" formControlName="num_guia" >
+                </mat-form-field>
+                <div style="display: flex;">
+                    <p style="color: red; font-weight: bold; font-size: 18px;" *ngIf="msg !='' && msg != 'LA GUIA YA HA REGISTRADO ANTERIORMENTE INGRESO A ESTA PLANTA '">{{msg}} </p>  <mat-icon style="color: red; font-weight: bold; font-size: 18px;" *ngIf="msg !='' && msg != 'LA GUIA YA HA REGISTRADO ANTERIORMENTE INGRESO A ESTA PLANTA '">block</mat-icon>
+
+                    <p style="color: red; font-weight: bold; font-size: 18px;" *ngIf="msg !='' && msg == 'LA GUIA YA HA REGISTRADO ANTERIORMENTE INGRESO A ESTA PLANTA '">{{msg}} </p>  <mat-icon style="color: green; font-weight: bold; font-size: 19px;" *ngIf="msg !='' && msg == 'LA GUIA YA HA REGISTRADO ANTERIORMENTE INGRESO A ESTA PLANTA '">done_outline</mat-icon>
+                </div>
+                
+            </div>
+            <div class="container-cuerpo-fila2">
+                <mat-form-field class="fila2-destino">
+                    <mat-label>Origen</mat-label>
+                    <input matInput disabled value='{{ origen_select }}' />
+                </mat-form-field>
+            </div>
+ 
+            <div class="container-cuerpo-fila3">
+                <mat-form-field class="fila3-cod-entregado">
+                    <mat-label>Dni Entrega</mat-label>
+                    <input matInput type="text" (keyup)="BuscarNomTrabajador('E')" placeholder="Dni Entrega" value=""
+                        autocomplete="off" formControlName="cod_entregado">
+                </mat-form-field>
+
+                <mat-form-field class="fila3-nom-entregado">
+                    <mat-label>Personal Entrega Guia</mat-label>
+                    <input matInput disabled value='{{ nom_entregado }}'>
+                </mat-form-field>
+            </div>
+
+            <div class="container-cuerpo-fila4">
+                <div class="fila4-num-bulto">
+                    <mat-form-field>
+                        <mat-label>Bultos</mat-label>
+                        <input matInput type="text" placeholder="Bultos" value="" autocomplete="off"
+                            formControlName="num_bulto">
+                    </mat-form-field>
+                </div>
+                <div class="fila4-num-cantidad">
+                    <mat-form-field>
+                        <mat-label>Cantidad</mat-label>
+                        <input matInput type="text" placeholder="Cantidad" value="" autocomplete="off"
+                            formControlName="num_cantidad">
+                    </mat-form-field>
+                </div>
+                <div class="fila4-num-peso">
+                    <mat-form-field>
+                        <mat-label>Peso</mat-label>
+                        <input matInput type="text" placeholder="Peso" value="" autocomplete="off"
+                            formControlName="num_peso">
+                    </mat-form-field>
+                </div> 
+                <div class="fila4-vehiculo">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Selecciona Vehículo</mat-label>
+                        <mat-select formControlName="Cod_Vehiculo">
+                          <mat-option *ngFor="let item of dataVehiculos" [value]="item.Cod_Vehiculo">{{item.Num_Placa}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>
+            </div>
+ 
+            <div class="container-cuerpo-fila5">
+                <mat-form-field class="fila5-cod-despachado">
+                    <mat-label>Dni Recibe</mat-label>
+                    <input matInput type="text" (keyup)="BuscarNomTrabajador('D')" placeholder="Dni Recibe" value=""
+                        autocomplete="off" formControlName="cod_despachado">
+                </mat-form-field>
+
+                <mat-form-field class="fila5-nom-despachado">
+                    <mat-label>Personal Recibe Guia</mat-label>
+                    <input matInput disabled value='{{ nom_despachado }}'>
+                </mat-form-field>
+            </div>
+            <div class="container-cuerpo-fila6">
+                <mat-form-field class="fila6-glosa">
+                    <mat-label>Glosa</mat-label>
+                    <input matInput disabled value='{{ glosa_select }}'>
+                </mat-form-field>
+                <mat-form-field class="fila6-ini">
+                    <mat-label>Fecha Inicio</mat-label>
+                    <input matInput type="datetime-local"  formControlName="Fecha_Inicio" readonly>
+                </mat-form-field>
+                <mat-form-field class="fila6-fin">
+                    <mat-label>Fecha Fin</mat-label>
+                    <input matInput type="datetime-local" formControlName="Fecha_Fin" readonly>
+                </mat-form-field>
+                
+            </div>
+            <div class="container-cuerpo-fila7">
+                <mat-form-field class="fila1-buscar-jabas">
+                    <mat-label>Buscar Jabas</mat-label> 
+                    <input matInput (input)="filtrarDatos($event)" formControlName="BuscarJabas" #myInput/>
+                </mat-form-field>
+                <button type="button" class="button-limpiar-jabas" mat-flat-button
+                (click)="limpiarBuscarJabas()">
+                <mat-icon aria-label=" person">delete</mat-icon>                
+                </button>
+                <button type="button" class="button-limpiar-jabas" mat-flat-button
+                (click)="refreshJabas()">
+                <mat-icon aria-label=" person">refresh</mat-icon>
+            
+        </button>
+            </div>
+           
+            <div class="container-cuerpo-fila8" *ngIf="dataJabas.length > 0">
+              
+                <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+                <table mat-table class="mat-elevation-z8" #table [dataSource]="datosFiltrados.length > 0 ? datosFiltrados : dataSource.data">
+
+                    <ng-container matColumnDef="Codigo_Barra">
+                        <th mat-header-cell *matHeaderCellDef> Código </th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Codigo_Barra}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Ubicacion">
+                        <th mat-header-cell *matHeaderCellDef> Destino </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Ubicacion }}</td>
+                    </ng-container>
+                    <!-- <ng-container matColumnDef="Estado_Actual">
+                        <th mat-header-cell *matHeaderCellDef> Estado Actual </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Estado_Actual }}</td>
+                    </ng-container> -->
+                    <ng-container matColumnDef="OK">
+                        <th mat-header-cell *matHeaderCellDef> OK </th>
+                        <td mat-cell *matCellDef="let data_det" style="font-weight: bold;">
+                            <mat-checkbox class="example-margin" [checked]="data_det['OK'] == 'OK '"
+                                (change)="changeRadio($event, data_det.Id, 'OK')" name="radio{{data_det.Id}}"
+                                value="OK"></mat-checkbox>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="RL">
+                        <th mat-header-cell *matHeaderCellDef> RL </th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <mat-checkbox class="example-margin" [checked]="data_det['RL'] == 'RL '"
+                                (change)="changeRadio($event, data_det.Id, 'RL')" name="radio{{data_det.Id}}"
+                                value="RL"></mat-checkbox>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="2RL">
+                        <th mat-header-cell *matHeaderCellDef> 2RL </th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <mat-checkbox class="example-margin" [checked]="data_det['2RL'] == '2RL'"
+                                (change)="changeRadio($event, data_det.Id, '2RL')" name="radio{{data_det.Id}}"
+                                value="2RL"></mat-checkbox>
+                        </td>
+
+                    </ng-container>
+                    <ng-container matColumnDef="RT">
+                        <th mat-header-cell *matHeaderCellDef> RT </th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <mat-checkbox class="example-margin" [checked]="data_det['RT'] == 'RT '"
+                                (change)="changeRadio($event, data_det.Id, 'RT')" name="radio{{data_det.Id}}"
+                                value="RT"></mat-checkbox>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="2RT">
+                        <th mat-header-cell *matHeaderCellDef> 2RT </th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <mat-checkbox class="example-margin" [checked]="data_det['2RT'] == '2RT'"
+                                (change)="changeRadio($event, data_det.Id, '2RT')" name="radio{{data_det.Id}}"
+                                value="2RT"></mat-checkbox>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="G">
+                        <th mat-header-cell *matHeaderCellDef> G </th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <mat-checkbox class="example-margin" [checked]="data_det['G'] == 'G  '"
+                                (change)="changeRadio($event, data_det.Id, 'G')" name="radio{{data_det.Id}}"
+                                value="G"></mat-checkbox>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="OUT">
+                        <th mat-header-cell *matHeaderCellDef> OUT </th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <mat-checkbox class="example-margin" [checked]="data_det['OUT'] == 'OUT'"
+                                (change)="changeRadio($event, data_det.Id, 'OUT')" name="radio{{data_det.Id}}"
+                                value="OUT"></mat-checkbox>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="RO">
+                        <th mat-header-cell *matHeaderCellDef> RO </th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <mat-checkbox class="example-margin" [checked]="data_det['RO'] == 'RO '"
+                                (change)="changeRadio($event, data_det.Id, 'RO')" name="radio{{data_det.Id}}"
+                                value="RO"></mat-checkbox>
+                        </td>
+                    </ng-container>
+
+                    <!-- Botones para cambiar y anular jaba del packinlist.  2024Oct31, Ahmed -->
+                    <ng-container matColumnDef="Acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <a mat-icon-button (click)="onCambiarJaba(data_det)"><mat-icon>published_with_changes</mat-icon></a> 
+
+                            <a mat-icon-button (click)="onQuitarJaba(data_det)"><mat-icon>highlight_off</mat-icon></a> 
+                        </td>
+                    </ng-container> 
+
+
+                    <tr mat-header-row *matHeaderRowDef="columnsToDisplay" class="fijar-row" ></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;" [ngClass]="{ 'seleccionar-row': isSeleccionadaFila(row) }" (click)="seleccionarFila(row)"></tr>
+               
+                </table>
+
+                <h4><b>Leyenda: </b></h4>
+                <table class="tables">
+                    <thead>
+                        <th>OK</th>
+                        <th>RL</th>
+                        <th>2RL</th>
+                        <th>RT</th>
+                        <th>2RT</th>
+                        <th>G</th>
+                        <th>OUT</th>
+                        <th>RO</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>JABA BUEN ESTADO</td>
+                            <td>JABA RAJADA LATERAL</td>
+                            <td>JABA DOBLE RAJADA LATERAL</td>
+                            <td>JABA RAJADA TAPA</td>
+                            <td>JABA DOBLE RAJADA</td>
+                            <td>JABA GOLPEADA</td>
+                            <td>JABA INSERVIBLE</td>
+                            <td>JABA ROTA</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="container-cuerpo-foot">
+
+                <button type="button" class="button-trabajador" mat-flat-button color="primary"
+                    (click)="MostrarVentanaPersonal()">
+                    <mat-icon aria-label=" person">accessibility</mat-icon>
+                </button>
+
+                <button type="button" class="button-registrar" mat-flat-button color="primary" (click)="Guardar()">
+                    <mat-icon aria-label="person">check_circle_outline
+                    </mat-icon>Registrar
+                </button>
+                <button type="button" class="button-cancelar" mat-flat-button color="primary"
+                    [routerLink]="['/SeguridadControlGuiaAccion']">
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ventana registrar personal -->
+    <div class="container-personal"
+        [ngClass]="Visible_Registro_Personal ? 'container-personal-activo-si' : 'container-personal-activo-no'">
+        <div class="container-personal-popup"
+            [ngClass]="Visible_Registro_Personal ? 'container-personal-popup-activo-si' : 'container-personal-popup-activo-no'">
+
+            <div class="container-personal-title">Agregar Personal</div>
+
+            <div class="container-personal-main">
+                <form class="container-personal-personalForm" [formGroup]="personalForm">
+                    <div class="container-personal-fila1">
+                        <mat-form-field>
+                            <mat-label>Dni Nro.</mat-label>
+                            <input matInput type="text" placeholder="Dni Nro." value="" autocomplete="off"
+                                formControlName="num_dni">
+                        </mat-form-field>
+                    </div>
+                    <div class="container-personal-fila2">
+                        <mat-form-field>
+                            <mat-label>Apellido Paterno</mat-label>
+                            <input matInput type="text" placeholder="Apellido Paterno" value="" autocomplete="off"
+                                formControlName="ape_paterno">
+                        </mat-form-field>
+                    </div>
+                    <div class="container-personal-fila3">
+                        <mat-form-field>
+                            <mat-label>Apellido Materno</mat-label>
+                            <input matInput type="text" placeholder="Apellido Materno" value="" autocomplete="off"
+                                formControlName="ape_materno">
+                        </mat-form-field>
+                    </div>
+                    <div class="container-personal-fila4">
+                        <mat-form-field>
+                            <mat-label>Nombres</mat-label>
+                            <input matInput type="text" placeholder="Nombres" value="" autocomplete="off"
+                                formControlName="nombres">
+                        </mat-form-field>
+                    </div>                                                            
+                    <div class="container-personal-foot">
+                        <button type="button" class="button-personal-registrar" mat-flat-button color="primary" (click)="GuardarRegistroPersonal()">
+                            <mat-icon aria-label="person">check_circle_outline
+                            </mat-icon>Registrar
+                        </button>
+                        <button type="button" class="button-personal-cancelar" mat-flat-button color="primary" (click)="MostrarVentanaPersonal()">
+                            <mat-icon aria-label="person">highlight_off
+                            </mat-icon>Cancelar
+                        </button>
+                    </div>                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

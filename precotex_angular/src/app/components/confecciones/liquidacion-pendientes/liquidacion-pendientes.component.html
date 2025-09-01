@@ -1,0 +1,104 @@
+
+<div class="container">
+
+    <div class="grid-container">
+
+        <div class="title">LIQUIDACIONES PENDIENTES</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+        
+            <div class="container-cuerpo-fila1">
+
+
+            <div class="container-tables">
+                <div class="container-table">
+
+                    <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                        <ng-container matColumnDef="Co_CodOrdPro">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">O/C</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Co_CodOrdPro}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Cod_OrdPro">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">OP</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_OrdPro}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Nom_Cliente">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cliente</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Nom_Cliente}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="cod_estcli">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estilo Cliente</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.cod_estcli}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="des_compest">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">COMBO</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.des_compest}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Des_Color">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">COLOR</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Des_Color}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Cod_OrdTra">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">PARTIDA</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_OrdTra}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Num_Prendas_Prog">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">PRENDAS PROG.</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Num_Prendas_Prog}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Num_Prendas_Reales">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">PRENDAS REALES</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Num_Prendas_Reales}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="MERMAS">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">MERMAS</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.MERMAS}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="flg_status">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">STATUS</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.flg_status}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Des_Tela">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Descripción Tela</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Des_Tela}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Fec_Corte">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">FEC. Corte</th>
+                            <td mat-cell *matCellDef="let data_det">
+                                <span *ngIf="data_det.Fec_Corte != null">
+                                    {{data_det.Fec_Corte.date | date: 'dd/MM/Y' }}
+                                </span>
+                                
+                            </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="MODULO">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">MODULO</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.MODULO}} </td>
+                        </ng-container>
+
+    
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns_cab; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;">
+                        </tr>
+                    </table>
+                    <mat-paginator  class="paginador" #MatPaginator1 [pageSizeOptions]="[10]" showFirstLastButtons aria-label="Select page of periodic elements">
+                    </mat-paginator>
+                </div>
+            </div>
+          
+
+            </div>
+
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

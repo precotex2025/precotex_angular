@@ -1,0 +1,62 @@
+<form [formGroup]="formulario">
+
+
+  <button class="boton" type="button" mat-flat-button color="primary" (click)="agregarTrabajadores()"
+    *ngIf="!mostrar">Agregar Todos Los Trabajadores
+    <mat-icon>add</mat-icon>
+  </button>
+
+  <button class="boton" type="button" mat-flat-button color="warn" (click)="quitarTrabajadores()" *ngIf="mostrar">Quitar
+    Todos Los Trabajadores
+    <mat-icon>cancel</mat-icon>
+  </button>
+
+
+  <mat-form-field style="min-width:100%;" appearance="fill">
+    <mat-label>Listar Trabajadores por Sub-Area</mat-label>
+    <mat-select formControlName="subAreas" (selectionChange)="changeSubArea($event)">
+      <mat-option value="TODOS">TODOS</mat-option>
+      <mat-option *ngFor="let item of subAreas" [value]="item.RH_Cod_Area">{{item.RH_Des_Area}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <ng-select [ngStyle]="{ 'max-width': '100%'}" [items]="listar_operacionConductor" bindLabel="Nombre"
+    bindValue="Codigo" (change)="Seleccionados($event)" [multiple]="true" [searchable]="searchable"
+    placeholder="Seleccione uno o mas Trabajadores" formControlName="codTrabajador">
+  </ng-select>
+
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Hora Inicio</mat-label>
+    <input [textMask]="{mask: num_guiaMascara}" matInput (change)="changeHoraInicio($event)" formControlName="horainicio">
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Hora Fin</mat-label>
+    <input [textMask]="{mask: num_guiaMascara}" (input)="changeFin($event)"  matInput formControlName="horafinal">
+  </mat-form-field>
+  <!-- <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Hora Inicio</mat-label>
+    <input [textMask]="{mask: num_guiaMascara}" matInput formControlName="horainicio">
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Hora Fin</mat-label>
+    <input [textMask]="{mask: num_guiaMascara}" matInput formControlName="horafinal">
+  </mat-form-field>
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Hora Inicio</mat-label>
+    <input matInput type="time" (change)="changeTimeIni($event)" formControlName="horainicio">
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Hora Fin</mat-label>
+    <input matInput type="time" formControlName="horafinal" (change)="changeFin($event)" >
+  </mat-form-field> -->
+  <span style="color: red;">Debes ingresar las horas formato 24 horas (00:00h - 23:59h)</span><br>
+
+
+  <span style="color: red;">Debe ingresar las horas en el formato de 24 horas  - 00:00 - 23:59</span> <br>
+
+  <button mat-flat-button class="button-registrar" (click)="guardar()">Agregar Permiso</button>
+  <button mat-flat-button class="button-cancelar" mat-dialog-close>Cancelar</button>
+</form>

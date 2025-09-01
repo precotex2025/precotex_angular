@@ -1,0 +1,341 @@
+<div class="container-fluid">
+    <div class="grid-container">
+        <div class="title">Registro de Rondas</div>
+
+        <div class="find">
+            <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)">
+                <mat-tab label="Registro">
+
+                    <div *ngIf="ll_listado">
+                        <mat-card class="list-form">
+                            <mat-card-header>
+                                <mat-card-subtitle>Listado de Rondas</mat-card-subtitle>
+                            </mat-card-header>
+
+                            <mat-card-content>
+                                <div>
+                                    <mat-form-field class="example-width-20">
+                                        <mat-label>Planta</mat-label>
+                                        <mat-select [(ngModel)]="planta">
+                                            <mat-option *ngFor="let item of dataPlanta" [value]="item.Id_Planta">
+                                                {{ item.des_planta }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-form-field>
+                                        <mat-label>Fecha</mat-label>
+                                        <input matInput [matDatepicker]="picker" name="ld_Fecha" [(ngModel)]="fecha" placeholder="Fecha">
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+                                    </mat-form-field>
+
+                                    <mat-form-field>
+                                        <mat-label>Filtrar</mat-label>
+                                        <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar busqueda" #input>
+                                    </mat-form-field>
+
+                                    <button mat-button type="button" color="primary" (click)="onListarRondas()"><mat-icon>search</mat-icon>Buscar</button>
+                                    <button mat-button type="button" color="primary" (click)="onInsertarRegistro()"><mat-icon>add</mat-icon>Nuevo</button>
+                                    <!--<button mat-button type="button" color="primary" (click)="onExportarRegistro()"><mat-icon>file_download</mat-icon>Descargar</button>-->
+                                </div>
+
+                                <div class="col-md-12 tabla">
+                                    <table mat-table [dataSource]='dataSource1' matSort #sortData1="matSort" matSortActive="Fec_Inicio" matSortDirection="desc" class="mat-elevation-z8">
+                                        <ng-container matColumnDef="Des_Planta">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Planta </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Des_Planta }} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="Fec_Inicio">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Inicio </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Fec_Inicio | date: 'dd-MM-yyyy HH:mm' }} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="Fec_Fin">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Fin </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Fec_Fin | date: 'dd-MM-yyyy HH:mm' }} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="Nom_Agente">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Agente </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Nom_Agente }} </td>
+                                        </ng-container>
+                                        
+                                        <ng-container matColumnDef="Flg_Estado">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <span [ngClass]="{'flg_grey':element.Flg_Estado=='X', 'flg_green':element.Flg_Estado=='P', 'flg_blue':element.Flg_Estado=='F'}">
+                                                    {{ element.Flg_Estado == 'P' ? 'PROCESO' : element.Flg_Estado == 'F' ? 'FINALIZADO' : 'NINGUNO' }}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="Acciones">
+                                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                            <td class="mat-header-cell" mat-cell *matCellDef="let element">
+                                                <a mat-icon-button (click)="onEditarRegistro(element)" matTooltip="Editar Ronda">
+                                                    <mat-icon color="primary">list</mat-icon>
+                                                </a>
+
+                                                <a mat-icon-button (click)="onAnularRegistro(element.Id_Ronda)" matTooltip="Anular Ronda" *ngIf="element.Flg_Estado != 'F'">
+                                                    <mat-icon color="warn">delete</mat-icon>
+                                                </a>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+                                    </table>
+
+                                    <mat-paginator #paginatorData1 [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>                        
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+
+                    <div *ngIf="!ll_listado">
+                        <mat-card class="list-form" [formGroup]="formulario">
+                            <mat-card-header>
+                                <mat-card-subtitle>Registro de Rondas</mat-card-subtitle>
+                            </mat-card-header>
+
+                            <mat-card-content>
+                                <div>
+                                    <p>
+                                        <mat-form-field class="example-width-15" appearance="outline">
+                                            <mat-label>Planta</mat-label>
+                                            <mat-select formControlName="Id_Planta">
+                                                <mat-option *ngFor="let item of dataPlanta" [value]="item.Id_Planta">
+                                                    {{ item.des_planta }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+
+                                        <mat-form-field class="example-width-35" appearance="outline">
+                                            <mat-label>Agente</mat-label>
+                                            <mat-select formControlName="Cod_Agente">
+                                                <mat-option *ngFor="let item of dataAgente" [value]="item.Codigo">
+                                                    {{ item.Trabajador }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+
+                                        <mat-form-field class="example-width-15" appearance="outline">
+                                            <mat-label>Fecha Inicio</mat-label>
+                                            <input matInput type="datetime-local" value="" autocomplete="off" formControlName="Fec_Inicio" placeholder="Inicio">
+                                        </mat-form-field>
+
+                                        <mat-form-field class="example-width-15" appearance="outline">
+                                            <mat-label>Fecha Fin</mat-label>
+                                            <input matInput type="datetime-local" value="" autocomplete="off" formControlName="Fec_Fin" placeholder="Fecha Fin">
+                                        </mat-form-field>
+                                    </p>
+                                </div>
+
+                                <mat-divider></mat-divider>
+                            </mat-card-content>
+
+                            <mat-card-actions>
+                                <button mat-button type="button" color="primary" [disabled]="formulario.invalid" (click)="onIniciarRonda()" *ngIf="ll_inicio"><mat-icon>alarm</mat-icon>Iniciar Ronda</button>
+                                <button mat-button type="button" color="primary" (click)="onTerminarRonda()" *ngIf="ll_fin"><mat-icon>alarm_off</mat-icon>Terminar Ronda</button>
+                                <button mat-button type="button" color="primary" (click)="onInsertarOcurrencia()" *ngIf="!ll_inicio && ll_fin"><mat-icon>add</mat-icon>Insertar Ocurrencia</button>
+                                <button mat-button type="button" color="primary" (click)="onCerrarRonda()"><mat-icon>undo</mat-icon>Cerrar</button>
+                            </mat-card-actions>
+                            
+                        </mat-card>
+
+                        <mat-card class="list-form">
+                            <mat-card-header>
+                                <mat-card-subtitle>Listado de Ocurrencias</mat-card-subtitle>
+                            </mat-card-header>
+
+                            <mat-card-content>
+                                <div class="col-md-12 tabla">
+                                    <table mat-table [dataSource]='dataSource2' matSort #sortData2="matSort" matSortActive="Fec_Ocurrencia" matSortDirection="desc" class="mat-elevation-z8">
+                                        <ng-container matColumnDef="Fec_Ocurrencia">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Ocurrencia </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Fec_Ocurrencia | date: 'dd-MM-yyyy HH:mm' }} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="Des_Area">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Area </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Des_Area }} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="Des_TipoEstandar">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Estandar Seguridad </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Des_TipoEstandar }} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="Des_Estandar">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Acto / Condición </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Des_Estandar }} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="Des_Riesgo">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Riesgo </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Des_Riesgo }} </td>
+                                        </ng-container>
+                                        
+                                        <ng-container matColumnDef="Nom_Responsable">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Responsable </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Nom_Responsable }} </td>
+                                        </ng-container>
+                                        
+                                        <ng-container matColumnDef="Des_Ocurrencia">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Des_Ocurrencia }} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="Acciones">
+                                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                            <td class="mat-header-cell" mat-cell *matCellDef="let element">
+                                                <a mat-icon-button (click)="onEditarOcurrencia(element)" matTooltip="Editar Ocurrencia">
+                                                    <mat-icon color="primary">edit</mat-icon>
+                                                </a>
+
+                                                <a mat-icon-button (click)="onAnularOcurrencia(element)" matTooltip="Anular Ocurrencia" *ngIf="ll_fin">
+                                                    <mat-icon color="warn">delete</mat-icon>
+                                                </a>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+                                    </table>
+
+                                    <mat-paginator #paginatorData2 [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>                        
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+
+                </mat-tab>
+                
+                <mat-tab label="Reporte" [disabled]="!ll_lista">
+                    <mat-card class="list-form">
+                        <mat-card-header>
+                            <mat-card-subtitle>Listado de Ocurrencias</mat-card-subtitle>
+                        </mat-card-header>
+
+                        <mat-card-content>
+                            <div>
+                                <mat-form-field class="example-width-20">
+                                    <mat-label>Planta</mat-label>
+                                    <mat-select [(ngModel)]="planta">
+                                        <mat-option *ngFor="let item of dataPlanta" [value]="item.Id_Planta">
+                                            {{ item.des_planta }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Rango de Fecha</mat-label>
+                                    <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                                        <input matStartDate formControlName="start" placeholder="Fecha inicio">
+                                        <input matEndDate formControlName="end" placeholder="Fecha fin">
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker></mat-date-range-picker>
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <mat-label>Filtrar</mat-label>
+                                    <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar busqueda" #input>
+                                </mat-form-field>
+
+                                <button mat-button type="button" color="primary" (click)="onListarOcurrencias()"><mat-icon>search</mat-icon>Buscar</button>
+                                <button mat-button type="button" color="primary" (click)="onExportarRonda()"><mat-icon>file_download</mat-icon>Descargar</button>
+                            </div>
+
+
+                            <div class="col-md-12 tabla">
+                                <table mat-table [dataSource]='dataSource3' matSort #sortData3="matSort" matSortActive="Fec_Ocurrencia" matSortDirection="desc" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="Fec_Ocurrencia">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Ocurrencia </th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.Fec_Ocurrencia | date: 'dd-MM-yyyy HH:mm' }} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Des_Planta">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Planta </th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.Des_Planta }} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Des_Area">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Area </th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.Des_Area }} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Des_TipoEstandar">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Estandar Seguridad </th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.Des_TipoEstandar }} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Des_Estandar">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Acto / Condición </th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.Des_Estandar }} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Des_Riesgo">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Riesgo </th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.Des_Riesgo }} </td>
+                                    </ng-container>
+                                        
+                                    <ng-container matColumnDef="Nom_Responsable">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Responsable </th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.Nom_Responsable }} </td>
+                                    </ng-container>
+                                        
+                                    <ng-container matColumnDef="Des_Ocurrencia">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.Des_Ocurrencia }} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Des_Accion">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Acción </th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.Des_Accion }} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Nom_Agente">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Agente </th>
+                                        <td mat-cell *matCellDef="let element"> {{ element.Nom_Agente }} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Flg_Estado">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <span [ngClass]="{'flg_grey':element.Flg_Estado=='X', 'flg_green':element.Flg_Estado=='P', 'flg_blue':element.Flg_Estado=='F'}">
+                                                {{ element.Flg_Estado == 'P' ? 'PROCESO' : element.Flg_Estado == 'F' ? 'FINALIZADO' : 'NINGUNO' }}
+                                            </span>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Acciones">
+                                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                        <td class="mat-header-cell" mat-cell *matCellDef="let element">
+                                            <a mat-icon-button (click)="onEditarOcurrencia(element)" matTooltip="Ver Ocurrencia">
+                                                <mat-icon color="primary">edit</mat-icon>
+                                            </a>
+                                        </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns3"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns3;"></tr>
+                                </table>
+
+                                <mat-paginator #paginatorData3 [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>                        
+                            </div>
+
+                        </mat-card-content>
+                    </mat-card>
+                </mat-tab>
+
+            </mat-tab-group>
+        </div>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner> 

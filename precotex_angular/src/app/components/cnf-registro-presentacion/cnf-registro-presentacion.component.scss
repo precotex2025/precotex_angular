@@ -1,0 +1,95 @@
+
+body {
+    font-family: 'Roboto', sans-serif;  /* Fuente moderna y legible */
+  }
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    /* background-color: blue; */
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; 
+    /* background-color: green; */
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    /* padding-bottom: 10px; */
+    min-width: 350px;
+    min-height: 400px;
+    height: 640px;
+    /* position: absolute;   */
+}
+
+.title {
+    background-color: #3f51b5;
+    color: #ffffff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    /* border-bottom: 1px solid #337AB7; */
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.horizontal-gradient {
+    background: linear-gradient(to right, blue, pink);
+  }
+
+
+
+  .btn {
+    padding: 10px 15px;  /* Padding horizontal de 10px */
+    font-size: 18px;  /* Tamaño de fuente legible */
+    height: 50px;  /* Altura consistente para todos los botones */
+    width: 80%;
+    color:#ffffff;
+    font-weight: bold;
+  }
+
+  .btn-standar {
+    width: 100%;
+    height: 60px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 80%;
+}
+
+.btn-standar-success {
+  width: 100%;
+  height: 60px;
+  max-width: 280px;
+  margin: auto;
+  margin-top: 3px;
+  background-color: #198754;
+  color: #ffffff;
+  width: 80%;
+}
+
+.btn-standar-warning {
+  width: 100%;
+  height: 60px;
+  max-width: 280px;
+  margin: auto;
+  margin-top: 3px;
+  background-color: #ffc107;
+  color: #ffffff;
+  width: 80%;
+}
+
+
+  /* @media (max-width: 576px) {
+    .btn {
+      width: 80% !important;  /* Los botones ocupan el 30% del ancho en pantallas pequeñas */
+    /* } */
+  /* } */

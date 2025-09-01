@@ -1,0 +1,104 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+        <!-- *ngIf="Titulo == undefined; else titulomodificar" -->
+        <div class="title"><strong> FABRIC CARD : {{this.data.Datos.NUM_FABRIC_CARD}}
+                                    - PARTIDA : {{this.data.Datos.COD_ORDTRA}}
+                                    - COLOR : {{this.data.Datos.COLOR}} 
+                            </strong></div>
+        <div class="body">
+            <form class="container-cuerpo"  [formGroup]="formulario" #formDirective="ngForm" >
+                <div class="fila21">
+                    <mat-form-field appearance="fill" style="margin-left:10px;">
+                        <mat-label>PESO ACABADO</mat-label>
+                        <input matInput type="text" formControlName="pesoacabado" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill" style="margin-left:10px;">
+                        <mat-label>PESO LAVADO</mat-label>
+                        <input matInput type="text" formControlName="pesolavado" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill" style="margin-left:10px;">
+                        <mat-label>KILOS PARTIDA</mat-label>
+                        <input matInput type="text" formControlName="kilospartida" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill" style="margin-left:10px;">
+                        <mat-label>COMENTARIOS</mat-label>
+                        <textarea matInput placeholder="Comentarios" formControlName="comentarios" cols="30" rows="3" ></textarea>
+                    </mat-form-field>
+                </div>
+
+
+                <div class="container-cuerpo-fila4" >
+
+                    <label class="fila4-lbl-vehiculo">Status:</label>
+            
+                    <mat-radio-group
+                       aria-labelledby="example-radio-group-label"
+                       class="fila4-opcion-vehiculo" formControlName="ope">
+                       <mat-radio-button  class="example-radio-button" *ngFor="let ope of listes" [value]="ope.cod">
+                         {{ope.name}}
+                       </mat-radio-button>
+                     </mat-radio-group> 
+
+
+
+                   
+                </div>
+
+
+
+                <div class="fila3">
+
+
+                      <div class="col-md-12">
+                        <input type="file" (change)="onFileChange($event)" class="form-control d-none" #inputFile/>
+                        <button (click)="inputFile.click()" type="button" class="button-info"  matTooltip="APROBACIÓN" matTooltipPosition="above" 
+                        mat-flat-button>FOTO
+                        <!-- <mat-icon>upload</mat-icon> -->
+                        </button>
+                      </div>
+
+
+                      <div class="col-md-12">
+                        <img [src]="RutaFoto" *ngIf="RutaFoto" style="height: 100%; width:100%">
+                      </div>
+                   
+                </div>
+
+
+                <div class="fila4">
+                  
+                </div>
+            </form>
+        </div>
+
+        <div class="footer">
+            <button class="button-dialog" mat-flat-button type="button"  matTooltip="APROBACIÓN" matTooltipPosition="above"  (click)="Aprobar()"
+                [disabled]="formulario.invalid">  
+                <mat-icon aria-label="person">thumb_up_alt
+                </mat-icon> 
+            </button>
+
+
+        <button class="button-desapro" mat-flat-button type="button" matTooltip="RECHAZO"  (click)="Rechazar()"
+                [disabled]="formulario.invalid">
+                <mat-icon aria-label="person">thumb_down_alt
+                </mat-icon>
+                 
+            </button>
+
+
+            <button class="button-cancelar" mat-flat-button type="button" mat-dialog-close>
+                <mat-icon aria-label="person">exit_to_app
+                </mat-icon> 
+                </button>
+        </div>
+    </div>
+
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

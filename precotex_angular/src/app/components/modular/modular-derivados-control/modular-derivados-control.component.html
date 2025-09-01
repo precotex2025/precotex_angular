@@ -1,0 +1,66 @@
+<div class="container">
+    <mat-tab-group>
+
+        <mat-tab label="Estampado y Bordado">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field class="input">
+                                <mat-label>Ticket</mat-label>
+                                <input matInput type="text" (input)="changeTicket()" placeholder="Nro Ticket"
+                                    autocomplete="off" [(ngModel)]="Ticket_1" maxLength="11">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <button color="primary" class="button" mat-flat-button (click)="registrarMovimiento('E')">
+                                <mat-icon>check</mat-icon> Registrar Salida</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Compostura">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field class="input">
+                                <mat-label>Ticket</mat-label>
+                                <input matInput type="text" (input)="changeTicket()" placeholder="Nro Ticket"
+                                    autocomplete="off" [(ngModel)]="Ticket" maxLength="11">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <button color="primary" class="button" mat-flat-button (click)="registrarMovimiento('C')">
+                                <mat-icon>check</mat-icon> Registrar Salida</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Zurcido">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field class="input">
+                                <mat-label>Ticket</mat-label>
+                                <input matInput type="text" (input)="changeTicket()" placeholder="Nro Ticket"
+                                    autocomplete="off" [(ngModel)]="Ticket_2" maxLength="11">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <button color="primary" class="button" mat-flat-button (click)="registrarMovimiento('Z')">
+                                <mat-icon>check</mat-icon> Registrar Salida</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

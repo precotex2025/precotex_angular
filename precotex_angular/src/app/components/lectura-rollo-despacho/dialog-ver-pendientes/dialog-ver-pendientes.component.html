@@ -1,0 +1,78 @@
+<div class="container">
+    <div class="grid-container">
+      <div class="title"><strong> PENDIENTES PARA TELA: {{this.NomTela}}</strong></div>
+      <div class="body">
+        <form
+          class="container-cuerpo"
+          class="container-cuerpo"
+          [formGroup]="formulario"
+          #formDirective="ngForm"
+        >
+       
+          <div class="container-cuerpo-fila2">
+
+          <mat-form-field class="fila1-partida" appearance="fill">
+              <mat-label>Filtro de Busqueda </mat-label>
+              <input matInput type="text" 
+                  placeholder="Ingrese la busqueda" (keyup)="DetallePendiente($event)" autocomplete="off" formControlName="iBuscaPendiente" />
+          </mat-form-field>
+
+            <table
+              mat-table
+              #table
+              [dataSource]="dataSource"
+              class="mat-elevation-z8"
+            >
+
+            <ng-container matColumnDef="Cl_CodRollo">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                CODIGO ROLLO
+              </th>
+              <td mat-cell *matCellDef="let data_det">{{ data_det.Id_Rollo_Key }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="Cl_Peso">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                PESO NETO
+              </th>
+              <td mat-cell *matCellDef="let data_det">{{ data_det.Peso_Neto }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="Cl_PesoBruto">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                PESO BRUTO
+              </th>
+              <td mat-cell *matCellDef="let data_det">{{ data_det.Peso_Bruto }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="Cl_NumRollo">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                NRO ROLLO
+              </th>
+              <td mat-cell *matCellDef="let data_det">{{ data_det.Num_Rollo }}</td>
+            </ng-container>
+
+
+           
+  
+              <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: displayedColumns_cab"
+              ></tr>
+            </table>
+  
+            <mat-paginator
+              [pageSizeOptions]="[5, 20, 30]"
+              showFirstLastButtons
+              aria-label="Select page of periodic elements"
+            >
+            </mat-paginator>
+          </div>
+  
+          <!-- <div class="footer"></div> -->
+        </form>
+      </div>
+    </div>
+  </div>
+  

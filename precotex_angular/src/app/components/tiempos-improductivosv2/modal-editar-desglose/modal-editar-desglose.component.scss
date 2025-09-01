@@ -1,0 +1,115 @@
+/* Contenedor principal del modal */
+.modal-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 80vh;
+  overflow-x: auto;  /* scroll horizontal si es muy ancho */
+  overflow-y: auto;
+}
+
+.modal-body label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: #333;
+  font-size: 14px;
+  text-align: left;
+}
+
+.modal-body label span {
+  margin-bottom: 5px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.modal-body input[type="text"],
+.modal-body input[type="number"],
+.modal-body input[type="datetime-local"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+  color: #333;
+}
+
+.modal-body input[disabled] {
+  background-color: #e9e9e9;
+  color: #777;
+  cursor: not-allowed;
+}
+
+.modal-footer {
+  padding: 15px 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  background-color: #f1f1f1;
+  border-top: 1px solid #eee;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.modal-footer button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.modal-footer button:first-child {
+  background-color: #007bff;
+  color: white;
+}
+
+.modal-footer button:first-child:hover {
+  background-color: #0056b3;
+}
+
+.modal-footer button:last-child {
+  background-color: #6c757d;
+  color: white;
+}
+
+.modal-footer button:last-child:hover {
+  background-color: #5a6268;
+}
+
+h2 {
+  padding: 15px 20px;
+  margin-top: 0;
+  margin-bottom: 0;
+  background-color: #007bff;
+  color: white;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+/* Contenedor principal del modal */
+.modal-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .modal-body {
+    grid-template-columns: 1fr;
+  }
+}
+

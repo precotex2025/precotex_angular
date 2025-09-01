@@ -1,0 +1,30 @@
+<div class="container">
+    <!-- ventana nro 2 - selecciona la accion salida/ingreso/historia/regresar -->
+    <div class="grid-container">
+
+        <div class="title">Indique el Tipo de Registro a Realizar</div>
+
+        <div class="container-cuerpo">
+            <button type="button" class="button-accion1" mat-flat-button color="primary"
+                [routerLink]="['/SeguridadControlVehiculoIngreso']">
+                Registro Vehiculo - Ingreso
+            </button>
+
+            <button type="button" class="button-accion2" mat-flat-button color="primary"
+                [routerLink]="['/SeguridadControlVehiculoSalida']">
+                Registro Vehiculo - Salida              
+            </button>
+
+            <button type="button" class="button-accion3" mat-flat-button color="primary"
+                [routerLink]="['/SeguridadControlVehiculoHistorial']">
+                Historial
+            </button>
+
+
+            <button type="button" class="button-accion6" mat-flat-button color="primary"
+                routerLink="/SeguridadControlVehiculo">
+                <mat-icon aria-label="person">reply_all</mat-icon>Regresar
+            </button>
+        </div>
+    </div>
+</div>   

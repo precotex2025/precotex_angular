@@ -1,0 +1,307 @@
+<div class="container">
+  <!-- ventana nro 4 - historial -->
+  <div class="grid-container">
+    <!-- *ngIf="Titulo == undefined; else titulomodificar" -->
+    <div class="title"><strong>Modificacion De Telas Requeridas <span class="tituloOp">({{vcod_op}} - 
+      <ng-container *ngIf="vcod_grupo == 'I'">
+        Individual
+      </ng-container>
+      <ng-container *ngIf="vcod_grupo == 'A'">
+        Agrupado
+      </ng-container>
+      )</span> </strong></div>
+
+    <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+      <!--[ngStyle]="element==true && {'display': 'none','height':'0vh'} || element==true && {'display': 'block','height':'70vh!important'}"-->
+      <div class="container-cuerpo-fila1">
+        <mat-form-field class="fila1-item1">
+          <mat-label>Tela</mat-label>
+          <input matInput type="text" value="" autocomplete="off" formControlName="tela">
+        </mat-form-field>
+        <mat-form-field class="fila1-item2">
+          <mat-label>Combo</mat-label>
+          <input matInput type="text" autocomplete="off" formControlName="combo">
+        </mat-form-field>
+        <mat-form-field class="fila1-item3">
+          <mat-label>Color</mat-label>
+          <input matInput type="text" autocomplete="off" formControlName="color">
+        </mat-form-field>
+        <mat-form-field class="fila1-item4">
+          <mat-label>Calidad</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="calidad">
+        </mat-form-field>
+        <mat-form-field class="fila1-item5">
+          <mat-label>Talla</mat-label>
+          <input matInput type="text" autocomplete="off" formControlName="talla">
+        </mat-form-field>
+
+        <mat-form-field class="fila1-item6">
+          <mat-label>Tizado</mat-label>
+          <!--<input matInput type="text"    autocomplete="off" formControlName="tizado" >-->
+          <mat-select formControlName="tizado" name="listar_operacionConductor"
+            (selectionChange)="cargarGrillaDetalle()">
+            <mat-option *ngFor="let listar_origen of listar_operacionConductor" (click)="seleccionTizado(listar_origen)" [value]="listar_origen.NUM_TENDIDO">
+              {{listar_origen.NUM_TENDIDO}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="fila1-item7 verde">
+          <mat-label>Retazos</mat-label>
+          <input matInput type="number" [autofocus]="true" autocomplete="off" formControlName="retazos" (keyup.enter)="keyTeclaEnter('Retazos')" #Retazos>
+        </mat-form-field>
+        <mat-form-field class="fila1-item8 verde">
+          <mat-label>Puntas</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="puntas" (keyup.enter)="keyTeclaEnter('Puntas')" #Puntas>
+        </mat-form-field>
+        <mat-form-field class="fila1-item9 verde">
+          <mat-label>Tela Fallada</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="telafallada" (keyup.enter)="keyTeclaEnter('Fallada')" #Fallada>
+        </mat-form-field>
+        <mat-form-field class="fila1-item10 verde">
+          <mat-label>Kgs Empalmes</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="kempalmes" (keyup.enter)="keyTeclaEnter('Kempalmes')" #Kempalmes>
+        </mat-form-field>
+        <mat-form-field class="fila1-item11 verde">
+          <mat-label>Kgs. Collareta / Tapete</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="kaccesorios" (keyup.enter)="keyTeclaEnter('Accesorios')" #Accesorios>
+        </mat-form-field>
+
+        <mat-form-field class="fila1-item12 verde">
+          <mat-label>1era Devolucion</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="devolucion1"  (keyup.enter)="keyTeclaEnter('Devolucion1')" #Devolucion1>
+        </mat-form-field>
+        <mat-form-field class="fila1-item13 verde">
+          <mat-label>PESO DE BOLSA</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="devolucion2" (keyup.enter)="keyTeclaEnter('Devolucion2')" #Devolucion2>
+        </mat-form-field>
+        <mat-form-field class="fila1-item14 verde">
+          <mat-label>Entre cortes</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="entrecortes" (keyup.enter)="keyTeclaEnter('Entrecortes')" #Entrecortes>
+        </mat-form-field>
+   
+     
+  
+        <mat-form-field class="fila1-item15 verde">
+          <mat-label>Ancho Tizado</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="anchotizado" (keyup.enter)="keyTeclaEnter('Anchotizado')" #Anchotizado>
+        </mat-form-field>
+        <mat-form-field class="fila1-item16 verde">
+          <mat-label>Ancho Total Real</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="anchototalreal" (keyup.enter)="keyTeclaEnter('AnchoReal')" #Anchototalreal>
+        </mat-form-field>
+        <mat-form-field class="fila1-item17">
+          <mat-label>Kgs. Devueltos Almacen</mat-label>
+          <input matInput type="number" autocomplete="off" [value]="kgs_devueltos | number : '1.2-2'" disabled>
+        </mat-form-field>
+        <mat-form-field class="fila1-item18">
+          <mat-label>Kgs. Atendidos Almacen</mat-label>
+          <input matInput type="number" autocomplete="off" [value]="kgs_atendidos | number : '1.2-2'" disabled>
+        </mat-form-field>
+        <mat-form-field class="fila1-item19">
+          <mat-label>Kgs. Consumidos</mat-label>
+          <input matInput type="number" autocomplete="off" [value]="kgs_consumidos | number : '1.2-2'" disabled>
+        </mat-form-field>
+        <mat-form-field class="fila1-item20"  [ngStyle]="{'background': status_liq == 'NO CONFORME' ? '#d32f2f' : '#25502a' }">
+          <mat-label style="color: white;">Status Liquidación</mat-label>
+          <input matInput type="text" autocomplete="off" [value]="status_liq" disabled>
+        </mat-form-field>
+        <mat-form-field class="fila1-item21">
+          <mat-label>Fecha Ter. Liquidacion</mat-label>
+          <input matInput type="date" autocomplete="off" formControlName="fec_liquidacion">
+        </mat-form-field>
+        <mat-form-field class="fila1-item22">
+          <mat-label>Observación</mat-label>
+          <!--<input matInput type="text"    autocomplete="off" formControlName="tizado" >-->
+          <mat-select formControlName="cod_motivo" name="observaciones">
+            <mat-option *ngFor="let item of dataObservaciones" [value]="item.COD_MOTIVO">
+              {{item.MOTIVO}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="fila1-item23">
+          <mat-label>Prendas Reales</mat-label>
+          <!--<input matInput type="text"    autocomplete="off" formControlName="tizado" >-->
+          <input matInput type="text" autocomplete="off" [value]="prendas_reales" disabled>
+        </mat-form-field>
+        <!-- <mat-form-field class="fila1-item17">
+          <mat-label>Retazos (Paños)</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="retazospaños" (keyup.enter)="keyTeclaEnter('Paños')" #Paños>
+        </mat-form-field>
+        <mat-form-field class="fila1-item18">
+          <mat-label>Kgs Merma Lavanderia</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="kmermalavanderia" (keyup.enter)="keyTeclaEnter('Lavanderia')" #Lavanderia>
+        </mat-form-field>
+        <mat-form-field class="fila1-item19">
+          <mat-label>Puntas (Paños)</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="puntaspaños" (keyup.enter)="keyTeclaEnter('PuntasPaños')" #PuntasPaños>
+        </mat-form-field>
+
+        <mat-form-field class="fila1-item20">
+          <mat-label>kgs Tela Reasig.</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="ktelareasig" (keyup.enter)="keyTeclaEnter('Ktelareasig')" #Ktelareasig>
+        </mat-form-field>
+        <mat-form-field class="fila1-item21">
+          <mat-label>Peso Paño Promedio</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="pppromedio" (keyup.enter)="keyTeclaEnter('Pppromedio')" #Pppromedio>
+        </mat-form-field>
+        <mat-form-field class="fila1-item22">
+          <mat-label>#Paños Tendido</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="ptendido" (keyup.enter)="keyTeclaEnter('PAtendido')" #PAtendido>
+        </mat-form-field>
+        <mat-form-field class="fila1-item23">
+          <mat-label>Prendas Depuradas</mat-label>
+          <input matInput type="number" [autofocus]="true" autocomplete="off" formControlName="pdepuradas" (keyup.enter)="keyTeclaEnter('Depuradas')" #Depuradas>
+        </mat-form-field> -->
+
+        <div class="fila1-item24">
+          <button type="button" class="button-cancelar" [routerLink]="['/LiquidacionCorte']" mat-button mat-flat-button [disabled]="deshabilitar">
+            <mat-icon aria-label="person">highlight_off 
+            </mat-icon> Volver
+          </button>
+          <button type="button" class="button-agregar" (click)="grabarFormDetalle()" mat-button mat-flat-button>
+            <mat-icon aria-label="person">add
+            </mat-icon> Guardar
+          </button>
+          <button type="button" class="button-dialog" (click)="openDialog()" mat-button mat-flat-button>
+            <mat-icon aria-label="person">add
+            </mat-icon> Cargar Detalles
+          </button>
+        </div>
+      </div>
+      <div class="container-cuerpo-fila2">
+        <!--[dataSource]=”myDataArray”-->
+        <!--<div><button mat-button class="margpequeño" color="primary">Historial Tendidos</button></div>-->
+        <div class="cabecera" style="display:none">
+
+          <mat-form-field style="display: none;">
+            <mat-label>Secuencia</mat-label>
+            <input matInput type="number" autocomplete="off" formControlName="Secuencia">
+          </mat-form-field>
+          <mat-form-field class="col1">
+            <mat-label>L.TendidoMts</mat-label>
+            <input matInput type="number" autocomplete="off" formControlName="LTendidoMts">
+          </mat-form-field>
+          <mat-form-field class="col2">
+            <mat-label>PesoxPañoKgs</mat-label>
+            <input matInput type="number" autocomplete="off" formControlName="PesoxPanoKgs">
+          </mat-form-field>
+          <mat-form-field class="col3">
+            <mat-label>PrendasxPaño</mat-label>
+            <input matInput type="number" autocomplete="off" formControlName="PrendasxPano">
+          </mat-form-field>
+          <mat-form-field class="col4">
+            <mat-label>NumPaños</mat-label>
+            <input matInput type="number" autocomplete="off" formControlName="num_panos">
+          </mat-form-field>
+          <!-- <button class="col5" (click)="grabarDatosGrilla2()" mat-flat-button>
+            <mat-icon aria-label="person">add
+            </mat-icon> Agregar Detalle
+          </button> -->
+
+        </div>
+        <div class="detallecab">
+          <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+            <ng-container matColumnDef="SECUENCIA">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Secuencia</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.SECUENCIA}} </td>
+            </ng-container>
+            <ng-container matColumnDef="LARGOTENDIDOMTS">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">L.TendidoMts</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.LARGOTENDIDOMTS | number : '1.2-2'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="PESOXPANOKGS">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">PesoxPañoKgs</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.PESOXPANOKGS | number : '1.2-2'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="PRENDASXPANO">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">PrendasxPañoUnd</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.PRENDASXPANO }} </td>
+            </ng-container>
+            <ng-container matColumnDef="NUM_PANOS">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">NumPaños</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.NUM_PANOS }} </td>
+            </ng-container>
+            <ng-container matColumnDef="CONSKGSNETO">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">ConskgsNeto</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.CONSKGSNETO | number : '1.2-2'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="CONSKGSNETOPROM">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">ConskgsNetoProm</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.CONSKGSNETOPROM | number : '1.2-2'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="CONSMETROSNETO">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">ConsMetrosNeto</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.CONSMETROSNETO | number : '1.2-2'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="CONSMETROSNETOPROM">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">ConsMetrosNetoProm</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.CONSMETROSNETOPROM | number : '1.2-2'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="LARGOTENDIDOREALPROM">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">L.TendidoRealProm</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.LARGOTENDIDOREALPROM | number : '1.2-2'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="PESOPANOPROM">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">PesoPañoProm</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.PESOPANOPROM | number : '1.2-2'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="PRENDAS">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">PrendasUnd</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.PRENDAS }} </td>
+            </ng-container>
+            <ng-container matColumnDef="TOTALPANOS">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">TotalPañosUnd</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.TOTALPANOS }} </td>
+            </ng-container>
+            <ng-container matColumnDef="TOTALPRENDAS">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">TotalPrendasUnd</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.TOTALPRENDAS}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Acciones">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Acciones</th>
+              <td mat-cell *matCellDef="let data_det">
+                 <!-- (click)="openDialogModificar(data_det.Fec_Registro,data_det.Cod_Maquina,data_det.Cod_Motivo,data_det.Fec_Hora_Inicio,data_det.Fec_Hora_Fin,data_det.Observacion,data_det.nodoc)"  --> 
+                <!-- (click)="EliminarRegistro(data_det.Fec_Registro,data_det.Cod_Maquina,data_det.Cod_Motivo,data_det.Fec_Hora_Inicio,data_det.Fec_Hora_Fin)" -->
+                <!--<a mat-icon-button style="margin-right:5px;" *ngIf="data_det.SECUENCIA!=''">
+                                <mat-icon color="success">create</mat-icon>
+                            </a>-->
+
+                <a mat-icon-button *ngIf="data_det.SECUENCIA!=''"
+                            (click)="eliminaDatosGrilla2(data_det.SECUENCIA,data_det.LARGOTENDIDOMTS,data_det.PESOXPANOKGS,data_det.PRENDASXPANO,data_det.NUM_PANOS)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+              </td>
+            </ng-container> 
+
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+          </table>
+
+        </div>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+
+
+      </div>
+
+      <!--*ngIf="Titulo == undefined; else btnmodificar" type="submit" class="button-agregar"  [disabled]="!formulario.valid"-->
+
+      <!--<div class="container-cuerpo-foot" *ngIf="element==true">
+              <button class="button-agregar" (click)="grabarFormDetalle()"   mat-flat-button>
+                  <mat-icon aria-label="person" >add
+                  </mat-icon>  Guardar
+              </button>
+
+
+              <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                  <mat-icon aria-label="person">highlight_off
+                  </mat-icon>  Cancelar
+              </button>
+          </div>-->
+    </form>
+
+  </div>
+
+</div>

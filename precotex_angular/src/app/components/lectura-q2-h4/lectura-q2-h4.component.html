@@ -1,0 +1,465 @@
+<div class="container">
+  <div class="grid-container">
+    <div class="title">
+      <strong>::. LECTURA DE CAJAS (Q2 A H4) .:: </strong>
+    </div>
+    <div class="body">
+      <form
+        class="container-cuerpo"
+        [formGroup]="formulario"
+        #formDirective="ngForm"
+      >
+        <!-- FILA PARA BUSQUEDA -->
+        <div class="container-cuerpo-fila1">
+          <mat-form-field appearance="fill" class="fila1-Cod_Bar_Caja">
+            <mat-label>COD. BAR CAJA </mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="ct_Cod_Bar_Caja"
+              maxlength="12"
+              #inpCodBarCa
+              (input)="onToggle()"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Filtro_Busq">
+            <mat-label>BUSQUEDA </mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="ct_Filtro"
+              maxlength="15"
+              (keyup)="Filtro($event)"
+              #inpFiltro
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Suma-Peso">
+            <mat-label>SUMA PESO </mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="ct_Peso"
+              maxlength="15"
+              #inpFiltro
+            />
+          </mat-form-field>
+        </div>
+        <!-- FILA PARA BUSQUEDA -->
+
+        <!-- FILA DE LISTA DE MOVIMIENTOS -->
+        <div class="container-cuerpo-fila2">
+          <table
+            mat-table
+            #table
+            [dataSource]="dataSource_Mov"
+            class="mat-elevation-z8"
+            [class.table-locked]="tablaBloqueada"
+          >
+            <ng-container matColumnDef="Num_Mov">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="mat-header-cell"
+                [class.bloqueada]="isRowBlocked"
+              >
+                NUM. MOV.
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let data_det_Mov"
+                [class.bloqueada]="isRowBlocked"
+              >
+                {{ data_det_Mov.Num_Mov }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Cod_Almacen">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="mat-header-cell"
+                [class.bloqueada]="isRowBlocked"
+              >
+                COD. ALMACEN
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let data_det_Mov"
+                [class.bloqueada]="isRowBlocked"
+              >
+                {{ data_det_Mov.Cod_Almacen }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Almacen">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="mat-header-cell"
+                [class.bloqueada]="isRowBlocked"
+              >
+                ALMACEN
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let data_det_Mov"
+                [class.bloqueada]="isRowBlocked"
+              >
+                {{ data_det_Mov.Almacen }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Fec_Mov">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                FECHA MOV.
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let data_det_Mov"
+                [class.bloqueada]="isRowBlocked"
+              >
+                {{ data_det_Mov.Fec_Mov }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Tipo_Mov">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="mat-header-cell"
+                [class.bloqueada]="isRowBlocked"
+              >
+                TIPO MOV.
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let data_det_Mov"
+                [class.bloqueada]="isRowBlocked"
+              >
+                {{ data_det_Mov.Tipo_Mov }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Usuario">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="mat-header-cell"
+                [class.bloqueada]="isRowBlocked"
+              >
+                USUARIO
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let data_det_Mov"
+                [class.bloqueada]="isRowBlocked"
+              >
+                {{ data_det_Mov.Usuario }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns_cab_mov"></tr>
+
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns_cab_mov"
+              (click)="showMostrarDetalleMov(row)"
+              [class.selected]="row === filaSeleccionada"
+              [class.bloqueada]="
+                row !== filaSeleccionada && filaSeleccionada !== null
+              "
+            >
+              >
+            </tr>
+          </table>
+        </div>
+
+        <!-- FILA PARA MOSTRAR DETALLE DE MOVIMIENTO - SE VISUALIZA LOS ARTICULOS -->
+
+        <div class="container-cuerpo-fila3">
+          <table
+            mat-table
+            #table
+            [dataSource]="dataSource_Mov_Sel"
+            class="mat-elevation-z8"
+          >
+            <!-- <ng-container matColumnDef="Sel">
+                <th mat-header-cell *matHeaderCellDef class="mat-header-cell_2">
+                  SEL
+                </th>
+               <td mat-cell *matCellDef="let dataSource_Mov_Sel">
+                   <mat-checkbox
+                   
+                    formControlName = "miCheckboxSel"
+                    [(ngModel)]="dataSource_Mov_Sel.checked"
+               
+                    
+                  ></mat-checkbox>
+                </td>
+                <td mat-cell *matCellDef="let dataSource_Mov_Sel">{{ dataSource_Mov_Sel.checked }}</td> 
+              </ng-container> -->
+
+            <ng-container matColumnDef="Lote">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_2">
+                LOTE
+              </th>
+              <td mat-cell *matCellDef="let dataSource_Mov_Sel">
+                {{ dataSource_Mov_Sel.Lote }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Item">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_2">
+                ITEM
+              </th>
+              <td mat-cell *matCellDef="let dataSource_Mov_Sel">
+                {{ dataSource_Mov_Sel.Item }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Cant_Mov">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_2">
+                CANTIDAD MOV.
+              </th>
+              <td mat-cell *matCellDef="let dataSource_Mov_Sel">
+                {{ dataSource_Mov_Sel.Cant_Mov }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Cod_Almacen">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_2">
+                COD. ALMACEN
+              </th>
+              <td mat-cell *matCellDef="let dataSource_Mov_Sel">
+                {{ dataSource_Mov_Sel.Cod_Almacen }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Almacen">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_2">
+                ALMACEN
+              </th>
+              <td mat-cell *matCellDef="let dataSource_Mov_Sel">
+                {{ dataSource_Mov_Sel.Almacen }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Num_Mov">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_2">
+                NUM. MOV.
+              </th>
+              <td mat-cell *matCellDef="let dataSource_Mov_Sel">
+                {{ dataSource_Mov_Sel.Num_Mov }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Fec_Mov">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_2">
+                FECHA MOV.
+              </th>
+              <td mat-cell *matCellDef="let dataSource_Mov_Sel">
+                {{ dataSource_Mov_Sel.Fec_Mov }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Tipo_Mov">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_2">
+                TIPO MOV.
+              </th>
+              <td mat-cell *matCellDef="let dataSource_Mov_Sel">
+                {{ dataSource_Mov_Sel.Tipo_Mov }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Usuario">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_2">
+                USUARIO
+              </th>
+              <td mat-cell *matCellDef="let dataSource_Mov_Sel">
+                {{ dataSource_Mov_Sel.Usuario }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Cod_Prov">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_2">
+                COD. PROVEEDOR
+              </th>
+              <td mat-cell *matCellDef="let dataSource_Mov_Sel">
+                {{ dataSource_Mov_Sel.Cod_Prov }}
+              </td>
+            </ng-container>
+
+            <tr
+              mat-header-row
+              *matHeaderRowDef="displayedColumns_cab_mov_sel"
+            ></tr>
+
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns_cab_mov_sel"
+              (click)="showMostrarDetalleBultos(row)"
+              [class.selected]="row === filaSeleccionada2"
+              [class.bloqueada]="
+                row !== filaSeleccionada2 && filaSeleccionada2 !== null
+              "
+            ></tr>
+          </table>
+        </div>
+
+        <!-- VISTA DE BULTOS  -->
+        <div class="container-cuerpo-fila4">
+          <table
+            mat-table
+            #table
+            [dataSource]="dataSource_Mov_Bultos"
+            class="mat-elevation-z8"
+          >
+            <!-- <ng-container matColumnDef="Sel">
+              <mat-header-cell *matHeaderCellDef class="mat-header-cell_3">
+                <mat-checkbox (change)="desmarcarTodos()">Todos</mat-checkbox>
+              </mat-header-cell> 
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_3">
+                SEL
+              </th>
+              <td mat-cell *matCellDef="let row; let i = index">
+                <mat-checkbox
+                  #checkbox
+                  formControlName="miCheckbox"
+                  (change)="agregarEliminarItemBultoCheck(row, $event)"
+                ></mat-checkbox>
+              </td>
+            </ng-container>-->
+
+            <ng-container matColumnDef="Sel">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_3">
+                QUITAR
+              </th>
+              <td mat-cell *matCellDef="let element" >
+                <button mat-mini-fab color="primary" aria-label="Add" *ngIf="element.checked === 0" (click)="agregarEliminarItemBulto(element)" >
+                  <mat-icon>fiber_new</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" aria-label="X"  *ngIf="element.checked === 1" (click)="EliminarItemBulto(element)" >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Nro_Caja">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_3">
+                NRO CAJA
+              </th>
+              <td mat-cell *matCellDef="let data_det_2">
+                {{ data_det_2.Num_Corre }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Peso_Neto">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_3">
+                PESO NETO
+              </th>
+              <td mat-cell *matCellDef="let data_det_2">
+                {{ data_det_2.Peso_Neto }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Nro_Bulto">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_3">
+                NRO BULTO
+              </th>
+              <td mat-cell *matCellDef="let data_det_2">
+                {{ data_det_2.Num_Bulto }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Proveedor">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_3">
+                PROVEEDOR
+              </th>
+              <td mat-cell *matCellDef="let data_det_2">
+                {{ data_det_2.Cod_Proveedor }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Lote">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_3">
+                LOTE
+              </th>
+              <td mat-cell *matCellDef="let data_det_2">
+                {{ data_det_2.Cod_OrdProv }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Item">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell_3">
+                QUIMICO
+              </th>
+              <td mat-cell *matCellDef="let data_det_2">
+                {{ data_det_2.Cod_item }}
+              </td>
+            </ng-container>
+
+            <tr
+              mat-header-row
+              *matHeaderRowDef="displayedColumns_cab_bulto"
+            ></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns_cab_bulto"
+       
+              [ngClass]="{
+                'estado-activo': row.checked === 1,
+                'estado-inactivo': row.checked === 0
+              }"
+            ></tr>
+          </table>
+        </div>
+
+        <div class="container-cuerpo-foot">
+          <!-- <mat-paginator
+            [pageSizeOptions]="[10, 20, 30]"
+            showFirstLastButtons
+            aria-label="Select page of periodic elements"
+          >
+          </mat-paginator> -->
+
+          <button
+            class="button-Generar"
+            mat-flat-button
+            type="button"
+            matTooltip="Generar ingreso a H4"
+            matTooltipPosition="above"
+            (click)="generarMovimientoQ2H4()"
+          >
+            <mat-icon aria-label="person">save </mat-icon>GENERAR
+          </button>
+
+          <button
+            class="button-Limpiar"
+            mat-flat-button
+            type="button"
+            matTooltip="LIMPIAR"
+            matTooltipPosition="above"
+            (click)="Limpiar()"
+          >
+            <mat-icon aria-label="person">border_clear</mat-icon> LIMPIAR
+          </button>
+
+          <button
+            class="button-Cancelar"
+            mat-flat-button
+            type="button"
+            matTooltip="CANCELAR"
+            matTooltipPosition="above"
+            (click)="cancelarTodo()"
+          >
+            <mat-icon aria-label="person">cancel</mat-icon> CANCELAR
+          </button>
+        </div>
+
+        <!-- <div class="footer"></div> -->
+      </form>
+    </div>
+  </div>
+</div>

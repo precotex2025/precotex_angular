@@ -1,0 +1,41 @@
+<mat-label > Hora Inicio: {{hoyDia}}</mat-label>
+
+<h3>Registro de Tiempos Improductivos</h3>
+<mat-label></mat-label>
+<h3>Maquina {{codigo}} : {{descripcion}}</h3>
+<div>
+    <table mat-table [dataSource]="partida" class="mat-elevation-z4">
+        <ng-container matColumnDef="Cod_OrdTra">
+            <th mat-header-cell *matHeaderCellDef>N. Partida </th>
+            <td class="filaTela" mat-cell *matCellDef="let element"> {{element.Cod_OrdTra}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedPartida"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedPartida;" (click)="selectionPartida.toggle(row)">
+        </tr>
+    </table>
+</div>
+<!--fin inferior izquierda  -->
+
+<mat-form-field appearance="fill">
+    <mat-label>Motivos Improductivos </mat-label>
+    <mat-select [(ngModel)]="motivoProductivo.Cod_Motivo_Impr" name="MotivosImproductivos">
+        <mat-option *ngFor="let motivos of lstMotivosImproductivos" [value]="motivos.Cod_Motivo_Impr">
+            {{motivos.Cod_Motivo_Impr}} {{motivos.Descripcion}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+
+
+<mat-form-field appearance="fill">
+    <mat-label>Observaciones Usuarios</mat-label>
+    <textarea matInput [(ngModel)]="observacion"></textarea>
+</mat-form-field>
+
+<div>Calculo de Tiempo Improductivo </div>
+
+
+<mat-dialog-actions class="dialog-actions">
+    <button class="tiempoInicio" (click)="tiempoInicio()" [disabled]="btnInicioHora">Inicio </button>
+    <button class="tiempoInicio" (click)="tiempoTerminar()" [disabled]="btnInicioFin">Fin</button>
+    <button class="dialog-button-cancelar" mat-button mat-dialog-close="cancelar">Salir</button>
+</mat-dialog-actions>

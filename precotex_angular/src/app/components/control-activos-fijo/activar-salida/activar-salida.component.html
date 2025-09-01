@@ -1,0 +1,93 @@
+<div class="container-fluid">
+    <div class="grid-container">
+        <div class="title">Activar Salida Activos</div>
+
+        <div class="find">
+            <mat-card class="list-form">
+                <mat-card-header>
+                    <mat-card-subtitle>Listado de Activos</mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content>
+                    <div>
+                        <mat-form-field class="example-width-35" appearance="outline">
+                            <mat-label>Clasificación</mat-label>
+                            <mat-select [(ngModel)]="idDescripcion">
+                                <mat-option *ngFor="let item of dataTipoActivos" [value]="item.IdDescripcion">
+                                    {{ item.Descripcion }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-label>Filtrar</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar busqueda" #input>
+                        </mat-form-field>
+
+                        <button mat-button type="button" color="primary" (click)="listarActivos()"><mat-icon>search</mat-icon>Buscar</button>
+                        <!--<button mat-button type="button" color="primary" (click)="onExportarRegistro()"><mat-icon>file_download</mat-icon>Descargar</button>-->
+                    </div>
+
+                    <div class="col-md-12 tabla">
+                        <table mat-table [dataSource]='dataSource' matSort #sortData1="matSort" matSortActive="Cod_Activo" matSortDirection="desc" class="mat-elevation-z8">
+                            <ng-container matColumnDef="Cod_Activo">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Cod_Activo }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Descripcion">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Descripcion }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Nom_Marca">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Marca </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Nom_Marca }} </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="Nom_Modelo">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Modelo </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Nom_Modelo }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Num_Serie_Equipo">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Número Serie </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Num_Serie_Equipo }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Nom_Area">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Area </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Nom_Area }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Nom_Responsable">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Responsable </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Nom_Responsable }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Flg_Salida">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-slide-toggle (change)="onChangeSalida($event, element)" class="example-margin" color="warn" [checked]="element.Flg_Salida == '1'">
+                                        <span [ngClass]="{'flg_grey':element.Flg_Salida=='0', 'flg_green':element.Flg_Salida=='1'}">
+                                            {{ element.Flg_Salida == '1' ? 'Autorizado' : 'Denegado' }}
+                                        </span>
+                                    </mat-slide-toggle>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+
+                        <mat-paginator #paginatorData1 [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>                        
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner> 

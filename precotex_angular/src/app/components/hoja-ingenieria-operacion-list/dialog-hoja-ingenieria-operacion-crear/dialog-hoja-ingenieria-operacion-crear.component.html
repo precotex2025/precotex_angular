@@ -1,0 +1,259 @@
+<div class="container-dialog">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container-dialog">
+
+      <div class="title-dialog"><span class="numhoja">{{Titulo}}</span></div>
+      <form class="container-cuerpo-dialog" [formGroup]="formulario">
+
+        <div class="container-cuerpo-fila1">
+
+            <mat-card>
+                <mat-card-header>
+                    Registro de método
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="container-cuerpo-fila1-content">
+
+                        <mat-form-field class="fila1-estilo-propio">
+                            <mat-label>Estilo Propio</mat-label>
+                            <input matInput type="text" maxlength="15" placeholder="Estilo Propio" value="" autocomplete="off" formControlName="sCodEstPro" (input)="buscarxEstiloPropio()"/>
+                        </mat-form-field>
+
+                        <mat-form-field class="fila1-tipo-estilo">
+                            <mat-label>Tipo de Estilo</mat-label>
+                            <mat-select formControlName="sTipoEstilo">
+                                <mat-option *ngFor="let option of lstOptTipoEstilo" [value]="option.id">
+                                    {{option.name}}
+                                </mat-option>
+                            </mat-select>
+                            <!--<input matInput type="text" placeholder="Tipo de Estilo" value="" autocomplete="off" formControlName="sDesEstPro"/>-->
+                        </mat-form-field>      
+
+                        <mat-form-field class="fila1-cliente">
+                            <mat-label>Cliente</mat-label>
+                            <input matInput type="text" placeholder="Cliente" value="" autocomplete="off" formControlName="sDesCliente"/>
+                        </mat-form-field>
+
+                        <mat-form-field class="fila1-prenda">
+                            <mat-label>Prenda</mat-label>
+                            <input matInput type="text" placeholder="Prenda" value="" autocomplete="off" formControlName="sTipoPrenda"/>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="fila1-version">
+                            <mat-label>Version</mat-label>
+                            <mat-select formControlName="sCodVersion" (selectionChange)="onVersionChange($event)">
+                                <mat-option *ngFor="let option of lstOptVersiones" [value]="option.Cod_Version">
+                                    {{option.Cod_Version}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="fila1-estcli">
+                            <mat-label>Estilo cliente</mat-label>
+                            <mat-select formControlName="sCodEstCli">
+                                <mat-option *ngFor="let option of itemsEstiloCliente" [value]="option.Cod_EstCli">
+                                    {{option.Cod_EstCli}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="fila1-grupo" class="fila1-grupo">
+                            <mat-label>Grupo</mat-label>
+                            <input matInput type="text" placeholder="Grupo" value="" autocomplete="off" formControlName="sGrupo"/>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="fila1-complejidad">
+                            <mat-label>Complejidad</mat-label>
+                            <mat-select formControlName="sComplejidad">
+                                <mat-option *ngFor="let option of lstOptComplejidad" [value]="option.id">
+                                    {{option.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="fila1-analista">
+                            <mat-label>Analista</mat-label>
+                            <input matInput type="text" #trigger="matAutocompleteTrigger" placeholder="Analista" formControlName="sAnalista" [matAutocomplete]="autoDataAnalista" />
+                            <mat-autocomplete autoActiveFirstOption #autoDataAnalista="matAutocomplete">
+                                <mat-option *ngFor="let option of filtroOperacionAnalista | async" [value]="option.Nom_Analista">
+                                    {{option.Nom_Analista}}
+                                </mat-option> 
+                            </mat-autocomplete>                            
+                        </mat-form-field>
+
+                        <mat-form-field class="fila1-fecha">
+                            <mat-label>Fecha</mat-label>
+                            <input matInput type="datetime-local" formControlName="sFechaHoraIngreso">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill" class="fila1-tipo-tela">
+                            <mat-label>Tipo de tela</mat-label>
+                            <mat-select formControlName="sTipoTela">
+                                <mat-option *ngFor="let option of lstOptTipoTela" [value]="option.DES_TELA">
+                                    {{option.DES_TELA | slice:0:250}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <div class="fila1-adjuntar" *ngIf="btnUploadFileVisible">
+
+                                <input type="file" accept="application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none;" #inputFile (change)="guardarArchivo($event, 'guardar')">
+                                <input type="file" accept="application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none;" #inputFile2  (change)="guardarArchivo($event, 'editar')">
+                                
+                                <button (click)="inputFile.click()" mat-button  color="primary" [disabled]="ExisteArchivo">
+                                    <mat-icon>attach_file</mat-icon>Adjuntar archivo
+                                </button>
+                              
+                                <button (click)="inputFile2.click()" mat-button  color="primary" [disabled]="!ExisteArchivo">
+                                    <mat-icon>edit</mat-icon>
+                                </button> 
+    
+                                <button  mat-button color="primary" (click)="eliminarArchivo()" [disabled]="!ExisteArchivo">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+
+                                <a [href]="URLArchivo" mat-button color="primary" [disabled]="!ExisteArchivo" target="_blank" download>
+                                    <mat-icon>cloud_download</mat-icon>
+                                </a>
+
+                        </div>
+
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+          
+        </div>
+
+        <div class="container-cuerpo-fila2">
+
+            <mat-card>
+                <mat-card-header>
+                    Paso a paso de operaciones
+                </mat-card-header>
+                <mat-card-content>
+                    
+                        <div class="container-cuerpo-fila2-title-formulario">
+                            <span>Agregar paso de operacion</span>
+                            <button mat-icon-button type="button" (click)="togglePanel()" class="btn-toggle">
+                                <span *ngIf="!frmPanelVisible" ><mat-icon>keyboard_arrow_down</mat-icon></span>
+                                <span *ngIf="frmPanelVisible"><mat-icon>keyboard_arrow_up</mat-icon></span>
+                            </button>
+                            <span style="clear: both;"></span>
+                        </div>
+                        <div class="container-cuerpo-fila2-formulario" *ngIf="frmPanelVisible">
+
+                            <mat-form-field class="fila2-titulo"> 
+                                <mat-label>Nombre de Operación</mat-label>
+                                <input matInput type="text"  placeholder="Nombre de Operación" value="" autocomplete="off" formControlName="sTituloOperacion">
+                            </mat-form-field>
+
+                            <div class="fila2-video" *ngIf="btnUploadFileVisible"> 
+
+                                <input type="file" accept="video/*" style="display:none;" #inputFileVideo (change)="guardarVideo($event, 'guardar')">
+                                <input type="file" accept="video/*" style="display:none;" #inputFileVideo2 (change)="guardarVideo($event, 'editar')">
+
+                                <button (click)="inputFileVideo.click()" mat-button color="primary" [disabled]="ExisteVideo">
+                                    <mat-icon>attach_file</mat-icon>Adjuntar video
+                                </button>
+
+                                <button (click)="inputFileVideo2.click()" mat-button  color="primary" [disabled]="!ExisteVideo">
+                                    <mat-icon>edit</mat-icon>
+                                </button> 
+    
+                                <button  mat-button color="primary" (click)="eliminarVideo()" [disabled]="!ExisteVideo">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+
+                                <a [href]="URLVideo" mat-button color="primary" [disabled]="!ExisteVideo" target="_blank" download>
+                                    <mat-icon>videocam</mat-icon>
+                                </a>
+                                  
+                            </div>
+
+                            <mat-form-field class="fila2-descripcion"> 
+                                <mat-label>Método</mat-label>
+                                <textarea matInput type="text" placeholder="Método" value="" autocomplete="off" formControlName="sDescripcionOperacion"></textarea>
+                            </mat-form-field>
+
+                            <mat-form-field class="fila2-observaciones">
+                                <mat-label>Observaciones:</mat-label>
+                                <textarea matInput type="text" placeholder="Observaciones" value="" autocomplete="off" formControlName="sObservacionesOperacion"></textarea>
+                            </mat-form-field>
+
+                            <mat-form-field class="fila2-accesorios">
+                                <mat-label>Accesorios:</mat-label>
+                                <textarea matInput type="text" placeholder="Accesorios" value="" autocomplete="off" formControlName="sAccesoriosOperacion"></textarea>
+                            </mat-form-field>
+
+                            <mat-form-field class="fila2-numorden">
+                                <mat-label>Num Orden:</mat-label>
+                                <textarea matInput type="number" placeholder="Num Orden" value="" autocomplete="off" formControlName="sNumOrden"></textarea>
+                            </mat-form-field>
+
+                            <button type="button" mat-flat-button (click)="addPasoOperacion()" class="fila2-btn-add" *ngIf="!btnEditarPanelVisible">
+                                <mat-icon aria-label="person">add</mat-icon> Agregar
+                            </button>
+                            <button type="button" mat-flat-button (click)="updatePasoOperacion()" class="fila2-btn-add" *ngIf="btnEditarPanelVisible">
+                                <mat-icon aria-label="person">add</mat-icon> Modificar
+                            </button>
+
+                        </div>
+                        <div class="container-cuerpo-fila2-content">
+                            <mat-list>
+                                <mat-list-item *ngFor="let item of dataItemsPasos; index as i">
+                                    <mat-icon matListIcon>folder</mat-icon>
+                                    <h4 matLine>{{item.Orden}}. {{item.Titulo}}</h4>
+                                    <p matLine [innerHTML]="item.Descripcion"></p>
+                                    <p matLine> 
+                                        <b>Observaciones: </b><br>
+                                        <span [innerHTML]="item.Observaciones"></span>
+                                    </p>
+                                    <p matLine> 
+                                        <b>Accesorios:</b><br>
+                                        <span [innerHTML]="item.Accesorios"></span>
+                                    </p>
+                                    
+                                    <p matLine *ngIf="item.UrlVideo !=''">  
+                                        <a href="{{item.UrlVideo}}" mat-button color="primary" target="_blank">
+                                            <mat-icon>videocam</mat-icon> Video
+                                        </a> 
+                                    </p>
+                                    <button mat-icon-button color="primary" type="button" (click)="editarItemPaso(item)"><mat-icon>edit</mat-icon></button>
+                                    <button mat-icon-button color="warn" type="button" (click)="supItemPaso(item)"><mat-icon>delete</mat-icon></button>
+                                 </mat-list-item>
+                              </mat-list>
+                        </div>
+
+                </mat-card-content>
+            </mat-card>
+          
+        </div> 
+
+
+        <div class="container-cuerpo-foot-dialog">
+
+            <button type="button" class="button-save-dialog" mat-flat-button  *ngIf="btnAccionModificar" (click)="ModificarHoja()">
+                <mat-icon aria-label="person">save</mat-icon>
+                Actualizar
+            </button>
+    
+            <button type="button" class="button-save-dialog" mat-flat-button  *ngIf="!btnAccionModificar" (click)="RegistrarHoja()">
+              <mat-icon aria-label="person">save</mat-icon>
+              Guardar
+            </button>
+    
+            <button mat-dialog-close type="button" class="button-cancel-dialog" mat-button mat-dialog-close
+              mat-dialog-close="false">
+              <mat-icon aria-label="person">cancel
+              </mat-icon> Cancelar
+            </button>
+        </div>
+          
+       </form>
+
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

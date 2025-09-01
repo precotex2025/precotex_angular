@@ -1,0 +1,129 @@
+<div class="card">
+    <div class="card-header">
+        Reubicar Cajas
+    </div>
+    <div class="container"> 
+        <form  [formGroup]="formulario" class="formulario">
+            
+            <!--FILA 1-->
+            <div class="row" >
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <mat-form-field style="margin-right: 8px;"> 
+                        <mat-label>Ubicación Fisico Destino</mat-label>
+                        <mat-select formControlName="ctrol_UbicacionFisico" (selectionChange)="onUbicacionChange($event)"> 
+                            <mat-option *ngFor="let ubicacion of dataUbicacionFisico" [value]="ubicacion.id_Tx_Ubicacion_Fisica">{{ ubicacion.descripcion_Larga }}</mat-option> 
+                        </mat-select> 
+                    </mat-form-field>     
+                    <!--
+                    <button type="button" (click)="AnadirUbicacion()" class="btn_anadirUbi" mat-flat-button >                    
+                        <mat-icon aria-label="person">assignment_turned_in</mat-icon>
+                    </button>
+                    -->
+                </div>
+            </div> 
+            
+            <!--FILA 2-->
+            <div class="row" >
+                <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8">
+
+                    <ng-container matColumnDef="tipUbi">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tipo
+                        </th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det">
+                            {{data_det.descripcion}} </td>
+                    </ng-container>  
+
+                    <ng-container matColumnDef="totCaj">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"># Cajas
+                        </th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det">
+                            {{data_det.nTotalCajas}} </td>
+                    </ng-container>   
+                    
+                    <ng-container matColumnDef="fecha">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha.
+                        </th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det">
+                            {{data_det.fec_Registro | date:'dd/MM/yyyy' }} </td>
+                    </ng-container>                         
+
+                    <ng-container matColumnDef="estado">
+                        <th mat-header-cell *matHeaderCellDef> Estado </th>
+                        <td mat-cell *matCellDef="let data_det">
+                                <span style="background-color: green; color: white; padding: 2px;" *ngIf="data_det.flg_Estatus == 'S'" >ACTIVO</span> 
+                                <span style="background-color: red; color: white; padding: 2px;" *ngIf="data_det.flg_Estatus == 'N'" >INACTIVO</span> 
+                        </td>                                
+                    </ng-container>     
+                    
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>                    
+                    
+                </table>
+            </div>  
+            
+            <br>    
+            
+            <!--FILA 3-->
+            <div class="row" >
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <mat-form-field style="margin-right: 8px;"> 
+                        <mat-label>Caja a ReUbicar</mat-label>
+                        <input matInput type="text"  placeholder="Escanee Codigo QR" (keydown.enter)="applyEnterAddGru($event)" value="" #myinputAddGru
+                            autocomplete="off" formControlName="grupo_añadir" >
+                    </mat-form-field>     
+
+                    <button type="button" (click)="AnadirGrupo()" class="btn_anadirUbi" [disabled]="isDisabled_BtnGrupo" mat-flat-button>                    
+                        <mat-icon aria-label="person">assignment_turned_in</mat-icon>
+                    </button>
+                </div>
+            </div>  
+            
+            <!--FILA 4-->
+            <div class="row" >            
+                    <table mat-table #table  [dataSource]="dataSourceUbi"   class="mat-elevation-z8" >
+
+
+                        <ng-container matColumnDef="tipUbi">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tipo</th>
+                            <td mat-cell  *matCellDef="let data_det"> {{data_det.codigoBarra}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="totCol">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell"># Col</th>
+                            <td mat-cell  *matCellDef="let data_det"> {{data_det.nTotalColgadores}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="fecha">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha.
+                            </th>
+                            <td class="mat-header-cell" mat-cell *matCellDef="let data_det">
+                                {{data_det.fec_Registro | date:'dd/MM/yyyy' }} </td>
+                        </ng-container>                   
+                        
+                        <ng-container matColumnDef="estado">
+                            <th mat-header-cell *matHeaderCellDef> Estado </th>
+                            <td mat-cell *matCellDef="let data_det">
+
+                                <span style="background-color: green; color: white; padding: 2px;" *ngIf="data_det.flg_Estatus == 'S'" >ACTIVO</span> 
+                                <span style="background-color: red; color: white; padding: 2px;" *ngIf="data_det.flg_Estatus == 'N'" >INACTIVO</span> 
+                
+                                </td>                                
+                        </ng-container>  
+                        
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsUbi"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsUbi;"></tr>                       
+
+                    </table>            
+            </div>
+            
+            <button type="button" class="boton-regresar" mat-flat-button (click)="Regresar()">                    
+                <mat-icon aria-label="person">reply_all</mat-icon>
+            </button>                
+
+        </form>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

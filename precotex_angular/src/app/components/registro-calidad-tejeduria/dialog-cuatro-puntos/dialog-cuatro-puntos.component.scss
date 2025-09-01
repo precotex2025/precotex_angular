@@ -1,0 +1,560 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 1px 1px 1px 1px;
+    font-family: corbel, arial;
+    font-size: 12px;
+    margin: 0;
+}
+
+.grid-container {
+    border-radius: 4px;
+    width: 180vh;
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0;
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 800px;
+    min-height: 400px;
+    //height: 640px;
+    height: 71vh;
+    //position: absolute;
+}
+
+.title {
+    background-color: #3f51b5;
+    color: white;
+    padding: 0px 1px 1px 1px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width:  100%;
+    height: 100%;
+    margin: 0;
+    padding: 1px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 60px
+        "fila2" 190px
+        "fila3" 200px
+        "foot" 400px/99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 12px;
+}
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    margin-top: 12px;
+}
+
+.container-cuerpo-fila3 {
+    grid-area: fila3;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+
+
+.container-cuerpo-foot {
+    grid-area: foot;
+    height: 5vh;
+}
+
+
+
+
+.mat-form-field {
+    width: 100%;
+    padding: 0px 20px 10px 20px;
+
+}
+
+//fila 1
+.container-cuerpo-fila1 {
+    display: grid;
+    grid-template:
+    "col1 col2 col3 col4" 70px;
+    
+}
+
+
+
+.fila1-codrollo {
+    grid-area: col1;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+
+}
+
+
+.fila1-ot {
+    grid-area: col2;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+
+}
+
+.fila1-pmaquina {
+    grid-area: col3;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+
+}
+
+
+.fila1-calidad {
+    grid-area: col4;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+    
+  }
+
+//   .fila1-leyenda0 {
+//     grid-area: col5;
+//     font-size: 12px;
+    
+//   }
+
+
+
+//   .fila1-leyenda {
+//     grid-area: col7;
+//     font-size: 14px;
+    
+//   }
+
+//   .fila1-leyenda2 {
+//     grid-area: col8;
+//     font-size: 14px;
+    
+//   }
+
+
+
+
+
+
+//fila 1
+.container-cuerpo-fila2 {
+    display: grid;
+    grid-template:
+        // "col1 col2 col3 col4" 70px
+        // "col5 col5 col6 col7" 70px
+        // "col8 col9 col10 col11" 70px
+        // "col12 col13 col14 col15 " / auto;
+
+        "col1 col2 col3 col4" 70px
+        "col5 col6 col7 col8" 70px
+        "col9 col10 col11 col12"/ auto;
+        //"col13 col14 col15 col16 " / auto;
+        
+}
+
+
+
+
+.fila2-inspector {
+    grid-area: col1;
+    
+
+}
+
+.fila2-observacion {
+    grid-area: col2;
+}
+
+.fila2-restriccion {
+    grid-area: col3;
+}
+
+.fila2-turno {
+    grid-area: col4;
+}
+
+.fila2-defecto {
+    grid-area: col5;
+}
+
+.fila2-codigodefecto {
+    grid-area: col6;
+}
+
+.fila2-metros {
+    grid-area: col7;
+    text-align: center;
+}
+
+
+// .fila2-tamañodefecto {
+//     grid-area: col8;
+//     text-align: center;
+// }
+
+// .fila2-puntosdefecto {
+//     grid-area: col9;
+//     text-align: center;
+//   }
+
+
+// .fila2-metroslineales {
+//     grid-area: col10;
+//     text-align: center;
+// }
+
+.fila2-anchotela {
+    grid-area: col9;
+    text-align: center;
+}
+
+.fila2-c100m2 {
+    grid-area: col12;
+    text-align: center;
+}
+
+.fila2-tpuntos {
+    grid-area: col13;
+    text-align: center;
+  }
+
+
+  .fila2-InCalidad {
+    grid-area: col8;
+    text-align: center;
+  }
+
+
+
+
+
+
+  
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot .fila1-agregar,
+.button-modificar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+
+.button-modificar {
+    grid-area: fcol2;
+    background-color: #8f2121;
+    color: #ffffff;
+}
+
+.mat-column-MTRS,
+.mat-column-CODIGO,
+.mat-column-DEFECTO,
+.mat-column-TAMANO_DEFECTO,
+.mat-column-PUNTOS,
+.mat-column-ACCION,
+.mat-column-OT,
+.mat-column-ROLLO,
+
+.mat-column-tpuntos,
+
+.mat-column-calidad,
+.mat-column-PREFIJO_MAQUINA,
+.mat-column-NUM_SEC
+
+
+// {
+// 	text-align: center;
+// 	font-size: 13px;
+//     font-family: arial;
+//     padding: 3px;
+// }
+
+.mat-column-MTRS {width: 10px !important;text-align: center}
+.mat-column-CODIGO {width: 10px !important;text-align: center}
+.mat-column-DEFECTO {min-width: 10px !important;text-align: center}
+.mat-column-TAMANO_DEFECTO {width: 10px !important;text-align: center; display: none;}
+.mat-column-PUNTOS {width: 10px !important;text-align: center; display: none;}
+.mat-column-ACCION {width: 10px !important;text-align: center}
+.mat-column-OT {width: 10px !important;text-align: center; display: none;}
+.mat-column-ROLLO {width: 10px !important;text-align: center; display: none;}
+.mat-column-tpuntos {width: 10px !important;text-align: center; display: none;}
+.mat-column-calidad {width: 10px !important;text-align: center; display: none;}
+.mat-column-PREFIJO_MAQUINA {width: 10px !important;text-align: center; display: none; }
+.mat-column-NUM_SEC {width: 10px !important;text-align: center;  }
+.mat-header-cell {text-align: center; }
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.container-cuerpo-foot .button-agregar,
+.button-cancelar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+.button-agregar {
+    grid-area: fcol1;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+
+.button-cancelar {
+    grid-area: fcol2;
+    background-color: #d32f2f;
+    color: #ffffff;
+}
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+ 
+}
+.paginador{
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width: 868px){
+
+    .grid-container{
+        width: 80%; 
+        height: auto; //93%;
+    }
+    .container-cuerpo {
+        display: grid;
+    
+        grid-template:
+        "fila1" 120px
+        "fila2" 425px
+        "fila3" 280px
+        "foot" 75px /
+        99%;
+    }
+
+    .container-cuerpo-fila1{
+        display: grid;
+        grid-template:
+        "col1 col2" auto
+        "col3 col4" auto
+        "col5 col6" auto
+        "col7 col8" auto
+        "col9 col9" auto
+        "col10 col10" auto
+        "col11 col11" auto;
+        width: 70vw;
+    }
+    
+   
+    .fila1-codrollo {
+        grid-area: col1;
+        
+    
+    }
+    
+    
+    .fila1-ot {
+        grid-area: col2;
+        
+    
+    }
+    
+    .fila1-pmaquina {
+        grid-area: col3;
+        
+    
+    }
+    
+    
+    .fila1-calidad {
+        grid-area: col4;
+        
+      }
+
+
+
+
+      .container-cuerpo-fila2{
+        display: grid;
+        grid-template:
+        "col1 col2" auto
+        "col3 col4" auto
+        "col5 col5" auto
+        "col6 col7" auto
+        "col8 col9" auto
+        "col10 col11" auto
+        "col12 col13" auto
+        "col14 col15" auto
+        "col16 col17" auto;
+        
+        width: 70vw;
+    }
+
+    .container-cuerpo-fila3 {
+        grid-area: fila3;
+        overflow: auto;
+        margin-bottom: 10px;
+        width: 55%;
+    }
+    
+
+
+    
+.fila2-inspector {
+    grid-area: col1;
+    
+
+}
+
+.fila2-observacion {
+    grid-area: col2;
+}
+
+.fila2-restriccion {
+    grid-area: col3;
+}
+
+.fila2-turno {
+    grid-area: col4;
+}
+
+.fila2-defecto {
+    grid-area: col5;
+}
+
+.fila2-codigodefecto {
+    grid-area: col6;
+}
+
+.fila2-metros {
+    grid-area: col7;
+    text-align: center;
+}
+
+
+.fila2-tamañodefecto {
+    grid-area: col8;
+    text-align: center;
+}
+
+.fila2-puntosdefecto {
+    grid-area: col9;
+    text-align: center;
+  }
+
+
+
+
+
+
+.fila2-metroslineales {
+    grid-area: col10;
+    text-align: center;
+}
+
+.fila2-anchotela {
+    grid-area: col11;
+    text-align: center;
+}
+
+.fila2-c100m2 {
+    grid-area: col12;
+    text-align: center;
+}
+
+.fila2-tpuntos {
+    grid-area: col13;
+    text-align: center;
+  }
+
+
+  
+th.mat-cell{
+    width: 120px;
+    min-width: 120px;
+}
+td.mat-cell{
+    width: 120px;
+    min-width: 120px;
+}
+
+.maticon-date{
+    position: absolute;
+    float: right;
+    top: -6px;
+    margin-left: 270px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.54);
+}
+
+
+
+
+
+
+
+  }
+
+

@@ -1,0 +1,210 @@
+
+<div class="container">
+
+    <div class="grid-container">
+
+        <div class="title"><strong>Finalizar Formato de hora (00:00 a 24horas)</strong></div>
+
+            <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm"  >
+            <div class="container-cuerpo-fila1">
+                
+                <mat-form-field class="fila1-ot">
+                    <mat-label>OT</mat-label>
+                    <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="OT" formControlName="sOt"  [matAutocomplete]="autoDataOt" />
+                    <mat-autocomplete autoActiveFirstOption #autoDataOt="matAutocomplete">
+                        <!-- <mat-option *ngFor="let option of filtroOperacionOt | async" [value]="option.OT" (click)="CambiarValorOt(option.Cod_TipOrdTra,option.OT)">
+                            {{option.OT}}
+                        </mat-option>  -->
+                    </mat-autocomplete> 
+                </mat-form-field>
+
+
+
+                <mat-form-field class="fila1-especialidad">
+                    <mat-label>Especialidad</mat-label>
+                    <mat-select  formControlName="ct_Especialidad" name="listar_especialidad">
+                        <mat-option *ngFor="let listar_origen of listar_especialidad" [value]="listar_origen.Cod_Espe">
+                            {{listar_origen.Nomb_Espec}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+                <mat-form-field class="fila1-dni" >
+                    <mat-label>DNI</mat-label>
+                    <input matInput placeholder="DNI TECNICO" #dnitejedor (input)="mostrarTejedor()" formControlName="dnitejedor">
+                  </mat-form-field>
+
+                  <mat-form-field class="fila1-nomtej">
+                    <mat-label>NOMBRE TEJEDOR</mat-label>
+                    <input matInput formControlName="nomtejedor">
+                  </mat-form-field>
+
+
+
+                <!-- <mat-form-field class="fila1-fecha">
+                    <mat-label>Fecha</mat-label>
+                    <input matInput  mask='99/99/9999' formControlName="Fec_Registro">
+                </mat-form-field> -->
+
+
+                
+                <mat-form-field class="fila1-area">
+                    <mat-label>Area</mat-label>
+                    <mat-select  formControlName="ct_Area" name="listar_especialidad">
+                        <!--(click)="CargarMaquinas()" -->
+                        <mat-option *ngFor="let listar_origen of listar_area" [value]="listar_origen.Cod_Area_Tej_Mante_Maq" (click)="CargarValoresMaquiTarea()">
+                            {{listar_origen.Nomb_Area_Tej_Mante_Maq}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+      
+
+                <mat-form-field class="fila1-tarea">
+                    <mat-label>Tarea</mat-label>
+                    <mat-select  formControlName="sTarea" name="listar_operacionTarea">
+                        <mat-option *ngFor="let listar_origen of listar_operacionTarea" [value]="listar_origen.Cod_Tarea" (click)="CargarTipoFalla(listar_origen.Cod_Tarea, listar_origen.Flg_ValidaMaquina)">
+                            {{listar_origen.Nombre_Tarea}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+                <mat-form-field class="fila1-codmaquina">
+                    <mat-label>Maquina</mat-label>
+                    <mat-select  formControlName="Cod_Maquina" name="listar_operacionMaquina">
+                        <mat-option *ngFor="let listar_origen of listar_operacionMaquina" [value]="listar_origen.Codigo">
+                            {{listar_origen.Descripcion}}
+                            <!--{{listar_origen.Codigo}}  -->
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                
+                <mat-form-field class="fila1-tipofalla">
+                    <mat-label>Tipo Falla</mat-label>
+                    <mat-select  formControlName="ct_Tipo_Falla" name="listar_tipo_falla" [(value)]="selectedTipoFalla" (openedChange)="limpiaFiltro()">
+
+                        <!-- Campo de búsqueda dentro del mat-select -->
+                        <mat-option>
+                            <input matInput placeholder="Buscar..." formControlName="filtro" (ngModelChange)="filtrarTiposFalla()" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" autocomplete="off">
+                        </mat-option>     
+
+                        <mat-option *ngFor="let listar_origen of tipoFallaFiltrada" [value]="listar_origen.Cod_TipFall">
+                            {{listar_origen.Desc_TipFall}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+       
+             
+                      <!-- <ng-select  class="fila1-tarea" [items]="listar_operacionTarea" bindLabel="Nombre_Tarea" bindValue="Cod_Tarea"
+                      placeholder="SELECCIONE TAREA" formControlName="sTarea">
+                    </ng-select>  -->
+
+    
+                     <mat-form-field class="fila1-articulo">
+                        <mat-label>Articulo</mat-label>
+                        <mat-select  formControlName="ct_Articulo" name="listar_articulo">
+                            <mat-option *ngFor="let listar_origen of listar_articulo" [value]="listar_origen.Cod_Articulo" (click)="ListarArticuloMinMax(listar_origen.Cod_Articulo)">
+                                {{listar_origen.Desc_Articulo}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <!-- <mat-form-field class="fila1-minmax">
+                        <mat-label>Min. minutos</mat-label>
+                        <input matInput formControlName="ct_MinMax">
+                    </mat-form-field> -->
+
+                    <mat-form-field class="fila1-condicion">
+                        <mat-label>Condicion</mat-label>
+                        <mat-select  formControlName="ct_Condicion" name="listar_condicion">
+                            <mat-option *ngFor="let listar_origen of listar_condicion" [value]="listar_origen.Cod_Tej_Cond">
+                                {{listar_origen.Desc_Tej_Cond}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field> 
+
+              <mat-form-field class="fila1-paromaquina">
+                        <mat-label>Paro Maquina</mat-label>
+                        <mat-select  formControlName="ct_Paromaquina" name="listar_paro_maquina">
+                            <mat-option *ngFor="let listar_origen of listar_paro_maquina" [value]="listar_origen.Cod_ParMaq_Tej">
+                                {{listar_origen.Desc_ParMaq_Tej}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                        
+                             <mat-form-field class="fila1-fechai">
+                                <mat-label>Fecha Inicio</mat-label>
+                                <input matInput [matDatepicker]="Fec_Inicio" autocomplete="off" formControlName="Fec_Inicio">
+                                <mat-datepicker-toggle matSuffix [for]="Fec_Inicio"></mat-datepicker-toggle>
+                                <mat-datepicker #Fec_Inicio></mat-datepicker>
+                            </mat-form-field>
+                                
+                                
+                                 <mat-form-field class="fila1-horai">
+                                <mat-label>Hora Inicio (00:00 a 24:00)</mat-label>
+                                <input matInput [textMask]="{mask: num_guiaMascara}" formControlName="hini">
+                            </mat-form-field>
+
+
+                            <mat-form-field class="fila1-fechaf">
+                                <mat-label>Fecha Fin</mat-label>
+                                <input matInput [matDatepicker]="Fec_Fin" autocomplete="off"
+                                    formControlName="Fec_Fin" >
+                                <mat-datepicker-toggle matSuffix [for]="Fec_Fin"></mat-datepicker-toggle>
+                                <mat-datepicker #Fec_Fin></mat-datepicker>
+                            </mat-form-field> 
+
+                            <mat-form-field class="fila1-horaf">
+                                <mat-label>Hora Fin (00:00 a 24:00)</mat-label>
+                                <input matInput [textMask]="{mask: num_guiaMascara}" formControlName="hfin">
+                            </mat-form-field>                         
+
+                            <!--AQUI LA LISTA DE ATRIBUIDO-->
+                            <!--<mat-form-field class="fila1-tipoAtribuido" *ngIf="mostrarCtrolOtrasSedes">-->
+                            <mat-form-field class="fila1-tipoAtribuido">
+                                <mat-label>Atribuido</mat-label>
+                                <mat-select  formControlName="ct_Tipo_Atribuido" name="listar_tipo_atribuido">
+                                    <mat-option *ngFor="let listar_origen of listar_tipo_atribuido" [value]="listar_origen.Cod_TipAtr">
+                                        {{listar_origen.Desc_TipAtr}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>     
+
+                            <mat-form-field class="fila1-obs">
+                                <mat-label>Descripción del Evento </mat-label>
+                                  <textarea  placeholder="Descripción del Evento " matInput formControlName="Observacion" autocomplete="off" rows="4"></textarea>
+                            </mat-form-field> 
+                            
+                            <mat-form-field class="fila1-obs2" *ngIf="mostrarCtrolOtrasSedes">
+                                <mat-label>Procedimiento Solución</mat-label>
+                                  <textarea  placeholder="Ingrese Procedimiento Solución" matInput formControlName="Observacion2" autocomplete="off" rows="4"></textarea>
+                            </mat-form-field>                                 
+
+            </div>
+
+
+
+
+            <div class="container-cuerpo-foot">
+
+                <button type="button" class="button-agregar" id="btnregistrar"  [disabled]="!formulario.valid"   (click)="submit(formDirective)"  mat-flat-button>
+                  <mat-icon aria-label="person" >add
+                  </mat-icon>  Guardar
+                </button>
+
+
+                <button type="button" class="button-cancelar" id="btncancelar"  mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>
+             
+            </div>
+        </form>
+
+    </div>
+
+</div>

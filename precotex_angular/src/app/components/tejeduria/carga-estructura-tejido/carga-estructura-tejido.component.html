@@ -1,0 +1,110 @@
+<div class="container">
+    <div class="grid-container">
+        <div class="title"><strong> CARGA DE ESTRUCTURA DE TEJIDO - EXCEL
+        </strong></div>
+        <div class="body">
+
+
+            <!-- file-upload.component.html -->
+            <div class="file-upload-container">
+                <!-- Input para seleccionar el archivo Excel -->
+                <input type="file" (change)="onFileSelected($event)" accept=".xls, .xlsx" #fileInput />
+                
+                <!-- Mensaje de error si el archivo no es válido -->
+                <div *ngIf="errorMessage" class="error-message">
+                {{ errorMessage }}
+                </div>
+            
+                <!-- Información del archivo seleccionado -->
+                <div *ngIf="selectedFile" class="file-info">
+                <p>Archivo seleccionado: {{ selectedFile.name }}</p>
+                </div>               
+
+            </div>   
+
+            <div class="botones-container">
+
+                <!-- Botón para cargar el archivo -->
+
+                <button (click)="uploadFile()" [disabled]="!selectedFile" class="upload-button" mat-flat-button type="button"   matTooltip="Cargar"   matTooltipPosition="above" >  
+                    <mat-icon aria-label="person">cloud_download
+                    </mat-icon> Cargar Estructura Tejido
+                </button>
+
+                <button (click)="guardarEstructura(fileInput)" [disabled]="!bExisteEstructura" class="save-button" mat-flat-button type="button"   matTooltip="Guardar Estructura Tejido"   matTooltipPosition="above" >  
+                    <mat-icon aria-label="person">save
+                    </mat-icon> Guardar Estructura Tejido
+                </button>                 
+
+            </div>
+
+            <div>
+                <table mat-table #table  [dataSource]="dataSource" class="mat-elevation-z8">
+                    <ng-container matColumnDef="Titulo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">TITULO</th>
+                
+                        <td  mat-cell *matCellDef="let data_det"> 
+                            {{data_det.Titulo}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cabo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">CABOS</th>
+                
+                        <td  mat-cell *matCellDef="let data_det"> 
+                            {{data_det.CABOS}}
+                        </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="Lm">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">L.M</th>
+                
+                        <td  mat-cell *matCellDef="let data_det"> 
+                            {{data_det.LM}}
+                        </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="Color">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">COLOR</th>
+                
+                        <td  mat-cell *matCellDef="let data_det"> 
+                            {{data_det.COLOR}}
+                        </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="Pasadas">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">PASADAS</th>
+                
+                        <td  mat-cell *matCellDef="let data_det"> 
+                            {{data_det.PASADAS}}
+                        </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="Estructura">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">ESTRUCTURA</th>
+                
+                        <td  mat-cell *matCellDef="let data_det"> 
+                            {{data_det.ESTRUCTURA}}
+                        </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="Repeticiones">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">REPETICIONES</th>
+                
+                        <td  mat-cell *matCellDef="let data_det"> 
+                            {{data_det.REPETICIONES}}
+                        </td>
+                    </ng-container>                
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>                
+                </table> 
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>   

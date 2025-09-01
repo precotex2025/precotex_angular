@@ -1,0 +1,114 @@
+.container {
+  box-sizing: border-box;
+  width: 100%;
+  
+  //background-color: blue;
+  padding: 5px 5px 5px 5px;
+  font-family: corbel, arial;
+  font-size: 16px;
+  margin: 0;
+}
+
+.grid-container {
+  border-radius: 4px;
+  width: 100%;
+  height: 93%; 
+  //background-color: green;
+  border: 1px solid #337AB7;
+  margin: 0;
+  padding: 0;  
+  //position: absolute;
+} 
+
+button {
+  height: 37px;
+  font-size: 14px;
+}
+mat-form-field {
+  width: 100%;
+  padding: 0px 20px 10px 0px;
+}
+
+mat-checkbox {
+  padding: 0px 20px 10px 0px;
+}
+
+.button_buscar {
+  width: 100%;
+  background-color: #337AB7;
+}
+
+.button_agregar {
+  width: 30%;
+  background-color: #337AB7;
+  margin-top: 5px;
+}
+
+.find, .main, .footer { margin: 0px 5px 0px 5px; }
+
+.title {
+  background-color: #337AB7;
+  color: #FCFFFF;
+  padding: 8px 10px 10px 10px;
+  text-align: left;
+}
+
+.find { border: 1px solid #BBD2E6; border-width: 0px 0px 1px 0px}
+.main { border: 1px solid #BBD2E6; border-width: 0px 0px 1px 0px;}
+.footer { 
+  text-align: left;
+ }
+
+.findcol6 {
+  min-width: 250px;
+}
+.findcol7 {
+  padding-top: 7px;
+} 
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.tabla_cabecera {
+  width: 100%;
+
+}
+
+tr:hover {
+  border-color: currentColor;
+  background: whitesmoke;
+}
+
+tr:active {
+  background: #efefef;
+}
+
+.mat-column-Num_Auditoria, 
+.mat-column-Fec_Auditoria,
+.mat-column-Cod_LinPro,
+.mat-column-Cod_Auditor,
+.mat-column-Abr_Cliente,
+.mat-column-Cod_EstCli,
+.mat-column-Cod_OrdPro,
+.mat-column-Des_Present,
+.mat-column-detalle,
+.mat-column-eliminar {
+	text-align: center;
+	font-size: 13px;
+    font-family: arial;
+    padding: 10px;
+}
+.mat-column-Num_Auditoria {width: 30px !important;}
+.mat-column-Fec_Auditoria {width: 50px !important;}
+.mat-column-Cod_LinPro {width: 50px !important;}
+.mat-column-Cod_Auditor {width: 50px !important;text-align: center;}
+.mat-column-Abr_Cliente {width: 30px !important;}
+.mat-column-Cod_EstCli {width: 50px !important;}
+.mat-column-Cod_OrdPro {width: 50px !important;}
+.mat-column-Des_Present {width: 100px !important;text-align: center;}
+.mat-column-detalle {width: 20px !important;}
+.mat-column-eliminar {width: 20px !important;}
+
+
+.mat-header-cell {text-align: center; }

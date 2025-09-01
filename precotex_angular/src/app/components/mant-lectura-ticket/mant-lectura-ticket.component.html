@@ -1,0 +1,69 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title">LECTURA DE TICKET (ARTES)</div>
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+
+
+
+                <mat-form-field class="fila1-Modulo" appearance="fill">
+                    <mat-label>Proceso Origen</mat-label>
+                    <mat-select formControlName="Proceso_Origen">
+                        <mat-option *ngFor="let item of dataProcesos" [value]="item.Cod_Almacen">
+                            {{item.Cod_Almacen}} - {{item.Nom_Almacen}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="fila1-Tipo_Proceso" appearance="fill">
+                    <mat-label>Proceso Destino</mat-label>
+                    <mat-select formControlName="Proceso_Destino">
+                        <mat-option *ngFor="let item of dataProcesos" [value]="item.Cod_Almacen">
+                            {{item.Cod_Almacen}} - {{item.Nom_Almacen}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="fila1-Ticket">
+                    <mat-label>Lectura de Barra</mat-label>
+                    <input matInput type="text" placeholder="Ticket" value="" autocomplete="off" formControlName="Barra" #Ticket (keyup)="generaMovimiento()" maxlength="10">
+                </mat-form-field>
+
+
+                <button type="button" (click)="generaMovimiento()" [disabled]="formulario.invalid"
+                    class="button-finalizar" mat-button mat-flat-button>
+                    <mat-icon aria-label="person">save
+                    </mat-icon> Finalizar
+                </button>
+
+            </div>
+
+            <div class="container-cuerpo-fila2" *ngIf="flgInfoJabVisible">
+                <table>
+                    <tr>
+                      <th>ID BOLSA</th>
+                      <th>COD BARRA</th>
+                      <th>OP</th>
+                      <th>PRESENT</th>
+                      <th>TALLA</th>
+                      <th>CANTIDAD</th>
+                    </tr>
+                    <tr *ngFor="let item of dataItemsJaba">
+                      <td>{{item.ID_BOLSA}}</td>
+                      <td>{{item.COD_BARRA}}</td>
+                      <td>{{item.COD_ORDPRO}}</td>
+                      <td>{{item.PRESENT}}</td>
+                      <td>{{item.TALLA}}</td>
+                      <td>{{item.CANTIDAD}}</td>
+                    </tr>
+                  </table>
+                  <br>
+                  <div style="color:darkblue">
+                      <b>{{ lc_Mensaje }}</b>
+                  </div>
+                  </div>
+        </form>
+    </div>
+</div>

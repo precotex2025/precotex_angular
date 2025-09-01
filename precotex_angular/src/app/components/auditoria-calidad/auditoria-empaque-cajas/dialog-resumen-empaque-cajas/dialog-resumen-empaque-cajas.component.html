@@ -1,0 +1,22 @@
+<div class="container"> 
+    <div class="grid-container">  
+        <div class="title">Resumen</div>
+
+        <form class="container-cuerpo">
+            <div class="container-cuerpo-fila">
+                <mat-list role="list">
+                    <mat-list-item role="listitem"> Número de Cajas : {{ data.Can_Cajas }} </mat-list-item>
+                    <mat-list-item role="listitem"> Número de Prendas : {{ data.Num_Prendas }} </mat-list-item>
+                    <mat-list-item role="listitem"> Cajas c/Defectos : {{ data.Can_Cajas_Def }} </mat-list-item>
+                  </mat-list>
+            </div>
+
+            <div class="container-cuerpo-foot">
+                <button type="submit" class="button-agregar" mat-button mat-dialog-close mat-dialog-close mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off</mat-icon>Cerrar
+                </button>               
+            </div>
+        </form>
+
+    </div>
+</div>

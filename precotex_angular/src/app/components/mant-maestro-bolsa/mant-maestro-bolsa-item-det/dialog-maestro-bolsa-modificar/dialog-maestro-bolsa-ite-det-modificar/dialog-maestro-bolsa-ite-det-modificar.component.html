@@ -1,0 +1,59 @@
+<div class="container-dialog">
+
+    <div class="grid-container-dialog">
+
+            <div class="container-cuerpo-fila2-dialog">
+                   
+                <table mat-table   class="mat-elevation-z8" #table [dataSource]="dataSource">
+ 
+                    <ng-container matColumnDef="Cod_OrdPro">
+                        <th mat-header-cell *matHeaderCellDef>OP</th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Cod_OrdPro }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Des_Present">
+                        <th mat-header-cell *matHeaderCellDef> Color </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Des_Present }}</td>
+                    </ng-container>
+
+                    <ng-container  matColumnDef="Cod_Talla">
+                        <th mat-header-cell *matHeaderCellDef> Talla </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Cod_Talla }}</td>
+                    </ng-container>
+
+                    <ng-container  matColumnDef="Num_SecOrd">
+                        <th mat-header-cell *matHeaderCellDef> Sec. Ord </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Num_SecOrd }}</td>
+                    </ng-container>
+
+                    <ng-container  matColumnDef="Cod_Item">
+                        <th mat-header-cell *matHeaderCellDef> Cod. Item </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Cod_Item }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cantidad">
+                        <th class="talla" mat-header-cell *matHeaderCellDef>Cant. </th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <input matInput type="number" min="0" [value]="data_det.Cantidad" (change)="capturarCant($event)">
+                        </td>
+                    </ng-container>
+
+
+                       <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                       <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                 </table>
+             </div>
+
+             <div class="container-cuerpo-foot-dialog">
+
+                <button mat-flat-button class="button-grabar" color="primary" (click)="guardarCantidad()">
+                    <mat-icon>save</mat-icon>Grabar</button>
+                <button mat-flat-button class="button-cancelar" mat-dialog-close>
+                    <mat-icon>cancel</mat-icon>Cancelar</button>   
+             </div>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

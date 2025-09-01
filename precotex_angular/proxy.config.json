@@ -1,0 +1,17 @@
+{
+    "/ws_android/*": {
+        "target": "https://gestion.precotex.com",
+        "secure": false,
+        "logLvel": "debug",
+        "changeOrigin": true
+    } , 
+    
+    "/ws_local/*": {
+        "target": "https://192.168.1.36:9443/",
+        "secure": false,
+        "logLvel": "debug",
+        "changeOrigin": true
+    }
+}
+
+

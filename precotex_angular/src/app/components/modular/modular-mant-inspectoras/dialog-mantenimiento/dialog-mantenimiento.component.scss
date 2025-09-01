@@ -1,0 +1,47 @@
+.example-full-width {
+    width: 100%;
+  }
+  .button-registrar {
+  
+    background-color: #2962FF;
+    color: white;
+    margin-right: 1rem;
+  
+  }
+  
+  .button-cancelar {
+  
+    background-color: #d32f2f;
+    color: white;
+  }
+
+  .boton{
+    min-width: 98%;
+    margin-bottom: 10px;
+  }
+  
+  .example-full-width {
+    width: 100%;
+  }
+  
+  .division {
+    width: 100%;
+    display: flex;
+  }
+
+  .Tipo {
+    margin-right: 30px;
+    width: 100px;
+  }
+
+  .Codigo {
+    margin-right: 30px;
+  }
+
+  .Nombre {
+    width: 100%;
+  }
+
+  ::ng-deep .my-class .mat-dialog-container{
+    padding: 20px;
+  }

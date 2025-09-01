@@ -1,0 +1,101 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title">.:: {{ des_planta }} ::. - Memorandum</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+                <mat-form-field class="fila1-fecha">
+                    <mat-label>Fec. Registro</mat-label>
+                    <input matInput [matDatepicker]="fec_registro" autocomplete="off" formControlName="fec_registro">
+                    <mat-datepicker-toggle matSuffix [for]="fec_registro"></mat-datepicker-toggle>
+                    <mat-datepicker #fec_registro></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+            <div class="container-cuerpo-fila2">
+                <mat-form-field class="fila2-dni-emisor">
+                    <mat-label>De</mat-label>
+                    <input matInput type="text" (keyup)="BuscarNomTrabajador('E')" placeholder="De" value=""
+                        autocomplete="off" formControlName="dni_emisor">
+                </mat-form-field>
+
+                <mat-form-field class="fila2-nom-emisor">
+                    <mat-label>Nombre</mat-label>
+                    <input matInput disabled value='{{ nom_emisor }}'>
+                </mat-form-field>
+            </div>
+
+            <div class="container-cuerpo-fila3">
+                <mat-form-field class="fila3-dni-receptor">
+                    <mat-label>Para</mat-label>
+                    <input matInput type="text" (keyup)="BuscarNomTrabajador('R')" placeholder="Para" value=""
+                        autocomplete="off" formControlName="dni_receptor">
+                </mat-form-field>
+
+                <mat-form-field class="fila3-nom-receptor">
+                    <mat-label>Nombre</mat-label>
+                    <input matInput disabled value='{{ nom_receptor }}'>
+                </mat-form-field>
+            </div>
+
+            <div class="container-cuerpo-fila4">
+                <mat-form-field class="fila4-asunto">
+                    <mat-label>Asunto</mat-label>
+                    <input matInput type="text" placeholder="Asunto" value="" autocomplete="off"
+                        formControlName="asunto">
+                </mat-form-field>
+
+                <mat-form-field class="fila4-nom_autoriza">
+                    <mat-label>Autorizado Por</mat-label>
+                    <mat-select formControlName="nom_autoriza" name="listar_autoriza">
+                        <mat-option *ngFor="let listar of listar_personal_autoriza" [value]="listar.nom_autoriza">
+                            {{listar.nom_autoriza}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="container-cuerpo-fila5">
+                <mat-form-field class="fila5-asunto">
+                    <mat-label>Glosa</mat-label>
+                    <input matInput type="text" placeholder="Glosa" value="" autocomplete="off"
+                        formControlName="glosa">
+                </mat-form-field>
+            </div>
+
+            <div class="container-cuerpo-fila6">
+                <div class="fila6-num-cantidad">
+                    <mat-form-field>
+                        <mat-label>Cantidad</mat-label>
+                        <input matInput type="text" placeholder="Cantidad" value="" autocomplete="off"
+                            formControlName="num_cantidad">
+                    </mat-form-field>
+                </div>
+                <div class="fila6-num-peso">
+                    <mat-form-field>
+                        <mat-label>Peso</mat-label>
+                        <input matInput type="text" placeholder="Peso" value="" autocomplete="off"
+                            formControlName="num_peso">
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+            <div class="container-cuerpo-foot">
+
+                <button type="button" class="button-registrar" mat-flat-button color="primary" (click)="Guardar()">
+                    <mat-icon aria-label="person">check_circle_outline
+                    </mat-icon>Guardar
+                </button>
+                <button type="button" class="button-cancelar" mat-flat-button color="primary"
+                    [routerLink]="['/SeguridadControlMemorandum']">
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>Cancelar
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>

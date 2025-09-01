@@ -1,0 +1,26 @@
+<div class="container-fluid">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title">Agregar Aprobación</div>
+        <mat-card>
+            <mat-card-content>
+                <div class="observaciones">
+                    <label for="">Observaciones</label>
+                    <textarea name="observaciones" [(ngModel)]="observaciones" id="observaciones" maxlength="200" cols="30" rows="10" placeholder="Ingrese Observaciones"></textarea>
+                </div>
+                <div class="botones">
+                    <button mat-flat-button color="primary" (click)="generarAprobacion(1)" type="button" class="button-registrar"><mat-icon>check_circle</mat-icon>
+                        Aprobar</button>
+                    <button mat-flat-button color="warn" (click)="generarAprobacion(0)" type="button" class="button-cancel"><mat-icon>cancel</mat-icon>
+                        Rechazar</button>
+                </div>
+                <div class="botones">
+                    <button mat-flat-button color="warn" mat-dialog-close class="button-cancel"><mat-icon>close</mat-icon>
+                        Cancelar</button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        
+    </div>
+</div>

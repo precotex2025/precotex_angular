@@ -1,0 +1,50 @@
+
+<div class="container"> 
+
+    <div class="grid-container">  
+ 
+        <div class="title">Seleccionar Medida</div>
+
+        <form class="container-cuerpo">
+            <div class="container-cuerpo-fila1">
+                
+            </div>    
+  
+            <div class="container-cuerpo-fila2">
+                
+                <!--<div class="fila1-Datos"> 
+                    <p><b>Talla:</b> {{Cod_Talla}}</p>
+                    <p><b>Descripcion:</b> {{Des_Medida}}</p>
+                    <br>
+                    <hr>
+                </div>-->
+
+                <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                    <ng-container matColumnDef="Tallas">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Medida</th>
+                        <td mat-cell  *matCellDef="let data_det;">
+                            <button type="button" class="button-agregar" (click)="selectMedida(data_det.Des_Medida)"  mat-flat-button >{{data_det.Des_Medida}}</button>
+                        </td>
+                    </ng-container>
+ 
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+                </table>
+ 
+            </div>
+
+            
+            <div class="container-cuerpo-foot">
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close="false"   mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>        
+            </div>
+
+
+        </form>
+
+    </div>
+ 
+</div>
+ 

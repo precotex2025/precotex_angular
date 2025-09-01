@@ -1,0 +1,165 @@
+<div class="container">
+    <!-- ventana nro 3 - salida -->
+    <div class="grid-container">
+
+        <div class="title">Lectura de Permisos -  <span   style="font-weight: bold;font-size: 20px; color: yellow;">Sede: {{sede}}</span></div>
+
+        <div class="find">
+            <form class="auditoriaForm" [formGroup]="formulario">
+
+
+                <div class="findcol1">
+                    <!-- <mat-form-field>
+                        <mat-label>DNI</mat-label>
+                        <input matInput type="search" maxlength="9" (input)="keyupDni($event)"
+                            (change)="changeDni($event)" #DniSearch formControlName="dni" placeholder="DNI" value=""
+                            autocomplete="off">
+                    </mat-form-field> -->
+                    <mat-form-field class="example-form-field" appearance="fill">
+                        <mat-label>DNI</mat-label>
+                        <input matInput type="text" maxlength="9" (input)="keyupDni($event)"
+                        (change)="changeDni($event)" #DniSearch formControlName="dni" placeholder="DNI" autocomplete="off">
+                        <button *ngIf="formulario.get('dni').value" matSuffix mat-icon-button aria-label="Clear" (click)="limpiarValor()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </div>
+                <div class="botones">
+                    <div class="findcol2">
+                        <button type="button" class="button_agregar" [disabled]="deshabilitar" (click)="actualizarPermiso()" mat-flat-button
+                            color="primary">
+                            <mat-icon aria-label="person">cached
+                            </mat-icon> Actualizar
+                        </button>
+
+                    </div>
+
+                    <div class="findcol3">
+                        <button class="button-cancelar" type="button" mat-flat-button color="primary"
+                            [routerLink]="['/LecturaPermisos']">
+                            <mat-icon aria-label="person">highlight_off </mat-icon> Cancelar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="findcol4">
+                    <span style="color: red;">{{fecha}}</span>
+                </div>
+
+            </form>
+
+
+        </div>
+
+        <div class="caja" *ngIf="resultado">
+            <mat-card class="caja">
+                <mat-card-content class="caja-content">
+                    <div class="caja-data">
+                        <label for="">Trabajador: <strong>{{Nom_Trabajador}}</strong> </label><br>
+
+                        <label for="">Tipo de Permiso: <strong>{{data[0].Des_Tipo_Permiso}} - 
+                            {{data[0].Cod_Motivo_Permiso == 'PPN' ? 'PERMISO PERSONAL' : data[0].Cod_Motivo_Permiso == 'PN2' ? 'PERMISO POR CITA MEDICA' : data[0].Cod_Motivo_Permiso == 'RRHH' ? 'PERMISO A RRHH' : data[0].Cod_Motivo_Permiso == 'TAR' ? 'TARDANZA' : data[0].Cod_Motivo_Permiso == 'PN1' ? 'PERMISO POR BAJA PRODUCCIÓN' : data[0].Cod_Motivo_Permiso == 'PBL' ? 'PERMISO POR BALANCE DE LINEA' : ''  }}</strong> </label><br>
+
+                        <label for="">Aprobador Jefe Inmediato: <strong>{{data[0].Nom_Trabajador_Aprob}}</strong>
+                        </label><br>
+
+                    </div>
+                    <div class="caja-data-2">
+                        <mat-card class="example-card">
+                            <mat-card-title>Hora de Inicio</mat-card-title>
+                            <mat-card-content>
+                                <p>Programada: {{data[0].Inicio}}</p>
+                                <p>Lectura:
+                                    <ng-container *ngIf="data[0].Inicio_Lectura == null">
+                                        --:--
+                                    </ng-container>
+                                    <ng-container *ngIf="data[0].Inicio_Lectura != null">
+                                        {{data[0].Inicio_Lectura}}
+                                    </ng-container>
+                                </p>
+                            </mat-card-content>
+                        </mat-card>
+
+                        <mat-card class="example-card">
+                            <mat-card-title>Hora de Termino</mat-card-title>
+                            <mat-card-content>
+                                <p>Programada: {{data[0].Termino}}</p>
+                                <p>Lectura:
+                                    <ng-container *ngIf="data[0].Termino_Lectura == null">
+                                        --:--
+                                    </ng-container>
+                                    <ng-container *ngIf="data[0].Termino_Lectura != null">
+                                        {{data[0].Termino_Lectura}}
+                                    </ng-container>
+                                </p>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+        </div>
+
+        <div class="container-cuerpo-fila5" *ngIf="resultado">
+
+            <!--<mat-form-field class="example-full-width" appearance="fill">
+                      <mat-label>Leave a comment</mat-label>
+                      <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+                    </mat-form-field>-->
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource">
+
+                    <!-- Position Column -->
+       
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="Fec_Permiso">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Fec. Permiso </th>
+                        <td mat-cell *matCellDef="let element"> {{fecha_mes}} </td>
+                    </ng-container>
+
+                    <!-- Weight Column -->
+   
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="Nom_Trabajador">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Nombre Trabajador </th>
+                        <td mat-cell *matCellDef="let element"> {{Nom_Trabajador}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Inicio">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> HI Prog. </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Inicio}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Termino">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> HT Prog. </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Termino}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Inicio_Lectura">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> HI Lec. </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Inicio_Lectura}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Termino_Lectura">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> HT Lec. </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Termino_Lectura}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Sede">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Sede. </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Sede}} </td>
+                    </ng-container>
+
+
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>

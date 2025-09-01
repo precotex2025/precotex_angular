@@ -1,0 +1,25 @@
+<mat-card>
+    <mat-card-header style="display: flex; justify-content: space-around;">
+        <strong>Asignar Rol Usuario</strong>
+        <span aria-label="Close" class="cerrar" (click)="closeModal()" aria-hidden="true">&times;</span>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="row">
+            <div class="columna">
+                <ng-select  [items]="dataUsuarios" bindLabel="Nom_usuario"
+                bindValue="Id_Usuario" [multiple]="false" [searchable]="true"
+                placeholder="Selecciona un Usuario" [(ngModel)]="Id_Usuario">
+                </ng-select> 
+            </div>
+            <div class="columna">
+                <ng-select  [items]="dataRoles" bindLabel="Des_Rol"
+                bindValue="Cod_Rol" [multiple]="false" [searchable]="true"
+                placeholder="Seleccione un Rol" [(ngModel)]="Cod_Rol">
+                </ng-select>
+            </div>
+        </div>
+        <div class="row">
+            <button mat-flat-button color="primary" (click)="guardarRol()"><mat-icon>save</mat-icon> GUARDAR</button>
+        </div>
+    </mat-card-content>
+</mat-card>

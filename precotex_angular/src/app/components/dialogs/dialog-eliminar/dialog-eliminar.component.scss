@@ -1,0 +1,54 @@
+.dialog-container{
+  
+    /* align-items: center;
+     justify-content: center;*/
+ }
+ 
+ .dialog-title{ 
+    
+     text-align: center;
+     margin: 0 0 0px;
+ }
+ 
+ .dialog-content{
+    // text-align: center;
+     margin-top: 12px; 
+     font-size: 15px;
+ }
+ .dialog-actions{
+    display: flex;
+   justify-content: center;
+   align-items: center;
+}
+ 
+ .dialog-button-cancelar {
+    
+     background-color: #d32f2f;
+     color: #ffffff; 
+ }
+ 
+ .dialog-button-eliminar {
+     background-color: #22a822;
+     color: #ffffff;
+ }
+ .dialog-footer{
+     margin-top: 15px;
+     font-size: 12px;
+     text-align: center; 
+ }
+ 
+ 
+ @media only screen and (max-width: 460px) {
+     .dialog-actions{
+         display: flex;
+        justify-content: center;
+        align-items: center;
+     }
+     .dialog-button-cancelar{
+         margin: 5px 0;
+     }
+     .dialog-button-eliminar{
+        margin: 5px 0;
+    }
+ 
+   }

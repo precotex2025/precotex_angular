@@ -1,0 +1,170 @@
+   
+<div class="container">
+
+    <div class="grid-container"> 
+ 
+        <div class="title">Imprimir Detalle Barra</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+                
+                <mat-form-field class="fila1-barra">
+                    <mat-label>Ingrese Cod. de barra</mat-label>
+                    <input matInput type="text" placeholder="Ingrese Cod. de barra" value="" autocomplete="off" formControlName="sBarra" maxlength="9"/>
+                </mat-form-field>                      
+
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="getInfoJaba()">                    
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>              
+
+                <button type="button" class="fila1-print" mat-flat-button (click)="openImprimir()" [disabled]="!flgInfoJabVisible">
+                    <mat-icon aria-label="person">print</mat-icon>Imprimir
+                </button>
+
+
+            </div>  
+
+
+            <div class="container-cuerpo-fila2" *ngIf="flgInfoJabVisible">
+
+                <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                    <!--<ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                [aria-label]="checkboxLabel()">
+                            </mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"
+                                [aria-label]="checkboxLabel(row)">
+                            </mat-checkbox>
+                        </td>
+                    </ng-container>-->
+      
+                    <ng-container matColumnDef="ID_BOLSA">
+                      <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                        ID BOLSA
+                      </th>
+                      <td mat-cell *matCellDef="let data_det">
+                        {{ data_det.ID_BOLSA }}
+                      </td>
+
+                    </ng-container>
+
+                    <ng-container matColumnDef="COD_BARRA">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                            COD BARRA
+                        </th>
+                        <td mat-cell *matCellDef="let data_det">
+                            {{ data_det.COD_BARRA }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="COD_ORDPRO">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                            OP
+                        </th>
+                        <td mat-cell *matCellDef="let data_det">
+                            {{ data_det.COD_ORDPRO }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="PRESENT">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                            COLOR
+                        </th>
+                        <td mat-cell *matCellDef="let data_det">
+                            {{ data_det.PRESENT }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TALLA">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                            TALLA
+                        </th>
+                        <td mat-cell *matCellDef="let data_det">
+                            {{ data_det.TALLA }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="CANTIDAD">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                            CANTIDAD
+                        </th>
+                        <td mat-cell *matCellDef="let data_det">
+                            {{ data_det.CANTIDAD }}
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab"></tr>
+
+                </table>
+
+            </div>
+
+            <div style="position: absolute; left: -9999em;" id="ticket" *ngIf="dataItemsJaba.length>0">
+                <div class="caja" style="width:590px;font-size:9px;">
+                    <div class="flex">
+                        <div class="head" style="width:550px;font-size:15px;">
+                            <span>
+                                OP: {{dataItemsJaba[0].COD_ORDPRO}} 
+                                &nbsp;&nbsp; Est.Cli: {{dataItemsJaba[0].COD_ESTCLI}}
+                                &nbsp;&nbsp; Color: {{dataItemsJaba[0].PRESENT}}
+                            </span>
+                            <br>
+                            <span>
+                                Sec.Ord. : {{dataItemsJaba[0].NUM_SECORD}}
+                                <!--&nbsp;&nbsp;&nbsp; ID: {{dataItemsJaba[0].ID_BOLSA}}-->
+                                &nbsp;&nbsp;&nbsp; ID: {{idBolsas}}
+                                &nbsp;&nbsp; {{dataItemsJaba[0].COD_BARRA}}
+                            </span>
+                        </div>
+                        <div>
+                            <span>_________________________________________________________________________________________________________________________</span>
+                            <span>.</span>
+                        </div>
+                    </div>
+
+                    <table class="flex" style="width:550px;font-size:15px;">
+                        <thead>
+                            <tr>
+                                <th> Talla </th>
+                                <th *ngFor="let column1 of dataItemsJaba; let i = index"> {{ column1.TALLA}} </th>
+                                <th> Total </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td > Cantidad </td>
+                                <td *ngFor="let column2 of dataItemsJaba; let i = index"> {{ column2.CANTIDAD }} </td>
+                                <td> {{totalCantidad}} </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                    <div class="barra">
+                        <div id="print-section">
+                            <svg class="barcode"  id="barcode" viewBox="0 0 85 85"></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+ 
+        </form>
+
+    </div>
+
+
+</div>
+
+
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>     

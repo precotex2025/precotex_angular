@@ -1,0 +1,117 @@
+.contenedor-registro-trabajador {
+	background: rgba(0,0,0,.3);
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	opacity: 0;
+	font-family: corbel, arial;
+	font-size: 15px;
+
+}
+
+.contenedor-registro-trabajador-popup {
+	background: #F8F8F8;
+	box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
+	border-radius: 4px;
+	padding: 0;
+    margin: 0;
+	text-align: center;
+	
+	transition: 0.3s ease all;
+	transform: scale(0.7);
+	opacity: 0;
+	width: 650px;
+}
+
+.contenedor-registro-trabajador-title {
+	background-color: #337AB7;
+	color: #FCFFFF;
+	padding: 8px 10px 10px 10px;
+	border-radius: 4px 4px 0px 0px;
+	width: 100%;
+}
+
+.contenedor-registro-trabajador-main {
+    padding: 10px 10px 10px 10px;
+    width: 100%;
+    height: 210px;
+	border: 1px solid rgba(0,0,0,0.3); 
+	border-width: 0px 0px 1px 0px;
+}
+
+.trabrow1, .trabrow2 {
+    text-align: left;
+}
+
+.trabrow1Codigo{
+    width: 80px;
+}
+
+.trabrow1Num_dni{
+    width: 150px;
+}
+
+.trabrow1Nom_trabajador{
+    width: 400px;
+}
+
+.button_leer_trabajador {
+    margin-left: 5px;
+    background-color: #337AB7;
+}
+
+.trabrow2familia {
+    width: 80px;
+}
+
+.trabrow6familia {
+    width: 200px;
+}
+
+.trabrow2Operacion {
+    width: 480px;
+}
+
+.button_leer_Operacion {
+    margin-left: 5px;
+    background-color: #337AB7;
+}
+
+
+
+.contenedor-registro-trabajador-foot { 
+	width: 100%;
+	height: 55px;
+	text-align: center;
+
+}
+
+.button_guardar_trabajador, .button_cerrar_trabajador {
+    margin: 10px 50px 0px 0px;
+    width: 130px;
+}
+
+
+
+
+
+
+
+/* ------------------------- */
+/* ANIMACIONES */
+/* ------------------------- */
+.contenedor-registro-trabajador-activo-no { opacity: 0; visibility: hidden;}
+
+.contenedor-registro-trabajador-activo-si {transform: scale(1); opacity: 1; visibility: visible;}
+// .container-registro-activo-si h3 { animation: entradaTitulo .8s ease .5s forwards; }
+// .container-registro-activo-si h4 { animation: entradaSubtitulo .8s ease .5s forwards; }
+// .overlay_activo_si .contenedor-inputs { animation: entradaInputs 1s linear 1s forwards; }
+
+.contenedor-registro-trabajador-popup-activo-no { opacity: 0;}
+.contenedor-registro-trabajador-popup-activo-si {transform: scale(1); opacity: 1; visibility: visible;}
+

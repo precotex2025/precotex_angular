@@ -1,0 +1,248 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <form class="grid-container" [style]="grid_border" [formGroup]="formulario">
+
+        <div class="title" [style]='background'>INSPECCION RECUPERACIÓN - AUDITORIA MANUAL | ID: {{Id}} - TIPO PROCESO:
+            {{Des_Tipo_Proceso}}
+        </div>
+
+        <div class="row" style="margin-top: 20px; padding: 5px;">
+            <div class="col-md-3">
+                <div class="row">
+                    <mat-form-field class="fila1-Codigo">
+                        <mat-label>Cod. Barras</mat-label>
+                        <input matInput type="text" placeholder="Cod. Barras" #Codigo autocomplete="off"
+                            (keyup)="obtenerCodigoBarra()" formControlName="Codigo">
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-OP">
+                        <mat-label>OP</mat-label>
+                        <input matInput type="text" placeholder="OP" value="" autocomplete="off" formControlName="OP"
+                            maxlength="5">
+                    </mat-form-field>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <mat-form-field class="fila1-Estado-Equipo" appearance="fill">
+                        <mat-label>Color</mat-label>
+                        <mat-select formControlName="Color" [(ngModel)]="SelectedValueColor">
+                            <mat-option *ngFor="let Color of listar_operacionColor" [value]="Color.COD_PRESENT">
+                                {{Color.DES_PRESENT}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-Talla" appearance="fill">
+                        <mat-label>Talla</mat-label>
+                        <mat-select formControlName="Talla" [(ngModel)]="SelectedValueTalla">
+                            <mat-option *ngFor="let Talla of listar_operacionTalla" [value]="Talla.COD_TALLA">
+                                {{Talla.COD_TALLA}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="row" style="margin-top: 10px;">
+                    <mat-form-field class="fila1-Cantidad">
+                        <mat-label>Cantidad</mat-label>
+                        <input matInput type="text" placeholder="Cantidad" value="" autocomplete="off"
+                            formControlName="Cantidad">
+                    </mat-form-field>
+
+                    <div class="buttons">
+                        <button type="button" class="button-Agregar" *ngIf="!Flg_Habilitar_Detalle || deshabilitar"
+                            mat-button mat-flat-button [disabled]="DisableSaveButton" (click)="GuardarCabecera()">
+                            <mat-icon aria-label="person">save
+                            </mat-icon> Guardar
+                        </button>
+                        <button type="button" class="button-Agregar-xs" *ngIf="!Flg_Habilitar_Detalle || deshabilitar"
+                            mat-button mat-flat-button [disabled]="DisableSaveButton" (click)="GuardarCabecera()">
+                            <mat-icon aria-label="person">save
+                            </mat-icon>
+                        </button>
+                        <button type="button" class="button-2" *ngIf="Flg_Habilitar_Detalle && !deshabilitar" mat-button mat-flat-button [disabled]="deshabilitar"
+                            (click)="finalizarAuditoria('A')">
+                            <mat-icon aria-label="person" class="icon">check
+                            </mat-icon> Aprobar
+                        </button>
+                        <button type="button" class="button-3" *ngIf="Flg_Habilitar_Detalle && !deshabilitar" mat-flat-button [disabled]="deshabilitar"
+                            (click)="finalizarAuditoria('D')">
+                            <mat-icon aria-label="person" class="icon">cancel
+                            </mat-icon> Rechazar
+                        </button>
+                        <button type="button" class="button-2 button-Limpiar"
+                            *ngIf="!Flg_Habilitar_Detalle || deshabilitar" (click)="Limpiar()" mat-button
+                            mat-flat-button>
+                            <mat-icon aria-label="person" class="icon">cached
+                            </mat-icon> Limpiar
+                        </button>
+                        <button type="button" class="button-Limpiar-xs" *ngIf="!Flg_Habilitar_Detalle || deshabilitar"
+                            mat-button (click)="Limpiar()" mat-flat-button>
+                            <mat-icon aria-label="person">cached
+                            </mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-31">
+                <div class="caja">
+                    <p class="titulo-prenda">Prenda</p>
+                    <img [src]="ImagePath" style="width: 100%;height: 150px; object-fit: contain;" alt="">
+                </div>
+            </div>
+            <div class="col-md-32">
+                <div class="caja2">
+                    <p class="titulo-efi">Eficiencia</p>
+                    <p class="subtitulo">Minutos Asistidos: {{Min_Trabajados}}min</p>
+                    <p class="subtitulo">Minutos Trabajados: {{Min_Asistidos}}min</p>
+                    <p class="subtitulo">Eficiencia: {{Eficiencia}}%</p>
+                </div>
+            </div>
+            <div class="col-md-33">
+                <div class="caja" style="overflow-y: scroll;" id="card-scroll">
+                    <span style="font-weight: bold; font-size: 18px; margin-left: 5px;">Por Recoger</span>
+                    <ng-container *ngIf="mostrar">
+                        <div class="row2" *ngFor="let item of codigos; let i = index">
+                            <svg width="100%" class="barcode" id="barcode{{i}}"></svg>
+                        </div>
+
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="caja1">
+                    <p class="texto">Primeras</p>
+                    <p class="texto">{{Primeras}}</p>
+                </div>
+                <div class="caja1">
+                    <p class="texto">Total</p>
+                    <p class="texto">{{Total}}</p>
+                </div>
+                <div class="caja1">
+                    <p class="texto">Derivadas</p>
+                    <p class="texto">{{Derivadas}}</p>
+                </div>
+                <div class="caja1">
+                    <p class="texto">Recogidas</p>
+                    <p class="texto">{{Recogidas}}</p>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="row" *ngIf="Flg_Habilitar_Detalle">
+            <div class="col-md-3">
+                <button (click)="agregarPrenda()" [disabled]="deshabilitar" style="margin-left: 10px;" mat-flat-button
+                    class="button-warning"><mat-icon>add</mat-icon>
+                    Agregar Prenda</button>
+            </div>
+        </div>
+        <div class="row" *ngIf="Flg_Habilitar_Detalle">
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+                <div class="tabla" id="tabla">
+                    <p style="text-align: right; font-weight: bold;">Total Registros: {{dataPrendaDefectos.length}}</p>
+                    <table class="styled-table">
+                        <thead style=" position: sticky; top:-11px; z-index: 999;">
+                            <tr>
+                                <th>Fila</th>
+                                <th>Compostura</th>
+                                <!-- <th>Segunda</th> -->
+                                <th>Zurcido</th>
+                                <th>Desmanche</th>
+                                <th>Estampado y Bordado</th>
+                                <th>Recogido</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of dataPrendaDefectos">
+                                <td>Prenda {{item.Num_Prenda}}</td>
+                                <td>
+                                    <div class="opciones">
+                                        <span>{{item.Tipo_Sub_Proceso_01}}</span>
+                                        <button
+                                            [disabled]="item.Tipo_Sub_Proceso_01 > 0 || item.Tipo_Sub_Proceso_02 > 0 || item.Cantidad_R > 0 || deshabilitar"
+                                            mat-icon-button class="boton-icon"
+                                            (click)="agregarDefecto(item, '01')"><mat-icon>add</mat-icon></button>
+                                        <button
+                                            [disabled]="item.Tipo_Sub_Proceso_02 > 0 || item.Cantidad_R > 0 || deshabilitar"
+                                            mat-icon-button (click)="quitarDefecto(item, '01')"
+                                            class="boton-icon-red"><mat-icon>remove</mat-icon></button>
+                                    </div>
+                                </td>
+                                <!-- <td>
+                                    <div class="opciones">
+                                        <span>{{item.Tipo_Sub_Proceso_02}}</span>
+                                        <button [disabled]="item.Tipo_Sub_Proceso_01 > 0 || item.Tipo_Sub_Proceso_02 > 0 || item.Tipo_Sub_Proceso_03 > 0 || item.Tipo_Sub_Proceso_04 > 0 || item.Tipo_Sub_Proceso_05 > 0 || item.Cantidad_R > 0 || deshabilitar" mat-icon-button class="boton-icon" (click)="agregarDefecto(item, '02')"><mat-icon>add</mat-icon></button>
+                                        <button [disabled]="item.Tipo_Sub_Proceso_01 > 0 || item.Tipo_Sub_Proceso_03 > 0 || item.Tipo_Sub_Proceso_04 > 0 || item.Tipo_Sub_Proceso_05 > 0 || item.Cantidad_R > 0 || deshabilitar" mat-icon-button (click)="quitarDefecto(item, '02')"
+                                            class="boton-icon-red"><mat-icon>remove</mat-icon></button>
+                                    </div>
+                                </td> -->
+                                <td>
+                                    <div class="opciones">
+                                        <span>{{item.Tipo_Sub_Proceso_03}}</span>
+                                        <button mat-icon-button
+                                            [disabled]="item.Tipo_Sub_Proceso_02 > 0 || item.Cantidad_R > 0 || deshabilitar"
+                                            class="boton-icon"
+                                            (click)="agregarDefecto(item, '03')"><mat-icon>add</mat-icon></button>
+                                        <button mat-icon-button
+                                            [disabled]="item.Tipo_Sub_Proceso_02 > 0 || item.Cantidad_R > 0 || deshabilitar"
+                                            (click)="quitarDefecto(item, '03')"
+                                            class="boton-icon-red"><mat-icon>remove</mat-icon></button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="opciones">
+                                        <span>{{item.Tipo_Sub_Proceso_04}}</span>
+                                        <button
+                                            [disabled]="item.Tipo_Sub_Proceso_02 > 0 || item.Cantidad_R > 0 || deshabilitar"
+                                            mat-icon-button class="boton-icon"
+                                            (click)="agregarDefecto(item, '04')"><mat-icon>add</mat-icon></button>
+                                        <button
+                                            [disabled]="item.Tipo_Sub_Proceso_02 > 0 || item.Cantidad_R > 0 || deshabilitar"
+                                            mat-icon-button (click)="quitarDefecto(item, '04')"
+                                            class="boton-icon-red"><mat-icon>remove</mat-icon></button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="opciones">
+                                        <span>{{item.Tipo_Sub_Proceso_05}}</span>
+                                        <button
+                                            [disabled]="item.Tipo_Sub_Proceso_02 > 0 || item.Cantidad_R > 0 || deshabilitar"
+                                            mat-icon-button class="boton-icon"
+                                            (click)="agregarDefecto(item, '05')"><mat-icon>add</mat-icon></button>
+                                        <button
+                                            [disabled]="item.Tipo_Sub_Proceso_02 > 0 || item.Cantidad_R > 0 || deshabilitar"
+                                            mat-icon-button (click)="quitarDefecto(item, '05')"
+                                            class="boton-icon-red"><mat-icon>remove</mat-icon></button>
+                                    </div>
+                                </td>
+                                <td>
+                                    {{item.Cantidad_R}}
+                                </td>
+                                <td>
+                                    <button mat-icon-button class="boton-icon-red"
+                                        [disabled]="item.Cantidad_R > 0 || deshabilitar"
+                                        (click)="eliminarPrenda(item)"><mat-icon>delete</mat-icon></button>
+                                </td>
+                            </tr>
+                            <tr *ngIf="dataPrendaDefectos.length == 0">
+                                <td colspan="8" style="text-align: center;">Aún no has agregado prendas para
+                                    inspeccionar</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </form>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

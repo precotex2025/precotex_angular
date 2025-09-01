@@ -1,0 +1,85 @@
+<div class="container">
+    <div class="grid-container">
+
+        <div class="title"> Agregar OPs</div>
+        <form class="container-cuerpo" [formGroup]="formulario">
+
+            <div class="container-cuerpo-fila1">
+
+                <mat-form-field class="fila1-Modulo" appearance="fill">
+                    <mat-label>OP</mat-label>
+                    <input matInput type="text" placeholder="OP" value="" maxlength="5" autocomplete="off" 
+                    formControlName="Cod_OrdPro" (change)="obtenerColor()">
+                </mat-form-field>
+
+                <mat-form-field class="fila1-Tipo_Proceso" appearance="fill">
+                    <mat-label>Color</mat-label>
+                    <mat-select formControlName="Des_Present" (selectionChange)="obtenerTallas($event); obtenerSec($event)">
+                        <mat-option *ngFor="let item of listar_color"
+                        [value]="item.Cod_Present">
+                            {{ item.Des_Present }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="fila1-Ticket">
+                    <mat-label>Sec. Ord</mat-label>
+                    <mat-select formControlName="Num_SecOrd" (selectionChange)="Secuencia($event)">
+                        <mat-option *ngFor="let item of listar_sec"
+                        [value]="item.Sec">
+                            {{ item.Sec }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="fila1-Item" *ngIf="visibleFieldItem">
+                    <mat-label>Cod. Item</mat-label>
+                    <mat-select formControlName="Cod_Item">
+                        <mat-option *ngFor="let item of listar_item" [value]="item.COD_ITEM" (selectionChange)="obItem($event)">
+                            {{ item.ITEM }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+            </div>
+
+            <div class="container-cuerpo-fila2-dialog">
+
+                <table mat-table   class="mat-elevation-z8" #table [dataSource]="dataSource">
+
+                    <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns; let i = index">
+                        <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+                        <td  mat-cell (click)="agregarCantidad(column, data_det[column])" *matCellDef="let data_det; let i = index"> {{ data_det[column] }} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                </table>
+
+            </div>
+
+            <div class="container-cuerpo-foot-dialog">
+
+                <button  type="button" class="button-grabar" mat-flat-button (click)="grabarTallas()">
+                    <mat-icon aria-label="person">save</mat-icon>
+                    Grabar
+                </button>
+
+                <button  type="button" class="button-grabar_2" mat-flat-button (click)="grabaryAgregar()">
+                    <mat-icon aria-label="person">add</mat-icon>
+                    Grabar y Agregar OP
+                </button>
+
+                <button mat-dialog-close type="button" class="button-cancelar"  
+                 mat-button mat-dialog-close mat-dialog-close="false" >
+                    <mat-icon aria-label="person" >cancel
+                    </mat-icon>  Cancelar
+                </button>                
+            </div>
+
+        </form>
+
+    </div>
+</div>

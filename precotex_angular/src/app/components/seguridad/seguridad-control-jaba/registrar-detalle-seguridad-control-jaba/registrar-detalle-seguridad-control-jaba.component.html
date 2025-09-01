@@ -1,0 +1,124 @@
+<!--DefectosAlamacenDerivados-->
+  
+  
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container">  
+ 
+        <div class="title">Registrar Detalle Control Jaba  <strong *ngIf="Titulo != '0'"> - {{Titulo}} </strong></div>
+
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)">
+            <div class="container-cuerpo-fila1">
+                
+    
+                <mat-form-field class="fila1-OP"> 
+                    <mat-label>OP</mat-label>
+                    <input matInput type="text"  placeholder="OP" value="" #myinputOP (input)="CargarOperacionColor()"
+                        autocomplete="off"   formControlName="OP" maxlength="5" >
+                </mat-form-field>  
+
+                <!--<mat-form-field appearance="fill" class="fila1-Color" >
+                    <mat-label>Color</mat-label>
+                    <mat-select formControlName="Color">
+                      <mat-option *ngFor="let option of listar_operacionColor" [value]="option.Cod_Present" (click)="CargarOperacionTalla()" >-->
+                          <!--*ngFor="let option of listar_operacionColor" [value]="option.Cod_Present" 
+                        {{option.Des_Present}}-->
+                        <!--{{option.Des_Present}}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field>-->
+
+                <!--<mat-form-field appearance="fill" class="fila1-Talla" >
+                    <mat-label>Talla</mat-label>
+                    <mat-select formControlName="Talla">
+                      <mat-option  *ngFor="let talla of listar_operacionTalla" [value]="talla.Cod_Talla">-->
+                          <!--*ngFor="let talla of tallas" [value]="talla.Cod_Talla"
+                        {{talla.Cod_Talla}}-->
+                        <!--{{talla.Cod_Talla}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>-->
+
+
+                  <!--<mat-form-field class="fila1-Cantidad"> 
+                    <mat-label>Cantidad</mat-label> 
+                    <input matInput type="number"  placeholder="Cantidad" value="0" 
+                        autocomplete="off" formControlName="Cantidad"  >
+                </mat-form-field>-->
+
+                <!--<button type="submit" class="fila1-btn_anadir" mat-flat-button [disabled]="!formulario.valid" >                    
+                    <mat-icon aria-label="person">assignment_turned_in</mat-icon>
+                </button>-->
+
+                <button type="button" class="fila1-btn_regresar" mat-flat-button [routerLink]="['/RegistrarSeguridadControlJaba']">                    
+                    <mat-icon aria-label="person">reply_all</mat-icon>
+                </button>
+
+            </div>    
+  
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                    <!--<ng-container matColumnDef="Cod_Registro_Sub_Det">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nº</th>
+                        <td mat-cell  *matCellDef="let data_det; let i = index;"> {{i+1}} </td>
+                    </ng-container>-->
+                    <ng-container matColumnDef="Cod_OrdPro">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">OP</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_OrdPro}}  </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Des_Cliente">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cliente</th>
+                        <td mat-cell *matCellDef="let data_det">  {{data_det.Des_Cliente}} </td>
+                    </ng-container>
+
+                     <ng-container matColumnDef="Cod_EstPro">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estilo</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{data_det.Cod_EstPro}} </td>
+                    </ng-container>
+
+                    <!--<ng-container matColumnDef="Des_Estpro">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Descripcion</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{data_det.Des_Estpro}} </td>
+                    </ng-container>-->
+                    
+                    <ng-container matColumnDef="Des_Present">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Color</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{data_det.Des_Present}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Talla">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Talla</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{data_det.Cod_Talla}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cant_Prendas">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Can.</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{data_det.Cant_Prendas}} </td>
+                    </ng-container>
+               
+
+                    <ng-container matColumnDef="Acciones">
+                        <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <button mat-icon-button *ngIf="data_det.Cod_OrdPro.length>0" [disabled]="isDisableAll" (click)="EliminarRegistroSubDetalle(data_det.Cod_Registro_Sub_Det)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container> 
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+                </table>
+ 
+            </div>
+
+        </form>
+
+    </div>
+ 
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>       

@@ -1,0 +1,40 @@
+<form [formGroup]="formulario">
+  <!-- <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Codigo Trabajador</mat-label>
+    <mat-select  formControlName="codTrabajador" (selectionChange)="pasarDato()" name="listar_operacionConductor">
+      <mat-option *ngFor="let listar_origen of listar_operacionConductor" [value]="listar_origen.Tipo+'-'+listar_origen.Codigo">
+          {{listar_origen.Nombre}}
+      </mat-option>
+  </mat-select>
+  </mat-form-field> -->
+  <ng-select 
+          [ngStyle]="{ 'max-width': '100%'}"
+          [items]="listar_operacionConductor" 
+           bindLabel="Nombre" 
+           bindValue="Codigo"
+           (change)="Seleccionados($event)"
+           [multiple]="true"
+           [searchable]="searchable"
+           placeholder="Seleccione uno o mas Trabajadores"
+           formControlName="codTrabajador">
+  </ng-select>
+
+  <!-- <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Trabajador</mat-label>
+    <input matInput placeholder="Trabajador" formControlName="desTrabajador" value="" readonly>
+  </mat-form-field> -->
+
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Hora Inicio</mat-label>
+    <input [textMask]="{mask: num_guiaMascara}" matInput required="required" formControlName="horainicio" (change)="changeHoraInicio($event)" placeholder="Ex. Pizza" value="">
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Hora Fin</mat-label>
+    <input [textMask]="{mask: num_guiaMascara}" matInput required="required" readonly  formControlName="horafinal" placeholder="Ex. Pizza" value="">
+  </mat-form-field>
+  <span style="color: red;">Debe ingresar las horas en el formato de 24 horas - 00:00 - 23:59</span> <br>
+  <button mat-flat-button (click)="guardar()" class="button-registrar"  color="primary">Agregar Permiso</button>
+  <button mat-flat-button class="button-cancelar" mat-dialog-close>Cancelar</button>
+</form>

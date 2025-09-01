@@ -1,0 +1,181 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+   
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    min-width: 350px;
+    height: 100%;
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #3f51b5;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+    grid-template:
+        "fila1" 120px
+        "fila2" 400px/99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+    min-height: 800px;
+}
+
+.container-cuerpo-foot {
+    grid-area: foot;  
+}
+
+.flg_red{
+    padding:8px;
+    background-color:red; 
+    color:white; 
+    font-size: 11px;
+    border-radius: 4px;
+}
+
+.flg_green{
+    padding:8px;
+    background-color:green; 
+    color:white; 
+    font-size: 11px;
+    border-radius: 4px;
+}
+
+.flg_blue{
+    padding:8px;
+    background-color:blue; 
+    color:white; 
+    font-size: 11px;
+    border-radius: 4px;
+}
+
+.flg_yellow{
+    padding:8px;
+    background-color:orange; 
+    color:white; 
+    font-size: 11px;
+    border-radius: 4px;
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 20px 10px 20px;
+}
+
+//fila 1 
+.container-cuerpo-fila1 {
+    display: grid;
+
+        grid-template:
+        "col1 col2 col3 col4 col5 col6 col7" 60px /
+        280px 280px 200px 200px 200px 200px 200px;
+}
+
+.fila1-fecha {
+    grid-area: col1;
+} 
+
+.fila1-op {
+    grid-area: col2; 
+}
+
+.fila1-buscar {
+    width: 100%;
+    grid-area: col6;
+    height: 40px;
+    max-width: 180px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #337ab7;
+    color: #ffffff; 
+}
+
+
+.fila1-agregar {
+    width: 100%;
+    grid-area: col5 ;
+    height: 40px;
+    max-width: 180px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #8f2121;
+    color: #ffffff;
+}
+
+.fila1-excel{
+    width: 100%;
+    grid-area: col7;
+    height: 40px;
+    max-width: 180px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #0e740e;
+    color: #ffffff;
+}
+
+.maticon-date {
+    position: absolute;
+    font-size: 15px;
+    float: right;
+    top: -6px;
+    margin-left: 180px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.54);
+}
+
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+.button-excel{
+    //background-color: #0e740e;
+    color: green;
+}

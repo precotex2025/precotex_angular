@@ -1,0 +1,342 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: rgb(60, 255, 0);
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 16px;
+    margin: 0;
+}
+
+.grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: 93%;
+    //background-color: green;
+    border: 1px solid #3f51b5;
+    margin: 0;
+    padding: 0;
+    //position: absolute;
+    min-width: 320px;
+}
+
+.mat-header-cell{
+    color: black;
+    //font-weight: bold;
+}
+
+.button-cancelar{
+    width: 100%;
+    background-color:  #d32f2f;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+.mat-elevation-z8{
+    padding: 10px;
+}
+
+button {
+    height: 37px;
+    font-size: 14px;
+}
+mat-form-field {
+    width: 100%;
+    padding: 0px 20px 10px 0px;
+}
+
+mat-checkbox {
+    padding: 0px 20px 10px 0px;
+}
+
+.button_buscar {
+    width: 100%;
+    background-color: #3f51b5;
+    margin-top: 5px;
+    
+}
+
+.button_agregar {
+    width: 100%;
+    background-color: #0e740e;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+.button_agregar2 {
+    max-width: 260px;
+    background-color: #0e740e;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+.find,
+.main,
+.footer {
+    margin: 5px 5px 0px 5px;
+}
+
+.title {
+    background-color: #3f51b5;
+    color: #fcffff;
+    padding: 8px 0px 10px 0px;
+    text-align: center;
+}
+.mat-column-Fase,
+.mat-column-Turno,
+.mat-column-Cliente,
+.mat-column-OP_SEC,
+.mat-column-OC,
+.mat-column-Partida,
+.mat-column-Estilo,
+.mat-column-Fecha,
+.mat-column-Item,
+.mat-column-Color,
+.mat-column-Merma_Declarada,
+.mat-column-Merma_Fisica,
+.mat-column-DIF,
+.mat-column-Cod_Auditor_Calidad,
+.mat-column-acciones,
+.mat-column-Defecto_Interno,
+.mat-column-Fecha_Revision,
+.mat-column-Des_Validacion,
+.mat-column-Peso,
+.mat-column-Cod_Auditor_Control_Interno
+    {
+        text-align: center;
+        font-size: 12px;
+        font-family: arial;
+        padding: 5px;
+        text-align: center
+    }
+.find {
+    //border: 1px solid #bbd2e6;
+    padding: 0px 15px;
+    border-width: 0px 0px 1px 0px;
+
+    width: 100%;
+    margin: 0%;
+    //padding: 0px 5px 5px 5px;    
+}
+.main {
+    border: 1px solid #bbd2e6;
+    border-width: 0px 0px 1px 0px;
+    padding-bottom: 5px;
+}
+.footer {
+    text-align: left;
+}
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.tabla_cabecera {
+    width: 100%;
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: whitesmoke;
+}
+
+tr:active {
+    background: #efefef;
+}
+
+/* ------------------------- */
+/* RESPONSIVE */
+/* ------------------------- */
+
+
+.title {
+    grid-area: title;
+}
+.find {
+    grid-area: find;
+}
+.main {
+    grid-area: main;
+}
+
+.auditoriaForm {
+    padding-bottom: 8px;
+    width: 100%;
+    display: flex;
+    margin-top: 10px;
+    align-items: center;
+}
+
+.findcol1 {
+    width: 60%; 
+    margin-right: 8px;
+    display: flex;
+    font-size: 14px;
+    font-family: Arial;
+    padding-top: 10px;
+}
+.botones {
+    width: 40%;
+    margin-right: 8px;
+    display: flex;
+    margin-bottom: 14px;
+}
+.findcol2{
+    width: 48%;
+    margin-right: 8px;
+}
+.findcol3 {
+    width: 48%;
+    margin-right: 8px;
+}
+.findcol4 {
+    width: 25%; 
+    margin-right: 8px;
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+    font-family: Arial;
+    padding-top: 10px;
+}
+.caja{
+    width: 100%;
+    margin-right: 5px;
+}
+.caja-data{
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center;
+}
+.caja-data-2{
+    width: 40%;
+    display: flex;
+}
+.example-card{
+    margin-right: 5px;
+}
+.caja-content{
+    display: flex;
+}
+
+.container-cuerpo-fila5{
+    margin-top: 20px;
+    overflow-x: scroll;
+}
+table{
+    width: 100%;
+
+}
+
+@media only screen and (max-width: 1000px) {
+    .auditoriaForm {
+        padding-bottom: 8px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+    }
+    .findcol1{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .caja{
+        width: 100%;
+    }
+
+    .mat-column-Fase,
+    .mat-column-Turno,
+    .mat-column-Cliente,
+    .mat-column-OP_SEC,
+    .mat-column-OC,
+    .mat-column-Partida,
+    .mat-column-Estilo,
+    .mat-column-Color,
+    .mat-column-Merma_Declarada,
+    .mat-column-Fecha,
+    .mat-column-Item,
+    .mat-column-Merma_Fisica,
+    .mat-column-DIF,
+    .mat-column-Cod_Auditor_Calidad,
+    .mat-column-acciones,
+    .mat-column-Defecto_Interno,
+    .mat-column-Fecha_Revision,
+    .mat-column-Des_Validacion,
+    .mat-column-Peso,
+    .mat-column-Cod_Auditor_Control_Interno
+    {
+        text-align: center;
+        font-size: 10px;
+        font-family: arial;
+        padding: 5px;
+        text-align: center
+    }
+
+
+    .botones{
+        width: 100%;
+        display: flex;
+    }
+    .findcol3{
+        width: 48%;
+    }
+    .findcol4{
+        text-align: center;
+        width: 100%;
+    }
+
+    .caja-content{
+        display: flex;
+        flex-direction: column;
+        font-size: 10px;    
+    }
+
+    .caja-data{
+        width: 100%;
+     
+    }
+    .caja-data-2{
+        width: 100%;
+        display: flex;
+    }
+    .example-card{
+        width: 49%;
+    }
+    mat-form-field{
+        padding: 0px;
+    }
+    .mat-form-field-wrapper {
+        padding-bottom: 0.8em;
+    }
+    mat-card-title{
+        font-size: 17px;
+    }
+    mat-card-content{
+        font-size: 10px;
+    }
+
+    .container-cuerpo-fila5{
+        margin-top: 20px;
+        overflow-x: scroll;
+    }
+
+    table{
+        width: 100%;
+        overflow-x: scroll;
+    }
+    tbody tr td{
+        font-size: 10px;
+    }
+
+    th.mat-cell{
+        width: 100px;
+        min-width: 103px;
+    }
+    td.mat-cell{
+        width: 100px;
+        min-width: 103px;
+    }
+}

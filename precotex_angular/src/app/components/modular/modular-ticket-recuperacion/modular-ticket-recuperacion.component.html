@@ -1,0 +1,65 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <form class="grid-container" [style]="grid_border" [formGroup]="formulario">
+
+        <div class="title" [style]='background'>INSPECCION RECUPERACIÓN - TICKET
+        </div>
+
+        <div class="row" style="margin-top: 20px; padding: 5px;">
+            <div class="col-md-2">
+                <mat-form-field class="fila1-Codigo">
+                    <mat-label>Modulo</mat-label>
+                    <mat-select formControlName="Modulo" (selectionChange)="changeModulo($event)">
+                        <mat-option *ngFor="let Modulo of listar_operacionModulo" (click)="clickModule(Modulo)" [value]="Modulo.Cod_Modulo">
+                            {{Modulo.Des_Modulo}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-2">
+                <mat-form-field class="fila1-Codigo">
+                    <mat-label>Familia</mat-label>
+                    <mat-select formControlName="Familia">
+                        <mat-option value="C">COMPOSTURA</mat-option>
+                        <mat-option value="E">ESTAMPADO</mat-option>
+                        <mat-option value="S">SEGUNDAS</mat-option>
+                        <mat-option value="Z">ZURCIDO</mat-option>
+                        <mat-option value="D">DESMANCHE</mat-option>
+                        <mat-option value="A">SEGUNDAS A</mat-option>
+                        <mat-option value="B">SEGUNDAS B</mat-option>
+                        <mat-option value="I">ADICIONAL 2 A</mat-option>
+                        <mat-option value="J">ADICIONAL 2 B</mat-option>
+                        <mat-option value="K">ADICIONAL 3 A</mat-option>
+                        <mat-option value="L">ADICIONAL 3 B</mat-option>
+                        <mat-option value="P">ESPECIALES</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-2">
+                <button mat-flat-button color="primary" style="margin-top: 10px; margin-left: 20px;" (click)="listadoTicket()"> <mat-icon>search</mat-icon> Buscar</button>
+            </div>
+        </div>
+        <hr>
+        <div class="row2" style="margin-top: 20px; padding: 5px;">
+            <div class="col-md-2" *ngFor="let item of dataPrendasImp">
+                <div class="card" (click)="touchTicket(item)">
+                    <div class="imagen">
+                        <img [src]="item.ICONO_WEB" alt="" srcset="" width="100%" height="100">
+                    </div>
+                    <hr>
+                    <div class="data">
+                        <p class="titulo-card">OP: {{item.COD_ORDPRO}}</p>
+                        <span>{{item.DES_PRESENT}}</span>
+                        <span>TALLA: {{item.COD_TALLA}} / CANT: {{item.CANTIDAD}}</span>
+                        <span style="color: red;">RUTA: {{item.Ruta_Inspeccion}}</span>
+                    </div>
+                </div>        
+            </div>
+        </div>
+
+          <div id="print-section" style="position: absolute; left: -999em;">
+                <svg  class="barcode"   id="barcode" viewBox="0 0 273 200"></svg>
+          </div>
+  
+    </form>
+</div>

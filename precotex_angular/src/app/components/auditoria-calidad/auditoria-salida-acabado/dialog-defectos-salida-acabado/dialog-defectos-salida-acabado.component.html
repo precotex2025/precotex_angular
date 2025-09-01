@@ -1,0 +1,74 @@
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container"> 
+ 
+        <div class="title">Lista de Defectos Salida Acabados - {{ this.ln_numAuditoria }}</div>
+
+        <form class="container-cuerpo">
+
+            <div class="container-cuerpo-fila1">
+                <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                    <ng-container matColumnDef="Num_Auditoria_Defecto">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nº Defecto</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Num_Auditoria_Defecto}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Defecto">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Código</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_Defecto}}  </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Descripcion">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Descripción</th>
+                        <td mat-cell *matCellDef="let data_det">  {{data_det.Descripcion}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cantidad">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cantidad</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{data_det.Cantidad}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Tipo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tipo</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{ data_det.Tipo == 1 ? 'Leve' : 'Crítico' }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <a mat-icon-button style="margin-right:5px;" *ngIf="data_det.Cod_Defecto.length>0" (click)="onEditarDefecto(data_det)">
+                                <mat-icon color="success">create</mat-icon>
+                            </a>
+                            
+                            <a mat-icon-button *ngIf="data_det.Cod_Defecto.length>0" (click)="onEliminarDefecto(data_det)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a> 
+                        </td>
+                    </ng-container> 
+ 
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+
+                <mat-paginator class="paginador" #paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons aria-label="Select page of periodic elements">
+                </mat-paginator>
+
+            </div>
+
+            <div class="container-cuerpo-foot">
+                <button type="button" class="button-agregar" mat-flat-button (click)="onInsertarDefecto()">
+                    <mat-icon aria-label="person">add</mat-icon>Agregar 
+                </button>
+
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>Cancelar
+                </button>        
+            </div>
+        </form>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>       

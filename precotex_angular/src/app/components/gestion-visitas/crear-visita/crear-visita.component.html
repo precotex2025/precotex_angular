@@ -1,0 +1,141 @@
+<div class="container">
+    <!-- ventana nro 3 - salida -->
+    <div class="grid-container">
+
+        <div class="title">Crear Nueva Visita - <span style="font-weight: bold;font-size: 20px; color: yellow;">Sede:
+                {{sede}}</span></div>
+
+        <div class="find">
+            <div class="auditoriaForm">
+                <mat-card>
+                    <mat-card-header>
+                        Datos del Visitante
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="findcol1">
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Tipo Documento*</mat-label>
+                                    <mat-select [(ngModel)]="Tipo_Documento">
+                                        <mat-option value="DNI">DNI</mat-option>
+                                        <mat-option value="CE">CARNET EXTRANJERIA</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-full-width" appearance="fill">
+                                    <mat-label>N° de Documento*</mat-label>
+                                    <input matInput type="text" [(ngModel)]="Nro_DNI" (keyup)="changeDni()">
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <button type="button" class="button_agregar" (click)="guardarVisita()" mat-flat-button
+                                    color="primary">
+                                    <mat-icon aria-label="person">save
+                                    </mat-icon> Guardar Visita
+                                </button>
+
+                            </div>
+                            <div class="caja">
+                                <button type="button" class="button_info" routerLink="/gestionVisitas" mat-flat-button
+                                    color="warn">
+                                    <mat-icon aria-label="person">cancel
+                                    </mat-icon> Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <mat-card>
+                    <mat-card-header>
+                        Datos De La Visita
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="findcol1">
+                            <div class="caja">
+                                <mat-form-field class="example-full-width margen" appearance="fill">
+                                    <mat-label>Empresa Visitante*</mat-label>
+                                    <input matInput type="text" [(ngModel)]="Empresa">
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-full-width margen" appearance="fill">
+                                    <mat-label>Apellidos y Nombres*</mat-label>
+                                    <input matInput type="text" [(ngModel)]="Nombres_Visita">
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field margen" appearance="fill">
+                                    <mat-label>Empresa a Visitar*</mat-label>
+                                    <mat-select [(ngModel)]="Cod_Empresa" (selectionChange)="getAreasEmpresa()">
+                                        <mat-option value="07">PRECOTEX SAC</mat-option>
+                                        <mat-option value="56">VYD</mat-option>
+                                        <mat-option value="77">SABOR CRIOLLO</mat-option>
+                                        <mat-option value="78">KAPRA</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <ng-select  [items]="dataAreas" bindLabel="Rh_Des_Area"
+                                bindValue="RH_Cod_Area" [multiple]="false" [searchable]="true" (change)="getTrabajadoresArea($event)"
+                                placeholder="Selecciona una Área*" [(ngModel)]="Rh_Cod_Area">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="findcol1">
+                            <div class="caja">
+                                <ng-select  [items]="dataPersonas" bindLabel="Nombres" 
+                                bindValue="Nombres" [multiple]="false" [searchable]="true"
+                                placeholder="Seleccionar Trabajador" [(ngModel)]="Persona_Visitada">
+                                </ng-select> 
+                            </div>
+
+                            <div class="caja">
+                                <mat-form-field class="example-form-field margen" appearance="fill">
+                                    <mat-label>Motivo Visita</mat-label>
+                                    <mat-select [(ngModel)]="Motivo_Visita">
+                                        <mat-option value="ENTREVISTA">ENTREVISTA</mat-option>
+                                        <mat-option value="VISITA PERSONAL">VISITA PERSONAL</mat-option>
+                                        <mat-option value="CLIENTE">CLIENTE</mat-option>
+                                        <mat-option value="DEJAR MERCADERIA">DEJAR MERCADERIA</mat-option>
+                                        <mat-option value="RECOJO DE MERCADERIA">RECOJO DE MERCADERIA</mat-option>
+                                        <mat-option value="IMPORTACION">IMPORTACION</mat-option>
+                                        <mat-option value="EXPORTACION">EXPORTACION</mat-option>
+                                        <mat-option value="COBRANZA DE CHEQUE">COBRANZA DE CHEQUE</mat-option>
+                                        <mat-option value="UTILIDADES">UTILIDADES</mat-option>
+                                        <mat-option value="VACACIONES">VACACIONES</mat-option>
+                                        <mat-option value="LIQUIDACION">LIQUIDACION</mat-option>
+                                        <mat-option value="RENUNCIA">RENUNCIA</mat-option>
+                                        <mat-option value="POSTULANTE">POSTULANTE</mat-option>
+                                        <mat-option value="REPARACION O MANTENIMIENTO">REPARACION O
+                                            MANTENIMIENTO</mat-option>
+                                        <mat-option value="CONTRATISTA">CONTRATISTA</mat-option>
+                                        <mat-option value="OTROS">OTROS</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+
+                        </div>
+                        <div class="findcol1">
+                            <div class="caja2">
+                                <mat-form-field class="fila1-Total">
+                                    <mat-label>Observaciones</mat-label>
+                                    <textarea matInput type="text" placeholder="Observaciones" value=""
+                                        autocomplete="off" [(ngModel)]="Observaciones"></textarea>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                    </mat-card-content>
+                </mat-card>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

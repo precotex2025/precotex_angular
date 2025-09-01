@@ -1,0 +1,237 @@
+<!-- <div class="card">
+    <div class="card-header">
+        {{data.Title}}
+    </div>    
+
+    <div class="container"> -->
+    <div class="dialog-scroll">
+    <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+
+        <mat-card class="example-card" appearance="outlined">
+        <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>Memo N°: {{data.Datos.num_Memo}} </mat-card-title>
+            <mat-card-subtitle>Fecha Emisión: {{ data.Datos.fecha_Emisor | date: 'dd/MM/yyyy HH:mm' }}</mat-card-subtitle>
+        </mat-card-header>
+        <!-- <img mat-card-image src="https://material.angular.dev/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+        <mat-card-content>
+
+            <div class="row">
+
+                <mat-form-field appearance="outline" style="flex: 1;"> 
+                    <mat-label>Tipo Memorandum :</mat-label> 
+                    <mat-select formControlName="ctrol_tip_memo" [disabled]="bEdita"> 
+                        <mat-option *ngFor="let tipomemo of dataTipoMemo" [value]="tipomemo.cod_Tipo_Memo">{{ tipomemo.descripcion }}</mat-option> 
+                    </mat-select> 
+                </mat-form-field>                                  
+
+                <mat-form-field appearance="outline" style="flex: 1;"> 
+                    <mat-label>Tipo Motivo :</mat-label> 
+                    <mat-select formControlName="ctrol_tip_mot" [disabled]="bEdita"> 
+                        <mat-option *ngFor="let motivo of dataMotivos" [value]="motivo.cod_Motivo_Memo">{{ motivo.descripcion }}</mat-option> 
+                    </mat-select> 
+                </mat-form-field> 
+            </div>
+
+            <div class="row">
+                <mat-form-field appearance="outline" style="flex: 1;"> 
+                    <mat-label>Usuario Emisor :</mat-label> 
+                    <mat-select formControlName="ctrol_user_ori" (selectionChange)="onUsuarioSeleccionado($event)" [disabled]="bEdita">  
+                        <mat-option *ngFor="let usuario of dataUsuarios" [value]="usuario.Cod_Usuario">{{ usuario.Nom_usuario }}</mat-option> 
+                    </mat-select> 
+                </mat-form-field> 
+
+                <mat-form-field appearance="outline" style="flex: 1;" > 
+                    <mat-label>Usuario Recepciona :</mat-label> 
+                    <mat-select formControlName="ctrol_user_des" (selectionChange)="onUsuarioSeleccionado($event)" [disabled]="bEdita"> 
+                        <mat-option *ngFor="let usuario of dataUsuarios" [value]="usuario.Cod_Usuario">{{ usuario.Nom_usuario }}</mat-option> 
+                    </mat-select> 
+                </mat-form-field>                 
+            </div>
+
+            <div class="row">
+                <mat-form-field appearance="outline" style="flex: 1;" > 
+                        <mat-label>Planta Origen :</mat-label> 
+                        <mat-select formControlName="ctrol_planta_ori" [disabled]="bEdita"> 
+                            <mat-option *ngFor="let planta of dataPlantas" [value]="planta.num_Planta">{{ planta.des_Planta }}</mat-option> 
+                        </mat-select> 
+                </mat-form-field> 
+
+                <mat-form-field appearance="outline" style="flex: 1;" > 
+                    <mat-label>Planta Destino :</mat-label> 
+                        <mat-select formControlName="ctrol_planta_des" [disabled]="bEdita"> 
+                            <mat-option *ngFor="let planta of dataPlantas" [value]="planta.num_Planta">{{ planta.des_Planta }}</mat-option> 
+                        </mat-select> 
+                </mat-form-field>    
+            </div>
+
+
+        </mat-card-content>
+        <!-- <mat-card-actions>
+            <button matButton>LIKE</button>
+            <button matButton>SHARE</button>
+        </mat-card-actions> -->
+        </mat-card>
+        <br>
+
+        <!--BLOQUE DE SEGURIDAD GARITA-->
+        <!--
+        <mat-card class="example-card" appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>Seguridad</mat-card-title>
+            </mat-card-header>     
+            
+            <mat-card-content>
+                <div class="row">
+                    <mat-form-field appearance="outline" style="flex: 1;"> 
+                        <mat-label>Usuario Emisor :</mat-label> 
+                        <mat-select formControlName="ctrol_user_seg_ori" (selectionChange)="onUsuarioSeleccionado($event)"> 
+                            <mat-option *ngFor="let usuario of dataUsuarios" [value]="usuario.Cod_Usuario">{{ usuario.Nom_usuario }}</mat-option> 
+                        </mat-select> 
+                    </mat-form-field> 
+
+                    <mat-form-field appearance="outline" style="flex: 1;"> 
+                        <mat-label>Usuario Recepciona :</mat-label> 
+                        <mat-select formControlName="ctrol_user_seg_des" (selectionChange)="onUsuarioSeleccionado($event)"> 
+                            <mat-option *ngFor="let usuario of dataUsuarios" [value]="usuario.Cod_Usuario">{{ usuario.Nom_usuario }}</mat-option> 
+                        </mat-select> 
+                    </mat-form-field>                 
+                </div>
+
+                <div class="row">
+                    <mat-form-field style="flex: 1;"> 
+                        <mat-label>Fecha Emite</mat-label> 
+                        <input matInput formControlName="ctrol_fecha_seg_ori"> 
+                    </mat-form-field> 
+
+                    <mat-form-field style="flex: 1;"> 
+                        <mat-label>Fecha Recepciona</mat-label> 
+                        <input matInput formControlName="ctrol_fecha_seg_des"> 
+                    </mat-form-field>                     
+                </div>      
+            </mat-card-content>
+        </mat-card>        
+        -->
+
+        <br>
+        <!--BLOQUE DETALLE DE PEDIDO-->
+        <mat-card class="example-card" appearance="outlined">
+            <mat-card-header>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+    
+                    <mat-card-title>Detalle de Pedido</mat-card-title>                 
+
+                    <button type="button" mat-raised-button color="primary" mat-flat-button *ngIf="data.Datos.cod_Estado_Memo === '01'"
+                        (click)="onAdd()">
+                        <mat-icon aria-label="create_new_folder">add
+                        </mat-icon> Agregar
+                    </button> 
+            
+                </div>
+            </mat-card-header>  
+            <mat-card-content>
+
+                <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+
+
+                    <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <!-- <mat-checkbox
+                            (change)="toggleAllRows($event)"
+                            [checked]="isAllSelected()"
+                            [indeterminate]="isIndeterminate()"
+                            [disabled]="data.Datos.cod_Estado_Memo !== '04' || sRolMemo !== 'RECEPTOR_FINAL'">
+                            </mat-checkbox> -->
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <mat-checkbox
+                            (click)="$event.stopPropagation()"
+                            (change)="toggleRow(row)"
+                            [checked]="selection.isSelected(row)"
+                            [disabled]="data.Datos.cod_Estado_Memo !== '04' || sRolMemo !== 'RECEPTOR_FINAL' || row.flg_Estatus === '1'">
+                            </mat-checkbox>
+                        </td>
+                    </ng-container>                    
+
+                    <!-- <ng-container matColumnDef="codigo">
+                        <th mat-header-cell *matHeaderCellDef> Codigó </th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.codigo}}</td>
+                    </ng-container>               -->
+                    
+                    <ng-container matColumnDef="descripcion">
+                        <th mat-header-cell *matHeaderCellDef> Material </th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.glosa}}</td>
+                    </ng-container>     
+                    
+                    <ng-container matColumnDef="cantidad">
+                        <th mat-header-cell *matHeaderCellDef> Cantidad </th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.cantidad}}</td>
+                    </ng-container>      
+
+                    <ng-container matColumnDef="estado">
+                        <th mat-header-cell *matHeaderCellDef> Estado </th>
+                        <td mat-cell *matCellDef="let data_det"> 
+
+                            <!-- <mat-slide-toggle class="example-margin" color="warn" [disabled]="data_det.cod_Estado_Memo != '04'"> -->
+                                <span style="background-color: rgb(245, 151, 69); color: white; padding: 2px;" *ngIf="data_det.flg_Estatus == '1'">Recepcionado</span> 
+                                <span style="background-color: green; color: white; padding: 2px;" *ngIf="data_det.flg_Estatus == '0'" >Pendiente</span> 
+                            <!-- </mat-slide-toggle> -->
+
+                        </td>
+                    </ng-container>    
+                    
+                    <!-- Acciones -->
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                        <td mat-cell *matCellDef="let row; let i = index">
+                        <button mat-icon-button color="warn" (click)="quitarDetalle(i)" [disabled]="bEdita">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                        </td>
+                    </ng-container>                    
+                    
+                    <!-- <ng-container matColumnDef="opciones">
+                        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                        <td mat-cell *matCellDef="let data_det">
+
+                            <a mat-icon-button color="warn" style="margin-right:5px;">
+                                <mat-icon color="warn" (click)="onDeleteDetail(data_det)">delete</mat-icon>
+                            </a>                       
+
+                        </td>
+                    </ng-container>  -->
+                    
+                    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>                                   
+
+                </table>                
+
+            </mat-card-content>    
+        </mat-card>              
+
+    </form>
+    </div>
+
+    <div class="button-row"> 
+        <!-- [disabled]="data.Datos.cod_Estado_Memo !== '04' && bEdita" -->
+        <button mat-flat-button color="primary" class="form-button" (click)="onSave()" [disabled]="bEdita"> 
+            <mat-icon>save</mat-icon> Grabar
+        </button>
+
+        <!--&& rol='RECEPTOR_FINAL'-->
+        <button type="button" mat-raised-button color="warn" (click)="onRecepcionar()" mat-flat-button *ngIf="data.Datos.cod_Estado_Memo === '04' && sRolMemo == 'RECEPTOR_FINAL'">
+            <mat-icon aria-label="create_new_folder">get_app
+            </mat-icon> Recepciónar
+        </button>    
+
+        <button mat-flat-button color="warn" mat-dialog-close class="form-button">
+            <mat-icon>close</mat-icon> Salir
+        </button>
+        
+    </div>      
+    <!-- </div>    
+</div> -->
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

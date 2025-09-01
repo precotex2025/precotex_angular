@@ -1,0 +1,131 @@
+.container-fluid {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100%;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 16px;
+    margin: 0;
+}
+
+.grid-container {
+    border-radius: 4px;
+    width: 99%;
+    height: 93%;
+    border: 1px solid #494040;
+    margin: 0;
+    padding: 0;
+    min-width: 320px;
+}
+
+.title {
+    background-color: #494040;
+    color: #fcffff;
+    padding: 8px 0px 10px 0px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.find, .main, .footer {
+    margin: 5px 5px 0px 5px;
+}
+
+.find {
+    padding: 0px 15px;
+    border-width: 0px 0px 1px 0px;
+    width: 99%;
+    margin: 0%;
+}
+
+.list-form {
+    padding-bottom: 8px;
+    width: 99%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espaciado entre elementos */
+}
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+}
+
+mat-form-field {
+    margin-right: 12px;
+}
+
+.example-full-width {
+    width: 100%;
+}
+
+.example-width-15 {
+    width: 15%;
+}
+
+.example-width-30 {
+    width: 30vw;
+}
+
+.mat-input-element:disabled {
+    color: black;
+}
+
+mat-grid-tile {
+  background: rgb(247, 247, 219);
+}
+
+.flg_red{
+    padding:8px;
+    background-color: red; 
+    color:white; 
+    font-size: 11px;
+    border-radius: 4px;
+    text-wrap: wrap;
+ }
+
+.flg_green{
+    padding:8px;
+    background-color: green; 
+    color:white; 
+    font-size: 11px;
+    border-radius: 4px;
+ }
+
+.flg_blue{
+    padding:8px;
+    background-color: blue; 
+    color:white; 
+    font-size: 11px;
+    border-radius: 4px;
+ }
+
+.flg_yellow{
+    padding:8px;
+    background-color: orange; 
+    color:white; 
+    font-size: 11px;
+    border-radius: 4px;
+ }
+
+.flg_grey{
+    padding:8px;
+    background-color: grey; 
+    color:white; 
+    font-size: 11px;
+    border-radius: 4px;
+ }
+
+.flg_magenta{
+    padding:8px;
+    background-color: magenta;
+    color:white; 
+    font-size: 11px;
+    border-radius: 4px;
+ }

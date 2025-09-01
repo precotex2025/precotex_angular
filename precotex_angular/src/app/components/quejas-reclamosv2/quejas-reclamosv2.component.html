@@ -1,0 +1,300 @@
+<div class="container" *ngIf="this.ActivarFormulario == true">
+  <div class="title">Lista de quejas y reclamo del cliente v2</div>
+  <div class="formulario">
+
+      <div>
+        <label>Nro Caso:</label><input [(ngModel)]="nuevoReclamo.nroCaso" />
+      </div>
+
+      <div>
+        <label>Fecha Inicio:</label><input type="date" [(ngModel)]="nuevoReclamo.fechaInicio" />
+      </div>
+
+      <div>
+        <label>Fecha Fin:</label><input type="date" [(ngModel)]="nuevoReclamo.fechaFin" />
+      </div>
+
+      <div>
+        <label>Cliente:</label><input [(ngModel)]="nuevoReclamo.cliente" />
+      </div>
+
+      <div>
+        <label for="clienteSelect">Seleccione Tipo Registro</label>
+        <select id="clienteSelect" [(ngModel)]="nuevoReclamo.tipoRegistro" (change)="reiniciarEstado()">
+          <!--<option value="" disabled selected>Seleccione tipo Registro</option>   Opción por defecto -->
+          <option *ngFor="let c of tipoRegistro" [value]="c.estado">{{ c.estado }}</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="clienteSelect">Seleccione Estado Solicitud</label>
+        <select id="clienteSelect" [(ngModel)]="nuevoReclamo.estadoSolicitud" (change)="reiniciarEstado()">
+          <!--<option value="" disabled selected>Seleccione Estado Solicitud</option> -->
+          <option *ngFor="let c of estados" [value]="c.estado">{{ c.estado }}</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="clienteSelect">Seleccione Area responsable</label>
+        <select id="clienteSelect" [(ngModel)]="nuevoReclamo.responsable" (change)="reiniciarEstado()">
+          <!--<option value="" disabled selected>Seleccione responsable</option>  Opción por defecto -->
+          <option *ngFor="let c of responsable" [value]="c.nombreArea">{{ c.nombreArea }}</option>
+        </select>
+      </div>
+
+      <button mat-raised-button color="primary" class="boton-buscar" (click)="buscar()">
+        🔍Buscar
+      </button>
+
+      <button mat-raised-button color="primary" class="boton-nuevo" (click)="nuevo()">
+        ☑️Nuevo
+      </button>
+
+      <button mat-raised-button color="primary" class="boton-excel" (click)="exportarExcel()">
+        📥Exportar a Excel
+      </button>
+
+  </div>
+  <table>
+    <thead>
+        <tr>
+          <th>Nro. Caso</th>
+          <th>Fecha Registro</th>
+          <th>Cliente</th>
+          <th>Usu. Asignado</th>
+          <th>Usu. Registro</th>
+          <th>Estado solicitud</th>
+          <th>Indicador</th>
+          <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of filtro | paginate: { itemsPerPage: itemsPorPagina, currentPage: currentPage }">
+        <td>{{ item.nroCaso }}</td>
+        <td>{{ item.fechaRegistro | date: 'yyyy-MM-dd' }}</td>
+        <td>{{ item.cliente?.toLowerCase() }}</td>
+        <td>{{ item.tipoRegistro }}</td>
+        <td>{{ item.usuarioRegistro }}</td>
+        <td>{{ item.estadoSolicitud }}</td>
+        <td [ngClass]="{
+          'older-than-48-hours': isOlderThan(item.fechaRegistro, 48),
+          'between-24-and-48-hours': isBetween(item.fechaRegistro, 24, 48),
+          'younger-than-24-hours': isYoungerThan(item.fechaRegistro, 24)
+        }">
+        <span style="display: inline-flex; align-items: center;">
+          <span style="width: 30px; height: 30px; border-radius: 80%; margin-right: 5px;"
+                [style.background-color]="
+                  isOlderThan(item.fechaRegistro, 48) ? 'red' :
+                  (isBetween(item.fechaRegistro, 24, 48) ? 'yellow' : 'green')
+                ">
+          </span>
+        </span>
+      </td>
+        <td>
+          <button mat-icon-button color="warn" (click)="editar(item)" matTooltip="Editar reclamo">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="eliminar(item)" matTooltip="Eliminar reclamo">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+
+  </table>
+
+  <pagination-controls
+  (pageChange)="currentPage = $event"
+  previousLabel="←"
+  nextLabel="→"
+  [maxSize]="5"
+  [directionLinks]="true"
+  [autoHide]="true">
+</pagination-controls>
+
+</div>
+
+<div class="container"  *ngIf="this.ActivarFormulario == false">
+
+  <!--<h2>Registro de quejas y reclamo del cliente</h2>-->
+
+  <div class="title">{{ this.esNuvoReclamo ? 'Registro de quejas y reclamo del cliente' : 'Actualizar quejas y reclamo del cliente' }}</div>
+  <div class="formulario">
+
+    <div *ngIf="this.esNuvoReclamo == false">
+      <label>Nro Caso:</label><input [(ngModel)]="nuevoReclamo.nroCaso" disabled/>
+    </div>
+
+    <div>
+      <label for="partidaInput">Partida</label>
+      <input
+        id="partidaInput"
+        placeholder="Partida"
+        [(ngModel)]="nuevoReclamo.partida"
+        (ngModelChange)="verificarPartida($event)"
+      />
+    </div>
+
+
+    <div>
+      <label for="articuloSelectec">Articulo</label>
+      <select [(ngModel)]="nuevoReclamo.cliente">
+        <option *ngFor="let c of clientes" [value]="c.nom_Cliente">
+          {{ c.nom_Cliente }}
+        </option>
+      </select>
+    </div>
+
+    <div>
+      <label for="clienteInput">Seleccione Cliente</label>
+      <select [(ngModel)]="nuevoReclamo.cliente">
+        <option *ngFor="let c of clientes" [value]="c.nom_Cliente">
+          {{ c.nom_Cliente }}
+        </option>
+      </select>
+    </div>
+
+
+    <div>
+      <label for="clienteSelect">Seleccione Usuario</label>
+      <select id="clienteSelect" [(ngModel)]="nuevoReclamo.tipoRegistro">
+        <!--<option value="" disabled selected>Seleccione tipo Registro</option>   Opción por defecto -->
+        <option *ngFor="let c of tipoRegistro" [value]="c.estado">{{ c.estado }}</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="clienteSelect">Seleccione Area responsable</label>
+      <select id="clienteSelect" [(ngModel)]="nuevoReclamo.responsable">
+        <!--<option value="" disabled selected>Seleccione responsable</option>   Opción por defecto -->
+        <option *ngFor="let c of responsable" [value]="c.nombreArea">{{ c.nombreArea }}</option>
+      </select>
+    </div>
+
+
+    <div>
+      <label for="clienteSelect">Seleccione Estado Solicitud</label>
+      <select id="clienteSelect" [(ngModel)]="nuevoReclamo.estadoSolicitud">
+        <!--option value="" disabled selected>Seleccione Estado Solicitud</option>-->
+        <option *ngFor="let c of estados" [value]="c.estado">{{ c.estado }}</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="clienteSelect">Observacion</label>
+      <input placeholder="Observación" [(ngModel)]="nuevoReclamo.observacion" />
+    </div>
+
+    <div>
+      <label for="clienteSelect">Seleccione Unidad Negocio</label>  <!-- Título encima del comboBox -->
+      <select id="clienteSelect" [(ngModel)]="nuevoReclamo.unidadNegocio">
+        <!--<option value="" disabled selected>Seleccione Unidad Negocio</option>   Opción por defecto -->
+        <option *ngFor="let c of this.unidadNegocio" [value]="c.descripcion">{{ c.descripcion }}</option>
+      </select>
+    </div>
+
+    <div>
+
+      <div>
+        <label for="clienteInput">Motivo(*)</label>
+        <input
+          id="motivoInput"
+          type="text"
+          [(ngModel)]="motivoInput"
+          (input)="actualizarMotivoDesdeInput()"
+          placeholder="Buscar motivo..."
+        />
+
+        <select [(ngModel)]="nuevoReclamo.motivoRegistro">
+          <option *ngFor="let c of motivoReclamo" [value]="c.descripcion">
+            {{ c.cod_Unidad_Negocio }} - {{ c.descripcion }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+  </div>
+
+  <div>
+    <button (click)="agregarReclamo()" class="buton-cab" mat-raised-button color="accent">
+      ➕ Agregar
+    </button>
+  </div>
+<br>
+  <table>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Cliente</th>
+        <th>Usuario Asignado</th>
+        <th>Unidad de Negocio</th>
+        <th>Usuario Registro</th>
+        <th>Responsable</th>
+        <th>Motivo Registro</th>
+        <th>Estado Solicitud</th>
+        <th>Observación</th>
+        <th>Archivo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let reclamo of reclamos; let i = index">
+        <td>{{ reclamo.id }}</td>
+        <td>{{ reclamo.cliente }}</td>
+        <td>{{ reclamo.tipoRegistro }}</td>
+        <td>{{ reclamo.unidadNegocio }}</td>
+        <td>{{ reclamo.usuarioRegistro }}</td>
+        <td>{{ reclamo.responsable }}</td>
+        <td>{{ reclamo.motivoRegistro }}</td>
+        <td>{{ reclamo.estadoSolicitud }}</td>
+        <td>{{ reclamo.observacion }}</td>
+
+        <!-- Mostrar botón si hay archivo y no es nuevo reclamo -->
+        <td *ngIf="reclamo.nombreArchivo">
+          <button
+            (click)="verArchivo(reclamo.nombreArchivo)"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-3 rounded-xl shadow transition duration-200 ease-in-out"
+            title="Ver archivo adjunto"
+          >
+            📎 Ver archivo
+          </button>
+        </td>
+
+        <!-- Mostrar input para nuevo reclamo -->
+        <td *ngIf="!reclamo.nombreArchivo">
+          <input type="file" (change)="onArchivoSeleccionado($event, i)" accept="*/*"/>
+        </td>
+
+        <td>
+          <button title="Eliminar" (click)="eliminarReclamo(i)">🗑️</button>
+        </td>
+      </tr>
+
+    </tbody>
+
+  </table>
+<!-- Asegúrate de que FontAwesome esté cargado, o puedes usar material icons también -->
+<button class="buton-cab" mat-raised-button color="primary" (click)="guardar()">
+  <ng-container>
+    💾 Guardar
+  </ng-container>
+
+</button>
+
+<div class="boton-derecha">
+  <button
+    class="buton-cab"
+    mat-raised-button
+    color="primary"
+    (click)="atras()"
+  >
+    <ng-container>
+      ⏪Atrás
+    </ng-container>
+
+  </button>
+</div>
+
+</div>
+
+

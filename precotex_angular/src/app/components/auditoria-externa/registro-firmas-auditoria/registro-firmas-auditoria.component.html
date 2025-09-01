@@ -1,0 +1,69 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title">Mantenimiento Firmas - Auditoria</div>
+
+        <form class="container-cuerpo">
+            <div class="container-cuerpo-fila1">
+                <mat-form-field class="fila1-fecha" appearance="fill">
+                    <mat-label>Buscar</mat-label>
+                    <input matInput type="text" placeholder="Ingrese" autocomplete="off" (keyup)="applyFilter($event)">
+                </mat-form-field>
+
+                <button type="button" class="fila1-agregar" mat-flat-button (click)="onInsertarFirma()">
+                    <mat-icon aria-label="person">add</mat-icon>Agregar
+                </button>
+
+                <!--
+                <button type="button" class="fila2-agregar" mat-flat-button (click)="onFirmaDigital()">
+                    <mat-icon aria-label="person">add</mat-icon>Firma
+                </button>-->
+            </div>
+
+            <div class="container-cuerpo-fila2">
+                <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+
+                    <ng-container matColumnDef="Tip_Origen">
+                        <th mat-header-cell *matHeaderCellDef> Tipo </th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Tip_Origen}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Trabajador">
+                        <th mat-header-cell *matHeaderCellDef> Código </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Tip_Origen.trim() == "TB" ? data_det.Tip_Trabajador.concat("-").concat(data_det.Cod_Trabajador) : data_det.Cod_Origen }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Nombre">
+                        <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Nombre }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let data_det">
+
+                            <a mat-icon-button style="margin-right:5px;" (click)="onEditarFirma(data_det)">
+                                <mat-icon color="success">edit</mat-icon>
+                            </a>
+
+                            <a mat-icon-button color="warn" style="margin-right:5px;" (click)="onAnulaFirma(data_det)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                </table>
+                <mat-paginator #MatPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </div>
+        </form>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

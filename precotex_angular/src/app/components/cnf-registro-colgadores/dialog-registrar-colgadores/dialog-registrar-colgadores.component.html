@@ -1,0 +1,209 @@
+<div class="card">
+    <div class="card-header">
+        {{data.Title}}
+    </div>
+
+    <div class="container"> 
+        <form [formGroup]="formulario">
+            <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+
+                <!-- Fila 1: Article # con botón -->
+                <!-- <div class="row">
+                    <mat-form-field class="col col-25">
+                    <mat-label>Article #</mat-label>
+                    <input matInput formControlName="ctrol_articleNumber">
+                    </mat-form-field>
+                    <div class="col col-5 btn-col">
+                    <button mat-icon-button color="primary" (click)="onSearchArticle()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    </div>
+                </div>     -->
+    
+                <!-- Fila 1: Article # con botón & Ruta -->
+                <div class="row"> 
+                    <!-- Article # Label --> 
+                    <mat-form-field class="col col-7"> 
+                        <mat-label>Article #</mat-label> 
+                        <input [textMask]="{mask: maskCodigo}"  matInput formControlName="ctrol_articleNumber" (keydown.enter)="onSearch()" placeholder="AA000000"> 
+                    </mat-form-field> 
+                    <!-- Botón de búsqueda --> 
+                    <!-- <div class="col-1"> 
+                        <button mat-icon-button color="primary" (click)="onSearchArticle()"> <mat-icon>search</mat-icon> </button> 
+                    </div>  -->
+                    <!-- Ruta --> 
+                    <mat-form-field class="col col-4"> 
+                        <mat-label>Ruta</mat-label> 
+                        <mat-select formControlName="ctrol_ruta"> 
+                            <mat-option *ngFor="let ruta of dataRutas" [value]="ruta.cod_Ruta">{{ ruta.descripcion }}</mat-option> 
+                        </mat-select> 
+                    </mat-form-field> 
+                </div>   
+                
+                <!-- Fila 2: Cliente -->
+                <div class="row">
+                
+                    <mat-form-field class="col col-7">
+                    <mat-label>Cliente</mat-label>
+                    <mat-select formControlName="ctrol_cliente">
+
+                        <!-- Campo de búsqueda dentro del mat-select -->
+                        <mat-option>
+                            <input matInput placeholder="Buscar..." formControlName="filtro" (ngModelChange)="filtrarClientes()" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" autocomplete="off">
+                        </mat-option>     
+
+                        <mat-option *ngFor="let cli of ClientesFiltrada" [value]="cli.cod_Cliente_Tex">{{ cli.abr_Cliente + ' - ' + cli.nom_Cliente }}</mat-option>
+                    </mat-select>
+                    </mat-form-field>
+    
+                    <mat-form-field class="col col-4">
+                        <mat-label>Partida</mat-label>
+                        <input matInput formControlName="ctrol_partida">
+                        </mat-form-field>                    
+                   
+                </div>    
+    
+                <div class="row">
+                    <mat-form-field class="col col-12">
+                      <mat-label>Fabric</mat-label>
+                      <input matInput formControlName="ctrol_fabric">
+                    </mat-form-field>
+                </div>     
+                
+                <div class="row">
+                    <mat-form-field class="col col-12">
+                      <mat-label>Yarn</mat-label>
+                      <input matInput formControlName="ctrol_yarn">
+                    </mat-form-field>
+                </div>        
+                
+                <div class="row">
+                    <mat-form-field class="col col-12">
+                      <mat-label>Composition</mat-label>
+                      <input matInput formControlName="ctrol_composition">
+                    </mat-form-field>
+                </div>    
+                
+                
+                <!-- Fila 8: Shrinkage -->
+                <div class="row">
+                    <mat-form-field class="col col-45">
+                    <mat-label>Shrinkage % Length</mat-label>
+                    <input matInput formControlName="ctrol_shrinkageLength">
+                    </mat-form-field>
+                    <mat-form-field class="col col-45">
+                    <mat-label>Shrinkage % Width</mat-label>
+                    <input matInput formControlName="ctrol_shrinkageWidth">
+                    </mat-form-field>
+                </div>     
+                
+                <!-- Fila 9: Width B/W - Width A/W -->
+                <div class="row">
+                    <mat-form-field class="col col-45">
+                    <mat-label>Width B/W (mts)</mat-label>
+                    <input matInput formControlName="ctrol_widthBW">
+                    </mat-form-field>
+                    <mat-form-field class="col col-45">
+                    <mat-label>Width A/W (mts)</mat-label>
+                    <input matInput formControlName="ctrol_widthAW">
+                    </mat-form-field>
+                </div>  
+                
+            <!-- Fila 10: Weight B/W - A/W -->
+            <div class="row">
+                <mat-form-field class="col col-45">
+                <mat-label>Weight SDT B/W (grms/mt2)</mat-label>
+                <input matInput formControlName="ctrol_weightBW">
+                </mat-form-field>
+                <mat-form-field class="col col-45">
+                <mat-label>Weight SDT A/W (grms/mt2)</mat-label>
+                <input matInput formControlName="ctrol_weightAW">
+                </mat-form-field>
+            </div>
+      
+            <!-- Fila 11: Yield -->
+            <div class="row">
+                <mat-form-field class="col col-45">
+                <mat-label>Yield Mt/Kg (mts/Kgs)</mat-label>
+                <input matInput formControlName="ctrol_yield">
+                </mat-form-field>
+            </div>
+      
+            <!-- Fila 12: Gauge y Diametro -->
+            <div class="row">
+                <mat-form-field class="col col-45">
+                <mat-label>Gauge</mat-label>
+                <input matInput formControlName="ctrol_gauge">
+                </mat-form-field>
+                <mat-form-field class="col col-45">
+                <mat-label>Diametro</mat-label>
+                <input matInput formControlName="ctrol_diametro">
+                </mat-form-field>
+            </div>  
+            
+            <div class="row">
+                <mat-form-field class="col col-12">
+                  <mat-label>Color</mat-label>
+                  <input matInput formControlName="ctrol_color">
+                </mat-form-field>
+            </div>  
+
+            <div class="row">
+                <mat-form-field class="col col-12">
+                  <mat-label>Fabric Finish</mat-label>
+                  <input matInput formControlName="ctrol_fabricFinish">
+                </mat-form-field>
+            </div>         
+            
+            <div class="row">
+                <mat-form-field class="col col-12">
+                  <mat-label>Fabric Wash</mat-label>
+                  <input matInput formControlName="ctrol_fabricWash">
+                </mat-form-field>
+            </div>  
+            
+<div style="display: flex; justify-content: center; margin-top: 16px;">
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <button mat-icon-button color="primary" (click)="decrementCantidad()" [disabled]="cantidadPrint <= 1">
+      <mat-icon>remove</mat-icon>
+    </button>
+
+    <mat-form-field appearance="outline" style="width: 80px;">
+      <input matInput type="number" [value]="cantidadPrint" formControlName="ctrol_cantidad" readonly>
+    </mat-form-field>
+
+    <button mat-icon-button color="primary" (click)="incrementCantidad()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>
+            
+            
+            <div class="button-row"> 
+
+                <button mat-flat-button color="primary" class="form-button" (click)="onSave()" [disabled]="btnGuardarDeshabilitado"> 
+                    <mat-icon>save</mat-icon> {{tituloBtnProceso}} 
+                </button>
+
+                <button mat-flat-button color="accent" class="form-button" (click)="onPrint()" [disabled]="btnImprimirDeshabilitado">
+                    <mat-icon>print</mat-icon> Imprimir
+                </button>
+                
+                <button mat-flat-button color="warn" mat-dialog-close class="form-button">
+                    <mat-icon>close</mat-icon> Salir
+                </button>
+                
+            </div>     
+                        
+          
+    
+            </form>            
+        </form>
+    </div>    
+</div>
+
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>
+

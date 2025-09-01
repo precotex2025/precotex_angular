@@ -1,0 +1,137 @@
+<div class="container">
+    <!-- ventana nro 3 - salida -->
+    <div class="grid-container">
+
+        <div class="title">Historial de Vacaciones </div>
+
+        <div class="find">
+            <div class="auditoriaForm">
+
+
+                <div class="findcol1">
+                    <div class="caja">
+                        <mat-form-field class="example-form-field" style="margin-right: 5px;" appearance="fill">
+                            <mat-label>Seleccionar Empresa</mat-label>
+                            <mat-select [(ngModel)]="Cod_Empresa">
+                                <mat-option value="07"> PRECOTEX S.A.C. </mat-option>
+                                <mat-option value="56"> V&D CORPORACION PERU S.A.C </mat-option>
+                                <mat-option value="77"> SABOR CRIOLLO Y PUNTO EIRL</mat-option>
+                                <mat-option value="78"> K APRA MANKA EIRL </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="caja">
+                        <mat-form-field class="example-form-field" appearance="fill">
+                            <mat-label>Buscar DNI, Nombres, Cod. Trabajador</mat-label>
+                            <input matInput type="text" [(ngModel)]="Nro_DNI" (keyup)="applyFilter($event)">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="botones">
+                    <div class="findcol2">
+                        <button type="button" class="button_agregar" [disabled]="deshabilitar"
+                            (click)="actualizarPermiso()" mat-flat-button color="primary">
+                            <mat-icon aria-label="person">cached
+                            </mat-icon> Buscar
+                        </button>
+
+                    </div>
+
+                    <div class="findcol3">
+                        <button class="button-cancelar" type="button" mat-flat-button color="primary"
+                            [routerLink]="['/RProgramacionVacaciones']">
+                            <mat-icon aria-label="person">highlight_off </mat-icon> Regresar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container-cuerpo-fila5">
+
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource">
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="fec_registro">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Fec. Registro </th>
+                        <td mat-cell *matCellDef="let element"> {{element.fec_registro}} </td>
+                    </ng-container>
+
+                    <!-- Weight Column -->
+
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="Trabajador">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Nombre Trabajador </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Trabajador}} </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="Nro_DNI">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> DNI </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Nro_DNI}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Cod_Trabajador">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Cod. Trabajador </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Cod_Trabajador}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Tip_Trabajador">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Tip. Trabajador </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Tip_Trabajador}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Periodo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Periodo </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Periodo}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Dias">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Días </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Dias}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="fec_inicio">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> F. Inicio </th>
+                        <td mat-cell *matCellDef="let element"> {{element.fec_inicio}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="fec_fin">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> F. Fin </th>
+                        <td mat-cell *matCellDef="let element"> {{element.fec_fin}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Cod_Usuario">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Usuario Registro </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Cod_Usuario}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Observaciones">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Observaciones </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Observaciones}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Aprobar </th>
+                        <td mat-cell *matCellDef="let element">
+                            <mat-checkbox class="example-margin" [checked]="element.Flg_Estado == 'A'" color="primary"
+                                (change)="setAll($event.checked, element.id)">
+                            </mat-checkbox>
+                            <button *ngIf="element.Flg_Estado != 'A'"  (click)="eliminarVacaciones(element)" mat-button color="primary"><mat-icon>delete</mat-icon></button>
+                            <button mat-button color="warn" (click)="imprimirPapeleta(element)"><mat-icon>print</mat-icon></button>
+                        </td>
+                    </ng-container>
+
+
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

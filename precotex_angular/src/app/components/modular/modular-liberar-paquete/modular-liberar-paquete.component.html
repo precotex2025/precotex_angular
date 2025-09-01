@@ -1,0 +1,117 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title" style="color:white;">INSPENCCIÓN DE PRENDA - LIBERACIÓN PAQUETE</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+
+                <!--<mat-form-field class="fila1-fecha">
+                    <mat-label>Fec. Registro</mat-label>
+                    <input matInput [matDatepicker]="fec_registro" autocomplete="off" formControlName="fec_registro">
+                    <mat-datepicker-toggle matSuffix [for]="fec_registro"></mat-datepicker-toggle>
+                    <mat-datepicker #fec_registro></mat-datepicker>
+                </mat-form-field>-->
+
+                <!--<mat-form-field class="fila1-fecha">
+                    <mat-label>Fec. Auditoria</mat-label>
+                    <input matInput [matDatepicker]="fec_registro" autocomplete="off"
+                        formControlName="fec_registro">
+                    <mat-datepicker-toggle matSuffix [for]="fec_registro"></mat-datepicker-toggle>
+                    <mat-icon  (click)="clearDate($event)" style=" position: absolute;
+                    float: right;
+                    top: 5px;
+                    margin-left: -26px;
+                    cursor: pointer;
+                    color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+                    <mat-datepicker #fec_registro></mat-datepicker>
+                </mat-form-field>-->
+
+                <mat-form-field class="fila1-dni">
+                    <mat-label>Ticket</mat-label>
+                    <input matInput type="text" placeholder="TICKET" value="" autocomplete="off"
+                        formControlName="Ticket">
+                </mat-form-field>
+
+                <mat-form-field class="fila1-nombres" appearance="fill">
+                    <mat-label>Usuario</mat-label>
+                    <input matInput type="text" placeholder="Usuario" formControlName="Usuario" />
+
+                </mat-form-field>
+
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="MostrarCabeceraPaquetes()">
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+
+
+            </div>
+
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+                    <ng-container matColumnDef="Id">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Id</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Id}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Ticket">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Ticket</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Ticket}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Tipo_Proceso">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tip. Proc.</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Tipo_Proceso}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Cod_Fabrica">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod Fabrica</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_Fabrica}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Cod_OrdPro">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod. Ord Pro.</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_OrdPro}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="COD_PRESENT">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">COD PRESENT</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.COD_PRESENT}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="COD_TALLA">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">COD. TALLA</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.COD_TALLA}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Num_Paquete">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Num Paquete</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Num_Paquete}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Usuario_Creacion">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Usuario</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Usuario_Creacion}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let data_det">
+
+                            <a mat-icon-button style="margin-right:5px;"
+                                (click)="OpenDialogConfirmacion(data_det.Id)">
+                                <mat-icon color="success">assignment_turned_in</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+                </table>
+                <mat-paginator class="paginador" #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

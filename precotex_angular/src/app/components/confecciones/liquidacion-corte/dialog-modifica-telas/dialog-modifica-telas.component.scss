@@ -1,0 +1,302 @@
+.container{
+  width: 100%;
+  padding: 10px;
+  font-family: corbel, arial;
+  font-size: 15px;
+}
+
+.grid-container{
+  width: 100%;
+  min-height: 100vh;
+  border: 1px solid #337ab7;
+}
+.verde{
+  background-color: #9DEE96;
+  //border: 3px solid greenyellow;
+}
+.title {
+  background-color: #3f51b5;
+  color: white;
+  padding: 8px 10px 10px 10px;
+  text-align: center;
+  font-family: corbel, arial;
+  //border-bottom: 1px solid #337AB7;
+  border-radius: 4px 4px 0px 0px;
+  border-bottom: 1px solid #337ab7;
+  font-weight: bold;
+}
+
+.detallecab {
+  margin-top: 1rem;
+  width: 95vw;
+  line-height: 1em;
+  overflow-x: scroll;
+  overflow-y: scroll;
+  margin: 0 auto;
+}
+.tituloOp{
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+table.mat-table {
+  border-spacing: 0;
+  width: 98%;
+}
+
+.container-cuerpo-fila1{
+  padding: 10px;
+}
+
+.fila1-item1{
+  width: 65%;
+  background-color: rgb(248, 238, 104);
+  color: black;
+  font-weight: bolder;
+  padding: 2px;
+  max-height: 66px;
+  margin-right: 5px;
+}
+
+.fila1-item2{
+  width: 16%;
+  background-color: rgb(248, 238, 104);
+  color: black;
+  padding: 2px;
+  font-weight: bolder;
+  margin-right: 5px;
+  max-height: 66px;
+}
+
+
+.fila1-item3{
+  width: 16%;
+  background-color: rgb(248, 238, 104);
+  color: black;
+  padding: 2px;
+  font-weight: bolder;
+  max-height: 66px;
+  margin-right: 5px;
+}
+
+.fila1-item4{
+  width: 16%;
+  background-color: rgb(248, 238, 104);
+  color: black;
+  font-weight: bolder;
+  padding: 2px;
+  max-height: 66px;
+  margin-right: 5px;
+}
+
+.fila1-item5{
+  width: 16%;
+  background-color: rgb(248, 238, 104);
+  color: black;
+  padding: 2px;
+  font-weight: bolder;
+  max-height: 66px;
+  margin-right: 5px;
+}
+
+.fila1-item6{
+  width: 16%;
+  padding: 2px;
+  margin-right: 5px;
+  color: black;
+  max-height: 66px;
+}
+
+
+
+.fila1-item7{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  max-height: 66px;
+  margin-right: 5px;
+}
+
+.fila1-item8{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  max-height: 66px;
+  margin-right: 5px;
+}
+
+.fila1-item9{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  max-height: 66px;
+  margin-right: 5px;
+}
+.fila1-item10{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  margin-right: 5px;
+  max-height: 66px;
+}
+.fila1-item11{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  max-height: 66px;
+  margin-right: 5px;
+}
+.fila1-item12{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  max-height: 66px;
+  margin-right: 5px;
+}
+.fila1-item13{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  max-height: 66px;
+  margin-right: 5px;
+}
+.fila1-item14{
+  width: 16%;
+  padding: 2px;
+  margin-right: 5px;
+  color: black;
+  max-height: 66px;
+}
+.fila1-item15{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  max-height: 66px;
+  margin-right: 5px;
+}
+.fila1-item16{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  max-height: 66px;
+  margin-right: 5px;
+}
+.fila1-item17{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  max-height: 66px;
+  margin-right: 5px;
+  :disabled{
+    color: black;
+  }
+}
+.fila1-item18{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  max-height: 66px;
+  margin-right: 5px;
+  :disabled{
+    color: black;
+  }
+}
+.fila1-item19{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  max-height: 66px;
+  margin-right: 5px;
+  :disabled{
+    color: black;
+  }
+}
+.fila1-item20{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  max-height: 66px;
+  margin-right: 5px;
+  :disabled{
+    color: white;
+  }
+}
+.fila1-item21{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  max-height: 66px;
+  margin-right: 5px;
+  :disabled{
+    color: black;
+  }
+}
+.fila1-item22{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  max-height: 66px;
+  margin-right: 5px;
+}
+.fila1-item23{
+  width: 16%;
+  padding: 2px;
+  color: black;
+  margin-right: 5px;
+  max-height: 66px;
+  :disabled{
+    color: black;
+  }
+}
+
+.fila1-item24{
+  width: 64%;
+  display: inline-block;
+  padding: 2px;
+  color: black;
+  margin-right: 5px;
+  max-height: 66px;
+}
+
+
+
+
+.container-cuerpo-foot .button-agregar,.button-cancelar {
+  height: 10%;
+  margin: 0 auto;
+  margin: 15px 10px 10px 10px;
+  min-height: 36px;
+  max-width: 300px;
+  min-width: 120px;
+}
+
+.mat-header-cell {
+  padding: 0.5rem;
+}
+
+.paginador{
+  width: auto
+}
+
+.button-agregar {
+  
+  background-color: #3f51b5;
+  color: #ffffff;
+  margin-right: 1rem;
+}
+
+
+
+.button-cancelar {
+  display: inline-block;
+  background-color: #d32f2f;
+  color: #ffffff;
+  margin-right: 1rem;
+}
+
+.button-dialog {
+  display: inline-block;
+  background-color: #25502a;
+  color: #ffffff;
+  margin-right: 1rem;
+}

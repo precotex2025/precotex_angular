@@ -1,0 +1,45 @@
+<!--DefectosAlamacenDerivados--> 
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container"> 
+ 
+        <div class="title"> Agregar / Editar imagen</div>
+
+        <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+        <div class="container-cuerpo-fila1">
+
+            
+            <table>
+
+                <td>
+                    <input type="file" accept="image/*" style="display:none;" #inputFile (change)="guardarImagen($event, 'guardar')">
+                    <input type="file" accept="image/*" #inputFile2 style="display:none;" (change)="guardarImagen($event, 'editar')">
+                    <button (click)="inputFile.click()" mat-button color="primary"><mat-icon>add_photo_alternate</mat-icon></button>
+                </td>
+                <td>
+                    <button (click)="inputFile2.click()" mat-button  color="primary"><mat-icon>edit</mat-icon></button>
+                </td>
+                <td>
+                    <button  mat-button matTooltip="Eliminar imagen"  color="primary" (click)="eliminarImagen()"><mat-icon>delete</mat-icon></button>
+                </td>
+                <td>
+                    <button   mat-button matTooltip="Mostrar imagen" color="primary" (click)="mostrarImagen()"><mat-icon>image_search</mat-icon></button>
+                        
+                </td>
+
+            </table>
+
+            
+        </div>
+
+        <div class="container-cuerpo-foot">
+
+            <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-flat-button>
+                <mat-icon aria-label="person">highlight_off
+                </mat-icon>  Cancelar
+            </button>        
+        </div>
+
+    </div>
+
+</div>

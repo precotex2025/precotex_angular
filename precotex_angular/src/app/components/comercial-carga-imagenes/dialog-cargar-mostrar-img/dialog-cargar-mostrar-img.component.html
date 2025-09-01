@@ -1,0 +1,31 @@
+<div class="container-fluid">
+    <mat-card>
+        <mat-card-header style="display: flex; justify-content: space-around;">
+            <strong>Detalle Imagenes Estilo</strong>
+            <span aria-label="Close" class="cerrar" (click)="closeModal()" aria-hidden="true">&times;</span>
+        </mat-card-header>
+        <mat-card-content>
+            <!-- <div class="row" style="margin-bottom:20px;" *ngIf="data.tipo == 1">
+                <div class="col-md-5">
+                    <input type="file" name="imagen" id="imagen">
+                </div>
+                <div class="col-md-3">
+                    <button mat-flat-button color="primary"><mat-icon>save</mat-icon> GUARDAR</button>
+                </div>
+            </div> -->
+            <div class="row" *ngIf="mostrar">
+                <mat-card >
+                    <mat-card-content>
+                        <p style="color:red;">No Hay Imágenes a Mostrar</p>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="row">
+                <div class="col-md-3" *ngFor="let item of dataImagenes">
+                    <img src="{{item.Icono}}" *ngIf="item.Icono != ''" (click)="verImagen(item)" style="cursor: zoom-in;" alt="" srcset="" width="100%" height="200px">                    
+                </div>
+            </div>
+        </mat-card-content>
+
+    </mat-card>
+</div>

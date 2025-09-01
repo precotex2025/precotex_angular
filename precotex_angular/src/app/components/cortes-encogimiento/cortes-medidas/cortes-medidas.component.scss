@@ -1,0 +1,166 @@
+/* Estilos generales */
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.grid-container {
+  border-radius: 4px;
+  width: 20%;
+  height: auto;
+  border: 1px solid #337ab7;
+  margin: 0;
+  padding: 0px;
+  min-width: 100%;
+  min-height: 400px;
+  height: 100%;
+}
+
+.title {
+  background-color: #3f51b5;
+  color: rgb(255, 255, 255);
+  padding: 8px 10px 10px 10px;
+  text-align: center;
+  border-radius: 4px 4px 0px 0px;
+  border-bottom: 1px solid #337ab7;
+  font-weight: bold;
+}
+
+.left-column, .right-column {
+  padding: 40px;
+}
+
+/* Estilos para botones */
+.button-Grabar-Salir, .button-Grabar-Est {
+  width: auto;
+  display: inline-block;
+  color: #ffffff;
+  margin-top: 2rem;
+}
+
+.button-Grabar-Salir {
+  background-color: #428542;
+}
+
+.button-Grabar-Est {
+  background-color: #0e740e;
+  margin-bottom: 1rem;
+}
+
+/* Estilos para la tabla */
+.mat-header-cell {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+}
+
+.mat-cell, .mat-header-cell {
+  border-right: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+th.mat-header-cell, td.mat-cell {
+  text-align: center;
+}
+
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+  padding-right: 10px;
+}
+
+/* Estilo del botón de regreso */
+.boton-regresar:hover {
+  background-color: #0056b3;
+  opacity: 1;
+}
+
+/* Estilo de los inputs */
+.input-estilo, .input-estilo-med {
+  background-color: #F0E000;
+  color: blue;
+  font-weight: bold;
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 5px;
+  width: 100px;
+}
+
+.close-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Footer */
+.footer {
+  margin-top: auto;
+  padding: 10px;
+  text-align: center;
+  background-color: #f1f1f1;
+  border-top: 1px solid #ccc;
+}
+
+/* Estilos específicos para iPad Mini (Resolución 768px o menos) */
+@media screen and (max-width: 768px) {
+  .grid-container {
+    width: 100%; /* Ocupa el 100% del ancho */
+    height: auto; /* Ajusta la altura automáticamente */
+  }
+
+  .title {
+    font-size: 16px; /* Reduce el tamaño de la fuente para que se vea bien en pantallas pequeñas */
+  }
+
+  .container {
+    padding: 10px; /* Menos espacio alrededor */
+  }
+
+  .button-Grabar-Salir, .button-Grabar-Est {
+    width: 100%; /* Los botones ocuparán todo el ancho de la pantalla */
+    text-align: center; /* Centrado del texto dentro del botón */
+  }
+
+  .input-estilo, .input-estilo-med {
+    width: 100%; /* Los campos de entrada ocuparán todo el ancho */
+    font-size: 14px; /* Ajuste de tamaño de fuente para la entrada */
+  }
+
+  .footer {
+    padding: 5px; /* Menos espacio en el pie de página */
+  }
+
+}
+
+/* Estilos específicos para iPad Mini (Resolución 768px o menos) */
+@media screen and (max-width: 1064px) {
+  .grid-container {
+    width: 100%; /* Ocupa el 100% del ancho */
+    height: auto; /* Ajusta la altura automáticamente */
+  }
+
+  .title {
+    font-size: 16px; /* Reduce el tamaño de la fuente para que se vea bien en pantallas pequeñas */
+  }
+
+  .container {
+    padding: 10px; /* Menos espacio alrededor */
+  }
+
+  .button-Grabar-Salir, .button-Grabar-Est {
+    width: 100%; /* Los botones ocuparán todo el ancho de la pantalla */
+    text-align: center; /* Centrado del texto dentro del botón */
+  }
+
+  .input-estilo, .input-estilo-med {
+    width: 100%; /* Los campos de entrada ocuparán todo el ancho */
+    font-size: 14px; /* Ajuste de tamaño de fuente para la entrada */
+  }
+
+  .footer {
+    padding: 5px; /* Menos espacio en el pie de página */
+  }
+
+}

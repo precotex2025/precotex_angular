@@ -1,0 +1,137 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+  }
+  
+  .grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #2962FF;
+    margin: 0;
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    //height: 640px;
+    height: 86vh;
+    //position: absolute;
+  }
+  
+  .cerrar {
+    cursor: pointer;
+    font-size: 20px;
+    padding: 5px;
+    background-color: red;
+    color: white;
+    display: inline-block;
+    margin-left: 15px;
+    text-align: right;
+  }
+  
+  .title {
+    background-color: #2962FF;
+    color: white;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #2962FF;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #2962FF;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  .container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+  }
+  
+  
+  .row {
+    width: 100%;
+  }
+  
+  .col-md-12 {
+    width: 100%;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  table td {
+    text-align: center;
+  }
+  
+  .total{
+    position: absolute;
+    left: -999px;
+  }
+  .cantidad {
+    width: 100px;
+  }
+  
+  .col-12{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .aceptar{
+    margin-right: 5px;
+    background-color: #258b25;
+    color: white;
+  }
+  
+  .highlight {
+    background: #42A948;
+    /* green */
+  }
+  
+  .button-warning{
+    background-color: #FFC400;
+    color: black;
+  }
+  
+  .mat-column-Color,
+  .mat-column-Cod_Talla,
+  .mat-column-Ticket_Generar,
+  .mat-column-Prendas_Generadas,
+  .mat-column-Num_Paquetes,
+  .mat-column-PrendasPaq,
+  .mat-column-Saldo,
+  .mat-column-COD_ORDPRO {
+    text-align: center;
+    font-size: 14px;
+    font-family: arial;
+    padding: 5px;
+    text-align: center
+  }
+  
+  @media screen and (max-width: 1366px) {
+  
+    .mat-column-Color,
+    .mat-column-Cod_Talla,
+    .mat-column-Ticket_Generar,
+    .mat-column-Prendas_Generadas,
+    .mat-column-Num_Paquetes,
+    .mat-column-PrendasPaq,
+    .mat-column-Saldo,
+    .mat-column-COD_ORDPRO {
+      text-align: center;
+      font-size: 10px;
+      font-family: arial;
+      padding: 5px;
+      text-align: center
+    }
+  }

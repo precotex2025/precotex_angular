@@ -1,0 +1,331 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: rgb(60, 255, 0);
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 16px;
+    margin: 0;
+}
+
+.grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: 93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0;
+    padding: 0;
+    //position: absolute;
+    min-width: 320px;
+}
+
+
+mat-card {
+    margin-top: 10px;
+    padding: 0px;
+    width: 100%;
+}
+
+.container-cuerpo-foot .button-trabajador  {
+    height: 20%;
+
+    padding: 0;
+    margin: 0 auto;
+    margin-right: 5px;
+    margin: 9px 5px 10px 5px;
+    min-height: 42px;
+    max-width: 40px;
+    min-width: 40px;
+}
+
+.table tbody tr td{
+    border: 1px solid black;
+    border-collapse: collapse;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h4{
+    margin-top: 10px;
+}
+
+.tables thead th{
+    border: 1px solid black;
+    border-collapse: collapse;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.tables{
+    margin-bottom: 10px;
+}
+
+.container-cuerpo-foot .button-registrar, .button-cancelar  {
+    height: 20%;
+    margin: 0 auto;
+    margin: 9px 10px 10px 10px;
+    min-height: 42px;    
+    max-width: 300px;
+    min-width: 120px;
+
+}
+mat-card-header {
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+    width: 100%;
+}
+
+mat-card-content {
+    margin-top: 10px;
+    padding: 10px 15px;
+    width: 100%;
+}
+button {
+    height: 37px;
+    font-size: 14px;
+}
+mat-form-field {
+    width: 48%;
+    padding: 0px 20px 10px 0px;
+}
+
+mat-checkbox {
+    padding: 0px 20px 10px 0px;
+}
+.caja-content{
+    width: 100%;
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+}
+.caja-datos{
+    width: 24%;
+    margin-right: 5px;
+    margin-top: 5px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.button_buscar {
+    width: 100%;
+    background-color: #cf4026;
+    margin-top: 5px;
+}
+
+.button_agregar {
+    width: 100%;
+    background-color: #0e740e;
+    margin-top: 5px;
+}
+
+.find,
+.main,
+.footer {
+    margin: 5px 5px 0px 5px;
+}
+
+.title {
+    background-color: #3f51b5;
+    color: #fcffff;
+    padding: 8px 0px 10px 0px;
+    text-align: center;
+}
+
+.find {
+    //border: 1px solid #bbd2e6;
+    padding: 0px 15px;
+    border-width: 0px 0px 1px 0px;
+
+    width: 100%;
+    margin: 0%;
+    //padding: 0px 5px 5px 5px;    
+}
+.main {
+    border: 1px solid #bbd2e6;
+    border-width: 0px 0px 1px 0px;
+    padding-bottom: 5px;
+}
+.footer {
+    text-align: left;
+}
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.tabla_cabecera {
+    width: 100%;
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: whitesmoke;
+}
+
+tr:active {
+    background: #efefef;
+}
+
+/* ------------------------- */
+/* RESPONSIVE */
+/* ------------------------- */
+
+
+.title {
+    grid-area: title;
+}
+.find {
+    grid-area: find;
+}
+.main {
+    grid-area: main;
+}
+
+.auditoriaForm {
+    padding-bottom: 8px;
+    width: 100%;
+    display: flex;
+    margin-top: 10px;
+}
+
+.findcol1 {
+ width: 48%;
+ margin-right: 8px;
+ display: flex;
+}
+.botones {
+    width: 48%;
+    margin-right: 8px;
+    display: flex;
+}
+.findcol2{
+    width: 48%;
+    margin-right: 8px;
+}
+.findcol3 {
+    width: 48%;
+    margin-right: 8px;
+}
+.findcol4 {
+    width: 25%; 
+    margin-right: 8px;
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+    font-family: Arial;
+    padding-top: 10px;
+}
+.caja{
+    width: 100%;
+    padding: 5px;
+}
+.caja-data{
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center;
+}
+.caja-data-2{
+    width: 40%;
+    display: flex;
+}
+.example-card{
+    margin-right: 5px;
+}
+.caja-content{
+    display: flex;
+}
+
+.container-cuerpo-fila5{
+    margin-top: 20px;
+    overflow-x: scroll;
+}
+table{
+    width: 100%;
+
+}
+
+@media only screen and (max-width: 800px) {
+    .auditoriaForm {
+        padding-bottom: 8px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+    }
+    .findcol1, .findcol2, mat-form-field{
+        width: 100%;
+    }
+
+
+    .botones{
+        width: 100%;
+        display: flex;
+    }
+    .findcol3{
+        width: 48%;
+    }
+    .findcol4{
+        text-align: center;
+        width: 100%;
+    }
+
+    .caja-datos{
+        width: 100%;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    }
+
+    .caja-content{
+        display: flex;
+        flex-direction: column;
+        font-size: 10px;    
+    }
+
+    .caja-data{
+        width: 100%;
+     
+    }
+    .caja-data-2{
+        width: 100%;
+        display: flex;
+    }
+    .example-card{
+        width: 49%;
+    }
+    mat-form-field{
+        padding: 0px;
+        width: 100%;
+        margin-right: 5px;
+    }
+    .mat-form-field-wrapper {
+        padding-bottom: 0.8em;
+    }
+    mat-card-title{
+        font-size: 17px;
+    }
+    mat-card-content{
+        font-size: 10px;
+    }
+
+    .container-cuerpo-fila5{
+        margin-top: 20px;
+        overflow-x: scroll;
+    }
+
+    table{
+        width: 100%;
+        overflow-x: scroll;
+    }
+    tbody tr td{
+        font-size: 10px;
+    }
+
+    th.mat-cell{
+        width: 100px;
+        min-width: 103px;
+    }
+    td.mat-cell{
+        width: 100px;
+        min-width: 103px;
+    }
+}

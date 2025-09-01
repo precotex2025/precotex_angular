@@ -1,0 +1,114 @@
+<div class="container">    
+    <div class="grid-container">  
+        <div class="title"><strong *ngIf="Titulo == undefined; else titulomodificar">Registrar </strong>Solicitud de Agujas</div>
+        <ng-template #titulomodificar><strong>Agregar </strong></ng-template>
+        <form class="container-cuerpo" [formGroup]="formulario2" #formDirective="ngForm" >
+            <div class="container-cuerpo-fila1">  
+                
+                    <mat-form-field class="fila1-CodSupervisor"> 
+                        <mat-label>Código Máquina</mat-label>
+                        <input matInput type="text"  placeholder="CodMaquinaTejeduria" value="" 
+                            autocomplete="off" formControlName="CodMaquinaTejeduria" >
+                    </mat-form-field>
+                    
+                    <mat-form-field class="fila1-Supervisor" appearance="fill">
+                        <mat-label>Máquina</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="MaquinaTejeduria" formControlName="MaquinaTejeduria"  [matAutocomplete]="autoDataMaquina" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataMaquina="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionMaqTejeduria | async" [value]="option.Nom_Maquina_Tejeduria" (click)="CambiarValorCodMaquinaTejeduria(option.Cod_Maquina_Tejeduria,option.Nom_Maquina_Tejeduria)">                                
+                                {{option.Nom_Maquina_Tejeduria}}
+                            </mat-option> 
+                        </mat-autocomplete>
+                    </mat-form-field>
+                                             
+                    <mat-form-field class="fila1-CodAuditor"> 
+                        <mat-label>Tejedor</mat-label>                        
+                            <input matInput type="text" placeholder="" formControlName="Tejedor" value='{{ Nom_Trabajador }}'>
+                    </mat-form-field>
+                    
+                    <mat-form-field class="fila1-Auditor" appearance="fill">
+                        <mat-label>Codigo Tejedor</mat-label>                 
+                        <input matInput type="text" (keyup)="BuscarNomTrabajador()" placeholder="Dni Tejedor" value=""
+                        autocomplete="off" formControlName="CodTejedor">
+                    </mat-form-field>  
+
+                    <mat-form-field class="fila1-Fecha" >
+                        <input matInput [matDatepicker]="picker1" placeholder="Fecha Registro" [disabled]="InputFechaDesHabilitado" [formControl]="Fecha" >
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker  #picker1></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-Linea"> 
+                        <mat-label>OT</mat-label>
+                        <input matInput type="text"  placeholder="(opcional)" value="" 
+                            autocomplete="off" formControlName="CodOrdtra" >
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-Observacion">
+                        <mat-label>Tipo de aguja</mat-label>
+                        <mat-select formControlName="CodTipoAguja" name="process" (selectionChange)="onChange()">
+                            <mat-option *ngFor="let tipo of listar_tipoaguja" [value]="tipo.Tipo_Aguja">
+                                {{tipo.Tipo_Aguja}} {{tipo.Nombre_Tipo_Aguja}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    
+                    
+                    <mat-form-field class="fila1-Talon1" *ngIf="this.formulario2.controls.CodTipoAguja.value==='01'"> 
+                        <mat-label>Talon 1</mat-label>
+                        <input matInput type="number"  placeholder="" value="" 
+                            autocomplete="off" formControlName="TalonC1" >
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-Talon1" *ngIf="this.formulario2.controls.CodTipoAguja.value==='02'"> 
+                        <mat-label>Talon 1</mat-label>
+                        <input matInput type="number"  placeholder="" value="" 
+                            autocomplete="off" formControlName="Talon_Pl1" >
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-Talon2" *ngIf="this.formulario2.controls.CodTipoAguja.value==='01'"> 
+                        <mat-label>Talon 2</mat-label>
+                        <input matInput type="number"  placeholder="" value="" 
+                            autocomplete="off" formControlName="TalonC2" >
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-Talon2" *ngIf="this.formulario2.controls.CodTipoAguja.value==='02'"> 
+                        <mat-label>Talon 2</mat-label>
+                        <input matInput type="number"  placeholder="" value="" 
+                            autocomplete="off" formControlName="Talon_Pl2" >
+                    </mat-form-field>
+                    
+                    <mat-form-field class="fila1-Talon3" *ngIf="this.formulario2.controls.CodTipoAguja.value==='01'"> 
+                        <mat-label>Talon 3</mat-label>
+                        <input matInput type="number"  placeholder="" value="" 
+                            autocomplete="off" formControlName="TalonC3" >
+                    </mat-form-field>
+                    <mat-form-field class="fila1-Talon4" *ngIf="this.formulario2.controls.CodTipoAguja.value==='01'"> 
+                        <mat-label>Talon 4</mat-label>
+                        <input matInput type="number"  placeholder="" value="" 
+                            autocomplete="off" formControlName="TalonC4" >
+                    </mat-form-field>  
+                    
+                    <mat-form-field class="fila1-Talon1" *ngIf="this.formulario2.controls.CodTipoAguja.value==='03'"> 
+                        <mat-label>Cntd</mat-label>
+                        <input matInput type="number" formControlName="Cntd" >
+                    </mat-form-field>
+
+            </div>      
+ 
+            <div class="container-cuerpo-foot">       
+                <button  type="button" class="button-agregar" mat-dialog-close="false" [disabled]="!formulario2.valid" mat-flat-button (click)="Guardar()">
+                    <mat-icon aria-label="person" >save
+                    </mat-icon>  Registrar
+                </button>
+              
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>               
+            </div> 
+        </form>
+
+    </div>
+
+</div>

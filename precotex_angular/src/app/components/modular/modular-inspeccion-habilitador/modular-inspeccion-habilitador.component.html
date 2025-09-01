@@ -1,0 +1,75 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <form class="grid-container" [style]="grid_border" [formGroup]="formulario">
+
+        <div class="title" [style]='background'>INSPECCION DE PRENDA - HABILITADOR
+        </div>
+
+        <div class="row" style="margin-top: 20px; padding: 5px;">
+            <div class="col-md-33">
+                <mat-form-field class="fila1-Codigo">
+                    <mat-label>Modulo</mat-label>
+                    <mat-select formControlName="Modulo" (selectionChange)="changeModulo($event)">
+                        <mat-option *ngFor="let Modulo of listar_operacionModulo" [value]="Modulo.Cod_Modulo">
+                            {{Modulo.Des_Modulo}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="fila1-Codigo">
+                    <mat-label>Ticket</mat-label>
+                    <input matInput type="text" (input)="changeTicket()" placeholder="Ingrese Ticket" autocomplete="off"
+                        formControlName="Ticket">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-33">
+                <button type="button" mat-flat-button color="primary" [disabled]="porFinalizar.length == 0"(click)="finalizarRecojo()"><mat-icon>save</mat-icon> FINALIZAR</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+                <p style="text-align: right; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">Total Registros: {{porFinalizar.length}}</p>
+                <div class="tabla">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <!-- <th>SEC</th> -->
+                                <th>OP</th>
+                                <th>COLOR</th>
+                                <th>TALLA</th>
+                                <th>RUTA DE INSPECCIÓN</th>
+                                <!-- <th>CANTIDAD</th> -->
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of porFinalizar">
+                                <!-- <td>Prenda {{item.Num_Prenda}}</td> -->
+                                <td>{{item.COD_ORDPRO}}</td>
+                                <td>{{item.DES_PRESENT}}</td>
+                                <td>{{item.COD_TALLA}}</td>
+                                <td>{{item.Ruta_Inspeccion}}</td>
+                                <!-- <td>0</td> -->
+                                <td>
+                                    <button mat-icon-button (click)="eliminarAuditoria(item)" class="boton-icon-red"><mat-icon>delete</mat-icon></button>
+                                </td>
+                            </tr>
+                            <tr *ngIf="porFinalizar.length == 0">
+                                <td colspan="5" style="text-align: center;">Aún no has agregado registros</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-2"></div>
+        </div>
+    </form>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

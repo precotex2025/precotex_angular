@@ -1,0 +1,111 @@
+<div class="container">     
+    <div class="grid-container"> 
+ 
+        <div class="title">Registrar Producción - Rectilíneos</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario2">
+            <div class="container-cuerpo-fila1">
+
+                <mat-form-field class="fila1-Auditor" appearance="fill">
+                    <mat-label>OT</mat-label>                 
+                    <input matInput type="number" placeholder="Orden Producción" value=""
+                    autocomplete="off" formControlName="Cod_Ordtra" style="text-transform: uppercase">
+                </mat-form-field>
+
+                <mat-form-field class="fila1-Auditor" appearance="fill">
+                    <mat-label>Máquina</mat-label>                 
+                    <input matInput type="text" placeholder="Código Máquina" value=""
+                    autocomplete="off" formControlName="Cod_Maquina" style="text-transform: uppercase">
+                </mat-form-field>
+                
+                <mat-form-field class="fila1-Auditor" appearance="fill">
+                    <mat-label>DNI Tejedor</mat-label>                 
+                    <input matInput type="number" (keyup)="BuscarDni()" placeholder="Dni" value=""
+                    autocomplete="off" formControlName="Cod_Trabajador">
+                </mat-form-field>
+
+                <mat-form-field class="fila1-CodAuditor"> 
+                    <mat-label>Tejedor</mat-label>                        
+                    <input matInput type="text" placeholder="" formControlName="Nom_Trabajador" value='{{ Nom_Trabajador }}'>
+                </mat-form-field>               
+                 
+                <br>    
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="BuscarOT()">                    
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+                <button type="button" class="fila1-agregar" mat-flat-button [routerLink]="['/ProdTejeRectilineo']">
+                <mat-icon aria-label="person">reply_all
+                </mat-icon>  Regresar
+                </button>
+  
+
+            </div>   
+            
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table  [dataSource]="dataSourceSol"   class="mat-elevation-z8" >
+                    <ng-container matColumnDef="Sec_Maquina">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Sec.Maq.</th>
+                        <td mat-cell  *matCellDef="let produccion_rectilineo"> {{produccion_rectilineo.Sec_Maquina}} </td>
+                    </ng-container>                 
+                    <ng-container matColumnDef="Maquina">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Máquina</th>
+                        <td mat-cell *matCellDef="let produccion_rectilineo">  {{produccion_rectilineo.Cod_Maquina}} </td>
+                    </ng-container>
+                     <ng-container matColumnDef="Cod_Tela">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod Tela</th>
+                        <td mat-cell  *matCellDef="let produccion_rectilineo">  {{produccion_rectilineo.Cod_Tela}} </td>
+                    </ng-container>               
+                    <ng-container matColumnDef="Comb" sticky>
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Comb</th>
+                        <td mat-cell  *matCellDef="let produccion_rectilineo"> {{produccion_rectilineo.Comb}}  </td>
+                    </ng-container>  
+                    <ng-container matColumnDef="Cod_Talla">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Talla</th>
+                         <td mat-cell *matCellDef="let produccion_rectilineo"> {{produccion_rectilineo.Cod_Talla}} </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="Und_Requerido">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Und Requerido</th>
+                        <td mat-cell *matCellDef="let produccion_rectilineo"> {{produccion_rectilineo.Und_Requerido}} </td>
+                    </ng-container>    
+                    
+                    <ng-container matColumnDef="Und_Producido">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Und Producido</th>
+                        <td mat-cell *matCellDef="let produccion_rectilineo"> {{produccion_rectilineo.Und_Producido}} </td>
+                    </ng-container>   
+
+                    <ng-container matColumnDef="Und_Pendiente">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Und Pendiente</th>
+                        <td mat-cell *matCellDef="let produccion_rectilineo"> {{produccion_rectilineo.Und_Pendiente}} </td>
+                    </ng-container>  
+             
+                    <ng-container matColumnDef="Agregar">
+                        <th mat-header-cell *matHeaderCellDef>Agregar</th>
+                        <td mat-cell *matCellDef="let produccion_rectilineo">
+ 
+                            <a mat-icon-button 
+                                (click)="openDialogAdd(produccion_rectilineo.Num_Secuencia,produccion_rectilineo.Sec_Maquina)">
+                                <mat-icon color="warn">add_comment</mat-icon>
+                            </a> 
+                        </td>
+                    </ng-container> 
+                
+                    <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                </table>
+
+                <mat-paginator  class="paginador" #paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons aria-label="Select page of periodic elements">
+                </mat-paginator>
+
+            </div>    
+        </form>
+
+    </div>
+ 
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>       

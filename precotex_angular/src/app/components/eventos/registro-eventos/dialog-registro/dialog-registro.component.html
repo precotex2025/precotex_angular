@@ -1,0 +1,193 @@
+<div class="container-fluid">
+    <div class="grid-container">
+        <div class="title">Registrar Evento</div>
+
+        <div class="find">
+            <div class="list-form" [formGroup]="formulario">
+                <mat-card class="example-card">
+                    <mat-card-content>
+                        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+                            <mat-tab label="Registro">
+                                <br>
+                                <p>
+                                    <mat-form-field class="example-width-20" appearance="outline">
+                                        <mat-label>Fecha Evento</mat-label>
+                                        <input matInput type="datetime-local" formControlName="Fec_Evento">
+
+                                        <!--<input matInput [matDatepicker]="dp1" autocomplete="off" formControlName="Fec_Evento" >
+                                        <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+                                        <mat-datepicker #dp1></mat-datepicker>-->
+                                    </mat-form-field>
+
+                                    <mat-form-field class="example-width-35" appearance="outline">
+                                        <mat-label>Tipo Evento</mat-label>
+                                        <mat-select formControlName="Id_TipoEvento">
+                                            <mat-option *ngFor="let item of tipoEvento" [value]="item.Id_TipoEvento">
+                                                {{ item.Des_TipoEvento }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="example-width-35" appearance="outline">
+                                        <mat-label>Lugar</mat-label>
+                                        <input matInput type="text" value="" autocomplete="off" formControlName="Lugar" placeholder="Lugar">
+                                    </mat-form-field>
+
+                                    <mat-form-field class="example-full-width" appearance="outline">
+                                        <mat-label>Descripción</mat-label>
+                                        <input matInput type="text" value="" autocomplete="off" formControlName="Des_Evento" placeholder="Descripción">
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field class="example-width-50" appearance="outline">
+                                        <mat-label>Detalle Entrega</mat-label>
+                                        <input matInput type="text" value="" autocomplete="off" formControlName="Des_Entrega" placeholder="Entrega">
+                                    </mat-form-field>
+
+                                    <mat-form-field class="example-width-20" appearance="outline">
+                                        <mat-label>Para hijos</mat-label>
+                                        <mat-select formControlName="Flg_Dependiente">
+                                            <mat-option *ngFor="let item of filtroLogico" [value]="item.idFiltro">
+                                                {{ item.desFiltro }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <button mat-button type="button" color="primary" (click)="onInsertarEntrega()" *ngIf="!ll_EditItem"><mat-icon>add</mat-icon>Agregar</button>
+                                    <button mat-button type="button" color="primary" (click)="onConfirmarEdicion()" *ngIf="ll_EditItem"><mat-icon>done</mat-icon>Confirmar</button>
+                                </p>
+
+                                <div class="col-md-12 tabla">
+                                    <table mat-table [dataSource]='dataSource' matSort #sortData1="matSort" matSortActive="Num_Item" matSortDirection="asc" class="mat-elevation-z8">
+                                        <ng-container matColumnDef="Num_Item">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Item </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Num_Item }} </td>
+                                        </ng-container>
+                
+                                        <ng-container matColumnDef="Des_Entrega">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Des_Entrega }} </td>
+                                        </ng-container>
+                
+                                        <ng-container matColumnDef="Dependiente">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Para Hijos </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Dependiente }} </td>
+                                        </ng-container>
+                
+                                        <ng-container matColumnDef="Acciones">
+                                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                            <td class="mat-header-cell" mat-cell *matCellDef="let element">
+                                                <a mat-icon-button (click)="onEditarEntrega(element)" matTooltip="Editar entrega">
+                                                    <mat-icon color="primary">edit</mat-icon>
+                                                </a>
+
+                                                <a mat-icon-button (click)="onAnularEntrega(element)" matTooltip="Anular entrega">
+                                                    <mat-icon color="warn">delete</mat-icon>
+                                                </a>
+                                            </td>
+                                        </ng-container>
+                
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                    </table>
+                
+                                    <mat-paginator #paginatorData1 [pageSizeOptions]="[3, 5, 10]" showFirstLastButtons></mat-paginator>
+                                </div>
+
+
+                            </mat-tab>
+
+                            <mat-tab label="Filtros">
+                                <br>
+                                <p>
+                                    <mat-form-field class="example-width-35" appearance="outline">
+                                        <mat-label>Sede</mat-label>
+                                        <mat-select formControlName="Fltr_Sede">
+                                            <mat-option *ngFor="let item of plantaEvento" [value]="item.Id_Planta">
+                                                {{ item.des_planta }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="example-width-35" appearance="outline">
+                                        <mat-label>Peronal</mat-label>
+                                        <mat-select formControlName="Fltr_Tipo">
+                                            <mat-option *ngFor="let item of filtroTipo" [value]="item.fltrTipo">
+                                                {{ item.desTipo }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="example-width-20" appearance="outline">
+                                        <mat-label>Sexo</mat-label>
+                                        <mat-select formControlName="Fltr_Sexo">
+                                            <mat-option *ngFor="let item of filtroSexo" [value]="item.fltrSexo">
+                                                {{ item.desSexo }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="example-width-35" appearance="outline">
+                                        <mat-label>Mes cumpleaños</mat-label>
+                                        <mat-select formControlName="Fltr_Onomastico">
+                                            <mat-option *ngFor="let item of filtroOnomastico" [value]="item.idMes">
+                                                {{ item.desMes }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="example-width-20" appearance="outline">
+                                        <mat-label>Solo padres</mat-label>
+                                        <mat-select formControlName="Fltr_Padre">
+                                            <mat-option *ngFor="let item of filtroLogico" [value]="item.idFiltro">
+                                                {{ item.desFiltro }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <b>Antiguedad del trabajador</b>
+                                </p>
+                                <p>
+                                    <mat-form-field class="example-width-20" appearance="outline">
+                                        <mat-label>Fecha Ingreso</mat-label>
+                                        <input matInput [matDatepicker]="dp2" autocomplete="off" formControlName="Fltr_Ingreso" >
+                                        <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+                                        <mat-datepicker #dp2></mat-datepicker>
+                                    </mat-form-field>
+                                </p>
+                                <mat-divider></mat-divider>
+                                <br>
+                                <p>
+                                    <b>Eventos para Hijos</b>
+                                </p>
+                                <p>
+                                    <mat-form-field class="example-width-20" appearance="outline">
+                                        <mat-label>Hijos trabajadores</mat-label>
+                                        <mat-select formControlName="Fltr_Dependiente">
+                                            <mat-option *ngFor="let item of filtroLogico" [value]="item.idFiltro">
+                                                {{ item.desFiltro }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="example-width-20" appearance="outline">
+                                        <mat-label>Edad Tope</mat-label>
+                                        <input  matInput type="number" [min]="0" [max]="25" value="" autocomplete="off" formControlName="Fltr_TopeEdad" placeholder="Edad">
+                                    </mat-form-field>
+                                </p>
+                            </mat-tab>
+                        </mat-tab-group>
+
+                        <mat-divider></mat-divider>
+                    </mat-card-content>
+
+                    <mat-card-actions>
+                        <button mat-button type="submit" color="primary" [mat-dialog-close]="formulario.value" [disabled]="formulario.invalid" *ngIf="ll_Pendiente"><mat-icon>done</mat-icon>Confirmar</button>
+                        <button mat-button mat-dialog-close color="warn"><mat-icon>close</mat-icon>Cancelar</button>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+<div class="container-fluid">
+    <div class="grid-container">
+        <div class="title">Validar Corte / Despacho</div>
+
+        <div class="find">
+            <mat-card class="list-form" [formGroup]="formulario">
+                <mat-card-header>
+                    <mat-card-subtitle>Actualizar Registro</mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content>
+                    <div>
+                        <p>
+                            <mat-form-field class="example-width-15" appearance="outline">
+                                <mat-label>Cantidad</mat-label>
+                                <input matInput type="number" value="" autocomplete="off" formControlName="Cantidad" placeholder="Cantidad">
+                            </mat-form-field>
+
+                            <mat-form-field class="example-width-15" appearance="outline">
+                                <mat-label>Porcentaje</mat-label>
+                                <input matInput type="number" value="" autocomplete="off" formControlName="Porcentaje" placeholder="Porcentaje">
+                            </mat-form-field>
+
+                            <button mat-button type="button" color="primary" [disabled]="formulario.invalid" (click)="onActualizarRegistro()"><mat-icon>published_with_changes</mat-icon>Actualizar</button>
+                        </p>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="list-form">
+                <mat-card-header>
+                    <mat-card-subtitle>Listado de Registros</mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content>
+                    <div class="col-md-12 tabla">
+                        <table mat-table [dataSource]='dataSource' matSort #sortData1="matSort" matSortActive="Orden" matSortDirection="desc" class="mat-elevation-z8">
+                            <ng-container matColumnDef="Orden">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Orden </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.ID }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Cantidad">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Cantidad }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Porcentaje">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Porcentaje </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Porcentaje }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="FechaHora">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha/Hora </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.FechaHora | date: 'dd-MM-yyyy HH:mm' }} </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="Estado">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Estado }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Usuario">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Usuario </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Usuario }} </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+
+                        <mat-paginator #paginatorData1 [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>                        
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

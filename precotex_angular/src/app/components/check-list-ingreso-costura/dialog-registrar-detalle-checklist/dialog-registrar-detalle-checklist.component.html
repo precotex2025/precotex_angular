@@ -1,0 +1,108 @@
+ 
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container">  
+ <!--*ngIf="Titulo == undefined; else titulomodificar"-->
+        <div class="title"><strong  *ngIf="Titulo == undefined; else titulomodificar">Registrar </strong>Detalle Checklist Costura - {{this.Num_Auditoria}}</div>
+        <ng-template #titulomodificar><strong>Modificar </strong></ng-template>
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)" >
+            <div class="container-cuerpo-fila1">
+ 
+                <mat-form-field class="fila1-OC">  
+                    <mat-label>OC</mat-label>
+                    <input matInput type="text" maxlength="5" value="" 
+                        autocomplete="off" formControlName="OC" (input)="buscarOC()" >
+                </mat-form-field> 
+                    <mat-form-field class="fila1-OP">  
+                        <mat-label>OP</mat-label>
+                        <input matInput type="text" maxlength="5" value="" 
+                            autocomplete="off" formControlName="OP" >
+                    </mat-form-field>   
+
+                    <input matInput type="text"  style="display: none;" formControlName="CodCliente" value="" >
+
+                    <mat-form-field class="fila1-Cliente"> 
+                        <mat-label>Cliente</mat-label>
+                        <input matInput type="text"  placeholder="Cliente" value="" 
+                            autocomplete="off" formControlName="Cliente">
+                    </mat-form-field>   
+
+                    <mat-form-field class="fila1-CodEstilo"> 
+                        <mat-label>Codigo</mat-label>
+                        <input matInput type="text"   placeholder="Estilo" value="" 
+                            autocomplete="off" formControlName="CodEstCli">
+                    </mat-form-field>  
+
+                    <mat-form-field class="fila1-Estilo"> 
+                        <mat-label>Estilo</mat-label>
+                        <input matInput type="text"   placeholder="Estilo" value="" 
+                            autocomplete="off" formControlName="Estilo">
+                    </mat-form-field>   
+
+                    <mat-form-field appearance="fill" class="fila1-Color" >
+                        <mat-label>Color</mat-label>
+                        <mat-select formControlName="Color">
+                          <mat-option *ngFor="let option of listar_operacionColor" [value]="option.Cod_Present"  >
+                            {{option.Des_Present}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+                    <!--<mat-form-field class="fila1-Color"> 
+                        <mat-label>Color</mat-label>
+                        <input matInput type="text"   placeholder="Color" value="" 
+                            autocomplete="off" formControlName="Color">
+                    </mat-form-field>-->   
+
+                    <mat-form-field class="fila1-Lote"> 
+                        <mat-label>Lote</mat-label>
+                        <input matInput type="number" placeholder="Lote" value="" 
+                            autocomplete="off" formControlName="Lote" (input)="CompararLoteConMuestra()">
+                    </mat-form-field>  
+                    
+                    <mat-form-field class="fila1-Muestra"> 
+                        <mat-label>Muestra</mat-label>
+                        <input matInput type="number"   placeholder="Muestra" value="" 
+                            autocomplete="off" formControlName="Muestra">
+                    </mat-form-field>   
+                    
+                    <mat-form-field class="fila1-Observacion"> 
+                        <mat-label>Observacion</mat-label>
+                        <textarea matInput type="text"  placeholder="Observacion" value="" 
+                            autocomplete="off" formControlName="Observacion"></textarea>
+                    </mat-form-field>   
+
+                
+            </div>     
+ 
+
+  
+            <div class="container-cuerpo-foot">
+                         
+               <button  type="submit" class="button-agregar"*ngIf="Titulo == undefined; else btnmodificar"  mat-dialog-close="false" [disabled]="!formulario.valid" mat-flat-button>
+                    <mat-icon aria-label="person" >save
+                    </mat-icon>  Registrar
+                </button>
+                
+
+                <ng-template #btnmodificar><button type="submit" class="button-agregar" mat-dialog-close="false" [disabled]="!formulario.valid"  mat-flat-button>
+                    <mat-icon aria-label="person" >create
+                    </mat-icon>  Modificar
+                </button></ng-template>
+               
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>               
+            </div>
+        </form>
+
+    </div> 
+
+
+</div>
+
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>      

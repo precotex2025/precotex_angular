@@ -1,0 +1,26 @@
+<!-- <div class="pdf-container">
+    <object  [data]="contentPdf2" type="application/pdf" width="100%" height="100%"></object>
+</div> -->
+
+<!-- <div class="image-container" > -->
+
+<div class="pdf-container" id="pdf-container">
+    <iframe [src]="contentPdf2" style="width: 100%; height: 100%; object-fit: contain;" frameborder="0">    
+    </iframe>
+</div> 
+
+
+
+    <!-- <mat-dialog-content> 
+        <object [data]="contentPdf2" type="application/pdf" width="100%" height="100%"> -->
+            <!-- <p>Tu navegador no soporta la vista previa de PDFs.</p> -->
+      <!--    </object>    
+    </mat-dialog-content> -->
+<!-- </div> -->
+
+<!--<div class="image-container" >
+    <img [src]="imageUrl" alt="Imagen" class="responsive-image" height="100% !Important">
+</div> -->
+<button type="button" class="boton-regresar" mat-flat-button (click)="Salir()">                    
+    <mat-icon aria-label="person">cancel</mat-icon>
+</button>  

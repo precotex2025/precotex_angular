@@ -1,0 +1,278 @@
+.grid-container {
+    display: grid;
+    gap: 5px;
+    grid-template: 
+      "title"   35px
+      "find"    205px
+      "main"    auto
+      "footer"  50px;
+  
+}
+  
+.title { grid-area: title; }
+.find { grid-area: find; }
+.main { grid-area: main; }
+.footer { grid-area: footer; }
+  
+.auditoriaForm {
+  display: grid;
+  
+  grid-template: 
+    "findcol1 findcol2" 50px
+    "findcol3 findcol4" 50px
+    "findcol5 findcol6" 50px
+    "findcol7 findcol7" 60px /
+    auto auto  ;
+}
+
+.findcol1 { grid-area: findcol1; }
+.findcol2 { grid-area: findcol2; }  
+.findcol3 { grid-area: findcol3; }
+.findcol4 { grid-area: findcol4; }
+.findcol5 { grid-area: findcol5; }
+.findcol6 { grid-area: findcol6; }
+.findcol7 { grid-area: findcol7; }    
+
+@media screen and (max-width: 320px) {
+  .grid-container {
+    display: grid;
+    gap: 5px;
+    grid-template: 
+      "title"   35px
+      "find"    150px
+      "main"    auto
+      "footer"  50px
+      auto;
+  }
+}
+
+@media screen and (min-width: 600px){
+  .grid-container {
+    display: grid;
+    gap: 5px;
+    grid-template: 
+      "title" 35px
+      "find"   150px
+      "main"    auto
+      "footer"  50px;
+  
+  }
+
+  .auditoriaForm{
+    display: grid;
+  
+    grid-template: 
+      "findcol1 findcol2 findcol3" 50px
+      "findcol4 findcol5 findcol6" 50px
+      "findcol7 findcol7 findcol7" 60px /
+      auto auto auto ;
+  }
+}
+
+@media screen and (min-width: 768px){
+  .grid-container {
+    //background-color: green;    
+    display: grid;
+    gap: 5px;
+    grid-template: 
+      "title" 35px
+      "find"   105px
+      "main"    auto
+      "footer"  50px;
+  }
+
+  .auditoriaForm{
+    display: grid;
+  
+    grid-template: 
+      "findcol1 findcol2 findcol3 findcol4" 50px
+      "findcol5 findcol6 findcol7 findcol7" 60px /
+      auto auto auto auto;
+  }
+}
+
+@media screen and (min-width: 992px){
+  .grid-container {
+    display: grid;
+    gap: 5px;
+    grid-template: 
+      "title"   35px
+      "find"    55px
+      "main"    auto
+      "footer"  50px;
+  }
+
+  .auditoriaForm{
+    display: grid;
+  
+    grid-template: 
+      "findcol1 findcol2 findcol3 findcol4 findcol5 findcol6 findcol7" 60px /
+      180px 150px 100px 140px 100px 220px auto;
+  }
+}
+
+@media screen and (min-width: 1200px){
+  .grid-container {
+    display: grid;
+    gap: 5px; 
+    grid-template: 
+      "title"   35px
+      "find"    55px
+      "main"    auto
+      "footer"  50px;
+  }
+
+  .auditoriaForm{
+    display: grid;
+  
+    grid-template: 
+      "findcol1 findcol2 findcol3 findcol4 findcol5 findcol6 findcol7" 60px /
+      200px 190px 140px 190px 150px 220px auto;
+  }
+}
+
+@media screen and (min-width: 1700px){
+  .grid-container {
+    display: grid;
+    gap: 5px;
+    grid-template: 
+      "title" 35px
+      "find"   55px
+      "main"    auto
+      "footer"  50px;
+  }
+
+  .auditoriaForm{
+    display: grid;
+  
+    grid-template: 
+      "findcol1 findcol2 findcol3 findcol4 findcol5 findcol6 findcol7" 60px /
+      280px 250px 250px 300px 150px 270px auto;
+  }
+}
+
+
+/* ------------------------- */
+/* REGISTRO AUDITORIA */
+/* ------------------------- */
+
+.contenedor-registro-popup {
+  display: grid;
+  gap: 5px;
+  grid-template: 
+    "title"   35px
+    "main"    auto
+    "footer"  50px;
+
+}
+
+.contenedor-registro-title { grid-area: title; }
+.contenedor-registro-main { grid-area: main; }
+.contenedor-registro-footer { grid-area: footer; }
+
+.contenedor-registro-auditoriaForm {
+  display: grid;
+  gap: 5px;
+  grid-template: 
+    "c-r-m-row1 c-r-m-row2" 50px
+    "c-r-m-row3 c-r-m-row4" 50px
+    "c-r-m-row5 c-r-m-row6" 50px
+    "c-r-m-row7 c-r-m-row8" 100px  /
+    auto auto ;
+}
+
+.contenedor-registro-main-row1 { grid-area: c-r-m-row1; }
+.contenedor-registro-main-row2 { grid-area: c-r-m-row2; }  
+.contenedor-registro-main-row3 { grid-area: c-r-m-row3; }
+.contenedor-registro-main-row4 { grid-area: c-r-m-row4; }
+.contenedor-registro-main-row5 { grid-area: c-r-m-row5; }
+.contenedor-registro-main-row6 { grid-area: c-r-m-row6; }
+.contenedor-registro-main-row7 { grid-area: c-r-m-row7; }
+.contenedor-registro-main-row8 { grid-area: c-r-m-row8; }
+
+@media (min-width: 600px){
+  .contenedor-registro-auditoriaForm {
+    display: grid;
+    gap: 5px;
+    grid-template: 
+      "c-r-m-row1 c-r-m-row2 c-r-m-row3" 50px
+      "c-r-m-row4 c-r-m-row5 c-r-m-row6" 50px
+      "c-r-m-row7 c-r-m-row8 c-r-m-row8" 100px  /
+      auto auto auto;
+  }
+}
+
+@media (min-width: 768px){
+  .contenedor-registro-auditoriaForm {
+    display: grid;
+    gap: 5px;
+    grid-template: 
+      "c-r-m-row1 c-r-m-row2 c-r-m-row3 c-r-m-row4" 50px
+      "c-r-m-row5 c-r-m-row6 c-r-m-row7 c-r-m-row8" 100px  /
+      auto auto auto auto;
+  
+  }
+}
+
+/* ------------------------- */
+/* REGISTRO AUDITORIA DETALLE */
+/* ------------------------- */
+
+.contenedor-registro-detalle-popup {
+  display: grid;
+  gap: 5px;
+  grid-template: 
+    "fila_1"   35px
+    "fila_2"   300px 
+    "fila_3"   60px  /
+    100%;
+}
+
+.contenedor-registro-detalle-title { grid-area: fila_1; }
+.contenedor-registro-detalle-main  { grid-area: fila_2; }
+.contenedor-registro-detalle-foot  { grid-area: fila_3; }
+
+.contenedor-registro-detalle-foot {
+  display: grid;
+  gap: 5px;
+  grid-template: 
+    "menu_1 menu_2"   35px /
+    465px 465px;
+
+}
+
+.registro_detalle_menu_1 { grid-area: menu_1; }
+.registro_detalle_menu_2 { grid-area: menu_2; }
+
+/* ------------------------- */
+/* REGISTRO TRABAJADOR */
+/* ------------------------- */
+
+/* ------------------------- */
+/* REGISTRO AUDITORIA CALIFICACION */
+/* ------------------------- */
+
+.califrow3 {
+  display: grid;
+  gap: 5px;
+  grid-template: 
+    "col_1 col_2 col_3"  170px /
+    auto auto auto;
+
+}
+
+.califrow3col1 { grid-area: col_1; }
+.califrow3col2 { grid-area: col_2; }
+.califrow3col3 { grid-area: col_3; }
+
+.califrow3_rechazo {
+  display: grid;
+  gap: 8px;
+  grid-template: 
+    "re_col_1 re_col_2 " 50px
+    "re_col_3 re_col_3 " 30px /
+    100px 100px ;
+}
+.califrow3_rechazo_motivo { grid-area: re_col_1; }
+.califrow3_rechazo_num_prendas { grid-area: re_col_2; }
+.califrow3_rechazo_des_motivo { grid-area: re_col_3; }

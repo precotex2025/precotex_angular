@@ -1,0 +1,141 @@
+<div class="container"> 
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container"> 
+
+        <div class="title">.:: {{ des_planta }} ::. - Registro Salida Jabas</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            
+            <div class="container-cuerpo-fila1">
+                <mat-form-field class="fila1-guia">
+                    <mat-label>Numero de Guia</mat-label>
+                    <mat-select  formControlName="num_guia" name="listar_guia" name="listar_guia" (selectionChange)="DatosGuia()">
+                        <mat-option *ngFor="let listar_guia of listar_guias" [value]="listar_guia.num_guia" >
+                            {{listar_guia.num_guia}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div> 
+            
+          
+          
+            <div class="container-cuerpo-fila2">
+                <div class="container-cuerpo-fila2">
+                    <mat-form-field class="fila2-destino">
+                        <mat-label>Destino</mat-label>
+                        <input name="destino" matInput disabled value='{{ destino_select }}'>
+                    </mat-form-field>
+                </div>
+            </div> 
+            
+            
+
+            <div class="container-cuerpo-fila3">
+                <mat-form-field class="fila3-jaba">
+                    <mat-label>Jaba</mat-label>
+                    <input matInput type="text" #jaba name="jaba" (keyup)="BuscarJaba()" placeholder="Codigo de Barras" value=""
+                        autocomplete="off" formControlName="jaba" >
+                </mat-form-field>
+
+            </div>
+
+ 
+
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+
+
+            <div class="container-cuerpo-fila4">
+               
+               
+                <div class="fila4-agregar">
+                   <!-- <button type="button" class="button_añadir" >
+                        <mat-icon aria-label="person">note_add
+                        </mat-icon>
+
+                    </button>-->
+                    <h2>Lista de Jabas</h2>
+
+                </div>
+
+                <table mat-table   class="mat-elevation-z8" #table [dataSource]="dataSource">
+
+
+
+                  <!---->  <ng-container matColumnDef="tipo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nº </th>
+                        <td mat-cell *matCellDef="let row"> {{row.tipo}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="hora">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Codigo de Barras</th>
+                        <td mat-cell *matCellDef="let row"> {{row.hora}}  </td>
+                    </ng-container>
+
+                     <ng-container matColumnDef="vehiculo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Jaba</th>
+                        <td mat-cell *matCellDef="let row"> {{row.vehiculo}}  </td>
+                    </ng-container>
+ 
+                 
+                      
+                   <ng-container *ngIf="dataSource" matColumnDef="detalle">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Eliminar</th>
+                        <td mat-cell *matCellDef="let i = index">
+                            <!--<td mat-cell *matCellDef="let i = index">-->
+                            <a mat-icon-button (click)="EliminarRegistroTableDinamica(i)"
+                                >
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>
+   
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;" class="example-element-row"></tr>
+
+
+ 
+                </table>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                 showFirstLastButtons 
+                 aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </div>
+
+            <div class="container-cuerpo-fila5">
+                <mat-form-field class="fila5-glosa" appearance="fill">
+                    <mat-label>Glosa</mat-label>
+                    <textarea matInput type="text"  placeholder="Glosa" value=""
+                    autocomplete="off" formControlName="glosa"></textarea>
+                </mat-form-field>
+            </div>
+
+            <div class="container-cuerpo-foot">
+
+                <button type="button" class="button-registrar" mat-flat-button (click)="Procesar()" >
+                    <mat-icon aria-label="person">check_circle_outline 
+                    </mat-icon>Registrar
+                </button>
+                <button type="button" class="button-cancelar" mat-flat-button [routerLink]="['/SeguridadControlJabaAccion']">
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>Cancelar
+                </button>
+                
+            </div>
+        </form>
+
+    </div>
+
+
+<!--<button mat-raised-button (click)="openDialog()">Open Dialog</button>-->
+
+
+
+   
+
+
+
+
+
+
+
+</div>
+

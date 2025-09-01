@@ -1,0 +1,124 @@
+<div class="container">
+    <!-- ventana nro 3 - salida -->
+    <div class="grid-container">
+
+        <div class="title">Estilo Propio - Imagenes (ATE)</div>
+
+        <div class="find">
+            <div class="auditoriaForm">
+                <div class="findcol1">
+                    <div class="caja">
+                        <ng-select  [items]="listar_estiloCliente" bindLabel="Cod_EstCli" style="padding-bottom: 39px;"
+                        bindValue="Cod_EstCli" [multiple]="false" [searchable]="true" (search)="searchEstilos($event)"
+                        placeholder="Buscar Estilo Cliente" (change)="changeEstilo($event)" [(ngModel)]="estilo">
+                        </ng-select>
+                    </div>
+                    <div class="caja">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Estilo Propio</mat-label>
+                            <input matInput type="text" [(ngModel)]="estilo_propio" maxlength="5">
+                        </mat-form-field>
+                    </div>
+                    <div class="caja">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>OP</mat-label>
+                            <input matInput type="text" [(ngModel)]="OP" maxlength="5">
+                        </mat-form-field>
+                    </div>
+                    <div class="caja">
+                        <ng-select  [items]="listar_operacionCliente" bindLabel="Nom_Cliente" style="padding-bottom: 39px;"
+                        bindValue="Cod_Cliente" [multiple]="false" [searchable]="true" (change)="CambiarValorCliente($event)"
+                        placeholder="Selecciona un Cliente" [(ngModel)]="sCliente">
+                        </ng-select> 
+                    </div>
+                    <div class="caja">
+                        <mat-form-field appearance="fill" class="fila1-temporada-dialog">
+                            <mat-label>Temporada</mat-label>
+                            <mat-select [(ngModel)]="sTemporada">
+                                <mat-option *ngFor="let option of listar_operacionTemporada" [value]="option.Cod_TemCli">
+                                    {{option.Nom_TemCli}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="caja">
+                        <button type="button" class="button_agregar" (click)="cargarLista()" mat-flat-button
+                            color="primary">
+                            <mat-icon aria-label="person">search
+                            </mat-icon> BUSCAR
+                        </button>
+                    </div>
+    
+                </div>
+  
+
+            </div>
+        </div>
+
+
+        <div class="container-cuerpo-fila5">
+
+            <div class="mat-elevation-z8">
+                <!-- <p style="text-align: right;">
+                    <button type="button" class="button_agregar2"
+                            (click)="applyFilter()" mat-flat-button color="primary">
+                            <mat-icon aria-label="person">view_comfy
+                            </mat-icon> EXPORTAR
+                    </button>
+                </p> -->
+                <table mat-table [dataSource]="dataSource">
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="ESTILO_PROPIO">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> ESTILO PROPIO</th>
+                        <td mat-cell *matCellDef="let element"> {{element.ESTILO_PROPIO}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="DESC_ESTILO_PROPIO">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">DES. ESTILO PROPIO</th>
+                        <td mat-cell *matCellDef="let element"> {{element.DESC_ESTILO_PROPIO}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ESTILO_CLIENTE">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Estilo Cliente</th>
+                        <td mat-cell *matCellDef="let element"> {{element.ESTILO_CLIENTE}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="TIPO_PRENDA">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Estilo Propio</th>
+                        <td mat-cell *matCellDef="let element"> {{element.TIPO_PRENDA}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="GRUPO_TALLA">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> GRUPO TALLA</th>
+                        <td mat-cell *matCellDef="let element"> {{element.GRUPO_TALLA}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Acciones </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-button (click)="agregarNuevo(element)" matTooltip="Agregar o Editar Imagenes"
+                                color="primary"><mat-icon>add_photo_alternate</mat-icon></button>
+
+                            <button mat-button (click)="editarOpcion(element)" matTooltip="Ver imagenes"
+                                color="primary"><mat-icon>image_search</mat-icon></button>
+
+                            <button mat-button (click)="copiarImagenes(element)" matTooltip="Copiar Imagénes por Estilo"
+                                color="primary"><mat-icon>compare_arrows</mat-icon></button>
+
+
+                        </td>
+                    </ng-container>
+
+
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"
+                        style="background-color: #ccc; font-weight: bold;"></tr>
+                    <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns; "></tr>
+                </table>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

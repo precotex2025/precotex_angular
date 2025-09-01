@@ -1,0 +1,299 @@
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0; 
+}
+  
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 320px;
+    min-height: 400px;
+    height: 510px;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 95%;
+    margin: 0;
+    padding: 10px 10px;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 390px
+        "foot" 55px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+//fila 1 
+.container-cuerpo-fila1 {
+    display: grid;
+    justify-content: center;
+    grid-template:
+    "col1 col2"  70px
+    "col3 col4"  70px
+    "col5 col6"  70px  
+    "col7 col7"  70px /
+    125px 300px  auto;
+
+.fila1-CodSupervisor {
+    grid-area: col1;
+    width: 120px;
+}
+.fila1-Supervisor {
+    grid-area: col2;
+    width: 295px;
+}
+.fila1-CodAuditor {
+    grid-area: col3;
+    width: 120px;
+}
+.fila1-Auditor {
+    grid-area: col4;
+    width: 295px;
+}
+.fila1-Fecha {
+    grid-area: col5;
+    width: 120px;
+}
+.fila1-Linea {
+    grid-area: col6;
+    width: 295px;
+}
+.fila1-Observacion {
+    grid-area: col7;
+    width: 420px;
+
+}
+
+textarea { 
+    height: 90px; 
+}
+
+}
+
+
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot .button-agregar,.button-cancelar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+
+.button-agregar {
+    grid-area: fcol1;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+.button-cancelar {
+    grid-area: fcol2;
+    background-color: #d32f2f;
+    color: #ffffff;
+}
+
+.container-cuerpo-fila2{
+    width: 100%;
+}
+
+
+
+@media screen and (max-width: 868px){
+    .grid-container{
+        height: 500px;
+    }
+
+    .container-cuerpo {
+        display: grid;
+        grid-template:
+        "fila1" 370px
+        "foot" 55px / 
+        99%;
+    }
+
+    .container-cuerpo-fila1 {
+        display: grid;
+        grid-template:
+        "col1 col2"  70px
+        "col3 col4"  70px
+        "col5 col6"  70px  
+        "col7 col7"  70px /
+        125px 235px  auto;
+    
+    
+          
+    .fila1-CodSupervisor {
+        grid-area: col1;
+        width: 120px;
+    }
+    .fila1-Supervisor {
+        grid-area: col2;
+        width: 230px;
+    }
+    .fila1-CodAuditor {
+        grid-area: col3;
+        width: 120px;
+    }
+    .fila1-Auditor {
+        grid-area: col4;
+        width: 230px;
+    }
+    .fila1-Fecha {
+        grid-area: col5;
+        width: 120px;
+    }
+    .fila1-Linea {
+        grid-area: col6;
+        width: 230px;
+    }
+    .fila1-Observacion {
+        grid-area: col7;
+        width: 360px;
+    }
+    }
+
+  }
+
+
+
+  @media screen and (max-width: 688px){
+   .grid-container{
+       height: 510px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila1" 390px
+        "foot" 55px /
+        99%; 
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        grid-template:
+        "col1 col2"  80px
+        "col3 col4"  80px
+        "col5 col6"  80px  
+        "col7 col7"  80px /
+        125px 175px  auto;
+    
+
+        .fila1-CodSupervisor {
+            grid-area: col1;
+            width: 120px;
+        }
+        .fila1-Supervisor {
+            grid-area: col2;
+            width: 170px;
+        }
+        .fila1-CodAuditor {
+            grid-area: col3;
+            width: 120px;
+        }
+        .fila1-Auditor {
+            grid-area: col4;
+            width: 170px;
+        }
+        .fila1-Fecha {
+            grid-area: col5;
+            width: 120px;
+        }
+        .fila1-Linea {
+            grid-area: col6;
+            width: 170px;
+        }
+        .fila1-Observacion {
+            grid-area: col7;
+            width: 300px;
+        }
+   
+
+} 
+    .container-cuerpo-foot {
+        grid-template:
+            "fcol1 fcol2" auto /
+            140px 140px;
+    }
+
+    
+    .container-cuerpo-foot .button-agregar,.button-cancelar {
+       
+        max-width: 300px;
+        min-width: 120px;
+    }
+    
+    .button-agregar {
+      width: 50px;
+    }
+
+    .button-cancelar {
+        width: 50px;
+    }
+    
+  }

@@ -1,0 +1,102 @@
+<div class="container" id="container">
+    <div class="grid-container">
+        <div class="title">Moldes - Hoja de medida final - {{idHojaMedida}}</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="onConformarRegistro(formDirective)">
+            <div class="container-cuerpo-fila1">
+                <mat-form-field class="fila1-OP"> 
+                    <mat-label>OP</mat-label>
+                    <input matInput type="text" placeholder="OP" value="" 
+                        autocomplete="off" formControlName="OP" (input)="onBuscarOP()">
+                </mat-form-field>  
+
+                <mat-form-field class="fila1-Cliente"> 
+                    <mat-label>Cliente</mat-label>
+                    <input matInput type="text" placeholder="Cliente" value="" autocomplete="off" formControlName="NomCliente" >
+                </mat-form-field>
+ 
+                <mat-form-field class="fila1-EstCli"> 
+                    <mat-label>Estilo Cliente</mat-label>
+                    <input matInput type="text" placeholder="Estilo Cliente" value="" autocomplete="off" formControlName="CodEstCli" >
+                </mat-form-field>
+
+                <mat-form-field class="fila1-EstPro"> 
+                    <mat-label>Estilo P. / Version</mat-label>
+                    <input matInput type="text" placeholder="Estilo P. / Version" value="" autocomplete="off" formControlName="EstProVer" >
+                </mat-form-field>
+
+                <mat-form-field class="fila1-EstPro"> 
+                    <mat-label>Temporada</mat-label>
+                    <input matInput type="text" placeholder="Temporada" value="" autocomplete="off" formControlName="NomTemCli" >
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="fila1-Color">
+                    <mat-label>Color</mat-label>
+                    <mat-select formControlName="CodColCli">
+                      <mat-option *ngFor="let option of dataColorOP" [value]="option.Cod_ColCli">
+                        {{option.Nom_ColCli}}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="fila1-Auditor" appearance="fill">
+                    <mat-label>Auditor</mat-label>
+                    <input matInput type="text" #trigger="matAutocompleteTrigger" placeholder="Auditor" formControlName="NomAuditor" [matAutocomplete]="autoDataAuditor" />
+                    <mat-autocomplete autoActiveFirstOption #autoDataAuditor="matAutocomplete">
+                        <mat-option *ngFor="let option of filtroOperacionAuditor | async" [value]="option.Nom_Auditor" (click)="seleccionarAuditor(option)">
+                            {{option.Nom_Auditor}}
+                        </mat-option> 
+                    </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="fila1-Color">
+                    <mat-label>Hoja Medida</mat-label>
+                    <mat-select formControlName="Sec">
+                      <mat-option *ngFor="let option of dataMedidaOP" [value]="option.Sec" (click)="seleccionarHojaMedida(option)">
+                        {{option.Des_Molde}}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="fila1-EstPro"> 
+                    <mat-label>Encogimiento</mat-label>
+                    <input matInput type="text" placeholder="Encogimiento" value="" autocomplete="off" formControlName="Encogimiento" >
+                </mat-form-field>
+
+                <mat-form-field class="fila1-EstPro"> 
+                    <mat-label>Color/Partida</mat-label>
+                    <input matInput type="text" placeholder="Color/Partida" value="" autocomplete="off" formControlName="ColorPartida" >
+                </mat-form-field>
+
+                <button type="button" class="button-finalizar" (click)="onFinalizarFicha()" mat-flat-button [disabled]="idHojaMedida == 0 || flgEnable == false" *ngIf="idHojaMedida != 0 && data.Flg_Estado != '0'">
+                    <mat-icon aria-label="person" >check</mat-icon> Finalizar Ficha
+                </button>
+               
+                <button type="submit" class="button-agregar" mat-flat-button [disabled]="!formulario.valid" *ngIf="idHojaMedida == 0">
+                    <mat-icon aria-label="person" >save </mat-icon> Generar Ficha
+                </button>
+
+                <button type="submit" class="button-agregar" mat-flat-button [disabled]="!formulario.valid" *ngIf="idHojaMedida != 0 && data.Flg_Estado == '0'">
+                    <mat-icon aria-label="person" >save </mat-icon> Grabar Ficha
+                </button>
+
+                <button mat-dialog-close type="button" class="button-regresar" mat-flat-button mat-dialog-close mat-dialog-close="false">
+                    <mat-icon aria-label="person">cancel</mat-icon> Cerrar Ficha
+                </button>
+
+            </div>
+
+            <div class="container-cuerpo-fila2">  
+                <ag-grid-angular 
+                    #gGridEmpty
+                    style="width: 100%; height: 100%;" 
+                    class="ag-theme-material"
+                    [suppressDragLeaveHidesColumns]="true"
+                    (cellClicked)="onCellClicked($event,$event)"
+                    [gridOptions]="gridOptions"
+                    >
+                </ag-grid-angular>
+            </div>
+        </form>
+    </div>
+</div>

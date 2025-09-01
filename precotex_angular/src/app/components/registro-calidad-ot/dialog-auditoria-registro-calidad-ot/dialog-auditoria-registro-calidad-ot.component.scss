@@ -1,0 +1,290 @@
+.container-fluid {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100%;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 16px;
+    margin: 0;
+  }
+  
+  
+  // .container {
+  //   box-sizing: border-box;
+  //   width: 100%;
+  //   min-height: 100%;
+  //   //background-color: blue;
+  //   padding: 5px 5px 5px 5px;
+  //   font-family: corbel, arial;
+  //   font-size: 15px;
+  //   margin: 0;
+  // }
+  
+  mat-card {
+    margin-top: 10px;
+    padding: 0px;
+    width: 100%;
+  }
+  
+  mat-card-header {
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, .4);
+    width: 100%;
+  }
+  
+  mat-card-content {
+    margin-top: 10px;
+    padding: 10px 15px;
+    width: 100%;
+    font-size: 11px;
+  }
+  
+  .grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0;
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 289px;
+    min-height: 400px;
+    //height: 640px;
+    height: auto;
+    //position: absolute;
+  }
+  
+  #cdk-overlay-3{
+    overflow-y: scroll;
+  }
+  .mat-dialog-container{
+    overflow: auto;
+  }
+  .title {
+    background-color: #3f51b5;
+    color: white;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+  }
+  
+  .contenedor {
+    width: 100%;
+    padding: 0px;
+  }
+  
+  .formulario{
+    display: flex;
+    flex-direction: row;
+    //justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .formulario2{
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .form-group-cliente{
+    margin-right: 8px;
+    width: 16%;
+    padding: 5px;
+    border: 1px solid rgba(0, 0, 0, .1);
+    margin-bottom: 5px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  }
+
+  .form-group-articulo{
+    margin-right: 8px;
+    width: 16%;
+    padding: 5px;
+    border: 1px solid rgba(0, 0, 0, .1);
+    margin-bottom: 5px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  }
+
+
+
+  .form-group-proveedor{
+    margin-right: 8px;
+    width: 16%;
+    padding: 5px;
+    border: 1px solid rgba(0, 0, 0, .1);
+    margin-bottom: 5px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  }
+
+
+
+  .form-group{
+    margin-right: 8px;
+    width: 16%;
+    padding: 5px;
+    border: 1px solid rgba(0, 0, 0, .1);
+    margin-bottom: 5px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  }
+    
+  .form-group3{
+    margin-right: 8px;
+  }
+  
+  .form-group2{
+    width: 100%;
+    margin-right: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+  }
+  
+  .fila{
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .caja{
+    width: 98%;
+    height: 150px;
+    border: 1px solid rgba(0, 0, 0, .5);
+    border-radius: 5px;
+  }
+  
+  .form-tabla{
+    margin-right: 5px;
+  }
+  
+  .button-agregar {
+    height: 40px;
+    max-width: 180px;
+    background-color: #0e740e;
+    color: #ffffff;
+  
+  }
+  
+  .body-tabla{
+    width: 100%;
+  }
+  
+  table{
+    width: 100%;
+  
+  }
+  table, th, td {
+    border: 1px solid;
+    text-align: center;
+  }
+  
+  .observaciones{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .observaciones textarea{
+    border: none;
+    border: 1px solid rgba(0, 0, 0, .5);
+    border-radius: 5px;
+    height: 80px;
+    max-height: 80px;
+    min-height: 80px;
+    max-width: 100%;
+    min-width: 100%;
+    background-color: none;
+    outline: none;
+    padding: 5px;
+  }
+  
+  .botones{
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .button-registrar{
+    margin-right: 5px;
+  }
+
+
+  
+  
+  
+  @media screen and (max-width: 1230px){
+    .formulario2{
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group2{
+      width: 99%;
+    }
+    .body-tabla{
+      overflow-x: scroll;
+      margin-top: 10px;
+      font-size: 11px;
+      background-color: rgb(252, 248, 203);
+    }
+  
+  }
+  
+  @media screen and (max-width: 680px){
+    .fila{
+      display: flex;
+      flex-direction: column;
+    }
+    .form-tabla, mat-form-field{
+      width: 40%;
+    }
+  }
+  
+  
+  @media screen and (max-width: 500px){
+    mat-form-field, input, .form-group{
+      width: 49%;
+      //height: 100vh;
+      display: grid;
+      justify-content: center;
+      align-items: center;
+      word-break:break-all;
+      margin: 0px 1px 0px;
+    }
+
+    
+
+    mat-form-field, input, .form-group-cliente{
+        width: 100%;
+        margin: 0px 1px 0px;
+    }
+    mat-form-field, input, .form-group-articulo{
+        width: 100%;
+        margin: 0px 1px 0px;
+    }
+    mat-form-field, input, .form-group-proveedor{
+        width: 100%;
+        margin: 0px 1px 0px;
+    }
+
+    .botones{
+      width: 100%;
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .button-registrar{
+      margin-top: 5px;
+    }
+    .button-cancel{
+      margin-top: 5px;
+    }
+  }
+  
+  
+  #cdk-overlay-3{
+    overflow-y: scroll;
+  }

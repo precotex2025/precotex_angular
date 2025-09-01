@@ -1,0 +1,26 @@
+<!-- <div mat-dialog-content>
+  <canvas #pdfCanvas *ngIf="isPDF()"></canvas>
+  <img *ngIf="!isPDF()" [src]="imageUrl" class="responsive-image"/>
+  <button type="button" class="boton-regresar" mat-flat-button (click)="Salir()">                    
+    <mat-icon aria-label="person">cancel</mat-icon>
+  </button> 
+</div>
+ -->
+
+ 
+ <div *ngIf="isPDF()">
+  <canvas #pdfCanvas></canvas>
+
+  <div class="pdf-controls">
+    <button mat-button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+    <span>Página {{currentPage}} de {{totalPages}}</span>
+    <button mat-button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+  </div>
+  <button type="button" class="boton-regresar" mat-flat-button (click)="Salir()">                    
+    <mat-icon aria-label="person">cancel</mat-icon>
+  </button>
+</div>
+
+<div *ngIf="!isPDF()">
+  <img [src]="imageUrl" alt="imagen" style="width: 100%;">
+</div>

@@ -1,0 +1,88 @@
+mat-card {
+    margin-top: 10px;
+    padding: 0px;
+}
+
+mat-card-header {
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+}
+
+mat-card-content {
+    margin-top: 10px;
+    padding: 10px 15px;
+}
+
+.mat-column-Cod_Empresa,
+.mat-column-Cod_Rol,
+.mat-column-Cod_Opcion,
+.mat-column-Des_Opcion,
+.mat-column-Cod_Trabajador,
+.mat-column-Apellidos,
+.mat-column-Nombre_Trabajador,
+.mat-column-Email,
+.mat-column-Nro_DNI,
+.mat-column-Tip_Trabajador,
+.mat-column-acciones //.mat-column-eliminar 
+
+    {
+    text-align: center;
+    font-size: 13px;
+    font-family: arial;
+    padding: 10px;
+}
+table{
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.mat-column-Cod_Rol {
+    width: 30px !important;
+    text-align: center
+}
+
+.mat-column-Cod_Opcion {
+    width: 30px !important;
+    text-align: center
+}
+
+.mat-column-Des_Opcion {
+    width: 30px !important;
+    text-align: center
+}
+.content{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    align-content: center;
+}
+.caja1{
+    width: 50%;
+    margin-right: 10px;
+}
+.caja2{
+    width: 40%;
+}
+
+.mat-header-cell {
+    text-align: center;
+}
+
+.cerrar {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+}
+
+.mat-mdc-row:hover, .mat-row cdk-row:hover,  .mat-mdc-cell {
+    border-color: currentColor;
+}
+
+.demo-row-is-clicked {
+    font-weight: bold;
+}

@@ -1,0 +1,53 @@
+<body>
+    <div class="container"> 
+    
+        <div class="grid-container">  
+     
+            <div class="title">Seleccionar Estado</div>
+    
+            <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)">
+               
+                <div class="container-cuerpo-fila1">
+                    
+                    <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                        <ng-container matColumnDef="Estado">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estado</th>
+                            <td mat-cell  *matCellDef="let data_det;">
+                                <button type="button" class="button-estado" (click)="selectEstado(data_det.Cod_Estado)"  mat-flat-button >{{data_det.Des_Jaba_Estado}}</button>
+                            </td>
+                        </ng-container>
+       
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns_cab; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;" class="table-row"></tr>
+                    </table>
+     
+                </div>
+     
+                <div class="container-cuerpo-fila2">
+                    <mat-form-field class="fila2-Observacion"> 
+                        <mat-label>Observacion</mat-label>
+                        <textarea matInput type="text"  placeholder="Observacion" value="" id="Observacion" 
+                            autocomplete="off" formControlName="Observacion"></textarea>
+                    </mat-form-field>   
+                </div>  
+     
+                <div class="container-cuerpo-foot">
+                    <button  type="submit" class="button-agregar"  mat-dialog-close="true" [disabled]="!formulario.valid" mat-flat-button>
+                        <mat-icon aria-label="person" >save
+                        </mat-icon>  Registrar
+                    </button>
+    
+                    <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                        <mat-icon aria-label="person">highlight_off
+                        </mat-icon>  Cancelar
+                    </button>               
+                </div> 
+    
+    
+            </form>
+    
+        </div>
+     
+    </div>
+    </body>
+     

@@ -1,0 +1,335 @@
+/* ------------------------- */
+/* ESTILOS GENERALES */
+/* ------------------------- */
+
+body {
+  font-family: Corbel, Arial, sans-serif;
+  font-size: 15px;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+}
+
+.container {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+}
+
+.grid-container {
+  border-radius: 4px;
+  width: 100%;
+  height: auto;
+  border: 1px solid #337ab7;
+  min-width: 350px;
+  min-height: 1200px;
+  height: 850px;
+}
+
+.title {
+  background-color: #3f51b5;
+  color: #ffffff;
+  padding: 8px 10px;
+  text-align: center;
+  border-radius: 4px 4px 0 0;
+  border-bottom: 1px solid #337ab7;
+  font-weight: bold;
+}
+
+.container-cuerpo {
+  width: 100%;
+  height: 100%;
+  padding: 20px 0;
+  display: -ms-grid;
+  grid-template:
+    "fila1" 115px
+    "fila2" 500px
+    "foot" 55px /
+    99%;
+}
+
+/* ------------------------- */
+/* FILA 1 */
+/* ------------------------- */
+
+.container-cuerpo-fila1 {
+  display: grid;
+  grid-template:
+    "col1 col2 col3 col4 col5 col6 col7 col8" auto /
+    140px 190px 130px 200px 352px 150px 150px 462px auto;
+}
+
+.fila1-buscar,
+.fila1-agregar,
+.fila1-confirmar {
+  height: 40px;
+  max-width: 280px;
+  margin: auto;
+  margin-top: 3px;
+  color: #ffffff;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.fila1-fecha {
+  width: 150;
+  height: 35px;
+  font-size: 16px;
+
+  @media screen and (max-width: 450px) { // iPad Mini
+    width: 100px;
+    height: 20px;
+    font-size: 5px;
+  }
+}
+
+.container-cuerpo-fila1 {
+  display: flex;
+  //justify-content: flex-start; /* Asegura que los elementos se alineen a la izquierda */
+  color: #141111;
+
+}
+
+.fila1-buscar {
+  background-color: #3f51b5;
+  width: 100px;
+}
+
+.fila1-agregar {
+  background-color: #3f51b5;
+  width: 100px;
+}
+
+.fila1-confirmar {
+  background-color: #47b53f;
+  width: 180px;
+  //justify-content: flex-end;
+}
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.table-container {
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.mat-table {
+  width: 100%;
+}
+
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+}
+
+.mat-cell img {
+  border-radius: 5px;
+  max-width: 100%;
+  height: auto;
+}
+
+.mat-column-Check_Seleccionado
+{
+
+  //font-size: 13px;
+  font-family: arial;
+  flex:100px;
+  //padding: 5px;
+
+  text-align: center; /* Centrar el contenido */
+  font-family: Arial, sans-serif;
+}
+
+.mat-column-Check_Seleccionado,
+.mat-column-Nom_Cliente,
+.mat-column-Cod_Partida {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.mat-column-Ancho_Antes_Lav_cm,
+.mat-column-Largo_Antes_Lav_cm,
+.mat-column-Ancho_Despues_Lav_cm,
+.mat-column-Largo_Despues_Lav_cm,
+.mat-column-Sesgadura{
+  background-color: rgb(239, 241, 201);
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.mat-column-Cod_Partida
+{
+  text-align: center;
+  //font-size: 13px;
+  font-family: arial;
+  flex:5px;
+  //padding: 5px;
+}
+.mat-column-Nom_Cliente
+{
+  text-align: center;
+  //font-size: 13px;
+  font-family: arial;
+  flex:50px;
+  //padding: 5px;
+}
+
+.mat-column-Check_Seleccionado
+{
+  text-align: center;
+  font-size: 13px;
+  font-family: arial;
+  flex:40px;
+  padding: 20px;
+}
+
+.mat-column-Des_Tela
+{
+  text-align: left;
+  font-size: 13px;
+  font-family: arial;
+  flex:100px;
+  padding: 20px;
+}
+
+.mat-column-Des_Color
+{
+  text-align: left;
+  font-size: 13px;
+  font-family: arial;
+  flex:20px;
+  padding: 20px;
+}
+
+.mat-column-Ancho_Antes_Lav_cm
+{
+  text-align: left;
+  font-size: 13px;
+  font-family: arial;
+  flex:5px;
+  padding: 5px;
+}
+
+.mat-column-Largo_Antes_Lav_cm
+{
+  text-align: left;
+  font-size: 13px;
+  font-family: arial;
+  flex:1px;
+  padding: 5px;
+}
+
+.mat-column-Ancho_Despues_Lav_cm
+{
+  text-align: left;
+  font-size: 13px;
+  font-family: arial;
+  flex:1px;
+  padding: 5px;
+}
+
+
+.mat-column-Largo_Despues_Lav_cm
+{
+  text-align: left;
+  font-size: 13px;
+  font-family: arial;
+  flex:1px;
+  padding: 5px;
+}
+
+.mat-column-Sesgadura
+{
+  text-align: left;
+  font-size: 13px;
+  font-family: arial;
+  flex:5px;
+  padding: 5px;
+}
+.mat-column-Encogimiento_Ancho
+{
+  text-align: left;
+  font-size: 13px;
+  font-family: arial;
+  flex:3px;
+  padding: 5px;
+}
+.mat-column-Encogimiento_Largo
+{
+  text-align: left;
+  font-size: 13px;
+  font-family: arial;
+  flex:3px;
+  padding: 5px;
+}
+
+/* ------------------------- */
+/* RESPONSIVIDAD */
+/* ------------------------- */
+
+@media screen and (max-width: 1513px) {
+  .grid-container {
+    height: 710px;
+  }
+
+  .container-cuerpo {
+    grid-template:
+      "fila1" 100px
+      "fila2" 535px
+      "foot" 55px /
+      99%;
+  }
+}
+
+@media screen and (max-width: 1069px) {
+  .grid-container {
+    height: 730px;
+  }
+
+  .container-cuerpo {
+    grid-template:
+      "fila1" 170px
+      "fila2" 330px
+      "foot" 55px /
+      99%;
+  }
+
+  .container-cuerpo-fila1 {
+    display: grid;
+    grid-template:
+      "col1 col2 col3 col4 col5 col6 col7 col8" auto /
+      90px 120px 90px 120px 100px 150px 150px 462px auto;
+  }
+
+}
+
+@media screen and (max-width: 683px) {
+  .grid-container {
+    height: 680px;
+  }
+
+  .container-cuerpo {
+    grid-template:
+      "fila1" 220px
+      "fila2" 600px
+      "foot" 55px /
+      99%;
+  }
+
+  .container-cuerpo-fila1 {
+    display: grid;
+    grid-template:
+      "col1 col2 col3 col4 col5 col6 col7 col8" auto /
+      140px 190px 130px 200px 352px 150px 150px 462px auto;
+  }
+
+}

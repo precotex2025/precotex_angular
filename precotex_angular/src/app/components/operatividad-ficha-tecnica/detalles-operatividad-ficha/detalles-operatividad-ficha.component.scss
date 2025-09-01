@@ -1,0 +1,403 @@
+.container-fluid {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+  }
+  
+  .grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0;
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 640px;
+    //position: absolute;
+  }
+  
+  .title {
+    background-color: #3f51b5;
+    color: white;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+  }
+  
+  .container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+  }
+  
+  .container-cuerpo {
+    display: grid;
+  
+    grid-template:
+        "fila1" 138px
+        "fila2" 400px/99%;
+  }
+  
+  .container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+  }
+  .container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+  }
+  .container-cuerpo-foot {
+    grid-area: foot;
+  
+  }
+  
+  // .fila1-guia,
+  // .fila2-destino {
+  //     width: 100%;
+  // }
+  
+  
+  mat-form-field {
+    width: 100%;
+    padding: 0px 20px 10px 20px;
+  
+  }
+  
+  //fila 1
+  .container-cuerpo-fila1 {
+    display: flex;
+  
+  }
+  
+  
+  
+  .fila1-fecha {
+    grid-area: col1;
+    max-width: 15rem;
+  
+  
+  }
+  
+  .fila1-select {
+    grid-area: col2;
+    max-width: 10rem;
+  
+  }
+  
+  
+  .fila1-buscar {
+    width: 100%;
+    grid-area: col3;
+    height: 40px;
+    max-width: 8rem;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+  
+  }
+  
+  .fila1-excel{
+  
+    width: 100%;
+    grid-area: col4;
+    height: 40px;
+    max-width: 8.8rem;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #0e740e;
+    color: #ffffff;
+  }
+  
+  .fila1-observaciones{
+  
+    width: 100%;
+    grid-area: col5;
+    height: 40px;
+    max-width: 8.8rem;
+    margin: auto;
+    margin-top: 3px;
+    background-color: rgb(226, 24, 24);
+    color: #ffffff;
+  }
+  
+  .fila1-avance{
+    width: 100%;
+    grid-area: col6;
+    height: 40px;
+    max-width: 8rem;
+    margin: auto;
+    margin-top: 3px;
+    background-color:#337ab7;
+    color: #ffffff;
+  }
+  
+  .fila1-ratio{
+    width: 100%;
+    grid-area: col7;
+    height: 40px;
+    max-width: 9rem;
+    margin: auto;
+    margin-left: 5px;
+    margin-top: 3px;
+    background-color:#c4b923;
+    color: #ffffff;
+  }
+  
+  
+  
+  
+  //fila foot
+  .container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+  
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+  }
+  
+  
+  .container-cuerpo-foot .fila1-agregar,
+  .button-modificar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+  }
+  
+  
+  
+  .button-modificar {
+    grid-area: fcol2;
+    background-color: #8f2121;
+    color: #ffffff;
+  }
+  
+  .mat-column-nAuditoria,
+  .mat-column-Fecha,
+  .mat-column-Auditor,
+  .mat-column-Cliente,
+  .mat-column-Estilo,
+  .mat-column-Color,
+  .mat-column-Cant,
+  .mat-column-Total,
+  .mat-column-Especiales,
+  .mat-column-modificar,
+  .mat-column-Codigo,
+  .mat-column-Descripcion,
+  .mat-column-Tipo_de_Prenda,
+  .mat-column-comentario1,
+  .mat-column-Grupo,
+  .mat-column-Est_Cli,
+  .mat-column-Grado_Dificultad,
+  .mat-column-detalle 
+  .mat-column-Version,
+  .mat-column-Descr,
+  .mat-column-Eficiencia_Costeo,
+  .mat-column-Tipo_Version,
+  .mat-column-Proto,
+  .mat-column-Des_Tela_Cliente,
+  .mat-column-Num_Id_Consumo,
+  .mat-column-FLG_STATUS  
+  {
+  text-align: center;
+  font-size: 13px;
+    font-family: arial;
+    padding: 10px;
+  }
+  
+  .mitad{
+    width: 48%;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .mat-column-nAuditoria {width: 30px !important;text-align: center}
+  .mat-column-Fecha {width: 30px !important;text-align: center}
+  .mat-column-Auditor {width: 30px !important;text-align: center}
+  .mat-column-Cliente {width: 50px !important;text-align: center}
+  .mat-column-Estilo {width: 100px !important;text-align: center}
+  .mat-column-Color {width: 80px !important;text-align: center}
+  .mat-column-Total {width: 80px !important;text-align: center}
+  .mat-column-Especiales {width: 80px !important;text-align: center}
+  .mat-column-Cant {width: 80px !important;text-align: center;}
+  .mat-column-modificar {width: 30px !important;text-align: center}
+  .mat-column-detalle {width: 30px !important;text-align: center}
+  .mat-header-cell {text-align: center; }
+  
+  /* ------------------------- */
+  /* TABLA */
+  /* ------------------------- */
+  .mat-header-cell {
+    text-align: center;
+    padding: 15px;
+    width: 10px;
+  
+  }
+  th.mat-header-cell:last-of-type{
+    padding-right: 12px;
+  }
+  
+  .mat-elevation-z8 {
+    width: 100%;
+  font-family: arial;
+  font-size: 10px;
+  
+  }
+  th.mat-cell{
+    padding:15px;
+    text-align: center;
+  }
+  td.mat-cell{
+    padding:15px;
+    text-align: center;
+  }
+  tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+  }
+  
+  tr:active {
+    background: #efefef;
+  }
+  
+  
+  @media screen and (max-width: 1200px){
+
+  }
+  
+  
+  @media screen and (max-width: 699px){
+    .grid-container{
+        height: 710px;
+    }
+    .container-cuerpo {
+        display: grid;
+        height: 95%;
+        grid-template:
+        "fila1" 215px
+        "fila2" 450px/99%;
+    }
+
+    .fila1-fecha {
+        grid-area: col1;
+        max-width: 97%;
+    }
+  
+    .fila1-select {
+      grid-area: col2;
+      max-width: 97%;
+    }
+  
+  
+    .fila1-buscar {
+        max-width: 97%;
+        grid-area: col3;
+  
+    }
+    .button-cancelar {
+      display: inline-block;
+      margin-left: 15px;
+      width: 16%;
+      background-color: #d32f2f;
+      color: #ffffff;
+      //margin-right: 1rem;
+    }
+    .mitad{
+      width: 48%;
+      font-size: 10px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+  
+    .fila1-excel{
+      max-width: 97%;
+        grid-area: col4;
+  
+    }
+  
+    .fila1-observaciones{
+      max-width: 98%;
+      grid-area: col5;
+  
+  }
+  
+  
+  }
+  
+  
+  @media screen and (max-width: 420px){
+    .grid-container{
+        height: 710px;
+    }
+    .container-cuerpo {
+        display: grid;
+        height: 95%;
+        grid-template:
+        "fila1" 215px
+        "fila2" 450px/99%;
+    }
+
+    .fila1-fecha {
+        grid-area: col1;
+        max-width: 83%;
+    }
+  
+    .fila1-select {
+      grid-area: col2;
+      max-width: 100%;
+      margin-left: -26px;
+    }
+  
+  
+    .fila1-buscar {
+        max-width: 85%;
+        grid-area: col3;
+  
+    }
+  
+  
+    .fila1-excel{
+      max-width: 81%;
+        grid-area: col4;
+      margin-right: 40px;
+    }
+  
+    .fila1-observaciones{
+      max-width: 90%;
+      margin-right: 40px;
+      grid-area: col5;
+  
+  }
+  .fila1-avance{
+    max-width: 90%;
+    margin-right: 40px;
+    grid-area: col6;
+  }
+  
+  .fila1-ratio{
+    max-width: 90%;
+    margin-right: 40px;
+    grid-area: col7;
+  }
+  
+  
+  }
+  

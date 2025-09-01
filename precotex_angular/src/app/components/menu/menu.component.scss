@@ -1,0 +1,137 @@
+
+
+ 
+example-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0; 
+  
+}
+
+.example-sidenav-container {
+  flex: 1;
+  
+}
+
+.example-spacer1 {
+  flex: none;
+}
+.example-spacer2 {
+  flex: 1 1 auto;
+}
+
+.user{
+  font-size: 14px;
+  font-weight: 500;
+}
+
+mat-toolbar{
+  background: white;
+  position: sticky;
+  position: -webkit-sticky; /* For macOS/iOS Safari */
+  top: 0; /* Sets the sticky toolbar to be on top */
+  z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
+  //border-bottom: 1px solid rgb(238, 238, 238);
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
+  
+}
+
+.logo{
+  width: 150px;
+  margin-left: 20px;
+}
+
+
+mat-sidenav{
+  width: 350px;
+}
+
+ .item{
+  
+  margin: 10px 0;
+}
+
+
+.sub-item{
+  width: 300px;
+}
+
+mat-sidenav-container{
+  background: white;
+  height: 90vh;
+}
+
+
+@media only screen and (max-width: 500px) {
+ 
+  
+  /*mat-toolbar{
+    background: red;
+    justify-content: space-between;
+    
+  }*/
+
+  .mat-toolbar-row, .mat-toolbar-single-row{
+    padding: 0;
+  }
+
+
+.example-spacer1 {
+  flex: 1 1 auto;
+}
+.example-spacer2 {
+  flex: 1 1 auto;
+}
+
+}
+
+
+.link, .dropdown-btn {
+  padding: 16px 16px 16px 16px;
+  text-decoration: none;
+  font-size: 15px;
+  color: #000000de;
+  display: block;
+  border: solid 1px #0000001f;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+}
+
+/* On mouse-over */
+.sidenav a:hover, .dropdown-btn:hover {
+  color: #0000001f;
+}
+
+
+/* Add an active class to the active dropdown button */
+.active {
+  background-color: #0000001f;
+  color: #000000de;
+}
+
+/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+.dropdown-container {
+  display: none;
+  background-color: #FFF;
+  padding-left: 4px;
+}
+
+/* Optional: Style the caret down icon */
+.fa-caret-down {
+  float: right;
+  padding-right: 8px;
+}
+
+/* Some media queries for responsiveness */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+

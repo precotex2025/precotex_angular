@@ -1,0 +1,59 @@
+<mat-card>
+    <mat-card-header style="display: flex; justify-content: space-around;">
+        <strong>Detalle del Rol</strong>
+        <span aria-label="Close" class="cerrar" (click)="closeModal()" aria-hidden="true">&times;</span>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="content">
+            <div class="caja1">
+                <ng-select  [items]="dataRoles" bindLabel="Des_Opcion"
+                    bindValue="Cod_Opcion" [multiple]="false" [searchable]="true"
+                    placeholder="Elige la Opcion" [(ngModel)]="opcion">
+                </ng-select>
+            </div>
+            <div class="caja2">
+                <button mat-flat-button color="primary" (click)="agregarOpcion()" ><mat-icon>save</mat-icon> Agregar Opción</button>
+            </div>  
+
+        </div>
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="Cod_Rol">
+                <th mat-header-cell *matHeaderCellDef> Cod. Rol </th>
+                <td mat-cell *matCellDef="let element"> {{element.Cod_Rol}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="Cod_Opcion">
+                <th mat-header-cell *matHeaderCellDef> Cod. Opcion </th>
+                <td mat-cell *matCellDef="let element"> {{element.Cod_Opcion}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="Des_Opcion">
+                <th mat-header-cell *matHeaderCellDef> Descripción Opción </th>
+                <td mat-cell *matCellDef="let element"> {{element.Des_Opcion}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                <td class="mat-header-cell" mat-cell *matCellDef="let data_det">
+
+
+                    <a mat-icon-button (click)="EliminarRegistro(data_det)">
+                        <mat-icon color="warn">delete</mat-icon>
+                    </a>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+        </table>
+        <mat-paginator class="paginador" #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Selecciona página">
+        </mat-paginator>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,82 @@
+
+
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container"> 
+  
+        <div class="title">Mantenimiento De Usuarios Rol</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+
+                    <mat-form-field class="fila1-nombres" appearance="fill">
+                        <mat-label>Escribe el Rol a Buscar </mat-label>
+                        <input matInput type="text" (keyup)="applyFilter($event)" placeholder="Buscar Rol" autocomplete="off" formControlName="Nombres"/>
+                    </mat-form-field>    
+            
+                <button type="button" class="fila1-buscar" mat-flat-button routerLink="/rolesUsuarioWeb"
+                    >                    
+                    <mat-icon aria-label="person">backspace</mat-icon> Regresar
+                </button>
+
+                <button type="button" class="fila1-roles" mat-flat-button (click)="dialogCrearNuevoRol()"
+                    >                    
+                    <mat-icon aria-label="person">supervised_user_circle</mat-icon>Crear Nuevo Rol de Usuario
+                </button>
+ 
+
+            </div>   
+ 
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                    <ng-container matColumnDef="Des_Rol">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Descripción Rol</th>
+                        <td class="mat-header-cell" mat-cell  *matCellDef="let data_det"> {{data_det.Des_Rol}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Nom_Usuario">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nombre de Usuario</th>
+                        <td class="mat-header-cell" mat-cell  *matCellDef="let data_det"> {{data_det.Nom_Usuario}}  </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det">
+
+                            <!-- <a mat-icon-button style="margin-right:5px;"
+                                (click)="openDialogModificar(data_det)"  title="Detalle Rol">
+                                <mat-icon color="success">delete</mat-icon>
+                            </a> -->
+
+                            <a mat-icon-button
+                                (click)="EliminarRegistro(data_det)">
+                                <mat-icon color="warn">delete_outline</mat-icon>
+                            </a> 
+                        </td>
+                    </ng-container> 
+
+                
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+
+                </table>
+
+                <mat-paginator  class="paginador" #paginator [pageSizeOptions]="[10, 20, 40]" showFirstLastButtons aria-label="Seleccione página">
+                </mat-paginator>
+
+            </div>
+
+            
+
+
+            <div class="container-cuerpo-foot">  
+            </div>
+        </form>
+
+    </div>
+ 
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>       

@@ -1,0 +1,438 @@
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0; 
+    min-width: 350px;
+}
+  
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 500px;
+    min-height: 670px;
+    height: 670px;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 95%;
+    margin: 0;
+    padding: 10px 10px;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 85px
+        "fila2" 450px
+        "foot" 55px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+//fila 1 
+.container-cuerpo-fila1 {
+    display: grid;
+    grid-template:
+    "col1 col2 col3 col4 col5" 70px/
+    200px 200px 200px 300px 200px
+}
+
+    .fila1-Partida {
+        grid-area: col1;
+        width: 200px;
+    }
+    .fila1-Kgacabado {
+        grid-area: col2;
+        
+    }
+    .fila1-Kgtenido {
+        grid-area: col3;
+        
+    }
+    .fila1-Motivo {
+        grid-area: col4;
+        width: 300px;
+    }
+    
+    .fila1-button-agregar-motivo{
+        width: 100%;
+        grid-area: col5;
+        height: 40px;
+        max-width: 280px;
+        margin: auto;
+        margin-top: 3px;
+        background-color: #3f51b5;
+        color: #ffffff;
+        width: 180px;
+        
+    }
+
+
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot .button-agregar,.button-cancelar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 200px;
+    min-width: 120px;
+}
+
+
+
+.button-agregar {
+    grid-area: fcol1;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+.button-cancelar {
+    grid-area: fcol2;
+    background-color: #d32f2f;
+    color: #ffffff;
+}
+
+.container-cuerpo-fila2{
+    width: 100%;
+}
+
+
+.mat-column-Tipo, 
+.mat-column-Ancho_Acab,
+.mat-column-Ancho_Reposo,
+.mat-column-Ancho_Acab_T,
+.mat-column-Gramaje_Acab,
+.mat-column-Gramaje_Reposo,
+.mat-column-Gramaje_Acab_T,
+.mat-column-Encog_Ancho,
+.mat-column-EncogA_Lavado,
+.mat-column-Encog_Ancho_T,
+.mat-column-EncogL_Lavado,
+.mat-column-Encog_largo_T,
+.mat-column-Revirado, 
+.mat-column-Revirado_Lavado,
+.mat-column-Revirado_T,
+.mat-column-Encogimiento_Tramo_Izquierdo,
+.mat-column-Encogimiento_Tramo_Centro,
+.mat-column-Gramaje_Lavado,
+.mat-column-Flg_Status_Apro,
+.mat-column-Fec_Registro,
+.mat-column-Estado
+
+.mat-column-Kgs_Req_Acabado,
+.mat-column-Kgs_Tenidos_1ras
+
+//.mat-column-eliminar 
+{
+	text-align: center;
+	font-size: 13px;
+    font-family: arial;
+    padding: 15px;
+   
+}
+
+.mat-column-Tela,
+.mat-column-Des_Comb,
+.mat-column-Nom_Auditor,
+.mat-column-Observaciones,
+.mat-column-Cliente,
+.mat-column-OP,
+.mat-column-Estilo,
+.mat-column-Tela2,
+.mat-column-Comb{
+    text-align: left;
+	font-size: 13px;
+    font-family: arial;
+    padding: 15px;
+}
+//tabla1
+.mat-column-Cliente{
+    width: 130px;
+    min-width: 130px;
+}
+.mat-column-OP{
+    width: 130px;
+    min-width: 130px;
+}
+.mat-column-Estilo{
+    width: 130px;
+    min-width: 130px;
+}
+.mat-column-Tela2{
+    width: 830px;
+    min-width: 830px;
+}
+.mat-column-Comb{
+    width: 200px;
+    min-width: 200px;
+}
+.mat-column-Kgs_Req_Acabado{
+    width: 130px;
+    min-width: 130px;
+}
+.mat-column-Kgs_Tenidos_1ras{
+    width: 130px;
+    min-width: 130px;
+}
+.mat-column-Estado{
+    width: 130px;
+    //min-width: 130px;
+}
+
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+    padding-right: 0px;
+}
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+    padding-right: 0;
+}
+th.mat-header-cell:last-of-type{
+    padding-right: 0;
+}
+//tabla2
+
+
+.mat-column-Tela{
+    width: 300px;
+    min-width: 300px;
+}
+
+.mat-column-Des_Comb{
+    width: 150px;
+    min-width: 150px;
+}
+
+.mat-column-Nom_Auditor{
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+}
+
+.mat-column-Fec_Registro{
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+}
+.mat-column-Observaciones{
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+}
+
+
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+ 
+}
+.paginador{
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+
+@media screen and (max-width: 1160px){
+    .grid-container{
+        min-width: 0px;
+        min-height: 780px;
+        height: 780px;
+    }
+
+    .container-cuerpo {
+        display: grid;
+        grid-template:
+        "fila1" 220px
+        "fila2" 440px
+        "foot" 55px / 
+        99%;
+    }
+
+
+
+    .container-cuerpo-fila1 {
+        display: grid;
+        grid-template:
+        "col1 col5" 70px
+        "col2 col3" 70px
+        "col4 col4" 70px/
+        150px 150px;  
+    }
+    
+        .fila1-Partida {
+            grid-area: col1;
+            width: 150px;
+        }
+        .fila1-Kgacabado {
+            grid-area: col2;
+            
+        }
+        .fila1-Kgtenido {
+            grid-area: col3;
+            
+        } 
+        .fila1-Motivo {
+            grid-area: col4;
+            width: 300px;
+        }
+
+        .fila1-button-agregar-motivo{
+            grid-area: col5;
+            width: 130px;
+        }
+ 
+
+  }
+
+  ::ng-deep mat-dialog-container{
+    padding: 5px;
+    height: auto;
+}
+
+    ::ng-deep .my-class .mat-dialog-container{
+    padding: 5px;
+    height: auto;
+    }
+
+    ::ng-deep .mat-input-element:disabled{
+        color: #222;
+    }
+    ::ng-deep .mat-select-value-text{
+        color: #222,
+    }
+  /*@media screen and (max-width: 688px){
+   .grid-container{
+       height: 510px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila1" 390px
+        "fila2" 450px
+        "foot" 55px /
+        99%; 
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        grid-template:
+        "col1 auto" 70px
+        "col2 col3" 70px
+        "col4 auto" 70px/
+        200px 200px;  
+    }
+
+        .fila1-Partida {
+            grid-area: col1;
+            
+        }
+        .fila1-Kgacabado {
+            grid-area: col2;
+            
+        }
+        .fila1-Kgtenido {
+            grid-area: col3;
+            
+        }
+        .fila1-Motivo {
+            grid-area: col4;
+            
+        }
+     
+    .container-cuerpo-foot {
+        grid-template:
+            "fcol1 fcol2" auto /
+            140px 140px;
+    }
+
+    
+    .container-cuerpo-foot .button-agregar,.button-cancelar {
+       
+        max-width: 300px;
+        min-width: 120px;
+    }
+    
+    .button-agregar {
+      width: 50px;
+    }
+
+    .button-cancelar {
+        width: 50px;
+    }
+    
+  }*/

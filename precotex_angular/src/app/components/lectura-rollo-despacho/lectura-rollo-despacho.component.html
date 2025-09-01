@@ -1,0 +1,178 @@
+<div class="container">
+  <div class="grid-container">
+    <div class="title"><strong> LECTURA DE ROLLOS PARA DESPACHO  </strong></div>
+    <div class="body">
+      <form
+        class="container-cuerpo"
+        class="container-cuerpo"
+        [formGroup]="formulario"
+        #formDirective="ngForm"
+      >
+        <div class="container-cuerpo-fila1">
+          <mat-form-field appearance="fill" class="fila1-xAbr_Cliente">
+            <mat-label>ABR. CLIENTE</mat-label>
+            <input matInput type="text" formControlName="iAbr_Cliente"  (keyup.enter)="BuscarCliente()"  (change)="BuscarCliente()" autofocus  #myinputAbr_Cliente />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-xNom_Cliente">
+            <mat-label>CLIENTE</mat-label>
+            <input matInput type="text" formControlName="iNom_Cliente" (keyup.enter)="BuscarCliente()" (change)="BuscarCliente()" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-xEstado_Lectura">
+            
+            <mat-label>ESTADO LECTURA</mat-label>
+            <!-- <mat-icon class="fila1-xIcono"  >style</mat-icon> -->
+            <!-- <div class="sub-container-cuerpo2">
+              <mat-card class="example-card">
+                  <mat-card-title>Estado</mat-card-title> -->
+
+                  <mat-card-content>
+                      <img [src] ="ImagePath" 
+                      style="width: 200px;height: 80px; object-fit: contain;"> 
+                  </mat-card-content>                  
+              <!-- </mat-card>
+                 style="width: 200px;height: 80px; object-fit: contain;"> 
+          </div> -->
+
+            <input matInput type="text" formControlName="iEstado_Lectura" readonly /> 
+          </mat-form-field>
+
+          <button
+          class="button-Cliente"
+          mat-flat-button
+          type="button"
+          matTooltip="CLIENTE"
+          matTooltipPosition="above"
+          [disabled]="formulario.invalid"
+          (click)="BuscarCliente()"
+        >
+          <mat-icon aria-label="person">accessibility</mat-icon> CLIENTES
+        </button>
+
+          <button
+            class="button-Limpiar"
+            mat-flat-button
+            type="button"
+            matTooltip="LIMPIAR"
+            matTooltipPosition="above"
+            [disabled]="formulario.invalid"
+            (click)="Limpiar()"
+          >
+            <mat-icon aria-label="person">delete</mat-icon> LIMPIAR
+          </button>
+
+          <button
+            class="button-CargarPrePack"
+            mat-flat-button
+            type="button"
+            matTooltip="LIMPIAR"
+            matTooltipPosition="above"
+            [disabled]="formulario.invalid"
+            (click)="MostrarPrePacking()"
+          >
+            <mat-icon aria-label="person">update</mat-icon> PRE-PACKING
+          </button>
+
+          <!-- <button
+            class="button-CambiarEstado"
+            mat-flat-button
+            type="button"
+            matTooltip="CAMBIAR ESTADO"
+            matTooltipPosition="above"
+            [disabled]="formulario.invalid"
+          >
+            <mat-icon aria-label="person">update</mat-icon> CAMBIAR ESTADO
+          </button> -->
+
+          <button
+            class="button-Salir"
+            mat-flat-button
+            type="button"
+            matTooltip="SALIR"
+            matTooltipPosition="above"
+            [disabled]="formulario.invalid"
+            (click)="Funcion_Cancelar()"
+          >
+            <mat-icon aria-label="person">exit_to_app</mat-icon> SALIR
+          </button>
+        </div>
+
+        <div class="container-cuerpo-fila2">
+
+            <mat-form-field appearance="fill" class="fila2-xPre_packingTitulo">
+                <input matInput type="text" formControlName="iPre_packingTitulo"  />
+              </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila2-xPre_packing">
+            <input matInput type="text" formControlName="iPre_packing"  readonly/>
+          </mat-form-field>
+        
+        </div>
+
+        <div class="container-cuerpo-fila3">
+
+            <mat-form-field appearance="fill" class="fila3-xCargado_Pack">
+                <mat-label>CARGADO EN PACKING N°</mat-label>
+                <input matInput type="text" formControlName="iCargado_Pack" readonly  />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-xPartida_Leida">
+                <mat-label>PARTIDA LEIDA</mat-label>
+                <input matInput type="text" formControlName="iPartida_Leida"  readonly />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-xRollo_Leido">
+                <mat-label>ROLLO LEIDO</mat-label>
+                <input matInput type="text" formControlName="ixRollo_Leido"  (input)="onToggle()"   #myinputCodRollo /> <!-- (keyup.enter)="LecturarRollo()"  -->
+              </mat-form-field>
+
+
+              
+                <button
+                class="button-Detalle"
+                mat-flat-button
+                type="button"
+                matTooltip="DETALLE"
+                matTooltipPosition="above"
+                [disabled]="formulario.invalid"
+                (click)="VerDetallePartida()"
+                >
+                <mat-icon aria-label="person">card_giftcard</mat-icon> Detalle
+                </button>
+
+
+        </div>
+
+        <div class="container-cuerpo-fila4">
+
+            <mat-form-field appearance="fill" class="fila4-xTotal">
+                <mat-label>TOTAL</mat-label>
+                <input matInput type="text" formControlName="iTotal" readonly  />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila4-xLeidos">
+                <mat-label>LEIDOS</mat-label>
+                <input matInput type="text" formControlName="iLeidos"  readonly />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila4-xFalta_Leer">
+                <mat-label>FALTA LEER</mat-label>
+                <input matInput type="text" formControlName="iFalta_Leer"  readonly />
+              </mat-form-field>
+
+
+
+        </div>
+        <!--   
+          <div class="footer">
+       
+          </div> -->
+      </form>
+    </div>
+  </div>
+</div>
+<!-- <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+      <p style="color: white; text-align: center">Cargando...</p>
+    </ngx-spinner>
+     -->

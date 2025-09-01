@@ -1,0 +1,90 @@
+<div class="container">
+    <!-- ventana nro 2 -->
+    <div class="grid-container">
+
+        <div class="title">Agregar Despacho</div>
+
+        <div class="find">
+            <form class="detalleForm" [formGroup]="form">
+                <div class="findcol1">
+                    <mat-form-field>
+                        <mat-label>Partida</mat-label>
+                        <input matInput type="text" placeholder="Añadir" (keydown.enter)="applyEnterPartida($event)" value="" autocomplete="off" 
+                            formControlName="partida">
+                    </mat-form-field>
+                </div>
+                
+                <div class="findcol2">
+                    <mat-form-field>
+                        <mat-label>Añadir</mat-label>
+                        <input matInput type="text" placeholder="Añadir" (keydown.enter)="applyEnterAdd($event)" value="" autocomplete="off" #myinputAdd
+                            formControlName="bulto_añadir">
+                    </mat-form-field>
+                </div>
+ 
+                <div class="findcol3">
+                    <button type="button" class="button_añadir" (click)="AnadirBulto()" >
+                        <mat-icon aria-label="person">assignment_turned_in
+                        </mat-icon>
+
+                    </button> 
+
+                </div>
+
+                <div class="findcol4">
+                    <mat-form-field>
+                        <mat-label>Eliminar</mat-label>
+                        <input matInput type="text" placeholder="Eliminar" (keydown.enter)="applyEnterDel($event)" value="" autocomplete="off" #myinputDel
+                            formControlName="bulto_eliminar">
+                    </mat-form-field>
+                </div>
+
+                <div class="findcol5">
+                    <button type="button" class="button_eliminar" (click)="EliminarBulto()">
+                        <mat-icon aria-label="person">delete
+                        </mat-icon>
+                    </button>
+                </div>
+
+                <div class="findcol6">
+                    <button type="button" class="button_regresar" [routerLink]="['/DespachoTelaCruda']">
+                        <mat-icon aria-label="person">reply_all
+                        </mat-icon>
+                    </button>
+                </div>
+
+            </form> 
+        </div>
+
+        <div class="main">
+            <table mat-table [dataSource]="data_det" class="tabla_cabecera">
+                <ng-container matColumnDef="secuencia">
+                    <th mat-header-cell *matHeaderCellDef> Id. </th>
+                    <td mat-cell *matCellDef="let data_det"> {{data_det.secuencia}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="tela">
+                    <th mat-header-cell *matHeaderCellDef> Tela </th>
+                    <td mat-cell *matCellDef="let data_det"> {{data_det.tela }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="peso">
+                    <th mat-header-cell *matHeaderCellDef> Cant. </th>
+                    <td mat-cell *matCellDef="let data_det"> {{data_det.peso}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="bultos">
+                    <th mat-header-cell *matHeaderCellDef> Bultos </th>
+                    <td mat-cell *matCellDef="let data_det"> {{data_det.bultos}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+            
+            </table>
+
+            <!-- <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator> -->
+
+        </div>
+    </div>
+</div>

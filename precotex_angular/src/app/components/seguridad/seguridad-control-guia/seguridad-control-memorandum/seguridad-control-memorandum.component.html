@@ -1,0 +1,87 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title">.:: {{ des_planta }} ::. - Memorandum</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+                <mat-form-field class="fila1-fecha">
+                    <mat-label>Fec. Registro</mat-label>
+                    <input matInput [matDatepicker]="fec_registro" autocomplete="off" formControlName="fec_registro">
+                    <mat-datepicker-toggle matSuffix [for]="fec_registro"></mat-datepicker-toggle>
+                    <mat-datepicker #fec_registro></mat-datepicker>
+                </mat-form-field>
+
+                <button type="button" class="fila1-buscar" mat-flat-button color="primary" (click)="ListarMemorandum()">
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+            </div>
+
+            <div class="container-cuerpo-fila2">
+                <table mat-table [dataSource]="data_det" class="mat-elevation-z8">
+                    <ng-container matColumnDef="hora">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Hora</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.hora}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="de">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">De</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.de}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="para">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Para</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.para}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="nom_autorizado">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Autorizado</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.nom_autorizado}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="asunto">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Asunto</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.asunto}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="modificar">
+                        <th mat-header-cell *matHeaderCellDef>Modificar</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <a mat-icon-button *ngIf="data_det.de.length>0"
+                                (click)="Modificar(data_det.num_memorandum)"
+                                [routerLink]="['/SeguridadControlMemorandumDetalle']">
+                                <mat-icon color="primary">assignment</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="eliminar">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Eliminar</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <a mat-icon-button *ngIf="data_det.de.length>0" (click)="Eliminar(data_det.num_memorandum)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let fila; columns: displayedColumns_cab;" class="example-element-row"></tr>
+                </table>
+            </div>
+            <div class="container-cuerpo-foot">
+                <button type="button" class="button-registrar" mat-flat-button color="primary"
+                    [routerLink]="['/SeguridadControlMemorandumDetalle']" (click)="Adicionar()">
+                    <mat-icon aria-label="person">check_circle_outline
+                    </mat-icon>Registrar
+                </button>
+                <button type="button" class="button-cancelar" mat-flat-button color="primary"
+                    [routerLink]="['/SeguridadControlGuiaAccion']">
+                    <mat-icon aria-label="person">reply_all
+                    </mat-icon>Regresar
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>

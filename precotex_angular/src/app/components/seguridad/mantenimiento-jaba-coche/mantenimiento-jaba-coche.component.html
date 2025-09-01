@@ -1,0 +1,138 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title">Mantenimiento Jabas - Coches</div>
+
+        <form class="container-cuerpo">
+            <div class="container-cuerpo-fila1">
+
+                <mat-form-field class="fila1-fecha" appearance="fill">
+                    <mat-label>Buscar</mat-label>
+                    <input matInput type="text" placeholder="Ingrese" autocomplete="off" (keyup)="applyFilter($event)">
+                </mat-form-field>
+
+                <!-- <button type="button" class="fila1-buscar" mat-flat-button >
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button> -->
+
+                <button type="button" class="fila1-agregar" mat-flat-button (click)="openDialogTipos()">
+                    <mat-icon aria-label="person">add</mat-icon>Agregar
+                </button>
+                <button type="button" class="fila1-excel" mat-flat-button
+                (click)="ExportarJabas()">
+                <mat-icon aria-label="create_new_folder">create_new_folder
+                </mat-icon>  Reporte Excel
+            </button>
+            </div>
+
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+
+
+                <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+
+                    <ng-container matColumnDef="Codigo">
+                        <th mat-header-cell *matHeaderCellDef> Código </th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Codigo}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Codigo_Barra">
+                        <th mat-header-cell *matHeaderCellDef> Cód. Barra </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Codigo_Barra }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="Ubicacion">
+                        <th mat-header-cell *matHeaderCellDef> Ubicación </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Ubicacion }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="OK">
+                        <th mat-header-cell *matHeaderCellDef> OK </th>
+                        <td mat-cell *matCellDef="let data_det" style="font-weight: bold;"> {{ data_det['OK'] }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="RL">
+                        <th mat-header-cell *matHeaderCellDef> RL </th>
+                        <td mat-cell *matCellDef="let data_det" style="font-weight: bold;"> {{ data_det['RL'] }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="2RL">
+                        <th mat-header-cell *matHeaderCellDef> 2RL </th>
+                        <td mat-cell *matCellDef="let data_det" style="font-weight: bold;"> {{ data_det['2RL'] }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="RT">
+                        <th mat-header-cell *matHeaderCellDef> RT </th>
+                        <td mat-cell *matCellDef="let data_det" style="font-weight: bold;"> {{ data_det['RT'] }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="2RT">
+                        <th mat-header-cell *matHeaderCellDef> 2RT </th>
+                        <td mat-cell *matCellDef="let data_det" style="font-weight: bold;"> {{ data_det['2RT'] }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="G">
+                        <th mat-header-cell *matHeaderCellDef> G </th>
+                        <td mat-cell *matCellDef="let data_det" style="font-weight: bold;"> {{ data_det['G'] }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="OUT">
+                        <th mat-header-cell *matHeaderCellDef> OUT </th>
+                        <td mat-cell *matCellDef="let data_det" style="font-weight: bold;"> {{ data_det['OUT'] }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="RO">
+                        <th mat-header-cell *matHeaderCellDef> RO </th>
+                        <td mat-cell *matCellDef="let data_det" style="font-weight: bold;"> {{ data_det['RO'] }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="Fecha_Compra">
+                        <th mat-header-cell *matHeaderCellDef> Fec. Compra </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Fecha_Compra }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="Observacion">
+                        <th mat-header-cell *matHeaderCellDef> Observacion </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Observacion }}</td>
+
+                    </ng-container> 
+                    <ng-container matColumnDef="Nro_Hoja">
+                        <th mat-header-cell *matHeaderCellDef> N° Hoja </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Nro_Hoja }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="Tipo">
+                        <th mat-header-cell *matHeaderCellDef> Tipo </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Tipo }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="Cod_Usuario">
+                        <th mat-header-cell *matHeaderCellDef> Cód. Usuario </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Cod_Usuario }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="Fecha_Registro">
+                        <th mat-header-cell *matHeaderCellDef> Fec. Registro </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Fecha_Registro }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let data_det">
+
+                            <a mat-icon-button style="margin-right:5px;" (click)="OpenDialogConfirmacion(data_det)">
+                                <mat-icon color="success">edit</mat-icon>
+                            </a>
+
+                            <!-- <a mat-icon-button color="warn" style="margin-right:5px;"
+                                (click)="OpenDeleteConfirmacion(data_det)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a> -->
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                </table>
+                <mat-paginator #MatPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </div>
+
+        </form>
+
+    </div>
+
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

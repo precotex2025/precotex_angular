@@ -1,0 +1,317 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+  
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 640px;
+    //position: absolute;  
+}
+   
+.title {
+    background-color: #337ab7;
+    color: black;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+ 
+    grid-template:
+        "fila1" 115px
+        "fila2" 400px
+        "foot" 55px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.container-cuerpo-foot {
+    grid-area: foot; 
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+//fila 1 
+.container-cuerpo-fila1 {
+    display: grid;
+
+    grid-template:
+        "col1 col2 col3 " auto /
+        180px 500px auto;
+}
+
+
+.fila1-dni {
+    grid-area: col1;
+     
+}
+.fila1-nombres {
+    grid-area: col2;
+    
+}
+.fila1-buscar {
+    width: 100%;
+    grid-area: col3;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    
+}
+
+
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot .button-agregar,
+.button-cancelar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+
+.button-agregar {
+    grid-area: fcol1;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+/*.button-cancelar {
+    grid-area: fcol2;
+    background-color: #d32f2f;
+    color: #ffffff;
+}*/
+
+.mat-column-Cod_Vehiculo,
+.mat-column-Num_Placa, 
+.mat-column-Cod_barras,
+.mat-column-Nom_Conductor,
+.mat-column-Num_Soat,
+.mat-column-Fec_Fin_Soat,
+.mat-column-Num_Tarjeta_Prop,
+.mat-column-Tmp_Carga,
+.mat-column-Tmp_Descarga,
+.mat-column-Flg_Activo,
+.mat-column-acciones
+//.mat-column-eliminar 
+{
+	text-align: center;
+	font-size: 13px;
+    font-family: arial;
+    padding: 10px;
+}
+
+.mat-column-Cod_Vehiculo {width: 30px !important;text-align: center}
+.mat-column-Num_Placa {width: 30px !important;text-align: center}
+.mat-column-Cod_barras {width: 30px !important;text-align: center}
+.mat-column-Nom_Conductor {width: 50px !important;text-align: center}
+.mat-column-Num_Soat {width: 100px !important;text-align: center}
+.mat-column-Fec_Fin_Soat {width: 80px !important;text-align: center}
+.mat-column-Num_Tarjeta_Prop {width: 80px !important;text-align: center;}
+.mat-column-Tmp_Carga {width: 100px !important;text-align: center}
+.mat-column-Tmp_Descarga {width: 80px !important;text-align: center}
+.mat-column-Flg_Activo {width: 80px !important;text-align: center;}
+.mat-column-acciones {width: 30px !important;text-align: center}
+//.mat-column-eliminar {width: 30px !important;text-align: center}
+.mat-header-cell {text-align: center; }
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+ 
+}
+.paginador{
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+
+@media screen and (max-width: 1500px){
+    
+    .grid-container{
+        height: 660px;
+    }
+    .container-cuerpo {
+        display: grid;
+    
+        grid-template:
+        "fila1" 100px
+        "fila2" 435px
+        "foot" 55px /
+        99%;
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        
+        grid-template:
+        "col1 col2 col3 " auto /
+        150px 380px auto;
+    }
+    
+    .fila1-dni {
+        grid-area: col1;
+         
+    }
+    .fila1-nombres {
+        grid-area: col2;
+        
+    }
+
+    .fila1-buscar {
+      
+        grid-area: col3;
+        
+    }
+}
+
+
+@media screen and (max-width: 868px){
+    .grid-container{
+        height: 560px;
+    }
+    .container-cuerpo {
+        display: grid;
+    
+        grid-template:
+        "fila1" 100px
+        "fila2" 330px
+        "foot" 55px /
+        99%;
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        
+        grid-template:
+        "col1 col2 col3 " auto /
+        150px 280px auto;
+    }
+    
+    .fila1-dni {
+        grid-area: col1;
+         
+    }
+    .fila1-nombres {
+        grid-area: col2;
+        
+    }
+
+    .fila1-buscar {
+        width: 90%;
+        grid-area: col3;
+        
+    }
+
+  }
+
+
+  @media screen and (max-width: 600px){
+   .grid-container{
+       height: 640px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila1" 155px
+        "fila2" 350px
+        "foot" 55px /
+        99%; 
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        
+        grid-template:
+        "col1 col2 " 75px 
+        "col3 auto " auto /
+        130px 230px  auto;
+    } 
+    .fila1-dni {
+        grid-area: col1;
+         
+    }
+    .fila1-nombres {
+        grid-area: col2;
+        
+    }
+
+    .fila1-buscar {
+        width: 90%;
+        grid-area: col3;
+        
+    }
+
+  }

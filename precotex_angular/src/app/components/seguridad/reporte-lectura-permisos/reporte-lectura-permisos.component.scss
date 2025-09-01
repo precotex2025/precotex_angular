@@ -1,0 +1,506 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+
+.grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0;
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 860px;
+    //position: absolute;  
+}
+
+.title {
+    background-color: #3f51b5;
+    color: black;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 100px
+        "fila2" 628px
+        "foot" 55px / 99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.container-cuerpo-foot {
+    grid-area: foot;
+
+}
+
+//fila 1 
+.verde{
+    background-color: green;
+}
+
+
+
+.fila21-dni {
+    width: 24%;
+}
+
+.fila1-Filtro {
+    width: 24%;
+    margin-top: 3px;
+    margin-right: 10px
+}
+
+.fila21-buscar {
+    width: 24%;
+    margin-top: 10px;
+    margin-left: 5px;
+    height: 40px;
+    max-width: 180px;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+.fila1-excel {
+    width: 24%;
+    height: 40px;
+    max-width: 180px;
+    margin-top: 10px;
+    margin-left: 10px;
+    background-color: rgb(45, 158, 45);
+    color: #ffffff;
+
+}
+
+.fila21-dni {
+    margin-top: 3px;
+    margin-right: 10px;
+}
+
+
+.mat-form-field-infix {
+    display: flex;
+}
+
+
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot .button-agregar,
+.button-cancelar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+
+.button-agregar {
+    grid-area: fcol1;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+/*.button-cancelar {
+    grid-area: fcol2;
+    background-color: #d32f2f;
+    color: #ffffff;
+}*/
+
+.mat-column-Num_Permiso,
+.mat-column-Nom_Trabajador,
+.mat-column-Nom_Trabajador_Aprob,
+.mat-column-Des_Tipo_Permiso,
+.mat-column-Inicio,
+.mat-column-Termino,
+.mat-column-Sede_partida,
+.mat-column-Cod_Tipo_Permiso,
+.mat-column-Inicio_Lectura,
+.mat-column-Tipo_Lectura,
+.mat-column-Sede,
+.mat-column-Termino_Lectura,
+.mat-column-Observacion {
+    text-align: center;
+    font-size: 12px;
+    font-family: arial;
+    padding: 10px;
+}
+
+.td_termino{
+    font-weight: bold;
+    color: white;
+}
+
+.mat-column-Id {
+    width: 30px !important;
+    text-align: center
+}
+.fila1-nombres{
+    margin-right: 5px;
+}
+.mat-column-Ticket {
+    width: 30px !important;
+    text-align: center
+}
+
+.mat-column-Tipo_Proceso {
+    width: 30px !important;
+    text-align: center
+}
+
+.mat-column-Cod_Fabrica {
+    width: 30px !important;
+    text-align: center
+}
+
+.mat-column-Cod_OrdPro {
+    width: 30px !important;
+    text-align: center
+}
+
+.mat-column-COD_PRESENT {
+    width: 30px !important;
+    text-align: center
+}
+
+.mat-column-COD_TALLA {
+    width: 30px !important;
+    text-align: center;
+}
+
+.mat-column-Num_Paquete {
+    width: 30px !important;
+    text-align: center;
+}
+
+.mat-column-Usuario_Creacion {
+    width: 30px !important;
+    text-align: center;
+}
+
+.mat-column-acciones {
+    width: 30px !important;
+    text-align: center
+}
+
+//.mat-column-eliminar {width: 30px !important;text-align: center}
+.mat-header-cell {
+    text-align: center;
+}
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+    font-family: arial;
+    font-size: 10px;
+
+}
+
+.paginador {
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+
+tr:active {
+    background: #efefef;
+}
+
+
+
+
+@media screen and (max-width: 1500px) {
+
+    .grid-container {
+        height: 860px;
+    }
+
+    .container-cuerpo {
+        display: grid;
+
+        grid-template:
+            "fila1" 100px
+            "fila2" 626px
+            "foot" 55px /
+            99%;
+    }
+
+    .container-cuerpo-fila1 {
+        display: grid;
+
+        grid-template:
+            "col1 col2" auto / auto;
+    }
+
+
+    .fila1-nombres {
+        grid-area: col3;
+
+    }
+
+    .fila1-buscar {
+
+        grid-area: col2;
+
+    }
+}
+
+@media screen and (max-width: 1170px) {
+
+    .grid-container {
+        height: 860px;
+    }
+
+    .container-cuerpo {
+        display: grid;
+
+        grid-template:
+            "fila1" 126px
+            "fila2" 626px
+            "foot" 55px /
+            99%;
+    }
+
+    .container-cuerpo-fila1 {
+        display: grid;
+
+        grid-template:
+            "col1 col2" auto / auto;
+    }
+
+
+    .fila1-nombres {
+        grid-area: col3;
+
+    }
+
+    .fila1-buscar {
+
+        grid-area: col2;
+
+    }
+}
+
+@media screen and (max-width: 868px) {
+    .grid-container {
+        height: 888px;
+    }
+
+    .container-cuerpo {
+        display: grid;
+
+        grid-template:
+            "fila1" 120px
+            "fila2" 625px
+            "foot" 55px /
+            99%;
+    }
+
+    .container-cuerpo-fila1 {
+        display: grid;
+
+        grid-template: "col1 col2 " /260px auto;
+    }
+
+    .fila1-dni {
+        grid-area: col1;
+
+    }
+
+    .fila1-nombres {
+        grid-area: col3;
+
+    }
+
+    .fila1-buscar {
+        width: 90%;
+        grid-area: col2;
+
+    }
+
+}
+
+
+@media screen and (max-width: 600px) {
+
+    .mat-column-Num_Permiso,
+    .mat-column-Nom_Trabajador,
+    .mat-column-Nom_Trabajador_Aprob,
+    .mat-column-Des_Tipo_Permiso,
+    .mat-column-Inicio,
+    .mat-column-Termino,
+    .mat-column-Sede_partida,
+    .mat-column-Cod_Tipo_Permiso,
+    .mat-column-Inicio_Lectura,
+    .mat-column-Tipo_Lectura,
+    .mat-column-Termino_Lectura,
+    .mat-column-Sede,
+    .mat-column-Observacion {
+        //.mat-column-eliminar 
+        text-align: center;
+        font-size: 10px;
+        font-family: arial;
+        padding: 5px;
+    }
+
+    .grid-container {
+        height: 640px;
+    }
+
+    .container-cuerpo {
+        display: grid;
+
+        grid-template:
+            "fila1" 130px
+            "fila2" 600px
+            "foot" 55px /
+            99%;
+    }
+
+    .container-cuerpo-fila1 {
+        display: grid;
+
+        grid-template:
+            "col1 col2" / auto auto;
+    }
+
+    .fila1-dni {
+        grid-area: col1;
+
+    }
+
+    .fila1-nombres {
+        grid-area: col3;
+
+    }
+
+    .fila1-buscar {
+        width: 90%;
+        grid-area: col2;
+
+    }
+
+}
+
+@media screen and (max-width: 500px) {
+
+    .mat-column-Num_Permiso,
+    .mat-column-Nom_Trabajador,
+    .mat-column-Nom_Trabajador_Aprob,
+    .mat-column-Des_Tipo_Permiso,
+    .mat-column-Inicio,
+    .mat-column-Termino,
+    .mat-column-Sede_partida,
+    .mat-column-Cod_Tipo_Permiso,
+    .mat-column-Inicio_Lectura,
+    .mat-column-Termino_Lectura,
+    .mat-column-Tipo_Lectura,
+    .mat-column-Sede,
+    .mat-column-Observacion {
+        text-align: center;
+        font-size: 10px;
+        font-family: arial;
+        padding: 5px;
+    }
+
+    .grid-container {
+        height: 730px;
+    }
+
+    .container-cuerpo {
+        display: grid;
+
+        grid-template:
+            "fila1" 178px
+            "fila2" 650px
+            "foot" 55px /
+            99%;
+    }
+
+    .fila21-dni {
+        width: 58%;
+        margin-top: 3px;
+        margin-right: 8px;
+    }
+
+    .fila1-excel {
+        width: 48%;
+        margin-top: 0px;
+        margin-left: 0px;
+    }
+
+    .fila1-Filtro {
+        width: 39%;
+        margin-right: 0px;
+    }
+
+    .fila21-buscar {
+        width: 48%;
+        height: 40px;
+        max-width: 280px;
+        margin-top: 0px;
+        margin-right: 8px;
+        background-color: #3f51b5;
+        color: #ffffff;
+
+    }
+
+
+
+
+}

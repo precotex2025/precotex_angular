@@ -1,0 +1,188 @@
+<div class="container">
+
+    <div class="grid-container">
+        <div class="title">Lectura de bultos en almacen</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+
+                <mat-form-field class="fila1-codUbica">
+                    <mat-label>UBICACIÓN</mat-label>
+                    <input matInput type="text" placeholder="UBICACIÓN" value="" autocomplete="off"
+                        (input)="onToggleCodBarUbicacion()" [(ngModel)]="codBarUbicacion"
+                        formControlName="sCodUbicacion">
+                </mat-form-field>
+
+
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="MostrarCodigoUbicacion()">
+                    <mat-icon aria-label="person">search</mat-icon>Buscar Ubicación
+                </button>
+
+                <mat-form-field class="fila1-Palet">
+                    <mat-label>N° PALET</mat-label>
+   
+                    <input matInput type="number" placeholder="PALETA" value="" autocomplete="off" id="Num_Paleta"
+                        name="Num_Paleta" (input)="onToggleCodBarBulto()" formControlName="sPalet"
+                        [(ngModel)]="numPal">
+                    </mat-form-field>
+
+                <mat-form-field class="fila1-codBulto">
+                    <mat-label>CODIGO BULTO</mat-label>
+                    <input matInput type="text" placeholder="BUSCAR BULTO" value="" autocomplete="off" id="Num_Corre"
+                        name="Num_Corre" (input)="onToggleCodBarBulto()" formControlName="sCodBulto"
+                        [(ngModel)]="codBarBulto">
+                </mat-form-field>
+
+                <button type="button" class="fila1-buscar2" mat-flat-button (click)="openDialogTranfer();">
+                    <mat-icon aria-label="warn">assignment</mat-icon>Transferir bultos
+                </button>
+
+                <mat-form-field class="fila1-codLote">
+                    <mat-label>CODIGO LOTE</mat-label>
+                    <input matInput type="text" placeholder="BUSCAR LOTE" value="" autocomplete="off" id="Lote_text"
+                        name="Lote_text" formControlName="sCodLote" [(ngModel)]="codLote">
+                </mat-form-field>
+
+                <button type="button" class="fila1-buscar3" mat-flat-button (click)="openDialogConsultaLote();">
+                    <mat-icon aria-label="warn">assignment</mat-icon>Buscar Ubicacion
+                </button>
+            </div>
+
+
+            <div class="container-cuerpo-fila3">
+                <div class="title">Bultos</div>
+                <table mat-table #table2 [dataSource]="dataSource2" class="mat-elevation-z8">
+
+                    <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+
+                            <mat-checkbox [checked]="selection.hasValue() && isAllSelectedBultos()"
+                                [indeterminate]="selection.hasValue() && !isAllSelectedBultos()"
+                                (change)="toggleAllBultos()">
+                            </mat-checkbox>
+                        </th>
+
+
+                        <td class="filaTela" mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
+                            <mat-checkbox (change)="onProcesoSelectedBultos(element)"
+                                [checked]="selection.isSelected(element)">
+                            </mat-checkbox>
+                        </td>
+
+                    </ng-container>
+
+
+
+                    <ng-container matColumnDef="Id_Correlativo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >Id_</th>
+                        <td mat-cell class="mat-header-cell" *matCellDef="let data_det" > {{data_det.Id_correlativo}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Num_Correlativo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod_Bar</th>
+                        <td mat-cell class="mat-header-cell" *matCellDef="let data_det" 
+                       > {{data_det.Num_Corre}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Palet">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">N° Palet</th>
+                        <td mat-cell class="mat-header-cell" *matCellDef="let data_det"  [ngStyle]="{'background': data_det.palet == 1 ? '#D7EBAF' : '#D6CBAE' }"
+                        > {{data_det.palet}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Lote">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Lote</th>
+                        <td mat-cell class="mat-header-cell" *matCellDef="let data_det"
+                       > {{data_det.lote}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Hilo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Código hilo</th>
+                        <td mat-cell class="mat-header-cell" *matCellDef="let data_det"
+                       > {{data_det.Hilo}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Num_Conos">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">N° Conos</th>
+                        <td mat-cell class="mat-header-cell" *matCellDef="let data_det"
+                       > {{data_det.Num_Conos}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Peso_Bruto">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Peso Bruto</th>
+                        <td mat-cell class="mat-header-cell" *matCellDef="let data_det"
+                       > {{data_det.Peso_Bruto}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Peso_Neto">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Peso Neto</th>
+                        <td mat-cell class="mat-header-cell" *matCellDef="let data_det"> {{data_det.Peso_Neto}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Serie_Guia">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Serie Guia</th>
+                        <td mat-cell class="mat-header-cell" *matCellDef="let data_det"> {{data_det.Serie_Guia}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Num_Guia">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">N° Guia</th>
+                        <td mat-cell class="mat-header-cell" *matCellDef="let data_det"> {{data_det.Num_Guia}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Nombre_Hilo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Desc. Hilo</th>
+                        <td mat-cell class="mat-header-cell" *matCellDef="let data_det"> {{data_det.Nombre_Hilo}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Serie_Orden">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Serie Orden</th>
+                        <td mat-cell class="mat-header-cell" *matCellDef="let data_det"> {{data_det.Serie_Orden}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Num_Orden">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">N° Orden</th>
+                        <td mat-cell class="mat-header-cell" *matCellDef="let data_det"> {{data_det.Num_Orden}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Acciones">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Acciones</th>
+                        <td mat-cell class="mat-header-cell" *matCellDef="let data_det" class="mat-header-cell">
+
+                            <!-- <a mat-icon-button style="margin-right:5px;" *ngIf="data_det.lote.length>0">
+                            <mat-icon color="success">tranfer</mat-icon>
+                        </a> -->
+
+                            <a mat-icon-button *ngIf="data_det.lote.length>0"
+                                (click)="EliminarBulto(data_det.Id_correlativo)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>
+
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab2"></tr>
+                    <tr mat-row   *matRowDef="let row; columns: displayedColumns_cab2;"></tr>
+
+                </table>
+
+                <mat-paginator class="paginador" #paginator [pageSizeOptions]="[8, 10, 20]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

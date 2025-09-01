@@ -1,0 +1,69 @@
+<div class="container"> 
+    <div class="grid-container">  
+        <div class="title"><strong  *ngIf="Titulo == ''; else titulomodificar">Registrar </strong>Firma</div>
+        <ng-template #titulomodificar><strong>Modificar </strong></ng-template>
+
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)" >
+            <div class="container-cuerpo-fila1">
+                <mat-radio-group aria-label="Select an option" class="fila1-Tipo" formControlName="Tipo" (change)="cambiarTipoFirma($event.value)">
+                    <mat-radio-button value="0">Trabajador</mat-radio-button>
+                    <mat-radio-button value="1">Servicio</mat-radio-button>
+                </mat-radio-group>
+
+                <mat-form-field class="fila1-Nombre" appearance="fill" *ngIf="Tipo == '0'">
+                    <mat-label>Auditor</mat-label>
+                    <input matInput type="text"  #trigger="matAutocompleteTrigger" formControlName="Nom_Auditor"  [matAutocomplete]="autoDataLider" />
+                    <mat-autocomplete autoActiveFirstOption #autoDataLider="matAutocomplete">
+                        <mat-option *ngFor="let option of filtroAuditor | async" [value]="option.Nom_Auditor" (click)="CambiarCodLider(option.Cod_Auditor,option.Tip_Trabajador)">
+                            {{option.Nom_Auditor}}
+                        </mat-option> 
+                    </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field class="fila1-Nombre" appearance="fill" *ngIf="Tipo == '1'">
+                    <mat-label>Servicio</mat-label>
+                    <input matInput type="text"  #trigger="matAutocompleteTrigger" formControlName="Des_Servicio"  [matAutocomplete]="autoDataServicio" />
+                    <mat-autocomplete autoActiveFirstOption #autoDataServicio="matAutocomplete">
+                        <mat-option *ngFor="let option of filtroServicio | async" [value]="option.Des_Servicio" (click)="CambiarCodLinPro(option.Cod_LinPro)">
+                            {{option.Des_Servicio}}
+                        </mat-option> 
+                    </mat-autocomplete>
+                </mat-form-field>
+
+                <div class="fila1-Foto">
+                    <input type="file" accept="image/png,image/jpeg" style="display:none;" #inputFile (change)="guardarImagen($event)">
+                    <button type="button" (click)="inputFile.click()" mat-button color="primary"><mat-icon>add_photo_alternate</mat-icon></button>    
+                </div>
+                
+                <div class="fila1-Imagen" *ngIf="Imagen64">
+                    <!--<img src="{{ Imagen64 }}"  alt="" srcset="" width="100%" height="200px">-->
+                    <img [src]="Imagen64" style="max-width: 200px;" alt="">
+                </div>
+            
+            </div>
+
+            <div class="container-cuerpo-foot">
+                         
+               <button  type="submit" class="button-agregar"*ngIf="Titulo == ''; else btnmodificar"  mat-dialog-close="false" [disabled]="!formulario.valid" mat-flat-button>
+                    <mat-icon aria-label="person" >save
+                    </mat-icon>  Registrar
+                </button>
+
+                <ng-template #btnmodificar><button type="submit" class="button-agregar" mat-dialog-close="false" [disabled]="!formulario.valid"  mat-flat-button>
+                    <mat-icon aria-label="person" >create
+                    </mat-icon>  Modificar
+                </button></ng-template>
+               
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>               
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>      

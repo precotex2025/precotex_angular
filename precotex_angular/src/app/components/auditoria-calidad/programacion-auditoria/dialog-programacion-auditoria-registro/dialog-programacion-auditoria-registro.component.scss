@@ -1,0 +1,203 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 2px 2px 2px 2px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0; 
+}
+  
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: 650px;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    min-width: 320px;
+    min-height: 320px;
+}
+
+.title {
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 95%;
+    //margin: 0;
+    padding: 10px 10px;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "caja" 520px
+        "foot" 55px / 
+        99%;
+}
+
+.container-cuerpo-caja{
+    width: 100%;
+    display: flex;
+}
+
+.container-cuerpo-foot {
+    grid-area: foot;
+}
+
+.container-caja1{
+    width: 40%;
+    margin: 10px 10px 10px 10px;
+}
+
+.container-caja2{
+    width: 60%;
+    top: 50%;
+    text-align: end;
+    margin: 30px 10px 10px 10px;
+}
+
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2 fcol3" auto /
+        200px 200px 200px auto;
+}
+
+.container mat-form-field + mat-form-field {
+    margin-left: 16px;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+}
+
+.example-short-width {
+    width: 150px;
+}
+
+.example-long-width {
+    width: 300px;
+}
+
+.example-full-width {
+    width: 450px;
+}
+
+.table-container {
+    position: relative;
+    min-height: 200px;
+    max-height: 420px;
+    //max-width: 700px;
+    overflow: auto;
+}
+  
+table {
+    width: 100%;
+}
+
+.container-cuerpo-foot .button-agregar,.button-programar,.button-cancelar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+.button-agregar {
+    grid-area: fcol2;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+.button-programar {
+    grid-area: fcol1;
+    background-color: #30d467;
+    color: #ffffff;
+}
+
+.button-cancelar {
+    grid-area: fcol3;
+    background-color: #d32f2f;
+    color: #ffffff;
+}
+
+.mat-input-element:disabled {
+    color: black;
+}
+
+.flg_red{
+    padding:8px;
+    background-color:red; 
+    color:white; 
+    font-size: 11px;
+    border-radius: 4px;
+}
+
+.flg_green{
+    padding:8px;
+    background-color:green; 
+    color:white; 
+    font-size: 11px;
+    border-radius: 4px;
+}
+
+.flg_blue{
+    padding:8px;
+    background-color:blue; 
+    color:white; 
+    font-size: 11px;
+    border-radius: 4px;
+}
+
+.flg_yellow{
+    padding:8px;
+    background-color:orange; 
+    color:white; 
+    font-size: 11px;
+    border-radius: 4px;
+}
+
+.flg_grey{
+    padding:8px;
+    background-color:grey; 
+    color:white; 
+    font-size: 11px;
+    border-radius: 4px;
+}
+
+.flg_prog_on{
+    background-color:white; 
+    color:red; 
+}
+
+.flg_prog_off{
+    background-color:white; 
+    color:black; 
+}
+
+.mat-mdc-header-cell, .mat-mdc-footer-cell, .mat-mdc-cell {
+    min-width: 180px;
+    box-sizing: border-box;
+}
+
+/*
+.mat-header-cell, .mat-footer-cell, .mat-cell {
+    min-width: 180px;
+    box-sizing: border-box;
+}
+*/

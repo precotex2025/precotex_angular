@@ -1,0 +1,73 @@
+
+<div class="container">
+
+  <div class="grid-container">
+      <div class="title">REGISTRAR DATOS DE LA PARTIDA  </div>
+
+      <form [formGroup]="formulario">
+        <div class="header">
+          <label for="numeroPartida">Codigo de Partida:</label>
+          <input type="text" placeholder="Ingrese el codigo" (input)="applyEnterAdd($event)" value=""
+          formControlName="Num_Partida"
+          [(ngModel)]="this.formulario[0]">
+      </div>
+
+      </form>
+
+
+      <form  [formGroup]="formularioDet">
+          <!-- Detalles -->
+          <div class="details" formArrayName="detalles">
+
+            <div *ngFor="let detalle of detalles.controls; let i = index" [formGroupName]="i">
+              <div class="row">
+                <label for="descripcion">{{ detalle.value.codigoParihuela }}</label>
+
+                <div class="double-input">
+                  <div class="input-container" *ngFor="let field of fields">
+                    <label [class.active]="detalle.get(field.controlName)?.value">
+                      {{ field.placeholder }}
+                    </label>
+                    <input
+                      type="text"
+                      [formControlName]="field.controlName"
+                      (focus)="onFocus(i, field.controlName)"
+                      (blur)="onBlur(i, field.controlName)"
+                      [ngClass]="{ 'enabled-input': detalle.get(field.controlName)?.enabled }">
+                  </div>
+                </div>
+
+                <select formControlName="complemento" class="double-option">
+                    <option value="">Seleccione Complemento</option>
+                    <option *ngFor="let categoria of categorias" [value]="categoria.desPartida">
+                      {{ categoria.desPartida }}
+                    </option>
+                </select>
+
+            </div>
+
+            </div>
+
+
+          </div>
+
+          <!-- Botón Grabar -->
+          <div class="button-container">
+            <button type="button" (click)="guardarDetalles()">Grabar</button>
+            <button *ngIf="mostrarBotonDespacho" type="button" (click)="enviarDespacho()">Enviar despacho</button>
+          </div>
+          <!--<div class="button-container">
+            <button (click)="Salir()"  type="button" > CERRAR
+            </button>
+          </div>-->
+
+      </form>
+
+
+  </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>
+

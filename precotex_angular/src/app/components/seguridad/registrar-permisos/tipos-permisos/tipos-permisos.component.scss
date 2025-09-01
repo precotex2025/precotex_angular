@@ -1,0 +1,17 @@
+.button-column {
+  display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    height: 32%;
+}
+
+.anchobotones {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.button-modificar {
+  background-color: #8f2121;
+  color: #ffffff;
+}

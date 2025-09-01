@@ -1,0 +1,39 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+        <!-- *ngIf="Titulo == undefined; else titulomodificar" -->
+        <div class="title"><strong> RECEPCION DE FABRIC CARD  : {{this.data.Datos.NUM_FABRIC_CARD}}
+                                    - PARTIDA : {{this.data.Datos.COD_ORDTRA}}
+                                    - COLOR :   {{this.data.Datos.COLOR}}
+                            </strong></div>
+        <div class="body">
+            <form class="container-cuerpo"  [formGroup]="formulario" #formDirective="ngForm"  >
+               
+                <div class="fila21" >
+                    <mat-label>¿DESEA RECEPCIONAR FABRICAR? </mat-label>
+                   
+                </div>
+
+            
+            </form>
+        </div>
+
+        <div class="footer">
+            <button class="button-dialog" mat-flat-button type="button"  matTooltip="APROBACIÓN" matTooltipPosition="above"   (click)="RecepcionarFabricard()"
+                >  
+                <mat-icon aria-label="person">thumb_up_alt
+                </mat-icon> SI
+            </button>
+
+
+            <button class="button-cancelar" mat-flat-button type="button" mat-dialog-close>
+                <mat-icon aria-label="person">exit_to_app
+                </mat-icon> NO
+                </button>
+        </div>
+    </div>
+
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

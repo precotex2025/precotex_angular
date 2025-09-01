@@ -1,0 +1,420 @@
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0; 
+}
+  
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 320px;
+    min-height: 400px;
+    height: 600px;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 95%;
+    margin: 0;
+    padding: 10px 10px;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 475px
+        "foot" 55px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+.trabrow2Operacion{
+    font-family: Arial, Helvetica, sans-serif;
+}
+//fila 1 
+.container-cuerpo-fila1 {
+    // display: grid;
+     justify-content: center;
+    grid-template:
+    "col1 col1 col2"  60px
+    "col3 col3 col4"  60px
+    "col5 col6 col6"  60px  
+    "col7 col8 col8"  60px
+    "col9 col10 col0"  60px
+    "col11 col12 col13"  60px/
+    // // 400px 320px  auto;
+    // // "col1 col2"  60px
+    // // "col3 col4"  60px
+    // // "col5 col6"  160px  
+    // // "col7 col8"  60px
+    // // "col9 col10" 60px  
+    // // "col11 col12" 50px  /
+    400px 320px  auto;
+
+
+.fila1-CodSupervisor {
+    grid-area: col1;
+    width: 50%;
+}
+.fila1-Supervisor {
+    grid-area: col2;
+    width: 18%;
+}
+.fila1-CodAuditor {
+    grid-area: col3;
+    width: 50%;
+}
+.fila1-Auditor {
+    grid-area: col4;
+    width: 30%;
+}
+.fila1-Fecha {
+    grid-area: col5;
+    width: 15%;//98%;
+}
+.fila1-Linea {
+    grid-area: col6;
+    width: 70%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.fila1-IMaster{
+    grid-area: col7;
+    width: 15%;//98%;
+}
+.fila1-ObsImaster {
+    grid-area: col8;
+    width: 70%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.fila1-TRD{
+    grid-area: col8;
+    width: 15%;//98%;
+}
+.fila1-ObsTRD {
+    grid-area: col9;
+    width: 70%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.fila1-ATYC{
+    grid-area: col8;
+    width: 15%;//98%;
+}
+.fila1-ObsATYC {
+    grid-area: col9;
+    width: 70%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.fila1-MS{
+    grid-area: col9;
+    width: 15%;//98%;
+}
+.fila1-ObsMS {
+    grid-area: col10;
+    width: 70%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+
+.fila1-Observacion {
+    grid-area: col7;
+    width: 50%;
+}
+.fila1-Cntd {
+    grid-area: col8;
+    width: 20%;
+}
+.fila1-Talon1 {
+    grid-area: col9;
+    width: 25%;
+}
+.fila1-Talon2 {
+    grid-area: col10;
+    width: 20%;
+}
+.fila1-Talon3 {
+    grid-area: col11;
+    width: 25%;
+}
+.fila1-Talon4 {
+    grid-area: col12;
+    width: 20%;
+}
+
+textarea { 
+    height: 90px; 
+}
+
+}
+
+
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot .button-agregar,.button-cancelar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+
+.button-agregar {
+    grid-area: fcol1;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+.button-cancelar {
+    grid-area: fcol2;
+    background-color: #d32f2f;
+    color: #ffffff;
+}
+
+.container-cuerpo-fila2{
+    width: 100%;
+}
+
+
+
+@media screen and (max-width: 868px){
+    .grid-container{
+        height: 500px;
+    }
+
+    .container-cuerpo {
+        display: grid;
+        grid-template:
+        "fila1" 475px
+        "foot" 55px / 
+        99%;
+    }
+
+    .container-cuerpo-fila1 {
+        display: grid;
+        grid-template:
+        "col1 col2"  70px
+        "col3 col4"  70px
+        "col5 col6"  70px  
+        "col7 col8"  70px 
+        "col9 col10"  70px 
+        "col11 col2"  70px /
+        125px 235px  auto;
+    
+    
+          
+    .fila1-CodSupervisor {
+        grid-area: col1;
+        width: 150px;
+    }
+    .fila1-Supervisor {
+        grid-area: col2;
+        width: 260px;
+    }
+    .fila1-CodAuditor {
+        grid-area: col3;
+        width: 290px;
+    }
+    .fila1-Auditor {
+        grid-area: col4;
+        width: 130px;
+    }
+    .fila1-Fecha {
+        grid-area: col5;
+        width: 120px;
+    }
+    .fila1-Linea {
+        grid-area: col6;
+        width: 115px;
+    }
+    .fila1-Observacion {
+        grid-area: col7;
+        width: 200px;
+    }
+    .fila1-Cntd {
+        grid-area: col8;
+        width: 20%;
+    }
+    .fila1-Talon1 {
+        grid-area: col9;
+        width: 25%;
+    }
+    .fila1-Talon2 {
+        grid-area: col10;
+        width: 20%;
+    }
+    .fila1-Talon3 {
+        grid-area: col11;
+        width: 25%;
+    }
+    .fila1-Talon4 {
+        grid-area: col12;
+        width: 20%;
+    }
+
+    }
+
+  }
+
+
+
+  @media screen and (max-width: 688px){
+   .grid-container{
+       height: 510px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila1" 475px
+        "foot" 55px /
+        99%; 
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        grid-template:
+        "col1 col2"  80px
+        "col3 col4"  80px
+        "col5 col6"  80px  
+        "col7 col8"  80px 
+        "col9 col10"  80px 
+        "col11 col12"  80px /
+        125px 175px  auto;
+    
+
+        .fila1-CodSupervisor {
+            grid-area: col1;
+            width: 120px;
+        }
+        .fila1-Supervisor {
+            grid-area: col2;
+            width: 85px;
+        }
+        .fila1-CodAuditor {
+            grid-area: col3;
+            width: 120px;
+        }
+        .fila1-Auditor {
+            grid-area: col4;
+            width: 85px;
+        }
+        .fila1-Fecha {
+            grid-area: col5;
+            width: 120px;
+        }
+        .fila1-Linea {
+            grid-area: col6;
+            width: 85px;
+        }
+        .fila1-Observacion {
+            grid-area: col7;
+            width: 200%;
+        }
+        .fila1-Cntd {
+            grid-area: col8;
+            width: 20%;
+        }
+        .fila1-Talon1 {
+            grid-area: col9;
+            width: 25%;
+        }
+        .fila1-Talon2 {
+            grid-area: col10;
+            width: 20%;
+        }
+        .fila1-Talon3 {
+            grid-area: col11;
+            width: 25%;
+        }
+        .fila1-Talon4 {
+            grid-area: col12;
+            width: 20%;
+        }
+   
+
+} 
+    .container-cuerpo-foot {
+        grid-template:
+            "fcol1 fcol2" auto /
+            140px 140px;
+    }
+
+    
+    .container-cuerpo-foot .button-agregar,.button-cancelar {
+       
+        max-width: 300px;
+        min-width: 120px;
+    }
+    
+    .button-agregar {
+      width: 50px;
+    }
+
+    .button-cancelar {
+        width: 50px;
+    }
+    
+  }

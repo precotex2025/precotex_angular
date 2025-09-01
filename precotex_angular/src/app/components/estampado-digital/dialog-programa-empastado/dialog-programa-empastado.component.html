@@ -1,0 +1,44 @@
+<div class="container">    
+    <div class="grid-container">  
+        <div class="title"><strong> Registrar Observaciones </strong></div>
+        <ng-template #titulomodificar><strong>Agregar </strong></ng-template>
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" >
+            <div class="container-cuerpo-fila1"> 
+                
+                <mat-form-field class="fila1-tippasta">
+                    <mat-label>Tipo Pasta</mat-label>
+                    <mat-select formControlName="sCodTipPasta" name="process">
+                        <mat-option *ngFor="let tipo of listar_TipPasta" [value]="tipo.Cod_Tip_Pasta" (click)="CambiarValorTipPasta(tipo.Cod_Tip_Pasta)" (keyup)="CambiarValorTipPasta(tipo.Cod_Tip_Pasta)">
+                            {{tipo.Nom_Tip_Pasta}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                
+                <mat-form-field> 
+                    <mat-label>Kgs Prog</mat-label>
+                    <input matInput type="number"  placeholder="" value="" 
+                        autocomplete="off" formControlName="nKgsProg" >
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Obs</mat-label>                                
+                    <textarea rows="5" matInput formControlName="sObs"></textarea>
+                </mat-form-field>                         
+            </div>      
+ 
+            <div class="container-cuerpo-foot">       
+                <button  type="button" class="button-agregar" mat-dialog-close="false" [disabled]="!formulario.valid" mat-flat-button (click)="Guardar()">
+                    <mat-icon aria-label="person" >save
+                    </mat-icon>  Registrar
+                </button>
+              
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>               
+            </div> 
+        </form>
+
+    </div>
+
+</div>

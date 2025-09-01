@@ -1,0 +1,174 @@
+  <div class="container">
+    <div class="grid-container">
+
+        <div class="title">Programa de Empastado</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+
+                <mat-form-field class="fila1-fecha" appearance="fill">
+                    <mat-label>Programa</mat-label>
+                    <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Programa" formControlName="Programa"  [matAutocomplete]="autoDataPrograma" />
+                    <mat-autocomplete autoActiveFirstOption #autoDataPrograma="matAutocomplete">
+                        <mat-option *ngFor="let option of filtroVersion | async" [value]="option.Version" (click)="CambiarVersion(option.Version)">
+                            {{option.Version}}
+                        </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+
+                <mat-form-field class="fila1-partida" appearance="fill">
+                    <mat-label>Partida</mat-label>
+                    <input matInput placeholder="" value=""
+                    autocomplete="off" formControlName="Cod_Ordtra" style="text-transform: uppercase">
+                </mat-form-field>
+
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="MostrarProgramaEmpastado()">
+                    <mat-icon aria-label="person">search</mat-icon>Buscar Programa
+                </button>
+
+                <button type="button" class="fila1-agregar" mat-flat-button (click)="AgregaItem('I')">
+                    <mat-icon aria-label="person">add_box</mat-icon>Agregar Partida
+                </button>
+
+                <button type="button" class="fila1-limpieza" mat-flat-button (click)="AgregaItem('L')">
+                    <mat-icon aria-label="person">add_box</mat-icon>Agregar Limpieza
+                </button>
+
+                <!-- <button type="button" class="fila1-tippasta" mat-flat-button (click)="AgregaPartidaPrograma()">
+                    <mat-icon aria-label="person">add_box</mat-icon>Agregar Partida
+                </button>
+           -->
+                <!-- <mat-form-field class="fila1-tippasta">
+                    <mat-label>Tipo Pasta</mat-label>
+                    <mat-select formControlName="Tip_Pasta" name="process">
+                        <mat-option *ngFor="let tipo of listar_TipPasta" [value]="tipo.Cod_Tip_Pasta" (click)="CambiarValorTipPasta(tipo.Cod_Tip_Pasta)" (keyup)="CambiarValorTipPasta(tipo.Cod_Tip_Pasta)">
+                            {{tipo.Nom_Tip_Pasta}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field> -->
+
+                <button type="button" class="fila1-confirmar" mat-flat-button (click)="ConfirmarProgramaEmpastado()" [disabled]="botonDeshabilitado">
+                    <mat-icon aria-label="person">save</mat-icon>Confirmar Programa
+                </button>
+            </div>
+            <div>
+                <button type="button" class="fila1-excel" mat-flat-button (click)="generateExcel()">
+                    <mat-icon aria-label="create_new_folder">create_new_folder
+                    </mat-icon> Reporte Excel
+                </button>
+            </div>
+
+            <div class="container-cuerpo-fila2">
+                <mat-table #table [dataSource]="dataSource" class="mat-elevation-z8"
+                cdkDropList (cdkDropListDropped)="drop($event)"
+                cdkDropListData="dataSource">
+                    <ng-container matColumnDef="Nom_Cliente">
+                        <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
+                        <mat-cell  *matCellDef="let programa">
+                            <mat-icon class="example-drag-cursor">reorder</mat-icon>
+                            <span>{{programa.Nom_Cliente}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Ordtra">
+                        <mat-header-cell *matHeaderCellDef>Partida</mat-header-cell>
+                        <mat-cell  *matCellDef="let programa">
+                            {{programa.Cod_Ordtra}}
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Des_Tela_Abr">
+                        <mat-header-cell *matHeaderCellDef class="mat-header-cell">Artículo</mat-header-cell>
+                        <mat-cell *matCellDef="let programa">  {{programa.Des_Tela_Abr}} </mat-cell>
+                    </ng-container>
+
+                     <ng-container matColumnDef="Des_Tip_Ancho">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Ancho</mat-header-cell>
+                        <mat-cell mat-cell  *matCellDef="let programa">  {{programa.Des_Tip_Ancho}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Des_Color">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Color</mat-header-cell>
+                         <mat-cell mat-cell *matCellDef="let programa"> {{programa.Des_Color}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Diseno">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Diseño</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let programa"> {{programa.Cod_Diseno}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Comb">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Combo</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let programa"> {{programa.Cod_Comb}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Kgs_Progr">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Kg Prog</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let programa"> {{programa.Kgs_Progr}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Engome">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Engome</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let programa"> {{programa.Engome}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Observaciones">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Obs</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let programa">
+                            <input class="prueba" *ngIf="programa.isEditable" matInput />
+                            <span *ngIf="!programa.isEditable">{{ programa.Observaciones }}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Nom_Archivo">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Imagen</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let programa">
+                            <img [src]="programa.Nom_Archivo" alt="{{programa.Cod_Diseno}}" width="40" />
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Tipo_OC">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Tipo OC</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let programa"> {{programa.Tipo_OC}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Nom_Tip_Pasta">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Tipo Pasta</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let programa"> {{programa.Nom_Tip_Pasta}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Acciones">
+                        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                        <mat-cell *matCellDef="let programa; let i = index">
+                            <a mat-icon-button
+                                (click)="ModificarObs(programa)">
+                                <mat-icon color="blue">{{icon }}</mat-icon>
+                            </a>
+                            <a mat-icon-button
+                                (click)="EliminarProgramaEmpastado(programa.Cod_Ordtra,programa.Id_Programa)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag [cdkDragData]="row"></mat-row>
+                    <!-- <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag [cdkDragData]="row"></tr> -->
+                    <!-- <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag [cdkDragData]="row"></mat-row> -->
+
+                </mat-table>
+
+                <mat-paginator  class="paginador" #paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons aria-label="Select page of periodic elements">
+                </mat-paginator>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; " >Cargando... </p>
+</ngx-spinner>

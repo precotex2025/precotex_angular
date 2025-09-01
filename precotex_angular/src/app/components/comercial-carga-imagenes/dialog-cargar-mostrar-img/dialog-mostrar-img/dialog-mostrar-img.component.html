@@ -1,0 +1,45 @@
+<mat-card>
+    <mat-card-header style="display: flex; justify-content: space-around;">
+        <strong>Imagen</strong>
+        <div>
+            <button mat-flat-button style="margin-right: 5px;" color="primary" (click)="abrirImagen()" type="button">Ampliar imagén <mat-icon matTooltip="Maximizar Imagen">image_search</mat-icon></button>
+            <span matTooltip="Cerrar" aria-label="Close" class="cerrar" (click)="closeModal()" aria-hidden="true">&times;</span>
+        </div>
+        
+    </mat-card-header>
+    <mat-card-content>
+        <!-- <div class="container-fluid">
+            <div class="caja-imagen2">
+                <img class="imagen" src="assets/{{data.data['img']}}" alt="">
+            </div>
+
+        </div> -->
+        <mat-card *ngIf="observacion != ''" style="width:95%; margin:auto;">
+            <mat-card-header>
+                <p><strong>Observación: </strong> {{observacion}}</p>
+            </mat-card-header>
+        </mat-card>
+        <div class="caja-imagen2">
+            <lib-ngx-image-zoom 
+            
+            [thumbImage]=myThumbnail 
+            [fullImage]=myFullresImage 
+            [magnification]="1"
+            [enableScrollZoom]="true"
+            [enableLens]="true"
+            [lensWidth]="lensWidth"
+            [lensHeight]="lensHeigth"
+            [circularLens]="true"
+            [maxZoomRatio]="2"
+            ></lib-ngx-image-zoom>
+        </div>
+    </mat-card-content>
+    <!-- <mat-card-footer>
+        <span aria-label="Close" class="cerrar" (click)="closeModal()" aria-hidden="true">&times;</span>
+    </mat-card-footer> -->
+
+
+    
+<!-- Modal -->
+
+</mat-card>

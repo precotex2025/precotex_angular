@@ -1,0 +1,282 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+   
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 640px;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #ffffff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 75px
+        "fila2" 400px
+        "foot" 55px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+//fila 1 
+.container-cuerpo-fila1 {
+    display: grid;
+
+    grid-template:
+    /* "col1 col2 col3 col4 col5 col6" 70px /
+    145px 145px 95px 95px 75px 75px;*/
+    "col1  col6" 70px /
+    145px  75px;
+}
+
+.fila1-OP {
+    grid-area: col1;
+    width: 150px; 
+    
+}
+.fila1-Color {
+    grid-area: col2;
+    width: 150px; 
+    
+}
+.fila1-Talla {
+    grid-area: col3;
+    width: 100px; 
+    
+}
+.fila1-Cantidad {
+    grid-area: col4;
+    width: 100px; 
+    
+}
+.fila1-btn_anadir {
+    grid-area: col5;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #155724;
+    color: #ffffff;
+    width: 65px; 
+}
+
+.fila1-btn_regresar {
+    grid-area: col6;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 65px; 
+}
+
+
+
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot{
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+.mat-column-Cod_Registro_Sub_Det,
+.mat-column-Cod_OrdPro, 
+.mat-column-Des_Cliente,
+.mat-column-Cod_EstPro,
+.mat-column-Des_Estpro,
+.mat-column-Des_Present,
+.mat-column-Cod_Talla,
+.mat-column-Cant_Prendas,
+.mat-column-Acciones
+//.mat-column-eliminar 
+{
+	text-align: center;
+	font-size: 13px;
+    font-family: arial;
+    padding: 10px;
+   
+}
+ 
+.mat-column-Cod_Registro_Sub_Det{
+    width: 10px;
+}
+.mat-column-Cod_OrdPro{
+    width: 120px;
+}
+.mat-column-Des_Cliente{
+    width: 120px;
+}
+.mat-column-Cod_EstPro{
+    width: 50px;
+}
+.mat-column-Des_Estpro{
+    width: 50px;
+}
+.mat-column-Des_Present{
+    width: 50px;
+}
+.mat-column-Cod_Talla{
+    width: 50px;
+}
+.mat-column-Cant_Prendas{
+    width: 50px;
+}
+.mat-column-Acciones{
+    width: 50px;
+}
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+ 
+}
+.paginador{
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+
+
+  @media screen and (max-width: 650px){
+   .grid-container{
+       height: 620px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila1" 85px
+        "fila2" 400px
+        "foot" 55px /
+        99%; 
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        
+        grid-template:
+        /*"col1 col2 col3" 70px 
+        "col4 col5 col6" 70px /
+        95px 165px 80px;*/
+        "col1 col6" 70px / 
+        250px  80px;
+    } 
+    .fila1-OP {
+        grid-area: col1;
+       width:250px;
+        
+    }
+    .fila1-Color {
+        grid-area: col2;
+        width: 170px;
+        
+    }
+    .fila1-Talla {
+        grid-area: col3;
+        width: 80px;
+      
+    }
+    .fila1-Cantidad {
+        grid-area: col4;
+        width: 100px;
+        
+    }
+    .fila1-btn_anadir {
+        grid-area: col5;
+        width: 160px;
+    }
+    
+    .fila1-btn_regresar {
+        grid-area: col6;
+        width: 70px;
+    }
+
+  }

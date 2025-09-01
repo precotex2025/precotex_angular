@@ -1,0 +1,163 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 13px;
+    margin: 0;
+}
+  
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    //padding: 1x ;
+    //padding-bottom: 15px;
+    min-width: 100%;
+    min-height: 100%;
+    height: 90%;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: rgb(255, 255, 255);
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: end;
+}
+
+  /* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+ 
+}
+.paginador{
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+.custom-header-cell {
+  height: 20px;
+  line-height: 20px; /* Para centrar el texto verticalmente */
+  text-align: center; /* Opcional: centra el texto horizontalmente */
+}
+
+
+.mat-header-cell {
+    background-color: #3f51b5; /* Cambia el color a tu preferencia */
+    color: white; /* Cambia el color del texto */
+    font-weight: bold;
+    padding: 0.5rem;
+    text-align: center;
+    vertical-align: middle;
+    height: auto;
+  }
+
+  .mat-cell {
+    font-family: Arial, Helvetica, sans-serif; /* Fuente Varela Sans */
+    font-size: 14px; /* Tamaño de fuente 14px */
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .mat-cell, .mat-header-cell { 
+    border-right: 1px solid #e0e0e0;  /* Color y estilo de la línea */ 
+    
+    }
+
+  .icon-green {
+    color: #4caf50; /* El código hexadecimal para un verde claro */
+  }
+
+  th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+    padding-right: 0px;
+
+  }
+
+  th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+    padding-left: 0px;
+}
+
+.container-cuerpo-fila1 {
+  padding: 5px;
+  display: grid;
+  grid-template-columns: 50% 50%; /* Dos columnas internas de igual tamaño */
+  gap: 5px; /* Espacio entre las columnas */
+  background-color: #3f51b5; /* Color de fondo opcional */
+  margin-bottom: 1px;
+}
+
+.columna-izquierda {
+  background-color: #3f51b5; /* Color de fondo opcional */
+  color: white; /* Estilo de ejemplo */
+  text-align: center; /* Centrar texto */
+  font-weight: bold;}
+
+.columna-derecha {
+  background-color: #3fb55d; /* Color de fondo opcional */
+  color: white; /* Estilo de ejemplo */
+  text-align: center; /* Centrar texto */
+  font-weight: bold;
+}
+
+.boton-regresar {
+  position: fixed;  /* Fija el botón en la pantalla */
+  top: 14px;         /* 5 píxeles desde el borde superior de la ventana */
+  right: 13px;       /* 5 píxeles desde el borde derecho de la ventana */
+  padding: 10px 20px;  /* Espaciado dentro del botón */
+  background-color: #007bff; /* Color de fondo del botón */
+  color: white;     /* Color del texto */
+  border: none;     /* Sin borde */
+  border-radius: 70px; /* Bordes redondeados */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  font-size: 16px;  /* Tamaño de fuente */
+  cursor: pointer; /* Cambia el cursor a mano */
+  z-index: 1000;    /* Asegura que el botón esté sobre otros elementos */
+  transition: background-color 0.3s ease; /* Transición suave al pasar el ratón */
+  opacity: 0.5; /* 50% de opacidad */
+}
+
+
+.container-cuerpo-fila4 {
+  display: flex;
+  background-color: yellow; /* Fondo amarillo para el contenedor */
+  padding: 20px;
+  border-radius: 8px; /* Bordes redondeados para un mejor aspecto */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombras suaves */
+}
+
+/* Estilo de las columnas */
+.Col1, .Col2 {
+  margin: 0 20px; /* Separación entre las columnas */
+}

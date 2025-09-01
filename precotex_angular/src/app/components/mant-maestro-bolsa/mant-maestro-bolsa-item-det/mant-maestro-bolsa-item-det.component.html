@@ -1,0 +1,121 @@
+<div class="container">
+
+    <div class="grid-container">
+
+        <div class="title"> Detalle Bolsa OP - Tallas (Artes) {{ this.Cod_Barra }} </div>
+
+        <form class="container-cuerpo">
+
+            <div class="container-cuerpo-fila1">
+
+                <button type="button" class="fila1-buscar2" mat-flat-button (click)="openDialogOp()" *ngIf="Flg_Edita"> 
+                    <mat-icon aria-label="person">add</mat-icon>Agregar OP
+                </button>
+
+                <button type="button" class="fila1-agregar" mat-flat-button (click)="Volver()">
+                    <mat-icon aria-label="person">replay</mat-icon>Volver
+                </button>
+
+            </div>
+
+            <div class="container-cuerpo-fila2">
+
+                <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+
+                    <ng-container matColumnDef="Id_Barra">
+                        <th mat-header-cell *matHeaderCellDef>Id Barra</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Id_Barra}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_EstCli">
+                        <th mat-header-cell *matHeaderCellDef>Estilo cliente</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_EstCli}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_OrdPro">
+                        <th mat-header-cell *matHeaderCellDef>OP</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_OrdPro}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Present">
+                        <th mat-header-cell *matHeaderCellDef>Cod. Color</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_Present}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Des_Present">
+                        <th mat-header-cell *matHeaderCellDef>Color</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Des_Present}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Talla">
+                        <th mat-header-cell *matHeaderCellDef>Talla</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_Talla}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cantidad">
+                        <th mat-header-cell *matHeaderCellDef>Cant. </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Cantidad }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Num_SecOrd">
+                        <th mat-header-cell *matHeaderCellDef> Sec. Ord </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Num_SecOrd }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Item">
+                        <th mat-header-cell *matHeaderCellDef> Cod. Item </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Cod_Item }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Usuario_Creacion">
+                        <th mat-header-cell *matHeaderCellDef>Usu. Creacion </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Cod_Usuario_Creacion }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Fecha_Creacion">
+                        <th mat-header-cell *matHeaderCellDef>Fec. Creacion </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Fecha_Creacion }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Usuario_Modificacion">
+                        <th mat-header-cell *matHeaderCellDef> Usu. Modificacion </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Cod_Usuario_Modificacion }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Fecha_Modificacion">
+                        <th mat-header-cell *matHeaderCellDef>Fec. Modificacion </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Fecha_Modificacion }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let data_det">
+
+                            <a mat-icon-button style="margin-right:5px;"  matTooltip="Editar" (click)="openDialogEditar(data_det)" *ngIf="Flg_Edita">
+                                <mat-icon color="primary">edit</mat-icon>
+                            </a>
+
+                            <a mat-icon-button color="warn" style="margin-right:5px;"  matTooltip="Eliminar" (click)="DeleteRegistro(data_det)" *ngIf="Flg_Edita">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                </table>
+                <mat-paginator #MatPaginator [pageSizeOptions]="[20,50,100]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </div>
+
+        </form>
+        <div id="print-section" style="position: absolute; left: -999em;">
+            <svg  class="barcode"   id="barcode" viewBox="0 0 273 200"></svg>
+        </div>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

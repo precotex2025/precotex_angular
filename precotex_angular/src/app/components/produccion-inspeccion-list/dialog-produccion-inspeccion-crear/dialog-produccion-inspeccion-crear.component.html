@@ -1,0 +1,1038 @@
+<div class="container-dialog">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container-dialog">
+
+      <div class="title-dialog">Hoja de Registro N° <span *ngIf="dataTrabajador.length > 0" class="numhoja">{{Titulo}}</span></div>
+      <form class="container-cuerpo-dialog" [formGroup]="formulario">
+
+        <div class="container-cuerpo-fila1-dialog">
+            <div class="row">
+
+                <div class="col-md-4">
+                    <mat-card>
+                        <mat-card-header>
+                            DATOS DE LA PRODUCCION:
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                    <mat-form-field>
+                                        <mat-label>Fecha</mat-label>
+                                        <input matInput type="datetime-local" formControlName="sFechaHoraIngreso">
+                                    </mat-form-field>
+                            </div>
+                            <div class="row">
+                                <div class="caja-cliente">
+                                    <mat-form-field>
+                                        <mat-label>OP*</mat-label>
+                                        <input matInput type="text" placeholder="OP" formControlName="sOP"
+                                            maxlength="5" autocomplete="off" (input)="buscarEstiloClientexOP()">
+                                    </mat-form-field>
+                                </div>
+                                <div class="caja-cliente">
+                                    <mat-form-field> 
+                                        <mat-label>Estilo</mat-label>
+                                        <input matInput type="text" placeholder="Estilo" value="" autocomplete="off" formControlName="sEstilo">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="caja-cliente">
+                                    <mat-form-field> 
+                                        <mat-label>Cliente</mat-label>
+                                        <input matInput type="text"  placeholder="Cliente" value="" autocomplete="off" formControlName="sCliente">
+                                    </mat-form-field>
+                                </div>
+                                <div class="caja-cliente">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Color*</mat-label>
+                                        <mat-select formControlName="sColor" (selectionChange)="getCantidadHabilitadas()">
+                                            <mat-option *ngFor="let option of lstOperacionColor" [value]="option.Cod_Present">
+                                                {{option.Des_Present}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="caja-cliente">
+                                    <mat-form-field class="fila2-tendido-tela-inicio">
+                                        <mat-label>Fecha Inicial:</mat-label>
+                                        <input matInput type="datetime-local" formControlName="sFechaInicio">
+                                    </mat-form-field>   
+                                </div>
+                                <div class="caja-cliente">
+                                    <mat-form-field class="fila2-tendido-tela-final">
+                                        <mat-label>Fecha Final</mat-label>
+                                        <input matInput type="datetime-local" formControlName="sFechaFin">
+                                    </mat-form-field>    
+                                </div>
+                            </div>                      
+                            
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div class="col-md-4">
+                    <mat-card>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <mat-form-field>
+                                        <mat-label># PLANILLA / CORTE</mat-label>
+                                        <!--<input matInput type="text" placeholder="# PLANILLA / CORTE" formControlName="sOC" maxlength="10" autocomplete="off">-->
+                                        <mat-select formControlName="sOC">
+                                            <mat-option *ngFor="let option of lstOC" [value]="option.Co_CodOrdPro">
+                                                {{option.Co_CodOrdPro}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>  
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <mat-form-field>
+                                        <mat-label>Habilitadas*</mat-label>
+                                        <input matInput type="text" placeholder="Habilitadas" formControlName="sHabilitadas">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="caja-cliente">
+                                    <!--<mat-form-field>
+                                        <mat-label>Prendas cantidad</mat-label>
+                                        <input matInput type="number" placeholder="" value="" autocomplete="off" formControlName="sPrendasCant" (input)="monitoreaCantidad()" onKeyPress="if(this.value.length==10) return false;">
+                                    </mat-form-field>-->
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Tipo prenda</mat-label>
+                                        <mat-select formControlName="sTipoPrenda" (selectionChange)="selectTipoPrenda()">
+                                            <mat-option *ngFor="let option of lstOptTipoPrenda" [value]="option.id">
+                                                {{option.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="caja-cliente">
+                                    <mat-form-field>
+                                        <mat-label>Cantidad</mat-label>
+                                        <input matInput type="number" placeholder="" value="" autocomplete="off" formControlName="sPrendasCant" (input)="monitoreaCantidad()" onKeyPress="if(this.value.length==10) return false;">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <!--<div class="row">
+                                <div class="col-md-12">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Supervisor</mat-label>
+                                        <input matInput type="text" #trigger="matAutocompleteTrigger" placeholder="Supervisor" formControlName="sSupervisor" [matAutocomplete]="autoDataSupervisor" />
+                                        <mat-autocomplete autoActiveFirstOption #autoDataSupervisor="matAutocomplete">
+                                            <mat-option *ngFor="let option of filtroOperacionSupervisor | async" [value]="option.Nom_Auditor" (click)="CambiarValorCodSupervisor(option.Cod_Auditor, option.Tip_Trabajador)">
+                                                {{option.Nom_Auditor}}
+                                            </mat-option> 
+                                        </mat-autocomplete>                            
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Tendedor</mat-label>
+                                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Tendedor" formControlName="sTendedor"  [matAutocomplete]="autoDatTendedor" />
+                                        <mat-autocomplete autoActiveFirstOption #autoDatTendedor="matAutocomplete">
+                                            <mat-option *ngFor="let option of filtroOperacionTendedor | async" [value]="option.Nom_Auditor" (click)="CambiarValorCodTendedor(option.Cod_Auditor,option.Tip_Trabajador)">
+                                                {{option.Nom_Auditor}}
+                                            </mat-option> 
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                </div>
+                            </div>-->
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div class="col-md-4">
+                    <mat-card>
+                        <mat-card-header>
+                            PARAMETROS / CONTROL:
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <!--<div class="col-md-12">
+                                    <mat-form-field>
+                                        <mat-label>#Maquina*</mat-label>
+                                        <input matInput type="text" placeholder="Maquina" formControlName="sNumMaquina"
+                                            maxlength="120" autocomplete="off">
+                                    </mat-form-field>
+                                </div>-->
+
+                                <div class="caja-cliente">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Proceso*</mat-label>
+                                        <mat-select formControlName="sProceso" (selectionChange)="getMaquinasProceso()">
+                                            <mat-option *ngFor="let option of listar_Procesos" [value]="option.Id_Parametro">
+                                                {{option.Des_Parametro}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="caja-cliente">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Maquina*</mat-label>
+                                        <mat-select formControlName="sIdMaquina">
+                                            <mat-option *ngFor="let option of listar_Maquinas" [value]="option.Id_Parametro">
+                                                {{option.Des_Parametro}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!--<div class="caja-cliente">
+                                    <mat-form-field>
+                                        <mat-label>Horno</mat-label>
+                                        <input matInput type="text" placeholder="" value="" autocomplete="off" formControlName="sHorno" maxlength="60">
+                                    </mat-form-field>
+                                </div>-->
+                                <div class="caja-cliente">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Horno</mat-label>
+                                        <mat-select formControlName="sIdHorno">
+                                            <mat-option *ngFor="let option of listar_Hornos" [value]="option.Id_Parametro" [disabled]="!flgHorno">
+                                                {{option.Des_Parametro}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="caja-cliente">
+                                    <mat-form-field>
+                                        <mat-label>Tiempo</mat-label>
+                                        <!--<input matInput type="text" placeholder="" value="" autocomplete="off" formControlName="sTiempo" maxlength="10" [readonly]="!flgTiempo">-->
+                                        <input [textMask]="{mask: num_guiaMascara}" matInput formControlName="sTiempo" [readonly]="!flgTiempo">
+                                        <span matSuffix>horas</span>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="caja-cliente">
+                                    <mat-form-field>
+                                        <mat-label>Velocidad</mat-label>
+                                        <input matInput type="text" placeholder="" value="" autocomplete="off" formControlName="sVelocidad" maxlength="10" [readonly]="!flgVelocidad">
+                                        <span matSuffix>m/s</span>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="caja-cliente">
+                                    <mat-form-field>
+                                        <mat-label>Presion</mat-label>
+                                        <input matInput type="text" placeholder="" value="" autocomplete="off" formControlName="sPresion" maxlength="10" [readonly]="!flgPresion">
+                                    </mat-form-field>
+                                </div>
+                                <div class="caja-cliente">
+                                    <mat-form-field>
+                                        <mat-label>Temperatura</mat-label>
+                                        <input matInput type="text" placeholder="" value="" autocomplete="off" formControlName="sTemperatura" maxlength="10" [readonly]="!flgTemperatura">
+                                        <span matSuffix>grados</span>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container-cuerpo-fila2" *ngIf="grdProcesosVisible">
+            <mat-card>
+                <mat-card-header>
+                    DATOS DEL PROCESO:
+                </mat-card-header>
+                <mat-card-content>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-card>
+                                <mat-card-header>
+                                    OPERARIOS:
+                                </mat-card-header>
+                                <mat-card-content>
+                                    <mat-form-field class="caja-cliente5" appearance="fill">
+                                        <mat-label>Puesto</mat-label>
+                                        <mat-select formControlName="sTipoOperario">
+                                            <mat-option *ngFor="let item of dataTipoOperario" [value]="item.Tipo_Operario">
+                                                {{item.Des_Puesto}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="caja-cliente6" appearance="fill">
+                                        <mat-label>Operario</mat-label>
+                                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Operario" formControlName="sOperario"  [matAutocomplete]="autoDatOperario" />
+                                        <mat-autocomplete autoActiveFirstOption #autoDatOperario="matAutocomplete">
+                                            <mat-option *ngFor="let option of filtroOperacionOperario | async" [value]="option.Nom_Auditor" (click)="CambiarValorCodOperario(option.Cod_Auditor,option.Tip_Trabajador)">
+                                                {{option.Nom_Auditor}}
+                                            </mat-option> 
+                                        </mat-autocomplete>                            
+                                    </mat-form-field>
+
+                                    <button mat-mini-fab color="primary" (click)="onRegistrarOperario()">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+        
+                                    <div class="table-container-1">
+                                        <table mat-table #table [dataSource]="dataOperarioSource" class="mat-elevation-z8">
+                                            <ng-container matColumnDef="Des_Puesto">
+                                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Puesto </th>
+                                                <td mat-cell *matCellDef="let data_op"> {{ data_op.Des_Puesto }} </td>
+                                            </ng-container>
+                
+                                            <ng-container matColumnDef="Nom_Operario">
+                                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Operario </th>
+                                                <td mat-cell *matCellDef="let data_op"> {{ data_op.Nom_Operario }} </td>
+                                            </ng-container>
+                
+                                            <ng-container matColumnDef="Acciones">
+                                                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <a mat-icon-button (click)="onEliminarOperario(element)"><mat-icon color="warn">delete</mat-icon></a>
+                                                </td>
+                                            </ng-container> 
+                
+                                            <tr mat-header-row *matHeaderRowDef="displayedColumns3;"></tr>
+                                            <tr mat-row *matRowDef="let row; columns: displayedColumns3;"></tr>
+                                        </table>
+                                    </div>
+                
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+
+                        <div class="col-md-4">
+                            <mat-card>
+                                <mat-card-header>
+                                    ESTAMPADO/BORDADO/PLANCHADO:
+                                </mat-card-header>
+                                <mat-card-content>
+                                    <mat-form-field class="caja-cliente1"> 
+                                        <mat-label>Codigo</mat-label>
+                                        <input matInput type="text" placeholder="Codigo" value="" autocomplete="off" formControlName="sCodMotivo" (change)="onBuscarMotivo('1')">
+                                    </mat-form-field>
+            
+                                    <mat-form-field class="caja-cliente"> 
+                                        <mat-label>Descripcion</mat-label>
+                                        <input matInput type="text" placeholder="Descripcion" value="" autocomplete="off" formControlName="sDesMotivo" >
+                                    </mat-form-field>
+                
+                                    <mat-form-field class="caja-cliente1"> 
+                                        <mat-label>Cantidad</mat-label>
+                                        <input matInput type="number" placeholder="Cantidad" value="" autocomplete="off" formControlName="sCantidad">
+                                    </mat-form-field>  
+        
+                                    <button mat-mini-fab color="primary" (click)="onRegistrarDefecto()">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+        
+                                    <div class="table-container-1">
+                                        <table mat-table #table [dataSource]="dataDefectoSource" class="mat-elevation-z8">
+                                            <ng-container matColumnDef="Des_Motivo">
+                                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Defecto </th>
+                                                <td mat-cell *matCellDef="let data_op"> {{ data_op.Des_Motivo }} </td>
+                                            </ng-container>
+                
+                                            <ng-container matColumnDef="Cantidad">
+                                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Cantidad </th>
+                                                <td mat-cell *matCellDef="let data_op"> {{ data_op.Cantidad }} </td>
+                                            </ng-container>
+                
+                                            <ng-container matColumnDef="Acciones">
+                                                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <a mat-icon-button (click)="onEliminarDefecto('1', element)"><mat-icon color="warn">delete</mat-icon></a>
+                                                </td>
+                                            </ng-container> 
+                
+                                            <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+                                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                        </table>
+                                    </div>
+                
+                                </mat-card-content>
+                            </mat-card>
+        
+                        </div>
+
+                        <div class="col-md-4">
+                            <mat-card>
+                                <mat-card-header>
+                                    PRUEBA DE LAVADO:
+                                </mat-card-header>
+                                <mat-card-content>
+
+                                    <mat-form-field class="caja-cliente2"> 
+                                        <mat-label>Tiempo</mat-label>
+                                        <!--<input matInput type="text" placeholder="Tiempo" value="" autocomplete="off" formControlName="sCiclo">-->
+                                        <input [textMask]="{mask: num_guiaMascara}" matInput formControlName="sCiclo">
+                                    </mat-form-field>
+            
+                                    <mat-slide-toggle (change)="changeAprobacion($event)" class="caja-cliente2" color="warn" [checked]="Flg_Estado == '1'">
+                                        <span style="background-color: green; color: white; padding: 2px 4px; font-size: 12px;" *ngIf="Flg_Estado == '1'" >A P R O B A D O</span> 
+                                        <span style="background-color: red; color: white; padding: 2px 4px; font-size: 12px;" *ngIf="Flg_Estado == '0'" >R E C H A Z A D O</span> 
+                                    </mat-slide-toggle>
+        
+                                    <button mat-mini-fab color="primary" (click)="onRegistrarLavado()">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+        
+                                    <div class="table-container-1">
+                                        <table mat-table #table [dataSource]="dataLavadoSource" class="mat-elevation-z8">
+                                            <ng-container matColumnDef="nRow">
+                                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Ciclo </th>
+                                                <td mat-cell *matCellDef="let data_op"> {{ data_op.NRow }} </td>
+                                            </ng-container>
+                
+                                            <ng-container matColumnDef="Tiempo">
+                                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Tiempo </th>
+                                                <td mat-cell *matCellDef="let data_op"> {{ data_op.Observacion }} </td>
+                                            </ng-container>
+                
+                                            <ng-container matColumnDef="Estado">
+                                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Estado </th>
+                                                <td mat-cell *matCellDef="let data_op"> {{ data_op.Des_Estado }} </td>
+                                            </ng-container>
+                
+                                            <ng-container matColumnDef="Acciones">
+                                                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <a mat-icon-button (click)="supItemMotivo(element)"><mat-icon color="warn">delete</mat-icon></a>
+                                                </td>
+                                            </ng-container> 
+                
+                                            <tr mat-header-row *matHeaderRowDef="displayedColumns2;"></tr>
+                                            <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+                                        </table>
+                                    </div>
+        
+        
+                                </mat-card-content>
+                            </mat-card>
+
+                        </div>
+
+                        
+                    </div>
+                    <!--
+                    <div class="row">
+                        <div *ngFor="let bloque of ItemsProceso" class="obj-medida">
+                            <div class="col-md-3" *ngIf="bloque.id == 'ES'">
+                                <table>
+                                    <thead>
+                                        <tr colspan="1">
+                                            <th>{{bloque.name}}</th>
+                                        </tr>
+                                        <tr >
+                                            <div class="row">
+                                                <div class="col-md-12 box-add-item">
+                                                    <!-<mat-form-field> 
+                                                        <mat-label>Ingrese codigo de defecto</mat-label>
+                                                        <input matInput type="text" placeholder="Codigo" value="" formControlName="sCodDefectoEstampado">
+                                                    </mat-form-field>->
+
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label>Ingrese codigo de defecto</mat-label>
+                                                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Codigo" formControlName="sCodDefectoEstampado"  [matAutocomplete]="autoDatMotivos" />
+                                                        <mat-autocomplete autoActiveFirstOption #autoDatMotivos="matAutocomplete">
+                                                            <mat-option *ngFor="let option of filtroDefectosEstampados | async" [value]="option.Descripcion">
+                                                                {{option.Descripcion}}
+                                                            </mat-option> 
+                                                        </mat-autocomplete>                            
+                                                    </mat-form-field>
+        
+                                                    <!-<mat-form-field> 
+                                                        <mat-label>Descripcion</mat-label>
+                                                        <input matInput type="text"  placeholder="Descripcion" value="" autocomplete="off">
+                                                    </mat-form-field>->
+
+                                                    <button type="button" mat-flat-button (click)="addMotivoEstampado(bloque)">
+                                                        <mat-icon aria-label="person">add</mat-icon>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of dataItemsProceso">
+                                            <td>
+                                                <div *ngIf="item.Id_FamItem == bloque.id">
+                                                    <div *ngIf="item.Tipo_dato == 'C'">
+                                                        <mat-checkbox class="example-margin" color="primary" name="chk_sublim_{{item.Id_Item}}" [checked]="item.Observacion == '1'" (change)="changeCheck($event, item)">{{item.Des_Motivo}}</mat-checkbox>
+                                                    </div>
+                                                    <div *ngIf="item.Tipo_dato == 'T'">
+                                                        <mat-form-field>
+                                                            <mat-label>{{item.Des_Motivo}}</mat-label>
+                                                            <input matInput type="number" placeholder="" value="{{item.Observacion}}" autocomplete="off" (change)="changeInfoObserv($event, item)">
+                                                            <button mat-icon-button matSuffix (click)="supItemMotivo(item)">
+                                                              <mat-icon class="md-20">delete</mat-icon>
+                                                            </button>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>                                 
+                                    </tbody>
+                                    
+                                </table>
+                            </div>
+                            <div class="col-md-3" *ngIf="bloque.id == 'LV'">
+                                <table>
+                                    <thead>
+                                        <tr colspan="1">
+                                            <th>{{bloque.name}}</th>
+                                        </tr>
+                                        <tr >
+                                            <div class="row">
+                                                <div class="col-md-12 box-add-item">       
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label>Ingrese codigo de defecto</mat-label>
+                                                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Codigo" formControlName="sCodDefectoLavado"  [matAutocomplete]="autoDatMotivos" />
+                                                        <mat-autocomplete autoActiveFirstOption #autoDatMotivos="matAutocomplete">
+                                                            <mat-option *ngFor="let option of filtroDefectosLavado | async" [value]="option.Descripcion">
+                                                                {{option.Descripcion}}
+                                                            </mat-option> 
+                                                        </mat-autocomplete>                            
+                                                    </mat-form-field>
+
+                                                    <button type="button" mat-flat-button (click)="addMotivoLavado(bloque)">
+                                                        <mat-icon aria-label="person">add</mat-icon>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of dataItemsProceso">
+                                            <td>
+                                                <div *ngIf="item.Id_FamItem == bloque.id">
+                                                    <div *ngIf="item.Tipo_dato == 'C'">
+                                                        <mat-checkbox class="example-margin" color="primary" name="chk_sublim_{{item.Id_Item}}" [checked]="item.Observacion == '1'" (change)="changeCheck($event, item)">{{item.Des_Motivo}}</mat-checkbox>
+                                                    </div>
+                                                    <div *ngIf="item.Tipo_dato == 'T'">
+                                                        <mat-form-field>
+                                                            <mat-label>{{item.Des_Motivo}}</mat-label>
+                                                            <input matInput type="number" placeholder="" value="{{item.Observacion}}" autocomplete="off" (change)="changeInfoObserv($event, item)">
+                                                            <button mat-icon-button matSuffix (click)="supItemMotivo(item)" *ngIf="item.Des_Motivo != 'Tiempo/Ciclos'">
+                                                              <mat-icon class="md-20">delete</mat-icon>
+                                                            </button>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>                                 
+                                    </tbody>
+                                    
+                                </table>
+                            </div>
+                            <div class="col-md-3" *ngIf="bloque.id == 'MT'">
+                                <table>
+                                    <thead>
+                                        <tr colspan="1">
+                                            <th>{{bloque.name}}</th>
+                                        </tr>
+                                        <!-<tr >
+                                            <div class="row">
+                                                <div class="col-md-12 box-add-item">
+                                                    <mat-form-field> 
+                                                        <mat-label>Ingrese codigo de defecto</mat-label>
+                                                        <input matInput type="text" placeholder="Codigo" value="" formControlName="sCodDefectoMatching">
+                                                    </mat-form-field>
+
+                                                    <button type="button" mat-flat-button (click)="addMotivoMatching(bloque)">
+                                                        <mat-icon aria-label="person">add</mat-icon>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </tr>->
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of dataItemsProceso">
+                                            <td>
+                                                <div *ngIf="item.Id_FamItem == bloque.id">
+                                                    <div *ngIf="item.Tipo_dato == 'C'">
+                                                        <mat-checkbox class="example-margin" color="primary" name="chk_sublim_{{item.Id_Item}}" [checked]="item.Observacion == '1'" (change)="changeCheck($event, item)">{{item.Des_Motivo}}</mat-checkbox>
+                                                    </div>
+                                                    <div *ngIf="item.Tipo_dato == 'T'">
+                                                        <mat-form-field>
+                                                            <mat-label>{{item.Des_Motivo}}</mat-label>
+                                                            <input matInput type="number" placeholder="" value="{{item.Observacion}}" autocomplete="off" (change)="changeInfoObserv($event, item)">
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>                                 
+                                    </tbody>
+                                    
+                                </table>
+                            </div>
+                            <div class="col-md-3" *ngIf="bloque.id == 'BD'">
+                                <table>
+                                    <thead>
+                                        <tr colspan="1">
+                                            <th>{{bloque.name}}</th>
+                                        </tr>
+                                        <tr >
+                                            <div class="row">
+                                                <div class="col-md-12 box-add-item">       
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label>Ingrese codigo de defecto</mat-label>
+                                                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Codigo" formControlName="sCodDefectoBordado"  [matAutocomplete]="autoDatMotivos" />
+                                                        <mat-autocomplete autoActiveFirstOption #autoDatMotivos="matAutocomplete">
+                                                            <mat-option *ngFor="let option of filtroDefectosBordado | async" [value]="option.Descripcion">
+                                                                {{option.Descripcion}}
+                                                            </mat-option> 
+                                                        </mat-autocomplete>                            
+                                                    </mat-form-field>
+
+                                                    <button type="button" mat-flat-button (click)="addMotivoBordado(bloque)">
+                                                        <mat-icon aria-label="person">add</mat-icon>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of dataItemsProceso">
+                                            <td>
+                                                <div *ngIf="item.Id_FamItem == bloque.id">
+                                                    <div *ngIf="item.Tipo_dato == 'C'">
+                                                        <mat-checkbox class="example-margin" color="primary" name="chk_sublim_{{item.Id_Item}}" [checked]="item.Observacion == '1'" (change)="changeCheck($event, item)">{{item.Des_Motivo}}</mat-checkbox>
+                                                    </div>
+                                                    <div *ngIf="item.Tipo_dato == 'T'">
+                                                        <mat-form-field>
+                                                            <mat-label>{{item.Des_Motivo}}</mat-label>
+                                                            <input matInput type="number" placeholder="" value="{{item.Observacion}}" autocomplete="off" (change)="changeInfoObserv($event, item)">
+                                                            <button mat-icon-button matSuffix (click)="supItemMotivo(item)">
+                                                              <mat-icon class="md-20">delete</mat-icon>
+                                                            </button>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>                                 
+                                    </tbody>
+                                    
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    -->
+                </mat-card-content>
+            </mat-card>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-card>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field>
+                                        <mat-label>Primeras</mat-label>
+                                        <input matInput type="number" placeholder="Primeras" value="" autocomplete="off" formControlName="sPrendasPri">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field>
+                                        <mat-label>Defectos</mat-label>
+                                        <input matInput type="number" placeholder="Defectos" value="" autocomplete="off" formControlName="sPrendasDef">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-cuerpo-fila7" *ngIf="grdProcesosVisible">
+            <div class="row">
+                <div class="col-md-4">
+                    <mat-card>
+                        <mat-card-header>
+                            MATCHING:
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div *ngFor="let bloque of ItemsProceso" class="obj-medida">
+                                <div class="col-md-3" *ngIf="bloque.id == 'MT'">
+                                    <table>
+                                        <!--<thead>
+                                            <tr colspan="1">
+                                                <th>{{bloque.name}}</th>
+                                            </tr>
+                                        </thead>-->
+                                        <tbody>
+                                            <tr *ngFor="let item of dataItemsProceso">
+                                                <td>
+                                                    <div *ngIf="item.Id_FamItem == bloque.id">
+                                                        <div *ngIf="item.Tipo_dato == 'C'">
+                                                            <mat-checkbox class="example-margin" color="primary" name="chk_sublim_{{item.Id_Item}}" [checked]="item.Observacion == '1'" (change)="changeCheck($event, item)">{{item.Des_Motivo}}</mat-checkbox>
+                                                        </div>
+                                                        <div *ngIf="item.Tipo_dato == 'T'">
+                                                            <mat-form-field>
+                                                                <mat-label>{{item.Des_Motivo}}</mat-label>
+                                                                <input matInput type="number" placeholder="" value="{{item.Observacion}}" autocomplete="off" (change)="changeInfoObserv($event, item)">
+                                                            </mat-form-field>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>                                 
+                                        </tbody>
+                                        
+                                    </table>
+                                </div>
+                            </div>
+
+                        </mat-card-content>
+                    </mat-card>
+
+                </div>
+
+                <div class="col-md-4">
+                    <mat-card>
+                        <mat-card-header>
+                            SEGUNDAS:
+                        </mat-card-header>
+                        <mat-card-content>
+                            <mat-form-field class="caja-cliente1"> 
+                                <mat-label>Codigo</mat-label>
+                                <input matInput type="text" placeholder="Codigo" value="" autocomplete="off" formControlName="sCodMotivo2" (change)="onBuscarMotivo('2')">
+                            </mat-form-field>
+    
+                            <mat-form-field class="caja-cliente"> 
+                                <mat-label>Descripcion</mat-label>
+                                <input matInput type="text" placeholder="Descripcion" value="" autocomplete="off" formControlName="sDesMotivo2" >
+                            </mat-form-field>
+        
+                            <mat-form-field class="caja-cliente1"> 
+                                <mat-label>Cantidad</mat-label>
+                                <input matInput type="number" placeholder="Cantidad" value="" autocomplete="off" formControlName="sCantidad2">
+                            </mat-form-field>  
+
+                            <button mat-mini-fab color="primary" (click)="onRegistrarDefecto2()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+
+                            <div class="table-container-1">
+                                <table mat-table #table [dataSource]="dataSegundasSource" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="Des_Motivo">
+                                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Defecto </th>
+                                        <td mat-cell *matCellDef="let data_op"> {{ data_op.Des_Motivo }} </td>
+                                    </ng-container>
+        
+                                    <ng-container matColumnDef="Cantidad">
+                                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Cantidad </th>
+                                        <td mat-cell *matCellDef="let data_op"> {{ data_op.Cantidad }} </td>
+                                    </ng-container>
+        
+                                    <ng-container matColumnDef="Acciones">
+                                        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <a mat-icon-button (click)="onEliminarDefecto('2', element)"><mat-icon color="warn">delete</mat-icon></a>
+                                        </td>
+                                    </ng-container> 
+        
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns4;"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns4;"></tr>
+                                </table>
+                            </div>
+
+                            <!--<div class="row">
+                                <div *ngFor="let bloque of ItemsProceso" class="obj-medida-segundas">
+                                    <div class="col-md-12" *ngIf="bloque.id == 'RE'">
+                                        <table>
+                                            <thead>
+                                                <tr colspan="1">
+                                                    <th>{{bloque.name}}</th>
+                                                </tr>
+                                                <tr >
+                                                    <div class="row">
+                                                        <div class="col-md-12 box-add-item">
+       
+                                                            <mat-form-field class="caja-cliente4" appearance="fill">
+                                                                <mat-label>Ingrese codigo de defecto</mat-label>
+                                                                <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Codigo" formControlName="sCodDefectoRecuperada"  [matAutocomplete]="autoDatMotivos" />
+                                                                <mat-autocomplete autoActiveFirstOption #autoDatMotivos="matAutocomplete">
+                                                                    <mat-option *ngFor="let option of filtroDefectosRecuperada | async" [value]="option.Descripcion">
+                                                                        {{option.Descripcion}}
+                                                                    </mat-option> 
+                                                                </mat-autocomplete>                            
+                                                            </mat-form-field>
+        
+                                                            <!-<button type="button" mat-flat-button (click)="addMotivoRecuperada(bloque)">
+                                                                <mat-icon aria-label="person">add</mat-icon>
+                                                            </button>->
+                                                            <button mat-mini-fab color="primary" (click)="addMotivoRecuperada(bloque)">
+                                                                <mat-icon>add</mat-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of dataItemsProceso">
+                                                    <td>
+                                                        <div *ngIf="item.Id_FamItem == bloque.id">
+                                                            <!-<div *ngIf="item.Tipo_dato == 'C'">
+                                                                <mat-checkbox class="example-margin" color="primary" name="chk_sublim_{{item.Id_Item}}" [checked]="item.Observacion == '1'" (change)="changeCheck($event, item)">{{item.Des_Motivo}}</mat-checkbox>
+                                                            </div>->
+                                                            <div *ngIf="item.Tipo_dato == 'T'">
+                                                                <mat-form-field>
+                                                                    <mat-label>{{item.Des_Motivo}}</mat-label>
+                                                                    <input matInput type="number" placeholder="" value="{{item.Observacion}}" autocomplete="off" (change)="changeInfoObserv($event, item)">
+                                                                    <button mat-icon-button matSuffix (click)="supItemMotivo(item)">
+                                                                      <mat-icon class="md-20">delete</mat-icon>
+                                                                    </button>
+                                                                </mat-form-field>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>                                 
+                                            </tbody>
+                                            
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>-->
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <div class="col-md-4">
+                    <mat-card>
+                        <mat-card-header>
+                            ESPECIALES:
+                        </mat-card-header>
+                        <mat-card-content>
+
+                            <mat-form-field class="caja-cliente1"> 
+                                <mat-label>Codigo</mat-label>
+                                <input matInput type="text" placeholder="Codigo" value="" autocomplete="off" formControlName="sCodMotivo3" (change)="onBuscarMotivo('3')">
+                            </mat-form-field>
+    
+                            <mat-form-field class="caja-cliente"> 
+                                <mat-label>Descripcion</mat-label>
+                                <input matInput type="text" placeholder="Descripcion" value="" autocomplete="off" formControlName="sDesMotivo3" >
+                            </mat-form-field>
+        
+                            <mat-form-field class="caja-cliente1"> 
+                                <mat-label>Cantidad</mat-label>
+                                <input matInput type="number" placeholder="Cantidad" value="" autocomplete="off" formControlName="sCantidad3">
+                            </mat-form-field>  
+
+                            <button mat-mini-fab color="primary" (click)="onRegistrarDefecto3()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+
+                            <div class="table-container-1">
+                                <table mat-table #table [dataSource]="dataEspecialesSource" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="Des_Motivo">
+                                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Defecto </th>
+                                        <td mat-cell *matCellDef="let data_op"> {{ data_op.Des_Motivo }} </td>
+                                    </ng-container>
+        
+                                    <ng-container matColumnDef="Cantidad">
+                                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Cantidad </th>
+                                        <td mat-cell *matCellDef="let data_op"> {{ data_op.Cantidad }} </td>
+                                    </ng-container>
+        
+                                    <ng-container matColumnDef="Acciones">
+                                        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <a mat-icon-button (click)="onEliminarDefecto('3', element)"><mat-icon color="warn">delete</mat-icon></a>
+                                        </td>
+                                    </ng-container> 
+        
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns5;"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns5;"></tr>
+                                </table>
+                            </div>
+
+                            <!--<div class="row">
+                                <div *ngFor="let bloque of ItemsProceso" class="obj-medida-segundas">
+                                    <div class="col-md-12" *ngIf="bloque.id == 'SC'">
+                                        <table>
+                                            <thead>
+                                                <tr colspan="1">
+                                                    <th>{{bloque.name}}</th>
+                                                </tr>
+                                                <tr >
+                                                    <div class="row">
+                                                        <div class="col-md-12 box-add-item">
+       
+                                                            <mat-form-field class="caja-cliente4" appearance="fill">
+                                                                <mat-label>Ingrese codigo de defecto</mat-label>
+                                                                <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Codigo" formControlName="sCodDefectoEspeciales"  [matAutocomplete]="autoDatMotivos" />
+                                                                <mat-autocomplete autoActiveFirstOption #autoDatMotivos="matAutocomplete">
+                                                                    <mat-option *ngFor="let option of filtroDefectosRecuperada | async" [value]="option.Descripcion">
+                                                                        {{option.Descripcion}}
+                                                                    </mat-option> 
+                                                                </mat-autocomplete>                            
+                                                            </mat-form-field>
+        
+                                                            <!-<button type="button" mat-flat-button (click)="addMotivoEspeciales(bloque)">
+                                                                <mat-icon aria-label="person">add</mat-icon>
+                                                            </button>->
+                                                            <button mat-mini-fab color="primary" (click)="addMotivoEspeciales(bloque)">
+                                                                <mat-icon>add</mat-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of dataItemsProceso">
+                                                    <td>
+                                                        <div *ngIf="item.Id_FamItem == bloque.id">
+                                                            <!-<div *ngIf="item.Tipo_dato == 'C'">
+                                                                <mat-checkbox class="example-margin" color="primary" name="chk_sublim_{{item.Id_Item}}" [checked]="item.Observacion == '1'" (change)="changeCheck($event, item)">{{item.Des_Motivo}}</mat-checkbox>
+                                                            </div>->
+                                                            <div *ngIf="item.Tipo_dato == 'T'">
+                                                                <mat-form-field>
+                                                                    <mat-label>{{item.Des_Motivo}}</mat-label>
+                                                                    <input matInput type="number" placeholder="" value="{{item.Observacion}}" autocomplete="off" (change)="changeInfoObserv($event, item)">
+                                                                    <button mat-icon-button matSuffix (click)="supItemMotivo(item)">
+                                                                      <mat-icon class="md-20">delete</mat-icon>
+                                                                    </button>
+                                                                </mat-form-field>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>                                 
+                                            </tbody>
+                                            
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>-->
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div class="col-md-12">
+                    <mat-card>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field>
+                                        <mat-label>Recuperadas</mat-label>
+                                        <input matInput type="number" placeholder="Recuperadas" value="" autocomplete="off" formControlName="sPrendasRec">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field>
+                                        <mat-label>Segundas</mat-label>
+                                        <input matInput type="number" placeholder="Segundas" value="" autocomplete="off" formControlName="sPrendasSeg">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field>
+                                        <mat-label>Especiales</mat-label>
+                                        <input matInput type="number" placeholder="Especiales" value="" autocomplete="off" formControlName="sPrendasEsp">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container-cuerpo-fila4">
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-card>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    
+                                </div>
+                                <div class="col-md-4">
+                                    <h4>RESULTADOS DEL PROCESO</h4>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <mat-form-field>
+                                                <mat-label>Total prendas auditadas</mat-label>
+                                                <input matInput type="number" placeholder="" value="" autocomplete="off" formControlName="sTotalPrenAud">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <mat-radio-group aria-labelledby="example-radio-group-label" formControlName="sFlgAprobacion" class="example-radio-group">
+                                                <mat-radio-button class="example-radio-button" *ngFor="let s of lstOptResultado" [value]="s.cod">
+                                                    {{s.name}}
+                                                </mat-radio-button>
+                                            </mat-radio-group> 
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-cuerpo-fila5">
+            <div class="row">
+                <div class="col-md-2">
+                    <h4><b>Observacion:</b></h4>
+                </div>
+                <div class="col-md-10">
+                    <mat-form-field>
+                        <mat-label>Observacion:</mat-label>
+                        <textarea matInput type="text" placeholder="Observaciones" value="" autocomplete="off" formControlName="sObservacion"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-cuerpo-fila6" *ngIf="optSupervicionVisible">
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-checkbox class="example-margin" formControlName="flgInspeCalidad">Aprobacion Inspector de calidad</mat-checkbox>
+                </div>
+                <div class="col-md-6">
+                    <mat-checkbox class="example-margin" formControlName="flgSuperProd">Aprobacion Supervisor de produccion</mat-checkbox>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-cuerpo-foot-dialog">
+            <!--<button type="button" class="button-clean-dialog" mat-flat-button>
+              <mat-icon aria-label="person">autorenew</mat-icon>
+              Limpiar
+            </button>-->
+            <button type="button" class="button-save-dialog" mat-flat-button (click)="ModificarHoja()" *ngIf="grdProcesosVisible && btnAccionModificar">
+                <mat-icon aria-label="person">save</mat-icon>
+                Actualizar
+            </button>
+    
+    
+            <button type="button" class="button-save-dialog" mat-flat-button (click)="RegistrarHoja()" *ngIf="grdProcesosVisible && !btnAccionModificar">
+              <mat-icon aria-label="person">save</mat-icon>
+              Guardar
+            </button>
+    
+    
+            <button mat-dialog-close type="button" class="button-cancel-dialog" mat-button mat-dialog-close
+              mat-dialog-close="false">
+              <mat-icon aria-label="person">cancel
+              </mat-icon> Cancelar
+            </button>
+        </div>
+          
+       </form>
+
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

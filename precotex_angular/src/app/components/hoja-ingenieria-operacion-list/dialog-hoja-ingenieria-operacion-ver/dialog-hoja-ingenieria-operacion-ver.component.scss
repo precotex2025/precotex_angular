@@ -1,0 +1,414 @@
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+mat-card {
+    margin-top: 10px;
+    padding: 0px;
+}
+
+mat-card-header {
+    padding: 10px;
+    border-bottom: 0.8px solid rgba(0, 0, 0, .2);
+    border-left: 0.8px solid rgba(0, 0, 0, .2);
+    border-right: 0.8px solid rgba(0, 0, 0, .2);
+    border-top: 0.8px solid rgba(0, 0, 0, .2);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-weight: bold;
+}
+
+mat-card-content {
+    
+    padding: 10px 15px;
+    border-bottom: 0.8px solid rgba(0, 0, 0, .2);
+    border-left: 0.8px solid rgba(0, 0, 0, .2);
+    border-right: 0.8px solid rgba(0, 0, 0, .2);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.container-dialog {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+
+.grid-container-dialog {
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 100%; 
+    height: auto; //93%;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+}
+  
+.title-dialog {
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+.numhoja{
+    //font-size: 1.2em;
+    //float: right;
+    font-family: arial;
+}
+
+.container-cuerpo-dialog {
+    width: 100%;
+    margin: 0;
+    height: 98%;
+    justify-content: center;
+}
+
+.container-cuerpo-fila1, .container-cuerpo-fila2{
+    padding: 5px 10px;
+}
+
+.container-cuerpo-fila1-content {
+    display: grid;
+    grid-template:
+        "col1 col2 col3 col4" 60px 
+        "col5 col6 col7 col8" 60px 
+        "col10 col9 col11 col11" 70px 
+        "col12 col12 col12 col12" auto/ 
+        1fr 1fr 1fr 1fr
+}
+
+.fila1-estilo-propio {
+    grid-area: col1;
+} 
+.fila1-tipo-estilo {
+    grid-area: col2;
+}
+.fila1-cliente {
+    grid-area: col3;
+}
+.fila1-prenda {
+    grid-area: col4;
+}
+.fila1-version {
+    grid-area: col5;
+}
+.fila1-estcli {
+    grid-area: col6;
+}
+.fila1-grupo {
+    grid-area: col7;
+}
+.fila1-complejidad {
+    grid-area: col8;
+}
+.fila1-analista {
+    grid-area: col9;
+}
+.fila1-fecha {
+    grid-area: col10;
+}
+.fila1-tipo-tela {
+    grid-area: col11;
+}
+.fila1-adjuntar{
+    grid-area: col12;
+}
+
+.container-cuerpo-fila2-title-formulario{
+    background-color: #ccc;
+    padding: 8px 10px 10px 10px;
+    font-weight: bold;
+}
+.btn-toggle{
+    float: right;
+    width: 30px;
+    height: 30px;
+}
+.container-cuerpo-fila2-formulario{
+    display: grid;
+    grid-template:
+        "col1 col2" 60px 
+        "col3 col3" 80px 
+        "col4 col4" 80px 
+        "col5 col5" 80px
+        "col7 col6" auto/
+        2fr 1fr;
+    
+    background: #efefef;
+    padding: 10px 10px 10px 0px;
+    margin-bottom: 10px;
+    border-radius: 0px 0px 4px 4px;
+}
+.fila2-titulo {
+    grid-area: col1;
+}
+.fila2-video {
+    grid-area: col2;
+    justify-content: center;
+}
+.fila2-descripcion {
+    grid-area: col3;
+}
+.fila2-observaciones {
+    grid-area: col4;
+}
+.fila2-accesorios {
+    grid-area: col5;
+}
+.fila2-btn-add {
+    grid-area: col6;
+    justify-self: end;
+}
+
+.container-cuerpo-fila2-formulario button.fila2-btn-add{
+    float: right;
+    background-color: green;
+    color: #fff;
+    width: 160px;
+    margin-top: 10px;
+}
+
+.container-cuerpo-fila2-content h4{
+    font-weight: bold;
+}
+
+mat-list-item:nth-child(odd) {
+	background: #fdf8ef;
+}
+
+
+tbody td.estados .mat-radio-button {
+    margin-right: 10px;
+}
+
+
+.mat-form-field-appearance-fill, .mat-form-field-flex{
+
+    background-color: white  !important;
+    background: white !important;
+}
+
+.example-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+    align-items: flex-start;
+}
+
+.example-radio-button {
+    margin: 5px;
+}
+
+//fila foot
+.container-cuerpo-foot-dialog {
+    grid-area: foot;
+    
+}
+
+.container-cuerpo-foot-dialog {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2 fcol3" auto /
+        150px  150px 150px auto;
+}
+
+
+.container-cuerpo-foot-dialog .button-clean-dialog, .button-save-dialog, .button-cancel-dialog {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+.button-clean-dialog {
+    grid-area: fcol1;
+    background-color: #8f2121;
+    color: #ffffff;
+}
+.button-save-dialog {
+    grid-area: fcol2;
+    background-color: #8f2121;
+    color: #ffffff;
+}
+
+.button-cancel-dialog {
+    grid-area: fcol3;
+    background-color: #8f2121;
+    color: #ffffff;
+}
+
+.button-add-defecto{
+    background-color: #8f2121;
+    color: #ffffff;
+    height: 10%;
+    margin: 0 auto;
+    margin: 4px 20px 10px 20px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 0px 0px 20px;
+
+}
+
+:host ::ng-deep .fila1-cliente-dialog{
+    padding: none!important;
+   
+}
+
+::ng-deep mat-dialog-container{
+    padding: 5px;
+    height: auto;
+}
+
+::ng-deep .my-class .mat-dialog-container{
+    padding: 5px;
+    height: auto;
+}
+
+.input{
+    border: none;
+    border: 1px solid rgba(0,0,0,.4);
+    padding: 6px;
+    width: 100%;
+    margin-left: 10px;
+}
+
+table{
+    width: 100%;
+}
+
+table:not([cellpadding]) td, table:not([cellpadding]) th {
+    padding: .1rem;
+}
+
+thead th {
+    //width: 30%;
+    text-align: left;
+}
+
+table tbody tr:nth-child(odd) {
+	background: #fdf8ef;
+}
+
+table.ops td {
+    padding: 5px 0px;
+    height: 40px;
+}
+
+.mat-icon-button .md-20 { font-size: 20px; }
+
+@media screen and (max-width: 1728px){
+    .container-cuerpo-fila1-content {
+        display: grid;
+        grid-template:
+            "col1 col2 col3" 60px 
+            "col4 col5 col6" 60px 
+            "col7 col8 col9" 60px 
+            "col10 col11 col11" 70px 
+            "col12 col12 col12" auto/
+            1fr 1fr 1fr
+    }
+
+    .container-cuerpo-fila2-formulario{
+        display: grid;
+        grid-template:
+            "col1 col2" 60px 
+            "col3 col3" 60px 
+            "col4 col4" 60px 
+            "col5 col5" 60px
+            "col7 col6" auto/
+            2fr 1fr;
+        
+        background: #efefef;
+        padding: 10px 10px 10px 0px;
+        margin-bottom: 10px;
+        border-radius: 0px 0px 4px 4px;
+    }
+
+    table{
+        width: 100%;
+    }
+}
+@media screen and (max-width: 635px){
+
+    .container-cuerpo-fila1-content {
+        display: grid;
+        grid-template:
+            "col1" 60px 
+            "col2" 60px 
+            "col3" 60px 
+            "col4" 60px 
+            "col5" 60px 
+            "col6" 60px 
+            "col7" 60px 
+            "col8" 60px 
+            "col9" 60px 
+            "col10" 60px 
+            "col11" 60px 
+            "col12" auto/ 
+            1fr
+    }
+
+    .container-cuerpo-fila2-formulario{
+        display: grid;
+        grid-template:
+            "col1" 60px 
+            "col2" 60px 
+            "col3" 60px 
+            "col4" 60px
+            "col5" 60px
+            "col6" auto/
+            1fr;
+        
+        background: #efefef;
+        padding: 10px 10px 10px 0px;
+        margin-bottom: 10px;
+        border-radius: 0px 0px 4px 4px;
+    }
+
+    .fila2-btn-add {
+        grid-area: col6;
+        align-self: center;
+      justify-self: center;
+    }
+
+    .container-cuerpo-foot-dialog {
+        grid-template:
+            "fcol1 fcol2 fcol3" auto /
+            123px  123px 123px auto;
+    }
+
+    .container-cuerpo-fila2{
+        padding: 5px 0px;
+    }
+
+    .container-cuerpo-foot-dialog .button-clean-dialog, .button-save-dialog, .button-cancel-dialog {
+        height: 10%;
+        margin: 0 auto;
+        margin: 10px 5px;
+        min-height: 40px;
+        max-width: 280px;
+        min-width: 80px;
+    }
+
+    table{
+        width: 100%;
+    }
+  
+}

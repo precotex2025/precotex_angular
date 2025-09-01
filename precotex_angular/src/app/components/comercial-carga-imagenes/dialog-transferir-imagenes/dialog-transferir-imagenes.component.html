@@ -1,0 +1,31 @@
+<mat-card>
+    <mat-card-header>
+        COPIAR IMAGÉNES POR ESTILO
+    </mat-card-header>
+    <mat-card-content>
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Estilo Origen</mat-label>
+                    <input matInput type="text" [(ngModel)]="estilo_origen" maxlength="5" disabled>
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Estilo Destino</mat-label>
+                    <input matInput type="text" [(ngModel)]="estilo_destino" maxlength="5" placeholder="Ingrese el Estilo Propio Destino">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button mat-flat-button color="primary" style="margin-right: 10px;" (click)="copiarImagenes()"><mat-icon>save</mat-icon> COPIAR IMAGENES</button>
+                <button mat-flat-button color="warn" (click)="cerrarModal()"><mat-icon>highlight_off</mat-icon> CANCELAR</button>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

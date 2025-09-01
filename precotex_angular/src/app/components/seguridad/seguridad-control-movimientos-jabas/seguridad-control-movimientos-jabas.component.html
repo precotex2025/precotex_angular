@@ -1,0 +1,130 @@
+<!--DefectosAlamacenDerivados-->
+  
+  
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container">  
+ 
+        <div class="title">Registrar <strong>{{this.Titulo}}</strong> de Jabas - ID: {{this.Id_Mov_Jaba_Cab}} - JABA: {{this.Cod_Barras_Flg}}</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+                
+    
+                <mat-form-field class="fila1-guia">
+                    <mat-label>Numero de Guia</mat-label>
+                    <input matInput type="text" [textMask]="{mask: num_guiaMascara}" placeholder="Numero de Guia" #myinputGuia
+                        value="" autocomplete="off" formControlName="num_guia">
+                </mat-form-field>
+
+                <mat-form-field class="fila1-ruc-proveedor">
+                    <mat-label>Ruc Proveedor</mat-label>
+                    <input matInput type="text" (input)="BuscarNomProveedor()" placeholder="Ruc Proveedor" value=""
+                        autocomplete="off" formControlName="ruc_proveedor" maxlength="11">
+                </mat-form-field>
+
+                <mat-form-field class="fila1-nom-proveedor">
+                    <mat-label>Nombre Proveedor</mat-label>
+                    <input matInput type="text" formControlName="nom_proveedor">
+                </mat-form-field>
+          
+            </div>     
+ 
+            <div class="container-cuerpo-fila2">
+                
+                <mat-form-field class="fila2-anadir"> 
+                    <mat-label>Añadir</mat-label>
+                    <input matInput type="text"  placeholder="Añadir"  value="" #myinputAdd
+                        autocomplete="off"  (keydown.enter)="applyEnterAdd($event)" formControlName="bulto_añadir" >
+                </mat-form-field>     
+                
+                
+                <button type="button" class="fila2-btn_anadir"  (click)="applyEnterAdd($event)" mat-flat-button >                    
+                    <mat-icon aria-label="person">assignment_turned_in</mat-icon>
+                </button>
+
+
+
+                <button type="button" class="fila2-btn_regresar" mat-flat-button [routerLink]="['/SeguridadControlMovimientosJabasAccion']">                    
+                    <mat-icon aria-label="person">reply_all</mat-icon>
+                </button>
+
+                <!--<button type="button" *ngIf="this.Cod_Barras_Flg !== ''" class="fila1-btn_baja" mat-flat-button (click)="DarDeBajaJaba()">                    
+                    <mat-icon aria-label="person">remove_circle</mat-icon>Dar de Baja
+                </button>-->
+
+                <button type="button" *ngIf="this.Cod_Barras_Flg !== ''" class="fila2-btn_agreagr_estado" mat-flat-button (click)="VerDetalle()">                    
+                    <mat-icon aria-label="person">save</mat-icon>Estado Jaba
+                </button>
+                <button type="button" *ngIf="this.Cod_Barras_Flg !== ''" class="fila2-btn_limpiar" mat-flat-button (click)="Limpiar()">                    
+                    <mat-icon aria-label="person">cached</mat-icon>Limpiar
+                </button>
+            
+            </div>     
+
+
+            <div class="container-cuerpo-fila3">
+                <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                    <!--<ng-container matColumnDef="Cod_Registro_Det">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Num.</th>
+                        <td mat-cell  *matCellDef="let data_det; let i = index;"> {{i+1}} </td>
+                    </ng-container>-->
+                    <!--<ng-container matColumnDef="Des_Jaba">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Jaba</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Des_Jaba}}  </td>
+                    </ng-container>-->
+                    <ng-container matColumnDef="Estado">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estado</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Des_Jaba_Estado}}  </td>
+                    </ng-container>
+
+                    <!--<ng-container matColumnDef="Operacion">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Accion</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Accion}}  </td>
+                    </ng-container>-->
+
+                    <ng-container matColumnDef="Fecha">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha</th>
+                        <td mat-cell *matCellDef="let data_det">  {{data_det.Fecha}} </td>
+                    </ng-container>
+
+                     <ng-container matColumnDef="Hora">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Hora</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{data_det.Hora}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Observacion">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Observacion</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{data_det.Observacion}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Usuario">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Usuario</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{data_det.Cod_Usuario}} </td>
+                    </ng-container>
+                    
+
+                    <!--<ng-container matColumnDef="Acciones">
+                        <th mat-header-cell *matHeaderCellDef>Ver Detalle</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <a mat-icon-button style="margin-right:5px;"  *ngIf="data_det.Des_Jaba.length>0" (click)="VerDetalle(data_det.Cod_Mov_Jaba,data_det.Cod_Jaba_Estado,data_det.Cod_Estado,data_det.Observacion)" >
+                                <mat-icon color="primary">assignment</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>--> 
+    
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+                </table>
+
+            </div>
+
+        </form>
+
+    </div>
+ 
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>       

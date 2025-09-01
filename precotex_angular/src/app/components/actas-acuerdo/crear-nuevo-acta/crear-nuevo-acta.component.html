@@ -1,0 +1,198 @@
+<div class="container">
+    <!-- ventana nro 3 - salida -->
+    <div class="grid-container">
+
+        <div class="title">{{cabecera}}</div>
+
+        <div class="find">
+            <div class="auditoriaForm">
+                <mat-card>
+                    <mat-card-header>
+                        <div class="row">
+                            <div class="col-md-3">
+                                Datos
+                            </div>
+                            <div class="col-md-9">
+                                <button type="button" class="button_agregar2" [disabled]="deshabilitar"
+                                    (click)="guardarRegistro()" mat-flat-button color="primary">
+                                    <mat-icon aria-label="person">save
+                                    </mat-icon> {{boton}}
+                                </button>
+                                <button type="button" class="button_info2" routerLink="/ActasAcuerdo" mat-flat-button
+                                    color="primary">
+                                    <mat-icon aria-label="person">cancel
+                                    </mat-icon> Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="findcol1">
+                            <div class="caja">
+                                <mat-form-field class="example-full-width" appearance="fill">
+                                    <mat-label>Asunto Acta</mat-label>
+                                    <input matInput type="text" [(ngModel)]="Descripcion" [readonly]="tipo == 2">
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-full-width" appearance="fill">
+                                    <mat-label>Fecha</mat-label>
+                                    <input matInput type="date" [(ngModel)]="Fecha" [readonly]="tipo == 2">
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Sede</mat-label>
+                                    <mat-select [(ngModel)]="Sede" [disabled]="tipo == 2">
+                                        <mat-option value="Santa Maria">Santa Maria</mat-option>
+                                        <mat-option value="Santa Cecilia">Santa Cecilia</mat-option>
+                                        <mat-option value="Huachipa Sede I">Huachipa Sede I</mat-option>
+                                        <mat-option value="Huachipa Sede II">Huachipa Sede II</mat-option>
+                                        <mat-option value="Independencia">Independencia</mat-option>
+                                        <mat-option value="Santa Rosa">Santa Rosa</mat-option>
+                                        <mat-option value="VyD">VyD</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-full-width" appearance="fill">
+                                    <mat-label>Area</mat-label>
+                                    <input matInput type="text" [(ngModel)]="Area">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="findcol1">
+                            <div class="caja">
+                                <label for="">Agregar Participantes
+                                    <button mat-mini-fab color="primary" (click)="crearNuevoParticipante()"
+                                        matTooltip="Agregar Participantes" class="agregar"
+                                        aria-label="Agregar Participantes">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+
+                                </label>
+                                <ng-select [items]="dataParticipantes" bindLabel="Nombres" bindValue="IdParticipante"
+                                    [multiple]="false" [searchable]="true" placeholder="Seleccione"
+                                    (change)="seleccionado($event)" [(ngModel)]="IdParticipante">
+                                </ng-select>
+                            </div>
+                            <div class="caja" style="padding: 35px;">
+                                <button mat-flat-button color="primary" (click)="selectParticipante()"
+                                    matTooltip="Agregar Participantes" class="agregar"
+                                    aria-label="Agregar Participantes">
+                                    Agregar Participante<mat-icon>add</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <mat-card>
+                    <mat-card-header>
+                        <div class="row">
+                            <div class="col-md-3">
+                                Participantes
+                            </div>
+                            <div class="col-md-9">
+                                <button type="button" class="button_info2" *ngIf="tipo == 2" (click)="enviarTodos()" mat-flat-button
+                                    color="primary">
+                                    <mat-icon aria-label="person">send
+                                    </mat-icon> Enviar a todos
+                                </button>
+                            </div>
+                        </div>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="container-cuerpo-fila5">
+
+                            <div class="mat-elevation-z8">
+
+                                <table mat-table [dataSource]="dataSource">
+                                    <ng-container matColumnDef="Nombres">
+                                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Nombres</th>
+                                        <td mat-cell *matCellDef="let element"> {{element.Nombres}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Apellidos">
+                                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Apellidos </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.Apellidos}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Cargo">
+                                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Cargo</th>
+                                        <td mat-cell *matCellDef="let element"> {{element.Cargo}} </td>
+                                    </ng-container>
+                                    <!-- Name Column -->
+                                    <ng-container matColumnDef="Correo">
+                                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Correo</th>
+                                        <td mat-cell *matCellDef="let element"> {{element.Correo}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Telefono">
+                                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Telefono</th>
+                                        <td mat-cell *matCellDef="let element"> {{element.Telefono}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="acciones">
+                                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Acciones </th>
+                                        <td mat-cell *matCellDef="let element; let i = index;">
+                                            <button mat-button
+                                                (click)="eliminarParticipante(element.IdParticipante, element.IdActa, i)"
+                                                color="warn"><mat-icon>delete</mat-icon></button>
+
+                                            <button
+                                                [disabled]="element.Envio_Correo != undefined && element.Envio_Correo == '1'"
+                                                mat-flat-button color="primary" (click)="enviarCorreo(element.IdParticipante, element.IdActa)"
+                                                *ngIf="tipo == 2 && element.IdActa != undefined"><mat-icon>send</mat-icon>
+                                                Enviar
+                                                Correo</button>
+
+                                            <button mat-button style="color:rgb(255, 217, 0)" *ngIf="tipo == 2" [disabled]="element.Envio_Correo != undefined && element.Envio_Correo == null"
+                                                (click)="revertirEnvio(element.IdParticipante, element.IdActa, i)"
+                                                color="warn"><mat-icon>refresh</mat-icon></button>
+
+                                        </td>
+                                    </ng-container>
+
+
+
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"
+                                        style="background-color: #ccc; "></tr>
+                                    <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns; "
+                                        [ngStyle]="{'background': i%2 == 0 ? '#FFFFFF' : '#96C2EE' }"></tr>
+                                </table>
+
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <mat-card>
+                    <mat-card-header>
+                        Glosario Acta
+                    </mat-card-header>
+                    <mat-card-content>
+                        <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="editor"></angular-editor>
+                        <!-- <editor apiKey="ct0m8t2dsa709r1gu8zov6dzdfe0iw42xjnon3n4rpvqusg9" cloudChannel="5"
+                            [disabled]="false" id="" [init]="{   
+                            height: 500,
+                            menubar: false,
+                            plugins: [
+                              'advlist autolink lists link image charmap print preview anchor',
+                              'searchreplace visualblocks code fullscreen',
+                              'insertdatetime media table paste code help wordcount'
+                            ],
+                            toolbar:
+                              'undo redo | formatselect | bold italic backcolor | \
+                              alignleft aligncenter alignright alignjustify | \
+                              bullist numlist outdent indent | removeformat | help'
+                          }" [(ngModel)]="editor" initialValue="" style="min-height: 400px;" [inline]="false"
+                            plugins="" tagName="div" toolbar=""></editor> -->
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

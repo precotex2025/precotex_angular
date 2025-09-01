@@ -1,0 +1,85 @@
+
+<div class="container"> 
+   
+    <div class="grid-container"> 
+ 
+        <div class="title">Transferir ubicación de bultos: </div>
+        
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+            <div class="container-cuerpo-fila1">
+
+                    <mat-form-field class="fila1-Rack"> 
+                        <mat-label>Escanear nueva ubicación</mat-label>
+                        <input matInput type="text"  value=""  (input)="onToggleCodBarUbicacion()" autocomplete="off"
+                               [(ngModel)]="codBarUbicacion"   formControlName="sCodUbicacion">
+                    </mat-form-field> 
+
+
+                    <!-- <mat-form-field class="fila1-Npalet"> 
+                        <mat-label>Número de paleta</mat-label>
+                        <input matInput type="text"  value=""  (input)="onToggleCodBarUbicacion()" autocomplete="off"
+                               [(ngModel)]="codBarUbicacion"   formControlName="sCodUbicacion">
+                    </mat-form-field>  -->   
+
+            </div>
+
+            <div class="container-cuerpo-fila2">
+                    <table mat-table #table2   [dataSource]="dataSource"  class="mat-elevation-z8" >
+                
+                        <ng-container matColumnDef="Id_correlativo">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Id_Detalle</th>
+                            <td mat-cell class="mat-header-cell" *matCellDef="let data_det"> {{data_det.Id_correlativo}} </td>
+                        </ng-container>
+        
+        
+                        <ng-container matColumnDef="Id_num">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Id_Ubica</th>
+                            <td mat-cell class="mat-header-cell" *matCellDef="let data_det"> {{data_det.Id_num}} </td>
+                        </ng-container>
+        
+                        <ng-container matColumnDef="Cod_ubicacion">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Ubicación actual</th>
+                            <td mat-cell class="mat-header-cell" *matCellDef="let data_det"> {{data_det.Cod_ubicacion}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="lote">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Lote</th>
+                            <td mat-cell  class="mat-header-cell" *matCellDef="let data_det"> {{data_det.lote}} </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="Palet">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Palet</th>
+                            <td mat-cell  class="mat-header-cell" *matCellDef="let data_det" 
+                            [ngStyle]="{'background': data_det.palet == 1 ? '#D7EBAF' : '#D6CBAE' }"> {{data_det.palet}} </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr> 
+
+            </table>
+
+            <mat-paginator  class="paginador" #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+            </mat-paginator>
+
+
+            </div>    
+
+
+ 
+            <div class="container-cuerpo-foot">
+                <button type="button" class="button-agregar" mat-dialog-close="false"  mat-flat-button (click)="guardarTranfer();">
+                    <mat-icon aria-label="person" >add </mat-icon>  Transferir
+                </button>
+
+              
+
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off </mat-icon>  Cancelar
+                </button>               
+            </div>
+        </form>
+
+    </div>
+</div>
+    

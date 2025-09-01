@@ -1,0 +1,77 @@
+
+<div class="container">
+
+    <div class="grid-container">
+
+        <div class="title">INSPECCION PRENDA - HABILITADOR</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario" >
+            <div class="main-container">
+
+                <div class="sub-container">
+                    <div class="sub-container-cuerpo1">
+                        <div class="container-cuerpo-fila1">
+
+                            <mat-form-field class="fila1-Codigo">
+                                <mat-label>Ticket</mat-label>
+                                <input matInput type="text" placeholder="Ticket" value="" autocomplete="off"
+                                    formControlName="Codigo">
+                            </mat-form-field>
+
+                            <mat-form-field class="fila1-OP">
+                                <mat-label>OP</mat-label>
+                                <input matInput type="text" placeholder="OP" value="" autocomplete="off"
+                                    formControlName="OP">
+                            </mat-form-field>
+
+                            <mat-form-field class="fila1-Color">
+                                <mat-label>Color</mat-label>
+                                <input matInput type="text" placeholder="Color" value="" autocomplete="off"
+                                    formControlName="Color">
+                            </mat-form-field>
+
+
+                            <mat-form-field class="fila1-Talla">
+                                <mat-label>Talla</mat-label>
+                                <input matInput type="text" placeholder="Talla" value="" autocomplete="off"
+                                    formControlName="Talla">
+                            </mat-form-field>
+
+                            <mat-form-field class="fila1-Cantidad">
+                                <mat-label>Cantidad</mat-label>
+                                <input matInput type="text" placeholder="Cantidad" value="" autocomplete="off"
+                                    formControlName="Cantidad">
+                            </mat-form-field>
+
+                        </div>
+                    </div>
+
+                    <div class="sub-container-cuerpo2">
+                        <mat-card class="example-card">
+                            <mat-card-title>Prenda</mat-card-title>
+
+                            <mat-card-content>
+                                <img [src]="ImagePath" style="width: 250px;height: 150px; object-fit: contain;">
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="container-cuerpo-foot">
+                <button  type="submit" class="button-agregar" (click)="closeModal()"  class="button-agregar" mat-flat-button>
+                    <mat-icon aria-label="person" >check
+                    </mat-icon>  Aceptar
+                </button>
+
+                <button type="button" class="button-cancelar"  mat-button mat-dialog-close="false" mat-dialog-close="false"  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>               
+            </div> 
+        </form>
+
+    </div>
+
+</div>

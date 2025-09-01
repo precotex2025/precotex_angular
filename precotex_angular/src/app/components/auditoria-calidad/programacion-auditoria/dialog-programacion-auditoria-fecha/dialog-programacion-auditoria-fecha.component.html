@@ -1,0 +1,23 @@
+<div class="container"> 
+    <div class="grid-container">  
+        <div class="title">Programar Auditoria - {{ data.Cod_EstCli }} </div>
+        <form class="container-cuerpo" #formDirective="ngForm" (ngSubmit)="onSubmit(formDirective)" >
+            <div class="container-cuerpo-fila1">
+                <mat-card class="demo-inline-calendar-cardx">
+                    <mat-calendar [minDate]="data.fechaMin" [(selected)]="data.Fecha_Programacion"></mat-calendar>
+                </mat-card>
+            </div>     
+ 
+            <div class="container-cuerpo-foot">
+                <button  type="submit" class="button-agregar" [mat-dialog-close]="data.Fecha_Programacion" mat-flat-button>
+                    <mat-icon aria-label="person" >check_circle</mat-icon>Aceptar
+                </button>
+
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off</mat-icon>Cancelar
+                </button>               
+            </div> 
+        </form>
+
+    </div>
+</div>

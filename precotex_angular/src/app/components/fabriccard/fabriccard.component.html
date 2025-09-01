@@ -1,0 +1,178 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title" style="color: white;">APROBACION DE FABRIC CARD</div>
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+
+               
+
+                <mat-form-field class="fila1-partida" appearance="fill">
+                    <mat-label>Filtro de busqueda </mat-label>
+                    <input matInput type="text" 
+                    placeholder="Ingrese la busqueda"  autocomplete="off" formControlName="Partida" #MyPartida /> 
+                    <!-- <input matInput type="text" 
+                        placeholder="Ingrese la busqueda" (keyup)="buscarPartida($event)" autocomplete="off" formControlName="Partida" /> -->
+                </mat-form-field>
+
+                
+                <!-- <mat-form-field class="fila1-estilo" appearance="fill">
+                    <mat-label>Busqueda por Estilo</mat-label>
+                    <input matInput type="text" 
+                        placeholder="Busca por Estilo" autocomplete="off" formControlName="Estilo" />
+                </mat-form-field>
+
+                
+                <mat-form-field class="fila1-temporada" appearance="fill">
+                    <mat-label>Busqueda por temporada</mat-label>
+                    <input matInput type="text" 
+                        placeholder="Busca por Temporada" autocomplete="off" formControlName="Temporada" />
+                </mat-form-field> -->
+<!-- 
+                <button type="button" class="fila1-excel" mat-flat-button (click)="generateExcel()">
+                    <mat-icon aria-label="person">assignment</mat-icon>Exportar
+                </button>   -->
+
+
+                <button type="button" class="fila1-actualizar" mat-flat-button (click)="MostrarCabeceraFabricC()" >                    
+                    <mat-icon aria-label="person">sync</mat-icon>Actualizar
+                </button>
+
+
+            </div>
+
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                    
+                    <ng-container matColumnDef="Acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det">
+
+                            <a mat-icon-button style="margin-right:5px;" (click)="openDialogModificar(data_det)"  matTooltip="EVALUAR">
+                                <mat-icon color="warn" style="color: #0e740e;">view_list</mat-icon>
+                            </a>
+
+                            <a mat-icon-button style="margin-right:5px;" (click)="openDialogRecepcionar(data_det)" matTooltip="RECEPCIÓN" >
+                                <mat-icon color="warn" style="color: #4935f5;">call_received</mat-icon>
+                            </a>
+
+                        </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="FechaRegistro">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha Registro</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.FECHA_REGISTRO}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Num_Fabric">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nro Fabric Card</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.NUM_FABRIC_CARD}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Partida">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Partida</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.COD_ORDTRA}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Sec">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Secuencia</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.SEC}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Cliente">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cliente</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.CLIENTE}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Color">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Color</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.COLOR}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Tela">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tela</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.TELA}}
+                        </td>
+                    </ng-container>
+              
+                    <ng-container matColumnDef="Temporada">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Temporada</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.TEMPORADA }} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Estilo_Cliente">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estilo Cliente</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.ESTILO_CLIENTE }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Op">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Op</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.OP }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Grupo_Textil">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Grupo Textil</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.COD_GRUPOTEX }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Primera_Partida">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Primera_Partida</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.PRIMERA_PARTIDA }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Estado">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estado</th>
+                        <td class="mat-header-cell" mat-cell *matCellDef="let data_det"> {{data_det.DES_STATUS}} </td>
+                    </ng-container>
+
+
+   
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+
+                </table>
+
+                                     </div>
+
+
+
+
+            <div class="container-cuerpo-foot">
+
+                <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+                </mat-paginator>
+
+                
+                <!-- <button type="button" class="button-agregar" mat-flat-button (click)="openDialog();">
+                    <mat-icon aria-label="person">add
+                    </mat-icon> Agregar
+                </button> -->
+
+                <!--<button type="button" class="button-cancelar" [routerLink]="['/SeguridadControlVehiculoAccion']" mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Regresar
+                </button> -->
+
+               
+
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

@@ -1,0 +1,36 @@
+<!-- presentacion.component.html -->
+<div class="container"> 
+    <div class="grid-container"> 
+        <div class="title"> Agrupamiento de Colgadores</div>
+        <div class="container-fluid bg-gradient">
+            <br>
+        
+            <!-- Botones verticales -->
+            <div class="d-flex flex-column justify-content-center align-items-center" style="display: flex;flex-direction: column;justify-content: space-evenly;">
+
+                <!-- <button type="button" class="btn-standar" mat-flat-button>                    
+                    <mat-icon aria-label="person">search</mat-icon> Ubicación colgadores consulta
+                </button>
+                <br> -->
+                <button type="button" class="btn-standar-success" mat-flat-button (click)="link_1()">                    
+                    <mat-icon aria-label="person">done</mat-icon> Ingreso / Retiro
+                </button>
+                <br>
+                <button type="button" class="btn-standar-warning" mat-flat-button (click)="link_2()">                    
+                    <mat-icon aria-label="person">where_to_vote</mat-icon> Reubicacion Colgadores
+                </button>
+                <br>
+                <button type="button" class="btn-standar-warning" mat-flat-button (click)="link_3()">
+                    <mat-icon aria-label="person">where_to_vote</mat-icon> Reubicacion Cajas
+                </button>
+                <!-- <button class="btn waves-effect waves-light btn-large purple lighten-2 mb-4 w-75">
+                    Genera / Consulta grupo
+                </button> -->
+                <!-- <button class="btn waves-effect waves-light btn-large indigo lighten-1 w-75">
+                    Reubica / Ubica grupo
+                </button> -->
+            </div>
+        </div>
+    </div>
+</div>
+  

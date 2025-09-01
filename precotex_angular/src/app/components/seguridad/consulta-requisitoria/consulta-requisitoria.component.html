@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="grid-container">
+        <div class="title">Consulta Requisitorias</div>
+
+        <div class="find">
+            <div class="auditoriaForm" >
+                <div class="findcol1">
+                    <mat-form-field class="example-form-field" appearance="fill">
+                        <mat-label>N° Documento</mat-label>
+                        <input matInput type="text" maxlength="8" (input)="validarDocumento()"
+                        (change)="validarDocumento()" [(ngModel)]="numDocumento" placeholder="N° Documento" autocomplete="off">
+                        <button matSuffix mat-icon-button aria-label="Clear" (click)="limpiarValor()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="caja" *ngIf="dataRequisitoria.length > 0">
+                <mat-card>
+                    <mat-card-header>
+                        <b>Datos de la Requisitoria</b>
+                    </mat-card-header>
+                </mat-card>
+
+                <mat-card-content class="caja-content">
+
+                    <table style="width:100%" border="1px">
+                        <tr>
+                            <th>N° Documento</th>
+                            <th>Nombres</th>
+                            <th>Observación</th>
+                            <th>Fecha Registro</th>
+                        </tr>
+                        <tr *ngFor="let item of dataRequisitoria">
+                            <td>{{ item.Nro_DocIde }}</td>
+                            <td>{{ item.Nombre }}</td>
+                            <td>{{ item.Observacion }}</td>
+                            <td>{{ item.Fecha_Creacion | date: 'dd-MM-yyyy HH:mm' }}</td>
+                        </tr>                        
+                    </table>
+                </mat-card-content>
+            </div>
+
+        </div>        
+
+    </div>
+</div>

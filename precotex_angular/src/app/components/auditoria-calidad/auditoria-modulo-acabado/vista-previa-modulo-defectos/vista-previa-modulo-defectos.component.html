@@ -1,0 +1,93 @@
+ <span style="float: right;" aria-label="Close" class="cerrar" (click)="closeModal()" aria-hidden="true">&times;</span>
+ <div class="row">
+    <div class="caja">
+        <p>OP</p>
+        <p class="strong">{{data.Cod_OrdPro}}</p>
+    </div>
+    <div class="caja">
+        <p>CLIENTE</p>
+        <p class="strong">{{data.Des_Cliente}}</p>
+    </div>
+    <div class="caja">
+        <p>Estilo</p>
+        <p class="strong">{{data.Des_EstPro}}</p>
+    </div>
+    <div class="caja">
+        <p>Temporada</p>
+        <p class="strong">{{Temp}}</p>
+    </div>
+    <div class="caja">
+        <p>Color</p>
+        <p class="strong">{{data.Des_Present}}</p>
+    </div>
+    <div class="caja">
+        <p>Fecha Registro</p>
+        <p class="strong">{{data.Fecha_Reg.date | date: 'dd/MM/YYYY' }}</p>
+    </div>
+    <div class="caja">
+        <p>Tamaño Muestra</p>
+        <p class="strong">{{data.Can_Muestra}}</p>
+    </div>
+    <div class="caja">
+        <p>Número de Defectos</p>
+        <p class="strong">{{data.Can_Defecto}}</p>
+    </div>
+    <div class="caja">
+        <p>N° de Defectos / Muestra %</p>
+        <p class="strong">{{((data.Can_Defecto*100)/data.Can_Muestra) | number : '1.2-2'}} %</p>
+    </div>
+    <div class="caja">
+        <p>Tipo Prenda</p>
+        <p class="strong">{{data.des_tippre}}</p>
+    </div>
+    <div class="caja">
+        <p>Status</p>
+        <p class="strong">{{data.Flg_Status == 'A' ? 'APROBADO' : data.Flg_Status == 'R' ? 'RECHAZADO' : ''}}</p>
+    </div>
+    <div class="caja">
+        <p>Auditor</p>
+        <p class="strong">{{data.Cod_Usuario}}</p>
+    </div>
+    
+   
+</div>
+<div class="row">
+    <mat-card>
+        <mat-card-content>
+            <div class="body-tabla">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Defecto</th>
+                      <th>Cantidad</th>
+                     <!-- <th>D. Leve</th>
+                      <th>D. Crítico</th>-->
+                      <th>% Defecto</th>
+                    </tr>
+                  </thead>
+               
+                  <tr  *ngIf="dataDefectos.length === 0" >
+                    <th colspan="4">No se encuentran registros</th>                     
+                  </tr>
+
+                    
+                  <tbody>                    
+                    <tr *ngFor="let item of dataDefectos">
+                      <td>{{item.Cod_Motivo}}</td>
+                      <td>{{item.Descripcion}}</td>
+                      <td>{{item.Cantidad}}</td>
+                     <!-- <td><span
+                        *ngIf="item.Leve == '1'"><mat-icon style="color: green; font-weight: bold; font-size: 30px;">check</mat-icon></span></td>
+                      <td><span
+                        *ngIf="item.Critico == '1'"><mat-icon style="color: green; font-weight: bold; font-size: 30px;">check</mat-icon></span></td>
+                      -->
+                        <td>{{((item.Cantidad / data.Can_Muestra) * 100) | number : '1.2-2' }} %</td>
+                    </tr>
+                    
+                  </tbody>               
+                </table>
+              </div>
+        </mat-card-content>
+    </mat-card>
+</div>

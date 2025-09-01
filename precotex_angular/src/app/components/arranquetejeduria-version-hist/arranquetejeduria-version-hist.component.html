@@ -1,0 +1,190 @@
+<div class="container">
+    <div class="grid-container">
+      <div class="title">
+        <strong> HISTORIAL DE ARRANQUE DE TEJEDURIA</strong>
+      </div>
+      <div class="body">
+
+        <form  [formGroup]="formulario" #formDirective="ngForm">
+
+            <mat-card class="full-width-card">
+                <mat-card-content>
+
+                    <div class="container-cuerpo-fila1">
+
+                        <mat-form-field class="fila1-fecha" appearance="fill">
+                            <mat-label>Rango de Fecha de Arranque</mat-label>
+                            <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                            <input matStartDate formControlName="start" placeholder="Fecha Inicio">
+                            <input matEndDate formControlName="end" placeholder="Fecha Final">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                            <mat-icon (click)="clearDate($event)" style=" position: absolute;
+                                        float: right;
+                                        top: -6px;
+                                        margin-left: 190px;
+                                        cursor: pointer;
+                                        color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+                            <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Fecha Invalida</mat-error>
+                            <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Fecha Invalida</mat-error>
+                        </mat-form-field>
+
+                        <div class="fila1-OT">
+                            <mat-form-field  appearance="fill">
+                                <mat-label>OT</mat-label>
+                                <input matInput type="text" formControlName="CodOrdTra">
+                            </mat-form-field>
+                        </div>  
+
+                        <button type="button" class="fila1-BtnBuscar" mat-flat-button  (click)="ListadoArranqueTejeduriaHistorial()">
+                            <mat-icon aria-label="create_new_folder">search
+                            </mat-icon> Buscar
+                        </button>    
+                        
+                        <button type="button" class="fila1-BtnExportar" mat-flat-button (click)="exportarExcel()">
+                            <mat-icon aria-label="create_new_folder">create_new_folder
+                            </mat-icon> Exportar
+                        </button>      
+                        
+                        <button type="button" class="fila1-BtnExportarDetail" mat-flat-button (click)="exportarExcelDetalle()">
+                            <mat-icon aria-label="create_new_folder">create_new_folder
+                            </mat-icon> Exportar Detalle
+                        </button>                           
+                        
+                    </div> 
+                                
+                </mat-card-content>
+            </mat-card>
+
+            <br>
+
+            <mat-card class="full-width-card">
+                <mat-card-header>
+                    Listado Historial de Arranque de Tejeduria
+                </mat-card-header>
+
+                <mat-card-content>
+                    <div class="container-cuerpo-fila2">
+
+                        <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+
+                            <ng-container matColumnDef="turno">
+                                <th mat-header-cell *matHeaderCellDef> Turno </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.turno}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="nom_Usuario">
+                                <th mat-header-cell *matHeaderCellDef> Auditor </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.nom_Usuario}}</td>
+                            </ng-container>    
+                            
+                            <ng-container matColumnDef="fecha_Produccion">
+                                <th mat-header-cell *matHeaderCellDef> Fecha Producción </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.fecha_Produccion | date: 'dd/MM/yyyy' }}</td>
+                            </ng-container>                               
+                            
+                            <ng-container matColumnDef="fecha_Creacion">
+                                <th mat-header-cell *matHeaderCellDef> Fecha Arranque </th>
+                                <!-- <td mat-cell *matCellDef="let data_det"> {{data_det.fecha_Creacion | date: 'dd/MM/yyyy' }}</td> -->
+                                <td mat-cell *matCellDef="let data_det"> 
+                                    {{
+                                    (data_det.fecha_Creacion && (data_det.fecha_Creacion | date:'yyyy-MM-dd HH:mm:ss') !== '1900-01-01 00:00:00') 
+                                        ? (data_det.fecha_Creacion | date:'dd/MM/yyyy HH:mm') 
+                                        : ''
+                                    }}                                
+                                </td>
+                            </ng-container>   
+                            
+                            <!-- <ng-container matColumnDef="hora_Creacion">
+                                <th mat-header-cell *matHeaderCellDef> Hora Arranque </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.fecha_Creacion | date: 'HH:mm' }}</td>
+                            </ng-container>                             -->
+                            
+                            <ng-container matColumnDef="cod_Maquina_Tejeduria">
+                                <th mat-header-cell *matHeaderCellDef> Maquina </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.cod_Maquina_Tejeduria}}</td>
+                            </ng-container>  
+
+                            <ng-container matColumnDef="cod_Ordtra">
+                                <th mat-header-cell *matHeaderCellDef> OT </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.cod_Ordtra}}</td>
+                            </ng-container>     
+                            
+                            <ng-container matColumnDef="OrdComp">
+                                <th mat-header-cell *matHeaderCellDef> Orden Pedido </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.ser_OrdComp}} - {{data_det.cod_OrdComp}} </td>
+                            </ng-container>    
+
+                            <ng-container matColumnDef="estado">
+                                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                                <td mat-cell *matCellDef="let data_det">
+                                    <mat-slide-toggle class="example-margin" color="warn" [disabled]="data_det.Fec_Almacen_Tela == null"  >
+                                       <span style="background-color: green; color: white; padding: 2px;" *ngIf="data_det.estado == 'APROBADO'" >Aprobado</span> 
+                                       <span style="background-color: red; color: white; padding: 2px;" *ngIf="data_det.estado == 'RECHAZADO'" >Rechazado</span> 
+                                    </mat-slide-toggle>
+                                  </td>                                
+                                <!-- <td mat-cell *matCellDef="let data_det"> {{data_det.estado}} </td> -->
+                            </ng-container>         
+                            
+                            <ng-container matColumnDef="nom_Cliente">
+                                <th mat-header-cell *matHeaderCellDef> Cliente </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.nom_Cliente}} </td>
+                            </ng-container>   
+
+                            <!--INI - NUEVO REQ-->
+                            <ng-container matColumnDef="fch_Hora_Entrega">
+                                <th mat-header-cell *matHeaderCellDef> Hora Entre. Calidad </th>
+                                <td mat-cell *matCellDef="let data_det">
+                                    {{
+                                    (data_det.fch_Hora_Entrega && (data_det.fch_Hora_Entrega | date:'yyyy-MM-dd HH:mm:ss') !== '1900-01-01 00:00:00') 
+                                        ? (data_det.fch_Hora_Entrega | date:'dd/MM/yyyy HH:mm') 
+                                        : ''
+                                    }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="diferenciaEnMinutos">
+                                <th mat-header-cell *matHeaderCellDef> Dif. Minutos </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.diferenciaEnMinutos}} </td>
+                            </ng-container>                            
+                            
+                            <ng-container matColumnDef="descripcion_Area">
+                                <th mat-header-cell *matHeaderCellDef> Area </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.descripcion_Area}} </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="descripcion_Motivo">
+                                <th mat-header-cell *matHeaderCellDef> Defecto </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.descripcion_Motivo}} </td>
+                            </ng-container>
+                            <!--FIN - NUEVO REQ-->
+
+                            <ng-container matColumnDef="observaciones">
+                                <th mat-header-cell *matHeaderCellDef> Observaciones </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.observaciones}} </td>
+                            </ng-container>                              
+                            
+                            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                            <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>                            
+                            
+                        </table> 
+
+                        <mat-paginator #MatPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons 
+                        aria-label="Select page of periodic elements">
+                        </mat-paginator>                        
+
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+        </form>
+
+
+      </div>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

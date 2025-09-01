@@ -1,0 +1,148 @@
+<!--DefectosAlamacenDerivados-->
+  
+  
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container"> 
+ 
+        <div class="title">Lista Control Jaba - Cabecera</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+                 
+                <mat-form-field class="fila1-fecha">
+                    <mat-label>Fec. Registro</mat-label>
+                    <input matInput [matDatepicker]="Fec_Registro" autocomplete="off"
+                        formControlName="Fec_Registro">
+                    <mat-datepicker-toggle matSuffix [for]="Fec_Registro"></mat-datepicker-toggle>
+                    <mat-icon  (click)="clearDate($event)" style=" position: absolute;
+                    float: right;
+                    top: 5px;
+                    margin-left: -26px;
+                    cursor: pointer;
+                    color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+                    <mat-datepicker #Fec_Registro></mat-datepicker>
+                </mat-form-field>
+
+                    <!--<mat-form-field class="fila1-Cod_registro"> 
+                        <mat-label>Cod. Registro</mat-label>
+                        <input matInput type="text"   placeholder="Cod. Registro" value=""
+                            autocomplete="off" formControlName="Cod_registro" >
+                    </mat-form-field>-->
+
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="ListarCabeceraJaba()">                    
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+
+
+                <button type="button" class="fila1-agregar" *ngIf="Cod_Rol != 11"  mat-flat-button (click)="AgregarDetalle()" [routerLink]="['/RegistrarSeguridadControlJaba']">
+                    <mat-icon aria-label="person">add
+                    </mat-icon>  Agregar
+                </button>
+ 
+                <!--<button type="button" class="fila1-excel" mat-flat-button (click)="generateExcel()">
+                    <mat-icon aria-label="create_new_folder">create_new_folder
+                    </mat-icon> Reporte Excel
+                </button>-->
+
+            </div>    
+ 
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                    <ng-container matColumnDef="Codigo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod. #</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_Registro_Cab}} </td>
+                    </ng-container>
+                
+                    <ng-container matColumnDef="Total">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Total Jabas</th>
+                        <td mat-cell *matCellDef="let data_det">  {{data_det.Total}} </td>
+                    </ng-container>
+
+                     <ng-container matColumnDef="Fec_Registro">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha Registro</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{data_det.Fec_Registro}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Cod_Usuario">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Usuario</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{data_det.Cod_Usuario}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Observacion">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Observacion</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Observacion}}  </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Estado">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estado</th>
+                        <td mat-cell *matCellDef="let data_det" >    
+                            <button *ngIf="data_det.Flg_Estado == 'F';" type="button"style="background:#3f51b5; width: 110px;" class="button-agregar" mat-flat-button >Finalizado</button>
+                            <button *ngIf="data_det.Flg_Estado == 'P';" type="button"style="background:#f44336; width: 110px;" class="button-agregar" mat-flat-button >Pendiente</button>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Almacen">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod. Almacen</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_Almacen}}  </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Movimiento">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Num. Movimiento</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Num_MovStk}}  </td>
+                    </ng-container>
+                  
+                    <ng-container matColumnDef="Acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            
+                            <div *ngIf="data_det.Flg_Estado == 'P';">
+                                <button mat-icon-button style="margin-right:5px;" *ngIf="data_det.Cod_Usuario.length>0 && Cod_Rol != 11"   (click)="VerDetalle(data_det.Cod_Registro_Cab, data_det.Observacion, 'N')" [routerLink]="['/RegistrarSeguridadControlJaba']">
+                                    <mat-icon color="primary">assignment</mat-icon>
+                                </button>
+                                <button mat-icon-button style="margin-right:5px;" *ngIf="data_det.Cod_Usuario.length>0 && Cod_Rol != 11"   (click)="FinalizarRegistro(data_det.Cod_Registro_Cab)">
+                                    <mat-icon color="primary">check_box</mat-icon>
+                                </button>
+                                <button mat-icon-button  *ngIf="data_det.Cod_Usuario.length>0 && Cod_Rol != 11" (click)="EliminarRegistroCabecera(data_det.Cod_Registro_Cab)">
+                                    <mat-icon color="warn">delete</mat-icon>
+                                </button>
+                            </div>
+
+                            <div *ngIf="data_det.Flg_Estado == 'F';">
+                                <button mat-icon-button style="margin-right:5px;" *ngIf="data_det.Cod_Usuario.length>0"   (click)="generateExcel(data_det.Cod_Registro_Cab)">
+                                    <mat-icon color="primary">print</mat-icon>
+                                </button>
+                                
+                                <button mat-icon-button style="margin-right:5px;" *ngIf="data_det.Cod_Usuario.length>0"   (click)="VerDetalle(data_det.Cod_Registro_Cab, data_det.Observacion, 'S')" [routerLink]="['/RegistrarSeguridadControlJaba']">
+                                    <mat-icon color="primary">assignment</mat-icon>
+                                </button>
+                           
+                                <button mat-icon-button style="margin-right:5px;" *ngIf="data_det.Cod_Usuario.length>0 && Cod_Rol != 11"   (click)="RevertirEstado(data_det.Cod_Registro_Cab)">
+                                    <mat-icon color="primary">cached</mat-icon>
+                                </button>
+                                <button mat-icon-button style="display: none;" *ngIf="data_det.Cod_Usuario.length>0 && Cod_Rol != 11" [disabled]="isDisableVerDetalle" (click)="EliminarRegistroCabecera(data_det.Cod_Registro_Cab)">
+                                    <mat-icon color="warn">delete</mat-icon>
+                                </button>
+                            </div>
+
+                        </td>
+                    </ng-container> 
+
+    
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+
+                </table>
+
+       
+
+            </div>
+
+        </form>
+
+    </div>
+ 
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>       

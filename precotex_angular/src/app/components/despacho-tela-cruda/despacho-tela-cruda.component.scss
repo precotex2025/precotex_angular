@@ -1,0 +1,218 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: rgb(60, 255, 0);
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 16px;
+    margin: 0;
+}
+
+.grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: 93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0;
+    padding: 0;
+    //position: absolute;
+    min-width: 320px;
+}
+
+button {
+    height: 37px;
+    font-size: 14px;
+}
+mat-form-field {
+    width: 100%;
+    padding: 0px 20px 10px 0px;
+}
+
+mat-checkbox {
+    padding: 0px 20px 10px 0px;
+}
+
+.button_buscar {
+    width: 100%;
+    background-color: #337ab7;
+    margin-top: 5px;
+}
+
+.button_agregar {
+    width: 100%;
+    background-color: #337ab7;
+    margin-top: 5px;
+}
+
+.find,
+.main,
+.footer {
+    margin: 5px 5px 0px 5px;
+}
+
+.title {
+    background-color: #337ab7;
+    color: #fcffff;
+    padding: 8px 0px 10px 0px;
+    text-align: center;
+}
+
+.find {
+    border: 1px solid #bbd2e6;
+    border-width: 0px 0px 1px 0px;
+
+    width: 100%;
+    margin: 0%;
+    padding: 0px 5px 5px 5px;    
+}
+.main {
+    border: 1px solid #bbd2e6;
+    border-width: 0px 0px 1px 0px;
+    padding-bottom: 5px;
+}
+.footer {
+    text-align: left;
+}
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.tabla_cabecera {
+    width: 100%;
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: whitesmoke;
+}
+
+tr:active {
+    background: #efefef;
+}
+
+/* ------------------------- */
+/* RESPONSIVE */
+/* ------------------------- */
+.grid-container {
+    display: grid;
+    gap: 5px;
+    grid-template:
+        "title" 35px
+        "find" 105px
+        "main" auto;
+}
+
+.title {
+    grid-area: title;
+}
+.find {
+    grid-area: find;
+}
+.main {
+    grid-area: main;
+}
+
+.auditoriaForm {
+    padding-bottom: 20px;
+    width: 100%;
+    display: grid;
+    gap: 5px;
+
+    grid-template:
+        "findcol1 findcol2 findcol3 findcol4" 50px /
+        150px 100px auto auto;
+}
+
+.findcol1 {
+    grid-area: findcol1;
+}
+.findcol2 {
+    grid-area: findcol2;
+}
+.findcol3 {
+    grid-area: findcol3;
+}
+.findcol4 {
+    grid-area: findcol4;
+}
+
+@media screen and (max-width: 370px) {
+    // .grid-container {
+    //     background: red;
+    // }
+
+    .auditoriaForm {
+        display: grid;
+        gap: 5px;
+        grid-template:
+            "findcol1 findcol2" 50px
+            "findcol3 findcol4" 50px /
+            165px 165px;
+    }
+}
+
+@media screen and (min-width: 370px) {
+    // .grid-container {
+    //     background: blue;
+    // }
+
+    .auditoriaForm {
+        display: grid;
+        gap: 5px;
+        grid-template:
+            "findcol1 findcol2" 50px
+            "findcol3 findcol4" 50px /
+            165px 165px;
+    }
+}
+
+@media screen and (min-width: 420px) {
+    // .grid-container {
+    //     background: blue;
+    //     width: 100%;
+    // }
+
+    .grid-container {
+        display: grid;
+        gap: 5px;
+        grid-template:
+            "title" 35px
+            "find" 50px
+            "main" auto;
+    }
+
+    .auditoriaForm {
+        display: grid;
+        gap: 5px;
+        grid-template:
+            "findcol1 findcol2 findcol3 findcol4" 50px /
+            140px 80px auto auto;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .grid-container {
+        //background: blue;
+        width: 100%;
+    }
+
+    .grid-container {
+        display: grid;
+        gap: 5px;
+        grid-template:
+            "title" 35px
+            "find" 50px
+            "main" auto;
+    }
+
+    .auditoriaForm {
+        display: grid;
+        gap: 5px;
+        grid-template:
+            "findcol1 findcol2 findcol3 findcol4" 50px /
+            200px 140px auto auto;
+    }
+}

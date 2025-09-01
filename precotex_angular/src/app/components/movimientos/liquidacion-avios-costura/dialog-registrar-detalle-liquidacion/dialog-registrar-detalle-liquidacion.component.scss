@@ -1,0 +1,351 @@
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0; 
+}
+  
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: 400px; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 320px;
+    min-height: 500px;
+
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 90%;
+    margin: 0;
+    padding: 10px 10px;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 380px
+        "foot" 55px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+.container-cuerpo-foot {
+    grid-area: foot;    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+//fila 1 
+.container-cuerpo-fila1 {
+    display: grid;
+    justify-content: center;
+    grid-template:
+    "col1 col2 col3"  70px
+    "col4 col5 col6"  70px  
+    "col7 col8 col9"  70px      
+    "col10 col11 col12"  70px 
+    "col13 col14 col14"  70px /     
+    300px 300px  auto;
+
+.fila1-Estado {
+    grid-area: col1;
+    width: 260px;
+}
+
+.fila1-OP {
+    grid-area: col4;
+    width: 260px;
+}
+ 
+.fila1-Item {
+    grid-area: col5;
+    width: 260px;
+}
+.fila1-Artículo {
+    grid-area: col6;
+    width: 260px;
+}
+.fila1-Grosor {
+    grid-area: col7;
+    width: 260px;
+}
+.fila1-Talla {
+    grid-area: col8;
+    width: 260px;
+}
+.fila1-ColorPro {
+    grid-area: col9;
+    width: 260px;
+}
+.fila1-Color {
+    grid-area: col10;
+    width: 260px;
+}
+.fila1-Lote {
+    grid-area: col11;
+    width: 260px;
+}
+.fila1-Marca {
+    grid-area: col12;
+    width: 260px;
+}
+.fila1-Conos {
+    grid-area: col13;
+    width: 260px;
+}
+.fila1-Descripcion {
+    grid-area: col14;
+   
+} 
+
+}
+
+
+
+
+//fila foot
+.container-cuerpo-foot {
+ 
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+    "fcol1 fcol2" auto /
+    160px 140px auto;
+}
+
+
+
+.container-cuerpo-foot, .button-agregar, .button-cancelar {
+    height: 70%;
+    margin: 0 auto;
+    margin: 10px 10px 10px 10px;
+    min-height: 42px;
+  //  max-width: 100%;
+    min-width: 140px;
+} 
+
+.button-agregar {
+    grid-area: fcol1;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+
+.button-cancelar {
+    grid-area: fcol2;
+    background-color: #d32f2f;
+    color: #ffffff;
+}
+
+.container-cuerpo-fila2{
+    width: 100%;
+}
+
+@media screen and (max-width: 1500px){
+    .container-cuerpo {
+        height: 100%;
+    }
+}
+
+
+@media screen and (max-width: 868px){
+    .grid-container{
+        height: 500px;
+    }
+
+    .container-cuerpo {
+        display: grid;
+        grid-template:
+        "fila1" 380px
+        "foot" 55px / 
+        99%;
+    }
+
+    .container-cuerpo-fila1 {
+        display: grid;
+        grid-template:
+        "col1 col2"  60px
+        "col3 col4"  60px  
+        "col5 col6"  60px 
+        "col7 col8"  60px      
+        "col9 col10"  60px 
+        "col11 col12"  60px 
+        "col13 col14"  60px /     
+        200px 300px  auto;
+
+    
+.fila1-Estado {
+    grid-area: col1;
+    width: 200px;
+}
+
+.fila1-OP {
+    grid-area: col3;
+    width: 200px;
+}
+ 
+.fila1-Item {
+    grid-area: col4;
+    width: 200px;
+}
+.fila1-Artículo {
+    grid-area: col5;
+    width: 200px;
+}
+.fila1-Grosor {
+    grid-area: col6;
+    width: 200px;
+}
+.fila1-Talla {
+    grid-area: col7;
+    width: 200px;
+}
+.fila1-ColorPro {
+    grid-area: col9;
+    width: 200px;
+}
+.fila1-Color {
+    grid-area: col8;
+    width: 200px;
+}
+.fila1-Lote {
+    grid-area: col9;
+    width: 200px;
+}
+.fila1-Marca {
+    grid-area: col10;
+    width: 200px;
+}
+.fila1-Conos {
+    grid-area: col11;
+    width: 200px;
+}
+.fila1-Descripcion {
+    grid-area: col12;
+   
+} 
+
+    }
+
+  }
+
+
+
+  @media screen and (max-width: 688px){
+   .grid-container{
+       height: 620px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila1" 440px
+        "foot" 55px /
+        99%; 
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        grid-template:
+        "col1 col2"  60px
+        "col3 col4"  60px
+        "col5 col6"  60px 
+        "col7 col8"  60px  
+        "col9 col10"  60px
+        "col11 col12"  60px
+        "col13 col14"  60px /
+        120px 120px  auto;
+    
+        
+    .fila1-Estado {
+        grid-area: col1;
+        width: 120px;
+    }
+
+    .fila1-OP {
+        grid-area: col3;
+        width: 120px;
+    }
+    
+    .fila1-Item {
+        grid-area: col4;
+        width: 120px;
+    }
+    .fila1-Artículo {
+        grid-area: col5;
+        width: 120px;
+    }
+    .fila1-Grosor {
+        grid-area: col6;
+        width: 120px;
+    }
+    .fila1-Talla {
+        grid-area: col7;
+        width: 120px;
+    }
+    .fila1-ColorPro {
+        grid-area: col8;
+        width: 120px;
+    }
+    .fila1-Color {
+        grid-area: col9;
+        width: 120px;
+    }
+    .fila1-Lote {
+        grid-area: col10;
+        width: 120px;
+    }
+    .fila1-Marca {
+        grid-area: col11;
+        width: 120px;
+    }
+    .fila1-Conos {
+        grid-area: col12;
+        width: 120px;
+    }
+    .fila1-Descripcion {
+        grid-area: col13;
+    
+    } 
+   
+    
+
+    }  
+}

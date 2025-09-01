@@ -1,0 +1,360 @@
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+mat-card {
+    margin-top: 10px;
+    padding: 0px;
+}
+
+mat-card-header {
+    padding: 10px;
+    border-bottom: 0.8px solid rgba(0, 0, 0, .2);
+    border-left: 0.8px solid rgba(0, 0, 0, .2);
+    border-right: 0.8px solid rgba(0, 0, 0, .2);
+    border-top: 0.8px solid rgba(0, 0, 0, .2);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-weight: bold;
+}
+
+mat-card-content {
+    
+    padding: 10px 15px;
+    border-bottom: 0.8px solid rgba(0, 0, 0, .2);
+    border-left: 0.8px solid rgba(0, 0, 0, .2);
+    border-right: 0.8px solid rgba(0, 0, 0, .2);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.container-dialog {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+
+.grid-container-dialog {
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 100%; 
+    height: auto; //93%;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+}
+  
+.title-dialog {
+    background-color: #ebc016;
+    color: black;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+.numhoja{
+    //font-size: 1.2em;
+    //float: right;
+    font-family: arial;
+}
+
+.container-cuerpo-dialog {
+    width: 100%;
+    margin: 0;
+    height: 98%;
+    justify-content: center;
+}
+
+.container-cuerpo-fila2, .container-cuerpo-fila3, .container-cuerpo-fila4, .container-cuerpo-fila5, .container-cuerpo-fila6{
+    //margin: 0px 10px;
+    padding: 5px 10px;
+}
+
+tbody td.estados .mat-radio-button {
+    margin-right: 10px;
+}
+
+.row{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+.col-md-12{
+    width: 100%;
+}
+
+.col-md-10{
+    width: 90%;
+    padding: 5px;
+}
+
+.col-md-8{
+    width: 64%;
+    margin: 0 10px;
+}
+
+.col-md-6{
+    width: 48.5%;
+    margin: 0px 0px 0px 10px;
+}
+
+.col-md-4{
+    width: 32%;
+    margin: 0 0 0 10px;
+}
+
+.col-md-3{
+    width: 24%;
+    margin-right: 5px;
+}
+
+.col-md-2{
+    width: 10%;
+}
+
+.caja-cliente{
+    width: 48%;
+    margin-right: 5px;
+}
+
+.caja-cliente-four{
+    width: 24%;
+    margin-right: 5px;
+}
+
+.mat-form-field-appearance-fill, .mat-form-field-flex{
+
+    background-color: white  !important;
+    background: white !important;
+}
+
+.example-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+    align-items: flex-start;
+}
+
+.example-radio-button {
+    margin: 5px;
+}
+
+//fila foot
+.container-cuerpo-foot-dialog {
+    grid-area: foot;
+    
+}
+
+.container-cuerpo-foot-dialog {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2 fcol3" auto /
+        150px  150px 150px auto;
+}
+
+
+.container-cuerpo-foot-dialog .button-clean-dialog, .button-save-dialog, .button-cancel-dialog {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+.button-clean-dialog {
+    grid-area: fcol1;
+    background-color: #8f2121;
+    color: #ffffff;
+}
+.button-save-dialog {
+    grid-area: fcol2;
+    background-color: #8f2121;
+    color: #ffffff;
+}
+
+.button-cancel-dialog {
+    grid-area: fcol3;
+    background-color: #8f2121;
+    color: #ffffff;
+}
+
+.button-add-defecto{
+    background-color: #8f2121;
+    color: #ffffff;
+    height: 10%;
+    margin: 0 auto;
+    margin: 4px 20px 10px 20px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 0px 0px 20px;
+
+}
+
+:host ::ng-deep .fila1-cliente-dialog{
+    padding: none!important;
+   
+}
+
+::ng-deep mat-dialog-container{
+    padding: 5px;
+    height: auto;
+}
+
+::ng-deep .my-class .mat-dialog-container{
+    padding: 5px;
+    height: auto;
+}
+
+.input{
+    border: none;
+    border: 1px solid rgba(0,0,0,.4);
+    padding: 6px;
+    width: 100%;
+    margin-left: 10px;
+}
+
+table{
+    width: 100%;
+}
+
+table:not([cellpadding]) td, table:not([cellpadding]) th {
+    padding: .1rem;
+}
+
+thead th {
+    //width: 30%;
+    text-align: left;
+}
+
+table tbody tr:nth-child(odd) {
+	background: #fdf8ef;
+}
+
+table.ops td {
+    padding: 5px 0px;
+    height: 40px;
+}
+
+.box-add-item{
+    background: #efefef;
+    padding: 10px 10px 10px 0px;
+    margin-bottom: 10px;
+}
+.box-add-item button{
+    float: right;
+    background-color: green;
+    color: #fff;
+}
+
+.box-add-item .mat-form-field-appearance-fill{
+    background: #efefef!important;
+}
+
+.mat-icon-button .md-20 { font-size: 20px; }
+
+@media screen and (max-width: 1728px){
+    .obj-medida{
+        width: 50%;
+    }
+    .obj-medida-segundas{
+        width: 100%;
+    }
+    .col-md-12{
+        width: 100%;
+        margin: 0px;
+    }
+    .col-md-3{
+        width: 90%;
+        margin: 0px;
+    }
+    table{
+        width: 100%;
+    }
+}
+@media screen and (max-width: 635px){
+
+    .col-md-12{
+        width: 100%;
+        margin: 1px 0px;
+    }
+
+    .col-md-10{
+        width: 100%;
+    }
+
+    .col-md-8{
+        width: 100%;
+    }
+    
+    .col-md-6{
+        width: 100%;
+        margin: 1px 0px;
+    }
+
+    .col-md-4{
+        width: 100%;
+        margin: 0px;
+    }
+
+    .col-md-3{
+        width: 100%;
+        margin: 0px;
+    }
+
+    .col-md-2{
+        width: 100%;
+    }
+    
+    .caja-cliente, .caja-cliente-four{
+        width: 100%;
+        margin: 1px 0px;
+    }
+    
+
+    .obj-medida{
+        width: 100%;
+    }
+
+    .obj-medida-segundas{
+        width: 100%;
+    }
+
+    .container-cuerpo-foot-dialog {
+        grid-template:
+            "fcol1 fcol2 fcol3" auto /
+            123px  123px 123px auto;
+    }
+
+    .container-cuerpo-fila2{
+        padding: 5px 0px;
+    }
+
+    .container-cuerpo-foot-dialog .button-clean-dialog, .button-save-dialog, .button-cancel-dialog {
+        height: 10%;
+        margin: 0 auto;
+        margin: 10px 5px;
+        min-height: 40px;
+        max-width: 280px;
+        min-width: 80px;
+    }
+
+    table{
+        width: 100%;
+    }
+  
+}

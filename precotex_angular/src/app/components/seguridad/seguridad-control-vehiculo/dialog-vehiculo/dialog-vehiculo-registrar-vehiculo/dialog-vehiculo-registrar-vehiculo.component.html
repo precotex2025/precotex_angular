@@ -1,0 +1,113 @@
+ 
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container">  
+ 
+        <div class="title">Mantenimiento de Vehiculos - <strong *ngIf="Titulo == undefined; else titulomodificar">Registrar</strong></div>
+        <ng-template #titulomodificar><strong>Modificar</strong></ng-template>
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)" >
+            <div class="container-cuerpo-fila1">
+                
+                    <mat-form-field class="fila1-Vehiculo"> 
+                        <mat-label>Vehiculo</mat-label>
+                        <input matInput type="text"  placeholder="Ejm: Vehiculo #" value="" 
+                            autocomplete="off" formControlName="Vehiculo" >
+                    </mat-form-field> 
+                    
+                    <mat-form-field class="fila1-Placa"> 
+                        <mat-label>Placa</mat-label>
+                        <input matInput type="text"  placeholder="Placa" value="" 
+                            autocomplete="off" formControlName="Placa" >
+                    </mat-form-field>   
+
+                    <mat-form-field class="fila1-codBarras"> 
+                        <mat-label>Codigo de Barra</mat-label>
+                        <input matInput type="text"  placeholder="Codigo de Barra" value="" 
+                            autocomplete="off" formControlName="codBarras" >
+                    </mat-form-field>   
+
+                    <mat-form-field class="fila1-soat"> 
+                        <mat-label>SOAT</mat-label>
+                        <input matInput type="text"  placeholder="SOAT" value="" 
+                            autocomplete="off" formControlName="soat">
+                    </mat-form-field>   
+
+                    <mat-form-field class="fila1-fec_registro">
+                        <mat-label>Fecha Venc.</mat-label>
+                        <input matInput [matDatepicker]="Fec_Fin_Lic" autocomplete="off" formControlName="Fec_Fin_Lic" >
+                        <mat-datepicker-toggle matSuffix [for]="Fec_Fin_Lic"></mat-datepicker-toggle>
+                        <mat-datepicker #Fec_Fin_Lic></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-tarjetaProp"> 
+                        <mat-label>Tarjeta Propiedad</mat-label>
+                        <input matInput type="text"  placeholder="Tarjeta Propiedad" value="" 
+                            autocomplete="off" formControlName="tarjetaProp" >
+                    </mat-form-field>   
+
+                    <mat-form-field class="fila1-tCarga"> 
+                        <mat-label>Tiempo Carga</mat-label>
+                        <input matInput type="text"  placeholder="Minutos" value="" 
+                            autocomplete="off" formControlName="tCarga" >
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-tDescarga"> 
+                        <mat-label>Tiempo Descarga</mat-label>
+                        <input matInput type="text"  placeholder="Minutos" value="" 
+                            autocomplete="off" formControlName="tDescarga" >
+                    </mat-form-field>
+                    
+                    <!--<mat-form-field class="fila1-conductor"> 
+                        <mat-label>Conductor</mat-label>
+                        <input matInput type="text"  placeholder="Conductor" value="" 
+                            autocomplete="off" formControlName="conductor" >
+                    </mat-form-field>-->  
+
+                    <mat-form-field appearance="fill" class="fila1-conductor" >
+                        <mat-label>Conductor</mat-label>
+                        <mat-select formControlName="conductor">
+                          <mat-option *ngFor="let option of listar_operacionConductor" [value]="option.Cod_Conductor" >
+                            {{option.Nombres}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>  
+ 
+
+            </div>    
+ 
+
+ 
+            <div class="container-cuerpo-foot">
+                <button *ngIf="Titulo == undefined; else btnmodificar" type="submit" class="button-agregar"  [disabled]="!formulario.valid"  mat-flat-button>
+                    <mat-icon aria-label="person" >add
+                    </mat-icon>  Registrar
+                </button>
+
+                <ng-template #btnmodificar><button type="submit" class="button-agregar" mat-dialog-close="false" [disabled]="!formulario.valid"  mat-flat-button>
+                    <mat-icon aria-label="person" >create
+                    </mat-icon>  Modificar
+                </button></ng-template>
+
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>               
+            </div>
+        </form>
+
+    </div>
+
+
+
+
+ 
+ 
+   
+
+
+
+ 
+
+
+
+</div>

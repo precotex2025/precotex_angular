@@ -1,0 +1,630 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+
+.grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0;
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    //position: absolute;
+}
+
+h4{
+    margin-top: 10px;
+}
+
+.tables thead th{
+    border: 1px solid black;
+    border-collapse: collapse;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.title {
+    background-color: #548235;
+    color: black;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 5px 5px 5px;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 55px
+        "fila2" 55px
+        "fila3" 55px
+        "fila4" 55px
+        "fila5" 55px
+        "fila6" 65px
+        "fila7" auto
+        "foot" 55px /
+        99%;
+}
+
+.row{
+    width: 50%;
+    display: flex;
+}
+
+table{
+    width: 100%;
+}
+
+.row mat-form-field{
+    width: 60%;
+    margin-right: 5px;
+}
+
+.row button{
+    width: 25%;
+    height: 48px;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+}
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+}
+.container-cuerpo-fila3 {
+    grid-area: fila3;
+}
+.container-cuerpo-fila4 {
+    grid-area: fila4;
+}
+.container-cuerpo-fila5 {
+    grid-area: fila5;
+}
+.container-cuerpo-fila6 {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.container-cuerpo-fila7 {
+    grid-area: fila7;
+}
+.fila6-glosa{
+    width: 58%;
+    margin-right: 5px;
+}
+.fila6-ini{
+    width: 20%;
+    margin-right: 5px;  
+}
+.fila6-fin{
+    width: 20%;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+}
+
+.fila1-guia {
+    width: 100%;
+}
+
+//fila 2
+.container-cuerpo-fila2 {
+    display: grid;
+
+    grid-template:
+        "2col1 2col2" auto /
+        120px auto;
+}
+
+.fila2-ruc-proveedor {
+    grid-area: 2col1;
+    text-align: center;
+    padding-right: 10px;
+}
+.fila2-nom-proveedor {
+    grid-area: 2col2;
+}
+
+//fila 3
+.container-cuerpo-fila3 {
+    display: grid;
+
+    grid-template:
+        "col1 col2" auto /
+        120px auto;
+}
+
+.fila3-cod-entregado {
+    grid-area: col1;
+    text-align: center;
+    padding-right: 10px;
+}
+.fila3-nom-entregado {
+    grid-area: col2;
+}
+
+//fila 4
+.container-cuerpo-fila4 {
+    display: grid;
+    grid-template:
+        "col1 col2 col3  col4" auto /
+        24.9% 24.9% 24.9% 24.9%;
+}
+
+.fila4-num-bulto {
+    grid-area: col1;
+    padding-right: 10px;
+    display: flex;
+}
+
+.fila4-num-cantidad {
+    grid-area: col2;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.fila4-num-peso {
+    grid-area: col3;
+    padding-left: 10px;
+}
+
+.fila4-vehiculo {
+    grid-area: col4;
+    padding-left: 10px;
+}
+
+mat-form-field {
+    width: 100%; 
+}
+
+.fila4-num-bulto mat-form-field{ text-align: center;}
+.fila4-num-cantidad mat-form-field{ text-align: center;}
+.fila4-num-peso mat-form-field{ text-align: center;}
+
+//fila 5
+.container-cuerpo-fila5 {
+    display: grid;
+
+    grid-template:
+        "scol1 scol2" auto /
+        120px auto;
+}
+
+.fila5-cod-despachado {
+    grid-area: scol1;
+    text-align: center;
+    padding-right: 10px;
+}
+.fila5-nom-despachado {
+    grid-area: scol2;
+}
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2 fcol3 fcol4 fcol5" auto /
+        50px 50px 50px auto auto;    
+}
+
+.container-cuerpo-foot .button-ruc, .button-trabajador, .button-oc  {
+    height: 20%;
+
+    padding: 0;
+    margin: 0 auto;
+    margin: 9px 5px 10px 5px;
+    min-height: 42px;
+    max-width: 40px;
+    min-width: 40px;
+}
+
+.container-cuerpo-foot .button-registrar, .button-cancelar  {
+    height: 20%;
+    margin: 0 auto;
+    margin: 9px 10px 10px 10px;
+    min-height: 42px;    
+    max-width: 300px;
+    min-width: 100px;
+}
+
+.button-ruc {
+    grid-area: fcol1;
+    background-color: #0f38c0;
+}
+
+.button-trabajador {
+    grid-area: fcol2;
+    background-color: #525252;
+}
+
+.button-oc {
+    grid-area: fcol3;
+    background-color: #0e740e;
+}
+
+.button-registrar {
+    grid-area: fcol4;
+    background-color: #108fe4;
+}
+
+.button-cancelar {
+    grid-area: fcol5;
+    background-color: #d32f2f;
+}
+
+/* ------------------------- */
+/* ventana trabajador */
+/* ------------------------- */
+.container-ruc {
+    background: rgba(0, 0, 0, 0.3);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    opacity: 0;
+}
+
+.container-ruc-popup {
+    background: #f8f8f8;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    font-family: corbel, arial;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+
+    transition: 0.3s ease all;
+    transform: scale(0.7);
+    opacity: 0;
+    width: 320px;
+    //background-color: brown;
+}
+
+.container-ruc-title {
+    background-color: #337ab7;
+    color: #fcffff;
+    padding: 8px 10px 10px 10px;
+    border-radius: 4px 4px 0px 0px;
+    width: 100%;
+}
+
+.container-ruc-main {
+    padding: 10px;
+    //background-color: red;
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-width: 0px 0px 1px 0px;
+    text-align: center;
+}
+
+.container-ruc-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "pcol1 pcol2" 50px /
+        auto auto;
+}
+
+.container-ruc-foot .button-ruc-cancelar {
+    height: 20%;
+    margin: 0 auto;
+    margin: 9px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+    background-color: #525252;
+}
+
+/* ------------------------- */
+/* ventana trabajador */
+/* ------------------------- */
+.container-personal {
+    background: rgba(0, 0, 0, 0.3);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    opacity: 0;
+}
+
+.container-personal-popup {
+    background: #f8f8f8;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    font-family: corbel, arial;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+
+    transition: 0.3s ease all;
+    transform: scale(0.7);
+    opacity: 0;
+    width: 320px;
+    //background-color: brown;
+}
+
+.container-personal-title {
+    background-color: #337ab7;
+    color: #fcffff;
+    padding: 8px 10px 10px 10px;
+    border-radius: 4px 4px 0px 0px;
+    width: 100%;
+}
+
+.container-personal-main {
+    padding: 10px;
+    //background-color: red;
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-width: 0px 0px 1px 0px;
+    text-align: center;
+}
+
+.container-personal-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "pcol1 pcol2" 50px /
+        auto auto;
+}
+
+.container-personal-foot .button-personal-registrar,
+.button-personal-cancelar {
+    height: 20%;
+    margin: 0 auto;
+    margin: 9px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+    background-color: #525252;
+}
+
+/* ------------------------- */
+/* ANIMACIONES */
+/* ------------------------- */
+.container-ruc-activo-no {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.container-ruc-activo-si {
+    transform: scale(1);
+    opacity: 1;
+    visibility: visible;
+}
+
+.container-ruc-popup-activo-no {
+    opacity: 0;
+}
+.container-ruc-popup-activo-si {
+    transform: scale(1);
+    opacity: 1;
+    visibility: visible;
+}
+
+
+.container-personal-activo-no {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.container-personal-activo-si {
+    transform: scale(1);
+    opacity: 1;
+    visibility: visible;
+}
+
+.container-personal-popup-activo-no {
+    opacity: 0;
+}
+.container-personal-popup-activo-si {
+    transform: scale(1);
+    opacity: 1;
+    visibility: visible;
+}
+
+
+
+/* ------------------------- */
+/* ventana orden de compra */
+/* ------------------------- */
+.container-ordcomp {
+    background: rgba(0, 0, 0, 0.3);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    opacity: 0;
+}
+
+.container-ordcomp-popup {
+    background: #f8f8f8;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    font-family: corbel, arial;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+
+    transition: 0.3s ease all;
+    transform: scale(0.7);
+    opacity: 0;
+    width: 360px;
+    //background-color: brown;
+}
+
+.container-ordcomp-title {
+    background-color: #337ab7;
+    color: #fcffff;
+    padding: 8px 10px 10px 10px;
+    border-radius: 4px 4px 0px 0px;
+    width: 100%;
+}
+
+.container-ordcomp-main {
+    padding: 10px;
+    //background-color: red;
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-width: 0px 0px 1px 0px;
+    text-align: center;
+}
+
+
+.container-ordcomp-fila2 {
+   display: grid;
+
+   grid-template:
+       "ocol1" auto /
+       auto;
+}
+
+.ofila2-nom-proveedor {
+    grid-area: ocol1;
+}
+
+.container-ordcomp-fila3 {
+    width: 100%;
+    display: grid;
+ 
+    grid-template:
+        "zcol1 zcol2" auto /
+        auto    90px;
+ }
+ 
+ .ofila3-ordcomp {
+     grid-area: zcol1;
+     padding-right: 30px;
+ }
+
+ .ofila3-adicionar {
+    width: 100%;
+    grid-area: zcol2;
+    margin-top: 5px;
+    padding: 0;
+    height: 40px;
+} 
+
+.container-ordcomp-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "ocol1" 50px /
+        auto;
+}
+
+.container-ordcomp-foot .button-ordcomp-cancelar {
+    height: 20%;
+    margin: 0 auto;
+    margin: 9px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+    background-color: #0e740e;
+}
+
+/* ------------------------- */
+/* ANIMACIONES */
+/* ------------------------- */
+.container-ordcomp-activo-no {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.container-ordcomp-activo-si {
+    transform: scale(1);
+    opacity: 1;
+    visibility: visible;
+}
+
+.container-ordcomp-popup-activo-no {
+    opacity: 0;
+}
+.container-ordcomp-popup-activo-si {
+    transform: scale(1);
+    opacity: 1;
+    visibility: visible;
+}
+
+.container-ordcomp-fila4 {
+	//background-color: blue;
+	overflow: auto;
+    height: 150PX;
+}
+
+
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+}
+  
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+  
+@media screen and (max-width: 650px){
+.row{
+    width: 80%;
+}
+.row button{
+    width: 37%;
+}
+.row2{
+    width: 100%;
+    overflow-x: scroll;
+}
+}

@@ -1,0 +1,678 @@
+<div class="container">
+
+    <div class="grid-container">
+        <div class="title">Registro Parámetros de Máquina Tintorería </div>
+
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+            <div class="container-cuerpo-fila1">
+
+                <mat-form-field class="fila1-codUbica">
+                    <mat-label>N°Ref Partida</mat-label>
+                    <input matInput type="number" placeholder="Ingrese.." value="" autocomplete="off"
+                        formControlName="Nro_Referencia">
+                </mat-form-field>
+
+                <button type="button" class="fila1-buscar" (click)="onToggle('S')" mat-flat-button>
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+            </div>
+            <div class="container-cuerpo-fila3">
+                <div class="title">Procesos</div>
+
+                <mat-accordion class="example-headers-align">
+                    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <mat-icon>list_alt</mat-icon>
+                                Datos Generales:
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <div class="example-content">
+                            <mat-form-field>
+                                <mat-label>Fecha</mat-label>
+                                <input class="deshabilitar" formControlName="nDgFecha" matInput>
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>Hora Carga</mat-label>
+                                <input (change)="onSave('nDgHoraCarga',formDirective)" [textMask]="{mask: num_guiaMascara}" matInput formControlName="nDgHoraCarga">
+                             </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Operario</mat-label>
+                                <input class="deshabilitar" formControlName="nDgOperario" matInput>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Máquina</mat-label>
+                                <input class="deshabilitar" formControlName="nDgMaquina" matInput>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Partida</mat-label>
+                                <input class="deshabilitar" formControlName="nDgPartida" matInput>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Color</mat-label>
+                                <textarea class="deshabilitar" rows="2" matInput formControlName="nDgColor"></textarea>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Articulo</mat-label>
+                                <textarea class="deshabilitar" rows="7"  matInput formControlName="nDgArticulo"></textarea>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Peso</mat-label>
+                                <input class="deshabilitar" formControlName="nDgPeso" matInput type="number">
+                            </mat-form-field>
+                            <mat-radio-group aria-label="Select an option" formControlName="nDgCuerdas">
+                                <mat-label><p class="cuerdas"> Cuerdas:</p></mat-label>
+                                <br>
+                                <mat-radio-button value="1">Simple</mat-radio-button>
+                                <mat-radio-button value="2">Doble</mat-radio-button>
+                                <mat-radio-button value="3">Cola</mat-radio-button>
+                            </mat-radio-group>
+                            <br>
+                            <mat-form-field>
+                                <mat-label>Cliente</mat-label>
+                                <input class="deshabilitar" formControlName="nDgCliente" matInput>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Relación Baño</mat-label>
+                                <input class="deshabilitar" formControlName="nDgRelaBano" matInput>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Volumen Receta</mat-label>
+                                <input class="deshabilitar" formControlName="nDgVolReceta" matInput>
+                            </mat-form-field>
+                        </div>
+
+                        <mat-action-row>
+                            <button mat-button color="primary" (click)="nextStep()">Next</button>
+                        </mat-action-row>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <mat-icon>style</mat-icon>
+                                Paramétros del Crudo:
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <div class="example-content">
+                            <mat-form-field>
+                                <mat-label>Ancho</mat-label>
+                                <input (change)="onSave('nCrAncho',formDirective)" (click)="onEditar('nCrAncho')" formControlName="nCrAncho" matInput type="number">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Densidad</mat-label>
+                                <input (change)="onSave('nCrDensidad',formDirective)" (click)="onEditar('nCrDensidad')" formControlName="nCrDensidad" matInput type="number">
+                            </mat-form-field>
+                            <br><br>
+                            <mat-label>Foto Cuerdas</mat-label>
+                            <input type="file" (change)="onFileChange3($event,formDirective)" class="form-control d-none" #inputFile3/>
+                            <button (click)="inputFile3.click()" type="button" class="button-info"
+                            mat-flat-button>Cargar<mat-icon>upload</mat-icon></button>
+
+                            <div *ngIf="elementget3 == false">
+                                <img [src]="getLinkPicture3()" *ngIf="RutaFoto3" style="height: 315px; width:200px">
+                            </div>
+
+                            <div *ngIf="elementload3 == false">
+                                <img [src]="RutaFoto3" *ngIf="RutaFoto3" style="height: 100%; width:100%">
+                            </div>                              
+                        </div>
+
+                        <mat-action-row>
+                            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                            <button mat-button color="primary" (click)="nextStep()">Next</button>
+                        </mat-action-row>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <mat-icon>view_day</mat-icon>
+                                Paramétros del Previo:
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <div class="example-content">
+                            <mat-form-field>
+                                <mat-label>Bar</mat-label>
+                                <input class="deshabilitar" formControlName="nPrBar" matInput type="number">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Tobera</mat-label>
+                                <input (change)="onSave('nPrTobera',formDirective)" (click)="onEditar('nPrTobera')" formControlName="nPrTobera" matInput type="number">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Acumulador</mat-label>
+                                <!-- <input (change)="onSave('nPrAcumulador',formDirective)" (click)="onEditar('nPrAcumulador')" formControlName="nPrAcumulador" matInput type="number"> -->
+                                <input class="deshabilitar" formControlName="nPrAcumulador" matInput type="number">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Bomba</mat-label>
+                                <!-- <input (change)="onSave('nPrBomba',formDirective)" (click)="onEditar('nPrBomba')" formControlName="nPrBomba" matInput type="number"> -->
+                                <input class="deshabilitar" formControlName="nPrBomba" matInput type="number">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Velocidad</mat-label>
+                                <!-- <input (change)="onSave('nPrVelocidad',formDirective)" (click)="onEditar('nPrVelocidad')" formControlName="nPrVelocidad" matInput type="number"> -->
+                                <input class="deshabilitar" formControlName="nPrVelocidad" matInput type="number">
+                            </mat-form-field>
+                            <br>
+                            <mat-label> <p class="ciclo"> T.Ciclo:</p></mat-label>
+                            <mat-form-field [style.width.px]=50>
+                                <mat-label> 1° </mat-label>
+                                <!-- <input (change)="onSave('nPrTiempoCiclo1',formDirective)" (click)="onEditar('nPrTiempoCiclo1')" formControlName="nPrTiempoCiclo1" matInput type="number"> -->
+                                <input class="deshabilitar" formControlName="nPrTiempoCiclo1" matInput type="number">
+                            </mat-form-field>
+                            <!-- |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 2° </mat-label>
+                                <input class="deshabilitar" formControlName="nPrTiempoCiclo2" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 3° </mat-label>
+                                <input class="deshabilitar" formControlName="nPrTiempoCiclo3" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 4° </mat-label>
+                                <input class="deshabilitar" formControlName="nPrTiempoCiclo4" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 5° </mat-label>
+                                <input class="deshabilitar" formControlName="nPrTiempoCiclo5" matInput type="number">
+                            </mat-form-field> -->
+                            <mat-form-field>
+                                <mat-label>Nivel Baño Máquina</mat-label>
+                                <input (change)="onSave('nPrNivBanoMaq',formDirective)" (click)="onEditar('nPrNivBanoMaq')" formControlName="nPrNivBanoMaq" matInput type="number">
+                            </mat-form-field>
+                            <mat-label> <p class="phpilling"> PH Antipill:</p></mat-label>
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>1°</mat-label>
+                                <input (change)="onSave('nPrPhPilling1',formDirective)" (click)="onEditar('nPrPhPilling1')" formControlName="nPrPhPilling1" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>2°</mat-label>
+                                <input (change)="onSave('nPrPhPilling2',formDirective)" (click)="onEditar('nPrPhPilling2')" formControlName="nPrPhPilling2" matInput type="number">
+                            </mat-form-field>
+                        </div>
+
+                        <mat-action-row>
+                            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                            <button mat-button color="primary" (click)="nextStep()">Next</button>
+                        </mat-action-row>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <mat-icon>format_color_fill</mat-icon>
+                                Parámetros del Teñido Reactivo:
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <div class="example-content">
+                            <mat-form-field>
+                                <mat-label>Bar</mat-label>
+                                <input class="deshabilitar" formControlName="nTrBar" matInput type="number">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Tobera</mat-label>
+                                <input (change)="onSave('nTrTobera',formDirective)" (click)="onEditar('nTrTobera')" formControlName="nTrTobera" matInput type="number">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Acumulador</mat-label>
+                                <!-- <input (change)="onSave('nTrAcumulador',formDirective)" (click)="onEditar('nTrAcumulador')" formControlName="nTrAcumulador" matInput type="number"> -->
+                                <input class="deshabilitar" formControlName="nTrAcumulador" matInput type="number">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Bomba</mat-label>
+                                <!-- <input (change)="onSave('nTrBomba',formDirective)" (click)="onEditar('nTrBomba')" formControlName="nTrBomba" matInput type="number"> -->
+                                <input class="deshabilitar" formControlName="nTrBomba" matInput type="number">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Velocidad</mat-label>
+                                <!-- <input (change)="onSave('nTrVelocidad',formDirective)" (click)="onEditar('nTrVelocidad')" formControlName="nTrVelocidad" matInput type="number"> -->
+                                <input class="deshabilitar" formControlName="nTrVelocidad" matInput type="number">
+                            </mat-form-field>
+
+                            <mat-label> <p class="ciclo"> T.Ciclo:</p></mat-label>
+                            <mat-form-field [style.width.px]=50>
+                                <mat-label> 1° </mat-label>
+                                <!-- <input (change)="onSave('nTrTiempoCiclo1',formDirective)" (click)="onEditar('nTrTiempoCiclo1')" formControlName="nTrTiempoCiclo1" matInput type="number"> -->
+                                <input class="deshabilitar" formControlName="nTrTiempoCiclo1" matInput type="number">
+                            </mat-form-field>
+                            <!-- |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 2° </mat-label>
+                                <input class="deshabilitar" formControlName="nTrTiempoCiclo2" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 3° </mat-label>
+                                <input class="deshabilitar" formControlName="nTrTiempoCiclo3" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 4° </mat-label>
+                                <input class="deshabilitar" formControlName="nTrTiempoCiclo4" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 5° </mat-label>
+                                <input class="deshabilitar" formControlName="nTrTiempoCiclo5" matInput type="number">
+                            </mat-form-field> -->
+                            <mat-label> <p class="volini"> Volumen Inicio:</p></mat-label>
+                            <mat-form-field>
+                                <input (change)="onSave('nTrVolumen',formDirective)" (click)="onEditar('nTrVolumen')" formControlName="nTrVolumen" matInput type="number">
+                            </mat-form-field>
+
+                            <mat-label> <p class="banomaq"> Niv.Baño1:</p></mat-label>
+                            <mat-form-field>
+                                <input (change)="onSave('nTrNivBanoMaq1',formDirective)" (click)="onEditar('nTrNivBanoMaq1')" formControlName="nTrNivBanoMaq1" matInput type="number">
+                            </mat-form-field>
+                            <br><br>
+                            <mat-label> <p class="phiniciosal"> PHIni CSal:</p></mat-label>
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>1°</mat-label>
+                                <input (change)="onSave('nTrPhInicio1CSal',formDirective)" (click)="onEditar('nTrPhInicio1CSal')" formControlName="nTrPhInicio1CSal" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>2°</mat-label>
+                                <input (change)="onSave('nTrPhInicio2CSal',formDirective)" (click)="onEditar('nTrPhInicio2CSal')" formControlName="nTrPhInicio2CSal" matInput type="number">
+                            </mat-form-field>
+                            <br><br>
+                            <mat-label> <p class="phiniciosal"> PHIni SSal:</p></mat-label>
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>1°</mat-label>
+                                <input (change)="onSave('nTrPhInicio1SSal',formDirective)" (click)="onEditar('nTrPhInicio1SSal')"formControlName="nTrPhInicio1SSal" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>2°</mat-label>
+                                <input (change)="onSave('nTrPhInicio2SSal',formDirective)" (click)="onEditar('nTrPhInicio2SSal')" formControlName="nTrPhInicio2SSal" matInput type="number">
+                            </mat-form-field>
+                            <br><br>
+                            <mat-label> <p class="densal"> Dens.Sal:</p></mat-label>
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>1°</mat-label>
+                                <input (change)="onSave('nTrDensidadSal1',formDirective)" (click)="onEditar('nTrDensidadSal1')" formControlName="nTrDensidadSal1" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>2°</mat-label>
+                                <input (change)="onSave('nTrDensidadSal2',formDirective)" (click)="onEditar('nTrDensidadSal2')" formControlName="nTrDensidadSal2" matInput type="number">
+                            </mat-form-field>
+                            <br><br>
+                            <mat-label> <p class="tentemp"> Temp:</p></mat-label>
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>1°</mat-label>
+                                <input (change)="onSave('nTrTemperatura1',formDirective)" (click)="onEditar('nTrTemperatura1')" formControlName="nTrTemperatura1" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>2°</mat-label>
+                                <input (change)="onSave('nTrTemperatura2',formDirective)" (click)="onEditar('nTrTemperatura2')" formControlName="nTrTemperatura2" matInput type="number">
+                            </mat-form-field>
+                            <br><br>
+
+                            <span *ngIf="this.flg_maq_at === 'S'">
+                                <mat-label> <p class="cantdosif"> Cant Dosif:</p></mat-label>
+                                <mat-form-field>
+                                    <input (change)="onSave('nTrCantDosif',formDirective)" (click)="onEditar('nTrCantDosif')" formControlName="nTrCantDosif" matInput type="number">
+                                </mat-form-field>
+                            </span>
+
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>G/L Densidad</mat-label>
+                                <input class="deshabilitar" formControlName="nTrGLDensidad" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>G/L Densidad</mat-label>
+                                <input class="deshabilitar" formControlName="nTrGLDensidad2" matInput type="number">
+                            </mat-form-field>
+
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>Lit. Densidad</mat-label>
+                                <input class="deshabilitar" formControlName="nTrLTDensidad" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>Lit. Densidad</mat-label>
+                                <input class="deshabilitar" formControlName="nTrLTDensidad2" matInput type="number">
+                            </mat-form-field>
+
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>Corr. Teórica</mat-label>
+                                <input class="deshabilitar" formControlName="nTrCorrTeorica" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>Corr. Teórica</mat-label>
+                                <input class="deshabilitar" formControlName="nTrCorrTeorica2" matInput type="number">
+                            </mat-form-field>
+
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>Corr. Real</mat-label>
+                                <input class="deshabilitar" formControlName="nTrCorrReal" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>Corr. Real</mat-label>
+                                <input class="deshabilitar" formControlName="nTrCorrReal2" matInput type="number">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-label>Litros dosif. Colorante</mat-label>
+                                <input (change)="onSave('nTrLtDosifColor',formDirective)" (click)="onEditar('nTrLtDosifColor')" formControlName="nTrLtDosifColor" matInput type="number">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Litros dosif. Sal Textil</mat-label>
+                                <input (change)="onSave('nTrLtDosifSal',formDirective)" (click)="onEditar('nTrLtDosifSal')" formControlName="nTrLtDosifSal" matInput type="number">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Litros dosif. 1° Alcali</mat-label>
+                                <input (change)="onSave('nTrLtDosif1Alca',formDirective)" (click)="onEditar('nTrLtDosif1Alca')" formControlName="nTrLtDosif1Alca" matInput type="number">
+                            </mat-form-field>
+                            <br><br>
+                            <mat-label> <p class="phalcali1"> PH1 Alcali:</p></mat-label>
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>1°</mat-label>
+                                <input (change)="onSave('nTrPh1Alcali1',formDirective)" (click)="onEditar('nTrPh1Alcali1')" formControlName="nTrPh1Alcali1" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>2°</mat-label>
+                                <input (change)="onSave('nTrPh1Alcali2',formDirective)" (click)="onEditar('nTrPh1Alcali2')" formControlName="nTrPh1Alcali2" matInput type="number">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-label>Litros dosif. 2° Alcali </mat-label>
+                                <input (change)="onSave('nTrLtDosif2Alca',formDirective)" (click)="onEditar('nTrLtDosif2Alca')" formControlName="nTrLtDosif2Alca" matInput type="number">
+                            </mat-form-field>
+
+                            <br><br>
+                            <mat-label> <p class="phalcali1"> PH2 Alcali:</p></mat-label>
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>1°</mat-label>
+                                <input (change)="onSave('nTrPh2Alcali1',formDirective)" (click)="onEditar('nTrPh2Alcali1')" formControlName="nTrPh2Alcali1" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>2°</mat-label>
+                                <input (change)="onSave('nTrPh2Alcali2',formDirective)" (click)="onEditar('nTrPh2Alcali2')" formControlName="nTrPh2Alcali2" matInput type="number">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-label>Litros dosif. 3° Alcali </mat-label>
+                                <input (change)="onSave('nTrLtDosif3Alca',formDirective)" (click)="onEditar('nTrLtDosif3Alca')" formControlName="nTrLtDosif3Alca" matInput type="number">
+                            </mat-form-field>
+
+                            <mat-label> <p class="banomaq"> Niv.Baño2:</p></mat-label>
+                            <mat-form-field>
+                                <input (change)="onSave('nTrNivBanoMaq2',formDirective)" (click)="onEditar('nTrNivBanoMaq2')" formControlName="nTrNivBanoMaq2" matInput type="number">
+                            </mat-form-field>
+                            <br><br>
+                            <mat-label> <p class="phagota"> PH Agota:</p></mat-label>
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>1°</mat-label>
+                                <input (change)="onSave('nTrAgotamiento1',formDirective)" (click)="onEditar('nTrAgotamiento1')" formControlName="nTrAgotamiento1" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=70>
+                                <mat-label>2°</mat-label>
+                                <input (change)="onSave('nTrAgotamiento2',formDirective)" (click)="onEditar('nTrAgotamiento2')" formControlName="nTrAgotamiento2" matInput type="number">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-label>Tiempo Agotamiento</mat-label>
+                                <input (change)="onSave('nTrTiempoAgota',formDirective)" (click)="onEditar('nTrTiempoAgota')" formControlName="nTrTiempoAgota" matInput type="number">
+                            </mat-form-field>
+                        </div>
+
+                        <mat-action-row>
+                            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                            <button mat-button color="primary" (click)="nextStep()">Next</button>
+                        </mat-action-row>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)" hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <mat-icon>bubble_chart</mat-icon>
+                                Parámetros del Jabonado/Fijado/Acidulado
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="example-content">
+                            <br>
+                            <mat-label> <p class="neph"> PH Neutrlzdo:</p></mat-label>
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 1° </mat-label>
+                                <input (change)="onSave('nNePh1',formDirective)" (click)="onEditar('nNePh1')" formControlName="nNePh1" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 2° </mat-label>
+                                <input (change)="onSave('nNePh2',formDirective)" (click)="onEditar('nNePh2')" formControlName="nNePh2" matInput type="number">
+                            </mat-form-field>
+                            <br><br>
+                            <mat-label> <p class="jabph"> PH Jabon:</p></mat-label>
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 1° </mat-label>
+                                <input (change)="onSave('nJaPh1',formDirective)" (click)="onEditar('nJaPh1')" formControlName="nJaPh1" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 2° </mat-label>
+                                <input (change)="onSave('nJaPh2',formDirective)" (click)="onEditar('nJaPh2')" formControlName="nJaPh2" matInput type="number">
+                            </mat-form-field>
+                            <br><br>
+
+                            <mat-label> <p class="jabph"> PH Fijado:</p></mat-label>
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 1° </mat-label>
+                                <input (change)="onSave('nFiPh1',formDirective)" (click)="onEditar('nFiPh1')" formControlName="nFiPh1" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 2° </mat-label>
+                                <input (change)="onSave('nFiPh2',formDirective)" (click)="onEditar('nFiPh2')" formControlName="nFiPh2" matInput type="number">
+                            </mat-form-field>
+                            <br><br>
+                            <mat-label> <p class="jabph"> PH Acidu:</p></mat-label>
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 1° </mat-label>
+                                <input (change)="onSave('nAcPh1',formDirective)" (click)="onEditar('nAcPh1')" formControlName="nAcPh1" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 2° </mat-label>
+                                <input (change)="onSave('nAcPh2',formDirective)" (click)="onEditar('nAcPh2')" formControlName="nAcPh2" matInput type="number">
+                            </mat-form-field>
+                        </div>
+
+                        <mat-action-row>
+                            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                            <button mat-button color="primary" (click)="nextStep()">Next</button>
+                        </mat-action-row>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel [expanded]="step === 5" (opened)="setStep(5)" hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <mat-icon>colorize</mat-icon>
+                                Parámetros del Teñido Disperso
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <div class="example-content">
+                            <mat-form-field>
+                                <mat-label>Bar</mat-label>
+                                <input class="deshabilitar" formControlName="nTdBar" matInput type="number">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Tobera</mat-label>
+                                <input (change)="onSave('nTdTobera',formDirective)" (click)="onEditar('nTdTobera')" formControlName="nTdTobera" matInput type="number">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Acumulador</mat-label>
+                                <input (change)="onSave('nTdAcumulador',formDirective)" (click)="onEditar('nTdAcumulador')" formControlName="nTdAcumulador" matInput type="number">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Bomba</mat-label>
+                                <input (change)="onSave('nTdBomba',formDirective)" (click)="onEditar('nTdBomba')" formControlName="nTdBomba" matInput type="number">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Velocidad</mat-label>
+                                <input (change)="onSave('nTdVelocidad',formDirective)" (click)="onEditar('nTdVelocidad')" formControlName="nTdVelocidad" matInput type="number">
+                            </mat-form-field>
+                            <br><br>
+                            <mat-label> <p class="jabph"> T.Ciclo:</p></mat-label>
+                            <mat-form-field [style.width.px]=50>
+                                <mat-label> 1° </mat-label>
+                                <input (change)="onSave('nTdTiempoCiclo1',formDirective)" (click)="onEditar('nTdTiempoCiclo1')" formControlName="nTdTiempoCiclo1" matInput type="number">
+                            </mat-form-field>
+                            <!-- |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 2° </mat-label>
+                                <input class="deshabilitar" formControlName="nTdTiempoCiclo2" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 3° </mat-label>
+                                <input class="deshabilitar" formControlName="nTdTiempoCiclo3" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 4° </mat-label>
+                                <input class="deshabilitar" formControlName="nTdTiempoCiclo4" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 5° </mat-label>
+                                <input class="deshabilitar" formControlName="nTdTiempoCiclo5" matInput type="number">
+                            </mat-form-field> -->
+
+                            <mat-label> <p class="tenph"> PH Teñido:</p></mat-label>
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 1° </mat-label>
+                                <input (change)="onSave('nTdPhTenido1',formDirective)" (click)="onEditar('nTdPhTenido1')" formControlName="nTdPhTenido1" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 2° </mat-label>
+                                <input (change)="onSave('nTdPhTenido2',formDirective)" (click)="onEditar('nTdPhTenido2')" formControlName="nTdPhTenido2" matInput type="number">
+                            </mat-form-field>
+
+                            <mat-label> <p class="descph"> PH Desc Disp:</p></mat-label>
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 1° </mat-label>
+                                <input (change)="onSave('nTdPhDescargaDisp1',formDirective)" (click)="onEditar('nTdPhDescargaDisp1')" formControlName="nTdPhDescargaDisp1" matInput type="number">
+                            </mat-form-field>
+                            |
+                            <mat-form-field [style.width.px]=40>
+                                <mat-label> 2° </mat-label>
+                                <input (change)="onSave('nTdPhDescargaDisp2',formDirective)" (click)="onEditar('nTdPhDescargaDisp2')" formControlName="nTdPhDescargaDisp2" matInput type="number">
+                            </mat-form-field>
+
+                        </div>
+
+                        <mat-action-row>
+                            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                            <button mat-button color="primary" (click)="nextStep()">Next</button>
+                        </mat-action-row>
+                    </mat-expansion-panel>
+
+
+                    <mat-expansion-panel [expanded]="step === 6" (opened)="setStep(6)" hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <mat-icon>add_comment</mat-icon>
+                                Otros Datos
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <div class="example-content">
+
+                            <mat-label>Muestra Dureza Teñido / Peroxido Residual</mat-label>
+                            <input type="file" (change)="onFileChange($event,formDirective)" class="form-control d-none" #inputFile/>
+                            <button (click)="inputFile.click()" type="button" class="button-info"
+                                mat-flat-button>Cargar<mat-icon>cloud_upload</mat-icon></button>
+
+                                <div *ngIf="elementget1 == false">
+                                    <img [src]="getLinkPicture()" *ngIf="RutaFoto1" style="height: 315px; width:200px">
+                                </div>
+
+                                <div *ngIf="elementload1 == false">
+                                    <img [src]="RutaFoto1" *ngIf="RutaFoto1" style="height: 100%; width:100%">
+                                </div>
+
+                            <!-- <br><br>
+                            <mat-label>Foto Cuerdas</mat-label>
+                            <input type="file" (change)="onFileChange2($event,formDirective)" class="form-control d-none" #inputFile2/>
+                            <button (click)="inputFile2.click()" type="button" class="button-info"
+                            mat-flat-button>Cargar<mat-icon>upload</mat-icon></button>
+
+                            <div *ngIf="elementget2 == false">
+                                <img [src]="getLinkPicture2()" *ngIf="RutaFoto2" style="height: 315px; width:200px">
+                            </div>
+
+                            <div *ngIf="elementload2 == false">
+                                <img [src]="RutaFoto2" *ngIf="RutaFoto2" style="height: 100%; width:100%">
+                            </div>                               -->
+
+                            <br><br>                             
+
+                            <mat-form-field>
+                                <mat-label>Proceso Cambio Turno</mat-label>
+                                <textarea rows="5" (change)="onSave('sCambioTurno',formDirective)" matInput formControlName="sCambioTurno"></textarea>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-label>Observaciones</mat-label>
+                                <textarea rows="10" (change)="onSave('sObs',formDirective)" matInput formControlName="sObs"></textarea>
+                            </mat-form-field>
+                        </div>
+
+                        <mat-action-row>
+                            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                            <button mat-button color="primary" (click)="nextStep()">End</button>
+                        </mat-action-row>
+                    </mat-expansion-panel>
+                </mat-accordion>
+
+                <div class="botones">
+                    <br>
+                        <button type="button" class="button-registrar" mat-flat-button color="primary"
+                        [disabled]="!formulario.valid"  (click)="submit(formDirective,'S')"  >
+                            <mat-icon aria-label="person">save
+                            </mat-icon>Registrar
+                        </button>
+
+                        <button type="button" class="button-Imprimir" mat-flat-button color="primary"
+                        [disabled]="!formulario.valid"  (click)="Imprimir()"  >
+                            <mat-icon aria-label="person">picture_as_pdf
+                            </mat-icon>Imprimir
+                        </button>
+
+                        <button type="button" class="button-cancelar" mat-flat-button color="primary"
+                            [routerLink]="['/']">
+                            <mat-icon aria-label="person">exit_to_app
+                            </mat-icon>Salir
+                        </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

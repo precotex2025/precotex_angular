@@ -1,0 +1,34 @@
+<div class="container">
+    <!-- ventana nro 2 - selecciona la accion salida/ingreso/historia/regresar -->
+    <div class="grid-container">
+
+        <div class="title">Indique el Tipo de Registro a Realizar</div>
+
+        <div class="container-cuerpo">
+            <button type="button" class="button-accion1" mat-flat-button color="primary"
+                [routerLink]="['/SeguridadControlJabaSalida']">
+                Salida 
+            </button>
+
+            <button type="button" class="button-accion2" mat-flat-button color="primary"
+                [routerLink]="['/SeguridadControlJabaInterno']">Ingreso
+                Interno
+            </button>
+
+            <button type="button" class="button-accion3" mat-flat-button color="primaryy"
+                [routerLink]="['/SeguridadControlJabaExterno']">Ingreso
+                Externo
+            </button>
+
+            <button type="button" class="button-accion4" mat-flat-button color="primaryy"
+                [routerLink]="['/SeguridadControlJabaHistorial']">
+                Historial
+            </button>
+
+            <button type="button" class="button-accion6" mat-flat-button color="primary"
+                routerLink="/SeguridadControlJaba">
+                <mat-icon aria-label="person">reply_all</mat-icon>Regresar
+            </button>
+        </div>
+    </div> 
+</div>  

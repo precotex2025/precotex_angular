@@ -1,0 +1,391 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+
+.grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0;
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    //height: 640px;
+    height: 86vh;
+    //position: absolute;
+}
+
+.title {
+    background-color: #3f51b5;
+    color: white;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 90px
+        "fila2" 400px
+        "foot" 400px/99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+    height: 71vh;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    height: 5vh;
+}
+
+.button-agregar {
+  grid-area: fcol1;
+  background-color: #3f51b5;
+  color: #ffffff;
+  height: 3rem;
+}
+
+.button-cancelar {
+  grid-area: fcol2;
+  background-color: #d32f2f;
+  color: #ffffff;
+  height: 3rem;
+  width: 9rem;
+}
+
+// .fila1-guia,
+// .fila2-destino {
+//     width: 100%;
+// }
+
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 20px 10px 20px;
+
+}
+
+//fila 1
+.container-cuerpo-fila1 {
+    display: grid;
+    grid-template:
+        "col1 col1 col1 col1" 90px
+        "col2 col2 col3 col3" 90px
+        "col4 col5 col6 col7" 90px
+        "col8 col8 col8 col8" 90px
+        "col9 col9 col10 col10" / auto;
+
+}
+
+
+
+.fila1-fecha {
+    grid-area: col1;
+
+}
+
+fila1-fecha3
+.fila1-codmaquina {
+    grid-area: col2;
+
+
+}
+
+.fila0-Color {
+    grid-area: col3;
+}
+
+.fila1-fecha2 {
+    grid-area: col4;
+}
+
+.fila1-Color {
+    grid-area: col5;
+}
+
+
+.fila1-fecha3 {
+    grid-area: col6;
+
+
+}
+.fila2-Color {
+    grid-area: col7;
+
+}
+
+.fila1-excel{
+    grid-area: col8;
+}
+
+.dni-tejedor{
+  grid-area: col9;
+}
+
+.nombre-tejedor{
+  grid-area: col10;
+}
+
+
+
+
+
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot .fila1-agregar,
+.button-modificar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+
+.button-modificar {
+    grid-area: fcol2;
+    background-color: #8f2121;
+    color: #ffffff;
+}
+
+.mat-column-nAuditoria,
+.mat-column-Fecha,
+.mat-column-Auditor,
+.mat-column-Cliente,
+.mat-column-Estilo,
+.mat-column-Color,
+.mat-column-Cant,
+.mat-column-Total,
+.mat-column-Especiales,
+.mat-column-modificar,
+.mat-column-detalle {
+	text-align: center;
+	font-size: 13px;
+    font-family: arial;
+    padding: 10px;
+}
+
+.mat-column-nAuditoria {width: 30px !important;text-align: center}
+.mat-column-Fecha {width: 30px !important;text-align: center}
+.mat-column-Auditor {width: 30px !important;text-align: center}
+.mat-column-Cliente {width: 50px !important;text-align: center}
+.mat-column-Estilo {width: 100px !important;text-align: center}
+.mat-column-Color {width: 80px !important;text-align: center}
+.mat-column-Total {width: 80px !important;text-align: center}
+.mat-column-Especiales {width: 80px !important;text-align: center}
+.mat-column-Cant {width: 80px !important;text-align: center;}
+.mat-column-modificar {width: 30px !important;text-align: center}
+.mat-column-detalle {width: 30px !important;text-align: center}
+.mat-header-cell {text-align: center; }
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+.mat-header-cell {
+    text-align: center;
+    padding: 15px;
+    width: 10px;
+
+}
+th.mat-header-cell:last-of-type{
+    padding-right: 12px;
+}
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+
+}
+th.mat-cell{
+    padding:15px;
+    text-align: center;
+}
+td.mat-cell{
+    padding:15px;
+    text-align: center;
+}
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+
+tr:active {
+    background: #efefef;
+}
+
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+.cdk-overlay-pane {
+  position: absolute;
+  pointer-events: auto;
+  box-sizing: border-box;
+  z-index: 1000;
+  display: flex;
+  max-width: 100%;
+  max-height: 100%;
+  max-width: 80vw;
+  position: static;
+  height: 95vh;
+}
+
+
+
+
+
+  @media screen and (max-width: 768px){
+    .grid-container{
+        height: 600px;
+    }
+
+    .container[_ngcontent-prr-c190] {
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        padding: 5px;
+        font-family: corbel,arial;
+        font-size: 15px;
+        margin: 0;
+        width: 91vw;
+    }
+
+    .container-cuerpo {
+        display: grid;
+        height: 65vh;
+        grid-template:
+        "fila1" auto
+        "fila2" auto/auto;
+        width: auto;
+
+    }
+
+
+    .container-cuerpo-fila1 {
+        display: grid;
+        grid-template:
+        "col1 col1" 50px
+        "col2 col2" 50px
+        "col3 col3" 50px
+        "col4 col4" 50px
+        "col5 col5" 50px
+        "col6 col6" 50px
+        "col7 col7" 50px
+        "col8 col8" 50px
+        "col9 col9" 50px
+        "col10 col10" 50px/auto;
+
+        width: 70vw;
+        //margin-left: 19rem;
+    }
+
+
+    .container-cuerpo-foot {
+        border-top: 1px solid #337ab7;
+        justify-content: left;
+        display: grid;
+        grid-template: "fcol1 fcol2" 5px/143px 5px;
+        margin-left:  -19rem;
+    }
+
+    .fila1-fecha {
+        grid-area: col1;
+        width: 130px;
+    }
+
+    .fila1-codmaquina {
+        grid-area: col2;
+        width: 130px;
+    }
+
+    .fila1-desmaquina {
+        grid-area: col3;
+        width: 130px;
+        
+    }   
+
+
+    .fila1-buscar {
+        grid-area: col4;
+
+    }
+
+
+    .fila1-reporte{
+        grid-area: col5;
+
+    }
+
+    .fila1-fecha3 {
+        grid-area: col6;
+
+
+    }
+    .fila2-Color {
+        grid-area: col7;
+
+    }
+
+    .fila1-excel{
+        grid-area: col8;
+        margin-bottom: 5rem;
+    }
+
+    .dni-tejedor{
+      grid-area: col9;
+    }
+
+    .nombre-tejedor{
+      grid-area: col10;
+    }
+
+
+  }

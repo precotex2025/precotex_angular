@@ -1,0 +1,76 @@
+<mat-card>
+    <mat-card-header style="display: flex; justify-content: space-around;">
+        <strong>Cargar/Editar Imagen</strong>
+        <span aria-label="Close" class="cerrar" (click)="closeModal()" aria-hidden="true">&times;</span>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="container-fluid">
+            <div class="mat-elevation-z8">
+                <!-- <p style="text-align: right;">
+                    <button type="button" class="button_agregar2"
+                            (click)="applyFilter()" mat-flat-button color="primary">
+                            <mat-icon aria-label="person">view_comfy
+                            </mat-icon> EXPORTAR
+                    </button>
+                </p> -->
+                <table mat-table [dataSource]="dataSource">
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="Id">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Id</th>
+                        <td mat-cell *matCellDef="let element"> {{element.Id}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Cod_EstPro">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> ESTILO PROPIO</th>
+                        <td mat-cell *matCellDef="let element"> {{element.Cod_EstPro}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Icono">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Icono</th>
+                        <td mat-cell *matCellDef="let element"> 
+                            {{element.Icono}}
+                            
+                        </td>
+                    </ng-container>                  
+                    <ng-container matColumnDef="Observacion">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Observación</th>
+                        <td mat-cell *matCellDef="let element">
+                            <input type="text" name="Observacion" id="Observacion" value="{{element.Observacion}}" class="form-control" (change)="saveObservacion($event, element)" placeholder="Ingrese una observación">    
+                        </td>
+                    </ng-container>
+                    <!-- matTooltip="Agregar Imagen" 
+                         matTooltip="Editar imagen"
+                    -->
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Acciones </th>
+                        <td mat-cell *matCellDef="let element">
+                            <input type="file" accept="image/*" style="display:none;" #inputFile (change)="guardarImagen($event, 'guardar', element)">
+                            <input type="file" accept="image/*" #inputFile2 style="display:none;" (change)="guardarImagen($event, 'editar', element)">
+                            
+                            <button (click)="inputFile.click()" mat-button 
+                            [disabled]="element.Icono != ''" 
+                                color="primary"><mat-icon>add_photo_alternate</mat-icon></button>
+                          
+                            <button (click)="inputFile2.click()" mat-button [disabled]="element.Icono == ''"
+                                color="primary"><mat-icon>edit</mat-icon></button> 
+
+                            <button  mat-button matTooltip="Eliminar imagen" [disabled]="element.Icono == ''"
+                                color="primary" (click)="eliminarImagen(element)"><mat-icon>delete</mat-icon></button>
+                                <button  [disabled]="element.Icono == ''" mat-button matTooltip="Mostrar imagen"
+                                color="primary" (click)="mostrarImagen(element)"><mat-icon>image_search</mat-icon></button>
+                                
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns" style="background-color: #ccc; font-weight: bold;"></tr>
+                    <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns; "></tr>
+                </table>
+
+            </div>
+        </div>
+    </mat-card-content>
+    <mat-card-footer>
+        <span aria-label="Close" class="cerrar" (click)="closeModal()" aria-hidden="true">&times;</span>
+    </mat-card-footer>
+</mat-card>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

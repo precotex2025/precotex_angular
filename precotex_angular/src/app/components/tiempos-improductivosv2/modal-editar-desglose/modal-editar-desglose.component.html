@@ -1,0 +1,35 @@
+<h2>Editar Desglose</h2>
+
+<div class="modal-body">
+  <label><span>ID:</span> <input type="text" [(ngModel)]="data.id_Desglose" disabled /></label>
+  <label><span>Partida:</span> <input type="text" [(ngModel)]="data.cod_Ordtra" disabled /></label>
+  <label><span>Fecha Inicio:</span> <input type="datetime-local" [(ngModel)]="data.fechaInicio" /></label>
+  <label><span>Fecha Fin:</span> <input type="datetime-local" [(ngModel)]="data.fechaFin" /></label>
+
+  <!-- Lista de items -->
+  <div *ngFor="let item of data.items; let i = index" class="item-row">
+    <label><span>Tipo:</span>
+      <input type="text" [(ngModel)]="item.descripcion" class="qr-input" disabled />
+    </label>
+    <label><span>Cantidad:</span>
+      <input
+        type="number"
+        [(ngModel)]="item.metros"
+        (ngModelChange)="calcularTotal()"
+        class="qr-input"
+      />
+    </label>
+  </div>
+
+
+  <label><span>Total:</span> <input type="text" [(ngModel)]="data.total" disabled/></label>
+  <label><span>Colitas:</span> <input type="text" [(ngModel)]="data.colitas" /></label>
+
+  <div class="modal-footer">
+    <button (click)="guardar()">Guardar</button>
+    <button (click)="cancelar()">Cancelar</button>
+  </div>
+</div>
+
+
+

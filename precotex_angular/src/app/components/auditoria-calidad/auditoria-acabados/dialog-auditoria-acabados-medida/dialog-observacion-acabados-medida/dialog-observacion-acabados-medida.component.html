@@ -1,0 +1,50 @@
+ 
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container"> 
+ 
+        <div class="title">Modificar Observacion</div>
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)" >
+            <div class="container-cuerpo-fila1">
+                
+                    <mat-form-field class="fila1-Total"> 
+                        <mat-label>Observacion</mat-label>
+                        <textarea matInput type="text"  placeholder="Observacion" value="" 
+                            autocomplete="off" formControlName="Observacion" ></textarea>
+                    </mat-form-field>      
+
+            </div>    
+
+
+ 
+            <div class="container-cuerpo-foot">
+                <button  type="submit" class="button-agregar" mat-dialog-close="true" [disabled]="!formulario.valid"  mat-flat-button>
+                    <mat-icon aria-label="person" >create
+                    </mat-icon>  Modificar
+                </button>
+
+               
+
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>               
+            </div>
+        </form>
+
+    </div>
+
+
+
+
+ 
+ 
+   
+
+
+
+ 
+
+
+
+</div>

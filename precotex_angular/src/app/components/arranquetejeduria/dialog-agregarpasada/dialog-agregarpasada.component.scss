@@ -1,0 +1,249 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height:100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+    display: flex;
+  }
+  
+  .grid-container {
+    border-radius: 4px;
+    width: 70%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 100%;
+    min-height: 400px;
+    height: 100%;
+  }
+  
+  .title {
+    background-color: #3f51b5;
+    color: rgb(255, 255, 255);
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: 60% 40%;  /* Define dos columnas: 70% y 30% */
+    padding: 20px; /* Relleno alrededor del contorno */
+    gap: 10px; /* Espacio entre las columnas (opcional) */
+  }
+
+  .left-column {
+    //background-color: lightblue;
+    padding: 10px; /* Espacio interno dentro de la columna */
+  }
+  
+  .right-column {
+    //background-color: lightgreen;
+    padding: 10px; /* Espacio interno dentro de la columna */
+  }
+
+  
+  .input-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .input-item {
+    //width: 48%;  /* Cada input ocupará el 50% menos un pequeño margen */
+    width: 100px;
+  }
+
+  .button-Grabar-Salir {
+    position: absolute; /* Para que sea fijo en la pantalla */
+    bottom: 50px;    /* Espaciado desde la parte inferior */
+    left: 80%;      /* Espaciado desde la parte izquierda */
+    z-index: 1000;   /* Asegura que el botón esté por encima de otros elementos */
+  }
+
+  .button-Grabar-Est {
+    width: 40%;
+    display: inline-block;
+    background-color: #0e740e;
+    color: #ffffff;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    //margin-right: 1rem;
+  }
+
+  .button-Grabar-Med {
+    //width: 40%;
+    //display: inline-block;
+    background-color: #0e740e;
+    color: #ffffff;
+    margin-top: 1rem;
+    margin-bottom: 1rem;    
+
+    flex: 40 0 0%; /* El botón ocupa el 50% del espacio */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  button.mat-fab {
+    /*bottom: 20px;*/  /* Ubicación en la parte inferior */
+    right: 1px;   /* Ubicación en la parte derecha */
+    width: 40px;   /* Ancho personalizado */
+    height: 40px;  /* Alto personalizado */
+    font-size: 30px; /* Tamaño del ícono dentro del botón */
+    vertical-align: middle;
+  }
+
+  .container-cuerpo {
+    padding: 5px;
+  }
+  
+  .container-cuerpo-fila1 {
+    display: flex;
+    gap: 16px; /* Espaciado entre los elementos */
+    flex-wrap: nowrap; /* Para asegurarte de que todos estén en una sola fila */
+    margin-top: 5px;
+    margin-left: 3px;
+  } 
+
+  .container-cuerpo-fila2 {
+    display: flex;
+    gap: 16px; /* Espaciado entre los elementos */
+    flex-wrap: nowrap; /* Para asegurarte de que todos estén en una sola fila */
+    margin-top: 5px;
+    margin-left: 3px;    
+  }
+
+  .container-cuerpo-fila4 {
+    display: flex;
+    gap: 16px; /* Espaciado entre los elementos */
+    flex-wrap: nowrap; /* Para asegurarte de que todos estén en una sola fila */    
+    margin-top: 5px;
+    margin-left: 3px;    
+  }
+
+  
+  mat-form-field {
+    // flex: 1; /* Esto hace que cada mat-form-field ocupe el mismo espacio disponible */
+    // width: 20px;
+    // align-items: flex-start;
+    width: 100px;
+  }
+  .container-cuerpo-filaButton {
+align-items: center;
+  }
+
+  .button-Grabar {
+    width: 100%;
+    display: inline-block;
+    background-color: #0e740e;
+    color: #ffffff;
+    margin-right: 1rem;
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+
+
+  /* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+  width: 100%;
+font-family: arial;
+font-size: 10px;
+
+}
+.paginador{
+  width: auto
+}
+
+tr:hover {
+  border-color: currentColor;
+  background: #E1E1E1;
+}
+
+tr:active {
+  background: #efefef;
+}
+
+
+.mat-header-cell {
+  background-color: #4caf50; /* Cambia el color a tu preferencia */
+  color: white; /* Cambia el color del texto */
+  font-weight: bold;
+}
+
+
+.mat-cell, .mat-header-cell { border-right: 1px solid #e0e0e0; text-align: center; /* Color y estilo de la línea */ }
+/* Centrar los contenidos de las celdas */
+th.mat-header-cell, td.mat-cell {
+  text-align: center;
+}
+
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+  padding-right: 0px;
+}
+
+
+.boton-regresar {
+  position: fixed; /* Permite que el botón permanezca visible al desplazarse */
+  top: 1rem; /* Espaciado superior proporcional */
+  right: 1rem; /* Espaciado derecho proporcional */
+  padding: 0.5rem 1rem; /* Espaciado interno flexible */
+  background-color: #007bff; /* Color del botón */
+  color: white; /* Color del texto */
+  border: none; /* Sin bordes */
+  border-radius: 50px; /* Bordes redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra del botón */
+  font-size: 1rem; /* Tamaño de fuente proporcional */
+  cursor: pointer; /* Cursor de mano */
+  z-index: 1000; /* Coloca el botón encima de otros elementos */
+  transition: background-color 0.3s ease, opacity 0.3s ease; /* Suaviza las transiciones */
+  opacity: 0.7; /* Ligera transparencia */
+}
+
+.boton-regresar:hover {
+  background-color: #0056b3; /* Color al pasar el ratón */
+  opacity: 1; /* Vuelve completamente visible al pasar el ratón */
+}
+
+.input-estilo {
+  background-color: #F0E000;
+  color: blue;
+  font-weight: bold;
+  border: 1px solid black; /* Borde de 2px, color negro */
+  border-radius: 4px; /* Esquinas redondeadas (opcional) */
+  padding: 5px; /* Espaciado interno (opcional) */
+  width: 100px
+}
+
+.input-estilo-med {
+  width: 100px
+}
+
+
+.close-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.footer {
+  margin-top: auto; /* Empuja el footer hacia abajo, para que esté siempre en el fondo */
+  padding: 10px;
+  text-align: center; /* Centra el contenido del footer */
+  background-color: #f1f1f1;
+  border-top: 1px solid #ccc; /* Línea separadora opcional */
+
+}

@@ -1,0 +1,251 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+  
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 320px;
+    min-height: 550px;
+    height: 550px;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: black;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 95%;
+    margin: 0;
+    padding: 10px 10px;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 90px
+        "fila2" 400px
+        "foot" 0px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    margin-top: 15px;
+    overflow: auto;
+    margin-bottom: 10px;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+//fila 1 
+.container-cuerpo-fila1 {
+    display: grid;
+
+    grid-template:
+    "col1 col2 col3"   90px  /
+    150px 150px 150px   auto;
+}
+
+      
+
+.fila1-Op {
+    grid-area: col1;
+    
+}
+/*.fila1-Color {
+    grid-area: col2;
+    
+}*/
+.button-buscar {
+    grid-area: col2;
+    height: 10%;
+    margin: 0 auto;
+    margin: 5px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+.button-registrar{
+
+    grid-area: col3;
+    height: 10%;
+    margin: 0 auto;
+    margin: 5px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+.mat-column-Sel,
+.mat-column-Codigo,
+.mat-column-Color,
+.mat-column-Stock
+{
+	text-align: left;
+	font-size: 13px;
+    font-family: arial;
+    padding: 15px;
+}
+.mat-column-Sel {width: 30px !important;text-align: left}
+.mat-column-Codigo {width: 30px !important;text-align: left}
+.mat-column-Color {width: 30px !important;text-align: left}
+.mat-column-Stock {width: 30px !important;text-align: left}
+
+
+.mat-header-cell {text-align: left; padding: 15px; }
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+ 
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+
+}
+th.mat-cell{
+    padding:15px;
+    text-align: left;
+}
+td.mat-cell{
+    padding:15px;
+    text-align: left;
+}
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+
+
+@media screen and (max-width: 868px){
+    .grid-container{
+        height: 430px;
+    }
+
+    .container-cuerpo {
+        display: grid;
+        grid-template:
+        "fila1" 90px
+        "fila2" 400px
+        "foot" 0px / 
+        99%;
+    }
+
+    .container-cuerpo-fila1{
+        display: grid;
+        
+        grid-template:
+        "col1 col2 col3"   90px  /
+        150px 150px 150px  auto;
+    }
+    
+          
+    
+    .fila1-Op {
+        grid-area: col1;
+        
+    }
+   
+    .button-buscar {
+        grid-area: col2;
+       
+    }
+
+    .button-registrar {
+        grid-area: col3;
+       
+    }
+
+  }
+
+
+  @media screen and (max-width: 600px){
+   .grid-container{
+       height: 510px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila1" 90px
+        "fila2" 400px
+        "foot" 0px / 
+        99%;
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        
+        grid-template:
+        "col1 col2 col3 "   90px  /
+        130px 110px 110px  auto;
+    }
+
+    .fila1-Op {
+        grid-area: col1;
+        
+    }
+    .button-buscar {
+        grid-area: col2;
+        margin: 5px 0px 10px;
+        min-width: 110px;
+   
+       
+    }
+
+    .button-registrar {
+        grid-area: col3;
+        margin: 5px 10px 10px;
+        min-width: 110px;
+       
+    }
+    
+  }

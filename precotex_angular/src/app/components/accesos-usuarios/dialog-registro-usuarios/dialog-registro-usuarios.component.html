@@ -1,0 +1,81 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+        <!-- *ngIf="Titulo == undefined; else titulomodificar" -->
+        <div class="title"><strong>CREAR NUEVO USUARIO</strong></div>
+        <div class="body">
+            <form class="container-cuerpo" [formGroup]="formulario">
+                <div class="fila1">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Apellidos</mat-label>
+                        <input matInput type="text" placeholder="Ingresa apellidos" autocomplete="off" formControlName="Apellidos"/>
+                    </mat-form-field>    
+                    <mat-form-field appearance="fill">
+                        <mat-label>Nombres</mat-label>
+                        <input matInput type="text" placeholder="Ingresa los nombres" autocomplete="off" formControlName="Nombres"/>
+                    </mat-form-field>
+                </div> 
+                <div class="fila1">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Password</mat-label>
+                        <input matInput type="text" placeholder="Ingresa la contraseña" autocomplete="off" formControlName="Password"/>
+                    </mat-form-field>    
+                    <mat-form-field appearance="fill">
+                        <mat-label>Estado</mat-label>
+                        <mat-select formControlName="Estado">
+                            <mat-option value="1">ACTIVO</mat-option>
+                            <mat-option value="0">INACTIVO</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>   
+                <div class="fila2">
+                    <mat-card>
+                        <mat-card-header>VINCULAR USUARIO CON LA PLANILLA</mat-card-header>
+                        <mat-card-content>
+                            <div class="fila2-content">
+                                <mat-form-field appearance="fill" >
+                                    <mat-label>Selecciona BD Planilla</mat-label>
+                                    <mat-select (selectionChange)="onEmpresaChange($event)">
+                                        <mat-option value="07">PRECOTEX S.A.C.</mat-option>
+                                        <mat-option value="56">V&D CORPORACION PERU S.A.C</mat-option>
+                                        <mat-option value="77">SABOR CRIOLLO Y PUNTO EIRL</mat-option>
+                                        <mat-option value="78">K APRA MANKA EIRL</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="fila3-content">
+                                <label for="" class="trabajador1">Trabajador: </label>
+                                <mat-form-field appearance="fill" class="trabajador2">
+                                    <mat-label>Cod. Trabajador</mat-label>
+                                    <input matInput type="text" autocomplete="off" formControlName="Cod_Trabajador" readonly/>
+                                </mat-form-field> 
+                                <mat-form-field appearance="fill" class="trabajador3">
+                                    <mat-label>Cod. Usuario</mat-label>
+                                    <input matInput type="text" autocomplete="off" formControlName="Cod_Usuario" (change)="validarCodUsuario($event)" [readonly]="existeCo" />
+                                </mat-form-field> 
+                                <mat-form-field appearance="fill" class="trabajador4">
+                                    <mat-label>Nombres Trabajador</mat-label>
+                                    <input matInput type="text" autocomplete="off" formControlName="Nombres_Trabajador" readonly/>
+                                </mat-form-field> 
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </form>
+        </div>
+
+        <div class="footer">
+            <button class="button-dialog" mat-flat-button type="button" (click)="guardarInformacion()" [disabled]="!formulario.valid">
+                <mat-icon aria-label="person" >check
+                </mat-icon>GUARDAR
+
+            </button>
+            <button class="button-cancelar"  mat-flat-button type="button" mat-dialog-close>
+                <mat-icon aria-label="person">highlight_off
+                </mat-icon>
+                CANCELAR</button>
+        </div>
+    </div>
+  
+  </div>
+  

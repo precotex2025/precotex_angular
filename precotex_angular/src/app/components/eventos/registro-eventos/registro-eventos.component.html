@@ -1,0 +1,98 @@
+<div class="container-fluid">
+    <div class="grid-container">
+        <div class="title">Registro de Eventos</div>
+
+        <div class="find">
+            <mat-card class="list-form">
+                <mat-card-header>
+                    <mat-card-subtitle>Listado de Eventos</mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content>
+                    <div>
+                        <mat-form-field>
+                            <mat-label>Filtrar</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar busqueda" #input>
+                        </mat-form-field>
+
+                        <button mat-button type="button" color="primary" (click)="onInsertarRegistro()"><mat-icon>add</mat-icon>Nuevo</button>
+                        <button mat-button type="button" color="primary" (click)="onExportarRegistro()"><mat-icon>file_download</mat-icon>Descargar</button>
+                    </div>
+                    <div class="col-md-12 tabla">
+                        <table mat-table [dataSource]='dataSource' matSort #sortData1="matSort" matSortActive="Fec_Evento" matSortDirection="desc" class="mat-elevation-z8">
+                            <ng-container matColumnDef="Fec_Evento">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Evento </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Fec_Evento | date: 'dd-MM-yyyy HH:mm' }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Des_Evento">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Des_Evento }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Lugar">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Lugar </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Lugar }} </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="Des_TipoEvento">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Des_TipoEvento }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Personal">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Personal </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Personal }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Sede">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Sede </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Sede }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Flg_Estado">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span [ngClass]="{'flg_grey':element.Flg_Estado=='P', 'flg_green':element.Flg_Estado=='A', 'flg_blue':element.Flg_Estado=='C'}">
+                                        {{ element.Flg_Estado == 'P' ? 'PENDIENTE' : element.Flg_Estado == 'A' ? 'ACTIVO' : 'CERRADO' }}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Fec_Cierre">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Cierre </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Fec_Cierre | date: 'dd-MM-yyyy HH:mm:ss' }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Acciones">
+                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                <td class="mat-header-cell" mat-cell *matCellDef="let element">
+                                    <a mat-icon-button (click)="onEditarRegistro(element)" matTooltip="Editar Evento">
+                                        <mat-icon color="primary">edit</mat-icon>
+                                    </a>
+
+                                    <a mat-icon-button (click)="onCerrarRegistro(element)" matTooltip="Cerrar Evento" *ngIf="element.Flg_Estado != 'C'">
+                                        <mat-icon color="accent">block</mat-icon>
+                                    </a>
+
+                                    <a mat-icon-button (click)="onAnularRegistro(element.Id_Evento)" matTooltip="Anular Evento" *ngIf="element.Flg_Estado != 'C'">
+                                        <mat-icon color="warn">delete</mat-icon>
+                                    </a>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+
+                        <mat-paginator #paginatorData1 [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>                        
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner> 

@@ -1,0 +1,97 @@
+<div class="container"> 
+    <div class="grid-container">
+        <div class="title">Agregar Colgadores</div> 
+    
+        <form class="container-cuerpo" [formGroup]="formulario">
+
+                <div class="container-cuerpo-fila0">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Tipo Ubicación : </mat-label>
+                        <input matInput placeholder="" formControlName="Codigo_QR">
+                    </mat-form-field>          
+                </div>        
+
+                <div class="container-cuerpo-fila1">
+
+                    <mat-form-field class="fila1-anadir"> 
+                        <mat-label>Añadir</mat-label>
+                        <input matInput type="text"  placeholder="Añadir" (keydown.enter)="applyEnterAdd($event)" value="" #myinputAdd
+                            autocomplete="off" formControlName="colgador_añadir" >
+                    </mat-form-field>     
+                    
+                    
+                    <button type="button" class="fila1-btn_anadir" (click)="onAnadir()" mat-flat-button >                    
+                        <mat-icon aria-label="person">assignment_turned_in</mat-icon>
+                    </button>
+
+                    <mat-form-field class="fila1-eliminar"> 
+                        <mat-label>Retirar</mat-label>
+                        <input matInput type="text"   placeholder="Retirar" (keydown.enter)="applyEnterDel($event)" value="" #myinputDel
+                            autocomplete="off" formControlName="colgador_eliminar" >
+                    </mat-form-field>    
+
+                    <button type="button" class="fila1-btn_eliminar" (click)="onRetirar()" mat-flat-button  >
+                    <mat-icon aria-label="person">delete</mat-icon> 
+                    </button>
+
+                    <button type="button" class="boton-regresar" mat-flat-button (click)="Regresar()">                    
+                        <mat-icon aria-label="person">reply_all</mat-icon>
+                    </button>                
+
+                </div>      
+                
+                <div class="container-cuerpo-fila2">
+                    <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+
+
+                        <ng-container matColumnDef="codigo">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Codigo</th>
+                            <td mat-cell  *matCellDef="let data_det"> {{data_det.codigoBarra}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tela">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tela</th>
+                            <td mat-cell  *matCellDef="let data_det"> {{data_det.cod_Tela}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="partida">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Partida</th>
+                            <td mat-cell  *matCellDef="let data_det"> {{data_det.cod_OrdTra}} </td>
+                        </ng-container>
+
+                        <!-- <ng-container matColumnDef="fabric">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fabric</th>
+                            <td mat-cell  *matCellDef="let data_det"> {{data_det.fabric}} </td>
+                        </ng-container>                     -->
+                        
+                        <ng-container matColumnDef="estado">
+                            <th mat-header-cell *matHeaderCellDef> Estado </th>
+                            <td mat-cell *matCellDef="let data_det">
+
+                                    <span style="background-color: green; color: white; padding: 2px;" *ngIf="data_det.flg_Estatus == 'I'" >INGRESO</span> 
+                                    <span style="background-color: red; color: white; padding: 2px;" *ngIf="data_det.flg_Estatus == 'E'" >RETIRO</span> 
+                                    <span style="background-color: rgba(255, 0, 204, 0.214); color: white; padding: 2px;" *ngIf="data_det.flg_Estatus == 'R'" >REUBICADO</span> 
+                
+                                </td>                                
+                        </ng-container>  
+
+                        <ng-container matColumnDef="fecha">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha.
+                            </th>
+                            <td class="mat-header-cell" mat-cell *matCellDef="let data_det">
+                                {{data_det.fec_Registro | date:'dd/MM/yyyy' }} </td>
+                        </ng-container>   
+                        
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>                       
+
+                    </table>
+                </div>
+
+        </form>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

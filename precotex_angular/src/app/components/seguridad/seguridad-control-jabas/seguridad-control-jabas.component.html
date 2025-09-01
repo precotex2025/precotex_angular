@@ -1,0 +1,37 @@
+<div class="container">
+    <!-- ventana nro 1 - selecciona la planta -->
+    
+
+    <div class="grid-container">
+        <div class="principal-title">Control de Jabas</div>
+
+        <div class="title">Indique la Planta donde Usted se Ubica</div>
+
+        <div class="container-cuerpo">
+            <button type = "button" class="button-establecimiento1" mat-flat-button color="primary" (click)="ActualizarPlanta(1)"
+                [routerLink]="['/SeguridadControlJabaAccion']" >Santa Maria
+            </button>
+            <button type = "button" class="button-establecimiento2" mat-flat-button color="primary" (click)="ActualizarPlanta(2)"
+                [routerLink]="['/SeguridadControlJabaAccion']" >Santa Cecilia
+            </button>
+            <button type = "button" class="button-establecimiento3" mat-flat-button color="primary" (click)="ActualizarPlanta(3)"
+                [routerLink]="['/SeguridadControlJabaAccion']" >Huachipa Sede I
+            </button>
+            <button type = "button" class="button-establecimiento4" mat-flat-button color="primary" (click)="ActualizarPlanta(4)"
+                [routerLink]="['/SeguridadControlJabaAccion']" >Huachipa Sede II
+            </button>
+            <button type = "button" class="button-establecimiento5" mat-flat-button color="primary" (click)="ActualizarPlanta(5)"
+                [routerLink]="['/SeguridadControlJabaAccion']" >Independencia
+            </button>
+            <button type = "button" class="button-establecimiento5" mat-flat-button color="primary" (click)="ActualizarPlanta(14)"
+                [routerLink]="['/SeguridadControlJabaAccion']" >Independencia II
+            </button>
+            <button type = "button" class="button-establecimiento6" mat-flat-button color="primary" (click)="ActualizarPlanta(6)"
+                [routerLink]="['/SeguridadControlJabaAccion' ]" >Pamer
+            </button>
+        </div>
+    </div> 
+</div>
+  
+<!-- <button type = "button" class="button-establecimiento1" mat-flat-button color="primary" (click)="ActualizarPlanta(1)"
+[routerLink]="['/SeguridadControlGuiaAccion']" *ngIf="mostrar_sede_1">Santa Maria -->

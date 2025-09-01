@@ -1,0 +1,63 @@
+<div class="container">
+  <!-- ventana nro 4 - historial -->
+  <div class="grid-container">
+      <!-- *ngIf="Titulo == undefined; else titulomodificar" -->
+      <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm"  >
+        <div class="container-cuerpo-fila2">
+                  <div  class="cabecera">
+                    <mat-form-field style="display: none;">
+                      <mat-label>Secuencia</mat-label>
+                      <input matInput type="number" autocomplete="off" formControlName="Secuencia" >
+                    </mat-form-field>
+                    <mat-form-field class="col1">
+                      <mat-label>L.TendidoMts</mat-label>
+                      <input matInput type="number" autocomplete="off" formControlName="LTendidoMts" >
+                    </mat-form-field>
+                    <mat-form-field class="col2">
+                      <mat-label>PesoxPäñoKgs</mat-label>
+                      <input matInput type="number" autocomplete="off" formControlName="PesoxPanoKgs" >
+                    </mat-form-field>
+                    <mat-form-field class="col3">
+                      <mat-label>PrendasxPaño</mat-label>
+                      <input matInput type="number" autocomplete="off" formControlName="PrendasxPano" >
+                    </mat-form-field>
+                    <mat-form-field class="col4">
+                      <mat-label>NumPaños</mat-label>
+                      <input matInput type="number" autocomplete="off" formControlName="num_panos" >
+                    </mat-form-field>
+                    <div class="col5">
+                      <button class="button-add"   (click)="grabarDatosGrilla2()"  mat-flat-button>
+                        <mat-icon aria-label="person" >add
+                        </mat-icon> Agregar Detalle
+                      </button>
+                    </div>
+
+                    <div class="col6">
+                      <button type="button" class="button-cancel" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                        <mat-icon aria-label="person">highlight_off
+                        </mat-icon>  Cancelar
+                      </button>
+                    </div>
+                    
+                    
+                  </div>
+              </div>
+    </form>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+

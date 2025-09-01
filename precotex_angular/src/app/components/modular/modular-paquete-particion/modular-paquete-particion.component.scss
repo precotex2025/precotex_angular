@@ -1,0 +1,282 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+   
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    //height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #cecece!important;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    //min-width: 350px;
+    //max-height: 100%;
+    //position: absolute;  
+}
+
+.title-fondo{
+    text-align: center;
+    color: black;
+    font-weight: bold;
+    width: 100%;
+}
+  
+.title {
+    background-color: #2962FF;
+    color: #fff;
+    padding: 8px 10px 10px;
+    text-align: center;
+    border-radius: 4px 4px 0 0;
+    border-bottom: 1px solid #337ab7;
+    font-weight: 700;
+    font-family: sans-serif;
+    font-size: 18px;
+}
+
+
+.row{
+    display: grid;
+    grid-template:
+    "col1 col2 col3" auto/
+    270px 270px 260px;
+
+    margin-top: 15px;
+    padding: 10px;
+}
+
+.fila1-modulo {
+    grid-area: col1;
+    padding-right: 10px;
+   
+}
+.fila1-ticket {
+    grid-area: col2;
+    padding-right: 10px;
+   
+}
+.fila1-buscar {
+    width: 100%;
+    grid-area: col3;
+    height: 40px;
+    max-width: 190px;
+    margin: auto;
+    margin-top: 3px;
+    
+}
+
+.row2{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.fila1-modulo{
+    width: 100%;
+}
+.fila1-ticket{
+    width: 100%;
+}
+
+.card{
+    width: 100%;
+    min-height: 300px;
+    max-height: 330px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px #222;
+    padding: 10px;
+    //cursor: pointer;
+}
+
+.data{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    justify-content: center;
+    color: #337ab7;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.imagen{
+    padding: 5px;
+    text-align: center;
+}
+
+.barcode{
+    width: 50px;
+}
+#barcode{
+    width: 10px;
+}
+svg{
+    width: 100px;
+}
+
+#print-section{
+    width: 100px;
+}
+
+.titulo-card{
+    text-align: center;
+    font-weight: bold;
+}
+
+.texto{
+    text-align: center;
+    margin-top: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.col-md-2{
+    width: 14%;
+    margin-right: 5px;
+}
+.col-md-3{
+    width: 21%;
+    margin-right: 5px;
+}
+.col-md-10{
+    width: 90%;
+    padding: 5px;
+}
+
+.btn{
+    display: grid;
+    grid-template:
+    "col1" 60px 
+    "col2" auto/
+    130px;
+    justify-content: center;
+}
+
+.btn-particiona {
+    width: 100%;
+    height: 40px;
+    margin: auto;
+    //background-color: #0e740e;
+    color: #ffffff;
+}
+
+.btn-reimpresona {
+    width: 100%;
+    height: 40px;
+    margin: auto;
+    background-color: #337ab7;
+    color: #ffffff;
+    
+}
+
+.btn-particiona {
+    grid-area: col1;
+}
+
+.btn-reimpresona {
+    grid-area: col2;
+   
+}
+
+@media screen and (max-width: 1100px){
+    .data{
+        font-size: 12px;
+    }
+}
+
+
+@media screen and (max-width: 980px){
+
+    .grid-container {
+        border: none!important;
+    }
+
+    .data{
+        font-size: 10px;
+    }
+
+
+    .row{
+        display: grid;
+        grid-template:
+        "col1" 80px
+        "col2" 80px
+        "col3" auto/
+        270px;
+    
+        margin-top: 15px;
+        padding: 10px;
+        justify-content: center;
+    }
+    
+    .fila1-modulo {
+        grid-area: col1;
+        padding-right: 10px;
+       
+    }
+    .fila1-ticket {
+        grid-area: col2;
+        padding-right: 10px;
+       
+    }
+    .fila1-buscar {
+        width: 100%;
+        grid-area: col3;
+        height: 40px;
+        max-width: 190px;
+        margin: auto;
+        margin-top: 3px;
+        
+    }
+
+    .col-md-3{
+        width: 98%;
+    }
+
+}
+
+
+@media screen and (max-width: 860px){
+    .data{
+        font-size: 8px;
+    }
+
+}
+
+@media screen and (max-width: 720px){
+    .data{
+        font-size: 7px;
+    }
+
+}
+
+@media screen and (max-width: 720px){
+    .data{
+        font-size: 7px;
+    }
+
+}
+
+@media screen and (max-width: 699px){
+    .data{
+        font-size: 12px;
+    }
+
+    .row2{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .col-md-2{
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}

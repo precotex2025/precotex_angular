@@ -1,0 +1,101 @@
+<div class="container">
+    <!-- ventana nro 3 - salida -->
+    <div class="grid-container">
+
+        <div class="title">Lectura de Reposición</div>
+
+        <div class="find">
+            <div class="auditoriaForm" >
+                <div class="findcol1">
+                    <mat-form-field class="example-form-field" appearance="fill">
+                        <mat-label>N° de Solicitud</mat-label>
+                        <input matInput type="text" maxlength="8" (input)="changeSolicitud()"
+                        (change)="changeSolicitud()" [(ngModel)]="Num_Solicitud" placeholder="Solicitud" autocomplete="off">
+                        <button matSuffix mat-icon-button aria-label="Clear" (click)="limpiarValor()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" *ngIf="dataReposiciones.length > 0">
+                        <mat-label>Seleccione Conductor</mat-label>
+                        <mat-select [(ngModel)]="Conductor">
+                            <mat-option *ngFor="let item of dataChoferes" [value]="item.Nombres">{{item.Nombres}}</mat-option>
+                        </mat-select>                        
+                    </mat-form-field>
+                </div>
+                <div class="botones" *ngIf="dataReposiciones.length > 0">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Seleccione</mat-label>
+                        <mat-select   required [(ngModel)]="Tipo">
+                            <mat-option value="S">Registro de Salida</mat-option>
+                            <mat-option value="I">Registro de Ingreso</mat-option>
+                            <mat-option value="SD">Registro Salida Despacho</mat-option>
+                            <mat-option value="RD">Registro Recepción Despacho</mat-option>
+                        </mat-select>                        
+                    </mat-form-field>
+                    <div class="findcol2">
+                        <button type="button" class="button_agregar"mat-flat-button
+                            color="primary" (click)="registrarSeguridad()">
+                            <mat-icon aria-label="person">save
+                            </mat-icon> Registrar
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <div class="caja" *ngIf="dataReposiciones.length > 0">
+            <mat-card>
+                <mat-card-header>
+                    Datos de la Solicitud
+                </mat-card-header>
+                <mat-card-content class="caja-content">
+                    <div class="caja-datos">
+                        <p>N° Solicitud</p>
+                        <p><b>{{dataReposiciones[0].Num_Solicitud}}</b></p>
+                    </div>
+                    <div class="caja-datos">
+                        <p>Cliente</p>
+                        <p><b>{{dataReposiciones[0].Des_Cliente}}</b></p>
+                    </div>
+                    <div class="caja-datos">
+                        <p>Tipo</p>
+                        <p><b>{{dataReposiciones[0].Tipo}}</b></p>
+                    </div>
+                    <div class="caja-datos">
+                        <p>Sede</p>
+                        <p><b>Costura {{dataReposiciones[0].Sede}}</b></p>
+                    </div>
+                    <div class="caja-datos">
+                        <p>Línea</p>
+                        <p><b>{{dataReposiciones[0].Num_Linea}}</b></p>
+                    </div>
+                    <div class="caja-datos">
+                        <p>Artes</p>
+                        <p><b>{{dataReposiciones[0].Artes}}</b></p>
+                    </div>
+                    <div class="caja-datos">
+                        <p>Fecha Salida</p>
+                        <p><b>{{dataReposiciones[0].Fecha_Salida}}</b></p>
+                    </div>
+                    <div class="caja-datos">
+                        <p>Fecha Ingreso Sta. Rosa</p>
+                        <p><b>{{dataReposiciones[0].Fecha_Ingreso}}</b></p>
+                    </div>
+                    <div class="caja-datos">
+                        <p>Fecha Salida Despacho Sta Rosa</p>
+                        <p><b>{{dataReposiciones[0].Fecha_Salida_Despacho}}</b></p>
+                    </div>
+                    <div class="caja-datos">
+                        <p>Fecha Recepción Despacho</p>
+                        <p><b>{{dataReposiciones[0].Fecha_Recepcion_Despacho}}</b></p>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+        </div>
+
+    </div>
+</div>

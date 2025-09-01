@@ -1,0 +1,64 @@
+<div class="container">
+  <!-- ventana nro 4 - historial -->
+  <div class="grid-container">
+
+    <div class="title">OP: {{this.data.datos.Cod_OrdPro}} - COLOR: {{this.data.datos.Color}}
+
+      <span aria-label="Close" class="cerrar" mat-dialog-close aria-hidden="true">&times;</span>
+    </div>
+
+    <div class="container-cuerpo">
+
+      <div class="row">
+        <div class="col-md-12">
+          <mat-card>
+            <mat-card-content>
+              <div class="row">
+                <div class="col-md-12">
+                  <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+
+                    <ng-container matColumnDef="DES_PRESENT">
+                      <th mat-header-cell *matHeaderCellDef> PRESENTACIÓN </th>
+                      <td mat-cell *matCellDef="let data_det"> {{data_det.DES_PRESENT}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="COD_TALLA">
+                      <th mat-header-cell *matHeaderCellDef> Talla </th>
+                      <td mat-cell *matCellDef="let data_det"> {{ data_det.COD_TALLA }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="PRENDASPAQ">
+                      <th mat-header-cell *matHeaderCellDef> Ticket Generar </th>
+                      <td mat-cell *matCellDef="let data_det"> {{ data_det.PRENDASPAQ }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="NUM_PAQUETE">
+                      <th mat-header-cell *matHeaderCellDef> Prendas Generadas </th>
+                      <td mat-cell *matCellDef="let data_det"> {{ data_det.NUM_PAQUETE }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="COD_ORDPRO">
+                      <th mat-header-cell *matHeaderCellDef> OP </th>
+                      <td mat-cell *matCellDef="let data_det"> {{ data_det.COD_ORDPRO }}</td>
+                    </ng-container>
+
+
+                    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;">
+                    </tr>
+                    <tr class="mat-row" *matNoDataRow>
+                      <td class="mat-cell" colspan="4">Aún no has agregado Registros</td>
+                    </tr>
+
+                  </table>
+
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

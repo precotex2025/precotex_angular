@@ -1,0 +1,259 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+
+.grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0;
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 439px;
+    //position: absolute;
+}
+
+.title {
+    background-color: #657eac;
+    color: black;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 5px 5px 5px;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 55px
+        "fila2" 55px
+        "fila3" 55px
+        "fila4" 55px
+        "fila5" 55px
+        "fila6" 55px
+        "foot" 55px /
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+}
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    // overflow: auto;
+    // margin-bottom: 10px;
+}
+
+.container-cuerpo-fila3 {
+    grid-area: fila3;
+}
+.container-cuerpo-fila4 {
+    grid-area: fila4;
+}
+.container-cuerpo-fila5 {
+    grid-area: fila5;
+}
+.container-cuerpo-fila6 {
+    grid-area: fila6;
+}
+
+.container-cuerpo-foot {
+    grid-area: foot;
+}
+
+
+.container-cuerpo-fila2 {
+    display: grid;
+    gap: 10px;
+
+    grid-template:
+        "fcol2-1 fcol2-2" auto /
+        120px auto;
+}
+
+.fila2-dni-emisior {
+    grid-area: fcol2-1;
+}
+
+.fila2-nom-emisior {
+    grid-area: fcol2-2;
+}
+
+.container-cuerpo-fila3 {
+    display: grid;
+    gap: 10px;
+    
+    grid-template:
+        "fcol3-1 fcol3-2" auto /
+        120px auto;
+}
+
+.fila3-dni-receptor {
+    grid-area: fcol3-1;
+}
+
+.fila3-nom-receptor {
+    grid-area: fcol3-2;
+}
+
+.container-cuerpo-fila4 {
+    display: grid;
+    gap: 10px;
+    
+    grid-template:
+        "fcol4-1 fcol4-2" auto /
+        60% 40%;
+}
+
+.fila4-asunto {
+    grid-area: fcol4-1;
+}
+
+.fila4-nom_autoriza {
+    grid-area: fcol4-2;
+}
+
+.container-cuerpo-fila6 {
+    display: grid;
+    gap: 10px;
+    
+    grid-template:
+        "fcol6-1 fcol6-2" auto /
+        50% 50%;
+}
+
+.fila6-num-cantidad {
+    grid-area: fcol6-1;
+}
+
+.fila6-num-peso {
+    grid-area: fcol6-2;
+}
+
+// .fila1-guia,
+// .fila2-destino {
+//     width: 100%;
+// }
+
+mat-form-field {
+    width: 100%;
+}
+
+//fila 1
+.container-cuerpo-fila1 {
+    display: grid;
+
+    grid-template:
+        "col1 col2" auto /
+        150px auto;
+}
+
+.fila1-fecha {
+    grid-area: col1;
+    padding-right: 10px;
+}
+
+.fila1-buscar {
+    width: 100%;
+    grid-area: col2;
+    height: 40px;
+    max-width: 300px;
+    margin: auto;
+    margin-top: 3px;
+}
+
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        auto auto;
+}
+
+.container-cuerpo-foot .button-registrar,
+.button-cancelar {
+    height: 20%;
+    margin: 0 auto;
+    margin: 9px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;    
+    //color: black; 
+    border: 1px solid #2f528f;
+}
+
+.button-registrar{
+    height: 20%;
+    background-color: #bd312d; 
+    color: white; 
+    grid-area: fcol1;
+    
+}
+
+.button-cancelar{
+    height: 20%;
+    background-color: #afabab; 
+    color: black; 
+    grid-area: fcol2;
+}
+.mat-column-hora, .mat-column-tipo,.mat-column-num_guia,.mat-column-proveedor, .detalle {
+	text-align: center;
+	font-size: 13px;
+    font-family: arial;
+}
+
+.mat-column-hora {width: 100px !important;}
+.mat-column-tipo {width: 80px !important;}
+.mat-column-num_guia {width: 120px !important;}
+.mat-column-proveedor {width: auto !important;text-align: left;}
+.mat-column-detalle {width: 20px !important;text-align: center;}
+
+.mat-header-cell {text-align: center; }
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+

@@ -1,0 +1,213 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+ 
+.grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0;
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 540px; 
+    //position: absolute;  
+}
+   
+.title {
+    background-color: #657eac;
+    color: black;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 5px 5px 5px;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 55px
+        "fila2" 350px
+        "foot" 55px /
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+}
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+// .fila1-guia,
+// .fila2-destino {
+//     width: 100%;
+// }
+
+
+mat-form-field {
+    width: 100%;
+}
+
+//fila 1
+.container-cuerpo-fila1 {
+    display: grid;
+
+    grid-template:
+        "col1 col2 col3" auto /
+        150px 200px auto;
+}
+
+.fila1-fecha {
+    grid-area: col1;
+    padding-right: 10px;
+} 
+.fila1-vehi {
+    grid-area: col2;
+    padding-right: 10px;
+}
+.fila1-buscar {
+    width: 100%;
+    grid-area: col3;
+    height: 40px;
+    max-width: 300px;
+    margin: auto;
+    margin-top: 3px;
+}
+
+
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot .button-registrar,
+.button-cancelar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+
+.button-registrar {
+    grid-area: fcol1;
+    background-color: #0e740e;
+    color: #ffffff;
+}
+
+.button-cancelar {
+    grid-area: fcol2;
+    background-color: #afabab;
+    color: #222222;
+}
+
+.mat-column-tipo, .mat-column-hora,.mat-column-vehiculo,.mat-column-conductor,.mat-column-origen,.mat-column-destino,.mat-column-kilometraje,.mat-column-tipo_operacion,.mat-column-ver {
+	text-align: center;
+	font-size: 13px;
+    font-family: arial;
+    padding: 10px;
+}
+.mat-column-tipo {width: 30px !important;}
+.mat-column-hora {width: 30px !important;}
+.mat-column-vehiculo {width: 50px !important;}
+.mat-column-conductor {width: 100px !important;}
+.mat-column-origen {width: 80px !important;}
+.mat-column-destino {width: 80px !important;text-align: center;}
+.mat-column-kilometraje {width: 80px !important;text-align: center;}
+.mat-column-tipo_operacion {width: 80px !important;text-align: center;}
+.mat-column-ver {width: 80px !important;text-align: center;}
+
+
+.mat-header-cell {text-align: center; }
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+
+
+@media screen and (max-width: 768px){
+   
+    .container-cuerpo {
+        display: grid;
+    
+        grid-template:
+            "fila1" 155px
+            "fila2" 275px
+            "foot" 65px /
+            99%;
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        
+        grid-template:
+        "col1 col2" auto
+        "col3 col4" auto /
+        150px 200px;
+    }
+    .fila1-buscar {
+        width: 90%;
+        grid-area: col3;
+        height: 40px;
+        max-width: 300px;
+        margin: auto;
+        margin-top: 3px;
+    }
+
+  }

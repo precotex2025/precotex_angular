@@ -1,0 +1,557 @@
+<div class="container">
+  <div class="grid-container">
+    <div class="title">
+      <strong> ARRANQUE DE TEJEDURIA - OT: {{ this.data.Datos.OT }} </strong>
+    </div>
+    <div class="body">
+      <form
+        class="container-cuerpo"
+        [formGroup]="formulario"
+        #formDirective="ngForm"
+      >
+        <!-- <div class="container-cuerpo-fila1"> -->
+
+     
+
+
+              <div class="container-cuerpo-fila1">
+                <mat-form-field appearance="fill" class="fila1-Ot">
+                  <mat-label>OT</mat-label>
+                  <input matInput type="text" formControlName="Cod_Ordtra" />
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="fila1-Inspector">
+                  <mat-label>INSPECTOR</mat-label>
+                  <input matInput type="text" formControlName="Inspector" />
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="fila1-Oc">
+                  <mat-label>OC</mat-label>
+                  <input matInput type="text" formControlName="Oc" />
+                </mat-form-field>
+
+               
+
+                <mat-form-field appearance="fill" class="fila1-Maquina">
+                  <mat-label>MAQUINA</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    formControlName="Cod_Maquina_Tejeduria"
+                  />
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="fila1-Combinacion">
+                  <mat-label>COMBINACIÓN</mat-label>
+                  <input matInput type="text" formControlName="Combinacion" />
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="fila1-Talla">
+                  <mat-label>TALLA</mat-label>
+                  <input matInput type="text" formControlName="Talla" />
+                  <!-- <button mat-icon-button matSuffix (click)="openDialogCombinacion()" > <mat-icon>search</mat-icon> </button> -->
+                </mat-form-field>
+
+                
+                <mat-form-field appearance="fill" class="fila1-Cliente">
+                  <mat-label>CLIENTE</mat-label>
+                  <input matInput type="text" formControlName="Cliente" />
+                </mat-form-field>
+
+
+                <mat-form-field appearance="fill" class="fila1-Tela">
+                  <mat-label>TELA</mat-label>
+                  <!-- <input matInput type="text" formControlName="Cod_Tela" /> -->
+                  <textarea
+                    matInput
+                    placeholder="Tela"
+                    formControlName="Cod_Tela"
+                    rows="3"
+                  ></textarea>
+                </mat-form-field>
+
+
+              </div>
+       
+
+        
+
+        <!-- </div> -->
+
+       
+            <div class="container-cuerpo-fila2">
+              <mat-form-field appearance="fill" class="fila2-Hilo_Titulo">
+                <mat-label>TITULO</mat-label>
+                <input matInput type="text" formControlName="Hilo_Titulo" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila2-Hilo_Compo">
+                <mat-label>COMPOSICION</mat-label>
+                <input matInput type="text" formControlName="Hilo_Compo" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila2-Hilo_Lote">
+                <mat-label>LOTE</mat-label>
+                <input matInput type="text" formControlName="Hilo_Lote" matInput #inputRef matTooltip="{{tooltipMessage}}"   [(ngModel)]="nombre" />
+                 <button mat-icon-button matSuffix (click)="openDialog()" > <mat-icon>search</mat-icon> </button>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila2-Hilo_Proveedor">
+                <mat-label>PROVEEDOR</mat-label>
+                <input matInput type="text" formControlName="Hilo_Proveedor" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila2-Galga">
+                <mat-label>GALGA</mat-label>
+                <input matInput type="text" formControlName="Galga" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila2-Sistemas">
+                <mat-label>NRO_SISTEMAS</mat-label>
+                <input matInput type="text" formControlName="Sistemas" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila2-Torsion">
+                <mat-label>TORSION</mat-label>
+                <input matInput type="text" formControlName="Torsion" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila2-Agujas">
+                <mat-label>NRO_AGUJAS</mat-label>
+                <input matInput type="text" formControlName="Agujas" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila2-Diametro">
+                <mat-label>DIAMETRO</mat-label>
+                <input matInput type="text" formControlName="Diametro" />
+              </mat-form-field>
+            </div>
+          
+       
+
+        
+            <div class="container-cuerpo-fila3">
+              <mat-form-field appearance="fill" class="fila3-Densidad">
+                <mat-label>DENSIDAD</mat-label>
+                <input matInput type="text" formControlName="Densidad" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-Densidad_real">
+                <mat-label>DENSIDAD REAL</mat-label>
+                <input matInput type="text" formControlName="Densidad_Real"  (keypress)="validateFormat($event)"/>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-Ancho">
+                <mat-label>ANCHO</mat-label>
+                <input matInput type="text" formControlName="Ancho" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-Ancho_real">
+                <mat-label>ANCHO REAL</mat-label>
+                <input matInput type="text" formControlName="Ancho_Real"  (keypress)="validateFormat($event)" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-Acabado">
+                <mat-label>ACABADO</mat-label>
+                <input matInput type="text" formControlName="Acabado" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-Acabado_real">
+                <mat-label>ACABADO REAL</mat-label>
+                <input matInput type="text" formControlName="Acabado_Real" /> 
+                <mat-select  formControlName="Acabado_Real" name="listar_tipotejidotela">
+                  <mat-option  value="A"> ABIERTO </mat-option>
+                  <mat-option  value="T"> TUBULAR </mat-option>
+              </mat-select>
+              </mat-form-field>
+
+
+
+
+              <mat-form-field appearance="fill" class="fila3-Tipo_Tejido_Tela">
+                <mat-label>TIPO TEJIDO TELA</mat-label>
+                <input matInput type="text" formControlName="Tipo_Tejido_Tela" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-Tipo_Tejido">
+                <mat-label>TIPO DE TEJIDO</mat-label>
+                <mat-select  formControlName="p_Tipo_Tejido" name="listar_tipotejidotela">
+                  <mat-option *ngFor="let listar_origen of listar_tipotejidotela" [value]="listar_origen.Cod_TipTejido">
+                      {{listar_origen.Descripcion}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+
+
+              
+
+
+
+              <mat-form-field appearance="fill" class="fila3-Largo">
+                <mat-label>LARGO</mat-label>
+                <input matInput type="text" formControlName="Largo" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-Largo-Real">
+                <mat-label>LARGO REAL</mat-label>
+                <input matInput type="text" formControlName="Largo_Real" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-Alto">
+                <mat-label>ALTO</mat-label>
+                <input matInput type="text" formControlName="Alto" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-Alto-Real">
+                <mat-label>ALTO REAL</mat-label>
+                <input matInput type="text" formControlName="Alto_Real" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-Peso-Unidad">
+                <mat-label>PESO X UNIDAD</mat-label>
+                <input matInput type="text" formControlName="Peso_Unidad" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-Peso-Unidad_Real">
+                <mat-label>PESO X UNIDAD REAL</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="Peso_Unidad_Real"
+                />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-Pasadas">
+                <mat-label>PASADAS</mat-label>
+                <input matInput type="text" formControlName="Pasadas" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-Pasadas-Real">
+                <mat-label>PASADAS REAL</mat-label>
+                <input matInput type="text" formControlName="Pasadas_Real" />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila3-Observaciones">
+                <mat-label>OBSERVACIONES</mat-label>
+                <textarea
+                  matInput
+                  placeholder=""
+                  formControlName="Observaciones"
+                  rows="5"
+                ></textarea>
+              </mat-form-field>
+
+              <!--MOTIVOS DE ARRANQUE DE TEJIDO-->
+              <!-- <mat-form-field appearance="fill" class="fila3-Motivo-Arranque">
+                <mat-label>MOTIVO</mat-label>
+                <mat-select  formControlName="Motivo_Arranque" name="listar_operacionDE">
+                  <mat-option *ngFor="let listar_origen of listar_operacionDE" [value]="listar_origen.Cod_Motivo">
+                      {{listar_origen.Descripcion }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>   -->
+
+              <!--ESTADO DE ARRANQUE DE TEJIDO-->
+              <mat-form-field appearance="fill" class="fila3-Estado-Arranque">
+                <mat-label>ESTADO</mat-label>
+                <mat-select  formControlName="Estado_Arranque" name="listar_tipotejidotela">
+                  <mat-option *ngFor="let listar_origen of opciones" [value]="listar_origen.valor">
+                      {{listar_origen.descripcion }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>              
+
+<mat-form-field appearance="fill" class="fila3-Motivo-Arranque">
+  <mat-label>MOTIVO</mat-label>
+  <mat-select [value]="motivosSeleccionados" multiple (selectionChange)="onSelectionChange($event)" formControlName="Motivo_Arranque">
+    <mat-option *ngFor="let listar_origen of listar_operacionDE" [value]="listar_origen.Cod_Motivo">
+      {{ listar_origen.Descripcion }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+           
+
+              <!--AREA DE ARRANQUE DE TEJIDO-->
+              <mat-form-field appearance="fill" class="fila3-Area-Arranque">
+                <mat-label>AREA</mat-label>
+                <mat-select  formControlName="Area_Arranque" name="listar_areatejido">
+                  <mat-option *ngFor="let listar_origen of listar_areatejido" [value]="listar_origen.Cod_Area">
+                      {{listar_origen.Descripcion }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>                 
+
+
+              <!--HORA DE ENTREGA DE TELA A CALIDAD-->
+              <mat-form-field appearance="fill" class="fila3-FechaHora-Inicio">
+                <mat-label>HORA INICIO</mat-label>
+                <input matInput type="text" formControlName="FechaHora_Arranque" />
+              </mat-form-field>                
+
+            </div>
+
+        
+
+        <!-- <div class="container-cuerpo-fila2">
+          <mat-form-field appearance="fill"   class="fila2-Hilo_Titulo">
+                        <mat-label>TITULO</mat-label>
+                         <input matInput type="text" formControlName="Hilo_Titulo" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila2-Hilo_Compo">
+                        <mat-label>COMPOSICION</mat-label>
+                         <input matInput type="text" formControlName="Hilo_Compo" />
+                    </mat-form-field>
+
+
+                    <mat-form-field appearance="fill"   class="fila2-Hilo_Lote">
+                        <mat-label>LOTE</mat-label>
+                         <input matInput type="text" formControlName="Hilo_Lote" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila2-Hilo_Proveedor">
+                        <mat-label>PROVEEDOR</mat-label>
+                         <input matInput type="text" formControlName="Hilo_Proveedor" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila2-Galga">
+                        <mat-label>GALGA</mat-label>
+                         <input matInput type="text" formControlName="Galga" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila2-Sistemas">
+                        <mat-label>NRO_SISTEMAS</mat-label>
+                         <input matInput type="text" formControlName="Sistemas" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila2-Torsion">
+                        <mat-label>TORSION</mat-label>
+                         <input matInput type="text" formControlName="Torsion" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila2-Agujas">
+                        <mat-label>NRO_AGUJAS</mat-label>
+                         <input matInput type="text" formControlName="Agujas" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila2-Diametro">
+                        <mat-label>DIAMETRO</mat-label>
+                         <input matInput type="text" formControlName="Diametro" />
+                    </mat-form-field>
+        </div> -->
+
+        <!-- <div class="container-cuerpo-fila3">
+          <mat-form-field appearance="fill"   class="fila3-Densidad">
+                        <mat-label>DENSIDAD</mat-label>
+                         <input matInput type="text" formControlName="Densidad" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila3-Densidad_real">
+                        <mat-label>DENSIDAD REAL</mat-label>
+                         <input matInput type="text" formControlName="Densidad_Real" />
+                    </mat-form-field>
+
+
+                    <mat-form-field appearance="fill"   class="fila3-Ancho">
+                        <mat-label>ANCHO</mat-label>
+                         <input matInput type="text" formControlName="Ancho" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila3-Ancho_real">
+                        <mat-label>ANCHO REAL</mat-label>
+                         <input matInput type="text" formControlName="Ancho_Real" />
+                    </mat-form-field>
+
+
+                    <mat-form-field appearance="fill"   class="fila3-Acabado">
+                        <mat-label>ACABADO</mat-label>
+                         <input matInput type="text" formControlName="Acabado" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila3-Acabado_real">
+                        <mat-label>ACABADO REAL</mat-label>
+                         <input matInput type="text" formControlName="Acabado_Real" />
+                    </mat-form-field>
+
+
+
+
+                    <mat-form-field appearance="fill"   class="fila3-Largo">
+                        <mat-label>LARGO</mat-label>
+                         <input matInput type="text" formControlName="Largo" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila3-Largo-Real">
+                        <mat-label>LARGO REAL</mat-label>
+                         <input matInput type="text" formControlName="Largo_Real" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila3-Alto">
+                        <mat-label>ALTO</mat-label>
+                         <input matInput type="text" formControlName="Alto" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila3-Alto-Real">
+                        <mat-label>ALTO REAL</mat-label>
+                         <input matInput type="text" formControlName="Alto_Real" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila3-Peso-Unidad">
+                        <mat-label>PESO X UNIDAD</mat-label>
+                         <input matInput type="text" formControlName="Peso_Unidad" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila3-Peso-Unidad_Real">
+                        <mat-label>PESO X UNIDAD REAL</mat-label>
+                         <input matInput type="text" formControlName="Peso_Unidad_Real" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila3-Pasadas">
+                        <mat-label>PASADAS</mat-label>
+                         <input matInput type="text" formControlName="Pasadas" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill"   class="fila3-Pasadas-Real">
+                        <mat-label>PASADAS REAL</mat-label>
+                         <input matInput type="text" formControlName="Pasadas_Real" />
+                    </mat-form-field>
+
+
+
+                    <mat-form-field appearance="fill"   class="fila3-Observaciones">
+                        <mat-label>OBSERVACIONES</mat-label>
+                         <textarea matInput placeholder="" formControlName="Observaciones" rows="5" ></textarea>
+                    </mat-form-field>
+        </div> -->
+
+        <div class="fila4">
+          <div class="col-md-4">
+            <input
+              type="file"
+              (change)="onFileChange($event)"
+              class="form-control d-none"
+              #inputFile
+            />
+
+
+            <button
+              [disabled]="DisableAgregarPasadasButton" 
+              *ngIf="DisablePasadaRealesButton"
+              (click)="openDialogAgregarPasadasReales()"
+              type="button"
+              class="button-info"
+              matTooltip="Agregar Pasadas "
+              matTooltipPosition="above"
+              formControlName="ImaDatosReales"
+              mat-flat-button
+            >
+              Agregar Estructuras / Medidas
+              <mat-icon>add_box</mat-icon>
+            </button>
+            
+            <!-- [disabled]="DisablePasadaRealesButton" -->
+
+            <button
+              (click)="inputFile.click()"
+              type="button"
+              class="button-info"
+              matTooltip="FOTO"
+              matTooltipPosition="above"
+              formControlName="ImaF"
+              mat-flat-button
+              [disabled]="DisableFotoButtom"
+            >
+              FOTO
+              <mat-icon>upload</mat-icon>
+            </button>
+
+
+            <!-- [disabled]="DisableLongMallaButton" -->
+            <button
+            [disabled]="DisableLongMallaButton" 
+            *ngIf="isVisibleLongMallaButton"
+            type="button"
+            class="button-lg"
+            matTooltip="LONGITUD DE MALLA"
+            matTooltipPosition="above"
+            mat-flat-button
+            (click)="openDialogModificarLg()"
+            
+          >
+            LONGITUD DE MALLA
+            <mat-icon>upload</mat-icon>
+          </button>
+
+
+          </div>
+
+
+          
+
+          <div class="col-md-12">
+            <img
+              [src]="RutaFoto"
+              *ngIf="RutaFoto"
+              style="height: 100%; width: 100%"
+            />
+          </div>
+        </div>
+
+        <div class="footer">
+          <button
+            class="button-Grabar"
+            mat-flat-button
+            type="button"
+            matTooltip="APROBACIÓN"
+            matTooltip="GRABAR"
+            matTooltipPosition="above"
+            [disabled]="DisableSaveButton"
+            (click)="GetValidaVersionHojasArranque()" 
+          >
+           <!-- (click)="GuardarArranque()" -->
+           <!-- [disabled]="formulario.invalid" -->
+            <mat-icon aria-label="person"
+              >save
+              <!-- thumb_up_alt -->
+            </mat-icon>
+            Grabar
+          </button> 
+          
+          <button
+            class="button-Cancelar"
+            mat-flat-button
+            type="button"
+            mat-dialog-close
+            matTooltip="SALIR"
+            [disabled]="formulario.invalid"
+          >
+            <mat-icon aria-label="person"
+              >exit_to_app
+              <!-- thumb_down_alt --> </mat-icon
+            >Cancelar
+          </button>     
+          
+          <button
+            class="button-Iniciar"
+            mat-flat-button
+            type="button"
+            matTooltip="Iniciar"
+            (click)="getIniciarEntrega()"
+            [disabled]="DisableInicioButton" >
+            <mat-icon aria-label="person">timer</mat-icon>Iniciar
+          </button>               
+
+          <!-- <button class="button-cancelar" mat-flat-button type="button" mat-dialog-close>
+                        <mat-icon aria-label="person">exit_to_app
+                        </mat-icon> 
+                        </button> -->
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center">Cargando...</p>
+</ngx-spinner>

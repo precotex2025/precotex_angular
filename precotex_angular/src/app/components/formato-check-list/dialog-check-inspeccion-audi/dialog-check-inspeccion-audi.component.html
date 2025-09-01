@@ -1,0 +1,78 @@
+<div class="container-dialog">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container-dialog">
+
+        <div class="title-dialog">Crear Registro </div>
+
+        <div class="container-cuerpo-dialog">
+            <div class="container-cuerpo-fila1-dialog">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <mat-card>
+                            <mat-card-header>
+                                REGISTRAR RECOJO DE PRENDA
+                            </mat-card-header>
+                            <mat-card-content>
+                                <div class="row">
+                                    <div class="caja-cliente">
+                                        <mat-form-field class="fila1-OP-dialog">
+                                            <mat-label>Ticket</mat-label>
+                                            <input matInput type="text"  readonly [(ngModel)]="data.Ticket" readonly   autocomplete="off">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="caja-cliente">
+                                        <mat-form-field class="fila1-OP-dialog">
+                                            <mat-label>OP</mat-label>
+                                            <input matInput type="text"  [(ngModel)]="data.Cod_OrdPro"    readonly autocomplete="off">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="caja-cliente">
+                                        <mat-form-field class="fila1-OP-dialog">
+                                            <mat-label>Color</mat-label>
+                                            <input matInput type="text"  readonly [(ngModel)]="data.Des_Present"   autocomplete="off">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="caja-cliente">
+                                        <mat-form-field class="fila1-OP-dialog">
+                                            <mat-label>Cantidad</mat-label>
+                                            <input matInput type="text"  readonly readonly [(ngModel)]="data.Cantidad"    autocomplete="off">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="caja-cliente">
+                                        <mat-form-field class="fila1-OP-dialog">
+                                            <mat-label>Talla</mat-label>
+                                            <input matInput type="text"  readonly [(ngModel)]="data.Cod_Talla"   autocomplete="off">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="caja-cliente">
+                                        <mat-form-field class="fila1-OP-dialog">
+                                            <mat-label>Cantidad Recogida</mat-label>
+                                            <input matInput type="number"  [(ngModel)]="data.Cantidad_Auditoria"   autocomplete="off">
+                                        </mat-form-field>
+                                    </div>
+                                    
+                                </div>
+                            
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+
+                <button type="button" (click)="RegistrarCabecera()"
+                    class="fila1-RegistrarCabecera-dialog" style="margin-top:15px" mat-flat-button>
+                    Guardar Cambios
+                </button>
+                
+                <button mat-dialog-close type="button" class="fila1-RegistrarCabecera-dialog" style="margin-top:15px" mat-button mat-dialog-close
+                    mat-dialog-close="false">
+                    <mat-icon aria-label="person">cancel
+                    </mat-icon> Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>

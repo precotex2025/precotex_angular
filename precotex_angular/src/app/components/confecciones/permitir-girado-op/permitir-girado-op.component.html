@@ -1,0 +1,337 @@
+x<!--DefectosAlamacenDerivados-->
+
+<div class="container">
+  <!-- ventana nro 4 - historial -->
+  <div class="grid-container">
+    <div class="title">Permitir Girado OP</div>
+
+    <form class="container-cuerpo" [formGroup]="formulario">
+      <div class="container-cuerpo-fila1">
+        <mat-form-field class="fila1-fecha" appearance="fill">
+          <mat-label>Rango de Fecha</mat-label>
+          <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+            <input
+              matStartDate
+              formControlName="start"
+              placeholder="Fecha Inicio"
+            />
+            <input matEndDate formControlName="end" placeholder="Fecha Final" />
+          </mat-date-range-input>
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+          <mat-icon class="maticon-date" (click)="clearDate($event)"
+            >clear</mat-icon
+          >
+          <mat-error
+            *ngIf="range.controls.start.hasError('matStartDateInvalid')"
+            >Fecha Invalida</mat-error
+          >
+          <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')"
+            >Fecha Invalida</mat-error
+          >
+        </mat-form-field>
+
+        <mat-form-field class="fila1-OP">
+          <mat-label>OP</mat-label>
+          <input
+            matInput
+            type="text"
+            maxlength="5"
+            placeholder="OP"
+            value=""
+            autocomplete="off"
+            formControlName="Cod_OrdPro"
+          />
+        </mat-form-field>
+
+        <mat-form-field class="fila1-Filtro" appearance="fill">
+          <mat-label>Estado</mat-label>
+          <mat-select formControlName="estado">
+            <mat-option value="P">PENDIENTE</mat-option>
+            <mat-option value="A">APROBADO</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- <ng-select 
+        class="fila1-Filtro"
+        [items]="estados" 
+        bindLabel="estado" 
+        bindValue="id"
+        placeholder="Estado"
+        formControlName="estado">
+        </ng-select> -->
+
+        <mat-form-field class="fila1-Input">
+          <mat-label>Partida</mat-label>
+          <input
+            matInput
+            type="text"
+            maxlength="5"
+            placeholder="Partida"
+            value=""
+            autocomplete="off"
+            formControlName="partida"
+          />
+        </mat-form-field>
+
+        <button
+          type="button"
+          class="fila1-buscar"
+          mat-flat-button
+          (click)="listarCabecera()"
+        >
+          <mat-icon aria-label="person">search</mat-icon>Buscar
+        </button>
+
+        <button
+          type="button"
+          class="fila1-excel"
+          mat-flat-button
+          (click)="generateExcel()"
+        >
+          <mat-icon aria-label="create_new_folder">create_new_folder </mat-icon>
+          Reporte Excel
+        </button>
+
+        <!--<button type="button" [disabled]="this.Flg_Btn_Registrar == false" class="fila1-revertir" mat-flat-button [routerLink]="['/AuditoriaHojaMedidaDetalle']">
+                    <mat-icon aria-label="person">cached
+                    </mat-icon>  Revertir
+                </button>-->
+      </div>
+
+      <div class="container-cuerpo-fila2">
+        <table
+          mat-table
+          #table
+          [dataSource]="dataSource"
+          class="mat-elevation-z8"
+        >
+          <!--<ng-container matColumnDef="Sel">
+                        <th mat-header-cell *matHeaderCellDef>
+                          <mat-checkbox (change)="$event ? masterToggle() : null"
+                                        [checked]="selection.hasValue() && isAllSelected()"
+                                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                        [aria-label]="checkboxLabel()">
+                          </mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                          <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="$event ? selection.toggle(row) : null"
+                                        [checked]="selection.isSelected(row)"
+                                        [aria-label]="checkboxLabel(row)">
+                          </mat-checkbox>
+                        </td>
+                      </ng-container>-->
+
+          <ng-container matColumnDef="NUM_GRUPO">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Num. Grupo
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.NUM_GRUPO }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="ESTCLI">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Estilo
+            </th>
+            <td mat-cell *matCellDef="let data_det">{{ data_det.ESTCLI }}</td>
+          </ng-container>
+          <ng-container matColumnDef="COD_ORDPRO">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              OP
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.COD_ORDPRO }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="COD_PRESENT">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Id Color
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.COD_PRESENT }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="DES_PRESENT">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Color
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.DES_PRESENT }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="PRIMER_MODOPROCESO">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              1er Proceso
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.PRIMER_MODOPROCESO }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="COD_ORDTRA">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Partida
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.COD_ORDTRA }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="TELA">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Tela
+            </th>
+            <td mat-cell *matCellDef="let data_det">{{ data_det.TELA }}</td>
+          </ng-container>
+          <ng-container matColumnDef="COMB">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Comb
+            </th>
+            <td mat-cell *matCellDef="let data_det">{{ data_det.COMB }}</td>
+          </ng-container>
+          <ng-container matColumnDef="COD_TALLA">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Talla
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.COD_TALLA }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="KGS_PROGRAMADA_TEX">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Kg. Req. Acab.
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.KGS_PROGRAMADA_TEX }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="KGS_TENIDO">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Kg. Teñido
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.KGS_TENIDO }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="KGS_PROGR">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Kg. Prog.
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.KGS_PROGR }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="KGS_CRUDO">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Kg. Crudo
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.KGS_CRUDO }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="OBSERVACION">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Observación
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.OBSERVACION }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="STATUS_PARTIDA">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Status Partida
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.STATUS_PARTIDA }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="FLG_APROBADO">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Aprobado
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.FLG_APROBADO }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="NOM_MOTIVO">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Motivo
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.NOM_MOTIVO }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="COD_USUARIO_SOLICITUD">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Usuario Solic.
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.COD_USUARIO_SOLICITUD }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="FEC_REGISTRO_SOLICITUD">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Fec. Solic.
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.FEC_REGISTRO_SOLICITUD }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="COD_USUARIO_APROBACION">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Usuario Aprob.
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.COD_USUARIO_APROBACION }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="FEC_REGISTRO_APROBACION">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              Fec. Aprob.
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.FEC_REGISTRO_APROBACION }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="ACCIONES">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let data_det">
+              <a
+                mat-icon-button
+                style="margin-right: 5px"
+                *ngIf="data_det.COD_ORDPRO.length > 0"
+                (click)="
+                  aprobarDespacho(
+                    data_det.NUM_GRUPO,
+                    data_det.COD_ORDPRO,
+                    data_det.COD_PRESENT,
+                    data_det.DES_PRESENT,
+                    data_det.COD_ORDTRA,
+                    data_det.FLG_APROBADO
+                  )
+                "
+              >
+                <mat-icon color="primary">assignment_turned_in</mat-icon>
+              </a>
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns_cab; sticky: true"
+          ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns_cab"></tr>
+        </table>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center">Cargando...</p>
+</ngx-spinner>

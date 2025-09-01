@@ -1,0 +1,27 @@
+<form [formGroup]="formulario">
+  <ng-select 
+  [ngStyle]="{ 'max-width': '100%'}"
+  [items]="listar_operacionConductor" 
+   bindLabel="Nombre" 
+   bindValue="Codigo"
+   (change)="Seleccionados($event)"
+   [multiple]="true"
+   [searchable]="searchable"
+   placeholder="Seleccione uno o mas Trabajadores"
+   formControlName="codTrabajador">
+</ng-select>
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Hora Inicio</mat-label>
+    <input [textMask]="{mask: num_guiaMascara}" (change)="changeHoraInicio($event)"  matInput formControlName="horainicio" placeholder="Ex. Pizza" value="">
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Hora Fin</mat-label>
+    <input [textMask]="{mask: num_guiaMascara}" matInput formControlName="horafinal" placeholder="Ex. Pizza" value="">
+  </mat-form-field>
+
+  <button mat-flat-button class="button-registrar"  (click)="guardar()" color="primary">Agregar Permiso</button>
+  <button mat-flat-button class="button-cancelar" mat-dialog-close >Cancelar</button>
+</form>
+

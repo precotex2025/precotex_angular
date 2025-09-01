@@ -1,0 +1,72 @@
+<div class="container"> 
+    <div class="grid-container">  
+        <div class="title">Reprogramar Auditoria - {{ data.Id_Auditoria_Op }} </div>
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="onSubmit(formDirective)" >
+            <div class="container-cuerpo-fila1">
+                <p>
+                    <mat-form-field class="example-long-width"> 
+                        <mat-label>Cliente</mat-label>
+                        <input matInput type="text"  placeholder="Cliente" value="" autocomplete="off" formControlName="Nom_Cliente" >
+                    </mat-form-field>
+
+                    <mat-form-field class="example-long-width"> 
+                        <mat-label>Estilo Cliente</mat-label>
+                        <input matInput type="text"  placeholder="Estilo Cliente" value="" autocomplete="off" formControlName="Cod_EstCli" >
+                    </mat-form-field>
+
+                    <mat-form-field class="example-long-width"> 
+                        <mat-label>Temporada</mat-label>
+                        <input matInput type="text"  placeholder="Temporada" value="" autocomplete="off" formControlName="Cod_TemCli" >
+                    </mat-form-field>
+                </p>
+                <!--<p>
+                    <mat-form-field class="example-long-width"> 
+                        <mat-label>OP</mat-label>
+                        <input matInput type="text"  placeholder="OP" value="" autocomplete="off" formControlName="Cod_OrdPro" >
+                    </mat-form-field>
+
+                    <mat-form-field class="example-long-width"> 
+                        <mat-label>Color</mat-label>
+                        <input matInput type="text"  placeholder="Color" value="" autocomplete="off" formControlName="Des_Present" >
+                    </mat-form-field>
+                </p>-->
+                <p>
+                    <mat-form-field class="example-short-width">
+                        <mat-label>Fecha Programación</mat-label>
+                        <input matInput [matDatepicker]="Fecha_Programacion" autocomplete="off" formControlName="Fecha_Programacion" >
+                        <mat-datepicker-toggle matSuffix [for]="Fecha_Programacion"></mat-datepicker-toggle>
+                        <mat-datepicker #Fecha_Programacion></mat-datepicker>
+                    </mat-form-field>
+                </p>
+                <p>
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>PCP</mat-label>
+                        <input matInput type="text" #trigger="matAutocompleteTrigger" placeholder="PCP" formControlName="Nom_Auditor" [matAutocomplete]="autoDataAuditor" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataAuditor="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionAuditor | async" [value]="option.Nom_Auditor" (click)="seleccionarAuditor(option)">
+                                {{option.Nom_Auditor}}
+                            </mat-option> 
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                    <!--<mat-form-field class="example-full-width"> 
+                        <mat-label>Observaciones</mat-label>
+                        <input matInput type="text"   placeholder="Observaciones" value=""
+                            autocomplete="off" formControlName="Observacion">
+                    </mat-form-field>-->
+                </p>
+            </div>     
+ 
+            <div class="container-cuerpo-foot">
+                <button  type="submit" class="button-agregar" mat-dialog-close="false" [disabled]="!formulario.valid" mat-flat-button>
+                    <mat-icon aria-label="person" >check</mat-icon> Confirmar
+                </button>
+
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off</mat-icon> Cerrar
+                </button>               
+            </div> 
+        </form>
+
+    </div>
+</div>

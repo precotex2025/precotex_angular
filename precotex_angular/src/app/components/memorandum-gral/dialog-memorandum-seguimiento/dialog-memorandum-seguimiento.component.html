@@ -1,0 +1,72 @@
+<div class="dialog-scroll">
+<form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+    <mat-card class="example-card" appearance="outlined">
+        <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>{{data.Title}} </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+                <!-- <ng-container matColumnDef="num_Memo">
+                    <th mat-header-cell *matHeaderCellDef> # Memo </th>
+                    <td mat-cell *matCellDef="let data_det"> {{data_det.num_Memo}}</td>
+                </ng-container>    -->
+
+                <ng-container matColumnDef="fechaMovimiento">
+                    <th mat-header-cell *matHeaderCellDef> # Fec. Movimiento </th>
+                    <td mat-cell *matCellDef="let data_det"> {{data_det.fechaMovimiento | date: 'dd/MM/yyyy hh:mm' }}</td>
+                </ng-container>   
+                
+                <!-- <ng-container matColumnDef="cod_Usuario">
+                    <th mat-header-cell *matHeaderCellDef> # Usuario </th>
+                    <td mat-cell *matCellDef="let data_det"> {{data_det.cod_Usuario}}</td>
+                </ng-container>    -->
+                
+                <ng-container matColumnDef="nombreUsuario">
+                    <th mat-header-cell *matHeaderCellDef> # Nombres </th>
+                    <td mat-cell *matCellDef="let data_det"> {{data_det.nombreUsuario}}</td>
+                </ng-container>   
+                
+                <!-- <ng-container matColumnDef="cod_Estado_Memo">
+                    <th mat-header-cell *matHeaderCellDef> # Estado </th>
+                    <td mat-cell *matCellDef="let data_det"> {{data_det.cod_Estado_Memo}}</td>
+                </ng-container>    -->
+                
+                <ng-container matColumnDef="estadoDescripcion">
+                    <th mat-header-cell *matHeaderCellDef> Estado </th>
+                    <td mat-cell *matCellDef="let data_det"> 
+
+                        <span style="background-color: green; color: white; padding: 2px;" >{{data_det.estadoDescripcion}}</span> 
+                    </td>
+                </ng-container>   
+                
+                <ng-container matColumnDef="observaciones">
+                    <th mat-header-cell *matHeaderCellDef> Observaciones </th>
+                    <td mat-cell *matCellDef="let data_det"> {{data_det.observaciones}}</td>
+                </ng-container>   
+                
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>   
+
+            </table>
+
+        </mat-card-content>
+    </mat-card>
+</form>
+</div>
+
+<div class="button-row"> 
+
+    <button mat-flat-button color="warn" mat-dialog-close class="form-button">
+        <mat-icon>close</mat-icon> Salir
+    </button>
+    
+</div>
+
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>
+

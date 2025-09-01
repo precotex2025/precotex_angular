@@ -1,0 +1,17 @@
+      <!--MODAL PARA LISTAR RESULTADOS DE BUSQUEDA DE LA PARTIDA INICIO -->
+      <h2>Seleccionar partida</h2>
+
+      <ul>
+        <li *ngFor="let item of data; let i = index"
+            [class.seleccionado]="item === seleccionado"
+            (click)="seleccionar(item, i)">
+          <span>{{ item.articulo }} - {{ item.descripcion }}</span>
+          <span *ngIf="item === seleccionado">✔️</span>
+        </li>
+      </ul>
+
+      <button (click)="cerrar()">Cancelar</button>
+
+
+
+      <!--MODAL PARA LISTAR RESULTADOS DE BUSQUEDA DE LA PARTIDA FIN -->

@@ -1,0 +1,218 @@
+<div class="container-dialog">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container-dialog">
+
+        <div class="title-dialog">Crear Registro </div>
+
+        <form class="container-cuerpo-dialog" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1-dialog">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <mat-card>
+                            <mat-card-header>
+                                PROCESO DONDE SE DETECTO LA OBSERVACIÓN
+                            </mat-card-header>
+                            <mat-card-content>
+                                <div class="row">
+                                    <div class="caja-cliente">
+                                        <mat-checkbox class="example-margin" formControlName="Corte">Corte</mat-checkbox>
+                                    </div>
+                                    <div class="caja-cliente">
+                                        <mat-checkbox class="example-margin" formControlName="Costura_Ate">Costura Ate</mat-checkbox>
+                                    </div>
+                                    <div class="caja-cliente">
+                                        <mat-checkbox class="example-margin"  formControlName="Costura_Indep">Costura Indep.</mat-checkbox>
+                                    </div>
+                                    <div class="caja-cliente">
+                                        <mat-checkbox class="example-margin"   formControlName="Estampado_Pieza">Estampado en Pieza</mat-checkbox>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="caja-cliente">
+                                        <mat-checkbox class="example-margin"    formControlName="Estampado_Prenda">Estampado en Prenda</mat-checkbox>
+                                    </div>
+                                    <div class="caja-cliente">
+                                        <mat-checkbox class="example-margin"    
+                                         formControlName="Bordado">Bordado</mat-checkbox>
+                                    </div>
+                                    <div class="caja-cliente">
+                                        <mat-checkbox class="example-margin"    
+                                         formControlName="Lavanderia">Lavandería</mat-checkbox>
+                                    </div>
+                                    <div class="caja-cliente">
+                                        <mat-checkbox class="example-margin"    
+                                        formControlName="Inspeccion">Inspección</mat-checkbox>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="caja-cliente">
+                                        <mat-checkbox class="example-margin"    
+                                         formControlName="Acabados">Acabados</mat-checkbox>
+                                    </div>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+
+                <button type="button" (click)="RegistrarCabecera()" [disabled]="flg_btn_cabecera"
+                    class="fila1-RegistrarCabecera-dialog" style="margin-top:15px" mat-flat-button>
+                    Guardar Cambios
+                </button>
+                
+                <button mat-dialog-close type="button" class="fila1-RegistrarCabecera-dialog" style="margin-top:15px" mat-button mat-dialog-close
+                    mat-dialog-close="false">
+                    <mat-icon aria-label="person">cancel
+                    </mat-icon> Cerrar
+                </button>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <mat-card>
+                    <mat-card-header>INVESTIGACIÓN DE LA CARGA</mat-card-header>
+                    <mat-card-content>
+                        <div class="container-cuerpo-fila3-dialog">
+                            <div class="row">
+                                <div class="caja-cliente">
+                                    <mat-form-field class="fila1-Filtro" appearance="fill">
+                                        <mat-label>Tipo</mat-label>
+                                        <mat-select [(ngModel)]="Tipo">
+                                          <mat-option value="MAQUINARIA">MAQUINARIA</mat-option>
+                                          <mat-option value="MATERIALES">MATERIALES</mat-option>
+                                          <mat-option value="MANO DE OBRA">MANO DE OBRA</mat-option>
+                                          <mat-option value="MEDIO AMBIENTE">MEDIO AMBIENTE</mat-option>
+                                          <mat-option value="METODO DE TRABAJO">METODO DE TRABAJO</mat-option>
+                                          <mat-option value="OTROS">OTROS</mat-option>
+                                        </mat-select>
+                                      </mat-form-field>
+                                </div>
+                                <div class="caja-cliente2">
+                                    <mat-form-field class="fila3-cant-dialog">
+                                        <mat-label>Descripcion</mat-label>
+                                        <input matInput type="text" [(ngModel)]="Descripcion" maxlength="250" placeholder="Ingrese una descripción" autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+            
+                                <div class="caja-cliente">
+                                    <div class="fila3-insertarFila-dialog">
+                                        <button type="button" (click)="InsertarFila()"
+                                            class="button-fila-dialog" mat-flat-button>
+                                            <mat-icon aria-label="person">save
+                                            </mat-icon> Guardar
+                                        </button>
+                                    </div>
+            
+                                </div>
+                                
+                            </div>
+                        </div>
+            
+                        <div class="container-cuerpo-fila2-dialog" style="margin-bottom: 20px; padding-bottom: 30px;">
+            
+                            <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+            
+                                <ng-container matColumnDef="Tipo">
+                                    <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                                        Tipo
+                                    </th>
+                                    <td mat-cell *matCellDef="let data_det">
+                                        {{ data_det.Tipo }}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="Descripcion">
+                                    <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                                        Descripción
+                                    </th>
+                                    <td mat-cell *matCellDef="let data_det">{{ data_det.Descripcion }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="Cantidad">
+                                    <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                                        Cantidad
+                                    </th>
+                                    <td mat-cell *matCellDef="let data_det">
+                                        {{ data_det.Cantidad }}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="Eliminar">
+                                    <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                                        Eliminar
+                                    </th>
+                                    <td mat-cell *matCellDef="let data_det">
+                                        <button mat-icon-button color="warn" (click)="eliminarFila(data_det)" type="button"><mat-icon>delete</mat-icon></button>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <mat-card>
+                    <mat-card-header>
+                        PLAN DE ACCIÓN A EMPRENDER
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <mat-form-field class="fila1-glosa-dialog">
+                                    <mat-label>Actividad</mat-label>
+                                    <input matInput type="text" maxlength="250" placeholder="Ingrese" value="" [(ngModel)]="Actividad"
+                                        autocomplete="off">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="fila3-insertarFila-dialog">
+                                    <button type="button" (click)="InsertarFilaActividad()"
+                                        class="button-fila-dialog" mat-flat-button>
+                                        <mat-icon aria-label="person">save
+                                        </mat-icon> Guardar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-cuerpo-fila2-dialog" style="margin-bottom: 20px; padding-bottom: 30px;">
+
+                            <table mat-table #table [dataSource]="dataSource2" class="mat-elevation-z8">
+            
+                                <ng-container matColumnDef="Actividad">
+                                    <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                                        Actividad
+                                    </th>
+                                    
+                                    <td mat-cell *matCellDef="let data_det">
+                                        {{ data_det.Actividad }}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Eliminar">
+                                    <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                                        Eliminar
+                                    </th>
+                                    
+                                    <td mat-cell *matCellDef="let data_det">
+                                        <button mat-icon-button color="warn" (click)="eliminarFilaActividad(data_det)" type="button"><mat-icon>delete</mat-icon></button>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns2;"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns2"></tr>
+                            </table>
+                        </div>
+                        
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

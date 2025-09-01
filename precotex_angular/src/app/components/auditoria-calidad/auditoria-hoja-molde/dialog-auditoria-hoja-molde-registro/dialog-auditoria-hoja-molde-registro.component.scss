@@ -1,0 +1,153 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 3px 3px 3px 3px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+   
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    min-width: 1350px;
+    min-height: 650px;
+    height: 680px;
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #ffffff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 5px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 150px
+        "fila2" 480px
+        "foot" 50px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.container-cuerpo-foot {
+    grid-area: foot;
+}
+
+.button-finalizar {
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    margin-left: 8px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 150px;
+}  
+
+.button-agregar {
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    margin-left: 8px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 150px;
+}  
+
+.button-regresar {
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    margin-left: 8px;
+    background-color: darkred;
+    color: #ffffff;
+    width: 150px;
+}
+
+.container mat-form-field + mat-form-field {
+    margin-left: 8px;
+}
+
+.mat-input-element:disabled {
+    color: black;
+}
+
+
+
+
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+/*
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+ 
+}
+.mat-header-cell {
+    text-align: center; 
+    padding: 30px; 
+    width: 10px;
+   
+}
+.paginador{
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+th.mat-cell{
+    padding:15px;
+    text-align: center;
+}
+
+td.mat-cell{
+    padding:15px;
+    text-align: center;
+}
+*/

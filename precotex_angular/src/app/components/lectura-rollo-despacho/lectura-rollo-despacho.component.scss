@@ -1,0 +1,1107 @@
+.container {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  //background-color: blue;
+  padding: 5px 5px 5px 5px;
+  font-family: corbel, arial;
+  font-size: 13px;
+  margin: 0;
+}
+
+.grid-container {
+  border-radius: 4px;
+  width: 100%;
+  height: auto; //93%;
+  //background-color: green;
+  border: 1px solid #337ab7;
+  margin: 0;
+  //padding: 1x ;
+  //padding-bottom: 15px;
+  //min-width: 350px;
+  min-height: 472px;
+  height: 800px;
+  //position: absolute;
+}
+
+.title {
+  background-color: blanchedalmond;
+  color: rgb(0, 0, 0);
+  padding: 10px 10px 10px 10px;
+  text-align: center;
+  border-bottom: 1px solid blanchedalmond;
+  border-radius: 4px 4px 0px 0px;
+  border-bottom: 1px solid blanchedalmond;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: x-large;
+}
+
+.container-cuerpo {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 5px 0;
+  justify-content: center;
+}
+
+.container-cuerpo {
+  display: grid;
+
+  grid-template:
+  "fila1" 200px
+  "fila2" 140px
+  "fila3" 200px
+  "fila4" 220px / 99%;
+}
+
+.container-cuerpo-fila1 {
+  grid-area: fila1;
+  margin-top: 15px;
+ // background-color:#e1e1e1;
+}
+
+.container-cuerpo-fila2 {
+  grid-area: fila2;
+  overflow: auto;
+  margin-bottom: 10px;
+  width: 100%;
+//  background-color:#dbf8e5;
+}
+
+.container-cuerpo-fila3 {
+  grid-area: fila3;
+  overflow: auto;
+  margin-bottom: 10px;
+  width: 100%;
+ // background-color: #e1e1e1;
+}
+
+.container-cuerpo-fila4 {
+  grid-area: fila4;
+  overflow: auto;
+  margin-bottom: 10px;
+  width: 100%;
+ // background-color: aquamarine;
+}
+
+.fila4-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: lightskyblue;
+}
+
+.container-cuerpo-foot {
+  grid-area: foot;
+}
+
+mat-form-field {
+  width: 100%;
+  padding: 0px 10px;
+}
+
+.d-none {
+  display: none;
+}
+
+.button-info {
+  margin-top: 10px;
+  background: #8c8984;
+  width: 98%;
+  color: white;
+}
+
+.button-Cliente {
+  display: inline-block;
+  background-color: #8c8984;
+  color: white;
+  margin-right: 1rem;
+}
+
+
+.button-Limpiar {
+  display: inline-block;
+  background-color: #8c8984;
+  color: white;
+  margin-right: 1rem;
+}
+
+
+.button-CargarPrePack {
+  display: inline-block;
+  background-color:#8c8984;
+  color: white;
+  margin-right: 1rem;
+}
+
+.button-CambiarEstado {
+  display: inline-block;
+  background-color: #8c8984;
+  color: white;
+  margin-right: 1rem;
+}
+
+
+.button-Salir {
+  display: inline-block;
+  background-color:#8c8984;
+  color: white;
+  margin-right: 1rem;
+}
+
+.button-Detalle {
+  display: inline-block;
+  background-color:#8c8984;
+  color: white;
+  margin-right: 1rem;
+}
+
+
+.mat-header-cell {
+  padding: 0.5rem;
+}
+
+.paginador {
+  width: auto;
+}
+
+.button-agregar {
+  background-color: #3f51b5;
+  color: #ffffff;
+  margin-right: 1rem;
+}
+
+.button-Agregar_Defecto {
+  background-color: #0e740e;
+  color: #ffffff;
+  margin-right: 1rem;
+  width: 98%;
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.button-cancelar {
+  display: inline-block;
+  width: 30%;
+  background-color: #d32f2f;
+  color: #ffffff;
+  //margin-right: 1rem;
+}
+
+::ng-deep .my-class .mat-dialog-container {
+  padding: 5px;
+  height: auto;
+}
+
+.button-Grabar {
+  width: 100%;
+  height: 85%;
+  display: inline-block;
+  background-color: #0e740e;
+  color: #ffffff;
+  margin-right: 1rem;
+}
+
+.button-Cancelar {
+  width: 30%;
+  display: inline-block;
+  background-color: #d32f2f;
+  color: #ffffff;
+  margin-right: 1rem;
+}
+
+
+.Txt_Peso_Rollo {
+  background-color: #6ff06f;
+  color: #ffffff;
+}
+
+
+
+.sub-container-cuerpo2{
+  width: 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.example-card{
+  max-width: 100%;
+  width: 80%;
+  max-height: 200px;
+  height: 70px;
+  display:inline-table;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+//fila 1
+.container-cuerpo-fila1 {
+  display: grid;
+
+  grid-template:
+    "col1 col2 col2 col2 col3 col3" 110px
+    "col4 col5 col6 col7 col8 col9" 50px/200px 200px 200px 200px 200px 200px;
+  }
+
+.fila1-xAbr_Cliente {
+  grid-area: col1;
+  font-size: xx-large;
+}
+
+.fila1-xNom_Cliente {
+  grid-area: col2;
+  font-size: xx-large;
+}
+
+.fila1-xEstado_Lectura {
+  grid-area: col3;
+  font-size:  -webkit-xxx-large;
+  text-align:  center;
+ 
+}
+
+.button-Cliente {
+  grid-area: col4;
+}
+
+
+
+
+.button-CargarPrePack {
+  grid-area: col5;
+}
+
+.button-Limpiar {
+  grid-area: col6;
+}
+
+
+
+.button-Salir {
+  grid-area: col7 ;
+}
+
+
+
+//fila 2
+.container-cuerpo-fila2 {
+  display: grid;
+
+  grid-template:
+    "col1 col2 col2 col3 col4 col5" 110px;
+    
+    
+}
+
+.fila2-xPre_packingTitulo {
+  grid-area: col1;
+  font-size: xx-large;
+  text-align:  center;
+} 
+
+.fila2-xPre_packing {
+  grid-area: col2;
+  font-size: xx-large;
+  text-align:  left;
+}
+
+
+
+//fila 3
+.container-cuerpo-fila3 {
+  display: grid;
+
+  grid-template:
+  "col1 col2 col3 col4 col5 col6" 50px;
+}
+
+.fila3-xCargado_Pack {
+  grid-area: col1;
+  font-size: xx-large;
+  text-align:  center;
+}
+
+.fila3-xPartida_Leida {
+  grid-area: col2;
+  font-size: xx-large;
+  text-align:  center;
+}
+
+
+.fila3-xRollo_Leido {
+  grid-area: col3;
+  font-size: xx-large;
+  text-align:  center;
+}
+
+
+.button-Detalle {
+  grid-area: col4;
+}
+
+
+
+//fila 3
+.container-cuerpo-fila4 {
+  display: grid;
+
+  grid-template:
+  "col1 col1 col2 col2 col3 col3" 110px;
+}
+
+.fila4-xTotal {
+  grid-area: col1;
+  font-size: -webkit-xxx-large;
+  text-align:  center;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.fila4-xLeidos {
+  grid-area: col2;
+  font-size: -webkit-xxx-large;
+  text-align:  center;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.fila4-xFalta_Leer {
+  grid-area: col3;
+  font-size: -webkit-xxx-large;
+  text-align:  center;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.button-Detalle {
+  grid-area: col4;
+}
+
+
+
+
+
+.fila1-excel {
+  width: 100%;
+  grid-area: col4;
+  height: 40px;
+  max-width: 280px;
+  margin: auto;
+  margin-top: 3px;
+  background-color: #18bd20c9;
+  color: #ffffff;
+}
+
+//fila foot
+.container-cuerpo-foot {
+  border-top: 1px solid #337ab7;
+  justify-content: center;
+  display: flex;
+
+  grid-template:
+    "fcol1 fcol2" auto /
+    200px auto;
+}
+
+
+.mat-elevation-z8 {
+  width: 100%;
+  font-family: arial;
+  font-size: 10px;
+}
+.paginador {
+  width: auto;
+}
+
+tr:hover {
+  border-color: currentColor;
+  background: #e1e1e1;
+}
+
+tr:active {
+  background: #efefef;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width: 1500px) {
+
+      
+  .grid-container {
+    height: 250px;
+    min-height: 481px;
+  }
+  .container-cuerpo {
+    display: grid;
+
+
+    grid-template:
+      "fila1" 80px
+      "fila2" 100px
+      "fila3" 100px
+      "fila4" 190px / 99%;
+      //"foot" 55px /
+      //99%;
+   
+  }
+
+
+  
+
+  
+
+  .container-cuerpo-fila1 {
+    display: grid;
+    grid-template:
+      "col1 col2 col2 col3 col3" 64px
+      "col4 col5 col6 col7 col8" auto/250px 250px;
+   
+  }
+
+  .fila1-xAbr_Cliente {
+    grid-area: col1;
+    font-size:large;
+  }
+
+  .fila1-xNom_Cliente {
+    grid-area: col2;
+    font-size:large;
+  }
+
+  .fila1-xEstado_Lectura {
+    grid-area: col3;
+    font-size:medium;
+    text-align: center;
+  }
+
+  .button-Cliente {
+    grid-area: col4;
+    margin: 4px;
+    
+  }
+
+  .button-CargarPrePack {
+    grid-area: col5;
+    margin: 4px;
+    
+  }
+
+  .button-Limpiar {
+    grid-area: col6;
+    margin: 4px;
+    
+  }
+
+  .button-Salir {
+    grid-area: col7;
+    visibility: hidden;
+  }
+
+  .fila1-xIcono {
+    font-size: xx-large;
+  }
+  
+
+
+
+
+
+ 
+
+  .container-cuerpo-fila2 {
+    display: grid;
+    grid-template:
+      "col1 col1 col2 col2 col3 " 10px;
+  }
+
+
+
+  
+
+  .fila2-xPre_packingTitulo {
+    grid-area: col1;
+    font-size: x-large;
+    text-align: center;
+  }
+
+
+  .fila2-xPre_packing {
+    grid-area: col2;
+    font-size: xx-large;
+    text-align: left;
+  }
+
+  
+
+
+
+
+
+
+  .container-cuerpo-fila3 {
+    display: grid;
+    grid-template:
+    "col1 col2 col3 col3 col4 " 40px;
+  }
+
+
+
+
+  .fila3-xCargado_Pack {
+    grid-area: col1;
+    font-size: x-large;
+    text-align:  center;
+    
+  }
+
+  .fila3-xPartida_Leida {
+    grid-area: col2;
+    font-size: x-large;
+    text-align:  center;
+  }
+
+  .fila3-xRollo_Leido {
+    grid-area: col3;
+    font-weight: bold;
+    font-size: x-large;
+    text-align:  center;
+    color: blue;
+  }
+
+  .button-Detalle {
+    grid-area: col4;
+}
+
+
+
+
+
+.container-cuerpo-fila4 {
+    display: grid;
+    grid-template:
+    "col1 col1 col2 col2 col3 col3 " 45px;
+  }
+
+
+
+
+  .fila4-xTotal {
+    grid-area: col1;
+    font-size: -webkit-xxx-large;
+    text-align:  center;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .fila4-xLeidos {
+    grid-area: col2;
+    font-size: -webkit-xxx-large;
+    text-align:  center;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    
+  }
+
+  .fila4-xFalta_Leer {
+    grid-area: col3;
+    font-size: -webkit-xxx-large;
+    text-align:  center;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+
+  
+
+  .container-cuerpo-fila1 {
+    margin-top: 1px;
+    margin-bottom: 13px;   
+  }
+
+  .container-cuerpo-fila2 {
+    margin-top: 15px;
+    margin-bottom: 2px;
+  }
+
+  .container-cuerpo-fila3 {
+    margin-top: 5px;
+    margin-bottom: 2px;
+  }
+
+  .container-cuerpo-fila4 {
+    margin-top: 5px;
+    margin-bottom: 2px;
+  }
+
+  th.mat-cell {
+    width: 120px;
+    min-width: 120px;
+  }
+  td.mat-cell {
+    width: 120px;
+    min-width: 120px;
+  }
+
+  .maticon-date {
+    position: absolute;
+    float: right;
+    top: -6px;
+    margin-left: 270px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.54);
+  }
+}
+
+@media screen and (max-width: 868px) {
+  .grid-container {
+    height: 888px;
+  }
+  .container-cuerpo {
+    display: grid;
+
+    grid-template:
+      "fila1" 120px
+      "fila2" 368px
+      "fila3" 220px
+      "fila4" auto
+      "foot" 55px /
+      99%;
+
+    .fila3 {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      align-content: center;
+
+      .fill {
+        width: 48%;
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  .fila3-content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .container-cuerpo-fila1 {
+    display: grid;
+    grid-template:
+      "col1 col2" 45px
+      "col3 col4" 45px
+      "col5 col5" 45px
+      "col7 col7" auto/
+      200px 200px;
+  }
+
+  .fila1-Ot {
+    grid-area: col1;
+  }
+  .fila1-Inspector {
+    grid-area: col2;
+  }
+
+  .fila1-Oc {
+    grid-area: col3;
+  }
+
+  .fila1-Maquina {
+    grid-area: col4;
+  }
+
+  .fila1-Combinacion {
+    grid-area: col5;
+  }
+
+  .fila1-Talla {
+    grid-area: col6;
+  }
+
+  .fila1-Tela {
+    grid-area: col7;
+  }
+
+  .container-cuerpo-fila2 {
+    display: grid;
+    grid-template:
+      "col1  col1" 45px
+      "col2  col3" 45px
+      "col4  col5 " 45px
+      "col6  col7" 45px
+      "col8  col9" 45px
+      "col10 colo11" auto/
+      200px 200px;
+  }
+
+  .fila2-Hilo_Titulo {
+    grid-area: col1;
+  }
+
+  .fila2-Hilo_Compo {
+    grid-area: col2;
+  }
+
+  .fila2-Hilo_Lote {
+    grid-area: col3;
+  }
+
+  .fila2-Hilo_Proveedor {
+    grid-area: col4;
+  }
+
+  .container-cuerpo-fila2 {
+    margin-top: 110px;
+  }
+
+  .container-cuerpo-fila3 {
+    display: grid;
+    grid-template:
+      "col1  col2" 45px
+      "col3  col4" 45px
+      "col5  col6 " 45px
+      "col7 col8" 45px
+      "col9 col10" 45px
+      "col11 col12" 45px
+      "col13 col14" 45px
+      "col15  col15" auto/
+      200px 200px;
+  }
+
+  .fila3-Densidad {
+    grid-area: col1;
+  }
+
+  .fila3-Densidad_real {
+    grid-area: col2;
+  }
+
+  .fila3-Ancho {
+    grid-area: col3;
+  }
+
+  .fila3-Ancho_real {
+    grid-area: col4;
+  }
+
+  .fila3-Acabado {
+    grid-area: col5;
+  }
+
+  .fila3-Acabado_real {
+    grid-area: col6;
+  }
+
+  .fila3-Largo {
+    grid-area: col7;
+  }
+
+  .fila3-Largo-Real {
+    grid-area: col8;
+  }
+
+  .fila3-Alto {
+    grid-area: col9;
+  }
+
+  .fila3-Alto-Real {
+    grid-area: col10;
+  }
+
+  .fila3-Peso-Unidad {
+    grid-area: col11;
+  }
+
+  .fila3-Peso-Unidad_Real {
+    grid-area: col12;
+  }
+
+  .fila3-Pasadas {
+    grid-area: col13;
+  }
+
+  .fila3-Pasadas-Real {
+    grid-area: col14;
+  }
+
+  .fila3-Observaciones {
+    grid-area: col15;
+    background-color: #dbf8e5;
+  }
+
+  //   .container-cuerpo-fila2{
+  //     margin-top: 110px;
+  //   }
+
+  //   .container-cuerpo-fila3{
+  //     margin-top: 110px;
+  //   }
+
+  th.mat-cell {
+    width: 120px;
+    min-width: 120px;
+  }
+  td.mat-cell {
+    width: 120px;
+    min-width: 120px;
+  }
+
+  .maticon-date {
+    position: absolute;
+    float: right;
+    top: -6px;
+    margin-left: 270px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.54);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .grid-container {
+    height: 595px;
+  }
+
+  .container-cuerpo {
+    display: grid;
+
+   
+
+
+    grid-template:
+      "fila1" 143px
+      "fila2" 167px
+      "fila3" 125px
+      "fila4" 123px / 99%;
+      //"foot" 55px /
+      //99%;
+   
+  }
+
+
+  .title {
+    background-color: blanchedalmond;
+    color: rgb(0, 0, 0);
+    padding: 10px 10px 10px 10px;
+    text-align: center;
+    border-bottom: 1px solid blanchedalmond;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid blanchedalmond;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: medium;
+  }
+
+  .example-card{
+    max-width: 100%;
+    width: 80%;
+    max-height: 200px;
+    height: 70px;
+    display:inline-table;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+
+  .container-cuerpo-fila1 {
+    display: grid;
+    grid-template:
+      "col1 col2" 64px
+      "col3 col3" 115px
+      "col4 col5" 40px
+      "col6 col7" 40px;
+  }
+
+
+  .fila1-xAbr_Cliente {
+    grid-area: col1;
+    font-size:large;
+    width: 170px;
+  }
+
+  .fila1-xNom_Cliente {
+    grid-area: col2;
+    font-size:large;
+    width: 170px;
+  }
+
+  .fila1-xEstado_Lectura {
+    grid-area: col3;
+    font-size: smaller;
+    text-align: center;
+    
+  }
+
+  .button-Cliente {
+    grid-area: col4;
+    margin: 4px;
+    width: 99%;
+  }
+
+  .button-CargarPrePack {
+    grid-area: col5;
+    margin: 4px;
+    width: 95%;
+  }
+
+
+
+  .button-Limpiar {
+    grid-area: col6;
+    margin: 4px;
+    width: 99%;
+  }
+
+  
+  .button-Salir {
+    grid-area: col7;
+    margin: 4px;
+    width: 99%;
+  }
+
+
+
+
+
+ 
+
+  .container-cuerpo-fila2 {
+    display: grid;
+    grid-template:
+      "col1 col2" 20px;
+      
+  }
+
+  .fila2-xPre_packingTitulo {
+    grid-area: col1;
+    font-size: medium;
+    text-align: center;
+    width: 180px;
+  }
+
+
+  .fila2-xPre_packing {
+    grid-area: col2;
+    font-size: medium;
+    text-align: center;
+    width: 180px;
+    color: blue;
+    font-weight: bolder;
+  }
+
+  
+
+
+
+  .container-cuerpo-fila3 {
+    display: grid;
+    grid-template:
+    "col1 col2" 45px
+    "col3 col4" 45px
+  }
+
+
+
+
+  .fila3-xCargado_Pack {
+    grid-area: col1;
+    font-size: medium;
+    text-align:  center;
+    width: 180px;
+    
+  }
+
+  .fila3-xPartida_Leida {
+    grid-area: col2;
+    font-size: medium;
+    text-align:  center;
+    width: 180px;
+  }
+
+  .fila3-xRollo_Leido {
+    grid-area: col3;
+     font-size: medium;
+     text-align:  center;
+     width: 180px;
+  }
+
+  .button-Detalle {
+    grid-area: col4;
+    align-content: center;
+    height: 36px;
+    width: 160px;
+    margin: 10px;
+}
+
+
+
+
+
+.container-cuerpo-fila4 {
+    display: grid;
+    grid-template:
+    "col1 col2 col3" 120px;
+  }
+
+
+
+
+  .fila4-xTotal {
+    grid-area: col1;
+    font-size: x-large;
+    text-align:  center;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 116px;
+  }
+
+  .fila4-xLeidos {
+    grid-area: col2;
+    font-size: x-large;
+    text-align:  center;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 116px;
+    
+  }
+
+  .fila4-xFalta_Leer {
+    grid-area: col3;
+    font-size: x-large;
+    text-align:  center;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 116px;
+  }
+
+
+  
+}

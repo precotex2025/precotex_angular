@@ -1,0 +1,367 @@
+
+<div class="container">
+
+    <div class="grid-container">
+        <div class="title">INSPECCIÓN DE CALIDAD TEJEDURÍA</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario" >
+            
+            <div class="container-cuerpo-fila1">
+
+               <mat-form-field class="fila1-ot">
+                    <mat-label>OT</mat-label>
+                    <input matInput type="text"  placeholder="OT" formControlName="sOt"
+                    />
+                </mat-form-field>
+
+
+                
+               <mat-form-field class="fila1-estado">
+                <mat-label>ESTADO ROLLO</mat-label>
+                <mat-select name="estadorollo" formControlName="nstrollo">
+                    <mat-option value="a" selected>TODOS</mat-option>
+                    <mat-option value="t">TEJIDO</mat-option>
+                    <mat-option value="p">PRODUCCION</mat-option>
+                    <mat-option value="e">ALMACENADO</mat-option>
+                    <mat-option value="d">DESPACHADO</mat-option>
+                </mat-select>
+             </mat-form-field>
+
+
+
+                
+                <button type="button" class="fila1-buscar" mat-flat-button (click)=" showOtRollos()" >
+                    <mat-icon aria-label="warn">search</mat-icon>Buscar
+                </button>
+
+
+<!-- 
+            <mat-form-field class="fila1-inspector">
+                <mat-label>INSPECTOR</mat-label>
+                <mat-select formControlName="ninspector" name="listar_operacionAuditor">
+                    <mat-option *ngFor="let listar_origen of listar_operacionAuditor"
+                        [value]="listar_origen.Tip_Auditor">
+                        {{listar_origen.Nom_Auditor}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+
+                <mat-form-field class="fila1-digitador">
+                    <mat-label>DIGITADOR</mat-label>
+                    <mat-select formControlName="ndigitador" name ="listar_operacionAuditor">
+                        <mat-option *ngFor="let listar_origen of listar_operacionAuditor"
+                        [value]="listar_origen.Tip_Auditor">
+                        {{listar_origen.Nom_Auditor}}
+                    </mat-option>
+                    </mat-select>
+                </mat-form-field> 
+                
+                
+                <mat-form-field class="fila2-restriccion">
+                    <mat-label>RESTRICCIÓN</mat-label>
+                    <mat-select formControlName="nrestriccion" name ="listar_operacionRestriccion">
+                        <mat-option *ngFor="let listar_origen of listar_operacionRestriccion"
+                        [value]="listar_origen.Codigo">
+                        {{listar_origen.Descripcion}}
+                    </mat-option>
+                </mat-select>
+                </mat-form-field>  
+                
+                
+
+                <mat-form-field class="fila2-turno">
+                    <mat-label>TURNO</mat-label>
+                    <mat-select name="turno" formControlName="nturno">
+                        <mat-option value="1">PRIMER TURNO</mat-option>
+                        <mat-option value="2">SEGUNDO TURNO</mat-option>
+                        
+                    </mat-select>
+                       </mat-form-field> -->
+
+
+                       <!-- <button type="button" class="fila1-4puntos" mat-flat-button >
+                        <mat-icon aria-label="create_new_folder">create_new_folder
+                        </mat-icon> 4 PUNTOS
+                    </button> -->
+
+
+            </div>
+
+            <!-- <button type="button" class="fila1-4puntos" mat-flat-button  >
+                <mat-icon aria-label="create_new_folder">create_new_folder
+                </mat-icon> 4 PUNTOS
+            </button> -->
+
+           
+
+
+
+            <div class="container-cuerpo-fila2">
+                
+                <!-- <mat-form-field class="fila2-observaciones">
+                    <mat-label>OSERVACIONES</mat-label>
+                    <input matInput type="text"  placeholder="Observacion" formControlName="nobservacion"/>
+                </mat-form-field>   -->
+
+                <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+                    <ng-container matColumnDef="ID" >
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"  >ID</th>
+                        <td mat-cell  *matCellDef="let data_det"  > {{data_det.ID}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ROLLO">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">ROLLO</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.ROLLO}} </td>
+                    </ng-container> 
+
+                  <ng-container matColumnDef="TALLA">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">TALLA</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.TALLA}} </td>
+                    </ng-container>
+
+                     <ng-container matColumnDef="OT">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">OT</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.OT}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Lote">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">LOTE</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Lote}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Partida">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">PARTIDA</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Partida}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="OC">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">OC</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.OC}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="PROVEEDOR">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">PROVEEDOR</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.PROVEEDOR}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Prefijo_Maquina">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">PJM</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Prefijo_Maquina}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Codigo_Rollo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">CODIGO_ROLLO</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Codigo_Rollo}} </td>
+                    </ng-container>
+
+                  <ng-container matColumnDef="TELA_COMB">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">TELA_COMB</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.TELA_COMB}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="NOMBRE_TELA">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">NOMBRE_TELA</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.NOMBRE_TELA}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="CALIDAD">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">CALIDAD</th>
+                        <td mat-cell  *matCellDef="let data_det" [ngStyle]="{'background': data_det.CALIDAD == 1 ? '#D7EBAF' : '' }"> {{data_det.CALIDAD}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Maquina_Tejeduria">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">COD_MAQUINA</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_Maquina_Tejeduria}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="MAQUINA">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">MAQUINA</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.MAQUINA}}
+                        </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Sec_Maquina">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">SEC_MAQ</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Sec_Maquina}} </td>
+                    </ng-container>
+
+
+
+                    <ng-container matColumnDef="Tip_Trabajador_Tejedor">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">TIP_TRAB_TEJ</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Tip_Trabajador_Tejedor}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Cod_Trabajador_Tejedor">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">COD_TRAB_TEJ</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_Trabajador_Tejedor}} </td>
+                    </ng-container>
+
+                    
+                    <ng-container matColumnDef="TEJEDOR">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">TEJEDOR</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.TEJEDOR}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="KGS_PRODUCIDOS">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">KGS_PRODUCIDOS</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.KGS_PRODUCIDOS}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="STATUS_ROLLO">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">STATUS_ROLLO</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.STATUS_ROLLO}} </td>
+                    </ng-container>
+
+
+                    
+
+                    <ng-container matColumnDef="Calf_Auto">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">CAL_AUTO</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Calf_Auto}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Def_Tej">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">DEF_TEJ</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Def_Tej}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="INSPECTOR">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">INSPECTOR</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.INSPECTOR}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Observaciones_Inspeccion">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">OBS_INPEC</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Observaciones_Inspeccion}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="FECHA_CALIFICACION">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">FECHA_CALIFICACION</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.FECHA_CALIFICACION}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="DIGITADOR">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">DIGITADOR</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.DIGITADOR}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TURNO">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">TURNO</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.TURNO}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="FECHA_PRODUCCION">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">FECHA_PRODUCCION</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.FECHA_PRODUCCION}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="FECHA_ALMACEN">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">FECHA_ALMACEN</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.FECHA_ALMACEN}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="FECHA_DESPACHO_CRUDO">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">FECHA_DESPACHO_CRUDO</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.FECHA_DESPACHO_CRUDO}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="flg_status">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">FLG_STATUS</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.flg_status}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="RESTRICCION">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">RESTRICCION</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.RESTRICCION}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="OBSERVACION">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">OBSERVACION</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.OBSERVACION}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="AUTORIZA_TERCERO">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">AUTORIZA_TERCERO</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.AUTORIZA_TERCERO}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="PEDIDO">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">PEDIDO</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.PEDIDO}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Auditor">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod_Auditor</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_Auditor}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Digitador">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod_Digitador</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_Digitador}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Restriccion">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod_Restriccion</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_Restriccion}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Turno">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod_Turno</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_Turno}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="MetrosCuad">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">MetrosCuad</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.MetrosCuad}} </td>
+                    </ng-container>
+
+
+                 <ng-container matColumnDef="CALIFICACION">
+                        <th mat-header-cell *matHeaderCellDef>CALIFICACION</th>
+                        <td mat-cell  *matCellDef="let data_det">
+
+                            <button mat-icon-button color="accent" (click)="openDialogRollo(data_det.Codigo_Rollo, data_det.OT, 
+                            data_det.Cod_Auditor, data_det.Cod_Digitador, data_det.Cod_Restriccion, 
+                            data_det.Cod_Turno, data_det.Prefijo_Maquina, data_det.Observaciones_Inspeccion,
+                            data_det.MetrosCuad, data_det.CALIDAD)" >
+                                <mat-icon>thumb_up</mat-icon>
+                                </button>
+                      </td>
+
+                    </ng-container>
+
+                    
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr> 
+                </table>
+
+                <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+
+                
+              
+
+              
+             </div>
+
+
+                      <div class="container-cuerpo-fila3">
+                        
+                    </div> 
+
+
+        </form>
+    </div>
+</div>
+
+<!-- <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner> -->

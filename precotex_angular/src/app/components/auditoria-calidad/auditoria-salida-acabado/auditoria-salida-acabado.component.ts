@@ -1,0 +1,393 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import * as _moment from 'moment';
+import { HttpErrorResponse } from '@angular/common/http';
+import { NgxSpinnerService }  from "ngx-spinner";
+import { ExceljsService } from 'src/app/services/exceljs.service';
+
+import { GlobalVariable } from 'src/app/VarGlobals';
+import { AuditoriaAcabadosService } from 'src/app/services/auditoria-acabados.service';
+
+import { DialogEliminarComponent} from 'src/app/components/dialogs/dialog-eliminar/dialog-eliminar.component';
+import { DialogConfirmacion2Component} from 'src/app/components/dialogs/dialog-confirmacion2/dialog-confirmacion2.component';
+import { DialogRegistrarSalidaAcabadoComponent } from './dialog-registrar-salida-acabado/dialog-registrar-salida-acabado.component';
+import { DialogDefectosSalidaAcabadoComponent } from './dialog-defectos-salida-acabado/dialog-defectos-salida-acabado.component';
+import { DialogVistaSalidaAcabadoComponent } from './dialog-vista-salida-acabado/dialog-vista-salida-acabado.component';
+
+interface data_det {
+  Num_Auditoria?: number; 
+  Cod_Auditor?: string; 
+  Nom_Auditor?: string;
+  Fecha_Auditoria?: string;
+  Cod_EstCli?: string;
+  Cod_TemCli?: string;
+  Lote?: string;
+  Estado?: string;
+  Tamano_Muestra?: string;
+  Tip_Trabajador_Auditor?: string;
+  Observacion?: string;
+  Obs_Medida?: string;
+  Nro_Defectos?: number;
+  Flg_Status?: string;
+  Cod_Usuario?: string; 
+  Nom_Cliente?: string; 
+  Des_EstCli?: string; 
+  Nom_TemCli?: string; 
+  Cod_Defecto?: string; 
+  Descripcion?: string; 
+  Cantidad?: number; 
+  Tipo?: string; 
+  Ops_Auditoria?: string; 
+}
+
+@Component({
+  selector: 'app-auditoria-salida-acabado',
+  templateUrl: './auditoria-salida-acabado.component.html',
+  styleUrls: ['./auditoria-salida-acabado.component.scss']
+})
+export class AuditoriaSalidaAcabadoComponent implements OnInit {
+
+  dataForExcel = [];
+  dataReporteAuditoria: any[] = [];
+  displayedColumns: string[] = ['Num_Auditoria','Fecha_Auditoria','Nom_Cliente','Cod_EstCli','Cod_TemCli','Lote','Tamano_Muestra','Observacion','Flg_Status','Acciones']
+  dataSource: MatTableDataSource<data_det>;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  formulario = this.formBuilder.group({
+    Cod_EstCli: [''],
+    CodAuditor: [''] 
+  })
+
+  range = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl(),
+  });
+
+  constructor(private formBuilder: FormBuilder,
+    private matSnackBar: MatSnackBar,
+    private auditoriaAcabadosService: AuditoriaAcabadosService,
+    public dialog: MatDialog,
+    private exceljsService: ExceljsService,
+    private spinnerService: NgxSpinnerService
+  ) {
+    this.dataSource = new MatTableDataSource();
+  }
+
+  ngOnInit(): void {
+    this.onListarCabeceraSalidaAcabados();
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.paginator._intl.itemsPerPageLabel = 'items por pagina';
+    this.paginator._intl.getRangeLabel = (page: number, pageSize: number, length: number) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      length = Math.max(length, 0);
+      const startIndex = page * pageSize;
+      // If the start index exceeds the list length, do not try and fix the end index to the end.
+      const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
+      return `${startIndex + 1}  - ${endIndex} de ${length}`;
+    };
+
+  }
+
+  onListarCabeceraSalidaAcabados(){
+    
+    this.auditoriaAcabadosService.Mant_AuditoriaModuloSalidaAcabado('L', 0, '', this.range.get('start')?.value, this.range.get('end').value, this.formulario.get('Cod_EstCli').value, '', '', '', '', '', '')
+      .subscribe((result: any) => {
+        if (result.length > 0) {
+     
+          this.dataSource.data = result;
+          this.spinnerService.hide();
+          //this.formulario.controls['CodAuditor'].setValue('');
+
+        }
+        else {
+          this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          this.dataSource.data = []
+          this.spinnerService.hide();
+        }
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+        duration: 1500,
+      }));
+
+  }
+
+  onInsertarAuditoria(){
+    let codAuditor: string = GlobalVariable.vtiptra.trim().concat("-").concat(GlobalVariable.vcodtra.trim())
+    let data_det: data_det = {Num_Auditoria: 0, Cod_Auditor: codAuditor, Nom_Auditor: "", Fecha_Auditoria: "", Cod_EstCli: "", Cod_TemCli: "", Lote: "", Tamano_Muestra: "", Tip_Trabajador_Auditor: "", Observacion: "", Obs_Medida: "", Nro_Defectos: 0, Flg_Status: '1', Cod_Usuario: "", Nom_Cliente: ""} ;
+
+    let dialogRef = this.dialog.open(DialogRegistrarSalidaAcabadoComponent, {
+      disableClose: true,
+      width: "1250px",
+      data: data_det
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.onListarCabeceraSalidaAcabados();
+    });
+
+
+  }
+
+  onGenerarReporteAuditoria(){
+    this.spinnerService.show();
+    this.auditoriaAcabadosService.Mant_AuditoriaModuloSalidaAcabado('X', 0, '', this.range.get('start')?.value, this.range.get('end').value, this.formulario.get('Cod_EstCli').value, '', '', '', '', '', '')
+      .subscribe((result: any) => {
+        if (result.length > 0) {
+
+          this.dataReporteAuditoria = result;
+          this.spinnerService.hide();
+     
+          this.generateExcel();
+
+        }
+        else {
+          this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          this.dataReporteAuditoria = []
+          this.spinnerService.hide();
+        }
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+        duration: 1500,
+      }));
+
+  }
+
+  generateExcel(){
+    this.dataForExcel = [];
+    if(this.dataReporteAuditoria.length > 0){
+      let dataReporte: data_det[] = [];
+      let cantidadDefecto: number = 0;
+      let totalMuestra: number = 0;
+      
+      this.dataReporteAuditoria.forEach((row: data_det) => {
+        let data: data_det = {};
+
+        data.Fecha_Auditoria = row.Fecha_Auditoria;
+        data.Num_Auditoria = row.Num_Auditoria;
+        data.Nom_Auditor = row.Nom_Auditor;
+        data.Nom_Cliente = row.Nom_Cliente;
+        data.Cod_EstCli = row.Cod_EstCli;
+        data.Cod_TemCli = row.Cod_TemCli;
+        data.Nom_TemCli = row.Nom_TemCli;
+        data.Lote = row.Lote;
+        data.Tamano_Muestra = row.Tamano_Muestra;
+        data.Ops_Auditoria = row.Ops_Auditoria;
+        data.Estado = row.Estado;
+        data.Cod_Defecto = row.Cod_Defecto;
+        data.Descripcion = row.Descripcion;
+        data.Cantidad = row.Cantidad;
+        data.Tipo = row.Tipo == '1' ? 'LEVE' : row.Tipo == '2' ? 'CRITICO' : '';
+        //data.Nro_Defectos = row.Nro_Defectos;
+        data.Observacion = row.Observacion;
+        data.Obs_Medida = row.Obs_Medida;
+
+        cantidadDefecto += parseInt(row.Cantidad.toString());
+        totalMuestra += parseInt(row.Tamano_Muestra.toString());
+
+        dataReporte.push(data);
+      });
+      
+      let rowTotales: any = {
+        Fecha_Auditoria: "",
+        Num_Auditoria: 0,
+        Nom_Auditor: "",
+        Nom_Cliente: "TOTALES",
+        Cod_EstCli: "",
+        Cod_TemCli: "",
+        Nom_TemCli: "",
+        Lote: "",
+        Tamano_Muestra: totalMuestra,
+        Ops_Auditoria: "",
+        Estado: "",
+        Cod_Defecto: "",
+        Descripcion: "",
+        Nro_Defectos: cantidadDefecto,
+        Tipo: "",
+        Observacion: "",
+        Obs_Medida: ""
+      }
+
+      dataReporte.push(rowTotales)
+
+      dataReporte.forEach((row: any) => {
+        this.dataForExcel.push(Object.values(row))
+      })
+
+      let reportData = {
+        title: 'REPORTE DE SALIDA DE ACABADO',
+        data: this.dataForExcel,
+        headers: Object.keys(dataReporte[0])
+      }
+
+      this.exceljsService.exportExcel(reportData);
+
+    } else{
+      this.matSnackBar.open("No existen registros...!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+    }
+
+  }
+
+  onEditarAuditoria(data_det: data_det){
+    data_det.Cod_Auditor = data_det.Tip_Trabajador_Auditor.concat("-").concat(data_det.Cod_Auditor);
+
+    let dialogRef = this.dialog.open(DialogRegistrarSalidaAcabadoComponent, {
+      disableClose: true,
+      width: "1250px",
+      data: data_det
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.onListarCabeceraSalidaAcabados();
+    });
+  }
+
+  onEliminarAuditoria(data_det: data_det){
+    let dialogRef = this.dialog.open(DialogEliminarComponent, { disableClose: true, data: {} });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == 'true') {
+        this.spinnerService.show();
+
+        this.auditoriaAcabadosService.Mant_AuditoriaModuloSalidaAcabado('D', data_det.Num_Auditoria, '', this.range.get('start')?.value, this.range.get('end').value, '', '', '', '', '', '', '')
+          .subscribe((result: any) => {
+            if (result.length > 0) {
+              this.onListarCabeceraSalidaAcabados();
+              this.spinnerService.hide();
+            }
+          },
+          (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+            duration: 1500,
+          }));
+
+      }
+    });
+
+  }
+
+  onDuplicarAuditoria(data_det: data_det){
+    let Fecha = new Date();
+    let dialogRef = this.dialog.open(DialogConfirmacion2Component, { disableClose: true, data: { TELA: "Desea reprocesar la auditoria " + data_det.Num_Auditoria + "?" } });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == 'true') {
+        this.spinnerService.show();
+
+        this.auditoriaAcabadosService.Mant_AuditoriaModuloSalidaAcabado(
+            'I', 
+            0, 
+            data_det.Tip_Trabajador_Auditor.concat("-").concat(data_det.Cod_Auditor), 
+            Fecha.toDateString(), 
+            Fecha.toDateString(), 
+            data_det.Cod_EstCli,
+            data_det.Cod_TemCli,
+            data_det.Lote,
+            data_det.Tamano_Muestra,
+            data_det.Observacion,
+            data_det.Obs_Medida,
+            '0')
+          .subscribe((result: any) => {
+            if (result.length > 0) {
+              this.onListarCabeceraSalidaAcabados();
+              this.spinnerService.hide();
+            }
+          },
+          (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+            duration: 1500,
+          }));
+
+      }
+    });
+
+  }
+
+  onDefectosAuditoria(data_det: data_det){
+    let dialogRef = this.dialog.open(DialogDefectosSalidaAcabadoComponent, {
+      disableClose: true,
+      panelClass: 'my-class',
+      maxWidth: '98vw',
+      maxHeight: '98vh',
+      data: data_det
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+        this.onListarCabeceraSalidaAcabados();
+  
+    });
+  }
+
+  onVistaPreviaAuditoria(data_det: data_det){
+
+    let dialogRef = this.dialog.open(DialogVistaSalidaAcabadoComponent, {
+      disableClose: true,
+      panelClass: 'my-class',
+      maxWidth: '95vw',
+      maxHeight: '98vh',
+      height: '100%',
+      width: '100%',
+      data: data_det
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
+  }
+
+  onSendAuditoriaEmpaque(data_det: data_det){
+    let Fecha = new Date();
+    let dialogRef = this.dialog.open(DialogConfirmacion2Component, { disableClose: true, data: { TELA: "Desea enviar el registro " + data_det.Num_Auditoria + " a la Auditoria de empaque de acabado?" } });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == 'true') {
+        this.spinnerService.show();
+
+        this.auditoriaAcabadosService.Mant_AuditoriaModuloSalidaAcabado(
+            'E', 
+            data_det.Num_Auditoria, 
+            data_det.Tip_Trabajador_Auditor.concat("-").concat(data_det.Cod_Auditor), 
+            Fecha.toDateString(), 
+            Fecha.toDateString(), 
+            data_det.Cod_EstCli,
+            data_det.Cod_TemCli,
+            data_det.Lote,
+            data_det.Tamano_Muestra,
+            data_det.Observacion,
+            data_det.Obs_Medida,
+            '0')
+          .subscribe((result: any) => {
+            if (result.length > 0) {
+              this.onListarCabeceraSalidaAcabados();
+              this.spinnerService.hide();
+              
+              if(result[0].Respuesta == "OK")
+                this.matSnackBar.open("Registro satisfactorio en Auditoria Empaque de Acabado ...!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+              else
+                this.matSnackBar.open(result[0].Respuesta, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+            }
+          },
+          (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+            duration: 1500,
+          }));
+
+      }
+    });
+
+  }
+
+  clearDate(event) {
+    event.stopPropagation();
+    this.range.controls['start'].setValue('')
+    this.range.controls['end'].setValue('')
+  }
+
+  clearEstilo(){
+    this.formulario.patchValue({Cod_EstCli: ''});
+  }
+
+}

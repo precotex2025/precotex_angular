@@ -1,0 +1,63 @@
+.container-fluid {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100%;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 16px;
+    margin: 0;
+}
+
+mat-card {
+    margin-top: 10px;
+    padding: 0px;
+}
+
+mat-card-header {
+    padding: 10px;
+    border-bottom: 0.8px solid rgba(0, 0, 0, .2);
+    border-left: 0.8px solid rgba(0, 0, 0, .2);
+    border-right: 0.8px solid rgba(0, 0, 0, .2);
+    border-top: 0.8px solid rgba(0, 0, 0, .2);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+mat-card-content {
+    
+    padding: 10px 15px;
+    border-bottom: 0.8px solid rgba(0, 0, 0, .2);
+    border-left: 0.8px solid rgba(0, 0, 0, .2);
+    border-right: 0.8px solid rgba(0, 0, 0, .2);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.cerrar {
+    cursor: pointer;
+    font-size: 20px;
+    padding: 5px;
+    background-color: red;
+    color: white;
+}
+
+.row{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col-md-3{
+    width: 20%;
+    padding: 5px;
+}
+
+.col-md-5{
+    width: 35%;
+    padding: 5px;
+}
+
+#cdk-overlay-3{
+    overflow-y: scroll;
+}
+

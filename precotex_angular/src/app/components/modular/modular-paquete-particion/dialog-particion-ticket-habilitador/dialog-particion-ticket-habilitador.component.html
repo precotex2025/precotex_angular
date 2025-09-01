@@ -1,0 +1,49 @@
+ 
+<div class="container"> 
+
+    <div class="grid-container">  
+
+        <div class="title"><strong>Particionar paquete </strong></div>
+        <form class="container-cuerpo" [formGroup]="formulario">
+
+            <div class="container-cuerpo-fila1">
+                <div class="card">
+                    <div class="data">
+                        <p class="titulo-card">OP: {{lstRetoque.COD_ORDPRO}}  &nbsp;&nbsp; <span>{{lstRetoque.DES_PRESENT}}</span></p>
+                        <p class="titulo-card"><span>TALLA:  {{lstRetoque.COD_TALLA}} </span> / <span style="color: red;">CANT: {{lstRetoque.CANTIDAD}}</span>  &nbsp;&nbsp; <span>RUTA: {{lstRetoque.Ruta_Inspeccion}}</span></p>
+                    </div>
+                </div> 
+            </div>
+
+            <div class="container-cuerpo-fila2">
+                <div class="fila1-internas">
+                    <mat-form-field>
+                        <mat-label>Retoque Interno</mat-label>
+                        <input matInput type="number" placeholder="Retoque Interno" value="" autocomplete="off" formControlName="sInternas" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="4">
+                    </mat-form-field>
+                </div>
+                <div class="fila1-externas">
+                    <mat-form-field>
+                        <mat-label>Retoque Estampado</mat-label>
+                        <input matInput type="number" placeholder="Externas" value="" autocomplete="off" formControlName="sExternas" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="4">
+                    </mat-form-field>
+                </div>
+            </div>
+ 
+            <div class="container-cuerpo-foot">
+
+                <button  type="submit" class="button-agregar" (click)="generarProceso()" mat-flat-button>
+                    <mat-icon aria-label="person" >save
+                    </mat-icon>  Aceptar
+                </button>
+               
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>               
+            </div> 
+        </form>
+
+    </div>
+
+</div>

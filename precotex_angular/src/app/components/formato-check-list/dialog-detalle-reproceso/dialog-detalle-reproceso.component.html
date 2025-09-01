@@ -1,0 +1,147 @@
+<div class="row">
+    <div class="col-md-12">
+        <p>¿Esta seguro de crear el reproceso?</p>
+        <p>
+            <button mat-flat-button color="primary" [disabled]="flg_btn_detalle" style="margin-right: 10px;" (click)="confirmarCreacion()"><mat-icon>save</mat-icon>CREAR REPROCESO</button>
+            <button mat-flat-button color="warn" mat-dialog-close><mat-icon>cancel</mat-icon>CERRAR</button>
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="caja-cliente3" *ngIf="flg_btn_detalle">
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="FlgAprobado"
+                (change)="changeAprobado($event)">
+                <mat-radio-button value="A"
+                    style="margin-right: 10px; padding-left: 10px;">Aprobado</mat-radio-button>
+                <mat-radio-button value="R">Rechazado</mat-radio-button>
+            </mat-radio-group>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <mat-card>
+            <mat-card-header>DEFECTOS</mat-card-header>
+            <mat-card-content>
+                <div class="container-cuerpo-fila3-dialog">
+                    <div class="row">
+                        <div class="caja-cliente">
+                            <mat-checkbox [disabled]="!flg_btn_detalle" class="example-margin" (change)="changeCheck($event)">Buscar por
+                                Nombre</mat-checkbox>
+                        </div>
+                    </div>
+                    <div class="row">
+                   
+                        <div class="caja-cliente" *ngIf="!check">
+                            <mat-form-field class="fila3-codigo-dialog">
+                                <mat-label>Codigo</mat-label>
+                                <input matInput type="number" #cod [(ngModel)]="Codigo"
+                                    [disabled]="!flg_btn_detalle" placeholder="Codigo" value=""
+                                    (input)="BuscarMotivo($event)" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                        <div class="caja-cliente" *ngIf="check">
+                            <mat-form-field class="fila3-codigo-dialog">
+                                <mat-label>Defecto</mat-label>
+                                <input matInput type="text" #cod [(ngModel)]="Codigo"
+                                     placeholder="Buscar Defecto"
+                                    (change)="BuscarDefecto($event.target)" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                        <div class="caja-cliente" *ngIf="check">
+                            <mat-form-field class="fila1-Rechazo" appearance="fill">
+                                <mat-label>Seleccionar Defecto</mat-label>
+                                <mat-select [(ngModel)]="Defecto"  placeholder="Seleccionar Defecto">
+                                  <mat-option *ngFor="let item of datosDefectos" (click)="saveDefecto(item)" [value]="item.Cod_Motivo">{{item.Descripcion}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <!-- <label for="">Seleccionar Defecto</label>
+                              <select name="Defecto" [(ngModel)]="Defecto" class="select">
+                                <option *ngFor="let item of datosDefectos" (change)="saveDefecto(item)" [value]="item.Cod_Motivo">{{item.Descripcion}}</option>
+                              </select> -->
+                        </div>
+
+                        <div class="caja-cliente" *ngIf="!check">
+                            <!-- [readonly]="!flg_btn_detalle" [disabled]="!flg_btn_detalle" -->
+                            <mat-form-field class="fila3-defecto-dialog">
+                                <mat-label>Defecto</mat-label>
+                                <input matInput type="text" #defecto placeholder="Defecto"
+                                    [disabled]="!flg_btn_detalle" [(ngModel)]="Defecto" value=""
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                        <div class="caja-cliente" *ngIf="check">
+                            <mat-form-field class="fila3-cant-dialog">
+                                <mat-label>Cantidad</mat-label>
+                                <input matInput type="number" [(ngModel)]="Cantidad"
+                                    [disabled]="!flg_btn_detalle" placeholder="" value="" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                        <div class="caja-cliente" *ngIf="!check">
+                            <mat-form-field class="fila3-cant-dialog">
+                                <mat-label>Cantidad</mat-label>
+                                <input matInput type="number" [(ngModel)]="Cantidad"
+                                    [disabled]="!flg_btn_detalle" placeholder="" value="" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="caja-cliente">
+                            <div class="fila3-insertarFila-dialog">
+                                <button type="button" (click)="InsertarFila()" [disabled]="!flg_btn_detalle"
+                                    class="button-fila-dialog" mat-flat-button>
+                                    <mat-icon aria-label="person">save
+                                    </mat-icon> Guardar
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="container-cuerpo-fila2-dialog" style="margin-bottom: 20px; padding-bottom: 30px;">
+
+                    <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="Cod_Defecto">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                                Código
+                            </th>
+                            <td mat-cell *matCellDef="let data_det">
+                                {{ data_det.Cod_Defecto }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Defecto">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                                Defecto
+                            </th>
+                            <td mat-cell *matCellDef="let data_det">{{ data_det.Defecto }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Cantidad">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                                Cantidad
+                            </th>
+                            <td mat-cell *matCellDef="let data_det">
+                                {{ data_det.Cantidad }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Eliminar">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                                Eliminar
+                            </th>
+                            <td mat-cell *matCellDef="let data_det">
+                                <button mat-icon-button color="warn" (click)="eliminarFila(data_det)"
+                                    type="button"><mat-icon>delete</mat-icon></button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    </table>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

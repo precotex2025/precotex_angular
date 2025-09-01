@@ -1,0 +1,32 @@
+<div class="container"> 
+    <div class="grid-container">  
+        <div class="title">Código de Jaba</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)" >
+            <div class="container-cuerpo-fila1">
+                <mat-form-field> 
+                    <mat-label>Código de Barra</mat-label>
+                    <input matInput type="text"  placeholder="Código de Barra" value="" 
+                        autocomplete="off" formControlName="Codigo_Barra" >
+                </mat-form-field>
+            </div>
+
+            <div class="container-cuerpo-foot">
+               <button  type="submit" class="button-agregar" mat-dialog-close="false" [disabled]="!formulario.valid" mat-flat-button>
+                    <mat-icon aria-label="person" >save
+                    </mat-icon>  Confirmar
+                </button>
+
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>               
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>      

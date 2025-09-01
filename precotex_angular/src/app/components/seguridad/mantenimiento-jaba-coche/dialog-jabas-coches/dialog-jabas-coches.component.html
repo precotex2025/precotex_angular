@@ -1,0 +1,66 @@
+<form [formGroup]="formulario">
+
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Código</mat-label>
+        <input matInput placeholder="Ingrese el Código" maxlength="9" formControlName="Codigo" [readonly]="data.tipo == 2">
+    </mat-form-field>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Código Barra</mat-label>
+        <input matInput placeholder="Ingrese el cód. Barra" maxlength="8" formControlName="Codigo_Barra" [readonly]="data.tipo == 2">
+    </mat-form-field>
+    
+    <div class="example-full-width">
+        <mat-form-field class="example-full-width2" appearance="fill">
+            <mat-label>Ubicación </mat-label>
+            <mat-select formControlName="Ubicacion" placeholder="Seleccione">
+                <mat-option value="SANTA MARIA">SANTA MARIA</mat-option>
+                <mat-option value="SANTA CECILIA">SANTA CECILIA</mat-option>
+                <mat-option value="SANTA ROSA">SANTA ROSA</mat-option>
+                <mat-option value="INDEPENDENCIA I">INDEPENDENCIA I</mat-option>
+                <mat-option value="INDEPENDENCIA II">INDEPENDENCIA II</mat-option>
+                <mat-option value="HUACHIPA I">HUACHIPA I</mat-option>
+                <mat-option value="HUACHIPA II">HUACHIPA II</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <!-- <button mat-flat-button mat-icon-button color="primary" (click)="openDialogTipos()" ><mat-icon color="info">add</mat-icon></button> -->
+    </div>    
+    <h5>Estado</h5> 
+    <div class="container">       
+        <mat-checkbox formControlName="EstadoOK" >JABA BUEN ESTADO</mat-checkbox> 
+        <mat-checkbox formControlName="Estado2RL"  >JABA DOBLE RAJADA LATERAL</mat-checkbox> 
+        <mat-checkbox formControlName="Estado2RT"  >JABA DOBLE RAJADA</mat-checkbox> 
+        <mat-checkbox formControlName="EstadoG" >JABA GOLPEADA</mat-checkbox> 
+        <mat-checkbox formControlName="EstadoOUT" >JABA INSERVIBLE</mat-checkbox> 
+        <mat-checkbox formControlName="EstadoRL">JABA RAJADA LATERAL</mat-checkbox> 
+        <mat-checkbox formControlName="EstadoRO">JABA ROTA</mat-checkbox> 
+        <mat-checkbox formControlName="EstadoRT">JABA RAJADA TAPA</mat-checkbox>
+    </div>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Fecha Compra</mat-label>
+        <input matInput type="date" maxlength="150" formControlName="Fecha_Compra" [readonly]="data.tipo == 2">
+    </mat-form-field>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Observación</mat-label>
+        <input matInput placeholder="Ingrese la Observación" formControlName="Observacion">
+    </mat-form-field>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>N° Hoja</mat-label>
+        <input matInput placeholder="Ingrese el N° Hoja" maxlength="150" formControlName="Nro_Hoja" [readonly]="data.tipo == 2">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill" >
+        <mat-label>Tipo </mat-label>
+        <mat-select formControlName="Tipo" placeholder="Seleccione" (selectionChange)="onTipoChange($event)" [disabled]="data.tipo == 2">
+            <mat-option value="JABA">JABA</mat-option>
+            <mat-option value="COCHE">COCHE</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+
+    <button mat-flat-button (click)="guardar()" class="button-registrar" color="primary">Guardar</button>
+    <button mat-flat-button class="button-cancelar" mat-dialog-close>Cancelar</button>
+</form>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

@@ -1,0 +1,25 @@
+<form [formGroup]="formulario">
+
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Tipo de Servicio</mat-label>
+        <mat-select formControlName="Tipo_Servicio" placeholder="Seleccione">
+            <mat-option value="Desayuno">Desayuno</mat-option>
+            <mat-option value="Almuerzo">Almuerzo</mat-option>
+            <mat-option value="Cena">Cena</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Título</mat-label>
+        <input matInput placeholder="Ingrese el Título/Descripción" maxlength="50" formControlName="Titulo">
+    </mat-form-field>
+
+
+
+    <button mat-flat-button (click)="guardar()" class="button-registrar" color="primary">Guardar</button>
+    <button mat-flat-button class="button-cancelar" mat-dialog-close>Cancelar</button>
+</form>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

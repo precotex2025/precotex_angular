@@ -1,0 +1,46 @@
+<form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+    <mat-card class="example-card" appearance="outlined">
+        <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>{{data.Title}} </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="row">
+                <mat-form-field appearance="fill">
+                    <mat-label>Articulo :</mat-label>
+                    <textarea matInput rows="3" formControlName="ctrol_glosa" placeholder="Ingrese una descripción"></textarea>
+                </mat-form-field>    
+            </div>
+            <div class="row2">
+
+                <mat-form-field appearance="outline" style="flex: 1;"> 
+                    <mat-label>Cantidad :</mat-label> 
+                    <input matInput type="number" formControlName="ctrol_cantidad"> 
+                </mat-form-field>       
+                
+                <!-- <div appearance="outline" style="flex: 1;">
+                    <button type="button" class="fila1-BtnBuscar" mat-flat-button (click)="onAddMaterial()">
+                        <mat-icon aria-label="create_new_folder">add
+                        </mat-icon> Agregar Detalle
+                    </button>   
+                </div> -->
+                
+            </div>
+        </mat-card-content>
+    </mat-card>
+</form>
+
+<br >
+
+<div class="button-row"> 
+
+    <button mat-flat-button color="primary" class="form-button" (click)="onAddMaterial()"> 
+        <mat-icon>add</mat-icon> Agregar
+    </button>
+
+    <button mat-flat-button color="warn" mat-dialog-close class="form-button">
+        <mat-icon>close</mat-icon> Salir
+    </button>
+    
+</div>   

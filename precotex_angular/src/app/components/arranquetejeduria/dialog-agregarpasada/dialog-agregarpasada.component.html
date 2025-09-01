@@ -1,0 +1,209 @@
+<div class="container">
+    <div class="grid-container">
+      <div class="title">
+        <strong> DATOS ESTANDAR/REALES - OT: {{ this.data.CodOrdtra }} - {{ this.data.title_Combinacion }} - {{ this.data.CodTalla }} </strong>
+      </div>
+      <div class="body">
+
+
+        <div class="left-column">
+          <div class="title">
+            <strong> ESTRUCTURAS </strong>
+          </div>
+
+          <button
+            [disabled]="isButtonDisabled_Est"
+            (click)="GuardarEstructura()"
+            type="button" class="button-Grabar-Est"
+            matTooltip="Grabar Información de Estructura" matTooltipPosition="above" mat-flat-button>
+            GUARDAR ESTRUCTURA
+            <mat-icon>save</mat-icon>
+          </button>
+
+          <table mat-table #table  [dataSource]="dataSource" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="Titulo">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Titulo</th>
+
+              <td  mat-cell *matCellDef="let data_det">
+                  {{data_det.titulo}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Estructura">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estructura</th>
+
+              <td  mat-cell *matCellDef="let data_det">
+                  {{data_det.estructura}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Cabos">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cabos</th>
+
+              <td  mat-cell *matCellDef="let data_det">
+                  {{data_det.cabos}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Color">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Color</th>
+
+              <td  mat-cell *matCellDef="let data_det">
+                  {{data_det.color}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="LongitudMalla">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">L.M</th>
+
+              <td  mat-cell *matCellDef="let data_det">
+                  {{data_det.longitudMalla}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="LongitudMallaReales">
+              <th mat-header-cell *matHeaderCellDef> L.M Real </th>
+              <td mat-cell *matCellDef="let data_det">
+                <input matInput type="number" class="input-estilo" [(ngModel)]="data_det.longitud_Malla_Real"
+                [value]="data_det.longitud_Malla_Real === 0 ? '' : data_det.longitud_Malla_Real"/>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Pasadas">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Pasada</th>
+
+              <td  mat-cell *matCellDef="let data_det">
+                  {{data_det.pasadas}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="PasadasReales">
+              <th mat-header-cell *matHeaderCellDef> Pasada Real </th>
+              <td mat-cell *matCellDef="let data_det">
+                <input matInput type="number" class="input-estilo" [(ngModel)]="data_det.rec_Pasadas_Real"
+                [value]="data_det.rec_Pasadas_Real === 0 ? '' : data_det.rec_Pasadas_Real"/>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+          </table>
+
+
+          <div class="container-cuerpo-foot">
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+            </mat-paginator>
+
+          </div>
+
+        </div>
+        <div class="right-column">
+          <div class="title">
+            <strong> MEDIDAS </strong>
+          </div>
+
+          <form [formGroup]="formulario" #formDirective="ngForm">
+          <div class="input-container">
+            <button
+            [disabled]="isButtonDisabled_Med"
+            (click)="GuardarMedida()"
+            type="button" class="button-Grabar-Med"
+            matTooltip="Grabar Información" matTooltipPosition="above" mat-flat-button>
+            GUARDAR MEDIDAS
+            <mat-icon>save</mat-icon>
+          </button>
+
+            <mat-form-field appearance="fill" style="text-align: center">
+              <mat-label>LARGO ESTANDAR</mat-label>
+              <input matInput type="text" formControlName="InputLargo" class="input-estilo-med" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" style="text-align: center">
+              <mat-label>ALTO ESTANDAR</mat-label>
+              <input matInput type="text" formControlName="InputAlto" class="input-med-estilo" />
+            </mat-form-field>
+          </div>
+
+          <!-- <div class="input-container">
+
+            <mat-form-field appearance="fill" class="input-item">
+              <mat-label>LARGO REAL</mat-label>
+              <input matInput type="text"  type="number" formControlName="InputLargo_Real" step="any"/>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="input-item">
+              <mat-label>ALTO REAL</mat-label>
+              <input matInput type="text"  type="number" formControlName="InputAlto_Real" />
+            </mat-form-field>
+
+          </div> -->
+
+        </form>
+
+        <table mat-table #table  [dataSource]="datasourceMed" class="mat-elevation-z8">
+
+
+          <ng-container matColumnDef="CodTela">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod Tela</th>
+
+            <td  mat-cell *matCellDef="let data_det_med">
+                {{data_det_med.cod_Tela}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="LargoReal">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Largo Real</th>
+
+            <td mat-cell *matCellDef="let data_det_med">
+              <input matInput type="number" class="input-estilo" [(ngModel)]="data_det_med.largoReal"
+              [value]="data_det_med.largoReal === 0 ? '' : data_det_med.largoReal"/>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="AltoReal">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Alto Real</th>
+
+            <td mat-cell *matCellDef="let data_det_med">
+              <input matInput type="number" class="input-estilo" [(ngModel)]="data_det_med.altoReal"
+              [value]="data_det_med.altoReal === 0 ? '' : data_det_med.altoReal"/>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Opciones">
+            <th mat-header-cell *matHeaderCellDef>
+              <button mat-fab color="primary" (click)="AgregarFila()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </th>
+            <td  mat-cell *matCellDef="let data_det">
+                <a (click)="EliminarFila(data_det)">
+                    <mat-icon class="icon-green">cancel</mat-icon>
+                </a>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns_cabMed"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns_cabMed;"></tr>
+
+        </table>
+        </div>
+      </div>
+
+      <button
+        (click)="Salir()"
+        type="button" class="button-Grabar-Salir"
+        matTooltip="Cerrar Ventana" matTooltipPosition="above" mat-flat-button>
+        CERRAR
+        <mat-icon aria-label="person">exit_to_app
+        </mat-icon>
+      </button>
+
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center; " >Cargando... </p>
+</ngx-spinner>

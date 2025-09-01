@@ -1,0 +1,45 @@
+.example-full-width {
+  width: 100%;
+}
+.button-registrar {
+
+  background-color: darkblue;
+  color: white;
+  margin-right: 1rem;
+
+}
+
+.button-cancelar {
+
+  background-color: #d32f2f;
+  color: white;
+}
+
+
+.boton{
+  min-width: 98%;
+  margin-bottom: 10px;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+::ng-deep .my-class .mat-dialog-container{
+  padding: 20px;
+}
+
+.button-cancelar {
+
+  background-color: #d32f2f;
+  color: white;
+}
+
+
+.button-registrar {
+
+  background-color: darkblue;
+  color: white;
+  margin-right: 1rem;
+
+}

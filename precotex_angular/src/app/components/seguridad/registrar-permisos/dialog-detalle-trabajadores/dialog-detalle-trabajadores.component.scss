@@ -1,0 +1,37 @@
+table{
+    width: 100%;
+}
+
+.mat-column-Fec_Permiso,
+.mat-column-Nom_Trabajador,
+.mat-column-Inicio,
+.mat-column-Termino,
+.mat-column-Inicio_Lectura,
+.mat-column-Termino_Lectura,
+.mat-column-Tipo_Lectura,
+.mat-column-Sede,
+.mat-column-Status,
+.mat-column-Des_Tipo_Permiso
+{
+    text-align: center;
+    font-size: 10px;
+    font-family: arial;
+    padding: 5px;
+    text-align: center
+}
+
+
+@media only screen and (max-width: 800px) {
+    .container-cuerpo-fila5{
+        overflow-x: scroll;
+    }
+}
+
+.close{
+    text-align: right;
+}
+
+.cerrar{
+    cursor: pointer;
+    font-size: 20px;
+}

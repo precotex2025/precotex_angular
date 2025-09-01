@@ -1,0 +1,120 @@
+<div class="container-fluid">
+    <div class="grid-container">
+        <div class="title">Registrar Ocurrencia</div>
+
+        <div class="find">
+            <div class="list-form" [formGroup]="formulario">
+                <mat-card>
+                    <mat-card-content>
+                        <p>
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Fecha Ocurrencia</mat-label>
+                                <input matInput type="datetime-local" isDisabled formControlName="Fecha">
+                            </mat-form-field>
+
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Area</mat-label>
+                                <mat-select formControlName="Id_Area">
+                                    <mat-option *ngFor="let item of dataArea" [value]="item.Id_Area" (click)="onSelectArea(item.Id_Area)">
+                                        {{ item.Des_Area }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Responsable Area</mat-label>
+                                <input matInput type="text" #trigger="matAutocompleteTrigger" placeholder="Responsable Area" formControlName="Nom_ResArea" [matAutocomplete]="autoDataRespArea" />
+                                <mat-autocomplete autoActiveFirstOption #autoDataRespArea="matAutocomplete">
+                                    <mat-option *ngFor="let option of filtroRespArea | async" [value]="option.Trabajador" (click)="selectRespArea(option)">
+                                        {{option.Trabajador}}
+                                    </mat-option> 
+                                </mat-autocomplete>
+                            </mat-form-field>
+
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Estandar Seguridad</mat-label>
+                                <mat-select formControlName="Tip_Estandar">
+                                    <mat-option *ngFor="let item of dataTipoEstandar" [value]="item.Tip_Estandar">
+                                        {{ item.Des_TipoEstandar }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Acto / Condición</mat-label>
+                                <mat-select formControlName="Id_Estandar">
+                                    <mat-option *ngFor="let item of filterEstandarSeguridad()" [value]="item.Id_Estandar">
+                                        {{ item.Des_Estandar }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <!--<mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Responsable Acto/Condición</mat-label>
+                                <mat-select formControlName="Cod_Responsable">
+                                    <mat-option *ngFor="let item of dataResponsable" [value]="item.Codigo">
+                                        {{ item.Trabajador }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>-->
+
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Responsable Acto/Condición</mat-label>
+                                <input matInput type="text" #trigger="matAutocompleteTrigger" placeholder="Responsable" formControlName="Nom_Responsable" [matAutocomplete]="autoDataResponsable" />
+                                <mat-autocomplete autoActiveFirstOption #autoDataResponsable="matAutocomplete">
+                                    <mat-option *ngFor="let option of filtroResponsable | async" [value]="option.Trabajador" (click)="selectResponsable(option)">
+                                        {{option.Trabajador}}
+                                    </mat-option> 
+                                </mat-autocomplete>
+                            </mat-form-field>
+
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Lugar</mat-label>
+                                <input matInput type="text" value="" autocomplete="off" formControlName="Des_Lugar" placeholder="Lugar">
+                            </mat-form-field>
+                        
+                            <mat-form-field class="example-width-50" appearance="outline">
+                                <mat-label>Tipo Riesgo</mat-label>
+                                <mat-select formControlName="Tip_Riesgo">
+                                    <mat-option *ngFor="let item of dataTipoRiesgo" [value]="item.Tip_Riesgo">
+                                        {{ item.Des_Riesgo }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <input type="file" accept="image/png,image/jpeg" style="display:none;" #inputFile (change)="onGuardarImagen($event)">
+                            <button type="button" (click)="inputFile.click()" mat-mini-fab color="primary" *ngIf="numImg < 2"><mat-icon>add_photo_alternate</mat-icon></button>    
+                        
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Descripción</mat-label>
+                                <input matInput type="text" value="" autocomplete="off" formControlName="Des_Ocurrencia" placeholder="Descripción">
+                            </mat-form-field>
+
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Acción</mat-label>
+                                <input matInput type="text" value="" autocomplete="off" formControlName="Des_Accion" placeholder="Acción">
+                            </mat-form-field>
+                        </p>
+
+                        <div class="image-container">
+                            <div *ngIf="Imagen64_1">
+                                <img [src]="Imagen64_1" style="max-width: 200px;" alt="" (click)="onAmpliarImagen('1')">
+                            </div>
+                            <br>
+                            <div *ngIf="Imagen64_2">
+                                <img [src]="Imagen64_2" style="max-width: 200px;" alt="" (click)="onAmpliarImagen('2')">
+                            </div>
+                        </div>
+
+                        <mat-divider></mat-divider>
+                    </mat-card-content>
+
+                    <mat-card-actions>
+                        <button mat-button type="submit" color="primary" [mat-dialog-close]="formulario.value" [disabled]="formulario.invalid"><mat-icon>done</mat-icon>Confirmar</button>
+                        <button mat-button mat-dialog-close color="warn"><mat-icon>close</mat-icon>Cancelar</button>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

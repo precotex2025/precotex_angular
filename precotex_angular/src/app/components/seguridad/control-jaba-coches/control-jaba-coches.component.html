@@ -1,0 +1,95 @@
+<div class="container">
+    <!-- ventana nro 3 - salida -->
+    <div class="grid-container">
+
+        <div class="title">Historial Packing Jaba Ingreso - Sede: {{this.des_planta}}</div>
+
+        <div class="find">
+            <div class="auditoriaForm">
+                <div class="findcol1">
+                    <mat-form-field class="example-form-field" appearance="fill">
+                        <mat-label>Fecha Registro</mat-label>
+                        <input matInput type="date" maxlength="8" (input)="changeJaba()" (change)="changeFecha()"
+                            [(ngModel)]="Num_Jaba" placeholder="N° de Jaba" autocomplete="off" readonly>
+                        <button matSuffix mat-icon-button aria-label="Clear" (click)="limpiarValor()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <div class="findcol2">
+                        <button type="button" class="button_buscar" mat-flat-button color="primary"
+                            routerLink="/SeguridadControlGuia">
+                            <mat-icon aria-label="person">reply_all
+                            </mat-icon> Regresar
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="caja" *ngIf="dataJaba.length > 0">
+            <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+
+                <ng-container matColumnDef="Fecha_Registro">
+                    <th mat-header-cell *matHeaderCellDef> Fecha Registro </th>
+                    <td mat-cell *matCellDef="let data_det"> {{data_det.Fecha_Registro}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Cod_Packing_Jaba">
+                    <th mat-header-cell *matHeaderCellDef> Código Paking</th>                   
+                    <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_Packing_Jaba}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Cod_Usuario">
+                    <th mat-header-cell *matHeaderCellDef> Cod. Usuario </th>
+                    <td mat-cell *matCellDef="let data_det"> {{ data_det.Cod_Usuario }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Num_Planta">
+                    <th mat-header-cell *matHeaderCellDef> Planta Origen </th>
+                    <td mat-cell *matCellDef="let data_det" >
+                        <span *ngIf="data_det.Num_Planta == 1">SANTA MARIA</span>
+                        <span *ngIf="data_det.Num_Planta == 2">SANTA CECILIA</span>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="Num_Planta_Destino">
+                    <th mat-header-cell *matHeaderCellDef> Planta Destino </th>
+                    <td mat-cell *matCellDef="let data_det" style="font-weight: bold;">
+                        <span *ngIf="data_det.Num_Planta_Destino == 1">SANTA MARIA</span>
+                        <span *ngIf="data_det.Num_Planta_Destino == 2">SANTA CECILIA</span>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="Cod_Usuario_Ingreso">
+                    <th mat-header-cell *matHeaderCellDef> Usuario Ingreso </th>
+                    <td mat-cell *matCellDef="let data_det">
+                        {{ data_det.Cod_Usuario_Ingreso }}
+                    </td>
+
+                </ng-container>
+                <ng-container matColumnDef="Flg_Estado">
+                    <th mat-header-cell *matHeaderCellDef> Estado </th>
+                    <td mat-cell *matCellDef="let data_det">
+                        <span *ngIf="data_det.Flg_Estado == 'P'">PENDIENTE</span>
+                        <span *ngIf="data_det.Flg_Estado == 'C'">CERRADO</span>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="Detalle">
+                    <th mat-header-cell *matHeaderCellDef> Detalle </th>
+                    <td mat-cell *matCellDef="let data_det">
+                        <button type="button" class="button-registrar" mat-flat-button color="primary"
+                            (click)="detalleJaba(data_det.Cod_Packing_Jaba)"> 
+                            <mat-icon aria-label=" person">assignment</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+
+
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+            </table>
+
+        </div>
+
+    </div>
+</div>

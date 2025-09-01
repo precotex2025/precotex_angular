@@ -1,0 +1,77 @@
+ 
+<!--<div class="container"> 
+    <div class="grid-container">  
+        <div class="title">Seleccionar Talla</div>
+        <form class="container-cuerpo" [formGroup]="formulario"  >
+            <div class="container-cuerpo-fila1">
+                
+                    
+                   
+                    <div class="Colores" *ngFor="let Tallas of listar_operacionTalla">
+                        <button  type="button" class="button-agregar"  mat-dialog-close="false"  mat-flat-button mat-dialog-close="true" value="Tallas.Cod_Talla" (click)="GuardarTalla(Tallas.Cod_Talla)">
+                            {{Tallas.Cod_Talla}}
+                        </button>
+                    </div>
+                
+            </div>     
+ 
+            <div class="container-cuerpo-foot">
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>               
+            </div> 
+            
+        </form>
+
+    </div>
+
+
+</div>-->
+
+
+<!--DefectosAlamacenDerivados-->
+  
+  
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container">  
+ 
+        <div class="title">Seleccionar Talla</div>
+
+        <form class="container-cuerpo">
+            <div class="container-cuerpo-fila1">
+                
+            </div>    
+  
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                    <ng-container matColumnDef="Tallas">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Talla</th>
+                        <td mat-cell  *matCellDef="let data_det;">
+                            <button type="button" class="button-agregar" mat-dialog-close="true" (click)="GuardarTalla(data_det.Cod_Talla)" mat-flat-button >{{data_det.Cod_Talla}}</button>
+                        </td>
+                    </ng-container>
+ 
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+                </table>
+ 
+            </div>
+
+            
+            <div class="container-cuerpo-foot">
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close   mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>        
+            </div>
+
+
+        </form>
+
+    </div>
+ 
+</div>
+ 

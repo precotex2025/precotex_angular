@@ -1,0 +1,133 @@
+<!--DefectosAlamacenDerivados-->
+  
+ 
+<div class="container">
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container"> 
+ 
+        <div class="title">Reporte Cantidad de Defectos - Derivados</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+                
+                <!--<mat-form-field class="fila1-fecha">
+                    <mat-label>Fec. Registro</mat-label>
+                    <input matInput [matDatepicker]="fec_registro" autocomplete="off" formControlName="fec_registro">
+                    <mat-datepicker-toggle matSuffix [for]="fec_registro"></mat-datepicker-toggle>
+                    <mat-datepicker #fec_registro></mat-datepicker>
+                </mat-form-field>-->
+
+               <!-- <mat-form-field class="fila1-fecha">
+                    <mat-label>Fec. Auditoria</mat-label>
+                    <input matInput [matDatepicker]="fec_registro" autocomplete="off"
+                        formControlName="fec_registro">
+                    <mat-datepicker-toggle matSuffix [for]="fec_registro"></mat-datepicker-toggle>
+                    <mat-icon  (click)="clearDate($event)" style=" position: absolute;
+                    float: right;
+                    top: 5px;
+                    margin-left: -26px;
+                    cursor: pointer;
+                    color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+                    <mat-datepicker #fec_registro></mat-datepicker>
+                </mat-form-field>-->
+
+
+                    <!--<mat-form-field class="fila1-cliente"> 
+                        <mat-label>Cliente</mat-label>
+                        <input matInput type="text"  placeholder="Cliente" value="" 
+                            autocomplete="off" formControlName="sCliente" >
+                    </mat-form-field>--> 
+
+                    <mat-form-field class="fila1-cliente" appearance="fill">
+                        <mat-label>Cliente</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Cliente" formControlName="sCliente"  [matAutocomplete]="autoDataCliente" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataCliente="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionCliente | async" [value]="option.Nom_Cliente" (click)="CambiarValorCliente(option.Cod_Cliente,option.Abr_Cliente)">
+                                {{option.Nom_Cliente}}
+                            </mat-option> 
+                        </mat-autocomplete>                            
+                    </mat-form-field>
+
+                    <!--<mat-form-field class="fila1-estilo"> 
+                        <mat-label>Estilo</mat-label>
+                        <input matInput type="text"  placeholder="Estilo" value=""
+                            autocomplete="off" formControlName="sEstilo" >
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-color"> 
+                        <mat-label>Color</mat-label>
+                        <input matInput type="text"  placeholder="Color" value=""
+                            autocomplete="off" formControlName="sColor" >
+                    </mat-form-field>-->
+                    <mat-form-field class="fila1-estilo" appearance="fill">
+                        <mat-label>Estilo</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Estilo" formControlName="sEstilo"  [matAutocomplete]="autoDataEstilo" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataEstilo="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionEstilo | async" [value]="option.Cod_EstCli" >
+                                {{option.Cod_EstCli}}
+                            </mat-option> 
+                        </mat-autocomplete>                            
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-color" appearance="fill">
+                        <mat-label>Color</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Color" formControlName="sColor"  [matAutocomplete]="autoDataColor" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataColor="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionColor | async" [value]="option.Cod_ColCli" >
+                                {{option.Cod_ColCli}}
+                            </mat-option> 
+                        </mat-autocomplete>                            
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-auditor"> 
+                        <mat-label>OP</mat-label>
+                        <input matInput type="text"  placeholder="OP" value=""
+                            autocomplete="off" formControlName="sAuditor" >
+                    </mat-form-field>
+    
+            
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="buscarDefectosDerivados()"
+                    >                    
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+
+
+            </div>  
+
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+                
+
+                <table mat-table   class="mat-elevation-z8" #table [dataSource]="dataSource">
+                
+
+                    <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns"  >
+                        <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+    
+                        <td  mat-cell *matCellDef="let element" > {{element[column]}} </td>
+                      </ng-container>
+ 
+            
+                    
+                      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                      <!--<tr mat-row *matRowDef="let row; columns: columnsToDisplay;">(click)="EliminarRegistro(row.Abr_Motivo)"</tr>
+                      <tr mat-row (click)="AsignarCodRegistroVariableEliminar(row.Cod_Motivo)" *matRowDef="let row; columns: columnsToDisplay;"></tr>-->
+                      <tr mat-row  *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                </table>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons 
+                aria-label="Select page of periodic elements">
+               </mat-paginator>
+            </div>
+
+ 
+        </form>
+
+    </div>
+
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>     

@@ -1,0 +1,218 @@
+<div class="registro-container">
+  <div class="title">REGISTRO DE SERVICIO DE DESGLOSE</div>
+
+  <form [formGroup]="desgloseForm">
+
+    <div class="filtros">
+
+      <label for="partida">Partida:
+        <input
+          formControlName="partida"
+          type="text"
+          id="partida"
+          name="partida"
+
+        />
+      </label>
+
+
+      <label for="calificacionSelect">*
+        <button class="buscar-btn" (click)="buscar()">Buscar</button>
+      </label>
+
+      <label for="fechaInicio">Fecha Inicio:
+        <input
+          formControlName="fechaInicio"
+          type="datetime-local"
+          id="fechaInicio"
+          name="fechaInicio"
+        />
+      </label>
+
+      <label for="maquinaSelect">Proveedores:
+        <select id="maquinaSelect"  formControlName="proveedor" name="maquina">
+          <option *ngFor="let c of proveedoresList; let i = index" [value]="c.acronimo"
+                  [selected]="i === 0">{{ c.acronimo }}</option>
+        </select>
+      </label>
+
+
+      <label for="fechaFin">Fecha Fin:
+        <input
+          formControlName="fechaFin"
+          type="datetime-local"
+          id="fechaFin"
+          name="fechaFin"
+        />
+      </label>
+
+      <label for="calificacionSelect">Auditor:
+        <input
+          formControlName="auditor"
+          id="calificacionSelect"
+          type="text"
+          name="datosauditor"
+          [disabled]="true"
+        />
+      </label>
+
+    </div>
+
+
+    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+      <!-- Columna izquierda: lista de items -->
+
+      <div style="flex: 1 1 100%;">
+
+        <div formArrayName="items">
+          <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i"
+               class="mb-4" style="display: flex; gap: 1rem; align-items: flex-end;">
+
+            <!-- Columna 1: Tipo -->
+            <div style="flex: 1;">
+              <label for="descripcion{{i}}" style="display: block; font-weight: bold;">Tipo:</label>
+              <input
+                type="text"
+                formControlName="descripcion"
+                id="descripcion{{i}}"
+                [disabled]="true"
+              />
+            </div>
+
+            <!-- Columna 2: Cantidad -->
+            <div style="flex: 1;">
+              <label for="metros{{i}}" style="display: block; font-weight: bold;">Cantidad:</label>
+              <input
+                type="number"
+                formControlName="metros"
+                id="metros{{i}}"
+
+                (input)="calcularTotal()"
+              />
+            </div>
+
+          </div>
+        </div>
+
+
+    </div>
+
+
+      <div style="flex: 1 1 200px;">
+        <label for="total" style="font-weight: bold;">Total:</label>
+        <input
+          type="number"
+          formControlName="total"
+          name="datostotal"
+          id="total"
+          style="margin-top: 0.5rem;"
+
+        />
+      </div>
+
+      <div style="flex: 1 1 200px;">
+        <label for="colitas" style="font-weight: bold;">Colitas:</label>
+        <input
+          formControlName="colitas"
+
+          type="number"
+          name="datoscolitas"
+          id="colitas"
+          style="margin-top: 0.5rem;"
+        />
+      </div>
+
+    </div>
+    <BR>
+    <button (click)="registrar()" class="btnAgregar">Registrar</button>
+
+  </form>
+  <br>
+
+  <div class="modulo-desglose">
+    <div class="container mx-auto p-4">
+
+      <div class="title2">LISTA DE SERVICIO DE DESGLOSE</div>
+      <!-- Filtros -->
+      <div class="filtros-container">
+        <label>
+          FECHA INICIO:
+          <input type="date" [(ngModel)]="filtro.fechaInicio" class="filtro-input" />
+        </label>
+
+        <label>
+          PARTIDA:
+          <input type="text" [(ngModel)]="filtro.partida" class="filtro-input" />
+        </label>
+
+        <label>
+          FECHA FIN:
+          <input type="date" [(ngModel)]="filtro.fechaFin" class="filtro-input" />
+        </label>
+
+        <div class="boton-container">
+          <button class="filtrar-btn" (click)="filtrar()">Filtrar</button>
+        </div>
+      </div>
+
+      <!-- Tabla de resultados -->
+      <div class="tabla-container">
+        <table class="tabla-desglose">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>AUDITOR</th>
+              <th>PARTIDA</th>
+              <th>COLOR</th>
+              <th>CLIENTE</th>
+              <th>FECHA INICIO</th>
+              <th>FECHA FIN</th>
+              <th>PUÑO</th>
+              <th>CUELLO</th>
+              <th>PECHERA</th>
+              <th>TIRA</th>
+              <th>PRETINA</th>
+              <th>TOTAL</th>
+              <th>COLITAS</th>
+              <th>ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of datosDesglosefiltro">
+              <td>{{ item.id_Desglose }}</td>
+              <td>{{ item.auditor }}</td>
+              <td>{{ item.cod_Ordtra }}</td>
+              <td>{{ item.cod_Color }}</td>
+              <td>{{ item.proveedor }}</td>
+              <td>{{ item.fechaInicio | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+              <td>{{ item.fechaFin | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+              <td>{{ item.punio }}</td>
+              <td>{{ item.cuello }}</td>
+              <td>{{ item.pechera }}</td>
+              <td>{{ item.tira }}</td>
+              <td>{{ item.pretina }}</td>
+              <td>{{ item.total }}</td>
+              <td>{{ item.colitas }}</td>
+              <td>
+                <button (click)="editar(item)" class="btn-editar" title="Editar desglose">✎</button>
+                <button (click)="eliminar(item)" class="btn-eliminar" title="Eliminar desglose">🗑️</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Botón exportar -->
+        <div class="boton-exportar-container">
+          <button (click)="exportarExcel()" class="btn-exportar">
+            EXPORTAR EXCEL
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+

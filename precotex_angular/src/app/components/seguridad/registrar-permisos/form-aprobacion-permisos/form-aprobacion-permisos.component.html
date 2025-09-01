@@ -1,0 +1,97 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+  
+      <div class="title">Aprobación de Permisos</div>
+  
+      <form class="container-cuerpo" [formGroup]="formulario">
+        <div class="container-cuerpo-fila1">
+  
+          <!-- <button type="button" class="fila1-agregar" mat-flat-button (click)="openDialogTipos()">
+            <mat-icon aria-label="person">person</mat-icon>Trabajadores Permisos
+          </button> -->
+  
+          <button type="button" class="fila1-aprobacion" mat-flat-button routerLink="/RegistrarPermisos">
+            <mat-icon aria-label="check">cancel</mat-icon>Regresar
+          </button>
+  
+        </div>
+  
+        <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+        <div class="container-cuerpo-fila2">
+  
+  
+          <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+  
+            <ng-container matColumnDef="Num_Permiso">
+              <th mat-header-cell *matHeaderCellDef> Nº Permiso </th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Num_Permiso}}</td>
+            </ng-container>
+  
+            <ng-container matColumnDef="Fecha">
+              <th mat-header-cell *matHeaderCellDef> Fecha permiso </th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Fecha }}</td>
+            </ng-container>
+  
+  
+            <ng-container matColumnDef="Nom_Trabajador">
+              <th mat-header-cell *matHeaderCellDef> Trabajador </th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Nom_Trabajador}}</td>
+            </ng-container>
+  
+  
+  
+            <ng-container matColumnDef="Des_Tipo_Permiso">
+              <th mat-header-cell *matHeaderCellDef> Tipo de Permiso </th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Des_Tipo_Permiso}} - 
+                {{data_det.Cod_Motivo_Permiso == 'PPN' ? 'PERMISO PERSONAL' : data_det.Cod_Motivo_Permiso == 'PN2' ? 'PERMISO POR CITA MEDICA' : data_det.Cod_Motivo_Permiso == 'RRHH' ? 'PERMISO A RRHH' : data_det.Cod_Motivo_Permiso == 'TAR' ? 'TARDANZA' : data_det.Cod_Motivo_Permiso == 'PN1' ? 'PERMISO POR BAJA PRODUCCIÓN' : data_det.Cod_Motivo_Permiso == 'PBL' ? 'PERMISO POR BALANCE DE LINEA' : ''  }}</td>
+            </ng-container>
+  
+            <ng-container matColumnDef="Inicio">
+              <th mat-header-cell *matHeaderCellDef> Hora Inicio </th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Inicio}}</td>
+            </ng-container>
+  
+            <ng-container matColumnDef="Termino">
+              <th mat-header-cell *matHeaderCellDef> Hora Término </th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Termino}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="Nom_Trabajador_Aprob">
+              <th mat-header-cell *matHeaderCellDef> Trabajador Creación </th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Nom_Trabajador_Aprob}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="Observacion">
+              <th mat-header-cell *matHeaderCellDef> Observación </th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Observacion}}</td>
+            </ng-container>
+  
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Detalles</th>
+              <td mat-cell *matCellDef="let data_det">
+  
+                <a mat-icon-button style="margin-right:5px;" matTooltip="Aprobar Permiso" (click)="OpenDialogConfirmacion(data_det)">
+                  <mat-icon color="info">check_box_outline_blank</mat-icon>
+                </a>
+              </td>
+            </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+          </table>
+          <mat-paginator #MatPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+  
+      </form>
+  
+    </div>
+  
+  
+  </div>
+  
+  <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+  </ngx-spinner>

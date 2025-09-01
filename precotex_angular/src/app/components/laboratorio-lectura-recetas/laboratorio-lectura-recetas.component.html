@@ -1,0 +1,89 @@
+<div class="container">
+
+    <div class="grid-container">
+
+        <div class="title"><strong>LECTURAR TERMINO RECETA </strong></div>
+
+            <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+            <div class="container-cuerpo-fila1">
+
+
+                <mat-form-field class="fila1-sticker">
+                    <mat-label>STICKER NRO</mat-label>
+                    <input matInput type="text"   [(ngModel)]="NgStiker" formControlName="nsticker" (input)="onToggle()" />
+                </mat-form-field>
+
+
+                <mat-form-field class="fila1-analista">
+                           <mat-label>ANALISTA</mat-label>
+                          <input matInput type="text"  [(ngModel)]="NgAnalista"  formControlName="nanalista" />
+                </mat-form-field>
+
+                            
+                    <mat-form-field class="fila1-cliente">
+                        <mat-label>CLIENTE</mat-label>
+                        <input matInput type="text"   [(ngModel)]="NgCliente"  formControlName="ncliente" />
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-clave">
+                        <mat-label>CLAVE</mat-label>
+                        <input matInput type="text"  [(ngModel)]="NgClave"   formControlName="nclave" />
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-sdccolor">
+                        <mat-label>SDC COLOR</mat-label>
+                        <input matInput type="text"   [(ngModel)]="NgSdColor"  formControlName="nsdccolor" />
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-colorante">
+                        <mat-label>COLORANTE</mat-label>
+                        <input matInput type="text"  [(ngModel)]="NgColorante"   formControlName="ncolorante" />
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-fecpro">
+                        <mat-label>FEC. PROGAM.</mat-label>
+                        <input matInput type="text"  [(ngModel)]="NgFecpro"   formControlName="nfpro" />
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-fecterm">
+                        <mat-label>FEC. TERMINO</mat-label>
+                        <input matInput type="text"  [(ngModel)]="NgFecem"   formControlName="nfter" />
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-partida">
+                        <mat-label>PARTIDA</mat-label>
+                        <input matInput type="text"    [(ngModel)]="NgPartida"  formControlName="npartida" />
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-colorlab">
+                        <mat-label>COLOR LAB.</mat-label>
+                        <input matInput type="text"  [(ngModel)]="NgColorLab"   formControlName="ncollab" />
+                    </mat-form-field>
+
+
+            </div>
+
+
+
+            <div class="container-cuerpo-foot">
+
+                <button type="submit"   class="button-agregar" id="btnregistrar"   [disabled]="!formulario.valid"  (click)="submit(formDirective)" mat-flat-button>
+                  <mat-icon aria-label="person">add
+                  </mat-icon>  Registrar
+                </button>
+
+
+                <button type="button" class="button-cancelar" id="btncancelar"  mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>
+             
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+

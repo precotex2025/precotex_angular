@@ -1,0 +1,53 @@
+<div class="registro-container">
+  <div class="title">Lectura de Rollo para Embalaje</div>
+
+    <div class="filtros">
+
+      <label for="calificacionSelect">Partida:
+        <input
+  #scannerInput
+  type="text"
+  class="border p-2"
+  (input)="addCode(scannerInput.value); scannerInput.value = ''"
+  autofocus
+  placeholder="Escanea aquí"
+/>
+      </label>
+
+    </div>
+  <!-- Defectos registrados -->
+  <div class="panel defectos-registrados">
+    <h3>ROLLOS</h3>
+    <table>
+      <thead>
+        <tr>
+
+          <th>Id</th>
+          <th>Partida</th>
+          <th>Rollo</th>
+          <th>Tela</th>
+          <th>P. Crudo</th>
+          <th>Cliente</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of partidaPorRolloList ; let i = index; trackBy: trackByFn">
+          <td>{{ item.id }}</td>
+          <td>{{ item.codPartida }}</td>
+          <td>{{ item.codRollo }}</td>
+          <td>{{ item.codTela }}</td>
+          <td>{{ item.metros }}</td>
+          <td>{{ item.cliente }}</td>
+          <td>
+                <button class="delete-btn" (click)="eliminarRollo(item, i)">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+    <div class="acciones-finales">
+      <button class="defecto-btn" (click)="limpiar()">Limpiar</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,352 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+  }
+  
+  .grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0;
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    //height: 640px;
+    height: 86vh;
+    //position: absolute;
+  }
+  
+  .title {
+    background-color: #337ab7;
+    color: white;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+  }
+  
+  .container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+  }
+  
+  .container-cuerpo {
+    display: grid;
+  
+    grid-template:
+      "fila1" 90px
+      "fila2" 400px/99%;
+  }
+  
+  .container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+  }
+  
+  .container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+    height: 71vh;
+  }
+  
+  .container-cuerpo-foot {
+    grid-area: foot;
+  
+  }
+  
+  // .fila1-guia,
+  // .fila2-destino {
+  //     width: 100%;
+  // }
+  
+  
+  mat-form-field {
+    width: 100%;
+    padding: 0px 20px 10px 20px;
+  
+  }
+  
+  //fila 1
+  .container-cuerpo-fila1 {
+    display: grid;
+  
+    grid-template:
+      "col4 col5" auto /
+      250px 190px;
+  }
+  
+  
+  
+  
+  
+  .fila1-agregar {
+    grid-area: col4;
+    width: 97%;
+    height: 40px;
+    //max-width: 180px;
+    margin: auto;
+    
+    margin-top: 3px;
+    background-color: #261c7e;
+    color: #ffffff;
+  
+  }
+  
+  .fila1-aprobacion{
+    grid-area: col5;
+    width: 100%;
+    height: 40px;
+    //max-width: 180px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #f31111;
+    color: #ffffff;
+  }
+  
+  
+  
+  //fila foot
+  .container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+  
+    grid-template:
+      "fcol1 fcol2" auto /
+      200px auto;
+  }
+  
+  
+  .container-cuerpo-foot .fila1-agregar,
+  .button-modificar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+  }
+  
+  
+  
+  .button-modificar {
+    grid-area: fcol2;
+    background-color: #8f2121;
+    color: #ffffff;
+  }
+  
+  .mat-column-Num_Permiso,
+  .mat-column-Fec_Permiso,
+  .mat-column-Des_Tipo_Permiso,
+  .mat-column-Nombres_Autoriza,
+  .mat-column-Observacion,
+  .mat-column-Cod_Usuario,
+  .mat-column-acciones{
+    text-align: center;
+    font-size: 11px;
+    font-family: arial;
+    padding: 5px;
+    text-align: center
+  }
+  
+  .mat-column-nAuditoria {
+    width: 30px !important;
+    text-align: center
+  }
+  
+  .mat-column-Fecha {
+    width: 30px !important;
+    text-align: center
+  }
+  
+  .mat-column-Auditor {
+    width: 30px !important;
+    text-align: center
+  }
+  
+  .mat-column-Cliente {
+    width: 50px !important;
+    text-align: center
+  }
+  
+  .mat-column-Estilo {
+    width: 100px !important;
+    text-align: center
+  }
+  
+  .mat-column-Color {
+    width: 80px !important;
+    text-align: center
+  }
+  
+  .mat-column-Total {
+    width: 80px !important;
+    text-align: center
+  }
+  
+  .mat-column-Especiales {
+    width: 80px !important;
+    text-align: center
+  }
+  
+  .mat-column-Cant {
+    width: 80px !important;
+    text-align: center;
+  }
+  
+  .mat-column-modificar {
+    width: 30px !important;
+    text-align: center
+  }
+  
+  .mat-column-detalle {
+    width: 30px !important;
+    text-align: center
+  }
+  
+  .mat-header-cell {
+    text-align: center;
+  }
+  
+  /* ------------------------- */
+  /* TABLA */
+  /* ------------------------- */
+  .mat-header-cell {
+    text-align: center;
+    padding: 15px;
+    width: 10px;
+  
+  }
+  
+  th.mat-header-cell:last-of-type {
+    padding-right: 12px;
+  }
+  
+  .mat-elevation-z8 {
+    width: 100%;
+    font-family: arial;
+    font-size: 10px;
+  
+  }
+  
+  th.mat-cell {
+    padding: 15px;
+    text-align: center;
+  }
+  
+  td.mat-cell {
+    padding: 15px;
+    text-align: center;
+  }
+  
+  tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+  }
+  
+  tr:active {
+    background: #efefef;
+  }
+  
+  
+  
+  
+  
+  @media screen and (max-width: 699px) {
+    .mat-column-Num_Permiso,
+    .mat-column-Fec_Permiso,
+    .mat-column-Des_Tipo_Permiso,
+    .mat-column-Nombres_Autoriza,
+    .mat-column-Observacion,
+    .mat-column-Cod_Usuario,
+    .mat-column-acciones{
+      text-align: center;
+      font-size: 10px;
+      font-family: arial;
+      padding: 5px;
+      text-align: center
+    }
+  
+    .grid-container {
+      height: 710px;
+    }
+  
+    .container-cuerpo {
+      display: grid;
+      height: 95%;
+      grid-template:
+        "fila1" 78px
+        "fila2" 450px/99%;
+    }
+  
+    .container-cuerpo-fila1 {
+      display: grid;
+  
+      grid-template:
+        "col4 col5" 60px /
+        210px 190px;
+    }
+  
+
+    .fila1-agregar {
+      grid-area: col4;
+  
+    }
+    
+    .fila1-aprobacion {
+      grid-area: col5;
+  
+    }
+  
+  
+  
+  }
+  
+  @media screen and (max-width: 420px) {
+    .grid-container {
+      height: 710px;
+    }
+  
+    .container-cuerpo {
+      display: grid;
+      height: 95%;
+      grid-template:
+        "fila1" 215px
+        "fila2" 450px/99%;
+    }
+  
+    .container-cuerpo-fila1 {
+      display: grid;
+  
+      grid-template:
+        "col4 col5" 60px /
+        200px 154px;
+    }
+  
+    .fila1-agregar {
+      grid-area: col4;
+  
+    }
+    .fila1-aprobacion {
+      grid-area: col5;
+  
+    }
+  
+  
+  
+  }

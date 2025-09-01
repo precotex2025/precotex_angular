@@ -1,0 +1,147 @@
+ 
+
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: Arial, arial;
+    font-size: 15px;
+    margin: 0;
+}
+  
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 500px;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: blanchedalmond;
+    //color: #ffffff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid blanchedalmond;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 560px;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 470px
+        "foot" 55px / 
+        99%;
+}
+
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+
+
+.mat-column-Abreviatura,
+.mat-column-Nombre, 
+.mat-column-Seleccion
+
+.mat-column-Abreviatura { font-size: 14px;}
+.mat-column-Nombre { font-size: 14px; }
+.mat-column-Seleccion {font-size: 14px; text-align: center;}
+
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+ 
+}
+.paginador{
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+
+// @media screen and (max-width: 1500px){
+//     .container{
+//         width: 350px;
+//     }
+
+//     .grid-container{
+//         height: 350px;
+//     }
+//     .container-cuerpo {
+//         height: 500px;
+//         display: grid;
+    
+//         grid-template:
+//         "fila1" 380px
+//         "foot" 55px /
+//         99%;
+//     }
+  
+// }
+
+
+
+
+
+

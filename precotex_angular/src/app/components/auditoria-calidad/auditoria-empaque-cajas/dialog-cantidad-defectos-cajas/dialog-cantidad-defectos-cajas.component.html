@@ -1,0 +1,53 @@
+<div class="container"> 
+    <div class="grid-container">  
+        <div class="title">Cantidad Defecto</div>
+
+        <form class="container-cuerpo">
+            <div class="container-cuerpo-fila">
+                <mat-form-field appearance="fill">
+                    <mat-label>Cantidad</mat-label>
+                    <input matInput [(ngModel)]="data.Cantidad" name="Cantidad" type="number"  min="0" max="1000" placeholder="Cantidad" value="" autocomplete="off">
+                  </mat-form-field>
+            </div>
+
+            <div class="container-cuerpo-foot">
+               <button  type="submit" class="button-agregar" [mat-dialog-close]="data.Cantidad" mat-flat-button>
+                    <mat-icon aria-label="person" >check_circle</mat-icon>Aceptar
+                </button>
+
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off</mat-icon>Cancelar
+                </button>               
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+<!--
+
+<form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="onConfirmar(formDirective)" >
+            <div class="container-cuerpo-fila">
+                <mat-form-field> 
+                    <mat-label>Cantidad</mat-label>
+                    <input matInput type="number" placeholder="Cantidad" value="" autocomplete="off" formControlName="Cantidad" >
+                </mat-form-field>
+            </div>
+
+            <div class="container-cuerpo-foot">
+               <button  type="submit" class="button-agregar" [mat-dialog-close]="data.Cantidad" [disabled]="!formulario.valid" mat-flat-button>
+                    <mat-icon aria-label="person" >check_circle</mat-icon>Aceptar
+                </button>
+
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off</mat-icon>Cancelar
+                </button>               
+            </div>
+        </form>
+
+
+
+
+
+        -->

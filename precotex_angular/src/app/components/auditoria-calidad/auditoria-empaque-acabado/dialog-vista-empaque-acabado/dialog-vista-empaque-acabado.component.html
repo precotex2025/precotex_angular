@@ -1,0 +1,136 @@
+<span style="float: right;" aria-label="Close" class="cerrar" (click)="closeModal()" aria-hidden="true">&times;</span>
+<div class="row">
+    <div class="caja">
+        <p>Estilo</p>
+        <p class="strong">{{data.Des_EstCli}}</p>
+    </div>
+
+    <div class="caja">
+        <p>Cliente</p>
+        <p class="strong">{{data.Nom_Cliente}}</p>
+    </div>
+
+    <div class="caja">
+        <p>Temporada</p>
+        <p class="strong">{{data.Nom_TemCli}}</p>
+    </div>
+
+    <div class="caja">
+        <p>Fecha Registro</p>
+        <p class="strong">{{data.Fecha_Auditoria }}</p>
+    </div>
+
+    <div class="caja">
+        <p>Lote</p>
+        <p class="strong">{{data.Lote}}</p>
+    </div>
+
+    <div class="caja">
+        <p>Tamaño Muestra</p>
+        <p class="strong">{{data.Tamano_Muestra}}</p>
+    </div>
+
+    <div class="caja">
+        <p>Número de Defectos</p>
+        <p class="strong">{{data.Nro_Defectos}}</p>
+    </div>
+
+    <div class="caja">
+        <p>N° de Defectos / Muestra %</p>
+        <p class="strong">{{((data.Nro_Defectos*100)/data.Tamano_Muestra) | number : '1.2-2'}} %</p>
+    </div>
+ 
+   <div class="caja">
+       <p>Status</p>
+       <p class="strong">{{data.Flg_Status == '1' ? 'APROBADO' : data.Flg_Status == '2' ? 'RECHAZADO' : 'PENDIENTE'}}</p>
+   </div>
+
+   <div class="caja">
+       <p>Auditor</p>
+       <p class="strong">{{data.Nom_Auditor}}</p>
+   </div>
+   
+   <div class="caja">
+        <p>Obs.Medias</p>
+        <p class="strong">{{data.Obs_Medida}}</p>
+   </div>
+
+    <div class="caja">
+        <p>Observaciones</p>
+        <p class="strong">{{data.Observacion}}</p>
+    </div>
+</div>
+
+<!-- OPs -->
+<div class="row">
+    <mat-card>
+        <mat-card-content>
+            <div class="body-tabla">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>OP</th>
+                      <th>Color</th>
+                      <th>Destino</th>
+                      <th>PO</th>
+                      <th>Pedido</th>
+                      <th>Encajado</th>
+                    </tr>
+                  </thead>
+               
+                  <tr  *ngIf="dataOPs.length === 0" >
+                    <th colspan="4">No se encuentran registros</th>                     
+                  </tr>
+ 
+                    
+                  <tbody>                    
+                    <tr *ngFor="let item of dataOPs">
+                        <td>{{item.Cod_OrdPro}}</td>
+                        <td>{{item.Des_Present}}</td>
+                        <td>{{item.Des_Destino}}</td>
+                        <td>{{item.Cod_PurOrd}}</td>
+                        <td>{{item.Num_PreReq}}</td>
+                        <td>{{item.Num_Encajadas}}</td>
+                        </tr>
+                  </tbody>               
+                </table>
+              </div>
+        </mat-card-content>
+    </mat-card>
+</div>
+ 
+<!-- DEFECTOS -->
+<div class="row">
+    <b>DEFECTOS</b>
+    <mat-card>
+        <mat-card-content>
+            <div class="body-tabla">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Defecto</th>
+                      <th>Cantidad</th>
+                      <th>% Defecto</th>
+                    </tr>
+                  </thead>
+               
+                  <tr  *ngIf="dataDefectos.length === 0" >
+                    <th colspan="4">No se encuentran registros</th>                     
+                  </tr>
+ 
+                    
+                  <tbody>                    
+                    <tr *ngFor="let item of dataDefectos">
+                      <td>{{item.Cod_Defecto}}</td>
+                      <td>{{item.Descripcion}}</td>
+                      <td>{{item.Cantidad}}</td>
+                      <td>{{((item.Cantidad / data.Tamano_Muestra) * 100) | number : '1.2-2' }} %</td>
+                    </tr>
+                    
+                  </tbody>               
+                </table>
+              </div>
+        </mat-card-content>
+    </mat-card>
+</div>

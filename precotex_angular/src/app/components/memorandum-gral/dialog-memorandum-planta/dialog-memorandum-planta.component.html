@@ -1,0 +1,25 @@
+<div class="dialog-scroll">
+    <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+         <mat-card class="example-card" appearance="outlined">
+
+            <mat-card-header>
+                <div mat-card-avatar class="example-header-image"></div>
+                <mat-card-title>{{data.Title}} </mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content>
+
+                <div class="row">
+                    <mat-form-field appearance="outline" style="flex: 1;" > 
+                        <mat-label>Planta Origen :</mat-label> 
+                        <mat-select formControlName="ctrol_planta_ori" (selectionChange)="onSelectPlanta($event)"> 
+                            <mat-option *ngFor="let planta of dataPlantas" [value]="planta.num_Planta">{{ planta.des_Planta }}</mat-option> 
+                        </mat-select> 
+                    </mat-form-field> 
+                </div>                
+
+            </mat-card-content>
+
+         </mat-card>
+    </form>
+</div>

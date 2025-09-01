@@ -1,0 +1,230 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title">Tiempos Improductivos Tejeduría</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+
+
+
+                <!-- <mat-form-field class="fila1-fecha">
+                    <mat-label>Fecha</mat-label>
+                    <input matInput [matDatepicker]="Fec_Registro" autocomplete="off" formControlName="Fec_Registro">
+                    <mat-datepicker-toggle matSuffix [for]="Fec_Registro"></mat-datepicker-toggle>
+                    <mat-datepicker #Fec_Registro></mat-datepicker>
+                </mat-form-field> -->
+
+                <mat-form-field class="fila1-codmaquina" appearance="fill">
+                    <mat-label>Cod_Maquina</mat-label>
+                    <mat-select formControlName="Cod_Maquina" name="listar_operacionConductor">
+                        <mat-option *ngFor="let listar_origen of listar_operacionConductor"
+                            [value]="listar_origen.Codigo">
+                            {{listar_origen.Descripcion}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+                <mat-form-field class="fila1-fecha1" appearance="fill">
+                    <mat-label>Fecha 1</mat-label>
+                    <input matInput [matDatepicker]="Fec_Registro1" autocomplete="off" formControlName="fec_registro1"
+                    (dateChange)="pasarfecha()"  >
+                    <mat-datepicker-toggle matSuffix [for]="Fec_Registro1"></mat-datepicker-toggle>
+                    <mat-datepicker #Fec_Registro1></mat-datepicker>
+                </mat-form-field>
+
+
+                <mat-form-field class="fila1-fecha2" appearance="fill">
+                    <mat-label>Fecha 2</mat-label>
+                    <input matInput [matDatepicker]="Fec_Registro2" autocomplete="off" formControlName="fec_registro2"
+                    (dateChange)="pasarfecha()"  >
+                    <mat-datepicker-toggle matSuffix [for]="Fec_Registro2"></mat-datepicker-toggle>
+                    <mat-datepicker #Fec_Registro2></mat-datepicker>
+                </mat-form-field>
+
+
+
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="CargarLista()">
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+
+                <button type="button" class="fila1-excel" mat-flat-button (click)="generateExcel()">
+                    <mat-icon aria-label="create_new_folder">create_new_folder
+                    </mat-icon> Reporte Excel
+                </button>
+
+
+            </div>
+
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+
+
+                <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+
+                    <!--
+                        Fec_Registro
+                        Des_Maquina_Tejeduria
+                        Tip_Trabajador_Tejedor
+                        Cod_Trabajador_Tejedor
+                        Cod_Usuario
+                        Des_Maquina_Tejeduria
+                        Des_Motivo
+                        Fec_Creacion
+                        Fec_Hora_Fin
+                        Fec_Hora_Inicio
+                        Fec_Registro
+                        Nombres
+                        Observacion
+
+                        'Fec_Registro','Cod_Maquina','Des_Maquina_Tejeduria','Tip_Trabajador_Tejedor','Cod_Trabajador_Tejedor','Nombres','Cod_Motivo',
+                        'Des_Motivo','Fec_Hora_Inicio','Fec_Hora_Fin','Observacion','Fec_Creacion','Cod_Usuario'
+                    -->
+
+
+
+
+                        <!--<th mat-header-cell *matHeaderCellDef> {{column}} </th>
+                        <td  mat-cell *matCellDef="let element" > {{element.Fec_Registro}} </td>     -->
+                        <ng-container matColumnDef="Fec_Registro">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fec_Registro</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Fec_Registro}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Cod_Maquina">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod_Maquina</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_Maquina}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Des_Maquina_Tejeduria">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Des_Maquina_Tejeduria</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Des_Maquina_Tejeduria}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Tip_Trabajador_Tejedor">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tip_Trabajador_Tejedor</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Tip_Trabajador_Tejedor}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Cod_Trabajador_Tejedor">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod_Trabajador_Tejedor</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_Trabajador_Tejedor}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="nodoc">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">DNI</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.nodoc}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Nombres">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nombres</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Nombres}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Cod_Motivo">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod_Motivo</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_Motivo}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Des_Motivo">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Des_Motivo</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Des_Motivo}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Fec_Hora_Inicio">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fec_Hora_Inicio</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Fec_Hora_Inicio}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Fec_Hora_Fin">
+                            <th mat-header-cell *matHeaderCellDef mat-header-cell>Fec_Hora_Fin</th>
+                            <td mat-cell *matCellDef="let data_det"><span
+                                    *ngIf="data_det.Fec_Hora_Fin!=='01/01/1900 00:00:00'"> {{data_det.Fec_Hora_Fin}}
+                                </span> </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Observacion">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Observacion</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Observacion}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Fec_Creacion">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fec_Creacion</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Fec_Creacion}} </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="Cod_Usuario">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod_Usuario</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_Usuario}} </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="Acciones">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Acciones</th>
+                            <td mat-cell *matCellDef="let data_det">
+
+                                <a mat-icon-button style="margin-right:5px;" *ngIf="data_det.Cod_Maquina!=''"
+                                    (click)="openDialogModificar(data_det.Fec_Registro,data_det.Cod_Maquina,data_det.Cod_Motivo,data_det.Fec_Hora_Inicio,data_det.Fec_Hora_Fin,data_det.Observacion,data_det.nodoc,data_det.Fec_Creacion )">
+                                    <mat-icon color="success">create</mat-icon>
+                                </a>
+<!-- 
+                                <a mat-icon-button *ngIf="data_det.Cod_Maquina!=''"
+                                    (click)="EliminarRegistro(data_det.Fec_Registro,data_det.Cod_Maquina,data_det.Cod_Motivo,data_det.Fec_Hora_Inicio,data_det.Fec_Hora_Fin,data_det.nodoc,data_det.Fec_Creacion )">
+                                    <mat-icon color="warn">delete</mat-icon>
+                                </a> -->
+                            </td>
+                        </ng-container>
+
+                            <ng-container matColumnDef="Accion_Borrar">
+                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Borrar</th>
+                                <td mat-cell *matCellDef="let data_det">
+<!--     
+                                    <a mat-icon-button style="margin-right:5px;" *ngIf="data_det.Cod_Maquina!=''"
+                                        (click)="openDialogModificar(data_det.Fec_Registro,data_det.Cod_Maquina,data_det.Cod_Motivo,data_det.Fec_Hora_Inicio,data_det.Fec_Hora_Fin,data_det.Observacion,data_det.nodoc,data_det.Fec_Creacion )">
+                                        <mat-icon color="success">create</mat-icon>
+                                    </a> -->
+    
+                                    <a mat-icon-button *ngIf="data_det.Cod_Maquina!=''"
+                                        (click)="EliminarRegistro(data_det.Fec_Registro,data_det.Cod_Maquina,data_det.Cod_Motivo,data_det.Fec_Hora_Inicio,data_det.Fec_Hora_Fin,data_det.nodoc,data_det.Fec_Creacion )">
+                                        <mat-icon color="warn">delete</mat-icon>
+                                    </a>
+                                </td>
+                        </ng-container>
+
+                    <!--<ng-container matColumnDef="Fec_Registro">
+                        <th mat-header-cell *matHeaderCellDef> Fec_Registro </th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Fec_Registro}} </td>
+                      </ng-container>-->
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                </table>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </div>
+
+            <div class="container-cuerpo-foot">
+                <button type="button" class="button-agregar" mat-flat-button (click)="openDialog();">
+                    <mat-icon aria-label="person">add
+                    </mat-icon> Agregar
+                </button>
+                <!--<button type="button" class="button-cancelar" [routerLink]="['/SeguridadControlVehiculoAccion']" mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Regresar
+                </button> -->
+            </div>
+
+
+        </form>
+
+
+
+
+
+
+
+        
+
+    </div>
+
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

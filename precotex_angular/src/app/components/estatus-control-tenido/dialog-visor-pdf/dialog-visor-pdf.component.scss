@@ -1,0 +1,50 @@
+.image-container {
+  width: 100%;      /* El ancho del div será del 100% de su contenedor padre */
+  height: 90vh;    /* El alto del div será del 100% de la ventana del navegador */
+  overflow: hidden; /* Si la imagen es más grande que el div, se recortará */
+  position: relative; /* Necesario para algunos efectos y posicionamiento */
+}
+
+.responsive-image {
+  width: 100%; /* Escalar la imagen al 100% del ancho del contenedor */
+  height: auto; /* Mantener la proporción de la imagen */
+}
+
+.boton-regresar {
+  position: fixed; /* Permite que el botón permanezca visible al desplazarse */
+  top: 1rem; /* Espaciado superior proporcional */
+  right: 1rem; /* Espaciado derecho proporcional */
+  padding: 0.5rem 1rem; /* Espaciado interno flexible */
+  background-color: #007bff; /* Color del botón */
+  color: white; /* Color del texto */
+  border: none; /* Sin bordes */
+  border-radius: 50px; /* Bordes redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra del botón */
+  font-size: 1rem; /* Tamaño de fuente proporcional */
+  cursor: pointer; /* Cursor de mano */
+  z-index: 1000; /* Coloca el botón encima de otros elementos */
+  transition: background-color 0.3s ease, opacity 0.3s ease; /* Suaviza las transiciones */
+  opacity: 0.7; /* Ligera transparencia */
+}
+
+.boton-regresar:hover {
+  background-color: #0056b3; /* Color al pasar el ratón */
+  opacity: 1; /* Vuelve completamente visible al pasar el ratón */
+}
+
+.pdf-container {
+  width: 100%; /* Se adapta al ancho del contenedor padre */
+  height: calc(100vh - 4rem); /* Ajusta la altura tomando en cuenta el botón */
+  max-width: 100%; /* Asegura que no se desborde horizontalmente */
+  margin: 0 auto; /* Centra el contenedor en dispositivos grandes */
+  overflow: hidden; /* Evita el desbordamiento */
+  display: flex; /* Hace flexible el contenido del PDF */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+}
+
+iframe {
+  width: 100%; /* El PDF ocupa todo el ancho disponible */
+  height: 100%; /* El PDF ocupa todo el alto disponible */
+  object-fit: contain; /* Ajusta el contenido dentro del contenedor sin recortarlo */
+}

@@ -1,0 +1,25 @@
+<mat-card>
+    <mat-card-header style="display: flex; justify-content: space-around;">
+        <strong>Modificar Acceso Especial</strong>
+        <span aria-label="Close" class="cerrar" (click)="closeModal()" aria-hidden="true">&times;</span>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="row">
+            <div class="columna">
+                <mat-form-field>
+                    <mat-label>Fecha de Inicio</mat-label>
+                    <input matInput type="date" [(ngModel)]="Fec_Inicio_Acceso_Especial">
+                </mat-form-field>
+            </div>
+            <div class="columna">
+                <mat-form-field>
+                    <mat-label>Días de Acceso especial</mat-label>
+                    <input matInput type="number" placeholder="Ingrese días" [(ngModel)]="Dias_Acceso_Especial">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <button mat-flat-button color="primary" (click)="guardarRol()"><mat-icon>save</mat-icon> GUARDAR</button>
+        </div>
+    </mat-card-content>
+</mat-card>

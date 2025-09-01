@@ -1,0 +1,227 @@
+<div class="container">
+    <!-- ventana nro 3 - salida -->
+    <div class="grid-container">
+
+        <div class="title">{{cabecera}}</div>
+
+        <div class="find">
+            <div class="auditoriaForm">
+                <mat-card>
+                    <mat-card-header>
+                        Seleccionar OP-Secuencia
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="findcol1">
+                            <div class="caja">
+                                <mat-form-field class="example-full-width" appearance="fill">
+                                    <mat-label>Ingrese OC</mat-label>
+                                    <input matInput type="text" maxlength="5" [(ngModel)]="oc" (change)="changeOc()"
+                                        [readonly]="tipo == 2">
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Seleccionar Op</mat-label>
+                                    <mat-select [(ngModel)]="OP_Sec" (selectionChange)="changeOp()"
+                                        [disabled]="tipo == 2">
+                                        <mat-option *ngFor="let item of dataOp"
+                                            [value]="item.OP_Sec">{{item.OP_Sec}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <button type="button" class="button_agregar" [disabled]="deshabilitar"
+                                    (click)="guardarRegistro()" mat-flat-button color="primary">
+                                    <mat-icon aria-label="person">save
+                                    </mat-icon> {{boton}}
+                                </button>
+
+                            </div>
+                            <div class="caja">
+                                <button type="button" class="button_info" routerLink="/ControlMerma" mat-flat-button
+                                    color="primary">
+                                    <mat-icon aria-label="person">cancel
+                                    </mat-icon> Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <mat-card *ngIf="data != ''">
+                    <mat-card-header>
+                        Datos OP-Secuencia
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="findcol1">
+                            <div class="caja">
+                                <mat-form-field class="example-full-width" appearance="fill">
+                                    <mat-label>Cliente</mat-label>
+                                    <input matInput type="text" readonly [value]="data[0].Cliente">
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Estilo</mat-label>
+                                    <input matInput type="text" readonly [value]="data[0].Estilo">
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Color</mat-label>
+                                    <input matInput type="text" readonly [value]="data[0].Color">
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Partida</mat-label>
+                                    <input matInput type="text" readonly [value]="data[0].Partida">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="findcol1">
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Merma Declarada</mat-label>
+                                    <input matInput type="text" readonly [value]="data[0].Merma_Declarada">
+                                </mat-form-field>
+                            </div>
+                            <!-- <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Defecto Principal</mat-label>
+                                    <mat-select [(ngModel)]="Defecto_Principal">
+                                        <mat-option *ngFor="let item of dataDefectos"
+                                            [value]="item.Cod_Defecto">{{item.Des_Defecto}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div> -->
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Merma Física</mat-label>
+                                    <input matInput type="number" [(ngModel)]="Merma_Fisica" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Dif</mat-label>
+                                    <input matInput type="text" [(ngModel)]="Dif" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Notas</mat-label>
+                                    <input matInput type="text" [(ngModel)]="Notas" readonly>
+                                </mat-form-field>
+                            </div>
+                         
+                        </div>
+                        <div class="findcol1">
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill" >
+                                    <mat-label>Defecto Principal</mat-label>
+                                    <mat-select [(ngModel)]="Defecto_Principal" disabled>
+                                        <mat-option *ngFor="let item of dataDefectos"
+                                            [value]="item.Cod_Defecto">{{item.Des_Defecto}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>TURNO</mat-label>
+                                    <mat-select [(ngModel)]="Turno" disabled>
+                                        <mat-option value="1">TURNO 1</mat-option>
+                                        <mat-option value="2">TURNO 2</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Pzas. Buenas</mat-label>
+                                    <input matInput type="text" [(ngModel)]="Pzas_Buenas" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Prendas Mercado Local</mat-label>
+                                    <input matInput type="text" [(ngModel)]="Prendas_Mercado_Local" readonly>
+                                </mat-form-field>
+                            </div>
+                            
+                         
+                        </div>
+                        <div class="findcol1">
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Prendas Recuperadas</mat-label>
+                                    <input matInput type="text" [(ngModel)]="Prendas_Recuperadas" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Num Prendas</mat-label>
+                                    <input matInput type="text" [value]="Num_Prendas" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Num Merma</mat-label>
+                                    <input matInput type="text" [value]="Num_Merma" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Porcentaje</mat-label>
+                                    <input matInput type="text" [value]="Porcentaje" readonly>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                    </mat-card-content>
+                </mat-card>
+                <mat-card>
+                    <mat-card-header>
+                        Control Interno
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="findcol1">
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Peso</mat-label>
+                                    <input matInput type="number"  [(ngModel)]="Peso">
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Defecto Principal</mat-label>
+                                    <mat-select [(ngModel)]="Defecto_Principal_Interno">
+                                        <mat-option *ngFor="let item of dataDefectos"
+                                            [value]="item.Cod_Defecto">{{item.Des_Defecto}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Validación</mat-label>
+                                    <mat-select [(ngModel)]="Validacion">
+                                        <mat-option *ngFor="let item of dataValidacion"
+                                            [value]="item.Cod_Validacion">{{item.Des_Validacion}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Observaciones</mat-label>
+                                    <input matInput type="text" [(ngModel)]="Observaciones" >
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

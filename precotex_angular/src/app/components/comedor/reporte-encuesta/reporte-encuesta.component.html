@@ -1,0 +1,143 @@
+<div>
+  <div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+      <div class="title">Reporte de Comedor</div>
+
+      <div class="container-cuerpo">
+        <div class="container-cuerpo-fila1">
+
+          <mat-form-field class="fila1-fecha" appearance="fill">
+            <mat-label>Rango de Fecha</mat-label>
+            <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+              <input matStartDate formControlName="start" placeholder="Fecha Inicio">
+              <input matEndDate formControlName="end" placeholder="Fecha Final">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+            <mat-icon (click)="clearDate($event)" style=" position: absolute;
+                    float: right;
+                    top: -6px;
+                    margin-left: 190px;
+                    cursor: pointer;
+                    color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+            <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Fecha Invalida</mat-error>
+            <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Fecha Invalida</mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="fila1-buscar" appearance="fill">
+            <mat-label>Tipo</mat-label>
+            <mat-select [(ngModel)]="Tipo">
+              <mat-option value="">SELECCIONE</mat-option>
+              <mat-option value="ENCUESTA">ENCUESTA</mat-option>
+              <mat-option value="RECLAMO">RECLAMO</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="fila1-buscar" appearance="fill">
+            <mat-label>Sede</mat-label>
+            <mat-select [(ngModel)]="Sede">
+              <mat-option value="">SELECCIONE</mat-option>
+              <mat-option value="ATE">SANTA MARIA</mat-option>
+              <mat-option value="SANTA_CECILIA">SANTA CECILIA</mat-option>
+              <mat-option value="SANTA_ROSA">SANTA ROSA</mat-option>
+              <mat-option value="HUACHIPA_I">HUACHIPA I</mat-option>
+              <mat-option value="HUACHIPA_II">HUACHIPA II</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- <mat-form-field class="fila1-agregar" appearance="fill">
+            <mat-label>Tipo de Servicio</mat-label>
+            <mat-select >
+              <mat-option value="Desayuno">DESAYUNO</mat-option>
+              <mat-option value="RECLAMO">RECLAMO</mat-option>
+            </mat-select>
+          </mat-form-field> -->
+          <button type="button" class="fila1-agregar" (click)="buscar()" mat-flat-button>
+            <mat-icon aria-label="check">search</mat-icon>BUSCAR
+          </button>
+          <button type="button" class="fila1-aprobacion" (click)="imprimir()" mat-flat-button color="warn">
+            <mat-icon aria-label="check">file_copy</mat-icon>IMPRIMIR PDF
+          </button>
+          
+        </div>
+
+        <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+        <div class="container-cuerpo-fila2" >
+          <!-- <ngx-charts-bar-vertical [view]="view"   [scheme]="colorScheme" [results]="single" [gradient]="gradient" [xAxis]="showXAxis"
+                      [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+                      [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+                      (select)="onSelect($event)">
+                  </ngx-charts-bar-vertical> -->
+          <ngx-charts-bar-vertical-2d [view]="view" id="imagen" [scheme]="colorScheme" [results]="multi" [gradient]="gradient"
+            [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+            [legendTitle]="legendTitle" (select)="onSelect($event)" [showDataLabel]=true>
+          </ngx-charts-bar-vertical-2d>
+
+          <div id="contentToConvert" >
+            <p style="font-size:20px;">Fecha Inicio: {{Fecha1tring | date: 'dd/MM/Y'}} </p>
+            <p style="font-size:20px;">Fecha Fin: {{Fecha2tring | date: 'dd/MM/Y'}} </p>
+            <p style="font-size:20px;">Sede: {{Sede == 'ATE' ? 'SANTA MARIA' : Sede == 'SANTA_CECILIA' ? 'SANTA CECILIA' : Sede == 'SANTA_ROSA' ? 'SANTA ROSA' : Sede == 'HUACHIPA_I' ? 'HUACHIPA I' : Sede == 'HUACHIPA_II' ? 'HUACHIPA II' : ''}}</p>
+            <p style="font-size:20px;">Tipo: {{Tipo}}</p>
+
+            <h2>Desayuno ({{totalDesayuno}} Votos Registrados)</h2>
+            <div class="caja-preguntas" *ngFor="let item of dataDesayuno">
+
+
+              <h4 style="font-size:20px;">{{item.Pregunta}}</h4>
+              <span class="plomo">Votos Totales: {{item.total}}</span>
+              <span class="azul">Si: {{item.Positivo}} votos</span>
+              <span class="rojo">No: {{item.Negativo}} votos</span>
+              <br>
+              <div class="fondo">
+                <p><mat-icon>assessment</mat-icon> {{item.Aprobacion}}% de aprobación</p>
+              </div>
+            </div>
+
+            <h2 style="margin-top:10px">Almuerzos ({{totalAlmuerzo}} Votos Registrados)</h2>
+            <div class="caja-preguntas" *ngFor="let item of dataAlmuerzo">
+
+
+              <h4 style="font-size:20px;">{{item.Pregunta}}</h4>
+              <span class="plomo">Votos Totales: {{item.total}}</span>
+              <span class="azul">Si: {{item.Positivo}} votos</span>
+              <span class="rojo">No: {{item.Negativo}} votos</span>
+              <br>
+              <div class="fondo">
+                <p><mat-icon>assessment</mat-icon> {{item.Aprobacion}}% de aprobación</p>
+              </div>
+            </div>
+
+            <h2>Cena ({{totalCena}} Votos Registrados)</h2>
+            <div class="caja-preguntas" *ngFor="let item of dataCena">
+
+
+              <h4 style="font-size:20px;">{{item.Pregunta}}</h4>
+              <span class="plomo">Votos Totales: {{item.total}}</span>
+              <span class="azul">Si: {{item.Positivo}} votos</span>
+              <span class="rojo">No: {{item.Negativo}} votos</span>
+              <br>
+              <div class="fondo">
+                <p><mat-icon>assessment</mat-icon> {{item.Aprobacion}}% de aprobación</p>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </div>
+</div>
+
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

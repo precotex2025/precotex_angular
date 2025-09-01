@@ -1,0 +1,29 @@
+<div class="container">
+    <!-- ventana nro 2 - selecciona la accion salida/ingreso/historia/regresar -->
+    <div class="grid-container">
+
+        <div class="title">Indique el Tipo -  <span   style="font-weight: bold;font-size: 20px; color: yellow;">Sede: {{sede}}</span></div>
+
+        <div class="container-cuerpo">
+            <button type="button" class="button-accion1" mat-flat-button color="primary"
+                [routerLink]="['/crearVisita']">
+                Crear Nueva Visita
+            </button>
+
+            <button type="button" class="button-accion2" mat-flat-button color="primary"
+                [routerLink]="['/consultaVisita']">
+                Consultar Visita de Hoy             
+            </button>
+
+            <button type="button" class="button-accion3" mat-flat-button color="primary"
+            [routerLink]="['/reporteVisitas']">
+                Historial Visitas
+            </button>
+
+            <button type="button" class="button-accion6" mat-flat-button color="primary"
+                routerLink="/gestionVisitas">
+                <mat-icon aria-label="person">reply_all</mat-icon>Regresar
+            </button>
+        </div>
+    </div>
+</div>   

@@ -1,0 +1,625 @@
+
+
+
+.mat-form-field-appearance-fill, .mat-form-field-flex{
+
+    background-color: white  !important;
+    background: white !important;
+}
+
+ 
+.container-dialog {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+ 
+.grid-container-dialog {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 800px;
+    //position: absolute;  
+}
+  
+.title-dialog {
+    background-color: #ebc016;
+    color: black;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo-dialog {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 10px 5px 0px;
+    justify-content: center;
+}
+
+.container-cuerpo-dialog {
+    display: grid;
+
+    grid-template:
+        "fila1" 100px
+        "fila4" 10px
+        "fila3" 80px
+        "fila5" 0px
+        "fila2" 470px
+        "foot" 55px /
+        99%;
+}
+
+.container-cuerpo-fila1-dialog {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+
+.container-cuerpo-fila3-dialog {
+    grid-area: fila3;
+    overflow: auto;
+   
+   
+}
+.container-cuerpo-fila2-dialog {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+}
+.container-cuerpo-foot-dialog {
+    grid-area: foot;
+    
+}
+
+// .fila1-guia,
+// .fila2-destino {
+//     width: 100%;
+// }
+
+  
+mat-form-field {
+    width: 100%;
+    padding: 0px 0px 0px 20px;
+
+}
+
+:host ::ng-deep .fila1-cliente-dialog{
+    padding: none!important;
+   
+}
+
+//fila 1
+.container-cuerpo-fila1-dialog {
+    display: grid;
+
+    grid-template:
+        "col1 col2 col3 col4 col5 col6 col7 col8" auto /
+        100px 200px 200px 200px 200px 150px 100px 200px  auto;
+}
+
+.fila1-abr-dialog {
+    grid-area: col1;
+    
+} 
+
+
+.fila1-cliente-dialog {
+    grid-area: col2;
+    
+} 
+
+.fila1-estilo-dialog {
+    grid-area: col3;
+    
+}
+.fila1-temporada-dialog{
+    grid-area: col4;
+}
+
+
+.fila1-color-dialog {
+    grid-area: col5;
+    
+}
+.fila1-fecha-dialog {
+    grid-area: col6;
+    
+}
+.fila1-auditor-dialog {
+    grid-area: col7;
+   
+}
+
+.fila1-alerta-dialog {
+    grid-area: col8;
+}
+
+
+
+.container-cuerpo-fila3-dialog {
+  
+    display: grid;
+
+    grid-template:
+        "col1 col2 col3 col4 col5 col6 " auto /
+        130px 300px 80px 100px 110px 80px auto;
+    
+
+        .fila3-codigo-dialog {
+            grid-area: col1;
+            
+        } 
+        .fila3-defecto-dialog {
+            grid-area: col2;
+            
+        } 
+
+        .fila3-tallas-dialog {
+            grid-area: col3;
+            
+        } 
+        .fila3-insertarFila-dialog {
+            grid-area: col5;
+            
+        } 
+
+        .fila3-cant-dialog{
+            grid-area: col4;
+        }
+
+        .fila3-modificarFila-dialog{
+            grid-area: col6;
+        }
+    
+        
+}
+
+.container-cuerpo-fila5-dialog {
+  
+    display: grid;
+
+    grid-template:
+        "col1 col2 col3 col4" auto /
+        100px 100px 100px 100px auto;
+
+        .fila5-s-dialog {
+            grid-area: col1;
+            
+        }
+        .fila5-m-dialog {
+            grid-area: col2;
+            
+        }
+        .fila5-x-dialog {
+            grid-area: col3;
+            
+        }
+        .fila5-xl-dialog {
+            grid-area: col4;
+            
+        }
+        margin-top:-30px; 
+        
+}
+
+
+.container-cuerpo-fila4-dialog {
+    width: 100%;
+}
+
+
+//fila foot
+.container-cuerpo-foot-dialog {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        150px  150px auto;
+}
+
+
+.container-cuerpo-foot-dialog .button-agregar-dialog,.button-Eliminar-dialog,
+.button-modificar-dialog {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+.button-fila-dialog {
+    height: 40px;
+    margin: 0 auto;
+    margin: 5px 0px 0px 20px;
+    min-height: 35px;
+    max-width: 105px;
+    min-width: 55px;
+}
+
+.titulo_datos{
+    margin-left: 20px;
+    margin-top: -5px;
+
+}
+
+.button-agregar-dialog {
+    grid-area: fcol1;
+    background-color: #8f2121;
+    color: #ffffff;
+}
+.button-Eliminar-dialog {
+    grid-area: fcol1;
+    background-color: #8f2121;
+    color: #ffffff;
+}
+
+.button-fila-dialog {
+    grid-area: fcol3;
+    background-color: #8f2121;
+    color: #ffffff;
+ 
+
+}
+
+.button-modificar-dialog {
+    grid-area: fcol2;
+    background-color: #8f2121;
+    color: #ffffff;
+}
+
+.mat-column-Codigo,
+.mat-column-Motivo,
+.mat-column-Total,
+.mat-column-Cantidad,
+.mat-column-Eliminar
+{
+	text-align: center;
+	font-size: 13px;
+    font-family: arial;
+    padding: 15px;
+}
+.mat-column-Codigo {text-align: center}
+.mat-column-Motivo {text-align: center}
+.mat-column-Total {text-align: center}
+.mat-column-Cantidad {text-align: center}
+.mat-column-Eliminar {text-align: center}
+
+
+
+.mat-header-cell {text-align: center; padding: 15px; }
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+ 
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+
+}
+th.mat-cell{
+    padding:15px;
+    text-align: center;
+}
+td.mat-cell{
+    padding:15px;
+    text-align: center;
+}
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+.mat-column-Codigo[_ngcontent-wnw-c174], .mat-column-Motivo[_ngcontent-wnw-c174], .mat-column-Total[_ngcontent-wnw-c174], .mat-column-Cantidad[_ngcontent-wnw-c174], .mat-column-Eliminar[_ngcontent-wnw-c174], .mat-header-cell[_ngcontent-wnw-c174]{
+    padding: 15px;
+}
+
+
+
+
+
+@media screen and (max-width: 1728px){
+    
+    .grid-container-dialog{
+        height: 730px;
+    }
+    .container-cuerpo-dialog {
+        display: grid;
+    
+        grid-template:
+        "fila1" 200px
+        "fila4" 10px
+        "fila3" 70px
+        "fila5" 0px
+        "fila2" 300px
+        "foot" 55px /
+        99%;
+    }
+    .container-cuerpo-fila1-dialog{
+        display: grid;
+        
+        grid-template:
+        "col1 col2 col3 col4" 
+        "col5 col6 col7 col8"/
+        200px 200px 200px 200px;
+    }
+    .fila1-abr-dialog {
+        grid-area: col1;
+       
+    } 
+    .fila1-cliente-dialog {
+        grid-area: col2;
+
+    }
+    .fila1-estilo-dialog {
+        grid-area: col3;
+        
+    }
+
+    .fila1-temporada-dialog{
+        grid-area: col4;
+    }
+
+  
+
+   
+    .fila1-color-dialog {
+        grid-area: col5;
+        
+    }
+    .fila1-fecha-dialog {
+        grid-area: col6;
+        
+    }
+    .fila1-auditor-dialog {
+        grid-area: col7;
+        
+    }
+    .fila1-alerta-dialog {
+        grid-area: col8;
+    }
+    
+
+    .container-cuerpo-fila5-dialog{
+        margin-top:-30px;
+    }
+    
+      
+    
+}
+
+
+@media screen and (max-width: 1118px){
+    .grid-container-dialog{
+        height: 740px;
+    }
+    .container-cuerpo-dialog {
+        display: grid; 
+    
+        grid-template:
+        "fila1" 140px
+        "fila4" 10px
+        "fila3" 65px
+        "fila5" 0px
+        "fila2" 400px
+        "foot" 55px /
+        99%;
+    }
+    .container-cuerpo-fila1-dialog{
+        display: grid;
+        
+        grid-template:
+        "col1 col2 col3 col4" 60px
+        "col5 col6 col7 col8"/
+        220px 220px 220px 220px;
+
+      
+    }
+    .fila1-abr-dialog {
+        grid-area: col1;
+       width: 220px;
+    } 
+    .fila1-cliente-dialog {
+        grid-area: col2;
+        width: 220px;
+    }
+
+    .fila1-estilo-dialog {
+        grid-area: col3;
+        width: 220px;
+    }
+    .fila1-temporada-dialog {
+        grid-area: col4;
+        width: 220px;
+    }
+   
+    
+    .fila1-color-dialog {
+        grid-area: col5;
+        width: 220px;
+    }
+    .fila1-fecha-dialog {
+        grid-area: col6;
+        width: 220px;
+    }
+    
+    .fila1-auditor-dialog {
+        grid-area: col7;
+        width: 220px;
+    }
+    .fila1-alerta-dialog {
+        grid-area: col8;
+    }
+    
+
+    .container-cuerpo-fila3-dialog{
+        display: grid;
+        
+        grid-template:
+         "col1 col2 col3 col4 col5 col6" auto /
+        100px 280px 80px 80px 110px 70px auto;
+    
+
+        .fila3-codigo-dialog {
+            grid-area: col1;
+            
+        } 
+        .fila3-defecto-dialog {
+            grid-area: col2; 
+            
+        } 
+
+        .fila3-tallas-dialog {
+            grid-area: col3;
+            
+        } 
+        .fila3-insertarFila-dialog {
+            grid-area: col5;
+            
+        } 
+
+        .fila3-cant-dialog{
+            grid-area: col4;
+        }
+
+        .fila3-modificarFila-dialog{
+            grid-area: col6;
+        }
+
+  }
+}
+
+
+  @media screen and (max-width: 635px){
+   .grid-container-dialog{ 
+       height: 760px;
+   }
+    .container-cuerpo-dialog {
+        display: grid;
+    
+        grid-template: 
+        "fila1" 275px
+        "fila4" 10px
+        "fila3" 70px
+        "fila5" 0px
+        "fila2" 285px
+        "foot" 55px /
+        99%;
+    }
+    .container-cuerpo-fila1-dialog{
+        display: grid;
+         
+        grid-template:
+        "col1 col2" 60px
+        "col3 col4" 60px
+        "col5 col6" 60px
+        "col7 col8"/
+        150px 150px;
+    
+    .fila1-abr-dialog {
+        grid-area: col1;
+        width: 150px;
+    } 
+    .fila1-cliente-dialog {
+        grid-area: col2;
+        width: 150px;
+    }
+
+    .fila1-estilo-dialog {
+        grid-area: col3;
+        width: 150px;
+    }
+    .fila1-temporada-dialog {
+        grid-area: col4;
+        width: 150px;
+    }
+   
+    .fila1-color-dialog {
+        grid-area: col5;
+        width: 150px;
+    }
+    .fila1-fecha-dialog {
+        grid-area: col6;
+        width: 150px;
+    }
+    
+    .fila1-auditor-dialog {
+        grid-area: col7;
+        width: 150px;
+    }
+    .fila1-alerta-dialog {
+        grid-area: col8;
+    }
+    
+}
+
+    .container-cuerpo-fila3-dialog {
+  
+        display: grid;
+    
+        grid-template:
+        "col1 col2 col3 col3" 60px
+        "col3 col4 col5 col6" 60px /
+        200px 200px 200px 200px;
+        
+        
+        .fila3-codigo-dialog {
+            grid-area: col1;
+            
+        } 
+        .fila3-defecto-dialog {
+            grid-area: col2;
+            
+        } 
+
+        .fila3-tallas-dialog {
+            grid-area: col3;
+            width: 200px;
+        } 
+        .fila3-insertarFila-dialog {
+            grid-area: col5;
+            
+        } 
+
+        .fila3-cant-dialog{
+            grid-area: col4;
+        }
+
+        .fila3-modificarFila-dialog{
+            grid-area: col6;
+        }
+    }
+            
+}
+    
+   
+
+
+ 
+  
+
+  

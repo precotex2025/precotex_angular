@@ -1,0 +1,298 @@
+<div class="container">
+
+    <div class="grid-container">
+
+        <div class="title"><strong>REGISTRO DE CALIDAD ROLLO </strong></div>
+
+            <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" >
+            <div class="container-cuerpo-fila1">
+
+
+                <mat-form-field class="fila1-ot">
+                    <mat-label>O/T</mat-label>
+                    <input matInput type="text"   placeholder="OT" formControlName="not" />
+                </mat-form-field>
+
+
+                <mat-form-field class="fila1-codrollo">
+                                <mat-label>CÓDIGO DE ROLLO</mat-label>
+                                <input matInput type="text"   placeholder="ROLLO" formControlName="ncodrollo" />
+                </mat-form-field>
+
+                <mat-form-field class="fila1-pmaquina">
+                    <mat-label>PREFIJO MÁQUINA</mat-label>
+                    <input matInput type="text"   placeholder="PREFIJO MAQUINA" formControlName="npmaquina" />
+                 </mat-form-field>
+
+                            
+                    <mat-form-field class="fila1-calidad">
+                        <mat-label>CALIDAD</mat-label>
+                        <input matInput type="text"   placeholder="" formControlName="ncalidad" />
+                    </mat-form-field>
+
+                    <!-- <mat-label class="fila1-leyenda0">
+                        <mat-label>Clasificación de la calidad </mat-label><br>
+                         <mat-label>0: Rollo Sin calificar</mat-label><br> 
+                         <mat-label>1: Rollo de primera calidad <=5</mat-label><br>
+                         <mat-label>2: Rollo de calidad segunda >=6 a <=20</mat-label><br>
+                         <mat-label>3: Rollo de tercera calidad >20</mat-label><br>
+                         <mat-label>4: Rollo Observado >20</mat-label><br>
+                   </mat-label>
+
+                    <mat-label class="fila1-leyenda">
+                        <mat-label>Determinación del puntaje de penalizacion </mat-label><br>
+                         <mat-label>DEFECTOS</mat-label><br>
+                         <mat-label>0cm a <= 5cm = 1</mat-label><br>
+                         <mat-label>> 5cm a <= 10cm = 2</mat-label><br>
+                         <mat-label>> 10cm a <= 20cm = 3</mat-label><br>
+                         <mat-label>más de 20cm = 4</mat-label><br>
+                   </mat-label>
+
+
+                   <mat-label class="fila1-leyenda2">
+                    <mat-label></mat-label><br>
+                     <mat-label>AGUJEROS</mat-label><br>
+                     <mat-label>0cm a <= 1cm = 1</mat-label><br>
+                     <mat-label>>1cm a <= 2cm = 2</mat-label><br>
+                     <mat-label>>2cm a <= 4cm = 3</mat-label><br>
+                     <mat-label>>4cm a <= 30cm = 4</mat-label><br>
+               </mat-label> -->
+
+
+
+
+
+                          
+
+            </div>
+
+         
+                        
+            <div class="container-cuerpo-fila2">
+
+                
+
+                <mat-form-field class="fila2-inspector">
+                    <mat-label>INSPECTOR</mat-label>
+                    <mat-select formControlName="ninspector" name="listar_operacionAuditor">
+                        <mat-option *ngFor="let listar_origen of listar_operacionAuditor"
+                            [value]="listar_origen.Codigo">
+                            {{listar_origen.Nom_Auditor}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+                <mat-form-field class="fila2-observacion">
+                    <mat-label>OBSERVACIONES</mat-label>
+                    <input matInput type="text"  placeholder="OBSERVACIONES" formControlName="nobservacion" />
+                    
+                </mat-form-field> 
+
+                <!-- <mat-form-field class="fila2-digitador">
+                    <mat-label>DIGITADOR</mat-label>
+                    <mat-select formControlName="ndigitador" name ="listar_operacionAuditor">
+                        <mat-option *ngFor="let listar_origen of listar_operacionAuditor"
+                        [value]="listar_origen.Codigo">
+                        {{listar_origen.Nom_Auditor}}
+                    </mat-option>
+                    </mat-select>
+                </mat-form-field>  -->
+                
+                
+                <mat-form-field class="fila2-restriccion">
+                    <mat-label>RESTRICCIÓN</mat-label>
+                    <mat-select formControlName="nrestriccion" name ="listar_operacionRestriccion">
+                        <mat-option *ngFor="let listar_origen of listar_operacionRestriccion"
+                        [value]="listar_origen.Codigo">
+                        {{listar_origen.Descripcion}}
+                    </mat-option>
+                </mat-select>
+                </mat-form-field>  
+                
+                
+
+                <mat-form-field class="fila2-turno">
+                    <mat-label>TURNO</mat-label>
+                    <mat-select name="turno" formControlName="nturno">
+                        <mat-option value="1">PRIMER TURNO</mat-option>
+                        <mat-option value="2">SEGUNDO TURNO</mat-option>
+                        
+                    </mat-select>
+                </mat-form-field>
+
+                       
+                <mat-form-field class="fila2-defecto" appearance="fill">
+                        <mat-label>DEFECTO</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="INGRESE DEFECTO" 
+                        formControlName="ndefecto"  [matAutocomplete]="autoDataDE" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataDE="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionDE | async" [value]="option.Descripcion" 
+                            (click)="CambiarValorDef(option.Cod_Motivo,option.Descripcion)" (change)="valKeySize()">
+                                {{option.Cod_Motivo}} - {{option.Descripcion}}
+                            </mat-option> 
+                        </mat-autocomplete> 
+                    </mat-form-field>
+
+
+                    <mat-form-field class="fila2-codigodefecto">
+                        <mat-label>CÓDIGO DE DEFECTO</mat-label>
+                        <input matInput type="text"   placeholder="" formControlName="ncoddefecto" />
+                    </mat-form-field>
+
+
+                    
+                    <mat-form-field class="fila2-metros">
+                        <mat-label>FAC. CONVERSIÓN</mat-label>
+                        <input matInput type="text"   placeholder="" formControlName="nmetros"  (keypress)="validateFormat($event)" (keyup)="valKeySize()"/>
+                    </mat-form-field>
+
+
+                    <!-- <mat-form-field class="fila2-tamañodefecto">
+                        <mat-label>TAMAÑO DE DEFECTO</mat-label>
+                        <input matInput type="text"   placeholder="" formControlName="ntamdefecto" (keypress)="validateFormat($event)" (keyup)="valKeySize()" />
+                    </mat-form-field>
+
+                    <mat-form-field class="fila2-puntosdefecto">
+                        <mat-label>PUNTOS DEFECTO</mat-label>
+                        <input matInput type="text"   placeholder="" formControlName="npuntos" />
+                    </mat-form-field>
+
+                    <mat-form-field class="fila2-metroslineales">
+                        <mat-label>METROS LINEALES</mat-label>
+                        <input matInput type="text"   placeholder="" formControlName="metroslineales"
+                         (keypress)="validateFormat($event)" (change)="calculomt2()" />
+                    </mat-form-field> -->
+
+                     <mat-form-field class="fila2-anchotela">
+                        <mat-label>ANCHO TELA CMS</mat-label>
+                        <input matInput type="text"   placeholder="" formControlName="anchotela" 
+                        (keypress)="validateFormat($event)" />
+                    </mat-form-field> 
+
+                    <!--(keypress)="validateFormat($event)"  (change)="calculomt2()" /> -->
+
+
+                <!-- <mat-form-field class="fila2-c100m2">
+                        <mat-label>MTS CUADRADOS</mat-label>
+                        <input matInput type="text"   placeholder="" formControlName="MetrosCuad" 
+                        (keypress)="validateFormat($event)" />
+                    </mat-form-field>
+
+                   
+
+
+
+                    <mat-form-field class="fila2-tpuntos">
+                        <mat-label>TOTAL PUNTOS DEFECTOS</mat-label>
+                        <input matInput type="text"   placeholder="" formControlName="tpuntos" [ngModel]="Total_Puntos" />
+                    </mat-form-field> -->
+
+
+                    <mat-form-field class="fila2-InCalidad">
+                        <mat-label>CALIDAD</mat-label>
+                        <input matInput type="text"   placeholder="" formControlName="InpCalidad" 
+                        (keypress)="validateFormat($event)" />
+                    </mat-form-field>
+
+
+                      
+            </div>
+
+
+            <div class="container-cuerpo-fila3">
+
+                <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+                    <ng-container matColumnDef="MTRS" >
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >MTRS</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.MTRS}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="CODIGO" >
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >CODIGO</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_Motivo}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="DEFECTO" >
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >DEFECTO</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Descripcion_Def}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TAMANO_DEFECTO" >
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >TAMANO_DEFECTO CMS</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.size}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="PUNTOS" >
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >PUNTOS</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Ptos}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="NUM_SEC" >
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >SECUENCIA</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Num_secuencia}} </td>
+                    </ng-container>
+
+
+
+                    <ng-container matColumnDef="ACCION" >
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >ACCION</th>
+                        <td mat-cell  *matCellDef="let data_det"> 
+                            <button mat-icon-button color="accent"  (click)="EliminarDefecto(data_det.Ot, data_det.Rollo, data_det.Cod_Motivo, data_det.Prefijo_Maquina, data_det.Num_secuencia)">
+                                <mat-icon>delete</mat-icon>
+                                </button>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="OT" >
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >OT</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Ot}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ROLLO" >
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >ROLLO</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Rollo}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="PREFIJO_MAQUINA" >
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >PREFIJO_MAQUINA</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Prefijo_Maquina}} </td>
+                    </ng-container>
+
+                   
+
+                           <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr> 
+                        </table>
+
+
+                <mat-paginator [pageSizeOptions]="[5, 20, 30]" showFirstLastButtons
+                aria-label="Select page of periodic elements" >
+            </mat-paginator>
+              
+
+            </div> 
+
+
+
+
+            <div class="container-cuerpo-foot">
+
+                 <button type="button"   class="button-agregar" id="btnregistrar"  [disabled]="!formulario.valid"  (click)="submit(formDirective)" mat-flat-button>
+                  <mat-icon aria-label="person">add
+                  </mat-icon>  Registrar
+                </button> 
+
+
+                <button type="button" class="button-cancelar" id="btncancelar"  mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>
+             
+            </div>
+        </form>
+
+    </div>
+
+</div>

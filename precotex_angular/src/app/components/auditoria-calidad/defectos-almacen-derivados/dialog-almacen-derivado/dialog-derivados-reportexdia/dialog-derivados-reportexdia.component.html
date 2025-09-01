@@ -1,0 +1,120 @@
+<div class="container">
+  <!-- ventana nro 4 - historial -->
+  <div class="grid-container">
+
+    <div class="title">Reporte Cantidades por Fecha</div>
+    <form class="container-cuerpo" [formGroup]="formulario">
+      <div class="container-cuerpo-fila1">
+        <!-- <div class="body-tabla">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Tipo</th>
+                          <th>Segundas</th>
+                          <th>M.L</th>
+                          <th>Terceras</th>
+                          <th>Seg Exp.</th>
+                          <th>Otros</th>
+                          <th>Especiales</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of dataResultado">
+                          <td> <span *ngIf="item.Tipo == 'P'">Producción</span>
+                            <span *ngIf="item.Tipo == 'R'">Recuperación</span>
+                            <span *ngIf="item.Tipo == 'X'">Segundas Exp.</span>
+                        </td>
+                          <td>{{item.Segundas == null ? 0 :  item.Segundas}}</td>
+                          <td>{{item.ML == null ? 0 :  item.ML}}</td>
+                          <td>{{item.Terceras == null ? 0 :  item.Terceras}}</td>
+                          <td> {{item.Segundas_Expo == null ? 0 :  item.Segundas_Expo}}</td>
+                          <td> {{item.Otros == null ? 0 :  item.Otros}} </td>
+                          <td> {{item.Especiales == null ? 0 :  item.Especiales}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div> -->
+
+        <mat-form-field class="fila1-Total">
+          <mat-label>Total Ingreso</mat-label>
+          <input matInput type="text" placeholder="Total Ingreso" value="" autocomplete="off" formControlName="Total">
+        </mat-form-field>
+
+        <mat-form-field class="fila1-Especial">
+          <mat-label>Total Especiales</mat-label>
+          <input matInput type="text" placeholder="Total Especiales" value="" autocomplete="off"
+            formControlName="Especial">
+        </mat-form-field>
+
+        <mat-form-field class="fila1-Defecto">
+          <mat-label>Total Defectos</mat-label>
+          <input matInput type="text" placeholder="Total Defectos" value="" autocomplete="off"
+            formControlName="Defecto">
+        </mat-form-field>
+
+        <mat-form-field class="fila1-Mercado">
+          <mat-label>Segundas Vendibles.</mat-label>
+          <input matInput type="text" placeholder="Vendibles" value="" autocomplete="off" formControlName="Exportado">
+        </mat-form-field>
+
+        <mat-form-field class="fila1-Mercado1">
+          <mat-label>Mercado Local</mat-label>
+          <input matInput type="text" placeholder="Mercado Local" value="" autocomplete="off"
+            formControlName="Mercado_Local">
+        </mat-form-field>
+
+        <mat-form-field class="fila1-Mercado2">
+          <mat-label>Segundas Exp. A</mat-label>
+          <input matInput type="text" placeholder="Segundas Exp. A" value="" autocomplete="off"
+            formControlName="seg_Exp_A">
+        </mat-form-field>
+        <mat-form-field class="fila1-Mercado3">
+          <mat-label>Segundas Exp. B</mat-label>
+          <input matInput type="text" placeholder="Segundas Exp. B" value="" autocomplete="off"
+            formControlName="seg_Exp_B">
+        </mat-form-field>
+
+        <mat-form-field class="fila1-Mercado4">
+          <mat-label>Adicionales 2. A</mat-label>
+          <input matInput type="text" placeholder="Adicionales 2. A" value="" autocomplete="off" formControlName="ad_A">
+        </mat-form-field>
+        <mat-form-field class="fila1-Mercado5">
+          <mat-label>Adicionales 2. B</mat-label>
+          <input matInput type="text" placeholder="Adicionales 2. B" value="" autocomplete="off" formControlName="ad_B">
+        </mat-form-field>
+
+        <mat-form-field class="fila1-Mercado6">
+          <mat-label>Adicionales 3. A</mat-label>
+          <input matInput type="text" placeholder="Adicionales 3. A" value="" autocomplete="off"
+            formControlName="ad3_A">
+        </mat-form-field>
+        <mat-form-field class="fila1-Mercado7">
+          <mat-label>Adicionales 3. B</mat-label>
+          <input matInput type="text" placeholder="Adicionales 3. B" value="" autocomplete="off"
+            formControlName="ad3_B">
+        </mat-form-field>
+
+      </div>
+      <div class="container-cuerpo-foot">
+        <mat-form-field appearance="fill" class="fila1-color-dialog" style="margin-top: 5px;">
+          <mat-label>Auditor</mat-label>
+          <mat-select formControlName="Cod_Auditor" (selectionChange)="traerReporte()">
+            <mat-option *ngFor="let option of dataAuditores" [value]="option.Cod_Auditor">
+              {{option.Cod_Auditor}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button type="button" class="button-primary" color="primary" mat-button (click)="generateExcel()"
+          mat-flat-button>
+          <mat-icon aria-label="person">create_new_folder
+          </mat-icon> Exportar
+        </button>
+        <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close mat-flat-button>
+          <mat-icon aria-label="person">highlight_off
+          </mat-icon> Cerrar
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>

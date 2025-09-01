@@ -1,0 +1,284 @@
+<div class="container">
+  <div class="grid-container">
+    <div class="title"><strong> REGISTRO PARTICION DE ROLLO </strong></div>
+    <div class="body">
+      <form
+        class="container-cuerpo"
+        class="container-cuerpo"
+        [formGroup]="formulario"
+        #formDirective="ngForm"
+      >
+        <div class="container-cuerpo-fila1">
+          <mat-form-field appearance="fill" class="fila1-Txt_CodRollo">
+            <mat-label>COD. ROLLO</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="Txt_CodRollo"
+              (input)="onToggle()"
+              #myinputAdd
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Ot">
+            <mat-label>OT</mat-label>
+            <input matInput type="text" formControlName="Txt_Ot" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Pref_Maquina">
+            <mat-label>PREFIJO MAQUINA</mat-label>
+            <input matInput type="text" formControlName="Txt_Pref_Maquina" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Codigo_Rollo">
+            <mat-label>CODIGO ROLLO</mat-label>
+            <input matInput type="text" formControlName="Txt_Codigo_Rollo" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Maquina">
+            <mat-label>MAQUINA</mat-label>
+            <input matInput type="text" formControlName="Txt_Maquina" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Cod_Turno">
+            <mat-label>TURNO</mat-label>
+            <mat-select name="turno" formControlName="Txt_Cod_Turno">
+              <mat-option value="1">PRIMER TURNO</mat-option>
+              <mat-option value="2">SEGUNDO TURNO</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- PARTICION DE ROLLOS -->
+          <mat-form-field appearance="fill" class="fila1-Txt_Peso_Rollo">
+            <mat-label>PESO ROLLO</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="Txt_Peso_Rollo"
+              (keypress)="validateFormat($event)"
+              md-select-on-focus
+              #myinputPesoRollo
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Peso_Rollo_Nuevo">
+            <mat-label>PESO ROLLO NUEVO </mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="Txt_Peso_Rollo_Nuevo"
+              (keypress)="validateFormat($event)"
+              (keydown)="onKeydown1($event)"
+              #myinputPesoRolloNuevo
+            />
+          </mat-form-field>
+
+          <mat-form-field
+            appearance="fill"
+            class="fila1-Txt_Unidades_Metros_Rollo"
+          >
+            <mat-label>UNIDADES METROS / ROLLO </mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="Txt_Unidades_Metros_Rollo"
+              (keypress)="validateFormat($event)"
+              (keydown)="onKeydown2($event)"
+              #myinputUniMetRoll
+            />
+          </mat-form-field>
+
+          <button
+            class="button-Grabar"
+            mat-flat-button
+            type="button"
+            matTooltip="PARTICIONAR"
+            matTooltipPosition="above"
+            [disabled]="formulario.invalid"
+            (click)="GenerarParticion()"
+          >
+            <mat-icon aria-label="person">save</mat-icon> PARTICIONAR
+          </button>
+
+          <!-- <button
+                        class="button-Imprimir-Etiqueta"
+                        mat-flat-button
+                        type="button"
+                        matTooltip="APROBACIÓN"
+                        matTooltip="GRABAR"
+                        matTooltipPosition="above">
+                        <mat-icon aria-label="person">print </mat-icon>Zebra
+                        </button> -->
+
+          <!-- <button
+            class="button-Imprimir-Formato"
+            mat-flat-button
+            type="button"
+            matTooltip="IMPRIMIR FORMATO"
+            matTooltipPosition="above"
+          >
+            <mat-icon aria-label="person">print </mat-icon>FORMATO
+          </button> -->
+          <!-- PARTICION DE ROLLOS -->
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Ancho">
+            <mat-label>ANCHO</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="Txt_Ancho"
+              #myinputAncho
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Densidad">
+            <mat-label>DENSIDAD</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="Txt_Densidad"
+              #myinputDensidad
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Calidad">
+            <mat-label>CALIDAD</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="Txt_Calidad"
+              #myinputCalidad
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Metros">
+            <mat-label>METROS</mat-label>
+            <input matInput type="text" formControlName="Txt_Metros" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Observaciones">
+            <mat-label>OBSERVACIONES</mat-label>
+            <textarea
+              matInput
+              placeholder=""
+              formControlName="Txt_Observaciones"
+              rows="3"
+              #myinputObs
+            ></textarea>
+          </mat-form-field>
+        </div>
+        <!--   
+          <div class="container-cuerpo-fila2">
+          </div>
+           -->
+
+        <!-- <div class="container-cuerpo-fila3">
+      
+            <mat-form-field appearance="fill" class="fila3-Txt_CantDef">
+              <mat-label>CANT. DEFECTOS</mat-label>
+              <input matInput type="text" formControlName="Txt_CantDef"  (keypress)="validateFormat($event)" (keydown)="onKeydown4($event)" #myinputCantDef/>
+            </mat-form-field>
+  
+            <mat-form-field appearance="fill" class="fila3-Txt_FacConv">
+              <mat-label>FACT. CONVERSION</mat-label>
+              <input matInput type="text" formControlName="Txt_FacConv"  (keypress)="validateFormat($event)" (keydown)="onKeydown5($event)"  #myinputFactConv/>
+            </mat-form-field>
+  
+            <mat-form-field appearance="fill" class="fila3-Txt_Observaciones">
+              <mat-label>OBSERVACIONES</mat-label>
+              <textarea matInput placeholder="" formControlName="Txt_Observaciones" rows="5" ></textarea>
+            </mat-form-field>
+          </div>
+   -->
+
+        <div class="container-cuerpo-fila4">
+          <table
+            mat-table
+            #table
+            [dataSource]="dataSource"
+            class="mat-elevation-z8"
+          >
+            <ng-container matColumnDef="Num_Rollo">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                N° Rollo
+              </th>
+              <td mat-cell *matCellDef="let data_det_Rollo">
+                {{ data_det_Rollo.Num_Rollo }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Prefijo_Maquina">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                Pref. Maq.
+              </th>
+              <td mat-cell *matCellDef="let data_det_Rollo">
+                {{ data_det_Rollo.Prefijo_Maquina }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Codigo_Rollo">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                Cod. Rollo
+              </th>
+              <td mat-cell *matCellDef="let data_det_Rollo">
+                {{ data_det_Rollo.Codigo_Rollo }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Cod_Calidad">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                Calidad
+              </th>
+              <td mat-cell *matCellDef="let data_det_Rollo">
+                {{ data_det_Rollo.Cod_Calidad }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Peso_rollo_actual">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                Peso
+              </th>
+              <td mat-cell *matCellDef="let data_det_Rollo">
+                {{ data_det_Rollo.Peso_rollo_actual }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Observaciones">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                Obs.
+              </th>
+              <td mat-cell *matCellDef="let data_det_Rollo">
+                {{ data_det_Rollo.Observaciones }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="data_det_Rollo_2"></tr>
+            <tr mat-row *matRowDef="let row; columns: data_det_Rollo_2"></tr>
+          </table>
+
+          <!-- <mat-paginator [pageSizeOptions]="[5, 20, 30]" showFirstLastButtons
+          aria-label="Select page of periodic elements" >
+            </mat-paginator> -->
+        </div>
+
+        <div class="footer">
+          <button
+            class="button-Cancelar"
+            mat-flat-button
+            type="button"
+            mat-dialog-close
+            matTooltip="SALIR"
+            [disabled]="formulario.invalid"
+            (click)="Funcion_Cancelar()"
+          >
+            <mat-icon aria-label="person">exit_to_app </mat-icon>CANCELAR
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center">Cargando...</p>
+  </ngx-spinner>
+   -->

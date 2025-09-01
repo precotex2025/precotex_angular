@@ -1,0 +1,208 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height:100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+    display: flex;
+  }
+
+  .grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: 100%; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 100%;
+    min-height: 400px;
+    height: 100%;
+  }
+
+  .title {
+    background-color: #3f51b5;
+    color: rgb(255, 255, 255);
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+  }
+
+  .body {
+    grid-template:
+    "fila1" 90px
+    "fila2" 400px/99%;
+    padding: 20px; /* Relleno alrededor del contorno */
+    gap: 10px; /* Espacio entre las columnas (opcional) */
+  }
+
+
+  .full-width-card {
+    width: 100%; /* Hace que el mat-card ocupe todo el ancho */
+    margin: 0; /* Elimina márgenes adicionales */
+  }
+
+  .full-width-card-low {
+    width: 100%; /* Hace que el mat-card ocupe todo el ancho */
+    height: 400px;
+    margin: 0; /* Elimina márgenes adicionales */
+  }
+
+    //fila 1
+  .container-cuerpo-fila1 {
+    display: grid;
+    grid-template:
+      "col1 col2 col3 col4 col5 col6 col7" auto /
+      200px 200px 200px 200px 200px 200px 200px;
+      column-gap: 10px; /* Ajusta el espacio entre las columnas */
+  }
+
+.container-cuerpo-fila2 {
+  grid-area: fila2;
+  overflow: auto;
+  margin-bottom: 10px;
+  height: 71vh;
+}
+
+  .container-cuerpo-foot {
+  grid-area: foot;
+
+}
+
+  .fila1-fecha {
+    grid-area: col1;
+  }
+
+  .fila1-OT {
+    grid-area: col2;
+  }
+
+
+  .fila1-BtnBuscar {
+    width: 100%;
+    grid-area: col3;
+    height: 40px;
+    max-width: 180px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #0e740e;
+    color: #ffffff;
+  }
+
+  .fila1-BtnCrear{
+    grid-area: col4;
+    width: 100%;
+    height: 40px;
+    max-width: 180px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+  }
+
+  .fila1-BtnListo{
+    grid-area: col5;
+    width: 100%;
+    height: 40px;
+    max-width: 180px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+  }  
+
+  .fila1-BtnRevertir{
+    grid-area: col6;
+    width: 100%;
+    height: 40px;
+    max-width: 180px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;       
+  }
+
+    .fila1-BtnDevolver{
+    grid-area: col7;
+    width: 100%;
+    height: 40px;
+    max-width: 180px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;    
+  }
+
+  .mat-column-cod_Tela,
+.mat-column-cod_OrdTra,
+.mat-column-cod_ruta,
+.mat-column-nom_Cliente,
+.mat-column-fabric ,
+.mat-column-estado ,
+.mat-column-fec_Registro, 
+.mat-column-opciones {
+  text-align: center;
+  font-size: 11px;
+  font-family: arial;
+  padding: 5px;
+  text-align: center
+}
+
+    /* ------------------------- */
+  /* TABLA */
+  /* ------------------------- */
+.mat-header-cell {
+  text-align: center;
+  padding: 15px;
+  width: 10px;
+
+}
+
+th.mat-header-cell:last-of-type {
+  padding-right: 12px;
+}
+  
+.mat-elevation-z8 {
+  width: 100%;
+  font-family: arial;
+  font-size: 10px;
+}
+  
+th.mat-cell {
+  padding: 15px;
+  text-align: center;
+}
+
+td.mat-cell {
+  padding: 15px;
+  text-align: center;
+}
+
+tr:hover {
+  border-color: currentColor;
+  background: #E1E1E1;
+}
+
+tr:active {
+  background: #efefef;
+}
+
+//columna numero de memo
+.memo-cell {
+  color: blue;
+  font-weight: bold;
+}
+
+
+.tabla-scroll-vertical {
+  max-height: 300px;   /* ajusta el alto visible */
+  overflow-y: auto;    /* activa scroll vertical */
+  overflow-x: hidden;  /* evita scroll horizontal */
+}

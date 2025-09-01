@@ -1,0 +1,599 @@
+<div class="registro-container">
+  <div class="title">Inspeccion Calidad Final</div>
+
+    <div class="filtros">
+
+      <label for="auditorSelect">Inspector:
+        <select id="auditorSelect" [(ngModel)]="PartidaCab.auditor" name="auditor" [disabled]="isHeadDisabled">
+          <option *ngFor="let c of auditorList; let i = index"
+                  [value]="c.acronimo"
+                  [selected]="i === 0">{{ c.acronimo }}</option>          
+        </select>
+      </label>
+
+      <label for="supervisorSelect">Supervisor:
+        <select id="supervisorSelect" [(ngModel)]="PartidaCab.supervisor" name="supervisor" [disabled]="isHeadDisabled">
+          <option *ngFor="let c of supervisorList; let i = index"
+                  [value]="c.acronimo"
+                  [selected]="i === 0">{{ c.acronimo }}</option>
+        </select>
+      </label>
+
+      <label for="maquinaSelect">Maquina:
+        <select id="maquinaSelect" [(ngModel)]="PartidaCab.maquina" name="maquina" [disabled]="isHeadDisabled">
+          <option *ngFor="let c of maquinaList; let i = index" [value]="c.acronimo"
+                  [selected]="i === 0">{{ c.acronimo }}</option>
+        </select>
+      </label>
+
+      <div [hidden]="true">
+
+
+        <label for="turnoSelect">Turno:
+          <select id="turnoSelect" [(ngModel)]="PartidaCab.turno" name="turno">
+            <option *ngFor="let c of turnoList; let i = index" [value]="c.acronimo"
+                    [selected]="i === 0">{{ c.acronimo }}</option>
+          </select>
+        </label>
+
+        <label for="unidadNegocioSelect">Unidad de Negocio:
+          <select id="unidadNegocioSelect" [(ngModel)]="PartidaCab.unidadNegocio" name="unidadNegocio">
+            <option *ngFor="let c of unidadNegocioList; let i = index" [value]="c.acronimo"
+                    [selected]="i === 0">{{ c.acronimo }}</option>
+          </select>
+        </label>
+
+        <label for="estadoPartidaSelect">Estado Partida:
+          <select id="estadoPartidaSelect" [(ngModel)]="PartidaCab.estadoPartida" name="estadoPartida">
+            <option *ngFor="let c of estadoPartidaList; let i = index" [value]="c.acronimo"
+                    [selected]="i === 0">{{ c.acronimo }}</option>
+          </select>
+        </label>
+
+        <label for="calificacionSelect">Calificacion:
+          <select id="calificacionSelect" id="estadoPartidaSelect" [(ngModel)]="PartidaCab.calificacion" name="calificacion">
+            <option *ngFor="let c of calificacionList; let i = index" [value]="c.acronimo"
+                    [selected]="i === 0">{{ c.acronimo }}</option>
+          </select>
+        </label>
+
+        <label for="calificacionSelect">Estado Proceso:
+          <select id="calificacionSelect" id="estadoPartidaSelect" [(ngModel)]="PartidaCab.estadoProceso" name="calificacion">
+            <option *ngFor="let c of estadoProcesoList; let i = index" [value]="c.acronimo"
+                    [selected]="i === 0">{{ c.acronimo }}</option>
+          </select>
+        </label>
+
+        <label for="estadoPartidaSelect">Proceso Auditado:
+          <select id="estadoPartidaSelect" [(ngModel)]="PartidaCab.procesoAuditado" name="procesoAuditado">
+            <option *ngFor="let c of procesoAuditadoaList; let i = index"
+
+                    [selected]="i === 0">{{ c.acronimo }}</option>
+          </select>
+        </label>
+      </div>
+
+
+      <label for="calificacionSelect">Observaciones:
+        <input type="text" [(ngModel)]="PartidaCab.observaciones" name="datosObservaciones" [disabled]="isHeadDisabled"/>
+      </label>
+
+    </div>
+
+  <!-- Zona principal -->
+  <div class="main-grid" hidden>
+    <!-- Datos de partida -->
+    <div class="panel datos-partida">
+      <h3>Datos de partida</h3>
+
+      <label>Partida <input type="text" [(ngModel)]="PartidaCab.datosPartida" name="datosPartida"/></label>
+
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <!-- Botón Buscar (se oculta si checkbox está marcado) -->
+        <button class="buscar-btn" *ngIf="!checkboxSeleccionado" (click)="buscar()">Buscar</button>
+      </div>
+      <br>
+      <label>Tela <input type="text" [(ngModel)]="PartidaCab.datosTela" name="datosTela" disabled/></label>
+      <label>Cliente <input type="text" [(ngModel)]="PartidaCab.datosCliente" name="datosCliente" disabled/></label>
+
+
+
+
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <label>N° Rollo <input type="text" [value]="totalItems" readonly disabled/></label>
+
+        <!-- Botón Buscar (se oculta si checkbox está marcado) -->
+        <label >Ancho <input type="text" [(ngModel)]="PartidaCab.ancho" name="datosAncho"/></label>
+
+        <!-- Checkbox en una sola línea -->
+        <label>Densidad
+          <input type="text" [(ngModel)]="PartidaCab.densidad" name="datosDensidad"/>
+        </label>
+      </div>
+
+
+
+      <!--label>N° Rollo en proceso: {{ totalItems }}</label>-->
+
+      <!-- Resultados -->
+      <ul *ngIf="resultadoBusqueda.length > 0">
+        <li *ngFor="let item of resultadoBusqueda">
+          {{ item | json }}
+        </li>
+      </ul>
+
+      <div class="tabla-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <span class="visually-hidden">Selec.</span>
+                <input
+                  type="checkbox"
+                  [checked]="isAllSelected()"
+                  (change)="toggleSeleccionTodos($event)"
+                  aria-label="Seleccionar todos"
+                />
+
+              </th>
+              <th>Rollo</th>
+              <th>OT Tejeduria</th>
+              <th>Tela</th>
+              <th>Kgs Crudo</th>
+              <!--<th>Mtrs</th>-->
+
+              <!-- Mostrar ambas si empieza con RE -->
+              <ng-container *ngIf="primerosDos === 'RE'; else mostrarSoloUnidcrudo1">
+                <th>Und. Crudo</th>
+                <th>Medi Est.</th>
+                <th>Uni Real.</th>
+                <th>Largo</th>
+                <th>Alto</th>
+              </ng-container>
+
+              <!-- Mostrar solo Mtrs Audi si NO empieza con RE kgs_Crudo-->
+              <ng-template #mostrarSoloUnidcrudo1>
+                <th>Mtrs</th>
+                <th>Mtrs Real.</th>
+              </ng-template>
+
+              <!-- Mostrar ambas si empieza con RE
+              <ng-container *ngIf="primerosDos === 'RE'; else mostrarSoloMtrsAudi">
+                <th>Medi Audi.</th>
+              </ng-container>-->
+
+              <!-- Mostrar solo Mtrs Audi si NO empieza con RE
+              <ng-template #mostrarSoloMtrsAudi>
+                <th>Mtrs Audi.</th>
+              </ng-template>-->
+              <th>Calidad</th>
+              <!--<th>Ancho</th>
+              <th>Prim. 5mts</th>
+              <th>Medio</th>
+              <th>Ult. 5mts</th>
+              <th>Densidad</th>-->
+              <th>Archivo</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of pagedPartidaItemList; let i = index; trackBy: trackByFn" [class.seleccionado]="item.sel">
+              <td>
+                <input type="checkbox" [checked]="item.sel" (change)="toggleSeleccion(item, i)" />
+              </td>
+              <td>{{ item.rollo }}</td>
+              <td>{{ item.ot_Tejeduria }}</td>
+              <td>{{ item.tela_Comb }}</td>
+              <td>{{ item.kgs_Crudo }}</td>
+              <!-- Mostrar ambas si empieza con RE -->
+              <ng-container *ngIf="primerosDos === 'RE'; else mostrarSoloUnidcrudo">
+                <td>{{ item.und_Crudo }}</td>
+                <td>{{ item.med_Std }}</td>
+
+                <td>
+                  <ng-container *ngIf="item.isEditing; else showUnd_Real">
+                    <input type="text" [(ngModel)]="item.und_Real" style="width: 80px;" />
+                  </ng-container>
+                  <ng-template #showUnd_Real>{{ item.und_Real }}</ng-template>
+                </td>
+
+                <td>
+                  <ng-container *ngIf="item.isEditing; else showLargo">
+                    <input type="text" [(ngModel)]="item.largo" style="width: 80px;" />
+                  </ng-container>
+                  <ng-template #showLargo>{{ item.largo }}</ng-template>
+                </td>
+
+                <td>
+                  <ng-container *ngIf="item.isEditing; else showAlto">
+                    <input type="text" [(ngModel)]="item.alto" style="width: 80px;" />
+                  </ng-container>
+                  <ng-template #showAlto>{{ item.alto }}</ng-template>
+                </td>
+
+                <td>
+                  <ng-container *ngIf="item.isEditing; else showCalidad">
+                    <input type="number" [(ngModel)]="item.calidadAuditada" style="width: 100px;" />
+                  </ng-container>
+                  <ng-template #showCalidad>{{ item.calidadAuditada }}</ng-template>
+                </td>
+              </ng-container>
+
+              <!-- Mostrar solo Mtrs Audi si NO empieza con RE -->
+              <ng-template #mostrarSoloUnidcrudo>
+                <td>{{ item.mtrs2_T === 0 ? '0' : item.mtrs2_T }}</td>
+
+                <td>
+
+                  <ng-container *ngIf="item.isEditing; else showMtrsAuditados">
+                    <input type="text" [(ngModel)]="item.mtrs2_R" style="width: 80px;" />
+                  </ng-container>
+                  <ng-template #showMtrsAuditados>{{ item.mtrs2_R }}</ng-template>
+           
+
+                  <!-- <ng-container *ngIf="item.isEditing; else showMtrsAuditados">
+                    <input type="text" [(ngModel)]="item.mtrsAuditados" style="width: 80px;" />
+                  </ng-container>
+                  <ng-template #showMtrsAuditados>{{ item.mtrsAuditados }}</ng-template> -->
+                </td>
+
+                <td>
+
+                  <ng-container *ngIf="item.isEditing; else showCalidad">
+                    <input type="number" [(ngModel)]="item.calidad" style="width: 100px;" />
+                  </ng-container>
+                  <ng-template #showCalidad>{{ item.calidad }}</ng-template>                  
+
+                  <!-- <ng-container *ngIf="item.isEditing; else showCalidad">
+                    <input type="number" [(ngModel)]="item.calidadAuditada" style="width: 100px;" />
+                  </ng-container>
+                  <ng-template #showCalidad>{{ item.calidadAuditada }}</ng-template> -->
+
+                </td>
+              </ng-template>
+
+              <td>
+                <input type="file"
+                       accept="*/*"
+                       (change)="onFileSelected($event, item)"
+                       capture="environment"
+                       style="display: none;"
+                       #fileInput />
+                <button type="button"
+                        (click)="fileInput.click()"
+                        title="Cargar archivo o tomar foto">
+                  📎 Archivo
+                </button>
+                <span *ngIf="item.archivoNombre">📄 {{ item.archivoNombre }}</span>
+              </td>
+
+              <td>
+
+                <ng-container *ngIf="item.isEditing; else editButton">
+                  <button (click)="guardarEdicion(item)" title="Guardar">💾</button>
+                </ng-container>
+
+                <ng-template #editButton>
+                  <button (click)="editarItem(item)" title="Editar">✏️</button>
+                </ng-template>
+
+                <ng-container *ngIf="primerosDos != 'RE'">
+                  <button (click)="abrirModalUnirRollos(item)" title="Unir rollos">🖇️</button>
+                </ng-container>
+
+                <ng-container *ngIf="primerosDos === 'RE'">
+                  <button (click)="declararRectilineo(item)" title="Declarar Rectilineo">📩</button>
+                  <!--<button (click)="abrirModalUnirRollos(item)" title="Unir rollos">🖇️</button>-->
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+        <div class="pagination">
+          <button (click)="previousPage()" [disabled]="currentPage === 1">
+            Atras
+          </button>
+          <span>Page {{ currentPage }} / {{ totalPages }}</span>
+          <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Lista de defectos -->
+    <div class="panel lista-defectos">
+      <h3>Lista defectos</h3>
+      <div class="defecto-grid">
+        <button
+  class="defecto-btn"
+  *ngFor="let defecto of defectoList | paginate: { itemsPerPage: 18, currentPage: p }"
+  (click)="openOptionsPopup(defecto.coD_MOTIVO)"
+  [ngClass]="{
+    'categoria-aca': selectedCategoria === 'ACA',
+    'categoria-hil': selectedCategoria === 'HIL',
+    'categoria-tej': selectedCategoria === 'TEJ',
+    'categoria-tin': selectedCategoria === 'TIN'
+  }"
+>
+  {{ defecto.defecto }}
+</button>
+      </div>
+
+      <pagination-controls (pageChange)="p = $event" class="custom-pagination"></pagination-controls>
+
+      <div *ngIf="showOptionsPopup" class="options-popup">
+        <h3>Seleccione Grado</h3>
+
+      <input type="hidden" [(ngModel)]="selectedCodMotivo" name="codMotivo">
+      <div *ngFor="let i of [1]">
+          <div class="option-button-group">
+              <button type="button" (click)="selectOption(i, '1')">Grado 1</button>
+              <button type="button" (click)="selectOption(i, '2')">Grado 2</button>
+              <button type="button" (click)="selectOption(i, '3')">Grado 3</button>
+              <button type="button" (click)="selectOption(i, '4')">Grado 4</button>
+              <button type="button" (click)="selectOption(i, '5')">Grado 5</button>
+          </div>
+      </div>
+      <button class="btnCerrar" type="button" (click)="closeOptionsPopup()">Cerrar</button>
+    </div>
+
+      <div class="categorias">
+        <button class="defecto-btnACA1" (click)="cargarDefectos('ACA')">acabados</button>
+        <button class="defecto-btnHIL2"(click)="cargarDefectos('HIL')">hilanderia</button>
+        <button class="defecto-btnTEJ3"(click)="cargarDefectos('TEJ')">tejeduria</button>
+        <button class="defecto-btnTIN4"(click)="cargarDefectos('TIN')">tintoreria</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Defectos registrados -->
+  <div class="panel defectos-registrados">
+    <h3>Defectos registrados</h3>
+    <table>
+      <thead>
+        <tr>
+          <!--<th>Selec.</th>-->
+          <th>Tela</th>
+          <th>Rollo</th>
+          <th>Motivo</th>
+          <th>Metros</th>
+          <th>Cantidad</th>
+          <th>Grado</th>
+          <th>Accion</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- <tr *ngFor="let defecto of defectosRegistrados; let i = index; trackBy: trackByFn "> -->
+          <tr *ngFor="let defecto of dataListadoDefectos; let i = index; trackBy: trackByFn ">
+          <!--<td>
+            <input type="checkbox" [checked]="defecto.sel"
+            />
+          </td>-->
+
+          <td>{{ defecto.cod_Tela }}</td>
+          <td>{{ defecto.codigo_Rollo }}</td>
+          <td>{{ defecto.descripcion }}</td>
+          <td>{{ defecto.mtrs }}</td>
+          <td>{{ defecto.cantidad }}</td>        
+          <td>{{ defecto.grado }}</td>     
+
+
+          <!-- ANTES
+          <td>{{ defecto.codTela }}</td>
+          <td>{{ defecto.codRollo }}</td>
+          <td>{{ defecto.codMotivo }}</td>
+          <td>{{ defecto.metros }}</td>
+          <td>{{ defecto.grado }}</td>
+          -->
+
+          <td>
+            <button class="delete-btn" (click)="eliminarDefecto(defecto, i)">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="acciones-finales">
+      <button class="defecto-btn" (click)="registrar()">Registrar</button>
+      <div *ngIf="isSaving" class="loading-container">
+        <img src="assets/spinner.gif" alt="Guardando..." width="40" />
+        <p>Guardando información...</p>
+      </div>
+
+      <div *ngIf="mensajeExito" class="mensaje-resultado">
+        {{ mensajeExito }}
+      </div>
+      <button class="defecto-btn" (click)="limpiar()">Limpiar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Rectilineo -->
+<div *ngIf="mostrarModalRectilineo" class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Número de Rollo N° [{{ itemSeleccionado?.codigo || '' }}]</h3>
+      <button (click)="cerrarModal()">✖</button>
+    </div>
+
+    <table class="modal-table">
+      <thead>
+        <tr>
+          <th>COD_TALLA</th>
+          <th>CANTIDAD</th>
+          <th>CALIDAD</th>
+          <th>ACCION</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- Filas agregadas dinámicamente -->
+        <tr *ngFor="let dato of listaRectilineos; let i = index">
+          <td>{{ dato.codTalla }}</td>
+          <td>{{ dato.cantidad }}</td>
+          <td>{{ dato.calidad }}</td>
+          <td>
+            <button (click)="eliminarFila(i)">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="modal-footer">
+
+      <label>
+        Partida:
+        <input type="text" [(ngModel)]="nuevoDato.partida"  disabled=""/>
+      </label>
+
+      <label>
+        Cod. Talla:
+        <input type="text" [(ngModel)]="nuevoDato.codTalla"  disabled=""/>
+      </label>
+      <label>
+        Cant. Rollos:
+        <input type="number" [(ngModel)]="nuevoDato.cantidad" />
+      </label>
+      <label>
+        Calidad:
+        <input type="number" [(ngModel)]="nuevoDato.calidad" />
+      </label>
+
+      <div class="modal-actions">
+        <button (click)="agregarRectilineo()" title="Agregar">📤</button>
+        <button (click)="guardarRectilineo()" title="Guardar">💾</button>
+        <button (click)="cerrarModal()" title="Limpiar">↩️</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal de Unión de Rollos -->
+<div *ngIf="mostrarModal" class="modal-backdrop">
+  <div class="modal-container">
+    <h2 class="modal-title">Unión de Rollos</h2>
+
+    <div class="section-box">
+      <!-- Rollo 1 -->
+      <div>
+        <h3 class="section-title">Datos de Rollo 1</h3>
+
+        <div class="mb-2">
+          <label class="label-input">OT Tejeduria</label>
+          <input type="text" [value]="rollo1.ot_tejeduria" class="input-control" readonly />
+        </div>
+
+        <div class="mb-2">
+          <label class="label-input"># Rollo</label>
+          <input type="text" [value]="rollo1.codigo" class="input-control" readonly />
+        </div>
+
+        <div class="mb-2">
+          <label class="label-input">Kilos Rollo</label>
+          <input type="text" [value]="rollo1.kilos" class="input-control" readonly />
+        </div>
+
+        <div class="mb-2">
+          <label class="label-input">Talla Rollo</label>
+          <input type="text" [value]="rollo1.talla" class="input-control" readonly />
+        </div>
+
+        <div class="mb-2">
+          <label class="label-input">Unidades Rollo</label>
+          <input type="text" [value]="rollo1.unidades" class="input-control" readonly />
+        </div>
+      </div>
+
+
+      <!-- Rollo 2 -->
+      <div>
+        <h3 class="section-title">Datos de Rollo 2</h3>
+
+        <div class="mb-2">
+          <label class="label-input">OT Tejeduria</label>
+          <input type="text" [(ngModel)]="rollo2.ot_tejeduria" [readonly]="rollo2Bloqueado"
+          class="input-control" />
+        </div>
+
+        <div class="mb-2">
+          <label class="label-input"># Rollo</label>
+          <input type="text" [(ngModel)]="rollo2.codigo" [readonly]="rollo2Bloqueado"
+          class="input-control" />
+        </div>
+        <div class="mb-2">
+          <label class="label-input">Kilos Rollo</label>
+          <input type="text" [(ngModel)]="rollo2.kilos" [readonly]="rollo2Bloqueado"
+          class="input-control" />
+        </div>
+        <div class="mb-2">
+          <label class="label-input">Talla Rollo</label>
+          <input type="text" [(ngModel)]="rollo2.talla" [readonly]="rollo2Bloqueado"
+          class="input-control" />
+        </div>
+        <div class="mb-2">
+          <label class="label-input">Unidades Rollo</label>
+          <input type="text" [(ngModel)]="rollo2.unidades" [readonly]="rollo2Bloqueado"
+          class="input-control" />
+        </div>
+      </div>
+
+    </div>
+
+    <div >
+      <div class="section-box">
+
+        <table class="modal-table w-full text-sm border">
+          <thead class="bg-gray-100">
+            <tr>
+              <th>ID</th>
+              <th>ROLLO</th>
+              <th>MEDIDA</th>
+              <th>KGS CRUDO</th>
+              <th>TELA COMBINADA</th>
+              <th>UNIDAD CRUDO</th>
+              <th>CALIDAD</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let dato of unionRollosList; let i = index"
+              (click)="seleccionarFila(dato)"
+              [ngClass]="{
+                'bg-blue-100 text-blue-900 font-semibold': dato.rollo === rollo2.codigo,
+                'hover:bg-blue-50': true,
+                'cursor-pointer': true,
+                'transition-colors': true
+              }"
+            >
+              <td>{{ dato.id }}</td>
+              <td class="flex items-center gap-2">
+                <span>{{ dato.rollo }}</span>
+                <span *ngIf="dato.rollo === rollo2.codigo" class="text-green-600 text-lg">✅</span>
+              </td>
+              <td>{{ dato.med_std }}</td>
+              <td>{{ dato.kgs_crudo }}</td>
+              <td>{{ dato.tela_comb }}</td>
+              <td>{{ dato.und_crudo }}</td>
+              <td>{{ dato.calidad }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+      <button (click)="unirRollo()" class="modal-btn-primary">Unir Rollo</button>
+      <button (click)="cerrarModal2()" class="modal-btn-secondary">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>
+
+

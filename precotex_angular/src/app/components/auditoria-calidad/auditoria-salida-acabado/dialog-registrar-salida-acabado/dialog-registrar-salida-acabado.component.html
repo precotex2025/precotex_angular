@@ -1,0 +1,178 @@
+<div class="container"> 
+    <div class="grid-container">  
+       <div class="title"><strong *ngIf="Titulo == ''; else titulomodificar" >Registrar </strong>Salida Acabados</div>
+       <ng-template #titulomodificar><strong>Modificar </strong></ng-template>
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)" >
+            <div class="container-cuerpo-caja">
+                <div class="container-caja1">
+                    <p>
+                        <mat-form-field class="example-short-width"> 
+                            <mat-label>Fecha</mat-label>
+                            <input matInput type="text"  placeholder="Fecha"
+                                autocomplete="off" formControlName="Fecha_Auditoria2" >
+                        </mat-form-field>
+    
+                        <mat-form-field class="example-long-width"> 
+                            <mat-label>Auditor</mat-label>
+                            <input matInput type="text"  placeholder="Auditor" value="" 
+                                autocomplete="off" formControlName="Nom_Auditor" >
+                        </mat-form-field>                    
+                    </p>
+                    <p>
+                        <mat-form-field class="example-short-width"> 
+                            <mat-label>Abr.Cliente</mat-label>
+                            <input matInput type="text"  placeholder="Abr.Cliente" value="" (input)="onBuscarEstilo()" 
+                                autocomplete="off" formControlName="Abr_Cliente" >
+                        </mat-form-field>
+    
+                        <mat-form-field class="example-long-width"> 
+                            <mat-label>Cliente</mat-label>
+                            <input matInput type="text"  placeholder="Cliente" value="" 
+                                autocomplete="off" formControlName="Nom_Cliente" >
+                        </mat-form-field>                    
+                    </p>
+                    <p>
+                        <mat-form-field class="example-short-width" appearance="fill">
+                            <mat-label>Estilo</mat-label>
+                            <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Estilo" formControlName="Cod_EstCli"  [matAutocomplete]="autoDataEstilo" />
+                            <mat-autocomplete autoActiveFirstOption #autoDataEstilo="matAutocomplete">
+                                <mat-option *ngFor="let item of filtroEstiloCliente | async" [value]="item.Cod_EstCli" (click)="selectEstilo(item.Cod_EstCli)">
+                                    {{ item.Cod_EstCli }}
+                                </mat-option> 
+                            </mat-autocomplete>
+                        </mat-form-field>
+
+                        <mat-form-field class="example-short-width">
+                            <mat-label>Temporada</mat-label>
+                            <mat-select formControlName="Cod_TemCli">
+                                <mat-option *ngFor="let item of dataTemporadaCli" (click)="selectTemporada(item)" [value]="item.Cod_TemCli">
+                                    {{ item.Nom_TemCli }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </p>
+                    <p>
+                        <mat-form-field class="example-short-width"> 
+                            <mat-label>Lote</mat-label>
+                            <input matInput type="number"   placeholder="Lote" value="" 
+                                autocomplete="off" formControlName="Lote">
+                        </mat-form-field>
+    
+                        <mat-form-field class="example-short-width"> 
+                            <mat-label>Tamaño de muestra</mat-label>
+                            <input matInput type="number"   placeholder="Tamaño de muestra" value="" (input)="getPorcentajeMuestra()" 
+                                autocomplete="off" formControlName="Tamano_Muestra">
+                        </mat-form-field>
+                    </p>
+                    <p>
+                        <mat-form-field class="example-short-width"> 
+                            <mat-label>% Tamaño de muestra</mat-label>
+                            <input matInput type="number"   placeholder="% Tamaño de muestra" value="" 
+                                autocomplete="off" formControlName="PorcMuestra">
+                        </mat-form-field>
+
+                        <mat-form-field class="example-short-width"> 
+                            <mat-label>Defectos</mat-label>
+                            <input matInput type="number"   placeholder="Defectos" value="" 
+                                autocomplete="off" formControlName="Defectos">
+                        </mat-form-field>
+                    </p>
+                    <p>
+                        <mat-form-field class="example-full-width"> 
+                            <mat-label>Obs. Medidas</mat-label>
+                            <input matInput type="text"   placeholder="Obs. Medidas" value=""
+                                autocomplete="off" formControlName="Obs_Medida">
+                        </mat-form-field>
+                    </p>
+                    <p>
+                        <mat-form-field class="example-full-width"> 
+                            <mat-label>Observaciones</mat-label>
+                            <input matInput type="text"   placeholder="Observaciones" value=""
+                                autocomplete="off" formControlName="Observacion">
+                        </mat-form-field>
+                    </p>
+                </div>
+
+                <div class="container-caja2">
+                    <p>
+                        <mat-radio-group aria-label="Select an option" formControlName="Flg_Status" (change)="onCambiarStatus($event.value)">
+                            <mat-radio-button value="1">Aprueba</mat-radio-button>
+                            <mat-radio-button value="2">Rechaza</mat-radio-button>
+                        </mat-radio-group>
+                    </p>
+                    <p>
+                        Seleccionar OPs
+                    </p>
+
+                    <div class="table-container">
+                        <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+                            <ng-container matColumnDef="Flg_Estado">
+                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                                    Sel
+                                </th>
+                                <td mat-cell *matCellDef="let data_op">
+                                    <input type="checkbox" name="check" id="check" (change)="changeCheck($event, data_op)" [checked]="data_op.Flg_Estado == '1'" class="checkbox">
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Cod_OrdPro">
+                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> OP </th>
+                                <td mat-cell *matCellDef="let data_op"> {{ data_op.Cod_OrdPro }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Des_Present">
+                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Color </th>
+                                <td mat-cell *matCellDef="let data_op"> {{ data_op.Des_Present }} </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="Destino">
+                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Destino </th>
+                                <td mat-cell *matCellDef="let data_op"> {{ data_op.Des_Destino }} </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="Cod_PurOrd">
+                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> PO </th>
+                                <td mat-cell *matCellDef="let data_op"> {{ data_op.Cod_PurOrd }} </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="Num_PreReq">
+                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Pedido </th>
+                                <td mat-cell *matCellDef="let data_op"> {{ data_op.Num_PreReq }} </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="Num_Encajadas">
+                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Encajado </th>
+                                <td mat-cell *matCellDef="let data_op"> {{ data_op.Num_Encajadas }} </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="Estado">
+                                <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Estado </th>
+                                <td mat-cell *matCellDef="let data_op">
+                                    <span *ngIf="data_op.Flg_Estado == '1'"> {{ data.Flg_Status == 1 ? 'Aprobado' : 'Rechazado' }} </span>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></tr>
+                        </table>
+    
+                    </div>
+                </div>
+            </div>     
+ 
+            <div class="container-cuerpo-foot">
+               <!-- *ngIf="Titulo == undefined; else btnmodificar"  [disabled]="!formulario.valid"-->
+                <button  type="submit" class="button-agregar" *ngIf="Titulo == ''; else btnmodificar" mat-dialog-close="false" [disabled]="!formulario.valid" mat-flat-button>
+                    <mat-icon aria-label="person">save </mat-icon>Registrar
+                </button>
+
+                <ng-template #btnmodificar><button type="submit" class="button-agregar" mat-dialog-close="false" [disabled]="!formulario.valid" mat-flat-button>
+                    <mat-icon aria-label="person">create</mat-icon>Modificar
+                </button></ng-template>
+              
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off</mat-icon>Cancelar
+                </button>               
+            </div>
+        </form>
+    </div>
+</div>

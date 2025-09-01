@@ -1,0 +1,47 @@
+<div class="qr-container">
+  <!-- Encabezado -->
+  <h2 class="qr-title">::. Lectura de Qr .::</h2>
+
+  <!-- Selector de operación -->
+  <select [(ngModel)]="tipoOperacion" class="qr-select">
+    <option value="Mantenimiento">Mantenimiento</option>
+    <option value="Produccion">Producción</option>
+  </select>
+
+  <!-- Campo de entrada de código -->
+  <input
+    type="text"
+    [(ngModel)]="qrValor"
+    placeholder="Ingrese código"
+    class="qr-input"
+  />
+
+  <!-- Contenedor del lector QR
+  <div class="qr-scanner">
+    <zxing-scanner
+      [device]="selectedDevice"
+      (scanSuccess)="onScanSuccess($event)"
+      [formats]="['QR_CODE']"
+      [torch]="false"
+    ></zxing-scanner>
+  </div> -->
+
+  <!-- Botones -->
+  <!-- Botones -->
+<div class="qr-actions">
+  <button (click)="registrar()" class="btn-registrar">Registrar</button>
+
+  <!-- Botón personalizado para subir imagen -->
+  <label class="btn-toggle">
+    <input type="file" accept="image/*" (change)="onFileSelected($event)" capture="environment" hidden />
+    📷 Leer Imagen
+  </label>
+
+  <button (click)="cancelar()" class="btn-cancelar">Cancelar</button>
+</div>
+
+</div>
+
+
+
+

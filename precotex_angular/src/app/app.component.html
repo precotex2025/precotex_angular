@@ -1,0 +1,59 @@
+<div class="login-form_background" *ngIf="login_activo">
+
+  <!-- comentario -->
+  <form class="login-form fadeInDown" [formGroup]="loginForm">
+    <div class="login-form__logo-container">
+      <img class="login-form__logo" src="assets/logo.jpg" alt="Logo">
+    </div>
+    <div class="login-form__content">
+      <div class="login-form__header">Bienvenido(a)</div>
+      <div class="login-form__header_sub">Ingresa a nuestra web!!</div>
+
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Codigo de Usuario</mat-label>
+        <input [class.is-invalid]="" matInput type="text" formControlName="user" placeholder="Ingresa tu Usuario"
+          value="" autocomplete="off" #usuario (keyup.enter)="focusContra()">
+        <button mat-icon-button matSuffix>
+          <mat-icon aria-label="person">person</mat-icon>
+        </button>
+        <mat-error *ngIf="loginForm.controls['user'].errors?.required && loginForm.controls['user'].touched">
+        </mat-error>
+      </mat-form-field>
+
+
+
+      <mat-form-field class="example-full-width">
+
+        <mat-label>Ingresa tu Contraseña</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="pass" placeholder="Ingresa tu Contraseña"
+          value="" autocomplete="off" #contraseña (keydown.enter)="validarUsuario()">
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="loginForm.controls['pass'].errors?.required && loginForm.controls['pass'].touched">
+        </mat-error>
+        <mat-error *ngIf="loginForm.controls['pass'].errors?.minLength">**Contraseña Invalida**
+        </mat-error>
+      </mat-form-field>
+
+
+
+      <!-- <input class="login-form__input" type="text" name="ingUsuario" placeholder="Codigo de Usuario">
+      <input class="login-form__input" type="password" name="ingPassword" placeholder="Ingresa tu Contraseña">
+     -->
+
+      <button class="login-form__button" [disabled]="!loginForm.valid" (click)="validarUsuario()"
+        #registro>Ingresar</button>
+      <div class="login-form__links">
+        <a class="login-form__link" href="./">Olvidaste tu contraseña?</a>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<div *ngIf="!login_activo">
+  <app-menu></app-menu>
+</div>

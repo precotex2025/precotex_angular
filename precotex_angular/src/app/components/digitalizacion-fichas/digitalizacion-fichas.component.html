@@ -1,0 +1,246 @@
+<div class="container">
+    <!-- ventana nro 3 - salida -->
+    <div class="grid-container">
+        <div class="title">Digitalización de Fichas Técnicas</div>
+
+        <div class="find">
+            <div class="auditoriaForm">
+                <div class="findcol1">
+                    <div class="caja">
+                        <ng-select  [items]="listar_estiloCliente" bindLabel="Cod_EstCli" style="padding-bottom: 39px;"
+                            bindValue="Cod_EstCli" [multiple]="false" [searchable]="true" (search)="searchEstilos($event)"
+                            placeholder="Buscar Estilo Cliente" (change)="changeEstilo($event)" [(ngModel)]="cod_EstCli">
+                        </ng-select>
+                    </div>
+
+                    <div class="caja">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Estilo Propio</mat-label>
+                            <input matInput type="text" [(ngModel)]="cod_EstPro" maxlength="5">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="caja">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>OP</mat-label>
+                            <input matInput type="text" [(ngModel)]="cod_OrdPro" maxlength="5">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="caja">
+                        <ng-select  [items]="listar_operacionCliente" bindLabel="Nom_Cliente" style="padding-bottom: 39px;"
+                        bindValue="Cod_Cliente" [multiple]="false" [searchable]="true" (change)="CambiarValorCliente($event)"
+                        placeholder="Selecciona un Cliente" [(ngModel)]="cod_Cliente">
+                        </ng-select> 
+                    </div>
+
+                    <div class="caja">
+                        <mat-form-field appearance="fill" class="fila1-temporada-dialog">
+                            <mat-label>Temporada</mat-label>
+                            <mat-select [(ngModel)]="cod_TemCli">
+                                <mat-option *ngFor="let option of listar_operacionTemporada" [value]="option.Cod_TemCli">
+                                    {{option.Nom_TemCli}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    
+                    <div class="caja">
+                        <button type="button" class="button_agregar" (click)="cargarLista()" mat-flat-button
+                            color="primary">
+                            <mat-icon aria-label="person">search
+                            </mat-icon> BUSCAR
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-cuerpo-fila5">
+            <div class="mat-elevation-z8">
+                <h2>Estilos</h2>
+                <section>
+                    <table mat-table [dataSource]="dataSource" matSort matSortActive="Cod_EstPro" matSortDirection="asc" class="mat-elevation-z8">
+                        <ng-container matColumnDef="Cod_EstPro">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell">Cod.EstProp</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Cod_EstPro}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Des_EstPro">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell">Estilo Propio</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Des_EstPro}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Cod_Version">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell">Cod.Versión</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Cod_Version}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="Des_Version">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell">Versión</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Des_Version}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Cod_EstCli">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell">Cod.Estilo</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Cod_EstCli}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Des_TipPre">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell">Tipo Prenda</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Des_TipPre}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Tallas">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell">Tallas</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Tallas}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="OPs">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell">OPs Relacionadas</th>
+                            <td mat-cell *matCellDef="let element"> {{element.OPs}} </td>
+                        </ng-container>
+
+                        <!--<ng-container matColumnDef="Acciones">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <td mat-cell *matCellDef="let element">
+                                <a mat-icon-button style="margin-right: 5px" (click)="generatePdf(element)">
+                                    <mat-icon color="warn">pageview</mat-icon>
+                                </a>
+
+                                <a mat-icon-button style="margin-right: 5px" (click)="generatePdf(element)">
+                                    <mat-icon color="primary">picture_as_pdf</mat-icon>
+                                </a>
+                            </td>
+                        </ng-container>-->
+
+                        <ng-container matColumnDef="Acciones">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Acciones </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-button (click)="onSelectFichaPdf(element, '1')" title="Abrir Ficha PDF" color="warn"><mat-icon>pageview</mat-icon></button>
+                                <button mat-button (click)="onSelectFichaPdf(element, '2')" title="Descargar Ficha PDF" color="primary"><mat-icon>picture_as_pdf</mat-icon></button>
+                            </td>                            
+                        </ng-container>
+
+                        <!--<tr mat-header-row *matHeaderRowDef="displayedColumns"
+                            style="background-color: #ccc; font-weight: bold;"></tr>
+                        <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;"></tr>-->
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    </table>
+
+                    <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons aria-label="Seleccione pagina"></mat-paginator>
+                </section>
+                <!--<table mat-table [dataSource]="dataSource" >                  
+                    <ng-container matColumnDef="ESTILO_PROPIO">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Código</th>
+                        <td mat-cell *matCellDef="let element"> {{element.ESTILO_PROPIO}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="DESC_ESTILO_PROPIO">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Descripción</th>
+                        <td mat-cell *matCellDef="let element"> {{element.DESC_ESTILO_PROPIO}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ESTILO_CLIENTE">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Código Estilo Cliente</th>
+                        <td mat-cell *matCellDef="let element"> {{element.ESTILO_CLIENTE}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="TIPO_PRENDA">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Tipo de Prenda</th>
+                        <td mat-cell *matCellDef="let element"> {{element.TIPO_PRENDA}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="GRUPO_TALLA">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Grupo Talla</th>
+                        <td mat-cell *matCellDef="let element"> {{element.GRUPO_TALLA}} </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"
+                        style="background-color: #ccc; font-weight: bold;"></tr>
+                    <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns; " (click)="onRowSelect(row)"></tr>
+                </table>-->
+            </div>
+        </div>
+
+
+        <!--<div class="containet-versiones">
+            <div class="grid">
+                <h2>Versiones</h2>
+                <table mat-table [dataSource]="dataSourceVersion" style="padding-left: 10px !important;">
+                
+                    <ng-container matColumnDef="Codigo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Código</th>
+                        <td mat-cell *matCellDef="let element"> {{element.Cod_Version}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Descripcion">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Descripcion</th>
+                        <td mat-cell *matCellDef="let element"> {{element.Des_Version}} </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsVersion" style="background-color: #ccc; font-weight: bold;"></tr>
+                    <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumnsVersion;"  (click)="onRowSelectVersion(row)"></tr>
+                
+                </table>
+            </div>
+            <div class="grid">
+                <div class="row-digitalizacion" style="padding-top: 40px;">
+                    <div class="caja-digitalizacion">
+                        <p>Estilo: {{flagEstilo}}</p>                      
+                    </div>
+                    <div class="caja-digitalizacion">
+                        <p>Versión: {{version}}</p>
+                    </div>
+                </div>
+                <div class="row-digitalizacion">
+                    <div class="caja-digitalizacion">
+                        <p>OP Relacionadas: {{opRelacionadas}}</p>
+                    </div>
+                </div>
+                <div>
+                    <form [formGroup]="formulario">
+                    <mat-form-field class="fila1-tipoImpresion" appearance="fill" *ngIf="showTipoImpresion">
+                        <mat-label>Tipos de Impresión</mat-label>
+                        <mat-select formControlName="TipoImpresion" (selectionChange)="onSelectionChangeTipo($event)">
+                            <mat-option *ngFor="let option of listar_tipoImpresion" [value]="option.Tipo_Ficha">
+                                {{option.Nom_Ficha}}
+                            </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </form>
+                </div>
+
+                <div class="grid containet-archivos"  *ngIf="showTipoImpresion">
+                    <h2>Archivos</h2>
+                    <table mat-table [dataSource]="dataSourceArchivos" style="padding-left: 10px !important;">
+                    
+                        <ng-container matColumnDef="Codigo Estilo">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Código Estilo</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Cod_EstPro}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Version">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Versión</th>
+                            <td mat-cell *matCellDef="let element"> {{element.Cod_Version}} </td>
+                        </ng-container>                                    
+                        <ng-container matColumnDef="Acciones">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Acciones </th>
+                            <td mat-cell *matCellDef="let element">
+                                 <button mat-button  (click)="generatePdf(element)" title="Descargar Archivo"                           
+                                    color="primary"><mat-icon>picture_as_pdf</mat-icon></button>
+                                <button mat-button  (click)="generatePdfBlank(element)" title="Mostrar Archivo"                          
+                                    color="primary"><mat-icon>pageview</mat-icon></button>
+                            </td>                            
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsArchivos" style="background-color: #ccc; font-weight: bold;"></tr>
+                        <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumnsArchivos; "></tr>
+                    
+                    </table>
+                </div>
+            </div>
+        </div>-->
+
+
+
+
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

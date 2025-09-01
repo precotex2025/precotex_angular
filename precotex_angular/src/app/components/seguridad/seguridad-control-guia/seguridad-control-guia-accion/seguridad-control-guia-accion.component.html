@@ -1,0 +1,45 @@
+<div class="container">
+    <!-- ventana nro 2 - selecciona la accion salida/ingreso/historia/regresar -->
+    <div class="grid-container">
+
+        <div class="title">Indique el Tipo de Registro a Realizar</div>
+
+        <div class="container-cuerpo">
+            <button type="button" class="button-accion1" mat-flat-button color="primary"
+                [routerLink]="['/SeguridadControlGuiaSalida']">
+                Salida Interna/Externa
+            </button>
+
+            <button type="button" class="button-accion2" mat-flat-button color="primary"
+                [routerLink]="['/SeguridadControlGuiaInterno']">Ingreso
+                Interno
+            </button>
+
+            <button type="button" class="button-accion3" mat-flat-button color="primaryy"
+                [routerLink]="['/SeguridadControlGuiaExterno']">Ingreso
+                Externo
+            </button>
+
+            <button type="button" class="button-accion4" mat-flat-button color="primary"
+                [routerLink]="['/SeguridadControlMemorandum']">Memorandum
+            </button>
+
+            <button type="button" class="button-accion5" mat-flat-button color="primary"
+                routerLink="/SeguridadControlGuiaHistorial">Historial
+            </button>
+
+            <button type="button" class="button-accion1" mat-flat-button color="primary" *ngIf="Num_Planta == 1 || Num_Planta == 2"
+                routerLink="/packingControlJaba"><mat-icon>add_shopping_cart</mat-icon> Salida Jabas
+            </button>
+
+            <button type="button" class="button-accion2" mat-flat-button color="primary" *ngIf="Num_Planta == 1 || Num_Planta == 2"
+                routerLink="/controlJabasCoches"><mat-icon>add_shopping_cart</mat-icon> Ingreso Jabas
+            </button>
+            
+            <button type="button" class="button-accion6" mat-flat-button color="primary"
+                routerLink="/SeguridadControlGuia">
+                <mat-icon aria-label="person">reply_all</mat-icon>Regresar
+            </button>
+        </div>
+    </div>
+</div>

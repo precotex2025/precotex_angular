@@ -1,0 +1,107 @@
+<!--DefectosAlamacenDerivados-->
+  
+  
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container"> 
+ 
+        <div class="title">Reporte Kardex de Jabas</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1"> 
+
+                <mat-form-field  class="fila1-fecha" appearance="fill">
+                    <mat-label>Fecha de Registro</mat-label>
+                    <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                      <input matStartDate formControlName="start" placeholder="Fecha Inicio" >
+                      <input matEndDate formControlName="end" placeholder="Fecha Final" >
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                    <mat-icon  (click)="clearDate($event)" style=" position: absolute;
+                    float: right;
+                    top: -6px;
+                    margin-left: 180px;
+                    cursor: pointer;
+                    color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+                    <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Fecha Invalida</mat-error>
+                    <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Fecha Invalida</mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="fila1-Jaba"> 
+                    <mat-label>Código de Jaba</mat-label>
+                    <input matInput type="text"  placeholder="Código de Jaba" value=""
+                        autocomplete="off" formControlName="Jaba" >
+                  </mat-form-field>    
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="MostrarKardexJabas()">                    
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+                <button type="button" class="fila1-excel" mat-flat-button
+                    (click)="ExportarKardexJabas()">
+                    <mat-icon aria-label="create_new_folder">create_new_folder
+                    </mat-icon>  Reporte Excel
+                </button>
+              
+ 
+
+            </div>   
+ 
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                    
+                    <ng-container matColumnDef="N">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nº</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det["N"]}} </td>
+                    </ng-container>  
+
+                    <ng-container matColumnDef="Fecha_Registro_Java">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">FECHA REGISTRO PL</th>
+                         <td mat-cell *matCellDef="let data_det"> {{data_det.Fecha_Registro_Java.date| date:'dd/MM/yyyy'}} </td>               
+                    </ng-container>
+ 
+                    <ng-container matColumnDef="Codigo_Barra">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">CODIGO JABA</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Codigo_Barra}}  </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Origen">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">UBICACION INICIAL / ORIGEN</th>
+                        <td mat-cell *matCellDef="let data_det">  {{data_det.Origen}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Fecha_Registro">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">FECHA REGISTRO</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{data_det.Fecha_Registro.date| date:'dd/MM/yyyy'}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Num_Movstk">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">NUMERO DE MOVIMIENTO</th>
+                         <td mat-cell *matCellDef="let data_det"> {{data_det.Num_Movstk}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Guia">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">N° GUIA REMISION</th>
+                         <td mat-cell *matCellDef="let data_det"> {{data_det.Guia}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Destino">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">UBICACION DESTINO / ORIGEN</th>
+                         <td mat-cell *matCellDef="let data_det"> {{data_det.Destino}} </td>
+                    </ng-container> 
+              
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+
+                </table>
+                <div *ngIf="dataSource.data.length === 0" style="text-align: center;">
+                    No se encuentran registros
+                  </div>
+                <mat-paginator  class="paginador" #paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons aria-label="Select page of periodic elements">
+                </mat-paginator>
+
+            </div>
+
+        </form>
+
+    </div>
+ 
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>       

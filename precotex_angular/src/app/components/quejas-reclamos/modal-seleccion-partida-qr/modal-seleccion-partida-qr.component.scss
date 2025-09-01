@@ -1,0 +1,98 @@
+/* Contenedor general del modal */
+:host {
+  display: block;
+  padding: 1rem;
+  font-family: 'Segoe UI', sans-serif;
+  max-width: 100%;
+}
+
+/* Título del modal */
+h2 {
+  font-size: 1.5rem;
+  color: #007bff;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Lista de partidas */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Elemento individual de la lista */
+li {
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+li:hover {
+  background-color: #f0f8ff;
+}
+
+/* Último item sin borde inferior */
+li:last-child {
+  border-bottom: none;
+}
+
+/* Botón de cerrar */
+button {
+  margin-top: 1rem;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+}
+
+button:hover {
+  background-color: #c82333;
+}
+
+li {
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+  transition: background 0.3s;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+li:hover {
+  background-color: #f0f8ff;
+}
+
+li.seleccionado {
+  background-color: #d1e7dd;
+  font-weight: bold;
+  color: #0f5132;
+}
+
+
+.fila {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.columna-check {
+  width: 40px; /* ancho fijo para alinear */
+  text-align: center;
+}
+
+.columna-info {
+  flex: 1; /* ocupa el resto */
+}

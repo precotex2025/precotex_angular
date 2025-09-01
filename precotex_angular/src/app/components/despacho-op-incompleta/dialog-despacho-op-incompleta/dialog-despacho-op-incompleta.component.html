@@ -1,0 +1,229 @@
+ 
+<div class="container"> 
+    <div class="grid-container">  
+        <div class="title">Permitir Girado Partida Incompleta - Detalle</div>
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)" >
+            
+            <div class="container-cuerpo-fila1">
+                    <mat-form-field class="fila1-Partida"> 
+                        <mat-label>Partida</mat-label>
+                        <input matInput type="text" placeholder="Partida" value="" 
+                            autocomplete="off" formControlName="Partida">
+                    </mat-form-field>   
+                    
+                    <mat-form-field class="fila1-Kgacabado"> 
+                        <mat-label>Kg Acabado</mat-label>
+                        <input matInput type="number"  placeholder="Kg Acabado" value=""
+                            autocomplete="off" formControlName="Kgacabado">
+                    </mat-form-field>    
+
+                    <mat-form-field class="fila1-Kgtenido"> 
+                        <mat-label>Kg Teñido</mat-label>
+                        <input matInput type="number"  placeholder="Kg Teñido" value=""
+                            autocomplete="off" formControlName="Kgtenido">
+                    </mat-form-field>   
+                
+                    <mat-form-field appearance="fill" class="fila1-Motivo" >
+                        <mat-label>Motivo</mat-label>
+                        <mat-select formControlName="Motivo">
+                          <mat-option *ngFor="let option of listar_operacionMotivo" [value]="option.IdMotivo">
+                            {{option.Nom_Motivo}} 
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <button *ngIf="this.Flg_visible_button == true" type="button" class="fila1-button-agregar-motivo"mat-flat-button (click)="GuardarMotivo()">
+                     Guardar Motivo
+                    </button>
+                    
+            </div>     
+  
+            <div class="container-cuerpo-fila2">
+                
+            <mat-tab-group preserveContent #tabgroup>
+                <mat-tab label="Detalle Partida" >
+                    <table mat-table #table  [dataSource]="dataSource1"   class="mat-elevation-z8" >
+
+                        <ng-container matColumnDef="Cliente">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cliente</th>
+                            <td mat-cell  *matCellDef="let data_det1"> {{data_det1.Cliente}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="OP">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">OP</th>
+                            <td mat-cell  *matCellDef="let data_det1"> {{data_det1.OP}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Estilo">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estilo</th>
+                            <td mat-cell  *matCellDef="let data_det1"> {{data_det1.Estilo}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Tela2">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tela</th>
+                            <td mat-cell  *matCellDef="let data_det1"> {{data_det1.Tela}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Comb">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Comb</th>
+                            <td mat-cell  *matCellDef="let data_det1"> {{data_det1.Comb}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Kgs_Req_Acabado">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Kgs_Req_Acabado</th>
+                            <td mat-cell  *matCellDef="let data_det1"> {{data_det1.Kgs_Req_Acabado | number : '1.3-3' }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Kgs_Tenidos_1ras">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Kgs_Tenidos_1ras</th>
+                            <td mat-cell  *matCellDef="let data_det1"> {{data_det1.Kgs_Tenidos_1ras | number : '1.3-3' }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Estado">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estado</th>
+                            <td mat-cell  *matCellDef="let data_det1"> {{data_det1.Estado}}</td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns_cab1"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns_cab1;"></tr>
+
+                    </table>
+
+                </mat-tab>
+                <mat-tab label="Datos Tecnicos"> 
+                    <table mat-table #table  [dataSource]="dataSource2"   class="mat-elevation-z8" >
+
+                        <ng-container matColumnDef="Tela">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tela</th>
+                            <td mat-cell  *matCellDef="let data_det2"> {{data_det2.Tela}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Des_Comb">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Des_Comb</th>
+                            <td mat-cell  *matCellDef="let data_det2"> {{data_det2.Des_Comb}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Tipo">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tipo</th>
+                            <td mat-cell  *matCellDef="let data_det2"> {{data_det2.Tipo}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Ancho_Acab">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Ancho_Acab</th>
+                            <td mat-cell *matCellDef="let data_det2">  {{data_det2.Ancho_Acab | number : '1.3-3'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Ancho_Reposo">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Ancho_Reposo</th>
+                            <td mat-cell  *matCellDef="let data_det2">  {{data_det2.Ancho_Reposo | number : '1.3-3'}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="Ancho_Acab_T">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Ancho_Acab_T</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.Ancho_Acab_T | number : '1.3-3'}} </td>
+                        </ng-container>
+                        
+                        <ng-container matColumnDef="Gramaje_Acab">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Gramaje_Acab</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.Gramaje_Acab | number : '1.3-3'}} </td>
+                        </ng-container> 
+                        <ng-container matColumnDef="Gramaje_Reposo">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Gramaje_Reposo</th>
+                            <td mat-cell  *matCellDef="let data_det2">  {{data_det2.Gramaje_Reposo | number : '1.3-3'}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="Gramaje_Acab_T">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Gramaje_Acab_T</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.Gramaje_Acab_T | number : '1.3-3'}} </td>
+                        </ng-container>
+                        
+                        <ng-container matColumnDef="Encog_Ancho">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Encog_Ancho</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.Encog_Ancho | number : '1.3-3'}} </td>
+                        </ng-container>  
+                        <ng-container matColumnDef="EncogA_Lavado">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">EncogA_Lavado</th>
+                            <td mat-cell  *matCellDef="let data_det2">  {{data_det2.EncogA_Lavado | number : '1.3-3'}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="Encog_Ancho_T">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Encog_Ancho_T</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.Encog_Ancho_T | number : '1.3-3'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Encog_Largo">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Encog_Ancho_T</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.Encog_Ancho_T | number : '1.3-3'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="EncogL_Lavado">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">EncogL_Lavado</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.EncogL_Lavado | number : '1.3-3'}} </td>
+                        </ng-container>  
+                        <ng-container matColumnDef="Encog_largo_T">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Encog_largo_T</th>
+                            <td mat-cell  *matCellDef="let data_det2">  {{data_det2.Encog_largo_T | number : '1.3-3'}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="Revirado">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Revirado</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.Revirado | number : '1.3-3'}} </td>
+                        </ng-container>
+                        
+                        <ng-container matColumnDef="Revirado_Lavado">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Revirado_Lavado</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.Revirado_Lavado | number : '1.3-3'}} </td>
+                        </ng-container>  
+                        <ng-container matColumnDef="Revirado_T">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Revirado_T</th>
+                            <td mat-cell  *matCellDef="let data_det2">  {{data_det2.Revirado_T | number : '1.3-3'}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="Encogimiento_Tramo_Izquierdo">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Encogimiento_Tramo_Izquierdo</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.Encogimiento_Tramo_Izquierdo | number : '1.3-3'}} </td>
+                        </ng-container>
+                        
+                        <ng-container matColumnDef="Encogimiento_Tramo_Centro">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Encogimiento_Tramo_Centro</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.Encogimiento_Tramo_Centro | number : '1.3-3'}} </td>
+                        </ng-container>   
+                        <ng-container matColumnDef="Gramaje_Lavado">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Gramaje_Lavado</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.Gramaje_Lavado | number : '1.3-3'}} </td>
+                        </ng-container>   
+                        <ng-container matColumnDef="Nom_Auditor">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nom_Auditor</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.Nom_Auditor}} </td>
+                        </ng-container>   
+                        <ng-container matColumnDef="Flg_Status_Apro">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Flg_Status_Apro</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.Flg_Status_Apro}} </td>
+                        </ng-container>   
+                        <ng-container matColumnDef="Fec_Registro">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fec_Registro</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.Fec_Registro}} </td>
+                        </ng-container>   
+                        <ng-container matColumnDef="Observaciones">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Observaciones</th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.Observaciones}} </td>
+                        </ng-container>   
+
+        
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns_cab2"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns_cab2;"></tr>
+
+                    </table> 
+                </mat-tab>
+                
+            </mat-tab-group>
+
+            </div>
+
+ 
+            <div class="container-cuerpo-foot">
+                <button *ngIf="this.Flg_visible_button == true" type="submit" class="button-agregar"  mat-dialog-close="true" [disabled]="!formulario.valid" mat-flat-button>
+                    <mat-icon aria-label="person" >save
+                    </mat-icon>  Aprobar
+                </button>
+
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>               
+            </div> 
+        </form>
+
+    </div>
+
+
+</div>

@@ -1,0 +1,177 @@
+<!--DefectosAlamacenDerivados-->
+  
+ 
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container"> 
+ 
+        <div class="title">Mantenimiento de Vehiculos</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+                
+                <!--<mat-form-field class="fila1-fecha">
+                    <mat-label>Fec. Registro</mat-label>
+                    <input matInput [matDatepicker]="fec_registro" autocomplete="off" formControlName="fec_registro">
+                    <mat-datepicker-toggle matSuffix [for]="fec_registro"></mat-datepicker-toggle>
+                    <mat-datepicker #fec_registro></mat-datepicker>
+                </mat-form-field>-->
+
+                <!--<mat-form-field class="fila1-fecha">
+                    <mat-label>Fec. Auditoria</mat-label>
+                    <input matInput [matDatepicker]="fec_registro" autocomplete="off"
+                        formControlName="fec_registro">
+                    <mat-datepicker-toggle matSuffix [for]="fec_registro"></mat-datepicker-toggle>
+                    <mat-icon  (click)="clearDate($event)" style=" position: absolute;
+                    float: right;
+                    top: 5px;
+                    margin-left: -26px;
+                    cursor: pointer;
+                    color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+                    <mat-datepicker #fec_registro></mat-datepicker>
+                </mat-form-field>-->
+
+                    <mat-form-field class="fila1-dni"> 
+                         <mat-label>Codigo de Barras</mat-label>
+                        <input matInput type="text"  placeholder="Codigo de Barras" value=""
+                            autocomplete="off" formControlName="sCod_Barras" >
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-nombres"> 
+                        <mat-label>N° Placa</mat-label>
+                        <input matInput type="text"  placeholder="N° Placa" value=""
+                            autocomplete="off" formControlName="sPlaca" >
+                    </mat-form-field>
+
+                    <!--<mat-form-field class="fila1-nombres" appearance="fill">
+                        <mat-label>N° Placa</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Conductor" formControlName="sConductor"  [matAutocomplete]="autoDataConductor" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataConductor="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionConductor | async" [value]="option.Nombres">
+                                {{option.Nombres}}
+                            </mat-option> 
+                        </mat-autocomplete>                            
+                    </mat-form-field>-->    
+            
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="MostrarCabeceraVehiculo()"
+                    >                    
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+ 
+
+            </div>   
+
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                    <ng-container matColumnDef="Cod_Vehiculo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nº</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_Vehiculo}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Num_Placa">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Placa</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Num_Placa}}  </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Cod_barras">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod. Barras</th>
+                        <td mat-cell *matCellDef="let data_det">  {{data_det.Cod_Barras}} </td>
+                    </ng-container>
+
+                     <ng-container matColumnDef="Nom_Conductor">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Conductor</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{data_det.Nombres}} </td>
+                    </ng-container>
+  
+                    <ng-container matColumnDef="Num_Soat">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">SOAT</th>
+                         <td mat-cell *matCellDef="let data_det"> {{data_det.Num_Soat}} </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="Fec_Fin_Soat">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha Venc.</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Fec_Fin_Soat2}} </td>
+                    </ng-container>     
+                    
+                    <ng-container matColumnDef="Num_Tarjeta_Prop">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tarjeta Prop.</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Num_Tarjeta_Prop}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Tmp_Carga">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tmp. Carga</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Tmp_Carga}} </td>
+                    </ng-container> 
+                    
+                    <ng-container matColumnDef="Tmp_Descarga">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tmp. Descarga</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Tmp_Descarga}} </td>
+                    </ng-container>  
+                    
+                    <ng-container matColumnDef="Flg_Activo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estado</th>
+                        <td mat-cell *matCellDef="let data_det" > <button *ngIf="data_det.Flg_Activo == 'S'; else btnerr" type="button"style="background:#3f51b5; width: 80px;" class="button-agregar" mat-flat-button (click)="OpenDialogConfirmacion(data_det.Cod_Vehiculo)">Activo</button>   
+                            <ng-template #btnerr><button type="button" style="background:#f44336; width: 80px;" class="button-agregar" mat-flat-button (click)="OpenDialogConfirmacion(data_det.Cod_Vehiculo)">Inactivo</button></ng-template>
+                        </td>
+                    </ng-container> 
+
+                  
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let data_det">
+
+                            <a mat-icon-button style="margin-right:5px;" *ngIf="data_det.Num_Placa.length>0"
+                                (click)="openDialogModificar(data_det.Cod_Vehiculo,data_det.Num_Placa)">
+                                <mat-icon color="success">create</mat-icon>
+                            </a>
+
+                            <a mat-icon-button *ngIf="data_det.Num_Placa.length>0"
+                                (click)="EliminarRegistro(data_det.Num_Placa,data_det.Cod_Vehiculo)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a> 
+                        </td>
+                    </ng-container> 
+
+                    <!--<ng-container matColumnDef="eliminar">
+                        <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <a mat-icon-button *ngIf="data_det.Nro_DocIde.length>0"
+                                (click)="EliminarRegistro(data_det.Nro_DocIde,data_det.Cod_Conductor)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>--> 
+ 
+                
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+
+                </table>
+
+                <mat-paginator  class="paginador" #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+                </mat-paginator>
+
+            </div>
+
+            
+
+
+            <div class="container-cuerpo-foot">
+                <button type="button" class="button-agregar" mat-flat-button (click)="openDialog();"
+                    >
+                    <mat-icon aria-label="person">add
+                    </mat-icon>  Agregar
+                </button>
+
+                <!--<button type="button" class="button-cancelar" [routerLink]="['/SeguridadControlVehiculoAccion']" mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Regresar
+                </button> -->              
+            </div>
+        </form>
+
+    </div>
+ 
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>       

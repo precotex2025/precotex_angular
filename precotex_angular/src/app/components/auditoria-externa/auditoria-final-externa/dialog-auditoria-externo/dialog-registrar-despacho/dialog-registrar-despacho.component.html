@@ -1,0 +1,59 @@
+ 
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container">  
+ <!--*ngIf="Titulo == undefined; else titulomodificar"-->
+        <div class="title"><strong  *ngIf="Titulo == undefined; else titulomodificar"></strong>Despachar Producción - {{this.Num_Auditoria}}</div>
+        <ng-template #titulomodificar><strong> </strong></ng-template>
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)" >
+            <div class="container-cuerpo-fila1">                     
+                    <mat-form-field class="fila1-Prescinto"> 
+                        <mat-label>Precinto</mat-label>
+                        <input matInput type="text" value="" maxlength="400"                        
+                        [textMask]="{mask: precintoMascara}"
+                            autocomplete="off" formControlName="Precinto" style="text-transform:uppercase;"/>
+                     </mat-form-field>  
+                    <mat-form-field class="fila1-Bultos"> 
+                        <mat-label>Número de Bultos</mat-label>
+                        <input matInput type="text" value="" 
+                            autocomplete="off" formControlName="Bulto" maxlength="3"/>
+                            <mat-error *ngIf="bultoErrors">{{ bultoErrors }}</mat-error>  
+                    </mat-form-field>            
+                    <mat-form-field class="fila1-guia"> 
+                        <mat-label>Guía</mat-label>
+                        <textarea matInput type="text" value="" maxlength="100"
+                            autocomplete="off" formControlName="Guia" style="text-transform:uppercase;"></textarea>
+                            <mat-error *ngIf="guiaErrors">{{ guiaErrors }}</mat-error>
+                    </mat-form-field> 
+
+                
+            </div>     
+ 
+
+  
+            <div class="container-cuerpo-foot">
+               <button  type="submit" class="button-agregar"*ngIf="Titulo == undefined; else btnmodificar"  mat-dialog-close="false" [disabled]="!formulario.valid" mat-flat-button>
+                    <mat-icon aria-label="person" >save
+                    </mat-icon>  Despachar
+                </button>
+                <ng-template #btnmodificar><button type="submit" class="button-agregar" mat-dialog-close="false" [disabled]="!formulario.valid"  mat-flat-button>
+                    <mat-icon aria-label="person" >create
+                    </mat-icon>  Despachar
+                </button></ng-template>
+               
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>               
+            </div>
+        </form>
+
+    </div> 
+
+
+</div>
+
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>      

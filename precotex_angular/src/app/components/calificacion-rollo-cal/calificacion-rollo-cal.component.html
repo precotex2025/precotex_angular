@@ -1,0 +1,582 @@
+<div class="container">
+  <div class="grid-container">
+    <div class="title"><strong> REGISTRO DE CALIDAD DE ROLLO </strong></div>
+    <div class="body">
+      <form
+        class="container-cuerpo"
+        [formGroup]="formulario"
+        #formDirective="ngForm"
+      >
+        <div class="container-cuerpo-fila1">
+          <mat-form-field appearance="fill" class="fila1-Txt_CodRollo">
+            <mat-label>COD. ROLLO</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="Txt_CodRollo"
+              (input)="onToggle()"
+              #myinputAdd
+              
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Ot">
+            <mat-label>OT</mat-label>
+            <input matInput type="text" formControlName="Txt_Ot" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Pref_Maquina">
+            <mat-label>PREFIJO MAQUINA</mat-label>
+            <input matInput type="text" formControlName="Txt_Pref_Maquina" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Cliente">
+            <mat-label>CLIENTE</mat-label>
+            <input matInput type="text" formControlName="Txt_Cliente" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Codigo_Rollo">
+            <mat-label>CODIGO ROLLO</mat-label>
+            <input matInput type="text" formControlName="Txt_Codigo_Rollo" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Maquina">
+            <mat-label>MAQUINA</mat-label>
+            <input matInput type="text" formControlName="Txt_Maquina" />
+          </mat-form-field>
+
+             <mat-form-field  appearance="fill" class="fila1-Txt_Cod_Turno">
+            <mat-label>TURNO</mat-label>
+            <mat-select name="turno" formControlName="Txt_Cod_Turno">
+                <mat-option value="1">PRIMER TURNO</mat-option>
+                <mat-option value="2">SEGUNDO TURNO</mat-option>
+                
+            </mat-select>
+        </mat-form-field>
+
+          
+          <mat-form-field class="fila1-Txt_Inspector">
+                    <mat-label>INSPECTOR</mat-label>
+                    <mat-select formControlName="Txt_Inspector" name="listar_operacionAuditor">
+                        <mat-option *ngFor="let listar_origen of listar_operacionAuditor"
+                            [value]="listar_origen.Codigo">
+                            {{listar_origen.Descripcion}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+          <mat-form-field appearance="fill" class="fila1-Txt_Restriccion">
+            <mat-label>RESTRICCIÓN</mat-label>
+            <mat-select formControlName="Txt_Restriccion" name ="listar_operacionRestriccion">
+                <mat-option *ngFor="let listar_origen of listar_operacionRestriccion"
+                [value]="listar_origen.Codigo">
+                {{listar_origen.Descripcion}}
+            </mat-option>
+        </mat-select>
+        </mat-form-field>  
+
+
+        <mat-form-field appearance="fill" class="fila1-Txt_AnchoEstandar">
+          <mat-label>ANCHO ESTANDAR</mat-label>
+          <input matInput type="text" formControlName="Txt_AnchoEstandar" />
+        </mat-form-field>    
+        
+        <mat-form-field appearance="fill" class="fila1-Txt_TipoTejidoTela">
+          <mat-label>TIPO TEJIDO TELA</mat-label>
+          <input matInput type="text" formControlName="Txt_TipoTejidoTela" />
+        </mat-form-field>    
+        
+        <mat-form-field appearance="fill" class="fila1-Txt_MaquinaRevisadora">
+          <mat-label>MAQ. REVISADORA</mat-label>
+            <mat-select formControlName="Txt_MaqRevisadora" name ="listar_maqRevisadora" >
+                <mat-option *ngFor="let listar_origen of listar_maqRevisadora"
+                [value]="listar_origen.cod_Maquina_Revisadora">
+                {{listar_origen.des_Maquina_Revisadora}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>        
+        
+        
+        </div>
+
+        <div class="container-cuerpo-fila2">
+
+          <div appearance="fill" class="fila2-Btn_1">
+            <button
+              type="button"
+              (click)="CodDefectoEnvia1()"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+
+            >
+              TEJ21
+            </button>
+          </div>
+
+          <div appearance="fill" class="fila2-Btn_2">
+            <button
+              type="button"
+              class="button-info"
+              (click)="CodDefectoEnvia2()"
+              matTooltipPosition="above"
+              mat-flat-button
+              
+              
+            >
+              TEJ28
+            </button>
+          </div>
+
+          <div appearance="fill" class="fila2-Btn_3">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia3()"
+            >
+              TEJ29
+            </button>
+          </div>
+
+          <div appearance="fill" class="fila2-Btn_4">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia4()"
+            >
+              TEJ27
+            </button>
+          </div>
+
+          <div appearance="fill" class="fila2-Btn_5">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia5()"
+            >
+              TEJ31
+            </button>
+          </div>
+
+          <div appearance="fill" class="fila2-Btn_6">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia6()"
+            >
+              TEJ32
+            </button>
+          </div>
+
+          <div appearance="fill" class="fila2-Btn_7">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia7()"
+            >
+              TEJ34
+            </button>
+          </div>
+
+          <div appearance="fill" class="fila2-Btn_8">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia8()"
+            >
+              TEJ38
+            </button>
+          </div>
+
+          <div appearance="fill" class="fila2-Btn_9">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia9()"
+            >
+              TEJ39
+            </button>
+          </div>
+
+          <div appearance="fill" class="fila2-Btn_10">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia10()"
+            >
+              TEJ50
+            </button>
+          </div>
+
+
+          <div appearance="fill" class="fila2-Btn_11">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia11()"
+            >
+              TEJ41
+            </button>
+          </div>
+
+          <div appearance="fill" class="fila2-Btn_12">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia12()"
+            >
+              TEJ46
+            </button>
+          </div>
+
+          <div appearance="fill" class="fila2-Btn_13">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia13()"
+            >
+              HI019
+            </button>
+          </div>
+
+          <div appearance="fill" class="fila2-Btn_14">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia14()"
+            >
+              TEJ35
+            </button>
+          </div>
+
+          <div appearance="fill" class="fila2-Btn_15">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia15()"
+            >
+              HI010
+            </button>
+          </div>
+
+
+
+
+
+
+          <div appearance="fill" class="fila2-Btn_16">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia16()"
+            >
+            TEJ30
+            </button>
+          </div>
+
+          <div appearance="fill" class="fila2-Btn_17">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia17()"
+            >
+            TEJ33
+            </button>
+          </div>
+
+
+          <div appearance="fill" class="fila2-Btn_18">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia18()"
+            >
+            TEJ36
+            </button>
+          </div>
+
+          <div appearance="fill" class="fila2-Btn_19">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia19()"
+            >
+            TEJ45
+            </button>
+          </div>
+
+
+          <div appearance="fill" class="fila2-Btn_20">
+            <button
+              type="button"
+              class="button-info"
+              matTooltipPosition="above"
+              mat-flat-button
+              (click)="CodDefectoEnvia20()"
+            >
+            TEJ49
+            </button>
+          </div>
+        </div>
+
+        <div class="container-cuerpo-fila3">
+         
+          <mat-form-field appearance="fill" class="fila3-Txt_NomDefecto">
+            <mat-label>DEFECTO</mat-label>
+
+            <input matInput type="text" id="myinputDef2"  #trigger="matAutocompleteTrigger" placeholder="INGRESE DEFECTO" 
+            formControlName="Txt_NomDefecto"  [matAutocomplete]="autoDataDE" #myinputDef  (click)="seleccionarTexto2($event)" />
+            <mat-autocomplete autoActiveFirstOption #autoDataDE="matAutocomplete" >
+                <mat-option *ngFor="let option of filtroOperacionDE | async" [value]="option.Descripcion" 
+                (click)="CambiarValorDef(option.Cod_Motivo,option.Descripcion,option.Factor_Conversion)" >
+                {{option.Descripcion}}
+                </mat-option> 
+            </mat-autocomplete> 
+
+
+            <input  type="hidden" formControlName="Txt_CodDefecto" />
+          </mat-form-field>
+
+          <div class="fila3-NuevoEscaneo">
+          <button
+          class="button-Nueva-Lecura"
+          mat-flat-button
+          type="button"
+          matTooltip="NUEVO ESCANEO"
+          matTooltipPosition="above"
+          [disabled]="formulario.invalid"
+          (click)="NuevoEscaneo()"
+          >
+          <mat-icon aria-label="person">settings_remote</mat-icon> Nuevo
+          </button>
+          </div>
+
+
+
+          <mat-form-field appearance="fill" class="fila3-Txt_CantDef">
+            <mat-label>CANT. DEFECTOS</mat-label>
+            <input matInput type="text" formControlName="Txt_CantDef"  (keypress)="validateFormat($event)" (keydown)="onKeydown1($event)" (click)="InputSelCantDef()"  #myinputCantDef/>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila3-Txt_FacConv">
+            <mat-label>METROS</mat-label>
+            <input matInput type="text" formControlName="Txt_FacConv"  (keypress)="validateFormat($event)" (keydown)="onKeydown2($event)" (click)="InputSelMet()"  #myinputMet/>
+          </mat-form-field>
+
+
+          <mat-form-field appearance="fill" class="fila3-Txt_Ancho">
+            <mat-label>ANCHO</mat-label>
+            <input matInput type="text" formControlName="Txt_Ancho"  (keypress)="validateFormat($event)"    (keydown)="onKeydown3($event)" (click)="InputSelAnc()" #myinputAncho />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila3-Txt_Densidad">
+            <mat-label>DENSIDAD</mat-label>
+            <input matInput type="text" formControlName="Txt_Densidad"  (keypress)="validateFormat($event)" (keydown)="onKeydown4($event)"  (click)="InputSelDen()" #myinputDensidad />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila3-Txt_Calidad">
+            <mat-label>CALIDAD ROLLO</mat-label>
+            <input matInput type="text" formControlName="Txt_Calidad"  (keydown)="onKeydown5($event)"  (click)="InputSelCal()" #myinputCalidad />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="fila3-Txt_Observaciones">
+            <mat-label>OBSERVACIONES</mat-label>
+            <input matInput type="text" formControlName="Txt_Observaciones"   (keydown)="onKeydown6($event)"  (click)="InputSelObs()" #myinputObs/>
+          </mat-form-field>
+
+          <!-- <mat-form-field appearance="fill" class="fila1-Txt_CodDefecto">
+            <mat-label>COD. DEFECTO</mat-label>
+
+            <input matInput type="hidden" formControlName="Txt_CodDefecto" />
+          </mat-form-field>
+        
+          (keypress)="prevenirEnter($event)"
+          -->
+
+      
+          <button 
+            class="button-Grabar"
+            mat-flat-button
+            matTooltip="APROBACIÓN"
+            matTooltip="GRABAR"
+            matTooltipPosition="above"
+            [disabled]="formulario.invalid"
+            (click)="GuardarCalidad()"
+            #button
+          >
+            <mat-icon aria-label="person">save </mat-icon>Calidad
+          </button>
+
+        </div>
+
+        <!-- (click)="GuardarCalidad()" -->
+
+
+
+
+        <div class="container-cuerpo-fila4">
+          <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="ACCION" >
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >ACCION</th>
+              <td mat-cell  *matCellDef="let data_det_Defecto"> 
+                  <button mat-icon-button color="accent" 
+                  (click)="EliminarDefecto(data_det_Defecto.Prefijo_Maquina, data_det_Defecto.Codigo_Rollo,data_det_Defecto.Secuencia)"> 
+                      <mat-icon>delete</mat-icon>
+                      </button>
+              </td>
+          </ng-container>
+
+
+            <ng-container matColumnDef="GRUPO" >
+                <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >GRUPO DEFECTO</th>
+                <td mat-cell  *matCellDef="let data_det_Defecto"> {{data_det_Defecto.DES_GRUPO_DEFECTO}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="COD_MOTIVO" >
+                <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >CODIGO MOTIVO</th>
+                <td mat-cell  *matCellDef="let data_det_Defecto"> {{data_det_Defecto.Cod_Motivo}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="SECUENCIA" >
+                <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >SECUENCIA</th>
+                <td mat-cell  *matCellDef="let data_det_Defecto"> {{data_det_Defecto.Secuencia}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="DESCRIPCION" >
+                <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >DESCRIPCION</th>
+                <td mat-cell  *matCellDef="let data_det_Defecto"> {{data_det_Defecto.Descripcion}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="CANTIDAD_DEFECTOS" >
+                <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >CANTIDAD DEFECTOS</th>
+                <td mat-cell  *matCellDef="let data_det_Defecto"> {{data_det_Defecto.Cantidad_Defec}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="METROS" >
+                <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >METROS</th>
+                <td mat-cell  *matCellDef="let data_det_Defecto"> {{data_det_Defecto.Metros}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="FACTOR_CONVERSION" >
+                <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >FACTOR CONVERSION</th>
+                <td mat-cell  *matCellDef="let data_det_Defecto"> {{data_det_Defecto.Factor_Conversion}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="CALIDAD_ROLLO" >
+                <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >CALIDAD ROLLO</th>
+                <td mat-cell  *matCellDef="let data_det_Defecto"> {{data_det_Defecto.Calidad_Rollo}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="FECHA_REGISRO" >
+                <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >FECHA REGISTRO</th>
+                <td mat-cell  *matCellDef="let data_det_Defecto"> {{data_det_Defecto.Fecha_Registro}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="USUARIO" >
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >USUARIO</th>
+              <td mat-cell  *matCellDef="let data_det_Defecto"> {{data_det_Defecto.Usuario}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="PREFIJO_MAQUINA" >
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >PREFIJO_MAQUINA</th>
+            <td mat-cell  *matCellDef="let data_det_Defecto"> {{data_det_Defecto.Prefijo_Maquina}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CODIGO_ROLLO" >
+          <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >CODIGO_ROLLO</th>
+          <td mat-cell  *matCellDef="let data_det_Defecto"> {{data_det_Defecto.Codigo_Rollo}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ANCHO_TELA" >
+        <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >ANCHO TELA</th>
+        <td mat-cell  *matCellDef="let data_det_Defecto"> {{data_det_Defecto.AnchoTela}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="DENSIDAD_TELA" >
+      <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >DENSIDAD TELA</th>
+      <td mat-cell  *matCellDef="let data_det_Defecto"> {{data_det_Defecto.Densidad_Tela}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="OBSERVACIONES" >
+    <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >OBSERVACIONES</th>
+    <td mat-cell  *matCellDef="let data_det_Defecto"> {{data_det_Defecto.Observaciones}} </td>
+</ng-container>
+
+      
+
+    
+           
+
+                   <tr mat-header-row *matHeaderRowDef="displayedColumns_cab_2"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab_2;"></tr> 
+                </table>
+
+
+        <mat-paginator [pageSizeOptions]="[5, 20, 30]" showFirstLastButtons
+        aria-label="Select page of periodic elements" >
+    </mat-paginator>
+  </div>
+
+
+
+
+
+        <div class="footer">
+          
+
+          <button
+            class="button-Cancelar"
+            mat-flat-button
+            type="button"
+            mat-dialog-close
+            matTooltip="SALIR"
+            [disabled]="formulario.invalid"
+            (click)="Funcion_Cancelar()"
+          >
+            <mat-icon aria-label="person">exit_to_app </mat-icon>Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center">Cargando...</p>
+</ngx-spinner>

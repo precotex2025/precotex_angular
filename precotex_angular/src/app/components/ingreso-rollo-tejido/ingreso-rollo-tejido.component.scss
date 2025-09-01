@@ -1,0 +1,306 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+   
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 640px;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #ffffff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 115px
+        "fila2" 400px
+        "foot" 55px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+//fila 1 
+.container-cuerpo-fila1 {
+    display: grid;
+
+    grid-template:
+        "col1 col2 col3 col4" auto /
+        200px 200px 160px 160px  auto;
+}
+
+
+.fila1-fecha {
+    grid-area: col1;
+     
+}
+.fila1-Orden_Servicio {
+    grid-area: col2;
+    
+}
+
+.fila1-buscar {
+    width: 100%;
+    grid-area: col3;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 150px;
+    
+}
+
+.fila1-agregar {
+    width: 100%;
+    grid-area: col4;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 150px;
+}
+
+
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot .button-agregar,
+.button-cancelar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+
+.button-agregar {
+    grid-area: fcol1;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+/*.button-cancelar {
+    grid-area: fcol2;
+    background-color: #d32f2f;
+    color: #ffffff;
+}*/
+
+.mat-column-Movimiento,
+.mat-column-Orden, 
+.mat-column-Peso,
+.mat-column-Bultos,
+.mat-column-Acciones
+//.mat-column-eliminar 
+{
+	text-align: center;
+	font-size: 13px;
+    font-family: arial;
+    padding: 10px;
+   
+}
+ 
+.mat-column-Movimiento{
+    width: 10px;
+}
+.mat-column-Orden{
+    width: 120px;
+}
+.mat-column-Peso{
+    width: 120px;
+}
+.mat-column-Bultos{
+    width: 50px;
+}
+.mat-column-Acciones{
+    width: 50px;
+}
+
+
+
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+ 
+}
+.paginador{
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+
+@media screen and (max-width: 1513px){
+    
+    .grid-container{
+        height: 710px;
+    }
+    .container-cuerpo {
+        display: grid;
+    
+        grid-template:
+        "fila1" 100px
+        "fila2" 535px
+        "foot" 55px /
+        99%;
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        
+        grid-template:
+        "col1 col2 col3 col4 " auto /
+        200px 200px 160px 160px auto;
+    }
+    
+    .fila1-fecha {
+        grid-area: col1;
+         
+    }
+    .fila1-Orden_Servicio {
+        grid-area: col2;
+        
+    }
+
+    .fila1-buscar {
+      
+        grid-area: col3;
+        width: 150px;
+    }
+
+    .fila1-agregar {
+      
+        grid-area: col4;
+        width: 150px;
+    }
+}
+
+
+
+
+  @media screen and (max-width: 683px){
+   .grid-container{
+       height: 600px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila1" 140px
+        "fila2" 400px
+        "foot" 55px /
+        99%; 
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        
+        grid-template:
+        "col1 col2" 60px 
+        "col3 col4" 60px /
+        190px 190px;
+    } 
+    .fila1-fecha {
+        grid-area: col1;
+         width: 190px;
+    }
+    .fila1-Orden_Servicio {
+        grid-area: col2;
+        width: 190px;
+    } 
+
+    .fila1-buscar {
+      
+        grid-area: col3;
+        width: 180px;
+    }
+
+    .fila1-agregar {
+      
+        grid-area: col4;
+        width: 180px;
+    }
+
+  }

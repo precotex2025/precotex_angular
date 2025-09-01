@@ -1,0 +1,284 @@
+<div class="container">
+    <div class="verfecha">
+        <form action="" [formGroup]="formulario">
+            <mat-form-field appearance="fill">
+                <input matInput [matDatepicker]="picker" formControlName="fec_auditoria"
+                    (dateChange)="cargarNuevaFecha()" [formControl]="date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <!--<button type="button" class="fila1-buscar" mat-flat-button (click)="cargarNuevaFecha()">Buscar</button>-->
+            </mat-form-field>
+        </form>
+    </div>
+    <div class="grid-container">
+
+        <div class="title">EFICIENCIA POR MAQUINA Y TURNO TEJEDURIA</div>
+        <form class="container-cuerpo" [formGroup]="formulario">
+
+            <div class="container-cuerpo-fila1">
+                <div class="container-tables">
+                    <div class="container-table" style="display: none;">
+                        <div class="container-title">
+                            ESTILOS PENDIENTES POR LIQUIDAR DEL PROGRAMA DE HOY
+
+                        </div>
+                        <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+                            <ng-container matColumnDef="Estilo">
+                                <th mat-header-cell *matHeaderCellDef> ESTILO </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.COD_ESTCLI}} </td>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="Des_Cliente">
+                                <th mat-header-cell *matHeaderCellDef> CLIENTE </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.DES_CLIENTE}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Icono_Web">
+                                <th mat-header-cell *matHeaderCellDef> IMAGEN </th>
+                                <td mat-cell *matCellDef="let data_det">
+                                    <img [src]="data_det.ICONO_WEB"
+                                        style="width: 150px;height: 150px; object-fit: contain;">
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Des_Present">
+                                <th mat-header-cell *matHeaderCellDef> COLOR </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.DES_PRESENT}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Por_Liquidar">
+                                <th mat-header-cell *matHeaderCellDef> POR LIQUIDAR </th>
+                                <td mat-cell *matCellDef="let data_det"> {{data_det.POR_LIQUIDAR}} </td>
+                            </ng-container>
+
+                            <!--<ng-container matColumnDef="Acciones">
+                            <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
+                            <td mat-cell *matCellDef="let data_det">
+                                <a mat-icon-button *ngIf="data_det.COD_ORDPRO.length>0"
+                                    >
+                                    <mat-icon color="warn">delete</mat-icon>
+                                </a>
+                            </td>
+
+                        </ng-container>
+                    -->
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns_cab; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;">
+                            </tr>
+                        </table>
+                        <mat-paginator class="paginador" #MatPaginator1 [pageSizeOptions]="[4]" showFirstLastButtons
+                            aria-label="Select page of periodic elements">
+                        </mat-paginator>
+                    </div>
+                    <div class="container-table2">
+                        <!--<mat-form-field appearance="fill">
+                        <mat-label>Fecha</mat-label>
+                        <input matInput [matDatepicker]="fec_auditoria" autocomplete="off"
+                        formControlName="fec_auditoria">
+                        <mat-datepicker-toggle matSuffix [for]="fec_auditoria"></mat-datepicker-toggle>
+                        <mat-datepicker #fec_auditoria></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field  class="example-full-width" appearance="fill">
+                        <mat-label>Favorite food</mat-label>
+                        <input matInput placeholder="Ex. Pizza" formControlName="valor" value="Sushi">
+                    </mat-form-field>-->
+                        <!--<div class="container-title2">
+                        ESTILOS ACUMULADOS PENDIENTES POR LIQUIDAR
+                    </div>-->
+                        <table mat-table #table [dataSource]="dataSource2" class="mat-elevation-z8">
+
+                                <ng-container matColumnDef="FILA">
+                                    <th mat-header-cell *matHeaderCellDef>FILA </th>
+                                    <td mat-cell *matCellDef="let data_det2" class="negritatexto"> {{data_det2.FILA}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="TURNO">
+                                    <th mat-header-cell *matHeaderCellDef> TURNO </th>
+                                    <td mat-cell *matCellDef="let data_det2" class="negritatexto"> {{data_det2.TURNO}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="DES_MAQUINA">
+                                    <th mat-header-cell *matHeaderCellDef> MAQUINA </th>
+                                    <td mat-cell *matCellDef="let data_det2" class="negritatexto">
+                                        {{data_det2.DES_MAQUINA}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="TEJEDOR">
+                                    <th mat-header-cell *matHeaderCellDef> TEJEDOR</th>
+                                    <td mat-cell *matCellDef="let data_det2" style="width:10% !important;"
+                                        class="negritatexto"> <span class="amoldatexto">{{data_det2.TEJEDOR}}</span>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="TELAS">
+                                    <th mat-header-cell *matHeaderCellDef> TELAS </th>
+                                    <td mat-cell *matCellDef="let data_det2" class="negritatexto"> {{data_det2.TELAS }}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="CAL0">
+                                    <th mat-header-cell *matHeaderCellDef> CAL 0 </th>
+                                    <td mat-cell *matCellDef="let data_det2"
+                                        [ngStyle]="{'text-align':'center','border-left':'1px solid #3f51b5'}">
+                                        {{data_det2.CAL0 | number: '1.0-2' }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="KG_CAL1">
+                                    <th mat-header-cell *matHeaderCellDef> CAL 1 </th>
+                                    <td mat-cell *matCellDef="let data_det2" [ngStyle]="{'text-align':'center'}">
+                                        {{data_det2.KG_CAL1 | number: '1.0-2' }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="KG_CAL2">
+                                    <th mat-header-cell *matHeaderCellDef> CAL 2 </th>
+                                    <td mat-cell *matCellDef="let data_det2" [ngStyle]="{'text-align':'center'}">
+                                        {{data_det2.KG_CAL2 | number: '1.0-2' }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="KG_CAL3">
+                                    <th mat-header-cell *matHeaderCellDef> CAL 3 </th>
+                                    <td mat-cell *matCellDef="let data_det2" [ngStyle]="{'text-align':'center'}">
+                                        {{data_det2.KG_CAL3 | number: '1.0-2' }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="KG_TOTAL">
+                                    <th mat-header-cell *matHeaderCellDef> KG TOTAL</th>
+                                    <td mat-cell *matCellDef="let data_det2" [ngStyle]="{'text-align':'center'}">
+                                        {{data_det2.KG_TOTAL | number: '1.0-2' }} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="KG_ESTIMADOS">
+                                    <th mat-header-cell *matHeaderCellDef> KG ESTIMADOS</th>
+                                    <td mat-cell *matCellDef="let data_det2"
+                                        [ngStyle]="{'text-align':'center','border-right':'1px solid #3f51b5'}">
+                                        {{data_det2.KG_ESTIMADOS | number: '1.0-2' }} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="MIN_IMPRODUCTIVO">
+                                    <th mat-header-cell *matHeaderCellDef> MIN. IMPRODUCTIVO</th>
+                                    <td mat-cell *matCellDef="let data_det2" [ngStyle]="{'text-align':'center'}">
+                                        {{data_det2.MIN_IMPRODUCTIVO | number: '1.0-2' }} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="EFICIENCIA">
+                                    <th mat-header-cell *matHeaderCellDef> EFICIENCIA (%)</th>
+                                    <td mat-cell *matCellDef="let data_det2" [ngStyle]="
+                        data_det2.EFICIENCIA >90  && {'background-color': '#b3d3b3','font-weight':'bold','text-align':'center', 'font-size':'1.2rem'}
+                        || data_det2.EFICIENCIA >70 && data_det2.EFICIENCIA <90  && {'background-color': '#ffeb3b','font-weight':'bold','text-align':'center', 'font-size':'1.2rem'}
+                        || data_det2.KG_CAL2 >50 && data_det2.KG_CAL2 <70  && {'background-color': '#e91e63','font-weight':'bold','text-align':'center', 'font-size':'1.2rem'}
+                        || data_det2.KG_CAL2 && data_det2.KG_CAL2 >=0  && {'font-weight':'bold','text-align':'center', 'font-size':'1.2rem'}
+                        "> {{ data_det2.EFICIENCIA | number: '1.0-2' }}% </td>
+                                </ng-container>
+                                <ng-container matColumnDef="KG_PROD_TOT">
+                                    <th mat-header-cell *matHeaderCellDef> KG PROD TOT</th>
+                                    <td mat-cell *matCellDef="let data_det2" [ngStyle]="{'text-align':'center'}">
+                                        {{data_det2.KG_PROD_TOT | number: '1.0-2'}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="KG_PROD_4TA">
+                                    <th mat-header-cell *matHeaderCellDef> KG PROD 4TA</th>
+                                    <td mat-cell *matCellDef="let data_det2" [ngStyle]="{'text-align':'center'}"> {{
+                                        data_det2.KG_PROD_4TA | number: '1.0-2' }} </td>
+                                </ng-container>
+
+
+
+
+
+
+
+                                <!--
+                                  [ngStyle]="
+                                    data_det2.KG_CAL2 >90  && {'color': 'green','font-weight':'bold','text-align':'center', 'font-size':'1.2rem','background-color':'#cacdd1'}
+                                    || column=='EFICIENCIA' && ((element[column] >70 && element[column] <90)  && {'color': '#ffeb3b','font-weight':'bold','text-align':'center', 'font-size':'1.2rem','background-color':'#cacdd1'})
+                                    || (column=='EFICIENCIA' && (element[column] >50 && element[column] <70)  && {'color': 'red','font-weight':'bold','text-align':'center', 'font-size':'1.2rem','background-color':'#cacdd1'})
+                                    || (column=='EFICIENCIA' && (element[column] <50 && element[column] >=0)  && {'font-weight':'bold','text-align':'center', 'font-size':'1.2rem','background-color':'#cacdd1'})
+                                    "
+
+
+
+
+                                    || column=='EFICIENCIA' && (element[column] >90  && {'color': 'green','font-weight':'bold','text-align':'center', 'font-size':'1.2rem','background-color':'#cacdd1'})
+                                    || column=='EFICIENCIA' && ((element[column] >70 && element[column] <90)  && {'color': '#ffeb3b','font-weight':'bold','text-align':'center', 'font-size':'1.2rem','background-color':'#cacdd1'})
+                                    || (column=='EFICIENCIA' && (element[column] >50 && element[column] <70)  && {'color': 'red','font-weight':'bold','text-align':'center', 'font-size':'1.2rem','background-color':'#cacdd1'})
+                                    || (column=='EFICIENCIA' && (element[column] <50 && element[column] >=0)  && {'font-weight':'bold','text-align':'center', 'font-size':'1.2rem','background-color':'#cacdd1'})
+
+                                -->
+
+                                <!--'FILA','TURNO','DES_MAQUINA','TEJEDOR','TELAS','CAL0','KG_CAL1','KG_CAL2','KG_CAL3','KG_TOTAL','KG_ESTIMADOS','MIN_IMPRODUCTIVO','EFICIENCIA','KG_PROD_TOT','KG_PROD_4TA'-->
+                                <!--<th mat-header-cell *matHeaderCellDef  [ngStyle]="
+                            column=='KG_TOTAL' && {'background-color': '#cacdd1', 'font-size':'0.9rem'}
+                            || column=='KG_ESTIMADOS' && {'background-color': '#cacdd1', 'font-size':'0.9rem'}
+                            || column=='KG_PROD_TOT' && {'background-color': '#cacdd1', 'font-size':'0.9rem'}
+                            || column=='KG_PROD_4TA' && {'background-color': '#cacdd1', 'font-size':'0.9rem'}
+                            || column=='EFICIENCIA' && {'background-color': '#5d5e60','color':'white', 'font-size':'0.9rem'}
+                            || column=='MIN_IMPRODUCTIVO' && {'background-color': '#cacdd1', 'font-size':'0.9rem'}
+                            || {'font-size':'0.9rem','background-color': '#edefef'}
+                            "> {{column}} </th>
+
+                            <td  mat-cell *matCellDef="let element" [ngStyle]="
+                                column=='KG_TOTAL' && {'background-color': '#ffeb3b21','text-align':'right', 'font-size':'0.9rem','font-weight':'bold'}
+                                || column=='CAL0' && {'text-align':'right', 'font-size':'0.9rem'}
+                                || column=='KG_CAL1' && {'text-align':'right', 'font-size':'0.9rem'}
+                                || column=='KG_CAL2' && {'text-align':'right', 'font-size':'0.9rem'}
+                                || column=='KG_CAL3' && {'text-align':'right', 'font-size':'0.9rem'}
+                                || column=='MIN_IMPRODUCTIVO' && {'background-color': '#ffeb3b21','text-align':'right', 'font-size':'1rem','font-weight':'bold'}
+                                || column=='KG_ESTIMADOS' && {'background-color': '#ffeb3b21','text-align':'right', 'font-size':'1rem','font-weight':'bold'}
+                                || column=='KG_PROD_TOT' && {'background-color': '#ffeb3b21' ,'text-align':'right', 'font-size':'1rem','font-weight':'bold'}
+                                || column=='KG_PROD_4TA' && {'background-color': '#ffeb3b21' ,'text-align':'right', 'font-size':'1rem','font-weight':'bold'}
+                                || column=='EFICIENCIA' && (element[column] >90  && {'color': 'green','font-weight':'bold','text-align':'center', 'font-size':'1.2rem','background-color':'#cacdd1'})
+                                || column=='EFICIENCIA' && ((element[column] >70 && element[column] <90)  && {'color': '#ffeb3b','font-weight':'bold','text-align':'center', 'font-size':'1.2rem','background-color':'#cacdd1'})
+                                || (column=='EFICIENCIA' && (element[column] >50 && element[column] <70)  && {'color': 'red','font-weight':'bold','text-align':'center', 'font-size':'1.2rem','background-color':'#cacdd1'})
+                                || (column=='EFICIENCIA' && (element[column] <50 && element[column] >=0)  && {'font-weight':'bold','text-align':'center', 'font-size':'1.2rem','background-color':'#cacdd1'})
+                                || {'text-align':'left', 'font-size':'0.8rem'}" > {{element[column]}} </td>-->
+
+
+                            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                            <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+
+                            <!--<ng-container matColumnDef="Dias">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell"></th>
+                            <td mat-cell *matCellDef="let data_det2" > <button *ngIf="data_det2.DIAS == 'S'; else btnerr" type="button"style="background:#f44336; width: 10px;" class="button-agregar" mat-flat-button></button>
+                                <ng-template #btnerr><button type="button" style="background:#fcc5ff; width: 10px;" class="button-agregar" mat-flat-button ></button></ng-template>
+                            </td>
+                        </ng-container>-->
+
+
+
+                            <!--<ng-container matColumnDef="Acciones">
+                            <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
+                            <td mat-cell *matCellDef="let data_det">
+                                <a mat-icon-button *ngIf="data_det.COD_ORDPRO.length>0"
+                                    >
+                                    <mat-icon color="warn">delete</mat-icon>
+                                </a>
+                            </td>
+
+                        </ng-container>
+                    -->
+
+                            <!--<tr mat-header-row *matHeaderRowDef="displayedColumns_cab2; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns_cab2;">
+                        </tr>-->
+                        </table>
+                        <mat-paginator class="paginador" #MatPaginator2 [pageSizeOptions]="[10]" showFirstLastButtons
+                            aria-label="Select page of periodic elements">
+                        </mat-paginator>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

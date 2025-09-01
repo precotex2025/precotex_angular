@@ -1,0 +1,108 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container" [style]="grid_border">
+  
+      <div class="title" [style]='background'>DISGREGAR PRENDA PAQUETE
+      </div>
+  
+      <div class="row" style="margin-top: 20px; padding: 5px;">
+        <div class="col-md-12">
+          <mat-card>
+            <mat-card-content>
+              <div class="row">
+                <div class="col-md-3">
+                  <mat-form-field class="fila1-Codigo">
+                    <mat-label>Ticket</mat-label>
+                    <input matInput type="text" [(ngModel)]="Ticket" placeholder="Cod. Barras" #Codigo autocomplete="off">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                  <button type="button" class="button-Agregar" mat-button mat-flat-button (click)="GuardarCabecera()">
+                    <mat-icon aria-label="person">search
+                    </mat-icon> Buscar
+                  </button>
+                </div>
+                
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        
+      </div>
+  
+      <div class="row">
+        <div class="col-md-12">
+          <mat-card>
+            <mat-card-content>
+              <div class="row">
+                <div class="col-md-12">
+                  <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+  
+                    <ng-container matColumnDef="Ticket">
+                      <th mat-header-cell *matHeaderCellDef> Ticket </th>
+                      <td mat-cell *matCellDef="let data_det"> {{data_det.Ticket}}</td>
+                    </ng-container>
+  
+                    <ng-container matColumnDef="NUM_PAQUETE">
+                      <th mat-header-cell *matHeaderCellDef> Paquete </th>
+                      <td mat-cell *matCellDef="let data_det"> {{ data_det.NUM_PAQUETE }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="COD_ORDPRO">
+                      <th mat-header-cell *matHeaderCellDef> OP </th>
+                      <td mat-cell *matCellDef="let data_det"> {{ data_det.COD_ORDPRO }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="DES_PRESENT">
+                      <th mat-header-cell *matHeaderCellDef> Color </th>
+                      <td mat-cell *matCellDef="let data_det"> {{ data_det.DES_PRESENT }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="COD_TALLA">
+                      <th mat-header-cell *matHeaderCellDef> Talla </th>
+                      <td mat-cell *matCellDef="let data_det"> {{ data_det.COD_TALLA }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="PRENDASPAQ">
+                      <th mat-header-cell *matHeaderCellDef> Cantidad </th>
+                      <td mat-cell *matCellDef="let data_det"> {{ data_det.PRENDASPAQ }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="Prendas_Disgregada">
+                        <th mat-header-cell *matHeaderCellDef> Cantidad Disgregada </th>
+                        <td mat-cell *matCellDef="let data_det"> 
+                            <mat-form-field class="cantidad">
+                                <mat-label>Ingrese Cantidad</mat-label>
+                                <input matInput type="number" [(ngModel)]="data_det.Prendas_Disgregada" (change)="changeCantidad($event, data_det)" placeholder="Quitar Prendas" autocomplete="off">
+                            </mat-form-field>
+                        </td>
+                      </ng-container>
+                    <ng-container matColumnDef="cod_estcli">
+                      <th mat-header-cell *matHeaderCellDef> Estilo </th>
+                      <td mat-cell *matCellDef="let data_det"> {{ data_det.cod_estcli }}</td>
+                    </ng-container>
+  
+                    <ng-container matColumnDef="acciones">
+                      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                      <td mat-cell *matCellDef="let data_det">
+  
+  
+                        <a mat-icon-button color="warn" style="margin-right:5px;"
+                          (click)="OpenDeleteConfirmacion(data_det)">
+                          <mat-icon color="warn">delete</mat-icon>
+                        </a>
+                      </td>
+                    </ng-container>
+  
+                    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                    <tr class="mat-row" *matNoDataRow>
+                      <td class="mat-cell" colspan="4">Aún no has agregado Tickets</td>
+                    </tr>
+                  </table>
+                  <mat-paginator #MatPaginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                  </mat-paginator>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>

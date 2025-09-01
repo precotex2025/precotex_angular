@@ -1,0 +1,110 @@
+.contenedor-registro-detalle {
+	background: rgba(0,0,0,.3);
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	opacity: 0;
+	font-family: corbel, arial;
+	font-size: 15px;
+
+}
+
+.contenedor-registro-detalle-popup {
+	background: #F8F8F8;
+	box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
+	border-radius: 4px;
+	padding: 0;
+    margin: 0;
+	text-align: center;
+	
+	transition: 0.3s ease all;
+	transform: scale(0.7);
+	opacity: 0;
+	width: 950px;
+}
+
+.contenedor-registro-detalle-title {
+	background-color: #337AB7;
+	color: #FCFFFF;
+	padding: 8px 10px 10px 10px;
+	border-radius: 4px 4px 0px 0px;
+	width: 100%;
+}
+
+.contenedor-registro-detalle-main {
+	//background-color: blue;
+	overflow: auto;
+}
+
+  .tabla_detalle {
+	font-family: arial;
+	font-size: 10px;
+  }
+
+
+  .mat-column-trabajador {
+	width: 300px !important;
+	text-align: left;
+	font-size: 13px;
+  }
+
+  .mat-column-operacion {
+	width: 200px !important;
+	text-align: left;
+	font-size: 13px;
+  }
+
+  .mat-column-rev1_status, .mat-column-rev2_status, .mat-column-rev3_status {
+	width: 70px !important;
+	text-align: center;
+  }
+
+  .mat-column-glosa {
+	width: 200px !important;
+	text-align: left;
+	font-size: 13px;
+  }  
+
+  .mat-header-cell{
+	text-align: center;
+	font-size: 13px;
+  }
+
+.contenedor-registro-detalle-foot { 
+	margin: 15px 5px 0px 5px; 
+	width: 100%;
+	text-align: center;
+}
+
+.registro_detalle_menu_1{
+	text-align: left;
+}
+
+.registro_detalle_menu_1  > button, .registro_detalle_menu_2 > button {
+	margin: 0px 5px 0px 5px;
+	width: 130px;
+}
+
+.registro_detalle_menu_2{
+	text-align: right;
+}
+
+
+/* ------------------------- */
+/* ANIMACIONES */
+/* ------------------------- */
+.contenedor-registro-detalle-activo-no { opacity: 0; visibility: hidden;}
+
+.contenedor-registro-detalle-activo-si {transform: scale(1); opacity: 1; visibility: visible;}
+// .container-registro-activo-si h3 { animation: entradaTitulo .8s ease .5s forwards; }
+// .container-registro-activo-si h4 { animation: entradaSubtitulo .8s ease .5s forwards; }
+// .overlay_activo_si .contenedor-inputs { animation: entradaInputs 1s linear 1s forwards; }
+
+.contenedor-registro-detalle-popup-activo-no { opacity: 0;}
+.contenedor-registro-detalle-popup-activo-si {transform: scale(1); opacity: 1; visibility: visible;}
+

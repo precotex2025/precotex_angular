@@ -1,0 +1,24 @@
+<div class="container"> 
+    <div class="grid-container">  
+        <div class="title">Valor Final</div>
+
+        <form class="container-cuerpo">
+            <div class="container-cuerpo-fila">
+                <mat-form-field appearance="fill">
+                    <mat-label>Medida</mat-label>
+                    <input matInput [(ngModel)]="data.medida" name="Mdida" type="text" placeholder="Medida" value="" autocomplete="off">
+                  </mat-form-field>
+            </div>
+
+            <div class="container-cuerpo-foot">
+               <button  type="submit" class="button-agregar" [mat-dialog-close]="data.medida" mat-flat-button>
+                    <mat-icon aria-label="person" >check_circle</mat-icon>Aceptar
+                </button>
+
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off</mat-icon>Cancelar
+                </button>               
+            </div>
+        </form>
+    </div>
+</div>

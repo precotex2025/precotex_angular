@@ -1,0 +1,89 @@
+<div class="container-dialog">
+
+    <div class="grid-container-dialog">
+
+        <div class="title-dialog">Transferencia Código de Barra</div>
+
+        <form [formGroup]="formulario">
+
+            <div class="Barra_origen">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Cod. de Barra Origen</mat-label>
+                <input matInput readonly placeholder="Codigo de Barra" maxlength="50" formControlName="Cod_BarraOri">
+                <td mat-cell *matCellDef="let data_det"> {{ data_det.Cod_Barra }}</td>
+            </mat-form-field>
+            </div>
+
+            <div class="Barra_destino">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Cod. de Barra Destino</mat-label>
+                <input matInput placeholder="Ingrese Codigo de Barra Destino" maxlength="50" formControlName="Cod_BarraDes" >
+            </mat-form-field>
+            </div>
+            
+
+            <div class="container-cuerpo-fila2-dialog">
+                   
+                <table mat-table   class="mat-elevation-z8" #table [dataSource]="dataSource">
+ 
+                    <ng-container matColumnDef="Id">
+                        <th mat-header-cell *matHeaderCellDef>Id</th>
+                        <td mat-cell *matCellDef="let data_det, index as id"> {{ id+1 }}</td>
+                        <td> Total </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_OrdPro">
+                        <th mat-header-cell *matHeaderCellDef>OP</th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Cod_OrdPro }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Present">
+                        <th mat-header-cell *matHeaderCellDef>Cod. Color</th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Cod_Present }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Des_Present">
+                        <th mat-header-cell *matHeaderCellDef> Color </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Des_Present }}</td>
+                    </ng-container>
+
+                    <ng-container  matColumnDef="Cod_Talla">
+                        <th mat-header-cell *matHeaderCellDef> Tallas </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Cod_Talla }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cantidad">
+                        <th class="talla" mat-header-cell *matHeaderCellDef>Cant. </th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <input matInput type="number" min="0" [value]="data_det.Cantidad" (change)="sumaTotales2($event, data_det)">
+                        </td>
+                    </ng-container>
+
+
+                       <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                       <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                 </table>
+             </div>
+             <div class="Lista_total">
+                <table class="Totales">
+                <ng-container>
+                    <td mat-header-cell class="fila" >Total de prendas: </td>
+                    <td class="total">
+                        <span class="value">{{ this.sum }}</span>
+                    </td>
+                </ng-container>
+                </table>
+            </div>
+
+             <div class="container-cuerpo-foot-dialog">
+
+                <button mat-flat-button class="button-grabar" color="primary" (click)="validarJabaConOpColor()">Grabar</button>
+                <button mat-flat-button class="button-cancelar" mat-dialog-close>Cancelar</button>   
+             </div>
+        </form>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

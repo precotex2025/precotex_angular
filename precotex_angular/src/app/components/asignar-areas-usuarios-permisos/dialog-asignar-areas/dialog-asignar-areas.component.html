@@ -1,0 +1,91 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+        <!-- *ngIf="Titulo == undefined; else titulomodificar" -->
+        <div class="title"><strong>{{data.title}}</strong></div>
+        <div class="body">
+            <form class="container-cuerpo" [formGroup]="formulario">
+                <div class="fila21">
+                    <mat-checkbox class="example-margin" *ngIf="this.data.Opcion != 'U'"
+                     (change)="setAll($event.checked)">
+                        Buscar por Nombre
+                    </mat-checkbox>
+                    <ng-select style="margin-left:10px;" *ngIf="mostrarUsuarios" [items]="dataUsuarios" (change)="obtenerSeleccionado($event)" bindLabel="Nom_usuario" [ngStyle]="{ 'min-width': '300px'}"
+                        bindValue="Id_Usuario" [multiple]="false" [searchable]="true" placeholder="Buscar por Nombre">
+                    </ng-select>
+                    <mat-form-field *ngIf="!mostrarUsuarios" appearance="fill" style="margin-left:10px;">
+                        <mat-label>COD. TRABAJADOR</mat-label>
+                        <input matInput type="text" placeholder="Ingresa Cod. Trabajador" maxlength="4"
+                            autocomplete="off" formControlName="Cod_Trabajador" />
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" style="margin-left:10px;">
+                        <mat-label>TIPO DE TRABAJADOR</mat-label>
+                        <mat-select formControlName="Tip_Trabajador">
+                            <mat-option value="O">OPERARIO</mat-option>
+                            <mat-option value="E">EMPLEADO</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button class="button-buscar" mat-flat-button color="warn" type="button"
+                        (click)="buscarTrabajadorPermiso()">
+                        <mat-icon aria-label="person">search
+                        </mat-icon>BUSCAR
+
+                    </button>
+                </div>
+                <div class="fila1" *ngIf="dataTrabajador.length > 0">
+                    <mat-card>
+                        <mat-card-content>
+                            Nombres Trabajador: <strong>{{dataTrabajador[0].Nombre_Trabajador != null ? dataTrabajador[0].Nombre_Trabajador : dataTrabajador[0].Nom_usuario}}</strong>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <div class="fila3">
+                    <mat-form-field appearance="fill" class="fill" style="margin-top: 9px;">
+                        <mat-label>Seleccione una Empresa</mat-label>
+                        <mat-select formControlName="Cod_Empresa" (selectionChange)="selectEmpresa($event)">
+                            <mat-option value="07">PRECOTEX SAC</mat-option>
+                            <mat-option value="56">VYD</mat-option>
+                            <mat-option value="77">SABOR CRIOLLO</mat-option>
+                            <mat-option value="78">KAPRA</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div class="fill">
+                        <ng-select [ngStyle]="{ 'max-width': '100%'}" [items]="dataAreas" bindLabel="RH_Des_Area"
+                            bindValue="RH_Cod_Area" [multiple]="false" [searchable]="true"
+                            placeholder="Seleccione un Area" formControlName="RH_Cod_Area">
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="fila4">
+                    <!--<mat-form-field appearance="fill" class="fill" style="margin-top: 9px; width: 100%;">
+                        <mat-label>Seleccione el Tipo</mat-label>
+                        <mat-select formControlName="Tipo">
+                            <mat-option value="T">CREAR Y APROBAR PERMISOS</mat-option>
+                            <mat-option value="C">SOLO CREAR PERMISOS</mat-option>
+                        </mat-select>
+                    </mat-form-field>-->
+                    <mat-form-field appearance="fill" class="fill" style="margin-top: 9px; width: 100%;">
+                        <mat-label>Seleccione el Tipo</mat-label>
+                        <mat-select formControlName="Tipo">
+                            <mat-option *ngFor="let option of ItemsTipoPermisos" [value]="option.id" >{{option.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </form>
+        </div>
+
+        <div class="footer">
+            <button class="button-dialog" mat-flat-button type="button" (click)="guardarAreaPermiso()"
+                [disabled]="formulario.invalid">
+                <mat-icon aria-label="person">check
+                </mat-icon>{{data.boton}}
+
+            </button>
+            <button class="button-cancelar" mat-flat-button type="button" mat-dialog-close>
+                <mat-icon aria-label="person">highlight_off
+                </mat-icon>
+                CANCELAR</button>
+        </div>
+    </div>
+
+</div>

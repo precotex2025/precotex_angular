@@ -1,0 +1,36 @@
+<form [formGroup]="formulario">
+    <!-- <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Codigo Trabajador</mat-label>
+      <mat-select  formControlName="codTrabajador" (selectionChange)="pasarDato()" name="listar_operacionConductor">
+        <mat-option *ngFor="let listar_origen of listar_operacionConductor" [value]="listar_origen.Tipo+'-'+listar_origen.Codigo">
+            {{listar_origen.Nombre}}
+        </mat-option>
+    </mat-select>
+    </mat-form-field> -->
+    <button class="boton" type="button" mat-flat-button color="primary" (click)="agregarTrabajadores()" *ngIf="!mostrar">Agregar Todos Los Trabajadores
+      <mat-icon>add</mat-icon>
+    </button>
+    <button class="boton" type="button" mat-flat-button color="warn" (click)="quitarTrabajadores()" *ngIf="mostrar">Quitar Todos Los Trabajadores
+      <mat-icon>cancel</mat-icon>
+    </button>  
+    <ng-select 
+            [ngStyle]="{ 'max-width': '100%'}"
+            [items]="listar_operacionConductor" 
+             bindLabel="Nombre" 
+             bindValue="Codigo"
+             (change)="Seleccionados($event)"
+             [multiple]="true"
+             [searchable]="searchable"
+             placeholder="Seleccione uno o mas Trabajadores"
+             formControlName="codTrabajador">
+    </ng-select>
+  
+    <!-- <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Trabajador</mat-label>
+      <input matInput placeholder="Trabajador" formControlName="desTrabajador" value="" readonly>
+    </mat-form-field> -->
+  
+    <button mat-flat-button (click)="guardar()" class="button-registrar"  color="primary">Agregar Permiso</button>
+    <button mat-flat-button class="button-cancelar" mat-dialog-close>Cancelar</button>  
+  </form>
+  

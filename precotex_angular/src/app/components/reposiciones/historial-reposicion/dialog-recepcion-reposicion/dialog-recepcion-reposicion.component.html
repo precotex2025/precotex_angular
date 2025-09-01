@@ -1,0 +1,44 @@
+<div class="container-fluid">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title">Confirmar Recepción</div>
+        <mat-card>
+            <mat-card-content>
+                <div class="observaciones">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Reposición</mat-label>
+                        <mat-select [(ngModel)]="Recepcion_Conforme">
+                            <mat-option value="SI">Reposición Aceptada</mat-option>
+                            <mat-option value="NO">Reposición Rechazada</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="observaciones">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Observaciones Rechazo</mat-label>
+                        <mat-select [(ngModel)]="observaciones" [required]="Recepcion_Conforme == 'NO'">
+                            <mat-option value="TONO DE PRENDA">TONO DE PRENDA</mat-option>
+                            <mat-option value="TIPO DE TELA">TIPO DE TELA</mat-option>
+                            <mat-option value="DIFERENTE TALLA">DIFERENTE TALLA</mat-option>
+                            <mat-option value="DIFERENTE ESTILO">DIFERENTE ESTILO</mat-option>
+                            <mat-option value="PIEZAS MAL CORTADAS">PIEZAS MAL CORTADAS</mat-option>
+                            <mat-option value="OTROS">OTROS</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="botones">
+                    <button mat-flat-button color="primary" (click)="generarAprobacion(1)" type="button" class="button-registrar"><mat-icon>check_circle</mat-icon>
+                        Guardar</button>
+                    <button mat-flat-button color="warn" mat-dialog-close type="button" class="button-cancel"><mat-icon>cancel</mat-icon>
+                        Cancelar</button>
+                </div>
+                <!-- <div class="botones">
+                    <button mat-flat-button color="warn" mat-dialog-close class="button-cancel"><mat-icon>close</mat-icon>
+                        Cancelar</button>
+                </div> -->
+            </mat-card-content>
+        </mat-card>
+        
+    </div>
+</div>

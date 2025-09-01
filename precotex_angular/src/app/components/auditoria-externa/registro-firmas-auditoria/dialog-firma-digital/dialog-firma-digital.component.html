@@ -1,0 +1,33 @@
+<div class="container-fluid">
+    <div class="grid-container">
+        <div class="title">Firma Digital - {{ lc_Nombre }}</div>    
+
+        <div class="find">
+            <mat-card class="example-card">
+                <mat-card-content>
+                    <canvas id="canvasId" #canvasRef></canvas>
+                </mat-card-content>
+                
+                <mat-divider></mat-divider>
+
+                <mat-card-actions>
+                    <button type="button" color="primary" mat-flat-button (click)="onSaveImage()">
+                        <mat-icon aria-label="person">check_circle</mat-icon>Registrar
+                    </button>
+                    
+                    <button type="button" color="warn" mat-button mat-dialog-close mat-dialog-close mat-flat-button>
+                        <mat-icon aria-label="person">highlight_off</mat-icon>Cancelar
+                    </button>    
+                </mat-card-actions>
+            </mat-card>
+            
+        </div>
+        
+        <!-- Muestra firma
+        <div class="fila1-Imagen" *ngIf="Imagen64">
+            <img [src]="Imagen64" style="max-width: 200px;" alt="">
+        </div>
+        -->
+    </div>
+</div>
+

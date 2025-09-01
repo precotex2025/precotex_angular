@@ -1,0 +1,28 @@
+      <!--MODAL PARA LISTAR RESULTADOS DE BUSQUEDA DE LA PARTIDA INICIO -->
+      <h2>Seleccionar partida</h2>
+
+      <ul>
+        <li *ngFor="let item of data; let i = index"
+            [class.seleccionado]="item === seleccionado"
+            class="fila">
+
+            <!-- Checkbox -->
+            <input type="checkbox" 
+                    (change)="toggleSeleccion(item)" 
+                    class="columna-check"
+                    />
+
+            <span class="columna-info">{{ item.cod_Tela }} - {{ item.des_Tela }} - {{ item.cod_Color }}</span>
+            <span *ngIf="item === seleccionado">✔️</span>
+        </li>
+      </ul>
+
+      <div style="display: flex; gap: 10px;">
+        <button (click)="agregar()">Aceptar</button>
+        <button (click)="cerrar()">Cancelar</button>
+      </div>
+
+
+
+
+      <!--MODAL PARA LISTAR RESULTADOS DE BUSQUEDA DE LA PARTIDA FIN -->

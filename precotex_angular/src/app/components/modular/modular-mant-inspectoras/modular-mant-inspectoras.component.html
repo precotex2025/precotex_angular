@@ -1,0 +1,76 @@
+<div class="container">
+  <!-- ventana nro 4 - historial -->
+  <div class="grid-container">
+  
+    <div class="title">Mantenimiento Inspectoras de Módulo</div>
+  
+      <form class="container-cuerpo">
+        <div class="container-cuerpo-fila1">
+  
+          <mat-form-field class="fila1-fecha" appearance="fill">
+            <mat-label>Buscar</mat-label>
+            <input matInput type="text" [(ngModel)]="Buscar" name="Buscar" placeholder="Ingrese" autocomplete="off">
+          </mat-form-field>
+  
+          <button type="button" class="fila1-buscar" mat-flat-button (click)="applyFilter()">
+            <mat-icon aria-label="person">search</mat-icon>Buscar
+          </button>
+  
+          <button type="button" class="fila1-agregar" mat-flat-button (click)="openDialogModulos()">
+            <mat-icon aria-label="person">add</mat-icon>Agregar
+          </button>
+        </div>
+  
+        <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+        <div class="container-cuerpo-fila2">
+  
+  
+          <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+  
+            <ng-container matColumnDef="Nom_Usuario">
+              <th mat-header-cell *matHeaderCellDef> Apellidos y Nombres </th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Nom_Usuario}}</td>
+            </ng-container>
+  
+            <ng-container matColumnDef="Des_Modulo">
+              <th mat-header-cell *matHeaderCellDef> Módulo </th>
+              <td mat-cell *matCellDef="let data_det"> {{ data_det.Des_Modulo }}</td>
+            </ng-container>
+  
+            <ng-container matColumnDef="Fecha_Registro">
+              <th mat-header-cell *matHeaderCellDef> Fecha de Registro </th>
+              <td mat-cell *matCellDef="let data_det"> {{ data_det.Fecha_Registro }}</td>
+            </ng-container>
+  
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <td mat-cell *matCellDef="let data_det">
+  
+                <a mat-icon-button style="margin-right:5px;" (click)="openEditarModulo(data_det)">
+                  <mat-icon color="success">edit</mat-icon>
+                </a>
+  
+                <a mat-icon-button color="warn" style="margin-right:5px" (click)="OpenEliminar(data_det)" >
+                  <mat-icon color="warn">delete</mat-icon>
+                </a>
+              </td>
+            </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+          </table>
+          <mat-paginator #MatPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+  
+      </form>
+  
+  </div>
+  
+
+</div>
+  
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

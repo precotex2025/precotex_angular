@@ -1,0 +1,39 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+        <!-- *ngIf="Titulo == undefined; else titulomodificar" -->
+        <div class="title"><strong>{{cabecera}}</strong></div>
+        <div class="body">
+            <form class="container-cuerpo" [formGroup]="formulario">
+                <div class="fila1">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Descripción</mat-label>
+                        <input matInput type="text" placeholder="Descripción" autocomplete="off" formControlName="Descripcion"/>
+                    </mat-form-field>    
+                    <mat-form-field class="example-form-field" appearance="fill">
+                        <mat-label>Categoría</mat-label>
+                        <mat-select
+                            formControlName="Cod_Categoria">
+                            <mat-option *ngFor="let item of ClaseActivos"
+                                [value]="item.Cod_Categoria">{{item.Nombre_Categoria}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>  
+            </form>
+        </div>
+
+        <div class="footer">
+            <button class="button-dialog" mat-flat-button type="button" (click)="guardarInformacion()" [disabled]="!formulario.valid">
+                <mat-icon aria-label="person" >check
+                </mat-icon>{{boton}}
+
+            </button>
+            <button class="button-cancelar"  mat-flat-button type="button" mat-dialog-close>
+                <mat-icon aria-label="person">highlight_off
+                </mat-icon>
+                CANCELAR</button>
+        </div>
+    </div>
+  
+  </div>
+  

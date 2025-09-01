@@ -1,0 +1,445 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 13px;
+    margin: 0;
+  }
+  
+  .grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0;
+    //padding: 1x ;
+    //padding-bottom: 15px;
+    //min-width: 350px;
+    min-height: 400px;
+    height: 1000px;
+    //position: absolute;
+  }
+  
+  .title {
+    background-color: #3f51b5;
+    color: rgb(255, 255, 255);
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  .container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 5px 0;
+    justify-content: center;
+  }
+  
+  .container-cuerpo {
+    display: grid;
+  
+    grid-template:
+      "fila1" 80px
+      "fila2" 180px
+      "fila3" 450px
+      "foot" 55px /
+      99%;
+  }
+  
+  .container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+  }
+  
+  .container-cuerpo-fila2 {
+    grid-area: fila2;
+     overflow: auto;
+     margin-bottom: 10px;
+     width: 100%;
+  }
+  
+
+  .container-cuerpo-fila3 {
+    grid-area: fila3;
+     overflow: auto;
+     margin-bottom: 10px;
+     width: 100%;
+  }
+  
+
+  .container-cuerpo-foot {
+    grid-area: foot;
+  }
+  
+  mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+  }
+  
+  .d-none {
+    display: none;
+  }
+  
+  .button-info {
+    margin-top: 10px;
+    background: #2b78e4;
+    width: 98%;
+    color: white;
+  }
+  
+  .mat-header-cell {
+    background-color: #4caf50; /* Cambia el color a tu preferencia */
+    color: white; /* Cambia el color del texto */
+    font-weight: bold;
+    padding: 0.5rem;
+  }
+
+  .mat-header-cell_2 {
+    background-color: #d7e607; /* Cambia el color a tu preferencia */
+    color: black; /* Cambia el color del texto */
+    font-weight: bold;
+    padding: 0.5rem;
+  }
+
+  .mat-cell, .mat-header-cell { border-right: 1px solid #e0e0e0;  /* Color y estilo de la línea */ }
+  
+
+  
+  .paginador {
+    width: auto;
+  }
+  
+
+  
+
+  .footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  
+ 
+  ::ng-deep .my-class .mat-dialog-container {
+    padding: 5px;
+    height: auto;
+  }
+  
+  .button-Buscar{
+    display: inline-block;
+    background-color: #4caf50;
+    color: #ffffff;
+    margin-right: 1rem;
+  }
+
+
+  
+  .button-Cancelar {
+    display: inline-block;
+    background-color: #d32f2f;
+    color: #ffffff;
+    margin-right: 1rem;
+  }
+
+
+  
+  //fila 1
+  .container-cuerpo-fila1 {
+    display: grid;
+  
+    grid-template:
+      "col1 col2 col3" 50px;
+  }
+  
+  .fila1-Partida {
+    grid-area: col1;
+    font-size: large;
+  }
+
+
+
+  .button-Buscar {
+    grid-area: col2;
+  }
+
+
+
+  .button-Cancelar {
+    grid-area: col3;
+  }
+  
+
+  //   'Cliente',
+  //   'Cliente_tex',
+  //   'Cod_ordtra_manufactura',
+  //   'Codi',
+  //   'Nombre_Color',
+  //   'Fec_Creacion',
+  //   'Orden_Compra',
+  //   'Ser_ordcomp',
+  //   'Cod_ordcomp',
+  //   'Observacion',
+  //   'Maquina',
+  //   'Partida_Cliente',
+  //   'Reproceso',
+  //   'Partida_Original',
+  //   'Guia',
+  //   'Cod_grupoTex',
+  //   'Opcion',
+  //   'Retencion',
+  //   'Rel_Bano_Litros',
+  //   'Rel_Bano_Kilos',
+  //   'Proveedor',
+  //   'Lote_Hilado',
+  //   'Nro_Partidas',
+  //   'Gots',
+
+    
+  
+  .mat-column-Cliente,
+  .mat-column-Cliente_tex,
+  .mat-column-Cod_ordtra_manufactura,
+  .mat-column-Cod_Color
+  .mat-column-Nombre_Color
+  .mat-column-Fec_Creacion
+  .mat-column-Orden_Compra
+  .mat-column-Observacion
+  .mat-column-Maquina
+  .mat-column-Partida_Cliente
+  .mat-column-Reproceso
+  .mat-column-Partida_Original
+  .mat-column-Guia
+  .mat-column-Cod_grupoTex
+  .mat-column-Opcion
+  .mat-column-Retencion
+  .mat-column-Rel_Bano_Litros
+  .mat-column-Rel_Bano_Kilos
+  .mat-column-Proveedor
+  .mat-column-Lote_Hilado
+  .mat-column-Nro_Partidas
+  .mat-column-Gots
+  
+  
+  .mat-column-Cliente {text-align: center; }
+  .mat-column-Cliente_tex {text-align: center; }
+  .mat-column-Cod_ordtra_manufactura {text-align: center; }
+  .mat-column-Cod_Color {text-align: center; }
+  .mat-column-Nombre_Color {text-align: center; }
+  .mat-column-Fec_Creacion {text-align: center; }
+  .mat-column-Orden_Compra {text-align: center; }
+  .mat-column-Observacion {text-align: center; }
+  .mat-column-Maquina {text-align: center; }
+  .mat-column-Partida_Cliente {text-align: center; }
+  .mat-column-Reproceso {text-align: center; }
+  .mat-column-Partida_Original {text-align: center; }
+  .mat-column-Guia {text-align: center; }
+  .mat-column-Cod_grupoTex {text-align: center; }
+  .mat-column-Opcion {text-align: center; }
+  .mat-column-Retencion {text-align: center; }
+  .mat-column-Rel_Bano_Litros {text-align: center; }
+  .mat-column-Rel_Bano_Kilos {text-align: center; }
+  .mat-column-Proveedor {text-align: center; }
+  .mat-column-Lote_Hilado {text-align: center; }
+  .mat-column-Nro_Partidas {text-align: center; }
+  .mat-column-Gots {text-align: center; }
+
+
+
+  //   'Tela',
+  //   'Comb',
+  //   'Talla',
+  //   'Kgs_Progr',
+  //   'Uni_Progr',
+  //   'Kgs_Asign',
+  //   'Uni_Asign',
+  //   'OT_Tejeduria',
+  //   'Rollo',
+  //   'Tela_Comb',
+  //   'Talla_OT',
+  //   'Nombre_Tela',
+  //   'Kgs_Despachados',
+  //   'Uni_Despachados',
+  //   'Calidad',
+  //   'Fec_Produccion',
+  //   'Proveedor_Tej',
+  //   'Observaciones',
+  //   'Num_Secuencia_Tinto',
+  //   'Barra',
+  //   'Tejedor',
+  //   'Maquina_Tejeduria',
+  //   'Calidad_Auditada',
+  //   'Cod_Restriccion',
+  //   'Obs_Control_Calidad',
+  //   'Restriccion',
+  //   'Fallas_Tejeduria',
+  //   'Lote_Hilado',
+
+
+
+  .mat-column-Rollo
+  .mat-column-Tela,
+  .mat-column-Comb,
+  .mat-column-Talla,
+  .mat-column-Kgs_Progr
+  .mat-column-Uni_Progr
+  .mat-column-OT_Tejeduria
+  .mat-column-Tela_Comb
+  .mat-column-Talla_OT
+  .mat-column-Nombre_Tela
+  .mat-column-Kgs_Despachados
+  .mat-column-Uni_Despachados
+  .mat-column-Calidad
+  .mat-column-Fec_Produccion
+  .mat-column-Proveedor_Tej
+  .mat-column-Observaciones
+  .mat-column-Num_Secuencia_Tinto
+  .mat-column-Barra
+  .mat-column-Tejedor
+  .mat-column-Maquina_Tejeduria
+  .mat-column-Calidad_Auditada
+  .mat-column-Cod_Restriccion
+  .mat-column-Obs_Control_Calidad
+  .mat-column-Restriccion
+  .mat-column-Fallas_Tejeduria
+  .mat-column-Lote_Hilado
+
+  
+  
+  .mat-column-Tela {text-align: center; }
+  .mat-column-Comb {text-align: center; }
+  .mat-column-Talla {text-align: center; }
+  .mat-column-Kgs_Progr {text-align: center; }
+  .mat-column-Uni_Progr {text-align: center; }
+  .mat-column-OT_Tejeduria {text-align: center; }
+  .mat-column-Rollo {text-align: center; }
+  .mat-column-Tela_Comb {text-align: center; }
+  .mat-column-Talla_OT {text-align: center; }
+  .mat-column-Nombre_Tela {text-align: center; }
+  .mat-column-Kgs_Despachados {text-align: center; }
+  .mat-column-Uni_Despachados {text-align: center; }
+  .mat-column-Calidad {text-align: center; }
+  .mat-column-Fec_Produccion {text-align: center; }
+  .mat-column-Proveedor_Tej {text-align: center; }
+  .mat-column-Observaciones {text-align: center; }
+  .mat-column-Num_Secuencia_Tinto {text-align: center; }
+  .mat-column-Barra {text-align: center; }
+  .mat-column-Tejedor {text-align: center; }
+  .mat-column-Maquina_Tejeduria {text-align: center; }
+  .mat-column-Calidad_Auditada {text-align: center; }
+  .mat-column-Cod_Restriccion {text-align: center; }
+  .mat-column-Obs_Control_Calidad {text-align: center; }
+  .mat-column-Restriccion {text-align: center; }
+  .mat-column-Fallas_Tejeduria {text-align: center; }
+  .mat-column-Lote_Hilado {text-align: center; }
+  
+
+  
+  .mat-elevation-z8 {
+    width: 100%;
+    font-family: arial;
+    font-size: 10px;
+  }
+  .paginador {
+    width: auto;
+  }
+  
+  tr:hover {
+    border-color: currentColor;
+    background: #e1e1e1;
+  }
+  
+  tr:active {
+    background: #efefef;
+  }
+  
+
+
+
+
+
+
+
+
+  @media screen and (max-width: 650px) {
+
+    .grid-container {
+      height: 700px;
+    }
+ 
+    .container-cuerpo {
+      display: grid;
+  
+      grid-template:
+        "fila1" 126px
+        "fila2" 230px
+        "fila3" 280px
+        "foot" 55px/99%;
+    }
+
+    .button-Buscar{
+        display: inline-block;
+        background-color: #0e740e;
+        color: #ffffff;
+        margin-right: 1rem;
+      }
+
+
+    .button-Cancelar {
+      display: inline-block;
+      background-color: #d32f2f;
+      color: #ffffff;
+      margin-right: 1rem;
+    }
+  
+ 
+    .container-cuerpo-fila1 {
+      display: grid;
+      grid-template:
+        "col1 col1" 55px
+        "col2 col3" 45px/185px 170px;
+    }
+
+    .container-cuerpo-fila2 {
+      grid-area: fila2;
+      overflow: auto;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    .container-cuerpo-fila3 {
+      grid-area: fila3;
+      overflow: auto;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    .fila1-Partida {
+        grid-area: col1;
+        font-size: medium;
+      }
+
+      .button-Buscar {
+        grid-area: col2;
+    }
+  
+
+    .button-Cancelar {
+      grid-area: col3;
+  }
+
+    
+
+ 
+  
+  
+  }

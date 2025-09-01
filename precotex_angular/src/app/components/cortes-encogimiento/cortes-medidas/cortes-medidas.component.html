@@ -1,0 +1,230 @@
+<div class="container">
+  <div class="grid-container">
+    <div class="title">
+      <strong> DATOS DE LA PARTIDA </strong>
+    </div>
+    <div class="body">
+
+       <!--VISTA ADMINISTRADOR-->
+      <div class="left-column" *ngIf="this.PerfilUsuario == 1">
+
+        <button
+          (click)="ActualizarCorteEncogimiento()"
+          type="button" class="button-Grabar-Est"
+          matTooltip="Grabar Información de Estructura" matTooltipPosition="above" mat-flat-button
+          [disabled]="!botonHabilitado">
+          GUARDAR MEDIDAS
+          <mat-icon>save</mat-icon>
+        </button>
+
+        <table mat-table #table  [dataSource]="dataSource" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="Secuencia">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Secuencia</th>
+            <td  mat-cell *matCellDef="let data_det">
+                {{data_det.num_Secuencia}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Partida">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Partida</th>
+
+            <td  mat-cell *matCellDef="let data_det">
+                {{data_det.cod_Partida}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="CodTela">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tela</th>
+
+            <td  mat-cell *matCellDef="let data_det">
+                {{data_det.cod_Tela}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="DesTela">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Descripcion Tela</th>
+
+            <td  mat-cell *matCellDef="let data_det">
+                {{data_det.des_Tela}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Ancho Antes Lavado">
+            <th mat-header-cell *matHeaderCellDef> Ancho Antes Lavado </th>
+            <td mat-cell *matCellDef="let data_det">
+              <input matInput type="text" class="input-estilo" [(ngModel)]="data_det.ancho_Antes_Lav"
+              [value]="data_det.ancho_Antes_Lav === 0 ? '' : data_det.ancho_Antes_Lav" min="0" max="2.15"
+              (input)="onInputChange(data_det)"
+              (keypress)="validateDecimal($event)"/>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Largo Antes Lavado">
+            <th mat-header-cell *matHeaderCellDef> Largo Antes Lavado </th>
+            <td mat-cell *matCellDef="let data_det">
+              <input matInput type="text" class="input-estilo" [(ngModel)]="data_det.alto_Antes_Lav"
+              [value]="data_det.alto_Antes_Lav === 0 ? '' : data_det.alto_Antes_Lav"
+              (keypress)="validateDecimal($event)"/>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Ancho Despues Lavado">
+            <th mat-header-cell *matHeaderCellDef> Ancho Despues Lavado </th>
+            <td mat-cell *matCellDef="let data_det">
+              <input matInput type="text" class="input-estilo" [(ngModel)]="data_det.ancho_Despues_Lav"
+              [value]="data_det.ancho_Despues_Lav === 0 ? '' : data_det.ancho_Despues_Lav"
+              (keypress)="validateDecimal($event)"/>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Largo Despues Lavado">
+            <th mat-header-cell *matHeaderCellDef> Largo Despues Lavado </th>
+            <td mat-cell *matCellDef="let data_det">
+              <input matInput type="text" class="input-estilo" [(ngModel)]="data_det.alto_Despues_Lav"
+              [value]="data_det.alto_Despues_Lav === 0 ? '' : data_det.alto_Despues_Lav" (input)="onInputChange(data_det)"
+              (keypress)="validateDecimal($event)"/>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Sesgadura">
+            <th mat-header-cell *matHeaderCellDef> Sesgadura </th>
+            <td mat-cell *matCellDef="let data_det">
+              <input matInput type="number" class="input-estilo" [(ngModel)]="data_det.sesgadura"
+              [value]="data_det.sesgadura === 0 ? '' : data_det.sesgadura" pattern="[0-9]*" (keypress)="validarEntero($event)" (input)="onInputChange(data_det)"/>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+        </table>
+
+        <button
+        (click)="Salir()"
+        type="button" class="button-Grabar-Salir"
+        matTooltip="Cerrar Ventana" matTooltipPosition="above" mat-flat-button>
+        CERRAR
+        <mat-icon aria-label="person">exit_to_app
+        </mat-icon>
+    </button>
+      </div>
+
+      <!--VISTA OPERARIO-->
+      <div class="left-column" *ngIf="this.PerfilUsuario == 2">
+
+        <button
+          (click)="ActualizarCorteEncogimiento()"
+          type="button" class="button-Grabar-Est"
+          matTooltip="Grabar Información de Estructura" matTooltipPosition="above" mat-flat-button
+          [disabled]="!botonHabilitado">
+
+          GUARDAR MEDIDAS
+          <mat-icon>save</mat-icon>
+        </button>
+
+        <table mat-table #table  [dataSource]="dataSource" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="Secuencia">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Secuencia</th>
+            <td  mat-cell *matCellDef="let data_det">
+                {{data_det.num_Secuencia}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Partida">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Partida</th>
+
+            <td  mat-cell *matCellDef="let data_det">
+                {{data_det.cod_Partida}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="CodTela">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tela</th>
+
+            <td  mat-cell *matCellDef="let data_det">
+                {{data_det.cod_Tela}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="DesTela">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Descripcion Tela</th>
+
+            <td  mat-cell *matCellDef="let data_det">
+                {{data_det.des_Tela}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Ancho Antes Lavado">
+            <th mat-header-cell *matHeaderCellDef> Ancho Antes Lavado </th>
+            <td mat-cell *matCellDef="let data_det">
+              <input matInput type="text" class="input-estilo" [(ngModel)]="data_det.ancho_Antes_Lav"
+              [value]="data_det.ancho_Antes_Lav === 0 ? '' : data_det.ancho_Antes_Lav" min="0" max="2.15"
+              (input)="onInputChange(data_det)"
+              [disabled]="esDeshabilitadoMedidaAntes(data_det)"/>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Largo Antes Lavado">
+            <th mat-header-cell *matHeaderCellDef> Largo Antes Lavado </th>
+            <td mat-cell *matCellDef="let data_det">
+              <input matInput type="text" class="input-estilo" [(ngModel)]="data_det.alto_Antes_Lav"
+              [value]="data_det.alto_Antes_Lav === 0 ? '' : data_det.alto_Antes_Lav" [disabled]="esDeshabilitadoMedidaAntes(data_det)"
+              (keypress)="validateDecimal($event)"/>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Ancho Despues Lavado">
+            <th mat-header-cell *matHeaderCellDef> Ancho Despues Lavado </th>
+            <td mat-cell *matCellDef="let data_det">
+              <input matInput type="text" class="input-estilo" [(ngModel)]="data_det.ancho_Despues_Lav"
+              [value]="data_det.ancho_Despues_Lav === 0 ? '' : data_det.ancho_Despues_Lav"
+              [disabled]="esDeshabilitadoMedidaDespues(data_det) "
+              (keypress)="validateDecimal($event)"/>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Largo Despues Lavado">
+            <th mat-header-cell *matHeaderCellDef> Largo Despues Lavado </th>
+            <td mat-cell *matCellDef="let data_det">
+              <input matInput type="text" class="input-estilo" [(ngModel)]="data_det.alto_Despues_Lav"
+              [value]="data_det.alto_Despues_Lav === 0 ? '' : data_det.alto_Despues_Lav"
+              [disabled]="esDeshabilitadoMedidaDespues(data_det) "
+              (keypress)="validateDecimal($event)"/>
+
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Sesgadura">
+            <th mat-header-cell *matHeaderCellDef> Sesgadura </th>
+            <td mat-cell *matCellDef="let data_det">
+              <input matInput type="number" class="input-estilo" [(ngModel)]="data_det.sesgadura"
+              [value]="data_det.sesgadura === 0 ? '' : data_det.sesgadura" pattern="[0-9]*"
+              (keypress)="validarEntero($event)"
+              [disabled]="esDeshabilitadoMedidaDespues(data_det) || data_det.alto_Antes_Lav == 0"/>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+        </table>
+
+        <button
+          (click)="Salir()"
+          type="button" class="button-Grabar-Salir"
+          matTooltip="Cerrar Ventana" matTooltipPosition="above" mat-flat-button>
+          CERRAR
+          <mat-icon aria-label="person">exit_to_app
+          </mat-icon>
+      </button>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+<p style="color: white; text-align: center; " >Cargando... </p>
+</ngx-spinner>

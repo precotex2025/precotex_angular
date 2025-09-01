@@ -1,0 +1,98 @@
+<!--DefectosAlamacenDerivados-->
+  
+  
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container"> 
+ 
+        <div class="title">Ingreso de Rollo Tejido</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+                 
+                <mat-form-field class="fila1-fecha">
+                    <mat-label>Fec. Despacho</mat-label>
+                    <input matInput [matDatepicker]="Fec_Despacho" autocomplete="off"
+                        formControlName="Fec_Despacho">
+                    <mat-datepicker-toggle matSuffix [for]="Fec_Despacho"></mat-datepicker-toggle>
+                    <mat-icon  (click)="clearDate($event)" style=" position: absolute;
+                    float: right;
+                    top: 5px;
+                    margin-left: -26px;
+                    cursor: pointer;
+                    color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+                    <mat-datepicker #Fec_Despacho></mat-datepicker>
+                </mat-form-field>
+
+                    <mat-form-field class="fila1-Orden_Servicio"> 
+                        <mat-label>Orden Servicio</mat-label>
+                        <input matInput type="text" [textMask]="{mask: Orden_ServicioMascara}"  placeholder="Orden Servicio" value=""
+                            autocomplete="off" formControlName="Orden_Servicio" >
+                    </mat-form-field>
+
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="ListarRolloTejido()">                    
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+
+
+                <button type="button" class="fila1-agregar" mat-flat-button (click)="AgregarRolloTejido()" [routerLink]="['/IngresoRolloTejidoDetalle']">
+                <mat-icon aria-label="person">add
+                </mat-icon>  Agregar
+            </button>
+ 
+
+            </div>    
+ 
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                    <ng-container matColumnDef="Movimiento">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Movimiento</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.num_movstk}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Orden">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Orden</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Orden_Servicio}}  </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Peso">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Peso</th>
+                        <td mat-cell *matCellDef="let data_det">  {{data_det.peso}} </td>
+                    </ng-container>
+
+                     <ng-container matColumnDef="Bultos">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Bultos</th>
+                        <td mat-cell  *matCellDef="let data_det">  {{data_det.bultos}} </td>
+                    </ng-container>
+  
+ 
+                  
+                    <ng-container matColumnDef="Acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let data_det">
+
+                            <a mat-icon-button style="margin-right:5px;" *ngIf="data_det.num_movstk.length>0"   (click)="VerDetalleRolloTejido(data_det.Orden_Servicio, data_det.num_movstk)" [routerLink]="['/IngresoRolloTejidoDetalle']">
+                                <mat-icon color="primary">assignment</mat-icon>
+                            </a>
+
+                        </td>
+                    </ng-container> 
+
+    
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+
+                </table>
+
+       
+
+            </div>
+
+        </form>
+
+    </div>
+ 
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>       

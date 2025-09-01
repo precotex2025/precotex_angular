@@ -1,0 +1,132 @@
+<div class="container-fluid">
+  <!-- ventana nro 4 - historial -->
+  <div class="grid-container">
+
+    <div class="title">Liquidación de Corte</div>
+
+    <form class="container-cuerpo" [formGroup]="formulario">
+      <div class="container-cuerpo-fila1">
+
+        <mat-form-field class="fila1-fecha" appearance="fill">
+          <mat-label>OC</mat-label>
+          <input matInput placeholder="Ingrese OP" formControlName="Cod_op" placeholder="Ingrese Corte" value="" (keyup)="validarOC($event)">
+        </mat-form-field>
+
+
+        <mat-form-field class="fila1-select" appearance="fill">
+          <mat-label>Tipo</mat-label>
+          <mat-select formControlName="Cod_Grupo">
+            <mat-option *ngFor="let food of foods" [value]="food.value">
+              {{food.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <button type="submit" class="fila1-buscar" mat-flat-button (click)="CargarLista()">
+          <mat-icon aria-label="person">search</mat-icon>Buscar
+        </button>
+
+        <button type="button" class="fila1-excel" mat-flat-button (click)="generateExcel()">
+          <mat-icon aria-label="create_new_folder">create_new_folder
+          </mat-icon> Reporte Excel
+        </button>
+
+        <button type="button" class="fila1-observaciones" mat-flat-button (click)="verObservaciones()">
+          <mat-icon aria-label="new_releases">new_releases
+          </mat-icon> Observaciones
+        </button>
+
+        <button type="button" class="fila1-avance" mat-flat-button (click)="verAvances()">
+          <mat-icon aria-label="build">build
+          </mat-icon> Avance
+        </button>
+        <button type="button" class="fila1-ratio" mat-flat-button (click)="verRatioConsumo()">
+          <mat-icon aria-label="build">build
+          </mat-icon> Ratio Consumo
+        </button>
+
+
+      </div>
+
+      <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+      <div class="container-cuerpo-fila2">
+        <!--[dataSource]="dataSource"-->
+        <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+          <!-- <ng-container matColumnDef="COD_TIPORDTRA">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">TIPO</th>
+            <td mat-cell *matCellDef="let data_det"> {{data_det.COD_TIPORDTRA}} </td>
+          </ng-container> -->
+          <ng-container matColumnDef="COD_ORDTRA">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">PARTIDA</th>
+            <td mat-cell *matCellDef="let data_det"> {{data_det.COD_ORDTRA}} </td>
+          </ng-container>
+          <!-- <ng-container matColumnDef="COD_ALMACEN">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">ALMACEN</th>
+            <td mat-cell *matCellDef="let data_det"> {{data_det.COD_ALMACEN}} </td>
+          </ng-container>
+          <ng-container matColumnDef="PARTIDA">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">LOTE</th>
+            <td mat-cell *matCellDef="let data_det"> {{data_det.PARTIDA}} </td>
+          </ng-container> -->
+          <ng-container matColumnDef="COD_TELA">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">COD. TELA</th>
+            <td mat-cell *matCellDef="let data_det"> {{data_det.COD_TELA}} </td>
+          </ng-container>
+          <ng-container matColumnDef="TELA">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">TELA</th>
+            <td mat-cell *matCellDef="let data_det"> {{data_det.TELA}} </td>
+          </ng-container>
+          <ng-container matColumnDef="COLOR">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">COLOR</th>
+            <td mat-cell *matCellDef="let data_det"> {{data_det.COLOR}} </td>
+          </ng-container>
+          <ng-container matColumnDef="ATENDIDA">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">KGS. ATENDIDOS ALMACEN</th>
+            <td mat-cell *matCellDef="let data_det"> {{data_det.ATENDIDA | number : '1.2-2'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="DEVUELTA_A_ALMACEN">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">KGS. DEVUELTOS ALMACEN</th>
+            <td mat-cell *matCellDef="let data_det"> {{data_det.DEVUELTA_A_ALMACEN | number : '1.2-2'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="KGS_CONSUMIDO">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">KGS. CONSUMIDOS</th>
+            <td mat-cell *matCellDef="let data_det"> {{data_det.KGS_CONSUMIDO | number : '1.2-2'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="STATUS_LIQ">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >STATUS LIQUIDACION</th>
+            <td mat-cell *matCellDef="let data_det" [ngStyle]="{'background': data_det.STATUS_LIQ == 'NO CONFORME' ? '#d32f2f' : '#9dee96' }"> {{data_det.STATUS_LIQ}} </td>
+          </ng-container>
+          <ng-container matColumnDef="STOCK_ALMACEN">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">STOCK ALMACEN</th>
+            <td mat-cell *matCellDef="let data_det"> {{data_det.STOCK_ALMACEN | number : '1.2-2'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="Acciones">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">ACCIONES</th>
+            <td mat-cell *matCellDef="let data_det">
+              <a mat-icon-button style="margin-right:5px;" (click)="openDialog(data_det)"
+                [routerLink]="['/DialogModificaTelas']">
+                <mat-icon color="success">create</mat-icon>
+              </a>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+
+      </div>
+
+    </form>
+
+  </div>
+
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

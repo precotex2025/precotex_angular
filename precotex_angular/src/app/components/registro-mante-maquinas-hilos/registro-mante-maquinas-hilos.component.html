@@ -1,0 +1,272 @@
+<div class="container">
+
+    <div class="grid-container">
+        <div class="title">::.CONTROL DE TIEMPO MAQUINAS TEJE.::</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+            
+            <div class="container-cuerpo-fila1">
+
+
+                <mat-form-field class="fila1-fecha" appearance="fill">
+                    <mat-label>Fecha inicial</mat-label>
+                    <input matInput [matDatepicker]="Fec_Registro" autocomplete="off" formControlName="fec_registro"
+                        (dateChange)="pasarfecha()">
+                    <mat-datepicker-toggle matSuffix [for]="Fec_Registro"></mat-datepicker-toggle>
+                    <mat-datepicker #Fec_Registro></mat-datepicker>
+                </mat-form-field>
+
+
+                <mat-form-field class="fila1-fecha2" appearance="fill">
+                    <mat-label>Fecha final</mat-label>
+                    <input matInput [matDatepicker]="Fec_Registro2" autocomplete="off" formControlName="fec_registro2"
+                        (dateChange)="pasarfecha()">
+                    <mat-datepicker-toggle matSuffix [for]="Fec_Registro2"></mat-datepicker-toggle>
+                    <mat-datepicker #Fec_Registro2></mat-datepicker>
+                </mat-form-field>
+
+               
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="Buscar()" [disabled]="btnDeshabilita">
+                    <mat-icon aria-label="warn">search</mat-icon>Buscar
+                </button>
+
+                <button type="button" class="fila1-excel" mat-flat-button (click)="generateExcel()" [disabled]="btnDeshabilita">
+                    <mat-icon aria-label="create_new_folder">create_new_folder
+                    </mat-icon> Reporte Excel
+                </button>
+           
+
+                <button type="button" class="fila1-agregar" mat-flat-button (click)="openDialogModificar
+                (
+                    'NUEVO',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    '',
+                    ''
+                );" [disabled]="btnDeshabilita">
+                    <mat-icon aria-label="person">add
+                    </mat-icon> Agregar
+                </button>
+
+        </div>
+
+
+            <div class="container-cuerpo-fila2">
+
+            </div>
+
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila3">
+                <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                    <ng-container matColumnDef="Num_Mante">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Num. Registro</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Num_Mante}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Fec_Registro">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha Registro</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.fec_registro}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Tarea">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod_Tarea</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_Tarea}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Nombre_Tarea_Mante">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tarea</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Nombre_Tarea}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Nom_Area">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Area</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Nom_Area}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Nom_Condicion">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Condicion</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Nom_Condicion}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Nom_Espe">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Especialidad</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Nom_Espe}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Nom_ParMaq">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Para Maquina</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Nom_ParMaq}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Nom_TipFal">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tipo Falla</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Nom_TipFal}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Desc_Articulo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Articulo</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Desc_Articulo}} </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="Min_Max">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Min- Maximo</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Min_Max}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Maquina">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Maquina</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_Maquina}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="NombreMaquina">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Maquina</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.NombreMaquina}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Dni">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">DNI</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Dni}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Trabajador">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Trabajador</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Trabajador}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Fec_Hora_Inicio">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha de Inicio</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Fec_Hora_Inicio}}
+                        </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Fec_Hora_Fin">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha Fin</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Fec_Hora_Fin}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Minutos">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Minutos</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.MINUTOS}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="OT_">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">OT</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_Ordtra}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Turno">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Turno</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Turno}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Atribuido">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Atribuido</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Flg_Atribuido}} </td>
+                    </ng-container>                    
+
+                    <ng-container matColumnDef="Observacion">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Observaciones</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Observacion}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Observacion2">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Observaciones 2</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Observacion2}} </td>    
+                    </ng-container>        
+                    
+                    <ng-container matColumnDef="Des_Planta">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Sede</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Des_Planta}} </td>    
+                    </ng-container>                         
+                  
+                    <ng-container matColumnDef="Acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell  *matCellDef="let data_det">
+
+                            <a mat-icon-button  *ngIf="data_det.Estado!='C'" (click)="openDialogModificar
+                                                                (
+                                                                    'MODIFICAR',
+                                                                    data_det.Num_Mante,
+                                                                    data_det.fec_registro,
+                                                                    data_det.Cod_Maquina,
+                                                                    data_det.Cod_Tarea,
+                                                                    data_det.Fec_Hora_Inicio,
+                                                                    data_det.Fec_Hora_Fin,
+                                                                    data_det.Cod_Ordtra,
+                                                                    data_det.Observacion,
+                                                                    data_det.Dni,
+                                                                    data_det.Estado,
+                                                                    data_det.Cod_Area,
+                                                                    data_det.Cod_Cond,
+                                                                    data_det.Cod_Espe,
+                                                                    data_det.Cod_ParMaq,
+                                                                    data_det.Cod_TipFal,
+                                                                    data_det.Cod_Articulo,
+                                                                    data_det.Min_Max,
+                                                                    data_det.Flg_Atribuido,
+                                                                    data_det.Observacion2,
+                                                                    data_det.Num_Planta
+                                                                )">
+                                <mat-icon color="success">create</mat-icon>
+                            </a>
+
+                            <a mat-icon-button *ngIf="data_det.Estado!='C'" (click)="EliminarRegistro(data_det.fec_registro,
+                                                            data_det.Cod_Maquina,
+                                                                data_det.Cod_Tarea,
+                                                                    data_det.Fec_Hora_Inicio,
+                                                                        data_det.Fec_Hora_Fin,
+                                                                            data_det.Dni, 
+                                                                                data_det.Cod_Ordtra)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+                        </td>
+
+                    </ng-container>
+
+                    <ng-container matColumnDef="Estado">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">ST</th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Estado}} </td>
+                    </ng-container>
+
+
+                    <!--(click)="AsignarNumAuditoriaModificar(row.Num_Auditoria)"-->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+                </table>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </div>
+
+<!-- 
+            <div class="container-cuerpo-foot">
+            </div> -->
+
+
+
+        </form>
+    </div>
+</div>
+

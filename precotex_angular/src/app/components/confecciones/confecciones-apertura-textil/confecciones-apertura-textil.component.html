@@ -1,0 +1,72 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title">GRUPO TEXTIL GIRADO - LIQUIDADO</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila21">
+                <div class="fila21-dni">
+                    <ng-select [ngStyle]="{ 'max-width': '100%'}" [items]="dataCliente" bindLabel="Nom_Cliente"
+                     bindValue="Cod_Cliente" [multiple]="false" (change)="selectCliente($event)"
+                    [searchable]="true" placeholder="CLIENTE"
+                    formControlName="codCliente">
+                </ng-select>
+                </div>
+                <div class="fila1-Filtro">
+                    <ng-select [ngStyle]="{ 'max-width': '100%'}" [items]="dataGrupoTextil" bindLabel="Grupo_Textil"
+                     bindValue="Grupo_Textil" [multiple]="false"
+                    [searchable]="true" placeholder="GRUPO TEXTIL"
+                    formControlName="codGrupoTextil">
+                </ng-select>
+                </div>
+                <button type="button" class="fila21-buscar" mat-flat-button (click)="buscarPorClienteGrupo()">
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+                <!-- <button type="button" class="fila1-excel" mat-flat-button >
+                    <mat-icon aria-label="create_new_folder">create_new_folder </mat-icon>
+                    Reporte Excel
+                </button> -->
+
+            </div>
+
+
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+                    <ng-container matColumnDef="Cliente">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cliente</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Cliente}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Grupo_Textil">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Grupo Textil</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Grupo_Textil}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Cierre_Girado">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Apertura Girado</th>
+                        <td mat-cell *matCellDef="let data_det"> 
+                            <button mat-button color="primary" type="button" (click)="aperturaGirado(data_det)" *ngIf="data_det.Cierre_Girado != 'P' "><mat-icon >assignment</mat-icon></button>  
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Cierre_Liquidado">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Apertura Liquidado</th>
+                        <td mat-cell *matCellDef="let data_det"> 
+                            <button mat-button color="primary" type="button" (click)="aperturaLiquidacion(data_det)" *ngIf="data_det.Cierre_Liquidado != 'P' "><mat-icon >assignment</mat-icon></button>        
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab2"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab2;"></tr>
+                </table>
+                <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator>
+
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

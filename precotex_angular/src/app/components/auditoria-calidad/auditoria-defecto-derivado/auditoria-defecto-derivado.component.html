@@ -1,0 +1,168 @@
+<!--DefectosAlamacenDerivados-->
+   
+<div class="container">
+
+    <div class="grid-container"> 
+ 
+        <div class="title">Registro de Defectos - Derivados</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+        
+                <mat-form-field class="fila1-fecha">
+                    <mat-label>Fec. Auditoria</mat-label>
+                    <input matInput [matDatepicker]="fec_registro" autocomplete="off"
+                        formControlName="fec_registro">
+                    <mat-datepicker-toggle matSuffix [for]="fec_registro"></mat-datepicker-toggle>
+                    <mat-icon  (click)="clearDate($event)" style=" position: absolute;
+                    float: right;
+                    top: 5px;
+                    margin-left: -26px;
+                    cursor: pointer;
+                    color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+                    <mat-datepicker #fec_registro></mat-datepicker>
+                </mat-form-field>
+
+                    <mat-form-field class="fila1-cliente" appearance="fill">
+                        <mat-label>Cliente</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Cliente" formControlName="sCliente"  [matAutocomplete]="autoDataCliente" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataCliente="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionCliente | async" [value]="option.Nom_Cliente" (click)="CambiarValorCliente(option.Cod_Cliente,option.Abr_Cliente)">
+                                {{option.Nom_Cliente}}
+                            </mat-option> 
+                        </mat-autocomplete>                            
+                    </mat-form-field>
+
+
+                    <mat-form-field class="fila1-estilo" appearance="fill">
+                        <mat-label>Estilo</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Estilo" formControlName="sEstilo"  [matAutocomplete]="autoDataEstilo" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataEstilo="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionEstilo | async" [value]="option.Cod_EstCli" >
+                                {{option.Cod_EstCli}}
+                            </mat-option> 
+                        </mat-autocomplete>                            
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-color" appearance="fill">
+                        <mat-label>Color</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Color" formControlName="sColor"  [matAutocomplete]="autoDataColor" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataColor="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionColor | async" [value]="option.Cod_ColCli" >
+                                {{option.Cod_ColCli}}
+                            </mat-option> 
+                        </mat-autocomplete>                            
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-auditor"> 
+                        <mat-label>OP</mat-label>
+                        <input matInput type="text"  placeholder="OP" value=""
+                            autocomplete="off" formControlName="sAuditor" >
+                    </mat-form-field>
+    
+            
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="buscarDefectosDerivados()"
+                    >                    
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+
+                <button type="button" class="fila1-agregar" mat-flat-button (click)="openDialog();"
+                >
+                <mat-icon aria-label="person">add
+                </mat-icon>  Agregar
+                </button>
+
+                <button type="button" class="fila1-reporte" mat-flat-button (click)="openReporte();"
+                >
+                <mat-icon aria-label="person">restore
+                </mat-icon>
+                </button>
+            
+
+
+            </div>  
+
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                    <ng-container matColumnDef="nAuditoria">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nº Auditoria</th>
+                        <td mat-cell *matCellDef="let data_det" > {{data_det.Num_Auditoria}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Fecha">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha</th>
+                        <td mat-cell *matCellDef="let data_det" > {{data_det.Fec_Auditoria}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Auditor">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Auditor</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_Auditor}} </td>
+                    </ng-container>
+
+                     <ng-container matColumnDef="Cliente">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cliente</th>
+                        <td mat-cell *matCellDef="let data_det" > {{data_det.Nom_Cliente}} </td>
+                    </ng-container>
+  
+                    <ng-container matColumnDef="Estilo">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estilo</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_EstCli}} </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="Color">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Color</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_ColCli}} </td>
+                    </ng-container>  
+
+                    <ng-container matColumnDef="Total">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell" >Total</th>
+                        <td mat-cell *matCellDef="let data_det" (click)="ingresarCantidadTotal(data_det.Num_Auditoria, data_det.Total)"> {{data_det.Total}} </td>
+                    </ng-container> 
+
+                    <ng-container matColumnDef="Especiales">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Especiales</th>
+                        <td mat-cell *matCellDef="let data_det" > {{data_det.Especiales}} </td>
+                    </ng-container> 
+
+                    <ng-container matColumnDef="Cant">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cant. Defec</th>
+                        <td mat-cell *matCellDef="let data_det" > {{data_det.Cantidad_Total}} </td>
+                    </ng-container> 
+
+                    <ng-container matColumnDef="modificar">
+                        <th mat-header-cell *matHeaderCellDef>Observacion</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <a mat-icon-button *ngIf="data_det.Num_Auditoria.length>0"
+                                (click)="verObservacion(data_det.Num_Auditoria)">
+                                <mat-icon color="primary">assignment</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="detalle">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <a mat-icon-button *ngIf="data_det.Num_Auditoria.length>0"
+                                (click)="AsignarNumAuditoriaModificar(data_det.Num_Auditoria)">
+                                <mat-icon color="success">create</mat-icon>
+                            </a>
+                            <a mat-icon-button *ngIf="data_det.Num_Auditoria.length>0"
+                                (click)="EliminarRegistro(data_det.Num_Auditoria, data_det.Cod_Cliente, data_det.Cod_EstCli, data_det.Cod_ColCli)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+                        </td>
+                        
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>
+                </table>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons 
+                aria-label="Select page of periodic elements">
+               </mat-paginator>
+            </div>
+          
+        </form>
+
+    </div>
+</div>

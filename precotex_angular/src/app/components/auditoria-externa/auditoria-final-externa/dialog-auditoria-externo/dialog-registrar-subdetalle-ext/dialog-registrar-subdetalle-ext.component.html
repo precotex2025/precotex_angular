@@ -1,0 +1,72 @@
+  
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container">  
+    <!--*ngIf="Titulo == undefined; else titulomodificar"-->
+        <div class="title"><strong *ngIf="Titulo == undefined; else titulomodificar" >Registrar </strong>Sub Detalle Auditoria Final - {{this.Num_Auditoria_Detalle}}</div>
+       <ng-template #titulomodificar><strong>Modificar </strong></ng-template>
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)" >
+            <div class="container-cuerpo-fila1">
+                
+                    <mat-form-field class="fila1-Cod_Motivo"> 
+                        <mat-label>Codigo</mat-label>
+                        <input matInput type="text"  placeholder="Codigo" value="" (input)="BuscarMotivo()" 
+                            autocomplete="off" formControlName="Cod_Motivo" >
+                    </mat-form-field>
+
+
+                    <mat-form-field class="fila1-Descripcion"> 
+                        <mat-label>Descripcion</mat-label>
+                        <input matInput type="text"  placeholder="Descripcion" value="" 
+                            autocomplete="off" formControlName="Descripcion" >
+                    </mat-form-field>
+
+
+                    <mat-form-field class="fila1-Cantidad"> 
+                        <mat-label>Cantidad</mat-label>
+                        <input matInput type="number"   placeholder="Cantidad" value="" 
+                            autocomplete="off" formControlName="Cantidad">
+                    </mat-form-field>   
+                    
+           
+
+                
+            </div>     
+ 
+
+ 
+            <div class="container-cuerpo-foot">
+               <!-- *ngIf="Titulo == undefined; else btnmodificar"  [disabled]="!formulario.valid"-->
+                <button  type="submit" class="button-agregar" *ngIf="Titulo == undefined; else btnmodificar"  [disabled]="!formulario.valid" mat-flat-button>
+                    <mat-icon aria-label="person" >save
+                    </mat-icon>  Registrar
+                </button>
+
+                <ng-template #btnmodificar><button type="submit" class="button-agregar" mat-dialog-close="false" [disabled]="!formulario.valid"  mat-flat-button>
+                    <mat-icon aria-label="person" >create
+                    </mat-icon>  Modificar
+                </button></ng-template>
+              
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>               
+            </div>
+        </form>
+
+    </div>
+
+
+
+
+ 
+ 
+   
+
+
+
+ 
+
+
+
+</div>

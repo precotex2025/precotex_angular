@@ -1,0 +1,50 @@
+.container {
+  box-sizing: border-box;
+  width: 100%;
+  height: 70%;
+  //background-color: blue;
+  padding: 5px 5px 5px 5px;
+  font-family: corbel, arial;
+  font-size: 15px;
+  margin: 0;
+}
+
+.grid-container {
+  border-radius: 4px;
+  width: 100%; 
+  height: auto; //93%;
+  //background-color: green;
+  border: 1px solid #337ab7;
+  margin: 0; 
+  padding: 0px 0px 0px 0px;
+  //padding-bottom: 10px;
+  min-width: 100%;
+  min-height: 400px;
+  height: 600px;
+  //position: absolute;  
+}
+
+.title {
+  background-color: #3f51b5;
+  color: rgb(255, 255, 255);
+  padding: 8px 10px 10px 10px;
+  text-align: center;
+  //border-bottom: 1px solid #337AB7;
+  border-radius: 4px 4px 0px 0px;
+  border-bottom: 1px solid #337ab7;
+  font-weight: bold;
+}
+
+
+
+.icon-green {
+    color: #4caf50; /* El código hexadecimal para un verde claro */
+  }
+
+  .icon-red {
+    color: red;
+  }
+  
+  .icon-gray {
+    color: gray;
+  }

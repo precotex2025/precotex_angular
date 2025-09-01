@@ -1,0 +1,321 @@
+<!--DefectosAlamacenDerivados-->
+  
+  
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container">  
+ 
+        <div class="title">DERIVADO - INSPECCION PRENDA - ID: {{Id}}</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="sub-container">
+                <div class="sub-container-cuerpo1">
+                    <div class="container-cuerpo-fila1">
+                       
+                        <mat-form-field class="fila1-Codigo"> 
+                            <mat-label>Cod. Barras</mat-label>
+                            <input matInput type="text"  placeholder="Cod. Barras"  value="" #Codigo
+                                autocomplete="off"  formControlName="Codigo" (input)="LecturaCodBarras()">
+                        </mat-form-field>     
+
+                        <mat-form-field class="fila1-OP"> 
+                            <mat-label>OP</mat-label>
+                            <input matInput type="text"  placeholder="OP"  value="" (input)="MostrarColor()" 
+                                autocomplete="off"  formControlName="OP" maxlength="5" >
+                        </mat-form-field>
+
+                        <!--<mat-form-field class="fila1-Color"> 
+                            <mat-label>Color</mat-label>
+                            <input matInput type="text"  placeholder="Color"  value="" 
+                                autocomplete="off"  formControlName="Color" >
+                        </mat-form-field>-->
+                        
+                        <mat-form-field class="fila1-Estado-Equipo" appearance="fill">
+                            <mat-label>Color</mat-label>
+                            <mat-select formControlName="Color" [(ngModel)]="SelectedValueColor">
+                                <mat-option *ngFor="let Color of listar_operacionColor" (click)="MostrarTalla(Color.COD_PRESENT)"
+                                    [value]="Color.COD_PRESENT">
+                                    {{Color.DES_PRESENT}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="fila1-Talla" appearance="fill">
+                            <mat-label>Talla</mat-label>
+                            <mat-select formControlName="Talla" [(ngModel)]="SelectedValueTalla">
+                                <mat-option *ngFor="let Talla of listar_operacionTalla"
+                                    [value]="Talla.COD_TALLA">
+                                    {{Talla.COD_TALLA}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <!--<mat-form-field class="fila1-Talla"> 
+                            <mat-label>Talla</mat-label>
+                            <input matInput type="text"  placeholder="Talla"  value="" 
+                                autocomplete="off"  formControlName="Talla" >
+                        </mat-form-field>-->    
+
+                        <mat-form-field class="fila1-Cantidad"> 
+                            <mat-label>Cantidad</mat-label>
+                            <input matInput type="text"  placeholder="Cantidad"  value="" 
+                                autocomplete="off"  formControlName="Cantidad" >
+                        </mat-form-field>    
+
+                        <div class="fila1-button-container">
+                            <button type="button" *ngIf="!Flg_Habilitar_Detalle" class="button-Agregar" mat-button mat-flat-button (click)="GuardarCabecera()">
+                                <mat-icon aria-label="person">assignment_turned_in
+                                </mat-icon>  Guardar
+                            </button>
+                            <button type="button" *ngIf="!Flg_Habilitar_Detalle" class="button-Agregar-xs" mat-button mat-flat-button (click)="GuardarCabecera()">
+                                <mat-icon aria-label="person">assignment_turned_in
+                                </mat-icon>
+                            </button>
+                            <button type="button" *ngIf ="Flg_Habilitar_Detalle" class="button-Agregar" mat-button mat-flat-button (click)="FinalizarProceso('A')">
+                                <mat-icon aria-label="person">check
+                                </mat-icon>  Aprobar
+                            </button>
+                            <button type="button" *ngIf ="Flg_Habilitar_Detalle" class="button-Agregar-xs" mat-button mat-flat-button (click)="FinalizarProceso('A')">
+                                <mat-icon aria-label="person">check
+                                </mat-icon>  Aprobar
+                            </button>
+                            <button type="button" *ngIf ="Flg_Habilitar_Detalle" class="button-Rechazar" mat-button mat-flat-button (click)="FinalizarProceso('R')">
+                                <mat-icon aria-label="person">clear
+                                </mat-icon>  Rechazar
+                            </button>
+                            <button type="button" *ngIf ="Flg_Habilitar_Detalle" class="button-Rechazar-xs" mat-button mat-flat-button (click)="FinalizarProceso('R')">
+                                <mat-icon aria-label="person">clear
+                                </mat-icon>  Rechazar
+                            </button>
+                            <button type="button" class="button-Limpiar" *ngIf ="!Flg_Habilitar_Detalle" mat-button mat-flat-button (click)="Limpiar()">
+                                <mat-icon aria-label="person">cached
+                                </mat-icon> Limpiar
+                                <!--[disabled]="Flg_Habilitar_Detalle"-->
+                            </button>  
+                            <button type="button" class="button-Limpiar-xs" *ngIf ="!Flg_Habilitar_Detalle" mat-button mat-flat-button (click)="Limpiar()">
+                                <mat-icon aria-label="person">cached
+                                </mat-icon>
+                                <!--[disabled]="Flg_Habilitar_Detalle"-->
+                            </button> 
+                        </div>
+                    </div>
+                </div> 
+                    <div class="sub-container-cuerpo2">
+                        <mat-card class="example-card">
+                            <mat-card-title>Prenda</mat-card-title>
+
+                            <mat-card-content>
+                                <img [src] ="ImagePath" 
+                                style="width: 250px;height: 150px; object-fit: contain;">
+                            </mat-card-content>                  
+                        </mat-card>
+                    </div>
+
+                    <div class="sub-container-cuerpo3">
+                        <mat-card class="example-card1">
+                            <mat-card-title>Eficiencia</mat-card-title>
+  
+                            <mat-card-content>
+                               Minutos Asistidos: {{Min_Trabajados}}min <br><br>
+                               Minutos Trabajados: {{Min_Asistidos}}min <br><br>
+                               Eficiencia: {{Eficiencia}}% 
+                            </mat-card-content>                  
+                        </mat-card>                      
+                    </div>
+         
+              
+            </div>  
+            
+            
+            <div class="container-cuerpo-fila2">
+                <div class="card-container-fila2">
+                    <mat-card class="example-card2">
+                        <mat-card-title>Compostura</mat-card-title>
+                        <!--<mat-card-subtitle>Dog Breed</mat-card-subtitle>-->
+                        <mat-card-content class="card-content-fila2">
+                            <div class="sub-card">
+                                <div class="sub-card-container">
+                                    <div class="sub-card-title">Cantidad</div>
+                                    <div class="sub-card-content"> 
+                                        <p>{{Compostura}}</p>
+                                    </div>
+                                </div>
+                                <div class="sub-card-container">
+                                    <div class="sub-card-title">Recogido</div>
+                                    <div class="sub-card-content"> 
+                                        <p>0</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                        <mat-divider inset></mat-divider>
+                        <mat-card-actions>
+                        <button class="card-btn" mat-flat-button (click)="SumarCompostura()"  [disabled]="!Flg_Habilitar_Detalle">+</button>
+                        <button class="card-btn" mat-flat-button (click)="RestarCompostura()" [disabled]="!Flg_Habilitar_Detalle">-</button>
+                        </mat-card-actions>
+                    </mat-card>
+
+                    <mat-card class="example-card2">
+                        <mat-card-title>Segunda</mat-card-title>
+                        <!--<mat-card-subtitle>Dog Breed</mat-card-subtitle>-->
+                        <mat-card-content class="card-content-fila2">
+                            <div class="sub-card">
+                                <div class="sub-card-container">
+                                    <div class="sub-card-title">Cantidad</div>
+                                    <div class="sub-card-content"> 
+                                        <p>{{Segunda}}</p>
+                                    </div>
+                                </div>
+                                <div class="sub-card-container">
+                                    <div class="sub-card-title">Recogido</div>
+                                    <div class="sub-card-content"> 
+                                        <p>0</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                        <mat-divider inset></mat-divider>
+                        <mat-card-actions>
+                        <button class="card-btn" mat-flat-button (click)="SumarSegunda()"  [disabled]="!Flg_Habilitar_Detalle">+</button>
+                        <button class="card-btn" mat-flat-button (click)="RestarSegunda()" [disabled]="!Flg_Habilitar_Detalle">-</button>
+                        </mat-card-actions>
+                    </mat-card>
+
+                    <mat-card class="example-card2">
+                        <mat-card-title>Zurcido</mat-card-title>
+                        <!--<mat-card-subtitle>Dog Breed</mat-card-subtitle>-->
+                        <mat-card-content class="card-content-fila2">
+                            <div class="sub-card">
+                                <div class="sub-card-container">
+                                    <div class="sub-card-title">Cantidad</div>
+                                    <div class="sub-card-content"> 
+                                        <p>{{Zurcido}}</p>
+                                    </div>
+                                </div>
+                                <div class="sub-card-container">
+                                    <div class="sub-card-title">Recogido</div>
+                                    <div class="sub-card-content"> 
+                                        <p>0</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                        <mat-divider inset></mat-divider>
+                        <mat-card-actions>
+                        <button class="card-btn" mat-flat-button (click)="SumarZurcido()"  [disabled]="!Flg_Habilitar_Detalle">+</button>
+                        <button class="card-btn" mat-flat-button (click)="RestarZurcido()" [disabled]="!Flg_Habilitar_Detalle">-</button>
+                        </mat-card-actions>
+                    </mat-card>
+
+                    <mat-card class="example-card2">
+                        <mat-card-title>Desmanche</mat-card-title>
+                        <!--<mat-card-subtitle>Dog Breed</mat-card-subtitle>-->
+                        <mat-card-content class="card-content-fila2">
+                            <div class="sub-card">
+                                <div class="sub-card-container">
+                                    <div class="sub-card-title">Cantidad</div>
+                                    <div class="sub-card-content"> 
+                                        <p>{{Desmanche}}</p>
+                                    </div>
+                                </div>
+                                <div class="sub-card-container">
+                                    <div class="sub-card-title">Recogido</div>
+                                    <div class="sub-card-content"> 
+                                        <p>0</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                        <mat-divider inset></mat-divider>
+                        <mat-card-actions>
+                        <button class="card-btn" mat-flat-button (click)="SumarDesmanche()"  [disabled]="!Flg_Habilitar_Detalle">+</button>
+                        <button class="card-btn" mat-flat-button (click)="RestarDesmanche()" [disabled]="!Flg_Habilitar_Detalle">-</button>
+                        </mat-card-actions>
+                    </mat-card>
+
+                    <mat-card class="example-card2">
+                        <mat-card-title>Primeras</mat-card-title>
+                        <!--<mat-card-subtitle>Dog Breed</mat-card-subtitle>-->
+                        <mat-card-content>
+                        <p>{{Primeras}}</p>
+                        </mat-card-content>
+                    
+                        <mat-card-actions>
+                        
+                        </mat-card-actions>
+                    </mat-card>
+
+                    <mat-card class="example-card2">
+                        <mat-card-title>Total</mat-card-title>
+                        <!--<mat-card-subtitle>Dog Breed</mat-card-subtitle>-->
+                        <mat-card-content>
+                        <p>{{Total}}</p>
+                        </mat-card-content>
+                    
+                        <mat-card-actions>
+                        
+                        </mat-card-actions>
+                    </mat-card>
+                </div>
+            </div>
+
+            <div class="container-cuerpo-fila3">
+                <div class="card-container-fila3">
+                   
+                </div>
+            </div>
+           
+            <!--<div class="container-cuerpo-fila2">
+                <div class="sub-container-fila2">Compostura
+                    <div class="sub-div-container1-fila2"> CONTADOR </div>
+                    <div class="sub-button-container2-fila2">
+                        <button type="button" class="add-button-container-fila2" mat-flat-button> + </button>
+                        <button type="button" class="res-button-container-fila2" mat-flat-button> - </button>
+                    </div>
+                </div>
+                <div class="sub-container-fila2">Segunda
+                    <div class="sub-div-container1-fila2"> CONTADOR</div>
+                    <div class="sub-button-container2-fila2">
+                        <button type="button" class="add-button-container-fila2" mat-flat-button> + </button>
+                        <button type="button" class="res-button-container-fila2" mat-flat-button> - </button>
+                    </div>
+                </div>
+                <div class="sub-container-fila2">Zurcido
+                    <div class="sub-div-container1-fila2"> CONTADOR</div>
+                    <div class="sub-button-container2-fila2">
+                        <button type="button" class="add-button-container-fila2" mat-flat-button> + </button>
+                        <button type="button" class="res-button-container-fila2" mat-flat-button> - </button>
+                    </div>
+                </div>
+                <div class="sub-container-fila2">Desmanche
+                    <div class="sub-div-container1-fila2"> CONTADOR</div>
+                    <div class="sub-button-container2-fila2">
+                        <button type="button" class="add-button-container-fila2" mat-flat-button> + </button>
+                        <button type="button" class="res-button-container-fila2" mat-flat-button> - </button>
+                    </div>
+                </div>
+                <div class="sub-container-fila2">Primeras
+                    <div class="sub-div-container1-fila2"> CONTADOR</div>
+                    <div class="sub-button-container2-fila2">
+                        <button type="button" class="add-button-container-fila2" mat-flat-button> + </button>
+                        <button type="button" class="res-button-container-fila2" mat-flat-button> - </button>
+                    </div>
+                </div>
+                <div class="sub-container-fila2">Total
+                    <div class="sub-div-container1-fila2"> CONTADOR</div>
+                    <div class="sub-button-container2-fila2">
+                        <button type="button" class="add-button-container-fila2" mat-flat-button> + </button>
+                        <button type="button" class="res-button-container-fila2" mat-flat-button> - </button>
+                    </div>
+                </div>
+            </div>-->
+
+        </form>
+
+    </div>
+ 
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>       

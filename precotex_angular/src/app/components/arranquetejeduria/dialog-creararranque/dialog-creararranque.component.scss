@@ -1,0 +1,1276 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 13px;
+    margin: 0;
+}
+  
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    //padding: 1x ;
+    //padding-bottom: 15px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 830px;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: rgb(255, 255, 255);
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: end;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" auto
+        "fila2" auto
+        "fila3" auto
+        "fila4" auto
+        "foot" 55px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.container-cuerpo-fila3 {
+    grid-area: fila3;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.fila4-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+
+
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+
+
+.d-none{
+    display: none;
+}
+
+  .button-info{
+    margin-top: 10px;
+    background: #2B78E4;
+    width: 98%;
+    color: white;
+}
+  
+
+.button-lg{
+  margin-top: 10px;
+  background: #b0f790;
+  width: 98%;
+  color: rgb(10, 10, 10);
+}
+
+
+
+.mat-header-cell {
+    padding: 0.5rem;
+  }
+  
+  .paginador {
+    width: auto
+  }
+  
+  .button-agregar {
+  
+    background-color: #3f51b5;
+    color: #ffffff;
+    margin-right: 1rem;
+  }
+  
+  .footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .button-cancelar {
+    display: inline-block;
+    width: 30%;
+    background-color: #d32f2f;
+    color: #ffffff;
+    //margin-right: 1rem;
+  }
+
+  .button-Iniciar {
+    display: inline-block;
+    width: 30%;
+    background-color: #034167;
+    color: #ffffff;
+    //margin-right: 1rem;
+  }
+  
+  ::ng-deep .my-class .mat-dialog-container {
+    padding: 5px;
+    height: auto;
+  }
+  
+  .button-Grabar {
+    width: 30%;
+    display: inline-block;
+    background-color: #0e740e;
+    color: #ffffff;
+    margin-right: 1rem;
+  }
+
+  .button-Cancelar {
+    width: 30%;
+    display: inline-block;
+    background-color: #d32f2f;
+    color: #ffffff;
+    margin-right: 1rem;
+  }
+  
+
+
+
+//fila 1 
+.container-cuerpo-fila1 {
+    display: grid;
+
+    grid-template:
+        "col1 col2 col3 col4" 50px
+        "col5 col5 col6 col7" 75px
+        "col8 col8 col8 col8" auto/200px  200px 200px  200px;
+        
+}
+
+
+.fila1-Ot {
+    grid-area: col1;
+    
+}
+.fila1-Inspector {
+    grid-area: col2;
+    
+}
+
+.fila1-Oc {
+    grid-area: col3;
+    
+}
+
+
+
+.fila1-Maquina {
+    grid-area: col4;
+}
+
+.fila1-Tela {
+  grid-area: col5;
+  
+}
+
+
+.fila1-Combinacion {
+  grid-area: col6;
+  
+}
+
+
+.fila1-Talla {
+  grid-area: col7;
+}
+
+.fila1-Cliente {
+  grid-area: col8;
+}
+
+
+
+
+
+
+
+
+//fila 2 
+.container-cuerpo-fila2 {
+    display: grid;
+
+    grid-template:
+        "col1 col2 col3 col4"   50px
+        "col5 col6 col7 col8"   50px
+        "col9 col10 col11 col12 " auto/200px  200px 200px  200px;
+}
+
+
+.fila2-Hilo_Titulo {
+    grid-area: col1;
+}
+
+
+.fila2-Hilo_Compo {
+    grid-area: col2;
+}
+
+
+.fila2-Hilo_Lote {
+    grid-area: col3;
+}
+
+
+.fila2-Hilo_Proveedor {
+    grid-area: col4;
+}
+
+.fila2-Galga {
+    grid-area: col5;
+}
+
+.fila2-Sistemas {
+    grid-area: col6;
+}
+
+.fila2-Torsion {
+    grid-area: col7;
+}
+
+.fila2-Agujas {
+    grid-area: col8;
+}
+
+.fila2-Diametro {
+    grid-area: col9;
+}
+
+
+
+//fila 3 
+.container-cuerpo-fila3 {
+    display: grid;
+
+    grid-template:
+        "col1 col1 col2 col2"   50px
+        "col3 col3 col4 col4"   50px
+        "col5 col5 col6 col6"   50px
+        "col7 col7 col8 col8"   50px
+        "col9 col9 col10 col10"   50px
+        "col11 col11 col12 col12"   50px
+        "col13 col13 col14 col14"   50px
+        "col15 col15 col15 col15 " auto/200px  200px 200px  200px;
+}
+
+
+.fila3-Densidad {
+    grid-area: col1;
+}
+
+
+.fila3-Densidad_real {
+    grid-area: col2;
+}
+
+
+.fila3-Ancho {
+    grid-area: col3;
+}
+
+
+.fila3-Ancho_real {
+    grid-area: col4;
+}
+
+.fila3-Acabado {
+    grid-area: col5;
+    visibility: hidden;
+}
+
+ .fila3-Acabado_real {
+     grid-area: col6;
+     visibility: hidden;
+ }
+
+
+
+.fila3-Tipo_Tejido_Tela {
+  grid-area: col5;
+}
+
+.fila3-Tipo_Tejido {
+  grid-area: col6;
+}
+
+
+
+
+.fila3-Largo {
+  grid-area: col7;
+}
+
+.fila3-Largo-Real {
+  grid-area: col8;
+}
+
+.fila3-Alto {
+  grid-area: col9;
+}
+
+.fila3-Alto-Real {
+  grid-area: col10;
+}
+
+.fila3-Peso-Unidad {
+  grid-area: col11;
+}
+
+.fila3-Peso-Unidad_Real {
+  grid-area: col12;
+}
+
+.fila3-Pasadas {
+  grid-area: col13;
+}
+
+.fila3-Pasadas-Real {
+  grid-area: col14;
+}
+
+.fila3-Observaciones {
+    grid-area: col15;
+}
+
+
+
+
+
+
+
+.fila1-excel {
+    width: 100%;
+    grid-area: col4;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #18bd20c9;
+    color: #ffffff;
+    
+}
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: flex;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot .button-agregar,
+// .button-cancelar {
+//     height: 10%;
+//     margin: 0 auto;
+//     margin: 15px 10px 10px 10px;
+//     min-height: 42px;
+//     max-width: 300px;
+//     min-width: 120px;
+// }
+
+
+
+.button-agregar {
+    grid-area: fcol1;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+ 
+}
+.paginador{
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+
+
+
+
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  //justify-content: center;
+  align-items: center;        
+
+}
+
+.mat-expansion-panel-header{
+  background: florlwhite;
+}
+
+.example-headers-align .mat-mdc-form-field + .mat-mdc-form-field {
+  margin-left: 8px;
+}
+
+.mat-input-element{
+  text-align: justify;
+
+}
+
+
+.example-content {
+  display:inline;
+  flex-direction: column;
+  align-items: flex-start; 
+  text-align: left;
+  span {
+      display: inline;
+      // margin-bottom: 16px;
+  };
+  // width: 250px; 
+  width: 151px;
+}
+
+
+
+
+
+
+
+@media screen and (max-width: 1500px){
+    
+    .grid-container{
+        height: 860px;
+    }
+    .container-cuerpo {
+      display: grid;
+
+      grid-template:
+      "fila1" 120px
+      "fila2" 368px
+      "fila3" 220px
+      "fila4" auto
+      "foot" 55px /
+      99%;
+
+
+      .fila3 {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        align-content: center;
+    
+        .fill {
+          width: 48%;
+          margin-right: 1rem;
+        }
+      }
+
+
+  }
+
+
+  .fila3-content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+
+
+  .container-cuerpo-fila1{
+      display: grid;
+      grid-template:
+      "col1 col2" 45px
+      "col3 col4" 45px
+      "col5 col6" 45px
+      "col7 col7" auto/
+      200px   200px
+    
+  }
+
+  .fila1-Ot {
+      grid-area: col1;
+      
+      
+  }
+  .fila1-Inspector {
+      grid-area: col2;
+      
+  }
+
+  .fila1-Oc {
+    grid-area: col3;
+  }
+
+  .fila1-Maquina {
+      grid-area: col4;
+    }
+
+    
+    .fila1-Combinacion {
+      grid-area: col5;
+      
+    }
+    
+    
+    .fila1-Talla {
+      grid-area: col6;
+      
+    }
+    
+
+
+  .fila1-Tela {
+      grid-area: col7;
+    }
+
+
+
+
+
+    .container-cuerpo-fila2{
+      display: grid;
+      grid-template:
+      "col1  col1"  45px
+      "col2  col3"  45px
+      "col4  col5 " 45px
+      "col6  col7"  45px
+      "col8  col9" 45px
+      "col10 colo11" auto/
+      200px   200px
+    
+  }
+
+
+
+  
+    .fila2-Hilo_Titulo {
+      grid-area: col1;
+    }
+
+
+    .fila2-Hilo_Compo {
+      grid-area: col2;
+    }
+
+
+    .fila2-Hilo_Lote {
+      grid-area: col3;
+    }
+
+
+    .fila2-Hilo_Proveedor {
+      grid-area: col4;
+    }
+
+
+    .container-cuerpo-fila2{
+      margin-top: 110px;
+    }
+
+
+
+    .container-cuerpo-fila3{
+      display: grid;
+      grid-template:
+      "col1  col2"  45px
+      "col3  col4"  45px
+      "col5  col6 " 45px
+      "col7 col8" 45px
+      "col9 col10" 45px
+      "col11 col12" 45px
+      "col13 col14" 45px
+      "col15  col15" auto/
+      200px   200px
+    
+  }
+
+
+
+  
+    .fila3-Densidad {
+      grid-area: col1;
+    }
+
+
+    .fila3-Densidad_real {
+      grid-area: col2;
+    }
+
+
+    .fila3-Ancho {
+      grid-area: col3;
+    }
+
+
+    .fila3-Ancho_real {
+      grid-area: col4;
+    }
+
+    .fila3-Acabado {
+      grid-area: col5;
+    }
+
+    .fila3-Acabado_real {
+      grid-area: col6;
+    }
+
+
+          
+    .fila3-Largo {
+      grid-area: col7;
+    }
+
+    .fila3-Largo-Real {
+      grid-area: col8;
+    }
+
+    .fila3-Alto {
+      grid-area: col9;
+    }
+
+    .fila3-Alto-Real {
+      grid-area: col10;
+    }
+
+    .fila3-Peso-Unidad {
+      grid-area: col11;
+    }
+
+    .fila3-Peso-Unidad_Real {
+      grid-area: col12;
+    }
+
+    .fila3-Pasadas {
+      grid-area: col13;
+    }
+
+    .fila3-Pasadas-Real {
+      grid-area: col14;
+    }
+
+    .fila3-Observaciones {
+      grid-area: col15;
+      background-color: #dbf8e5;
+    }
+
+
+
+
+
+
+
+
+
+  //   .container-cuerpo-fila2{
+  //     margin-top: 110px;
+  //   }
+
+  //   .container-cuerpo-fila3{
+  //     margin-top: 110px;
+  //   }
+
+
+
+
+  th.mat-cell{
+      width: 120px;
+      min-width: 120px;
+  }
+  td.mat-cell{
+      width: 120px;
+      min-width: 120px;
+  }
+
+  .maticon-date{
+      position: absolute;
+      float: right;
+      top: -6px;
+      margin-left: 270px;
+      cursor: pointer;
+      color: rgba(0, 0, 0, 0.54);
+  }
+
+
+  
+
+}
+
+
+@media screen and (max-width: 868px){
+    .grid-container{
+        height: 888px;
+    }
+    .container-cuerpo {
+      display: grid;
+
+      grid-template:
+      "fila1" 120px
+      "fila2" 368px
+      "fila3" 220px
+      "fila4" auto
+      "foot" 55px /
+      99%;
+
+
+      .fila3 {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        align-content: center;
+    
+        .fill {
+          width: 48%;
+          margin-right: 1rem;
+        }
+      }
+
+
+  }
+
+
+  .fila3-content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+
+
+  .container-cuerpo-fila1{
+      display: grid;
+      grid-template:
+      "col1 col2" 45px
+      "col3 col4" 45px
+      "col5 col6" 45px
+      "col7 col7" auto/
+      200px   200px
+    
+  }
+
+  .fila1-Ot {
+      grid-area: col1;
+      
+      
+  }
+  .fila1-Inspector {
+      grid-area: col2;
+      
+  }
+
+  .fila1-Oc {
+    grid-area: col3;
+  }
+
+  .fila1-Maquina {
+      grid-area: col4;
+    }
+
+    
+    .fila1-Combinacion {
+      grid-area: col5;
+      
+    }
+    
+    
+    .fila1-Talla {
+      grid-area: col6;
+      
+    }
+    
+
+
+  .fila1-Tela {
+      grid-area: col7;
+    }
+
+
+
+
+
+    .container-cuerpo-fila2{
+      display: grid;
+      grid-template:
+      "col1  col1"  45px
+      "col2  col3"  45px
+      "col4  col5 " 45px
+      "col6  col7"  45px
+      "col8  col9" 45px
+      "col10 colo11" auto/
+      200px   200px
+    
+  }
+
+
+
+  
+    .fila2-Hilo_Titulo {
+      grid-area: col1;
+    }
+
+
+    .fila2-Hilo_Compo {
+      grid-area: col2;
+    }
+
+
+    .fila2-Hilo_Lote {
+      grid-area: col3;
+    }
+
+
+    .fila2-Hilo_Proveedor {
+      grid-area: col4;
+    }
+
+
+    .container-cuerpo-fila2{
+      margin-top: 110px;
+    }
+
+
+
+    .container-cuerpo-fila3{
+      display: grid;
+      grid-template:
+      "col1  col2"  45px
+      "col3  col4"  45px
+      "col5  col6 " 45px
+      "col7 col8" 45px
+      "col9 col10" 45px
+      "col11 col12" 45px
+      "col13 col14" 45px
+      "col15  col15" auto/
+      200px   200px
+    
+  }
+
+
+
+  
+    .fila3-Densidad {
+      grid-area: col1;
+    }
+
+
+    .fila3-Densidad_real {
+      grid-area: col2;
+    }
+
+
+    .fila3-Ancho {
+      grid-area: col3;
+    }
+
+
+    .fila3-Ancho_real {
+      grid-area: col4;
+    }
+
+    .fila3-Acabado {
+      grid-area: col5;
+    }
+
+    .fila3-Acabado_real {
+      grid-area: col6;
+    }
+
+
+          
+    .fila3-Largo {
+      grid-area: col7;
+    }
+
+    .fila3-Largo-Real {
+      grid-area: col8;
+    }
+
+    .fila3-Alto {
+      grid-area: col9;
+    }
+
+    .fila3-Alto-Real {
+      grid-area: col10;
+    }
+
+    .fila3-Peso-Unidad {
+      grid-area: col11;
+    }
+
+    .fila3-Peso-Unidad_Real {
+      grid-area: col12;
+    }
+
+    .fila3-Pasadas {
+      grid-area: col13;
+    }
+
+    .fila3-Pasadas-Real {
+      grid-area: col14;
+    }
+
+    .fila3-Observaciones {
+      grid-area: col15;
+      background-color: #dbf8e5;
+    }
+
+
+
+
+
+  th.mat-cell{
+      width: 120px;
+      min-width: 120px;
+  }
+  td.mat-cell{
+      width: 120px;
+      min-width: 120px;
+  }
+
+  .maticon-date{
+      position: absolute;
+      float: right;
+      top: -6px;
+      margin-left: 270px;
+      cursor: pointer;
+      color: rgba(0, 0, 0, 0.54);
+  }
+
+
+
+
+
+  }
+
+
+  @media screen and (max-width: 600px){
+  
+
+    .grid-container{
+        height: 950px;
+    }
+
+    .container-cuerpo {
+        display: grid;
+
+        grid-template:
+        "fila1" 160px
+        "fila2" 338px
+        "fila3" 220px
+        "fila4" auto
+        "foot" 55px /
+        99%;
+
+
+        .fila3 {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          align-content: center;
+      
+          .fill {
+            width: 48%;
+            margin-right: 1rem;
+          }
+        }
+
+
+    }
+
+
+    .fila3-content {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+  
+
+
+    .container-cuerpo-fila1{
+        display: grid;
+        grid-template:
+        "col1 col2" 45px
+        "col3 col4" 45px
+        "col5 col6" 45px
+        "col7 col7" 45px
+        "col8 col8" auto/
+        130px   198px
+      
+    }
+
+    .fila1-Ot {
+        grid-area: col1;
+        //text-align: center;
+    }
+
+    .fila1-Inspector {
+        grid-area: col2;
+        
+    }
+
+    .fila1-Oc {
+      grid-area: col3;
+    }
+
+    .fila1-Maquina {
+        grid-area: col4;
+      }
+
+      
+      .fila1-Combinacion {
+        grid-area: col5;
+        
+      }
+      
+      
+      .fila1-Talla {
+        grid-area: col6;
+      }
+
+      .fila1-Cliente {
+        grid-area: col7;
+      }
+      
+
+
+    .fila1-Tela {
+        grid-area: col8;
+      }
+
+
+
+ 
+
+      .container-cuerpo-fila2{
+        display: grid;
+        grid-template:
+        "col1  col1"  45px
+        "col2  col3"  45px
+        "col4  col5 " 45px
+        "col6  col7"  45px
+        "col8  col9" 45px
+        "col10 colo11" auto/
+        200px   135px
+      
+    }
+
+
+
+    
+      .fila2-Hilo_Titulo {
+        grid-area: col1;
+      }
+
+
+      .fila2-Hilo_Compo {
+        grid-area: col2;
+      }
+
+
+      .fila2-Hilo_Lote {
+        grid-area: col3;
+      }
+
+
+      .fila2-Hilo_Proveedor {
+        grid-area: col4;
+      }
+
+
+      .container-cuerpo-fila2{
+        margin-top: 110px;
+      }
+
+
+
+      .container-cuerpo-fila3{
+        display: grid;
+        grid-template:
+        "col1  col2"  45px
+        "col3  col4"  45px
+        "col5  col6 " 45px
+        "col7 col8" 45px
+        "col9 col10" 45px
+        "col11 col12" 45px
+        "col13 col14" 45px
+        "col15  col15" auto/
+        150px   174px
+      
+    }
+
+
+
+    
+      .fila3-Densidad {
+        grid-area: col1;
+      }
+
+
+      .fila3-Densidad_real {
+        grid-area: col2;
+      }
+
+
+      .fila3-Ancho {
+        grid-area: col3;
+      }
+
+
+      .fila3-Ancho_real {
+        grid-area: col4;
+      }
+
+      .fila3-Acabado {
+        
+        visibility: hidden;
+      }
+
+      .fila3-Acabado_real {
+        
+        visibility: hidden;
+      }
+
+
+
+      .fila3-Tipo_Tejido_Tela {
+        grid-area: col5;
+      }
+      
+      .fila3-Tipo_Tejido {
+        grid-area: col6;
+      }
+
+
+      
+            
+      .fila3-Largo {
+        grid-area: col7;
+      }
+
+      .fila3-Largo-Real {
+        grid-area: col8;
+      }
+
+      .fila3-Alto {
+        grid-area: col9;
+      }
+
+      .fila3-Alto-Real {
+        grid-area: col10;
+      }
+
+      .fila3-Peso-Unidad {
+        grid-area: col11;
+      }
+
+      .fila3-Peso-Unidad_Real {
+        grid-area: col12;
+      }
+
+      .fila3-Pasadas {
+        grid-area: col13;
+      }
+
+      .fila3-Pasadas-Real {
+        grid-area: col14;
+      }
+
+      .fila3-Observaciones {
+        grid-area: col15;
+        background-color: #dbf8e5;
+      }
+
+
+
+
+    th.mat-cell{
+        width: 120px;
+        min-width: 120px;
+    }
+    td.mat-cell{
+        width: 120px;
+        min-width: 120px;
+    }
+
+    .maticon-date{
+        position: absolute;
+        float: right;
+        top: -6px;
+        margin-left: 270px;
+        cursor: pointer;
+        color: rgba(0, 0, 0, 0.54);
+    }
+
+
+
+
+
+
+  }

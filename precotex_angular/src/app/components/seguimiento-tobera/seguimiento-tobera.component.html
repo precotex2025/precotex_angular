@@ -1,0 +1,466 @@
+<div class="container">
+  <div class="grid-container">
+    <div class="title">.:: Seguimiento de Toberas ::.</div>
+
+    <form
+      class="container-cuerpo"
+      [formGroup]="formulario"
+      #formDirective="ngForm"
+    >
+      <div class="container-cuerpo-fila1">
+        <mat-form-field class="fila1-cod-receta">
+          <mat-label>Scan Receta-</mat-label>
+          <input
+            matInput
+            #miInputref
+            type="text"
+            [(ngModel)]="numeroref"
+            [value]="numeroIngresado"
+            formControlName="CodReceta"
+            (keyup)="onToggle()"
+            maxlength="6"
+            (input)="validarInputRef($event)"
+            (keypress)="validarNumero($event)"
+            inputmode="none"
+          />
+          <input type="hidden" formControlName="CodRecetaHidden" />
+        </mat-form-field>
+
+        <mat-form-field class="fila1-cod-receta2">
+          <mat-label>Receta</mat-label>
+          <input matInput type="text" value="" formControlName="CodReceta2" />
+        </mat-form-field>
+      </div>
+
+      <div class="container-cuerpo-fila2">
+        <mat-form-field class="fila2-partida">
+          <mat-label>Partida</mat-label>
+          <input type="hidden" formControlName="IdSeg" />
+          <input matInput type="text" formControlName="Partida" />
+        </mat-form-field>
+
+        <mat-form-field class="fila2-maquina">
+          <mat-label>Maquina</mat-label>
+          <input matInput type="text" formControlName="Maquina" />
+        </mat-form-field>
+
+        <mat-form-field class="fila2-tipo">
+          <mat-label>Tipo Prueba</mat-label>
+          <mat-select [(value)]="opcionSeleccionada" formControlName="Tipo"  [disabled]="estaDeshabilitado"  (selectionChange)="onSelectionChange()">
+            <mat-option
+              *ngFor="let opcion of opciones"
+              [value]="opcion.value"
+
+            >
+              {{ opcion.viewValue }}
+            </mat-option>
+          </mat-select>
+
+          <!-- <input matInput type="text" formControlName="Tipo" /> -->
+        </mat-form-field>
+
+        <mat-form-field class="fila2-autoriza">
+          <mat-label>Autoriza Cambio Tobera</mat-label>
+          <mat-select [(value)]="autorizaCambio" formControlName="Autoriza" [disabled]="deshabilitado">
+            <mat-option
+              *ngFor="let opcion of opcionesAut"
+              [value]="opcion.value"
+            >
+              {{ opcion.viewValue }}
+
+            </mat-option>
+          </mat-select>
+
+          <!-- <input matInput type="text" formControlName="Autoriza" /> -->
+        </mat-form-field>
+      </div>
+
+      <div class="container-cuerpo-fila3">
+        <mat-form-field class="fila3-ntoberaorg">
+          <mat-label>N Tob Org.</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="Tobera"
+            [readonly]="true"
+          />
+        </mat-form-field>
+
+        <mat-form-field class="fila3-ntoberasel">
+          <mat-label>Tob. Sel.</mat-label>
+          <input
+            matInput
+            #miInput
+            maxlength="1"
+            type="text"
+            [(ngModel)]="numero"
+            [value]="numeroIngresado2"
+            formControlName="Toberasel"
+            (input)="validarInput($event)"
+            (click)="InputSelTob()"
+            (keypress)="validarNumero($event)"
+            inputmode="none"
+          />
+        </mat-form-field>
+      </div>
+
+
+      <div class="container-cuerpo-fila8">
+        <div class="fila8-ntoberaorg">
+          <mat-checkbox class="example-margin" formControlName="Flg_Reproceso" (click)="onCheckboxReproceso()">REPROCESO
+          </mat-checkbox>
+        </div>
+        <div class="fila8-ntoberasel">
+        <mat-form-field >
+          <mat-label>Motivo Reproceso</mat-label>
+          <mat-select formControlName="Option_TipMotivoReproceso" name="process" [disabled]="deshabilitaMotivoReproceso">
+              <mat-option *ngFor="let tipo of listar_TipMotivoReproceso" [value]="tipo.Tip_MotivoReproceso">
+                  {{tipo.Des_MotivoReproceso}}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+        </div>
+        <!-- (click)="CambiarValorTipMotivoReproceso(tipo.Tip_MotivoReproceso)"
+        (keyup)="CambiarValorTipMotivoReproceso(tipo.Tip_MotivoReproceso)"              -->
+      </div>
+
+
+      <!-- <mat-label>Selección Tobera</mat-label> -->
+
+      <div class="container-cuerpo-fila4">
+        <button
+          type="button"
+          class="fila4-boton1"
+          mat-flat-button
+          color="primary"
+          name="button1"
+          (click)="ingresarNumero(1)"
+        >
+          1
+        </button>
+
+        <button
+          type="button"
+          class="fila4-boton2"
+          mat-flat-button
+          color="primary"
+          name="button2"
+          (click)="ingresarNumero(2)"
+        >
+          2
+        </button>
+
+        <button
+          type="button"
+          class="fila4-boton3"
+          mat-flat-button
+          color="primary"
+          name="button3"
+          (click)="ingresarNumero(3)"
+        >
+          3
+        </button>
+
+        <button
+          type="button"
+          class="fila4-boton4"
+          mat-flat-button
+          color="primary"
+          name="button4"
+          (click)="ingresarNumero(4)"
+        >
+          4
+        </button>
+
+        <button
+          type="button"
+          class="fila4-boton5"
+          mat-flat-button
+          color="primary"
+          name="button5"
+          (click)="ingresarNumero(5)"
+        >
+          5
+        </button>
+
+        <button
+          type="button"
+          class="fila4-boton6"
+          mat-flat-button
+          color="primary"
+          name="button6"
+          (click)="ingresarNumero(6)"
+        >
+          6
+        </button>
+
+        <button
+          type="button"
+          class="fila4-boton7"
+          mat-flat-button
+          color="primary"
+          name="button7"
+          (click)="ingresarNumero(7)"
+        >
+          7
+        </button>
+
+        <button
+          type="button"
+          class="fila4-boton8"
+          mat-flat-button
+          color="primary"
+          name="button8"
+          (click)="ingresarNumero(8)"
+        >
+          8
+        </button>
+
+        <button
+          type="button"
+          class="fila4-boton9"
+          mat-flat-button
+          color="primary"
+          name="button9"
+          (click)="ingresarNumero(9)"
+        >
+          9
+        </button>
+
+        <button
+
+        type="button"
+        class="fila4-boton10"
+        mat-flat-button
+        color="primary"
+        name="button10"
+      >
+      *
+      </button>
+
+        <button
+        type="button"
+        class="fila4-boton0"
+        mat-flat-button
+        color="primary"
+        name="button0"
+        (click)="ingresarNumero(0)"
+      >
+        0
+      </button>
+
+      <button
+
+      type="button"
+      class="fila4-boton12"
+      mat-flat-button
+      color="primary"
+      name="button12"
+      (click)="disminuirNumero()"
+    >
+    <mat-icon>backspace</mat-icon>
+    </button>
+
+      </div>
+
+      <div class="container-cuerpo-fila5">
+        <button
+          type="button"
+          class="button-registrar"
+          mat-flat-button
+          color="primary"
+          [disabled]="!formulario.valid"
+          (click)="submit(formDirective)"
+        >
+          <mat-icon aria-label="person">check_circle_outline </mat-icon
+          >Registrar
+        </button>
+
+        <button
+          type="button"
+          class="button-limpiar"
+          mat-flat-button
+          color="primary"
+          (click)="limpiar()"
+        >
+          <mat-icon aria-label="person">highlight_off </mat-icon>Limpiar
+        </button>
+
+        <button
+          type="button"
+          class="button-cancelar"
+          mat-flat-button
+          color="primary"
+          [routerLink]="['/']"
+        >
+          <mat-icon aria-label="person">highlight_off </mat-icon>Cancelar
+        </button>
+      </div>
+
+
+
+
+      <div class="container-cuerpo-foot">
+        <!-- CARGA DE MAS DE UNA IMAGEN -->
+        <div class="col-md-12">
+          <input
+            type="file"
+            (change)="onFileChange($event)"
+            class="form-control d-none"
+            #inputFile
+          />
+          <button
+            (click)="inputFile.click()"
+            type="button"
+            class="button-info"
+            mat-flat-button
+          >
+            Foto 1<mat-icon>upload</mat-icon>
+          </button>
+        </div>
+
+        <div class="col-md-12">
+          <input
+            type="file"
+            (change)="onFileChange2($event)"
+            class="form-control d-none"
+            #inputFile2
+          />
+          <button
+            (click)="inputFile2.click()"
+            type="button"
+            class="button-info"
+            mat-flat-button
+          >
+            Foto 2<mat-icon>upload</mat-icon>
+          </button>
+        </div>
+
+        <div class="col-md-12">
+          <input
+            type="file"
+            (change)="onFileChange3($event)"
+            class="form-control d-none"
+            #inputFile3
+          />
+          <button
+            (click)="inputFile3.click()"
+            type="button"
+            class="button-info"
+            mat-flat-button
+          >
+            Foto 3<mat-icon>upload</mat-icon>
+          </button>
+        </div>
+
+        <div class="col-md-12">
+          <input
+            type="file"
+            (change)="onFileChange4($event)"
+            class="form-control d-none"
+            #inputFile4
+          />
+          <button
+            (click)="inputFile4.click()"
+            type="button"
+            class="button-info"
+            mat-flat-button
+          >
+            Foto 4<mat-icon>upload</mat-icon>
+          </button>
+        </div>
+
+        <div class="col-md-12">
+          <input
+            type="file"
+            (change)="onFileChange5($event)"
+            class="form-control d-none"
+            #inputFile5
+          />
+          <button
+            (click)="inputFile5.click()"
+            type="button"
+            class="button-info"
+            mat-flat-button
+          >
+            Foto 5<mat-icon>upload</mat-icon>
+          </button>
+        </div>
+
+        <div class="col-md-12">
+          <input
+            type="file"
+            (change)="onFileChange6($event)"
+            class="form-control d-none"
+            #inputFile6
+          />
+          <button
+            (click)="inputFile6.click()"
+            type="button"
+            class="button-primary"
+            mat-flat-button
+          >
+            Foto Receta<mat-icon>upload</mat-icon>
+          </button>
+        </div>
+        <!-- CARGA DE MAS DE UNA IMAGEN -->
+
+        <div class="col-md-12">
+          <LABEl>FOTO 1</LABEl>
+          <img
+            [src]="RutaFoto"
+            *ngIf="RutaFoto"
+            style="height: 100%; width: 100%"
+          />
+        </div>
+
+        <div class="col-md-12">
+          <LABEl>FOTO 2</LABEl>
+          <img
+            [src]="RutaFoto2"
+            *ngIf="RutaFoto2"
+            style="height: 100%; width: 100%"
+          />
+        </div>
+
+        <div class="col-md-12">
+          <LABEl>FOTO 3</LABEl>
+          <img
+            [src]="RutaFoto3"
+            *ngIf="RutaFoto3"
+            style="height: 100%; width: 100%"
+          />
+        </div>
+
+        <div class="col-md-12">
+          <LABEl>FOTO 4</LABEl>
+          <img
+            [src]="RutaFoto4"
+            *ngIf="RutaFoto4"
+            style="height: 100%; width: 100%"
+          />
+        </div>
+
+        <div class="col-md-12">
+          <LABEl>FOTO 5</LABEl>
+          <img
+            [src]="RutaFoto5"
+            *ngIf="RutaFoto5"
+            style="height: 100%; width: 100%"
+          />
+        </div>
+
+        <div class="col-md-12">
+          <LABEl>FOTO RECETA</LABEl>
+          <img
+            [src]="RutaFoto6"
+            *ngIf="RutaFoto6"
+            style="height: 100%; width: 100%"
+          />
+        </div>
+
+
+      </div>
+    </form>
+  </div>
+</div>

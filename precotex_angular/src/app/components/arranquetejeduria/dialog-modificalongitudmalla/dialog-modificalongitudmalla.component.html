@@ -1,0 +1,101 @@
+<!--DefectosAlamacenDerivados-->
+
+<div class="container">
+  <!-- ventana nro 4 - historial -->
+  <div class="grid-container">
+    <div class="title">Longitud de malla para OT - {{ this.Cod_Ordtra }}</div>
+
+    <form class="container-cuerpo" [formGroup]="formulario">
+      <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+      <div class="container-cuerpo-fila1">
+        <table
+          mat-table
+          #table
+          [dataSource]="dataSource"
+          class="mat-elevation-z8"
+        >
+          <ng-container matColumnDef="Codigo_Hilado">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              CODIGO HILADO
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.Cod_HilTel }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="Longitud_Malla">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              LONG. MALLA
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.Long_Malla }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="Longitud_Malla_Real">
+            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+              LONG. MALLA REAL
+            </th>
+            <td mat-cell *matCellDef="let data_det">
+              {{ data_det.Long_Malla_Real }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Acciones">
+            <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
+            <td mat-cell *matCellDef="let data_det">
+
+                <a mat-icon-button style="margin-right:5px;"  
+                *ngIf="Estado !== 'S'" 
+                    (click)="ModificarLongitudMalla(data_det.Cod_Ordtra, data_det.Cod_HilTel, data_det.Long_Malla, data_det.Long_Malla_Real)"  matTooltip="Modificar">
+                    <mat-icon color="warn" style="color: #faaa33;">edit</mat-icon>
+                </a>
+
+
+              <!-- <a
+                mat-icon-button
+                style="margin-right: 5px"
+                *ngIf="data_det.Cod_Motivo.length > 0"
+                (click)="
+                  ModificarSubDetalle(
+                    data_det.Cod_Ordtra,
+                    data_det.Codigo_Hilado
+                  )
+                "
+              >
+                <mat-icon color="success">edit</mat-icon>
+              </a> -->
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns_cab"></tr>
+        </table>
+
+        <mat-paginator
+          class="paginador"
+          #paginator
+          [pageSizeOptions]="[50, 100, 150]"
+          showFirstLastButtons
+          aria-label="Select page of periodic elements"
+        >
+        </mat-paginator>
+      </div>
+
+      <div class="container-cuerpo-foot">
+        <button
+          type="button"
+          class="button-cancelar"
+          mat-button
+          mat-dialog-close
+          mat-dialog-close
+          mat-flat-button
+        >
+          <mat-icon aria-label="person">highlight_off </mat-icon> Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center">Cargando...</p>
+</ngx-spinner>

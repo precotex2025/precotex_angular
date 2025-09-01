@@ -1,0 +1,223 @@
+<div class="container" id="container">
+    <div class="grid-container">
+        <div class="title">Registro Encogimiento de Prendas - {{idRegistro}}</div>
+
+        <mat-tab-group>
+            <mat-tab label="Registro">
+                <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="onConfirmarRegistro(formDirective)">
+                    <div class="container-cuerpo-fila1">
+                        <mat-form-field class="fila1-OP"> 
+                            <mat-label>OP</mat-label>
+                            <input matInput type="text" placeholder="OP" value="" 
+                                autocomplete="off" formControlName="OP" (input)="onBuscarOP()">
+                        </mat-form-field>  
+
+                        <mat-form-field class="fila1-Cliente"> 
+                            <mat-label>Cliente</mat-label>
+                            <input matInput type="text" placeholder="Cliente" value="" autocomplete="off" formControlName="NomCliente" >
+                        </mat-form-field>
+        
+                        <mat-form-field class="fila1-EstCli"> 
+                            <mat-label>Estilo Cliente</mat-label>
+                            <input matInput type="text" placeholder="Estilo Cliente" value="" autocomplete="off" formControlName="CodEstCli" >
+                        </mat-form-field>
+
+                        <mat-form-field class="fila1-EstPro"> 
+                            <mat-label>Estilo P. / Version</mat-label>
+                            <input matInput type="text" placeholder="Estilo P. / Version" value="" autocomplete="off" formControlName="EstProVer" >
+                        </mat-form-field>
+
+                        <mat-form-field class="fila1-EstPro"> 
+                            <mat-label>Temporada</mat-label>
+                            <input matInput type="text" placeholder="Temporada" value="" autocomplete="off" formControlName="NomTemCli" >
+                        </mat-form-field>
+
+                        <!--<mat-form-field class="fila1-EstPro"> 
+                            <mat-label>Version</mat-label>
+                            <input matInput type="text" placeholder="Version" value="" autocomplete="off" formControlName="CodVersion" >
+                        </mat-form-field>
+
+                        <mat-form-field class="fila1-EstPro"> 
+                            <mat-label>Estilo Propio</mat-label>
+                            <input matInput type="text" placeholder="Estilo Propio" value="" autocomplete="off" formControlName="CodEstPro" >
+                        </mat-form-field>-->
+
+                        <!--<mat-form-field class="fila1-EstPro"> 
+                            <mat-label>Partida</mat-label>
+                            <input matInput type="text" placeholder="Partida" value="" autocomplete="off" formControlName="CodOrdTra" >
+                        </mat-form-field>-->
+
+                        <mat-form-field class="fila1-Modelista" appearance="fill">
+                            <mat-label>Modelista</mat-label>
+                            <input matInput type="text" #trigger="matAutocompleteTrigger" placeholder="Modelista" formControlName="NomModelista" [matAutocomplete]="dataOperacionModelista" />
+                            <mat-autocomplete autoActiveFirstOption #dataOperacionModelista="matAutocomplete">
+                                <mat-option *ngFor="let option of filtroOperacionModelista | async" [value]="option.Nom_Auditor" (click)="seleccionarModelista(option)">
+                                    {{option.Nom_Auditor}}
+                                </mat-option> 
+                            </mat-autocomplete>
+                        </mat-form-field>
+
+                        <button type="button" class="button-finalizar" (click)="onFinalizarRegistro()" mat-flat-button [disabled]="idRegistro == 0 || flgEnable == false" *ngIf="idRegistro != 0 && data.Flg_Estado != '0'">
+                            <mat-icon aria-label="person" >check</mat-icon> Finalizar Ficha
+                        </button>
+                    
+                        <button type="submit" class="button-agregar" mat-flat-button [disabled]="!formulario.valid" *ngIf="idRegistro == 0">
+                            <mat-icon aria-label="person" >save </mat-icon> Generar Ficha
+                        </button>
+
+                        <button type="submit" class="button-agregar" mat-flat-button [disabled]="!formulario.valid" *ngIf="idRegistro != 0 && data.Flg_Estado == '0'">
+                            <mat-icon aria-label="person" >save </mat-icon> Grabar Ficha
+                        </button>
+
+                        <button mat-dialog-close type="button" class="button-regresar" mat-flat-button mat-dialog-close mat-dialog-close="false">
+                            <mat-icon aria-label="person">cancel</mat-icon> Cerrar Ficha
+                        </button>
+
+                    </div>
+
+                    <div class="container-cuerpo-fila2">  
+                        <ag-grid-angular 
+                            #gGridEmpty
+                            style="width: 100%; height: 100%;" 
+                            class="ag-theme-material"
+                            [suppressDragLeaveHidesColumns]="true"
+                            (cellClicked)="onCellClicked($event, $event)"
+                            [gridOptions]="gridOptions"
+                            >
+                        </ag-grid-angular>
+                    </div>
+
+                    <div class="container-cuerpo-foot">
+                        <table style="width:100%">
+                            <tr>
+                                <td>[{{ formulario.get('CodTalla')?.value }}] TALLA BASE</td>
+                                <td>[1P] PIEZAS</td>
+                                <td>[2E] ESTAMPADO</td>
+                                <td>[3B] BORDADO</td>
+                                <td>[4C] COSTURA</td>
+                                <td>[5L] LAVADO</td>
+                                <td>[6V] VAPORIZADO</td>
+                                <td>[9F] VALOR FINAL</td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
+            </mat-tab>
+
+            <mat-tab label="Detalle">
+                <div class="container-cuerpo-caja">
+                    <div class="container-caja1">
+                        <div style="text-align: center;">
+                            <img [src]="img64" width="220px" id="img" alt="" srcset="">
+                        </div>
+                    </div>
+
+                    <div class="table-container">                        
+                        <table style="width:100%" border="1px">
+                            <tr>
+                                <th colspan="4">Tela</th>
+                                <th colspan="3">Prenda</th>
+                            </tr>
+                            <tr>
+                                <th colspan="1" rowspan="2">OP</th>
+                                <th colspan="1" rowspan="2">Partida</th>
+                                <th colspan="1" rowspan="2">Tela Principal</th>
+                                <th colspan="1" rowspan="2">Color</th>
+                                <th colspan="1" rowspan="2">Código de molde de referencia</th>
+                                <th colspan="2">Encogimiento</th>
+                            </tr>
+                            <tr>
+                                <th>Hilo</th>
+                                <th>Travez</th>
+                            </tr>
+                            <tr *ngFor="let item of especificaciones">
+                                <td>{{ item.Cod_OrdPro }}</td>
+                                <td>{{ item.Cod_OrdTra }}</td>
+                                <td>{{ item.Tipo_Tela }}</td>
+                                <td>{{ item.Color_Tela }}</td>
+                                <td>{{ item.Codigo_Molde }}</td>
+                                <td>{{ item.Encogimiento_Hilo }}</td>
+                                <td>{{ item.Encogimiento_Travez }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="container-cuerpo-caja">
+                    <div class="container-tabla">
+                        <table style="width:100%" border="1px">
+                            <tr>
+                                <th colspan="20">Tela</th>
+                            </tr>
+                            <tr>
+                                <th colspan="1" rowspan="2">Partida</th>
+                                <th colspan="2">Densidad</th>
+                                <th colspan="3">Revirado</th>
+                                <th colspan="3">Inclinación de trama</th>
+                                <th colspan="2">Encogimiento std</th>
+                                <th colspan="2">Encogimiento real 1er lavado</th>
+                                <th colspan="2">Encogimiento real 3er lavado</th>
+                                <th colspan="2">Encogimiento residual</th>
+                                <th colspan="3">Inclinación de trama residual</th>
+                            </tr>
+                            <tr>
+                                <th>Densidad sth</th>
+                                <th>Densidad real</th>
+                                <th>Revirado sth</th>
+                                <th>Revirado real ( 1er Lavado)</th>
+                                <th>Revirado real ( 3er Lavado)</th>
+                                <th>Izquierdo</th>
+                                <th>Centro</th>
+                                <th>Derecho</th>
+                                <th>Ancho</th>
+                                <th>Largo</th>
+                                <th>Ancho</th>
+                                <th>Largo</th>
+                                <th>Ancho</th>
+                                <th>Largo</th>
+                                <th>Ancho</th>
+                                <th>Largo</th>
+                                <th>Izquierdo</th>
+                                <th>Centro</th>
+                                <th>Derecho</th>
+                            </tr>
+                            <tr *ngFor="let item of especificaciones">
+                                <td>{{ item.Cod_OrdTra }}</td>
+                                <td>{{ item.Densidad_Std }}</td>
+                                <td>{{ item.Densidad_Real }}</td>
+                                <td>{{ item.Revirado_Std }}%</td>
+                                <td>{{ item.Revirado_1er_Lav }}%</td>
+                                <td>{{ item.Revirado_3er_Lav }}%</td>
+                                <td>{{ item.Inc_Tramo_Izq }}%</td>
+                                <td>{{ item.Inc_Tramo_Cen}}%</td>
+                                <td>{{ item.Inc_Tramo_Der }}%</td>
+                                <td>{{ item.Encog_Ancho_Std }}%</td>
+                                <td>{{ item.Encog_Largo_Std }}%</td>
+                                <td>{{ item.Encog_Ancho_Real_1Lav }}%</td>
+                                <td>{{ item.Encog_Largo_Real_1Lav }}%</td>
+                                <td>{{ item.Encog_Ancho_Real_3Lav }}%</td>
+                                <td>{{ item.Encog_Largo_Real_3Lav }}%</td>
+                                <td>{{ item.Encog_Ancho_Residual }}%</td>
+                                <td>{{ item.Encog_Largo_Residual }}%</td>
+                                <td>{{ item.Inc_Tramo_Res_Izq }}%</td>
+                                <td>{{ item.Inc_Tramo_Res_Cen }}%</td>
+                                <td>{{ item.Inc_Tramo_Res_Der }}%</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="container-cuerpo-caja">
+                    <div class="container-caja2">
+                        <dl>
+                            <!--<dt><b>Tela Principal:</b></dt>
+                            <dd>{{ cabecera[0].Tipo_Tela }}</dd>-->
+                            <dt><b>Ruta de Prenda:</b></dt>
+                            <dd>{{ cabecera[0].Ruta_Prenda }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

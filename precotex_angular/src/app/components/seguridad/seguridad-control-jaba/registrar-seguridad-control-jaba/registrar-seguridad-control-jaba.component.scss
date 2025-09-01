@@ -1,0 +1,367 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+   
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 640px;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #ffffff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 140px
+        "fila2" 400px
+        "foot" 55px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+//fila 1 
+.container-cuerpo-fila1 {
+    display: grid;
+
+    grid-template:
+    "col1 col2 col3 col4 auto auto" 70px 
+    "col6 col6 col6 col6 col7 col8" 70px /
+    180px 80px 185px 115px 70px 245px;
+}
+
+
+/*.fila1-Cod_Registro {
+    grid-area: col1;
+    width: 120px; 
+}*/
+
+
+.fila1-anadir {
+    grid-area: col1;
+    width: 185px; 
+    
+}
+.fila1-btn_anadir {
+    grid-area: col2;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #155724;
+    color: #ffffff;
+    width: 70px; 
+}
+
+.fila1-eliminar {
+    grid-area: col3;
+    width: 180px;
+    
+}.fila1-btn_eliminar {
+    grid-area: col4;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #e91919;
+    color: #ffffff;
+    width: 70px; 
+    margin-left: -5px;
+}
+
+.fila1-Observacion {
+    grid-area: col6;
+    width: 555px;
+}
+
+.fila1-btn_finalizar {
+    grid-area: col7;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 150px; 
+}
+
+.fila1-btn_regresar {
+    grid-area: col8;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 70px; 
+}
+
+
+
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot{
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+.mat-column-Cod_Registro_Det,
+.mat-column-Des_Jaba, 
+.mat-column-Total,
+.mat-column-Fecha,
+.mat-column-Hora,
+.mat-column-Usuario,
+.mat-column-Acciones
+//.mat-column-eliminar 
+{
+	text-align: center;
+	font-size: 13px;
+    font-family: arial;
+    padding: 10px;
+   
+}
+ 
+.mat-column-Cod_Registro_Det{
+    width: 10px;
+}
+.mat-column-Des_Jaba{
+    width: 120px;
+}
+.mat-column-Total{
+    width: 120px;
+}
+.mat-column-Fecha{
+    width: 50px;
+}
+.mat-column-Hora{
+    width: 50px;
+}
+.mat-column-Usuario{
+    width: 50px;
+}
+.mat-column-Acciones{
+    width: 50px;
+}
+
+
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+ 
+}
+.paginador{
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+
+@media screen and (max-width: 810px){
+    
+    .grid-container{
+        height: 710px;
+    }
+    .container-cuerpo {
+        display: grid;
+    
+        grid-template:
+        "fila1" 220px
+        "fila2" 535px
+        "foot" 55px /
+        99%;
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        
+        grid-template:
+        "col1 col2 col3 col4" 70px 
+        "col6 col6 col6 col6" 70px
+        "col7 col7 col8 col8" 70px /
+        180px 80px 185px 115px;
+    }
+
+    .fila1-anadir {
+        grid-area: col1;
+        
+    }
+    .fila1-btn_anadir {
+        grid-area: col2;
+    }
+    
+    .fila1-eliminar {
+        grid-area: col3;
+        
+    }.fila1-btn_eliminar {
+        grid-area: col4;
+    }
+    
+    .fila1-Observacion {
+        grid-area: col6;
+        width: 520px;
+    }
+    
+    .fila1-btn_finalizar {
+        grid-area: col7;
+        width: 250px;
+    }
+    
+    .fila1-btn_regresar {
+        grid-area: col8;
+        width: 250px;
+        margin-left: 5px;
+    }
+    
+    
+}
+
+
+
+
+  @media screen and (max-width: 535px){
+   .grid-container{
+       height: 720px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila1" 290px
+        "fila2" 400px
+        "foot" 55px /
+        99%; 
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        
+        grid-template:
+        "col1 col2" 70px 
+        "col3 col4" 70px 
+        "col6 col6" 70px
+        "col7 col8" 70px /
+        270px 80px;
+    } 
+    .fila1-anadir {
+        grid-area: col1;
+        width: 270px;
+    }
+    .fila1-btn_anadir {
+        grid-area: col2;
+        margin-left: 0px;
+    }
+    
+    .fila1-eliminar {
+        grid-area: col3;
+        width: 270px;
+    }
+
+    .fila1-btn_eliminar {
+        grid-area: col4;
+        margin-left: 0px;
+    }
+    
+    .fila1-Observacion {
+        grid-area: col6;
+        width: 350px;
+    }
+    
+    .fila1-btn_finalizar {
+        grid-area: col7;
+        width: 165px;
+        margin-left: 5px;
+    }
+    
+    .fila1-btn_regresar {
+        grid-area: col8;
+        width: 165px;
+        margin-left: -95px;
+    }
+
+  }

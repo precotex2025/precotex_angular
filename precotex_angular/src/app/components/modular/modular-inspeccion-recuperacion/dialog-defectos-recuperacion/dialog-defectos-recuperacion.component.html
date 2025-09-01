@@ -1,0 +1,81 @@
+<body>
+    <div class="container"> 
+    
+        <div class="grid-container">  
+     
+            <div class="title">{{data.Tipo}}</div>
+    
+            <form class="container-cuerpo">
+                <div class="container-cuerpo-fila1">
+                    
+                </div>    
+      
+                <div class="container-cuerpo-fila2">
+                    
+                    <!--<div class="fila1-Datos"> 
+                        <p><b>Talla:</b> {{Cod_Talla}}</p>
+                        <p><b>Descripcion:</b> {{Des_Medida}}</p>
+                        <br>
+                        <hr>
+                    </div>-->
+                    <mat-form-field class="fila1-Datos" appearance="fill">
+                        <mat-label>Escribe el Defecto</mat-label>
+                        <input matInput type="text" (keyup)="applyFilter($event)" placeholder="Buscar Defecto" autocomplete="off"/>
+                    </mat-form-field>    
+            
+    
+                    <table mat-table #table  [dataSource]="dataSource" class="mat-elevation-z8" >
+                        <ng-container matColumnDef="Tallas">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Defecto</th>
+                            <td mat-cell  *matCellDef="let data_det;">
+                                <button type="button" class="button-agregar" (click)="selectMedida(data_det.Abr_Motivo)"  mat-flat-button >{{data_det.Descripcion}}</button>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Defecto_Leve">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Defecto Leve</th>
+                            <td mat-cell  *matCellDef="let data_det;">
+                                <input type="checkbox" name="check" id="check" (change)="changeCheck($event, data_det, 1)" [checked]="data_det.Defecto_Leve == '1' && data_det.Defecto_Critico != '1'" class="checkbox">
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Defecto_Critico">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Defecto Critico</th>
+                            <td mat-cell  *matCellDef="let data_det;">
+                                <input type="checkbox" name="check" id="check" (change)="changeCheck($event, data_det, 2)" [checked]="data_det.Defecto_Critico == '1' && data_det.Defecto_Leve != '1' "  class="checkbox">
+                            </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="Cantidad">
+                           
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cantidad</th>
+                            <td mat-cell  *matCellDef="let data_det;">
+                                <button type="button" class="button-agregar2"mat-flat-button >{{data_det.Cantidad}}</button> 
+                            </td>
+                        </ng-container>
+     
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns_cab; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;" class="table-row"></tr>
+                    </table>
+     
+                </div>
+    
+                
+                <div class="container-cuerpo-foot" style="width: 100%;">
+                    <button type="button" class="button-cancelar" mat-button mat-dialog-close="false"   mat-flat-button>
+                        <mat-icon aria-label="person">highlight_off
+                        </mat-icon>  Cerrar
+                    </button>
+                    <!-- <div class="Total">
+                        Total: {{Total}}
+                    </div>         -->
+                </div>
+    
+    
+            </form>
+    
+        </div>
+     
+    </div>
+    </body>
+    <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+        <p style="color: white; text-align: center; ">Cargando... </p>
+    </ngx-spinner>

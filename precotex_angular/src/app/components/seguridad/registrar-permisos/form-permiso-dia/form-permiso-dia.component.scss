@@ -1,0 +1,310 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+  }
+  
+  .grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0;
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 350px;
+    //position: static;
+  }
+  
+  .title {
+    background-color: darkblue;
+    color: beige;
+    padding: 8px 10px 10px;
+    text-align: center;
+    border-radius: 4px 4px 0 0;
+    border-bottom: 1px solid #337ab7;
+    font-weight: 700;
+  }
+  
+  .container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 5px 5px 5px;
+    justify-content: center;
+  }
+  
+  .container-cuerpo {
+    display: grid;
+  
+    grid-template:
+    "fila1" 75px
+    "fila2" 75px
+    "fila3" 85px
+    "fila4" 110px
+    "fila5" 38vh
+    "foot" /99%;
+  }
+  
+  .container-cuerpo-fila1 {
+    grid-area: fila1;
+  }
+  .container-cuerpo-fila2 {
+    grid-area: fila2;
+  }
+  .container-cuerpo-fila3 {
+    grid-area: fila3;
+  }
+  .container-cuerpo-fila4 {
+    grid-area: fila4;
+  }
+  .container-cuerpo-fila5 {
+    grid-area: fila5;
+  }
+  .container-cuerpo-fila6 {
+    grid-area: fila6;
+  }
+  .container-cuerpo-foot {
+    grid-area: foot;
+  }
+  
+  .buscador{
+    margin-top: 15px;
+  }
+  
+  //fila 1
+  .container-cuerpo-fila1 {
+    display: grid;
+  
+    grid-template:
+        "scol1 scol2" auto/25vw auto;
+  }
+  
+  .fila1-cod-vehiculo {
+    grid-area: scol1;
+    text-align: center;
+    padding-right: 10px;
+  }
+  .fila1-des-vehiculo {
+    grid-area: scol2;
+    text-align: center;
+  }
+  
+  //fila 2
+  .container-cuerpo-fila2 {
+    display: grid;
+  
+    grid-template:
+        "scol1 scol2" auto /auto auto;
+  }
+  
+  .fila2-codcond-vehiculo{
+    grid-area: scol1;
+    text-align: center;
+    padding-right: 10px;
+  }
+  
+  .fila2-nomcond-vehiculo {
+    grid-area: scol2;
+    text-align: center;
+    padding-right: 10px;
+  }
+  
+  //fila 3
+  .container-cuerpo-fila3 {
+    display: grid;
+  
+    grid-template:
+        "scol1";
+  }
+  
+  .fila3-origen-vehiculo {
+    grid-area: scol1;
+    text-align: center;
+    padding-right: 10px;
+  }
+  .fila3-km-vehiculo {
+    grid-area: scol2;
+  }
+  
+  /**************************************************/
+  //fila4
+  .container-cuerpo-fila4{
+    display: grid;
+  
+    grid-template:
+    "scol1 scol2" auto/
+    5px  auto;
+  }
+  
+  .fila4-lbl-vehiculo{
+    text-align: left;
+  }
+  
+  .fila4-opcion-vehiculo{
+    grid-area: scol1;
+    display: flex;
+    flex-direction: row;
+     margin: 15px 0;
+    align-items: flex-start;
+  
+  }
+  
+  .container-cuerpo-fila5{
+    display: grid;
+    grid-template:
+    "scol1";
+    border: 1px solid darkblue;
+  }
+  
+  .container-cuerpo-fila5 .mat-elevation-z8 {
+    grid-area: scol1;
+  }
+  
+  table.mat-table {
+    border-spacing: 0;
+    width: 100%;
+    position: static;
+  }
+  
+  
+  .example-radio-button{
+    margin: 25px;
+  }
+  
+  /*****************************************************/
+  
+  //fila5
+  
+  .fila5-glosa-vehiculo {
+    width: 100%;
+  }
+  
+  //fila foot
+  .container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+  
+    grid-template:
+        "fcol1 fcol2 fcol3" auto /
+        0px auto auto;
+  }
+  
+  .container-cuerpo-foot .button-registrar, .button-cancelar  {
+    height: 20%;
+    margin: 0 auto;
+    margin: 20px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+  
+  }
+  
+  .button-registrar {
+    grid-area: fcol2;
+    background-color: darkblue;
+  }
+  
+  .button-cancelar {
+    grid-area: fcol3;
+    background-color: #d32f2f;
+  }
+  
+  
+  
+  @media only screen and (max-width: 768px) {
+    
+  .mat-column-position,
+  .mat-column-name,
+  .mat-column-weight,
+  .mat-column-symbol,
+  .mat-column-Acciones
+  {
+      text-align: center;
+      font-size: 10px;
+      font-family: arial;
+      padding: 5px;
+      text-align: center
+  }
+  
+    .fila4-opcion-vehiculo{
+        flex-direction: column;
+    }
+  
+    .fila4-lbl-vehiculo{
+        margin-bottom: 20px;
+    }
+  
+    .example-radio-button{
+        margin: 18px;
+    }
+  
+  
+    .container-cuerpo {
+        display: grid;
+  
+        grid-template:
+        "fila1" 150px
+          "fila2" 150px
+          "fila3" 150px
+          "fila4" 90px
+          "fila5" auto
+          "foot" auto/99%;
+    }
+  
+    .container-cuerpo-fila1 {
+      display: grid;
+  
+      grid-template:
+          "scol1" auto
+          "scol2" auto/auto;
+          position: static;
+          width: 100%;
+    }
+    .container-cuerpo-fila2 {
+      display: grid;
+  
+      grid-template:
+          "scol1" auto
+          "scol2" auto /auto;
+  
+          position: static;
+          width: 100%;
+  
+    }
+    .container-cuerpo-fila3 {
+      display: grid;
+  
+      grid-template:
+          "scol1";
+          position: static;
+          width: 100%;
+    }
+    .container-cuerpo-fila4{
+      display: grid;
+  
+      grid-template:
+      "scol1" auto
+      "scol2" auto/auto;
+      position: static;
+          width: 100%;
+    }
+    .container-cuerpo-fila5{
+      display: grid;
+      grid-template:
+      "scol1";
+      position: static;
+          width: 100%;
+          border: 1px solid darkblue;
+    }
+  
+  }
+  

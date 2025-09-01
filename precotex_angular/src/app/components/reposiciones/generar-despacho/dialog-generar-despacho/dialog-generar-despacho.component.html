@@ -1,0 +1,57 @@
+<div class="container-fluid">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title">Generar Despacho</div>
+        <mat-card>
+            <mat-card-content>
+                <div class="caja">
+                    <div class="observaciones">
+                        <div class="form-group">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Prendas Producción</mat-label>
+                                <input matInput type="number" [(ngModel)]="piezas_prod" placeholder="" autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="observaciones">
+                        <div class="form-group">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Prendas Mercado Local (Adicional 3)</mat-label>
+                                <input [(ngModel)]="piezas_ML" matInput type="number" placeholder="" autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="caja">
+                    <div class="observaciones">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Reposición</mat-label>
+                            <mat-select [(ngModel)]="reposicion">
+                                <mat-option value="SI">Reposición Completa</mat-option>
+                                <!-- <mat-option value="NO">Reposición Incompleta</mat-option> -->
+                                <mat-option value="ST">Sin Tela</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="observaciones">
+                        <label for="">Observaciones</label>
+                        <textarea name="observaciones" [(ngModel)]="observaciones" id="observaciones" maxlength="200"
+                            cols="30" rows="10" placeholder="Ingrese Observaciones"></textarea>
+                    </div>
+
+                </div>
+
+                <div class="botones">
+                    <button mat-flat-button color="primary" (click)="generarAprobacion(1)" type="button"
+                        class="button-registrar"><mat-icon>check_circle</mat-icon>
+                        Crear Despacho</button>
+                    <button mat-flat-button color="warn" mat-dialog-close
+                        class="button-cancel"><mat-icon>close</mat-icon>
+                        Cancelar</button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+    </div>
+</div>

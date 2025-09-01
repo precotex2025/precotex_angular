@@ -1,0 +1,586 @@
+<div class="container">
+    <!-- ventana ver registro auditoria -->
+    <div class="grid-container">
+
+        <div class="title">Auditoria de Linea de Costura Externa Servicios</div>
+
+        <div class="find">
+            <form class="auditoriaForm" [formGroup]="auditoriaForm">
+                 <!--<div class="findcol1">
+                    <mat-form-field>
+                        <mat-label>Auditoria Nro.</mat-label>
+                        <input matInput type="text" placeholder="Auditoria Nro." value="" autocomplete="off"
+                            formControlName="num_auditoria">
+                    </mat-form-field>
+                </div>-->
+  
+               <div class="findcol1">
+                    <mat-form-field>
+                        <mat-label>Fec. Auditoria</mat-label>
+                        <input matInput [matDatepicker]="fec_auditoria" autocomplete="off"
+                            formControlName="fec_auditoria">
+                        <mat-datepicker-toggle matSuffix [for]="fec_auditoria"></mat-datepicker-toggle>
+                        <mat-icon  (click)="clearDate($event)" style=" position: absolute;
+                        float: right;
+                        top: 5px;
+                        margin-left: -26px;
+                        cursor: pointer;
+                        color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+                        <mat-datepicker #fec_auditoria></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div class="findcol2">
+                    <mat-form-field>
+                        <mat-label>Linea Nro.</mat-label>
+                        <input matInput type="text" placeholder="Linea Nro." value="" autocomplete="off"
+                            formControlName="cod_linea">
+                    </mat-form-field>
+                </div>
+
+                <div class="findcol3">
+                    <mat-form-field>
+                        <mat-label>Auditor</mat-label>
+                        <input matInput type="text" placeholder="Auditor" value="" autocomplete="off"
+                            formControlName="cod_auditor">
+                    </mat-form-field>
+                </div>
+
+                <div class="findcol4">
+                    <mat-form-field>
+                        <mat-label>Estilo</mat-label>
+                        <input matInput type="text" placeholder="Estilo" value="" autocomplete="off"
+                            formControlName="num_auditoria">
+                    </mat-form-field>
+                </div>
+
+
+                <div class="findcol5">
+                    <mat-form-field>
+                        <mat-label>OP</mat-label>
+                        <input matInput type="text" placeholder="OP" value="" autocomplete="off"
+                            formControlName="cod_ordpro">
+                    </mat-form-field>
+                </div>
+
+                <div class="findcol6">
+                    <mat-label>Status</mat-label>
+                    <section class="example-section">
+                        <mat-checkbox class="example-margin" color="primary" formControlName="flg_pendiente">Pendiente
+                        </mat-checkbox>
+                        <mat-checkbox class="example-margin" color="primary" formControlName="flg_cerrado">Cerrado
+                        </mat-checkbox>
+                    </section>
+                </div>
+                <div class="findcol7">
+                    <button class="button_buscar" mat-flat-button color="primary"
+                        (click)="CargarLista()">Buscar</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="main">
+            <table mat-table #table [dataSource]="dataSource" class="tabla_cabecera">
+                <ng-container matColumnDef="Num_Auditoria">
+                    <th mat-header-cell *matHeaderCellDef>Id</th>
+                    <td mat-cell *matCellDef="let data_cab"> {{data_cab.Num_Auditoria}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Fec_Auditoria">
+                    <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                    <td mat-cell *matCellDef="let data_cab"> {{data_cab.Fec_Auditoria}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Cod_LinPro">
+                    <th mat-header-cell *matHeaderCellDef>Linea</th>
+                    <td mat-cell *matCellDef="let data_cab"> {{data_cab.Cod_LinPro}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Cod_Auditor">
+                    <th mat-header-cell *matHeaderCellDef>Auditor</th>
+                    <td mat-cell *matCellDef="let data_cab"> {{data_cab.Cod_Auditor}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Abr_Cliente">
+                    <th mat-header-cell *matHeaderCellDef>Cliente</th>
+                    <td mat-cell *matCellDef="let data_cab"> {{data_cab.Abr_Cliente}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Cod_EstCli">
+                    <th mat-header-cell *matHeaderCellDef>Estilo Cliente</th>
+                    <td mat-cell *matCellDef="let data_cab"> {{data_cab.Cod_EstCli}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Cod_OrdPro">
+                    <th mat-header-cell *matHeaderCellDef>OP</th>
+                    <td mat-cell *matCellDef="let data_cab"> {{data_cab.Cod_OrdPro}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Des_Present">
+                    <th mat-header-cell *matHeaderCellDef>Color</th>
+                    <td mat-cell *matCellDef="let data_cab"> {{data_cab.Des_Present}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="detalle">
+                    <th mat-header-cell *matHeaderCellDef>Ver Detalle</th>
+                    <td mat-cell *matCellDef="let data_cab">
+                        <a mat-icon-button *ngIf="data_cab.Abr_Cliente?.length>0"
+                            (click)="VerDetalle(data_cab.Num_Auditoria, data_cab.Cod_OrdPro, data_cab.Cod_LinPro)">
+                            <mat-icon color="primary">assignment</mat-icon>
+                        </a>
+                    </td> 
+                </ng-container>
+                <ng-container matColumnDef="eliminar">
+                    <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+                    <td mat-cell *matCellDef="let data_cab">
+                        <a mat-icon-button *ngIf="data_cab.Abr_Cliente?.length>0"
+                            (click)="EliminarAuditoria(data_cab.Num_Auditoria)">
+                            <mat-icon color="warn">delete</mat-icon>
+                        </a>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                <tr mat-row *matRowDef="let fila; columns: displayedColumns_cab;" class="example-element-row"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[10, 20, 30]"
+            showFirstLastButtons 
+            aria-label="Select page of periodic elements">
+           </mat-paginator>
+        </div>
+        <div class="footer">
+            <button class="button_agregar" (click)="MostrarVentanaAuditoria()" mat-flat-button color="primary">Agregar
+                Auditoria</button>
+        </div>
+
+    </div>
+
+    <!-- ventana registrar auditoria -->
+    <div class="contenedor-registro"
+        [ngClass]="Visible_Registro_Auditoria ? 'contenedor-registro-activo-si' : 'contenedor-registro-activo-no'">
+        <div class="contenedor-registro-popup"
+            [ngClass]="Visible_Registro_Auditoria ? 'contenedor-registro-popup-activo-si' : 'contenedor-registro-popup-activo-no'">
+
+            <div class="contenedor-registro-title">Agregar Registro Auditoria</div>
+
+            <div class="contenedor-registro-main">
+                <form class="contenedor-registro-auditoriaForm" [formGroup]="RegistroAuditoriaForm">
+                    <div class="contenedor-registro-main-row1">
+                        <mat-form-field>
+                            <mat-label>Fec. Auditoria</mat-label>
+                            <input matInput [matDatepicker]="fec_reg_auditoria" autocomplete="off"
+                                formControlName="fec_reg_auditoria">
+                            <mat-datepicker-toggle matSuffix [for]="fec_reg_auditoria"></mat-datepicker-toggle>
+                            <mat-datepicker #fec_reg_auditoria></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="contenedor-registro-main-row2">
+                        <!-- <mat-form-field>
+                            <mat-label>Linea Nro.</mat-label>
+                            <input matInput type="text" placeholder="Linea Nro." value="" autocomplete="off"
+                                formControlName="cod_linea">
+                        </mat-form-field> -->
+
+                        <!-- <mat-form-field>
+                            <mat-label>Linea Nro.</mat-label>
+                            <mat-select formControlName="cod_linea" name="listar_linea">
+                                <mat-option *ngFor="let listar_linea of listar_lineas" [value]="listar_linea.cod_linea">
+                                     {{listar_linea.cod_linea}} - {{listar_linea.descripcion}} 
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+                        <ng-select  [items]="listar_lineas" bindLabel="descripcion" class="trabrow2Operacion"
+                        bindValue="cod_linea" [multiple]="false" [searchable]="true"
+                        placeholder="Selecciona N° de Linea" formControlName="cod_linea">
+                        </ng-select> 
+                    </div>
+
+                    <div class="contenedor-registro-main-row3">
+                        <mat-form-field>
+                            <mat-label>OP</mat-label>
+                            <input matInput type="text" placeholder="OP" value="" autocomplete="off"
+                                (change)="BuscarColorOP()" formControlName="cod_ordpro">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="contenedor-registro-main-row4">
+                        <mat-form-field>
+                            <mat-label>Color</mat-label>
+                            <mat-select formControlName="cod_present" name="listar_op_present">
+                                <mat-option *ngFor="let listar_op_present of listar_op_presents"
+                                    [value]="listar_op_present.Cod_Present">
+                                    {{listar_op_present.Des_Present}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- <div class="contenedor-registro-main-row5">
+                        <mat-form-field>
+                            <mat-label>Cliente</mat-label>
+                            <input matInput type="text" placeholder="Cliente" value="" autocomplete="off"
+                                formControlName="abr_cliente">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="contenedor-registro-main-row6">
+                        <mat-form-field>
+                            <mat-label>Estilo Cliente</mat-label>
+                            <input matInput type="text" placeholder="Estilo Cliente" value="" autocomplete="off"
+                                formControlName="cod_estcli">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="contenedor-registro-main-row7">
+                        <mat-form-field>
+                            <mat-label>Tipo de Prenda</mat-label>
+                            <input matInput type="text" placeholder="Tipo de Prenda" value="" autocomplete="off"
+                                formControlName="tipo_prenda">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="contenedor-registro-main-row8">
+                        <mat-form-field>
+                            <mat-label>foto</mat-label>
+                            <input matInput type="text" placeholder="foto" value="" autocomplete="off"
+                                formControlName="ruta_imagen">
+                        </mat-form-field>
+                    </div> -->
+                </form>
+            </div>
+
+            <div class="contenedor-registro-foot">
+                <button class="button_guardar_registro" (click)="GuardarRegistroCab()" mat-flat-button
+                    color="primary">Guardar</button>
+                <button class="button_cerrar_registro" (click)="CancelarRegistroCab()" mat-flat-button
+                    color="warn">Cancelar</button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ventana ver detalle -->
+    <div class="contenedor-registro-detalle" 
+        [ngClass]="Visible_Detalle_Auditoria ? 'contenedor-registro-detalle-activo-si' : 'contenedor-registro-detalle-activo-no'">
+        <div class="contenedor-registro-detalle-popup mat-elevation-z8"
+            [ngClass]="Visible_Detalle_Auditoria ? 'contenedor-registro-detalle-popup-activo-si' : 'contenedor-registro-detalle-popup-activo-no'">
+
+            <div class="contenedor-registro-detalle-title">Registro Auditoria Nro. {{ nNum_Auditoria_Activo }}</div>
+
+            <div class="contenedor-registro-detalle-main">
+                <table mat-table [dataSource]="data_det" class="tabla_detalle">
+                    <ng-container matColumnDef="trabajador">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Linea</th>
+                        <td mat-cell *matCellDef="let data_det"> {{ Cod_LinPro }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="operacion">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Operacion</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.operacion}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="rev1_status">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">1ra Revision</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <mat-icon style="color: #337AB7;">{{data_det.rev1_status}}</mat-icon>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="rev2_status">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">2da Revision</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <mat-icon style="color: #337AB7;">{{data_det.rev2_status}}</mat-icon>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="rev3_status">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">3ra Revision</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <mat-icon style="color: #337AB7;">{{data_det.rev3_status}}</mat-icon>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="glosa">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Glosa</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.glosa}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="detalle">
+                        <th mat-header-cell *matHeaderCellDef>Ver Detalle</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <a mat-icon-button *ngIf="data_det.trabajador?.length>0"
+                                (click)="VerCalificacion(data_det.trabajador, data_det.operacion, data_det.Tip_Trabajador)">
+                                <mat-icon color="primary">assignment</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="eliminar">
+                        <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <a mat-icon-button *ngIf="data_det.trabajador?.length>0"
+                                (click)="EliminarRegistroDetalle(data_det.trabajador, data_det.operacion, data_det.Tip_Trabajador)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns_det; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let fila; columns: displayedColumns_det"></tr>
+                </table>
+
+            </div>
+
+            <div class="contenedor-registro-detalle-foot">
+                <div class="registro_detalle_menu_1">
+                    <button class="button_registro_detalle_agregar" mat-flat-button color="primary"
+                        (click)="MostrarVentanaTrabajador('I')">Agregar Operac.</button>
+                    <!--<button class="button_registro_detalle_modificar" mat-flat-button color="primary"
+                        (click)="MostrarVentanaTrabajador('U')">Modificar Trab.</button>
+                    <button class="button_registro_detalle_eliminar" mat-flat-button color="primary"
+                        (click)="MostrarVentanaTrabajador('D')">Eliminar Trab.</button>-->
+                </div>
+                <div class="registro_detalle_menu_2">
+                    <button class="button_registro_detalle_cerrar" mat-flat-button color="warn"
+                        (click)="OcultarVentanaDetalle()">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ventana registrar trabajador -->
+    <div class="contenedor-registro-trabajador"
+        [ngClass]="Visible_Registro_Trabajador ? 'contenedor-registro-trabajador-activo-si' : 'contenedor-registro-trabajador-activo-no'">
+        <div class="contenedor-registro-trabajador-popup"
+            [ngClass]="Visible_Registro_Trabajador ? 'contenedor-registro-trabajador-popup-activo-si' : 'contenedor-registro-trabajador-popup-activo-no'">
+
+            <div class="contenedor-registro-trabajador-title">Registro Auditoria Nro. {{ nNum_Auditoria_Activo }}</div>
+
+            <div class="contenedor-registro-trabajador-main">
+                <form class="trabajadorForm" [formGroup]="trabajadorForm">
+                    <div class="trabrow1">
+
+                        <mat-form-field class="trabrow1Nom_trabajador">
+                            <mat-label>Linea</mat-label>
+                            <input matInput type="text" placeholder="" [value]="Cod_LinPro" autocomplete="off" [disabled]="''" />
+                        </mat-form-field>
+
+                    </div>
+
+                    <div class="trabrow2">
+      
+                        <ng-select  [items]="dataOperaciones" bindLabel="FAM_OPE_COSTURA" class="trabrow2Operacion"
+                        bindValue="FAM_OPE_COSTURA" [multiple]="false" [searchable]="true"
+                        placeholder="Selecciona la operación" formControlName="operacion">
+                        </ng-select> 
+                    </div>
+                </form>
+            </div>
+
+            <div class="contenedor-registro-trabajador-foot">
+                <button class="button_guardar_trabajador" mat-flat-button color="primary"
+                    (click)="GuardarTrabajador()">Guardar</button>
+                <button class="button_cerrar_trabajador" mat-flat-button color="warn"
+                    (click)="OcultarVentanaTrabajador()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ventana registrar calificacion -->
+    <div class="contenedor-registro-calificacion"
+        [ngClass]="Visible_Registro_Calificacion ? 'contenedor-registro-calificacion-activo-si' : 'contenedor-registro-calificacion-activo-no'">
+        <div class="contenedor-registro-calificacion-popup"
+            [ngClass]="Visible_Registro_Calificacion ? 'contenedor-registro-calificacion-popup-activo-si' : 'contenedor-registro-calificacion-popup-activo-no'">
+
+            <div class="contenedor-registro-calificacion-title">Registro Auditoria Nro. {{ nNum_Auditoria_Activo }}
+            </div>
+
+            <div class="contenedor-registro-calificacion-main">
+                <div class="califrow1">
+                    <mat-form-field class="califrow1Trabajador">
+                        <mat-label>{{ Cod_LinPro }}</mat-label>
+                        <input matInput type="text" placeholder="" value="" autocomplete="off" [disabled]="''" />
+                    </mat-form-field>
+                </div>
+
+                <div class="califrow2">
+                    <mat-form-field class="califrow1Operacion">
+                        <mat-label>{{ des_operacion }}</mat-label>
+                        <input matInput type="text" placeholder="" value="" autocomplete="off" [disabled]="''" />
+                    </mat-form-field>
+                </div>
+
+                <div class="califrow3">
+
+                    <div class="califrow3col1">
+                        <p>Primera Revisión</p>
+                        <mat-button-toggle-group [(ngModel)]="calif_rev1_status" aria-label="Font Style">
+                            <mat-button-toggle value="S">Aprobado</mat-button-toggle>
+                            <mat-button-toggle value="N">Rechazado</mat-button-toggle>
+                        </mat-button-toggle-group>
+
+                        <div class="califrow3_rechazo">
+                            <div class="califrow3_rechazo_motivo">
+                                <mat-form-field>
+                                    <mat-label>Lote</mat-label>
+                                    <input matInput type="text" placeholder="Lote v1" value="" autocomplete="off"
+                                        (change)="changeLote($event, '1')"
+                                        [(ngModel)]="Lotev1">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="califrow3_rechazo_num_prendas">
+                                <mat-form-field>
+                                    <mat-label>Muestra</mat-label>
+                                    <input matInput [(ngModel)]="Muestrav1" type="number" readonly
+                                        style="text-align: center;" placeholder="Muestra v1">
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                        <div class="califrow3_rechazo" *ngIf="calif_rev1_status == 'N'">
+                            <div class="califrow3_rechazo_motivo">
+                                <mat-form-field>
+                                    <mat-label>Motivo</mat-label>
+                                    <input matInput type="text" placeholder="Motivo" value="" autocomplete="off"
+                                        (change)="BuscarMotivo('rev1', calif_rev1_abr_motivo)"
+                                        [(ngModel)]="calif_rev1_abr_motivo">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="califrow3_rechazo_num_prendas">
+                                <mat-form-field>
+                                    <mat-label>Prendas</mat-label>
+                                    <input matInput [(ngModel)]="calif_rev1_num_prendas" type="number"
+                                        style="text-align: center;" placeholder="Prendas">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="califrow3_rechazo_des_motivo">
+                                {{ calif_rev1_des_motivo }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="califrow3col2">
+                        <p>Segunda Revisión</p>
+                        <mat-button-toggle-group [(ngModel)]="calif_rev2_status" aria-label="Font Style">
+                            <mat-button-toggle value="S">Aprobado</mat-button-toggle>
+                            <mat-button-toggle value="N">Rechazado</mat-button-toggle>
+                        </mat-button-toggle-group>
+
+                        <div class="califrow3_rechazo">
+                            <div class="califrow3_rechazo_motivo">
+                                <mat-form-field>
+                                    <mat-label>Lote</mat-label>
+                                    <input matInput type="text" placeholder="Lote v2" value="" autocomplete="off"
+                                        (change)="changeLote($event, '2')"
+                                        [(ngModel)]="Lotev2">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="califrow3_rechazo_num_prendas">
+                                <mat-form-field>
+                                    <mat-label>Muestra</mat-label>
+                                    <input matInput [(ngModel)]="Muestrav2" type="number" readonly
+                                        style="text-align: center;" placeholder="Muestra v2">
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+
+                        <div class="califrow3_rechazo" *ngIf="calif_rev2_status == 'N'">
+                            <div class="califrow3_rechazo_motivo">
+                                <mat-form-field>
+                                    <mat-label>Motivo</mat-label>
+                                    <input matInput type="text" placeholder="Motivo" value="" autocomplete="off"
+                                        (change)="BuscarMotivo('rev2', calif_rev2_abr_motivo)"
+                                        [(ngModel)]="calif_rev2_abr_motivo">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="califrow3_rechazo_num_prendas">
+                                <mat-form-field>
+                                    <mat-label>Prendas</mat-label>
+                                    <input matInput [(ngModel)]="calif_rev2_num_prendas" type="number"
+                                        style="text-align: center;" placeholder="Prendas">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="califrow3_rechazo_des_motivo">
+                                {{ calif_rev2_des_motivo }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="califrow3col3">
+                        <p>Tercera Revisión</p>
+                        <mat-button-toggle-group [(ngModel)]="calif_rev3_status" aria-label="Font Style">
+                            <mat-button-toggle value="S">Aprobado</mat-button-toggle>
+                            <mat-button-toggle value="N">Rechazado</mat-button-toggle>
+                        </mat-button-toggle-group>
+
+                        <div class="califrow3_rechazo">
+                            <div class="califrow3_rechazo_motivo">
+                                <mat-form-field>
+                                    <mat-label>Lote</mat-label>
+                                    <input matInput type="text" placeholder="Lote" value="" autocomplete="off"
+                                        (change)="changeLote($event, '3')"
+                                        [(ngModel)]="Lotev3">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="califrow3_rechazo_num_prendas">
+                                <mat-form-field>
+                                    <mat-label>Muestra</mat-label>
+                                    <input matInput [(ngModel)]="Muestrav3" type="number" readonly
+                                        style="text-align: center;" placeholder="Muestra">
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                        <div class="califrow3_rechazo" *ngIf="calif_rev3_status == 'N'">
+                            <div class="califrow3_rechazo_motivo">
+                                <mat-form-field>
+                                    <mat-label>Motivo</mat-label>
+                                    <input matInput type="text" placeholder="Motivo" value="" autocomplete="off"
+                                        (change)="BuscarMotivo('rev3', calif_rev3_abr_motivo)"
+                                        [(ngModel)]="calif_rev3_abr_motivo">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="califrow3_rechazo_num_prendas">
+                                <mat-form-field>
+                                    <mat-label>Prendas</mat-label>
+                                    <input matInput [(ngModel)]="calif_rev3_num_prendas" type="number"
+                                        style="text-align: center;" placeholder="Prendas">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="califrow3_rechazo_des_motivo">
+                                {{ calif_rev3_des_motivo }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="califrow4">
+                    <mat-form-field class="califrow4_input">
+                        <mat-label>Glosa</mat-label>
+                        <input matInput type="text" placeholder="Glosa" value="" autocomplete="off"
+                            [(ngModel)]="calif_glosa">
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+            <div class="contenedor-registro-calificacion-foot">
+                <button class="button_guardar_calificacion" mat-flat-button color="primary"
+                    (click)="GuardarCalificacion()">Guardar</button>
+                <button class="button_cerrar_calificacion" mat-flat-button color="warn"
+                    (click)="OcultarVentanaCalificacion()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>

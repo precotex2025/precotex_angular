@@ -1,0 +1,179 @@
+<!--DefectosAlamacenDerivados-->
+   
+ 
+<div class="container">
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container"> 
+ 
+        <div class="title">Reporte Detallado Defectos  - Derivados</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+                
+                    <mat-form-field class="fila1-fecha" appearance="fill">
+                        <mat-label>Rango de Fecha</mat-label>
+                        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                        <input matStartDate formControlName="start" placeholder="Fecha Inicio"/>
+                        <input matEndDate formControlName="end" placeholder="Fecha Final" />
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                        <mat-icon class="maticon-date" (click)="clearDate()">clear</mat-icon>
+                        <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Fecha Invalida</mat-error>
+                        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Fecha Invalida</mat-error>
+                    </mat-form-field>
+
+                    <!--<mat-form-field class="fila1-cliente" appearance="fill">
+                        <mat-label>Cliente*</mat-label>
+                        <mat-select formControlName="sCliente">
+                            <mat-option *ngFor="let option of listar_operacionCliente" [value]="option.Cod_Cliente" (click)="filtraPorOpcion(option, 'cliente')">
+                                {{option.Nom_Cliente}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>-->
+                    <mat-form-field class="fila1-cliente" appearance="fill">
+                        <mat-label>Cliente*</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Cliente" formControlName="sCliente"  [matAutocomplete]="autoDataCliente" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataCliente="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionCliente | async" [value]="option.Nom_Cliente" (click)="filtraPorOpcion(option, 'cliente')">
+                                {{option.Nom_Cliente}}
+                            </mat-option> 
+                        </mat-autocomplete>                            
+                    </mat-form-field>
+
+                    <!--<mat-form-field class="fila1-estilo" appearance="fill">
+                        <mat-label>Estilo*</mat-label>
+                        <mat-select formControlName="sEstilo">
+                            <mat-option *ngFor="let option of listar_operacionEstilo" [value]="option.Cod_EstCli" (click)="filtraPorOpcion(option, 'estilo')">
+                                {{option.Cod_EstCli}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>-->
+                    <mat-form-field class="fila1-estilo" appearance="fill">
+                        <mat-label>Estilo</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Estilo" formControlName="sEstilo"  [matAutocomplete]="autoDataEstilo" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataEstilo="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionEstilo | async" [value]="option.Cod_EstCli"  (click)="filtraPorOpcion(option, 'estilo')">
+                                {{option.Cod_EstCli}}
+                            </mat-option> 
+                        </mat-autocomplete>                            
+                    </mat-form-field>
+
+                    <!--<mat-form-field class="fila1-temporada" appearance="fill">
+                        <mat-label>Temporada*</mat-label>
+                        <mat-select formControlName="sTemporada">
+                            <mat-option *ngFor="let option of listar_operacionTemporada" [value]="option.Cod_TemCli" (click)="filtraPorOpcion(option, 'temporada')">
+                                {{option.Nom_TemCli}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>-->
+                    <mat-form-field class="fila1-temporada" appearance="fill">
+                        <mat-label>Temporada</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Estilo" formControlName="sTemporada"  [matAutocomplete]="autoDataTemporada" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataTemporada="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionTemporada| async" [value]="option.Nom_TemCli"  (click)="filtraPorOpcion(option, 'temporada')">
+                                {{option.Nom_TemCli}}
+                            </mat-option> 
+                        </mat-autocomplete>                            
+                    </mat-form-field>
+
+                    <!--<mat-form-field class="fila1-color" appearance="fill">
+                        <mat-label>Color</mat-label>
+                        <mat-select formControlName="sColor">
+                            <mat-option *ngFor="let option of listar_operacionColor" [value]="option.Cod_ColCli" (click)="filtraPorOpcion(option, 'color')">
+                                {{option.Cod_ColCli}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>-->
+                    <mat-form-field class="fila1-color" appearance="fill">
+                        <mat-label>Color</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Color" formControlName="sColor"  [matAutocomplete]="autoDataColor" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataColor="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionColor | async" [value]="option.Cod_ColCli"  (click)="filtraPorOpcion(option, 'color')">
+                                {{option.Cod_ColCli}}
+                            </mat-option> 
+                        </mat-autocomplete>                            
+                    </mat-form-field>
+                    
+                    <div class="fila1-filter" >
+                        <ul class="lista-horizontal">
+                            <li><b>Filtrar por:</b></li>
+                            <li *ngFor="let item of ItemsSearch">
+                                <mat-checkbox class="example-margin" color="primary" name="chk_{{item.id}}" [checked]="item.checked == '1'" [disabled]="item.disable" (change)="changeCheck($event, item)">{{item.name}}</mat-checkbox>
+                            </li>
+                          </ul>
+                    </div>
+
+                    <div class="fila1-botones">
+
+                        <button type="button" class="fila1-buscar" mat-flat-button (click)="buscarDefectosDerivados()">                    
+                            <mat-icon aria-label="person">search</mat-icon>Buscar
+                        </button>              
+         
+                        <button type="button" class="fila1-excel" mat-flat-button (click)="generateExcel()">
+                            <mat-icon aria-label="create_new_folder">create_new_folder
+                            </mat-icon>  Reporte Excel
+                        </button>
+        
+                        <button type="button" class="fila1-excel2" mat-flat-button (click)="generateExcel2()">
+                            <mat-icon aria-label="create_new_folder">create_new_folder
+                            </mat-icon>  Reporte PCP
+                        </button>
+        
+                        <button type="button" class="fila1-segundas" mat-flat-button (click)="generateRptSegundas()">
+                            <mat-icon aria-label="create_new_folder">create_new_folder
+                            </mat-icon>  R. Segundas
+                        </button>
+        
+                        <button type="button" class="fila1-pedidos" mat-flat-button (click)="generateRptPedidos()">
+                            <mat-icon aria-label="create_new_folder">create_new_folder
+                            </mat-icon>  R. Pedidos
+                        </button>
+
+                        <button type="button" class="fila1-limpiar" mat-flat-button (click)="limpiarCampos()">                    
+                            <mat-icon aria-label="person">history</mat-icon>Limpiar
+                        </button>
+        
+                    </div>
+                        
+
+               
+
+            </div>  
+
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2">
+                
+
+                <table mat-table   class="mat-elevation-z8" #table [dataSource]="dataSource">
+                  
+
+                    <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns"  >
+                        <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+    
+                        <td  mat-cell *matCellDef="let element" > {{element[column]}} </td>
+                      </ng-container>
+
+                      <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+                      <!--<tr mat-row *matRowDef="let row; columns: columnsToDisplay;">(click)="EliminarRegistro(row.Abr_Motivo)"</tr>
+                      <tr mat-row (click)="AsignarCodRegistroVariableEliminar(row.Cod_Motivo)" *matRowDef="let row; columns: columnsToDisplay;"></tr>-->
+                      <tr mat-row  *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                    
+                </table>
+                <!--<mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons 
+                aria-label="Select page of periodic elements">
+               </mat-paginator>-->
+            </div>
+
+ 
+        </form>
+
+    </div>
+
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>     

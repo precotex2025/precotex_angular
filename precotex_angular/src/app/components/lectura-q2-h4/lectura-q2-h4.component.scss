@@ -1,0 +1,491 @@
+.container {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  //background-color: blue;
+  padding: 5px 5px 5px 5px;
+  font-family: corbel, arial;
+  font-size: 13px;
+  margin: 0;
+}
+
+.grid-container {
+  border-radius: 4px;
+  width: 100%;
+  height: auto; //93%;
+  //background-color: green;
+  border: 1px solid #337ab7;
+  margin: 0;
+  //padding: 1x ;
+  //padding-bottom: 15px;
+  //min-width: 350px;
+  min-height: 400px;
+  height: 1000px;
+  //position: absolute;
+}
+
+.title {
+  background-color: #3f51b5;
+  color: rgb(255, 255, 255);
+  padding: 8px 10px 10px 10px;
+  text-align: center;
+  //border-bottom: 1px solid #337AB7;
+  border-radius: 4px 4px 0px 0px;
+  border-bottom: 1px solid #337ab7;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.container-cuerpo {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 5px 0;
+  justify-content: center;
+}
+
+.container-cuerpo {
+  display: grid;
+
+  grid-template:
+    "fila1" 80px
+    "fila2" 180px
+    "fila3" 250px
+    "fila4" 250px
+    "foot" 55px /
+    99%;
+}
+
+.container-cuerpo-fila1 {
+  grid-area: fila1;
+  margin-top: 15px;
+}
+
+.container-cuerpo-fila2 {
+  grid-area: fila2;
+  overflow: auto;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.container-cuerpo-fila3 {
+  grid-area: fila3;
+  overflow: auto;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.container-cuerpo-fila4 {
+  grid-area: fila4;
+  overflow: auto;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.container-cuerpo-foot {
+  grid-area: foot;
+}
+
+mat-form-field {
+  width: 100%;
+  padding: 0px 10px;
+}
+
+.d-none {
+  display: none;
+}
+
+.button-info {
+  margin-top: 10px;
+  background: #2b78e4;
+  width: 98%;
+  color: white;
+}
+
+.mat-header-cell {
+  background-color: #4caf50; /* Cambia el color a tu preferencia */
+  color: white; /* Cambia el color del texto */
+  font-weight: bold;
+  padding: 0.5rem;
+}
+
+.mat-header-cell_2 {
+  background-color: #d7e607; /* Cambia el color a tu preferencia */
+  color: black; /* Cambia el color del texto */
+  font-weight: bold;
+  padding: 0.5rem;
+}
+
+.mat-header-cell_3 {
+  background-color: #07e6c5; /* Cambia el color a tu preferencia */
+  color: black; /* Cambia el color del texto */
+  font-weight: bold;
+  padding: 0.5rem;
+}
+
+.mat-cell,
+.mat-header-cell {
+  border-right: 1px solid #e0e0e0;
+  font-size: 12px; /* Color y estilo de la línea */
+}
+
+// .bloqueada
+// {
+//   pointer-events: none; /* Deshabilitar la interacción */
+//   background-color: #f0f0f0; /* Cambiar el color de fondo para indicar bloqueo */
+//   opacity: 0.6; /* Opcional: hacer la fila semi-transparente */
+// }
+
+.paginador {
+  width: auto;
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+::ng-deep .my-class .mat-dialog-container {
+  padding: 5px;
+  height: auto;
+}
+
+.button-Generar {
+  display: inline-block;
+  background-color: #4caf50;
+  color: #ffffff;
+  margin-right: 1rem;
+}
+
+.button-Limpiar {
+  display: inline-block;
+  background-color: #eb5b00;
+  color: #ffffff;
+  margin-right: 1rem;
+}
+
+.button-Cancelar {
+  display: inline-block;
+  background-color: #d32f2f;
+  color: #ffffff;
+  margin-right: 1rem;
+}
+
+//fila 1
+.container-cuerpo-fila1 {
+  display: grid;
+
+  grid-template: "col1 col2 col3 col4" 50px;
+}
+
+.fila1-Cod_Bar_Caja {
+  grid-area: col1;
+  //font-size: large;
+}
+
+.fila1-Filtro_Busq {
+  grid-area: col2;
+  //font-size: medium;
+}
+
+.button-Generar {
+  grid-area: col2;
+}
+
+.button-Limpiar {
+  grid-area: col3;
+}
+
+.button-Cancelar {
+  grid-area: col4;
+}
+
+.mat-column-Sel,
+.mat-column-Num_Mov
+  .mat-column-Cod_Almacen
+  .mat-column-Almacen
+  .mat-column-Fec_Mov
+  .mat-column-Tipo_Mov
+  .mat-column-Usuario
+  .mat-column-Sel {
+  text-align: center;
+  width: auto;
+}
+.mat-column-Num_Mov {
+  text-align: center;
+}
+.mat-column-Cod_Almacen {
+  text-align: center;
+}
+.mat-column-Almacen {
+  text-align: center;
+}
+.mat-column-Fec_Mov {
+  text-align: center;
+}
+.mat-column-Tipo_Mov {
+  text-align: center;
+}
+.mat-column-Usuario {
+  text-align: center;
+}
+
+.mat-column-Sel,
+.mat-column-Lote,
+.mat-column-Item,
+.mat-column-Cant_Mov,
+.mat-column-Cod_Almacen,
+.mat-column-Almacen,
+.mat-column-Num_Mov,
+.mat-column-Fec_Mov,
+.mat-column-Tipo_Mov,
+.mat-column-Usuario,
+.mat-column-Cod_Prov,
+.mat-column-Sel {
+  text-align: center;
+  width: auto;
+}
+.mat-column-Lote {
+  text-align: center;
+  width: auto;
+}
+.mat-column-Item {
+  text-align: center;
+}
+.mat-column-Cant_Mov {
+  text-align: center;
+}
+.mat-column-Cod_Almacen {
+  text-align: center;
+}
+.mat-column-Almacen {
+  text-align: center;
+  display: none;
+}
+.mat-column-Fec_Creacion {
+  text-align: center;
+}
+.mat-column-Num_Mov {
+  text-align: center;
+}
+.mat-column-Fec_Mov {
+  text-align: center;
+}
+.mat-column-Tipo_Mov {
+  text-align: center;
+}
+.mat-column-Usuario {
+  text-align: center;
+}
+.mat-column-Cod_Prov {
+  text-align: center;
+}
+
+.mat-column-Sel,
+.mat-column-Nro_Caja,
+.mat-column-Peso_Neto,
+.mat-column-Nro_Bulto,
+.mat-column-Proveedor,
+.mat-column-Lote,
+.mat-column-Item,
+.mat-column-Sel {
+  text-align: center;
+  width: auto;
+}
+.mat-column-Nro_Caja {
+  text-align: center;
+}
+.mat-column-Peso_Neto {
+  text-align: center;
+}
+.mat-column-Nro_Bulto {
+  text-align: center;
+}
+.mat-column-Proveedor {
+  text-align: center;
+  display: none;
+}
+.mat-column-Lote {
+  text-align: center;
+}
+.mat-column-Item {
+  text-align: center;
+}
+
+.mat-elevation-z8 {
+  width: 100%;
+  font-family: arial;
+  font-size: 10px;
+}
+.paginador {
+  width: auto;
+}
+
+tr:hover {
+  border-color: currentColor;
+  background: #e1e1e1;
+}
+
+tr:active {
+  background: #efefef;
+}
+
+.error-snackbar {
+  background-color: #f44336; /* Color rojo para errores */
+  color: white;
+}
+
+.selected {
+  background-color: #a1eebd; /* Cambiar el color de fondo para indicar selección */
+  color: black; /* Cambiar el color del texto si es necesario */
+}
+
+.selected2 {
+  background-color: #a1eebd; /* Cambiar el color de fondo para indicar selección */
+  color: black; /* Cambiar el color del texto si es necesario */
+}
+
+.bloqueada {
+  pointer-events: none; /* Deshabilitar la interacción */
+  background-color: #219ebc; /* Cambiar el color de fondo para indicar bloqueo */
+  opacity: 0.6; /* Opcional: hacer la fila semi-transparente */
+}
+
+.table-locked {
+  background-color: #a1eebd; /* Cambiar el color de fondo para indicar selección */
+  pointer-events: none; /* Deshabilitar la interacción */
+  opacity: 0.6; /* Opcional: hacer la tabla semi-transparente */
+}
+
+.mat-row {
+  min-height: 65px;
+
+  &.selected {
+    background: #dddddd;
+  }
+}
+
+.mat-row.highlighted {
+  background: lightblue;
+}
+
+.estado-activo {
+  background-color: #a1eebd; /* Color para filas activas */
+  color: black;
+}
+.estado-inactivo {
+  background-color: #f8d7da; /* Color para filas inactivas */
+  color: black;
+}
+
+.mat-mini-fab {
+  width: 40px; /* Ajustar el ancho del botón */
+  height: 40px; /* Ajustar la altura del botón */
+  min-width: 40px; /* Asegurar que el ancho mínimo sea el mismo */
+  min-height: 40px; /* Asegurar que la altura mínima sea la misma */
+  line-height: 40px; /* Ajustar la altura de línea */
+  margin-right: 8px; /* Ajustar el margen derecho */
+}
+.mat-mini-fab .mat-icon {
+  font-size: 25px; /* Ajustar el tamaño del icono */
+}
+
+@media screen and (max-width: 650px) {
+  .grid-container {
+    height: 665px;
+  }
+
+  .container-cuerpo {
+    display: grid;
+
+    grid-template:
+      "fila1" 60px
+      "fila2" 126px
+      "fila3" 165px
+      "fila4" 220px
+      "foot" 55px/99%;
+  }
+
+  .container-cuerpo-fila1 {
+    display: grid;
+    grid-template:
+      "col1 col2 col3" 55px
+      "col4 col5 col6" 45px/120px 120px 120px;
+  }
+
+  .container-cuerpo-foot {
+    display: grid;
+    grid-template: "col1 col2 col3" 45px/120px 120px 120px;
+  }
+
+  .button-Generar {
+    display: inline-block;
+    background-color: #4caf50;
+    color: #ffffff;
+    margin-inline-end: 0.5rem;
+  }
+
+  .button-Limpiar {
+    display: inline-block;
+    background-color: #eb5b00;
+    color: #ffffff;
+    margin-inline-end: 0.5rem;
+  }
+
+  .button-Cancelar {
+    display: inline-block;
+    background-color: #d32f2f;
+    color: #ffffff;
+    margin-inline-end: 0.5rem;
+  }
+
+  .container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  .container-cuerpo-fila3 {
+    grid-area: fila3;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  .container-cuerpo-fila4 {
+    grid-area: fila4;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  .fila1-Cod_Bar_Caja {
+    grid-area: col1;
+    //font-size: medium;
+  }
+
+  .fila1-Filtro_Busq {
+    grid-area: col2;
+    //font-size: medium;
+  }
+
+  .fila1-Suma-Peso {
+    grid-area: col3;
+    text-align: center;
+  }
+
+  .button-Generar {
+    grid-area: col1;
+  }
+
+  .button-Limpiar {
+    grid-area: col2;
+  }
+
+  .button-Cancelar {
+    grid-area: col3;
+  }
+}

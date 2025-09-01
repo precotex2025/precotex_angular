@@ -1,0 +1,225 @@
+<div class="container-dialog">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container-dialog">
+
+      <div class="title-dialog">Hoja de Registro N° <span *ngIf="dataTrabajador.length > 0" class="numhoja">{{Titulo}}</span></div>
+      <form class="container-cuerpo-dialog" [formGroup]="formulario">
+
+        <div class="container-cuerpo-fila1-dialog">
+            <div class="row">
+
+                <div class="col-md-6">
+                    <mat-card>
+                        <mat-card-header>
+                            PRODUCCION:
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="caja-cliente">
+                                    <mat-form-field>
+                                        <mat-label>Fecha Inicio</mat-label>
+                                        <input matInput type="datetime-local" formControlName="sFechaHoraIngreso">
+                                    </mat-form-field>
+                                </div>
+                                <div class="caja-cliente">
+                                    <!--<label id="">Strike</label>-->
+                                    <mat-radio-group aria-labelledby="example-radio-group-label" formControlName="sFlgStrike">
+                                        <mat-radio-button class="example-radio-button" *ngFor="let s of lstStrike" [value]="s.cod">
+                                            {{s.name}}
+                                        </mat-radio-button>
+                                    </mat-radio-group> 
+                                </div>
+                                <div class="row">
+                                    <div class="caja-cliente">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Tipo prenda</mat-label>
+                                            <mat-select formControlName="sTipoPrenda" (selectionChange)="selectTipoPrenda()">
+                                                <mat-option *ngFor="let option of lstOptTipoPrenda" [value]="option.id">
+                                                    {{option.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>    
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+                <div class="col-md-6">
+                    <mat-card>
+                        <mat-card-header>
+                            DESCRIPCION DE PRENDA:
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="caja-cliente">
+                                    <mat-form-field>
+                                        <mat-label>OP*</mat-label>
+                                        <input matInput type="text" placeholder="OP" formControlName="sOP" maxlength="5" autocomplete="off" (input)="buscarEstiloClientexOP()">
+                                    </mat-form-field>
+                                </div>
+                                <div class="caja-cliente">
+                                    <!--<mat-form-field appearance="fill">
+                                        <mat-label>Estilo*</mat-label>
+                                        <input matInput type="text" #trigger="matAutocompleteTrigger" placeholder="Estilo" formControlName="sEstilo" #estilo [matAutocomplete]="autoDataEstilo" />
+                                        <mat-autocomplete autoActiveFirstOption #autoDataEstilo="matAutocomplete">
+                                            <mat-option>
+                                                LM2K4047
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>-->
+                                    <mat-form-field> 
+                                        <mat-label>Estilo</mat-label>
+                                        <input matInput type="text" placeholder="Estilo" value="" autocomplete="off" formControlName="sEstilo">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="caja-cliente">
+                                    <!--<mat-form-field appearance="fill">
+                                        <mat-label>Cliente*</mat-label>
+                                        <input matInput type="text" #trigger="matAutocompleteTrigger" readonly placeholder="Cliente" formControlName="sCliente" [matAutocomplete]="autoDataCliente" />
+                                        <mat-autocomplete #autoDataCliente="matAutocomplete">
+                                            <mat-option>
+                                                KARL LAGERFELD
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>-->
+                                    <mat-form-field> 
+                                        <mat-label>Cliente</mat-label>
+                                        <input matInput type="text"  placeholder="Cliente" value="" autocomplete="off" formControlName="sCliente">
+                                    </mat-form-field>  
+                                </div>
+                                <div class="caja-cliente">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label># PLANILLA / CORTE*</mat-label>
+                                        <!--<mat-select formControlName="sOC" (selectionChange)="changeDataGrilla()">-->
+                                        <mat-select formControlName="sOC">
+                                            <mat-option *ngFor="let option of lstOC" [value]="option.Co_CodOrdPro">
+                                                {{option.Co_CodOrdPro}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <!--<mat-form-field>
+                                        <mat-label># PLANILLA / CORTE*</mat-label>
+                                        <input matInput type="text" placeholder="#PLANILLA / CORTE" formControlName="sOC" maxlength="5" autocomplete="off" (input)="changeDataGrilla()">
+                                    </mat-form-field>-->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="caja-cliente">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Color*</mat-label>
+                                        <mat-select formControlName="sColor">
+                                            <mat-option *ngFor="let option of lstOperacionColor" [value]="option.Cod_Present">
+                                                {{option.Des_Present}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="caja-cliente">
+                                    <mat-form-field>
+                                        <mat-label>Fecha Entrega</mat-label>
+                                        <input matInput type="datetime-local" formControlName="sFechaHoraEntrega">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container-cuerpo-fila2" *ngIf="grdComposicionVisible">
+            <table class="mat-elevation-z8">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Composicion de prenda / piezas</th>
+                        <th class="itemcabecera" *ngIf="dataItemsComposicion[0].ExisteEstampado == 1">Estampado</th>
+                        <th class="itemcabecera" *ngIf="dataItemsComposicion[0].ExisteBordado == 1">Bordado</th>
+                        <th class="itemcabecera" *ngIf="dataItemsComposicion[0].ExisteSublimado == 1">Sublimado</th>
+                        <th class="itemcabecera resultado">Result. A/R</th>
+                        <th>Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of dataItemsComposicion; index as i">
+                        <td>{{i+1}}</td>
+                        <td>{{item.Item_Nombre_Composicion}}</td>
+                        <td *ngIf="item.ExisteEstampado == 1" class="center"><mat-checkbox class="example-margin" color="primary" name="chk_estamp_{{item.Id_Item}}" value="estamp" [checked]="item.Estampado == '1'" (change)="changeCheck($event, item.Id_Item, 'estamp')"></mat-checkbox></td>
+                        <td *ngIf="item.ExisteBordado == 1" class="center"><mat-checkbox class="example-margin" color="primary" name="chk_bordad_{{item.Id_Item}}" value="bordad" [checked]="item.Bordado == '1'" (change)="changeCheck($event, item.Id_Item, 'bordad')"></mat-checkbox></td>
+                        <td *ngIf="item.ExisteSublimado == 1" class="center"><mat-checkbox class="example-margin" color="primary" name="chk_sublim_{{item.Id_Item}}" value="sublim" [checked]="item.Sublimado == '1'" (change)="changeCheck($event, item.Id_Item, 'sublim')"></mat-checkbox></td>
+                        <td class="center">
+                            <!--<mat-checkbox class="example-margin" name="chk_result_{{item.Id_Item}}" value="result" [checked]="item.Resultado == '1'" (change)="changeCheck($event, item.Id_Item, 'result')"></mat-checkbox>-->
+                            <mat-radio-group aria-labelledby="example-radio-group-label">
+                                <mat-radio-button class="example-radio-button-interno" *ngFor="let option of optResultado"
+                                    [value]="option.id" 
+                                    [name]="'chk_result_' +  item.Id_Item" 
+                                    [checked]="item.Resultado === option.id"
+                                    (change)="changeRadio($event, item.Id_Item, 'result')">
+                                    {{option.name}}
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <mat-label>Observaciones</mat-label>
+                                <textarea matInput type="text" placeholder="Observaciones" value="{{item.Observacion}}" autocomplete="off" (change)="changeInfoObserv($event, item.Id_Item, 'observ')"></textarea>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="container-cuerpo-fila3">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4><b>Importante:</b></h4>
+                </div>
+                <div class="col-md-8">
+                    <span>El presente formato es obligatorio llenarlo, ya que contiene los datos y componente en los procesos de estampado, bordado y sublimado, para prevenir posibles errores de la produccion "Siempre prevenir y no lamentar"</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-cuerpo-fila4" *ngIf="optSupervicionVisible">
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-checkbox class="example-margin" color="primary" formControlName="flgSuperAseg">Aprobacion Supervisor de aseguramiento</mat-checkbox>
+                </div>
+                <div class="col-md-6">
+                    <mat-checkbox class="example-margin" color="primary" formControlName="flgSuperProd">Aprobacion Supervisor de produccion</mat-checkbox>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-cuerpo-foot-dialog">
+
+            <button type="button" class="button-save-dialog" mat-flat-button (click)="ModificarHoja()" *ngIf="grdComposicionVisible && btnAccionModificar">
+                <mat-icon aria-label="person">save</mat-icon>
+                Actualizar
+            </button>
+    
+            <button type="button" class="button-save-dialog" mat-flat-button (click)="RegistrarHoja()" *ngIf="grdComposicionVisible && !btnAccionModificar">
+              <mat-icon aria-label="person">save</mat-icon>
+              Guardar
+            </button>
+    
+            <button mat-dialog-close type="button" class="button-cancel-dialog" mat-button mat-dialog-close
+              mat-dialog-close="false">
+              <mat-icon aria-label="person">cancel
+              </mat-icon> Cancelar
+            </button>
+          </div>
+          
+       </form>
+
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

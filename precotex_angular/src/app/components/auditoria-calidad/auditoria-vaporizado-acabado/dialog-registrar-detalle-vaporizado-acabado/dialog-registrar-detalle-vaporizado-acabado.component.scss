@@ -1,0 +1,389 @@
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0; 
+}
+  
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: 600px; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 320px;
+    min-height: 520px;
+
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 95%;
+    margin: 0;
+    padding: 10px 10px;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 380px
+        "foot" 55px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+}
+
+//fila 1 
+.container-cuerpo-fila1 {
+    display: grid;
+    justify-content: center;
+    grid-template:
+    "colx col0"  50px
+    "col1 col2"  50px
+    "col3 col4"  50px
+    "col5 col5"  50px
+    "col6 col7"  50px 
+    "col8 col9"  50px  
+    "col10 col11"  50px 
+    "col12 col13"  50px /
+    120px 300px  auto;
+
+.fila1-Tipo {
+    grid-area: col0;
+    width: 320px;
+}    
+ 
+.fila1-OP {
+    grid-area: col1;
+    width: 120px;
+}
+
+.fila1-Cliente {
+    grid-area: col2;
+    width: 300px;
+}
+.fila1-CodEstilo {
+    grid-area: col3;
+    width: 120px;
+}
+.fila1-Estilo {
+    grid-area: col4;
+    width: 300px;
+}
+.fila1-Color {
+    grid-area: col5;
+    width: 420px;
+}
+
+.fila1-CodLider{
+    grid-area: col6;
+    width: 120px;
+}
+.fila1-Lider{
+    grid-area: col7;
+    width: 300px;
+}
+
+/*
+.fila1-CodDobladora{
+    grid-area: col8;
+    width: 120px;
+}
+.fila1-Dobladora{
+    grid-area: col9;
+    width: 300px;
+}*/
+
+.fila1-Muestra {
+    grid-area: col8;
+    width: 120px;
+}
+.fila1-Observacion {
+    grid-area: col10;
+    width: 420px;
+
+}
+
+.fila1-Muestra-6 {
+    grid-area: col6;
+    width: 120px;
+}
+.fila1-Observacion-8 {
+    grid-area: col8;
+    width: 420px;
+
+}
+
+textarea { 
+    height: 90px; 
+}
+
+}
+
+
+
+
+//fila foot
+.container-cuerpo-foot {
+    //border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" /
+        154px 150px auto;
+}
+
+
+.container-cuerpo-foot, .button-agregar, .button-cancelar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 45px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 350px;
+    min-width: 150px;
+}
+
+ 
+
+.button-agregar {
+    grid-area: fcol1;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+
+.button-cancelar {
+    grid-area: fcol2;
+    background-color: #d32f2f;
+    color: #ffffff;
+}
+
+.container-cuerpo-fila2{
+    width: 100%;
+}
+
+@media screen and (max-width: 1500px){
+    .container-cuerpo {
+        height: 100%;
+    }
+}
+
+
+@media screen and (max-width: 868px){
+    .grid-container{
+        height: 600px;
+    }
+
+    .container-cuerpo {
+        display: grid;
+        grid-template:
+        "fila1" 380px
+        "foot" 55px / 
+        99%;
+    }
+
+    .container-cuerpo-fila1 {
+        display: grid;
+        grid-template:
+        "col1 col2"  50px
+        "col3 col4"  50px
+        "col5 col5"  50px
+        "col6 col7"  50px 
+        "col8 col9"  50px  
+        "col10 col11"  50px 
+        "col12 col13"  50px /
+        210px 210px  auto; 
+   
+    .fila1-OP {
+        grid-area: col1;
+        width: 120px;
+    }
+    .fila1-Cliente {
+        grid-area: col2;
+        width: 210px;
+    }
+    .fila1-CodEstilo {
+        grid-area: col3;
+        width: 120px;
+    }
+    .fila1-Estilo {
+        grid-area: col4;
+        width: 210px;
+    }
+    .fila1-Color {
+        grid-area: col5;
+        width: 420px;
+    }
+ 
+    .fila1-CodLider{
+        grid-area: col6;
+        width: 120px;
+    }
+    .fila1-Lider{
+        grid-area: col7;
+        width: 210px;
+    }
+
+    .fila1-CodDobladora{
+        grid-area: col8;
+        width: 120px;
+    }
+    .fila1-Dobladora{
+        grid-area: col9;
+        width: 210px;
+    }
+
+    .fila1-Muestra {
+        grid-area: col10;
+        width: 120px;
+    }
+    .fila1-Observacion {
+        grid-area: col12;
+        width: 420px;
+
+    }
+
+    .fila1-Muestra-6 {
+        grid-area: col6;
+        width: 120px;
+    }
+    .fila1-Observacion-8 {
+        grid-area: col8;
+        width: 420px;
+    
+    }
+    
+    }
+
+  }
+
+
+
+  @media screen and (max-width: 688px){
+   .grid-container{
+       height: 600px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila1" 380px
+        "foot" 55px /
+        99%; 
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        grid-template:
+        "col1 col2"  50px
+        "col3 col4"  50px
+        "col5 col5"  50px
+        "col6 col7"  50px 
+        "col8 col9"  50px  
+        "col10 col11"  50px 
+        "col12 col13"  50px /
+        130px 130px  auto;
+    
+    
+    .fila1-OP {
+        grid-area: col1;
+        width: 95px;
+    }
+    .fila1-Cliente {
+        grid-area: col2;
+        width: 126px;
+    }
+    .fila1-CodEstilo {
+        grid-area: col3;
+        width: 95px;
+    }
+    .fila1-Estilo {
+        grid-area: col4;
+        width: 126px;
+    }
+    .fila1-Color {
+        grid-area: col5;
+        width: 255px;
+    }
+    .fila1-CodLider{
+        grid-area: col6;
+        width: 95px;
+    }
+    .fila1-Lider{
+        grid-area: col7;
+        width: 126px;
+    }
+    .fila1-CodDobladora{
+        grid-area: col8;
+        width: 95px;
+    }
+    .fila1-Dobladora{
+        grid-area: col9;
+        width: 126px;
+    }
+    .fila1-Muestra {
+        grid-area: col10;
+        width: 160px;
+    }
+    .fila1-Observacion {
+        grid-area: col12;
+        width: 255px;
+    
+    }
+    .fila1-Muestra-6 {
+        grid-area: col6;
+        width: 160px;
+    }
+    .fila1-Observacion-8 {
+        grid-area: col8;
+        width: 255px;
+    
+    }
+    
+
+    } 
+}

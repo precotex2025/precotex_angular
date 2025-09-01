@@ -1,0 +1,26 @@
+
+
+  <mat-menu   #childMenu="matMenu" [overlapTrigger]="false">
+
+    <!--<ng-container *ngFor="let child of opciones" >
+            <button  class="sub-item" mat-menu-item routerLink="child.Ruta_Opcion" style="cursor: pointer">
+            <mat-icon>assessment</mat-icon>
+            <span>{{child.Des_Opcion}}</span>
+            </button>
+            <mat-divider></mat-divider>
+    </ng-container>  -->
+    
+      <ng-container *ngFor="let child of items" >
+            <button  class="sub-item" mat-menu-item routerLink="child.route" style="cursor: pointer">
+            <mat-icon>assessment</mat-icon>
+            <span>{{child.displayName}}</span>
+            </button>
+            <mat-divider></mat-divider>
+    </ng-container>  
+
+ </mat-menu>
+
+
+
+
+  

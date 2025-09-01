@@ -1,0 +1,258 @@
+<div class="container">
+    <!-- ventana nro 3 - salida -->
+    <div class="grid-container">
+
+        <div class="title">Programación de Vacaciones</div>
+
+        <div class="find">
+            <div class="auditoriaForm">
+                <mat-card>
+                    <mat-card-header>
+                        Seleccionar Trabajador
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="findcol1">
+                            <div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label>Seleccionar Empresa</mat-label>
+                                    <mat-select (selectionChange)="selectEmpresa($event)" [(ngModel)]="Cod_Empresa">
+                                        <mat-option *ngFor="let item of dataEmpresas" [value]="item.Cod_Empresa">
+                                            <ng-container *ngIf="item.Cod_Empresa == '07'">
+                                                PRECOTEX S.A.C.
+                                            </ng-container>
+                                            <ng-container *ngIf="item.Cod_Empresa == '56'">
+                                                V&D CORPORACION PERU S.A.C
+                                            </ng-container>
+                                            <ng-container *ngIf="item.Cod_Empresa == '77'">
+                                                SABOR CRIOLLO Y PUNTO EIRL
+                                            </ng-container>
+                                            <ng-container *ngIf="item.Cod_Empresa == '78'">
+                                                K APRA MANKA EIRL
+                                            </ng-container>
+
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja">
+                                <ng-select [items]="dataTrabajadores" (change)="selectUsuario($event)"
+                                    bindLabel="Nombre" bindValue="Codigo" [multiple]="false" [searchable]="true"
+                                    [(ngModel)]="Cod_Trabajador" placeholder="Selecciona un Usuario">
+                                </ng-select>
+                            </div>
+
+                            <div class="caja">
+                                <button type="button" class="button_agregar" [disabled]="deshabilitar"
+                                    (click)="actualizarPermiso()" mat-flat-button color="primary">
+                                    <mat-icon aria-label="person">check
+                                    </mat-icon> Seleccionar
+                                </button>
+
+                            </div>
+                            <div class="caja">
+                                <button type="button" class="button_info" [disabled]="deshabilitar"
+                                    routerLink="/historial-vacaciones" mat-flat-button color="primary">
+                                    <mat-icon aria-label="person">dehaze
+                                    </mat-icon> Historial
+                                </button>
+                            </div>
+                        </div>
+                        <div class="botones" *ngIf="data.length > 0">
+                            <div class="caja_datos">
+                                <mat-form-field class="example-full-width" appearance="fill">
+                                    <mat-label>Trabajador</mat-label>
+                                    <input matInput [value]="data[0].Trabajador" readonly>
+                                </mat-form-field>
+                                <mat-form-field class="example-full-width" appearance="fill">
+                                    <mat-label>Area</mat-label>
+                                    <input matInput [value]="data[0].AREA_RRHH" readonly>
+                                </mat-form-field>
+                                <mat-form-field class="example-full-width" appearance="fill">
+                                    <mat-label>Cargo</mat-label>
+                                    <input matInput [value]="data[0].Des_Ocupacion" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="caja_datos2">
+                                <mat-form-field class="example-full-width" appearance="fill">
+                                    <mat-label>Cod. Trabajador</mat-label>
+                                    <input matInput [value]="this.Cod_Trabajador" readonly>
+                                </mat-form-field>
+                                <mat-form-field class="example-full-width" appearance="fill">
+                                    <mat-label>Tipo Trabajador</mat-label>
+                                    <input matInput [value]="this.Tip_Trabajador == 'E' ? 'EMPLEADO' : 'OPERARIO'"
+                                        readonly>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+
+
+            </div>
+
+
+        </div>
+
+        <div class="find" *ngIf="data.length > 0">
+            <mat-card>
+                <mat-card-header>
+                    Vacaciones Disponibles
+                </mat-card-header>
+                <mat-card-content class="caja-content">
+                    <p style="text-align: right;">
+                        <strong>Total Días Disponibles: {{dias_pendientes}}</strong>
+                    </p>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Periodos</th>
+                                <th>Días Truncos</th>
+                                <th>Días Pendientes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngIf="data[0].dias_01 != null && data[0].dias_01 > 0">
+                                <tr>
+                                    <td>{{data[0].Periodo_01}}</td>
+                                    <td>0</td>
+                                    <td>{{data[0].dias_01}}</td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="data[0].dias_02 != null && data[0].dias_02 > 0">
+                                <tr>
+                                    <td>{{data[0].Periodo_02}}</td>
+                                    <td>0</td>
+                                    <td>{{data[0].dias_02}}</td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="data[0].dias_03 != null && data[0].dias_03 > 0">
+                                <tr>
+                                    <td>{{data[0].Periodo_03}}</td>
+                                    <td>0</td>
+                                    <td>{{data[0].dias_03}}</td>
+                                </tr>
+                            </ng-container>
+
+                            <ng-container *ngIf="data[0].dias_04 != null && data[0].dias_04 > 0">
+                                <tr>
+                                    <td>{{data[0].Periodo_04}}</td>
+                                    <td>0</td>
+                                    <td>{{data[0].dias_04}}</td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="data[0].dias_05 != null && data[0].dias_05 > 0">
+                                <tr>
+                                    <td>{{data[0].Periodo_05}}</td>
+                                    <td>0</td>
+                                    <td>{{data[0].dias_05}}</td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="data[0].dias_06 != null && data[0].dias_06 > 0">
+                                <tr>
+                                    <td>{{data[0].Periodo_06}}</td>
+                                    <td>0</td>
+                                    <td>{{data[0].dias_06}}</td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="data[0].dias_07 != null && data[0].dias_07 > 0">
+                                <tr>
+                                    <td>{{data[0].Periodo_07}}</td>
+                                    <td>0</td>
+                                    <td>{{data[0].dias_07}}</td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="data[0].dias_08 != null && data[0].dias_08 > 0">
+                                <tr>
+                                    <td>{{data[0].Periodo_08}}</td>
+                                    <td>0</td>
+                                    <td>{{data[0].dias_08}}</td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="data[0].dias_09 != null && data[0].dias_09 > 0">
+                                <tr>
+                                    <td>{{data[0].Periodo_09}}</td>
+                                    <td>0</td>
+                                    <td>{{data[0].dias_09}}</td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="data[0].dias_10 != null && data[0].dias_10 > 0">
+                                <tr>
+                                    <td>{{data[0].Periodo_10}}</td>
+                                    <td>0</td>
+                                    <td>{{data[0].dias_10}}</td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="data[0].dias_10 != null">
+                                <tr>
+                                    <td>{{data[0].Periodo_11}}</td>
+                                    <td>
+
+                                        <ng-container *ngIf="data[0].dias_vencidos == null">
+                                            {{data[0].dias_truncos}}
+                                        </ng-container>
+
+                                    </td>
+                                    <td>0</td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </mat-card-content>
+            </mat-card>
+
+        </div>
+
+        <div class="find" *ngIf="data.length > 0">
+            <mat-card>
+                <mat-card-header>
+                    Crear Vacaciones
+                </mat-card-header>
+                <mat-card-content class="caja-content-vacaciones">
+                    <div class="caja_vacaciones">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Fecha Inicio Vacaciones</mat-label>
+                            <input matInput type="date" [(ngModel)]="fecha_inicio" [min]="min_date" name="fecha_inicio">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Fecha Fin Vacaciones</mat-label>
+                            <input matInput type="date" name="fecha_fin" [(ngModel)]="fecha_fin" [min]="min_date"
+                                (change)="changeFechaFin()">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Fecha Retorno</mat-label>
+                            <input matInput type="date" name="Fecha_Modificada" [(ngModel)]="Fecha_Modificada" readonly>
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Días de Vacaciones</mat-label>
+                            <input matInput type="number" name="dias" [(ngModel)]="dias" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div class="caja_vacaciones_2">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Observaciones</mat-label>
+                            <input matInput type="text" name="observaciones" [(ngModel)]="observaciones">
+                        </mat-form-field>
+                    </div>
+                    <div class="caja_vacaciones_3">
+                        <button type="button" class="button_agregar" (click)="CargarLista()" mat-flat-button
+                            color="primary" [disabled]="validarForm">
+                            <mat-icon aria-label="person">save
+                            </mat-icon> Guardar Vacaciones
+                        </button>
+                        <button type="button" class="button_imprimir" (click)="nuevoRegistro()"
+                            [disabled]="!validarForm" mat-flat-button color="primary">
+                            <mat-icon aria-label="person">refresh
+                            </mat-icon> Nuevo Registro
+                        </button>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+        </div>
+
+
+
+    </div>
+</div>

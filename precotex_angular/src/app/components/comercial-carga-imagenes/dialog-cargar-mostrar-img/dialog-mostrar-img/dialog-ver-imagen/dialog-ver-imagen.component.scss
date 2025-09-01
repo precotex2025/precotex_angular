@@ -1,0 +1,80 @@
+.container-fluid {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100%;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 16px;
+    margin: 0;
+}
+
+mat-card {
+    margin-top: 10px;
+    padding: 0px;
+}
+
+mat-card-header {
+    padding: 10px;
+    border-bottom: 0.8px solid rgba(0, 0, 0, .2);
+    border-left: 0.8px solid rgba(0, 0, 0, .2);
+    border-right: 0.8px solid rgba(0, 0, 0, .2);
+    border-top: 0.8px solid rgba(0, 0, 0, .2);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+mat-card-content {
+    
+    padding: 10px 15px;
+    border-bottom: 0.8px solid rgba(0, 0, 0, .2);
+    border-left: 0.8px solid rgba(0, 0, 0, .2);
+    border-right: 0.8px solid rgba(0, 0, 0, .2);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    height: 85vh;
+}
+
+.caja-imagen2{
+    margin: auto;
+    width: 95%;
+    height: 99%;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 5px 5px 25px #222;
+}
+.caja-estilo{
+    display: flex;
+    justify-content: space-around;
+}
+
+
+.caja-imagen2 img{
+    object-fit: contain;
+    object-position: center;
+    height: 100%;
+    max-width: 95%;
+}
+.cerrar{
+    cursor: pointer;
+    font-size: 20px;
+    padding: 5px;
+    background-color: red;
+    color: white;
+}
+mat-card-footer{
+    border-top: 1px solid rgba(0,0,0, .1);
+    margin-top: 10px;
+    padding: 24px 15px;
+    width: 100%;
+    text-align: right;
+}
+
+#cdk-overlay-3{
+    overflow-y: scroll;
+}
+
+// ::ng-deep .ngxImageZoomContainer > img{
+//     max-width: 100%;
+// }

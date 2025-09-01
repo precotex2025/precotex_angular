@@ -1,0 +1,218 @@
+<!--<a [routerLink]="['/AuditoriaHojaMedida']" >auditoria-hoja-medida-detalle works!-->
+
+
+<div class="container" id="container">
+
+    <div class="grid-container">
+
+        <div class="title">Hoja de medidas Top - {{this.Cod_Hoja_Medida_Cab}}</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm"
+            (ngSubmit)="submit(formDirective)">
+
+
+            <div class="container-cuerpo-fila1">
+
+                <mat-form-field class="fila1-OP">
+                    <mat-label>OP</mat-label>
+                    <input matInput type="text" placeholder="OP" value="" autocomplete="off" formControlName="OP"
+                        (input)="buscarPorOp()">
+                </mat-form-field>
+
+                <mat-form-field class="fila1-Cliente">
+                    <mat-label>Cliente</mat-label>
+                    <input matInput type="text" placeholder="Cliente" value="" autocomplete="off"
+                        formControlName="inputCliente">
+                </mat-form-field>
+
+                <mat-form-field class="fila1-EstCli">
+                    <mat-label>Estilo Cliente</mat-label>
+                    <input matInput type="text" placeholder="Estilo Cliente" value="" autocomplete="off"
+                        formControlName="inputEstCli">
+                </mat-form-field>
+
+                <mat-form-field class="fila1-EstPro">
+                    <mat-label>Estilo P. / Version</mat-label>
+                    <input matInput type="text" placeholder="Estilo P. / Version" value="" autocomplete="off"
+                        formControlName="inputEstPro">
+                </mat-form-field>
+
+                <mat-form-field class="fila1-Version" style="display: none;">
+                    <mat-label>Version</mat-label>
+                    <input matInput type="text" placeholder="Version" value="" autocomplete="off"
+                        formControlName="inputVersion">
+                </mat-form-field>
+
+
+                <mat-form-field appearance="fill" class="fila1-Color" *ngIf="!this.Flg_Color">
+                    <mat-label>Color</mat-label>
+                    <mat-select formControlName="Color">
+                        <mat-option *ngFor="let option of listar_operacionColor" [value]="option.Cod_ColCli">
+                            {{option.Nom_ColCli}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+                <mat-form-field class="fila1-Color" *ngIf="this.Flg_Color">
+                    <mat-label>Color</mat-label>
+                    <input matInput type="text" placeholder="Color" value="" autocomplete="off" formControlName="Color">
+                </mat-form-field>
+
+                <mat-form-field class="fila1-Ops" style="display: none;">
+                    <mat-label>OP'S</mat-label>
+                    <input matInput type="text" placeholder="OP'S" value="" autocomplete="off"
+                        formControlName="inputOps">
+                </mat-form-field>
+
+
+                <ng-select [items]="listar_lineas" bindLabel="descripcion" class="fila1-Linea" bindValue="cod_linea"
+                    [multiple]="false" [searchable]="true" placeholder="Selecciona N° de Linea" formControlName="Linea">
+                </ng-select>
+
+                <!-- <mat-form-field class="fila1-Supervisor" appearance="fill">
+                    <mat-label>Supervisor</mat-label>
+                    <input matInput type="text" #trigger="matAutocompleteTrigger" placeholder="Supervisor"
+                        formControlName="Supervisor" [matAutocomplete]="autoDataSupervisor" />
+                    <mat-autocomplete autoActiveFirstOption #autoDataSupervisor="matAutocomplete">
+                        <mat-option *ngFor="let option of filtroOperacionSupervisor | async"
+                            [value]="option.Nom_Auditor"
+                            (click)="CambiarValorCodSupervisor(option.Cod_Auditor,option.Tip_Trabajador)">
+                            {{option.Nom_Auditor}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field> -->
+                <mat-form-field class="fila1-Auditor" appearance="fill">
+                    <mat-label>Auditor</mat-label>
+                    <input matInput type="text" #trigger="matAutocompleteTrigger" placeholder="Auditor"
+                        formControlName="Auditor" [matAutocomplete]="autoDataAuditor" />
+                    <mat-autocomplete autoActiveFirstOption #autoDataAuditor="matAutocomplete">
+                        <mat-option *ngFor="let option of filtroOperacionAuditor | async" [value]="option.Nom_Auditor"
+                            (click)="CambiarValorCodAuditor(option.Cod_Auditor,option.Tip_Trabajador)">
+                            {{option.Nom_Auditor}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Hoja de Medida</mat-label>
+                    <mat-select formControlName="Sec">
+                        <mat-option *ngFor="let item of dataHojasMedida"
+                            value="{{item.Sec}}">{{item.Descripcion}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+
+
+            <div class="container-cuerpo-fila2">
+
+                <!--<mat-form-field class="fila2-Linea"> 
+                        <mat-label>Linea</mat-label>
+                        <input matInput type="number" maxlength="3"  placeholder="Linea" value="" 
+                            autocomplete="off" formControlName="Linea">
+                    </mat-form-field>-->
+
+                <mat-form-field class="fila2-CodSupervisor" style="display: none;">
+                    <mat-label>Codigo</mat-label>
+                    <input matInput type="text" placeholder="Codigo" value="" (keyup.enter)="BuscarSupervisor()"
+                        autocomplete="off" formControlName="CodSupervisor">
+                </mat-form-field>
+
+                <!--<mat-form-field class="fila2-Supervisor" appearance="fill">
+                        <mat-label>Supervisor</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Supervisor" formControlName="Supervisor"  [matAutocomplete]="autoDataSupervisor" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataSupervisor="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionSupervisor | async" [value]="option.Nom_Auditor" (click)="CambiarValorCodSupervisor(option.Cod_Auditor,option.Tip_Trabajador)">
+                                {{option.Nom_Auditor}}
+                            </mat-option> 
+                        </mat-autocomplete>                            
+                    </mat-form-field>-->
+
+                <mat-form-field class="fila2-CodAuditor" style="display: none;">
+                    <mat-label>Codigo</mat-label>
+                    <input matInput type="text" placeholder="Codigo" value="" autocomplete="off"
+                        formControlName="CodAuditor">
+                </mat-form-field>
+
+
+                <!--<mat-form-field class="fila2-Auditor" appearance="fill">
+                        <mat-label>Auditor</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Auditor" formControlName="Auditor"  [matAutocomplete]="autoDataAuditor" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataAuditor="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionAuditor | async" [value]="option.Nom_Auditor" (click)="CambiarValorCodAuditor(option.Cod_Auditor,option.Tip_Trabajador)">
+                                {{option.Nom_Auditor}}
+                            </mat-option> 
+                        </mat-autocomplete>                            
+                    </mat-form-field>-->
+
+                <mat-form-field class="fila2-Fecha" style="display: none;">
+                    <input matInput [matDatepicker]="picker1" placeholder="Fecha Registro"
+                        [disabled]="InputFechaDesHabilitado" [formControl]="Fecha">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+
+                <button type="button" class="button-finalizar" (click)="FinalizarFicha()" mat-flat-button
+                    [disabled]="Cod_Hoja_Medida_Cab == 0 || this.Flg_Enable == false">
+                    <mat-icon aria-label="person">check
+                    </mat-icon> Finalizar Ficha
+                </button>
+
+                <button type="submit" class="button-agregar" mat-flat-button [disabled]="!formulario.valid">
+                    <mat-icon aria-label="person">save
+                    </mat-icon> Registrar
+                </button>
+
+                <button type="button" class="button-regresar" mat-flat-button [routerLink]="['/auditoriaMedidaServicios']">
+                    <mat-icon aria-label="person">reply_all</mat-icon>
+                </button>
+
+            </div>
+
+            <div class="container-cuerpo-fila3">
+                <!--<table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                        
+                        <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns_cab"  >
+                            <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+        
+                            <td  mat-cell *matCellDef="let element" > {{element[column]}} </td>
+                          </ng-container>
+    
+                 
+                        
+                          <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+                          <tr mat-row  *matRowDef="let row; columns: columnsToDisplay;"></tr>
+    
+                    </table>-->
+
+                <!-- <ag-grid-angular
+                    style="width: 100%; height: 100%"
+                    class="ag-theme-material"
+                    [rowData]="rowData"
+                    [columnDefs]="columnDefs"
+                    [rowDragManaged]="false"
+                    [animateRows]="false"
+                    (cellClicked)="onCellClicked($event,$event)"
+                    >
+    
+                    </ag-grid-angular>-->
+                <ag-grid-angular #gGridEmpty style="width: 100%; height: 100%;" class="ag-theme-material"
+                    [suppressDragLeaveHidesColumns]="true" (cellClicked)="onCellClicked($event,$event)"
+                    [gridOptions]="gridOptions">
+                </ag-grid-angular>
+
+                <!-- <mat-paginator  class="paginador" #paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons aria-label="Select page of periodic elements">
+                    </mat-paginator>-->
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<!--<button class="btn btn-primary btn-xs" (click)="print()">imprimir</button>-->
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

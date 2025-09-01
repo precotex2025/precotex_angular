@@ -1,0 +1,101 @@
+<div class="container-fluid">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+  
+      <div class="title">Versiones
+
+        <span>
+            <button class="button-cancelar" style="margin-bottom: 10px; margin-left: 10px; background-color: #d32f2f; color: white;"  (click)="regresar()" mat-flat-button type="button">
+              <mat-icon aria-label="person">highlight_off
+              </mat-icon>
+              REGRESAR</button>
+          </span>
+      </div>
+  
+      <form class="container-cuerpo" >
+        <div class="container-cuerpo-fila1">
+  
+            <div class="mitad">
+                <p><strong>Código: </strong>  {{data.Codigo}}</p>
+                <p><strong>Descripción: </strong>  {{data.Descripcion}}</p>
+                <p><strong>Tipo de Prenda: </strong>  {{data.Tipo_de_Prenda}}</p>
+            </div>
+
+            <div class="mitad">
+                <p><strong>Comentario: </strong>  {{data.comentario1}}</p>
+                <p><strong>Grupo: </strong>  {{data.Grupo}}</p>
+                <p><strong>Estilo Cliente: </strong>  {{data.Est_Cli}}</p>
+                <p><strong>Grado Dificultad: </strong>  {{data.Grado_Dificultad}}</p>
+            </div>
+  
+        </div>
+  
+        <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+        <div class="container-cuerpo-fila2">
+          <!--[dataSource]="dataSource"-->
+          <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+            <!-- <ng-container matColumnDef="COD_TIPORDTRA">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">TIPO</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.COD_TIPORDTRA}} </td>
+            </ng-container> -->
+            <ng-container matColumnDef="Version">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Codigo</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Version}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Descr">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Descripcion</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Descr}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Eficiencia_Costeo">
+                <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Eficiencia Costeo</th>
+                <td mat-cell *matCellDef="let data_det"> {{data_det.Eficiencia_Costeo}} </td>
+              </ng-container>
+            <ng-container matColumnDef="Tipo_Version">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tipo</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Tipo_Version}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Proto">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Ult. Proto</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Proto}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Des_Tela_Cliente">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Des. Tela Cliente</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Des_Tela_Cliente }} </td>
+            </ng-container>
+            <ng-container matColumnDef="Num_Id_Consumo">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Num. Consumo</th>
+              <td mat-cell *matCellDef="let data_det"> {{data_det.Num_Id_Consumo }} </td>
+            </ng-container>
+            <ng-container matColumnDef="FLG_STATUS">
+                <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estado</th>
+                <td mat-cell *matCellDef="let data_det"> {{data_det.FLG_STATUS }} </td>
+              </ng-container>
+            <ng-container matColumnDef="Acciones">
+              <th mat-header-cell *matHeaderCellDef class="mat-header-cell">ACCIONES</th>
+              <td mat-cell *matCellDef="let data_det">
+                <a mat-icon-button style="margin-right:5px;" (click)="openDialog(data_det)">
+                  <mat-icon color="success">reorder icon</mat-icon>
+                </a>
+              </td>
+            </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+          </mat-paginator>
+  
+        </div>
+  
+      </form>
+  
+    </div>
+  
+  
+  </div>
+  
+  <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+  </ngx-spinner>

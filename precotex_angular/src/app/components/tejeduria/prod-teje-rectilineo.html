@@ -1,0 +1,139 @@
+<div class="container">     
+    <div class="grid-container"> 
+ 
+        <div class="title">Producción de Tejeduría - Rectilíneos</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario2">
+            <div class="container-cuerpo-fila1">
+                
+                <mat-form-field  class="fila1-fecha" appearance="fill">
+                    <mat-label>Rango de Fecha</mat-label>
+                    <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                      <input matStartDate formControlName="start" placeholder="Fecha Inicio" >
+                      <input matEndDate formControlName="end" placeholder="Fecha Final" >
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                    <mat-icon  (click)="clearDate($event)" style=" position: absolute;
+                    float: right;
+                    top: -6px;
+                    margin-left: 190px;
+                    cursor: pointer;
+                    color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+                    <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Fecha Invalida</mat-error>
+                    <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Fecha Invalida</mat-error>
+                </mat-form-field>
+                  
+                <mat-form-field appearance="fill" class="fila1-Ot">
+                    <mat-label>OT</mat-label>
+                    <input matInput type="number" formControlName="Cod_Ordtra" />
+                </mat-form-field>  
+
+                <mat-form-field class="fila1-Auditor" appearance="fill">
+                    <mat-label>Código Tela</mat-label>                 
+                    <input matInput type="text" (keyup)="BuscarTela()" placeholder="Código" value=""
+                    autocomplete="off" formControlName="Cod_Tela" style="text-transform: uppercase">
+                </mat-form-field>
+
+                <mat-form-field class="fila1-CodAuditor"> 
+                    <mat-label>Des.Tela</mat-label>                        
+                    <input matInput type="text" placeholder="" formControlName="Des_Tela" value='{{ Des_Tela }}'>
+                </mat-form-field>               
+                 
+                <br>    
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="BuscarProduccion()">                    
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+                <button type="button" class="fila1-agregar" mat-flat-button [routerLink]="['/ProdTejeRectilineoRegistro']">
+                <mat-icon aria-label="person">add
+                </mat-icon>  Agregar
+                </button>             
+            </div>   
+            
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table  [dataSource]="dataSourceSol"   class="mat-elevation-z8" >
+                    <ng-container matColumnDef="Fec_Lectura" sticky>
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha</th>
+                        <td mat-cell  *matCellDef="let produccion_rectilineo"> {{produccion_rectilineo.Fec_Lectura}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Cod_Ordtra" sticky>
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">OT</th>
+                        <td mat-cell  *matCellDef="let produccion_rectilineo"> {{produccion_rectilineo.Cod_Ordtra}}  </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Maquina">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Máquina</th>
+                        <td mat-cell *matCellDef="let produccion_rectilineo">  {{produccion_rectilineo.Cod_Maquina}} </td>
+                    </ng-container>
+
+                     <ng-container matColumnDef="Cod_Tela">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tela</th>
+                        <td mat-cell  *matCellDef="let produccion_rectilineo">  {{produccion_rectilineo.Cod_Tela}} </td>
+                    </ng-container>
+  
+                    <ng-container matColumnDef="Talla">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Talla</th>
+                         <td mat-cell *matCellDef="let produccion_rectilineo"> {{produccion_rectilineo.Cod_Talla}} </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="Kg_Producido">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Kg Producido</th>
+                        <td mat-cell *matCellDef="let produccion_rectilineo"> {{produccion_rectilineo.Kg_Producido}} </td>
+                    </ng-container>    
+                    
+                    <ng-container matColumnDef="Und_Producido">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Und Producido</th>
+                        <td mat-cell *matCellDef="let produccion_rectilineo"> {{produccion_rectilineo.Und_Producido}} </td>
+                    </ng-container>   
+
+                    <ng-container matColumnDef="Und_Fallado">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Und Fallado</th>
+                        <td mat-cell *matCellDef="let produccion_rectilineo"> {{produccion_rectilineo.Und_Fallado}} </td>
+                    </ng-container>  
+                    
+                    <ng-container matColumnDef="Tejedor">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Tejedor</th>
+                        <td mat-cell *matCellDef="let produccion_rectilineo"> {{produccion_rectilineo.Tejedor}} </td>
+                    </ng-container>  
+              
+                    <ng-container matColumnDef="Eliminar">
+                        <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+                        <td mat-cell *matCellDef="let produccion_rectilineo">
+ 
+                            <a mat-icon-button 
+                                (click)="EliminarRegistro(produccion_rectilineo.Id)">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a> 
+                        </td>
+                    </ng-container> 
+                                    
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                </table>
+
+                <mat-paginator  class="paginador" #paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons aria-label="Select page of periodic elements">
+                </mat-paginator>            
+            </div> 
+            <tr>                
+                <td class="titulo">
+                    Total Unidades:
+                </td>                
+                <td class="dato">
+                    {{Tot_Und}}
+                </td>
+                <td class="titulo">
+                    Fallados:
+                </td>
+                <td class="dato2">
+                    {{Tot_Falla}}
+                </td>
+            </tr>    
+        </form>
+
+    </div>
+ 
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>       

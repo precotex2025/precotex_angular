@@ -1,0 +1,268 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 13px;
+    margin: 0;
+  }
+  
+  .grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0;
+    //padding: 1x ;
+    //padding-bottom: 15px;
+    //min-width: 350px;
+    min-height: 400px;
+    height: 1000px;
+    //position: absolute;
+  }
+  
+  .title {
+    background-color: #3f51b5;
+    color: rgb(255, 255, 255);
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  .container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 5px 0;
+    justify-content: center;
+  }
+  
+  .container-cuerpo {
+    display: grid;
+  
+    grid-template:
+      "fila1" 190px
+      "fila2" 360px
+      "foot" 55px /
+      99%;
+  }
+  
+  .container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+  }
+  
+  .container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  
+
+  .container-cuerpo-foot {
+    grid-area: foot;
+  }
+  
+  mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+    font-size: -webkit-xxx-large;
+  }
+  
+  .d-none {
+    display: none;
+  }
+  
+
+  
+  .mat-header-cell {
+    padding: 0.5rem;
+  }
+  
+  .paginador {
+    width: auto;
+  }
+  
+
+
+  .footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  
+ 
+  ::ng-deep .my-class .mat-dialog-container {
+    padding: 5px;
+    height: auto;
+  }
+
+  
+  .button-Cancelar {
+    width: 80%;
+    display: inline-block;
+    background-color: #d32f2f;
+    color: #ffffff;
+    margin-right: 1rem;
+  }
+
+
+  .button-Liberar{
+    width: 80%;
+    display: inline-block;
+    background-color: #0e740e;
+    color: #ffffff;
+    margin-right: 1rem;
+  }
+
+  .button-Actualizar{
+    
+    width: 80%;
+    display: inline-block;
+    background-color: #abfc29;
+    color: #111010;
+    margin-right: 1rem;
+  }
+
+
+  
+  //fila 1
+  .container-cuerpo-fila1 {
+    display: grid;
+  
+    grid-template:
+      "col1 col2 col3 col4 col5" 50px
+      "col6 col7 col8 col9 col10" 50px
+      "col11 col12 col13 col14 col15" auto/200px 200px 200px 200px 200px;
+  }
+  
+  
+  .mat-column-Ot,
+  .mat-column-Fecha,
+  .mat-column-Detalle,
+  .mat-column-Imprimir
+  
+  
+  .mat-column-Ot {width: 10px !important;text-align: center; }
+  .mat-column-Fecha {width: 10px !important;text-align: center; }
+  .mat-column-Detalle {width: 10px !important;text-align: center; }
+  .mat-column-Imprimir {min-width: 10px !important;text-align: center; }
+  
+
+  
+  .mat-elevation-z8 {
+    width: 100%;
+    font-family: arial;
+    font-size: 10px;
+  }
+  .paginador {
+    width: auto;
+  }
+  
+  tr:hover {
+    border-color: currentColor;
+    background: #e1e1e1;
+  }
+  
+  tr:active {
+    background: #efefef;
+  }
+  
+
+
+  @media screen and (max-width: 650px) {
+
+    .grid-container {
+      height: 660px;
+    }
+
+    .button-Cancelar {
+        width: 100%;
+        height: 80%;
+        display: inline-block;
+        background-color: #d32f2f;
+        color: #ffffff;
+        margin-right: 1rem;
+      }
+    
+    
+      .button-Liberar{
+        height: 80%;
+        width: 100%;
+        display: inline-block;
+        background-color: #0e740e;
+        color: #ffffff;
+        margin-right: 1rem;
+      }
+
+      .button-Actualizar{
+        height: 80%;
+        width: 100%;
+        display: inline-block;
+        background-color: #abfc29;
+        color: #111010;
+        margin-right: 1rem;
+      }
+
+
+ 
+    .container-cuerpo {
+      display: grid;
+  
+      grid-template:
+        "fila1" 355px
+        "fila2" 380px
+        "foot" 55px/99%;
+    }
+  
+    .container-cuerpo-fila1 {
+      display: grid;
+      grid-template:
+        "col1 col1" 150px
+        "col2 col2" 65px
+        "col3 col3" 65px
+        "col4 col4" 65px;
+    }
+
+    .container-cuerpo-fila2 {
+      grid-area: fila2;
+      overflow: auto;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+  
+
+    .fila1-partida {
+      grid-area: col1;
+  }
+
+    .button-Liberar {
+      grid-area: col2;
+  }
+
+  .button-Actualizar {
+      
+    grid-area: col3;
+ }
+  
+    .button-Cancelar {
+      
+       grid-area: col4;
+    }
+
+
+
+     
+  
+  
+  }

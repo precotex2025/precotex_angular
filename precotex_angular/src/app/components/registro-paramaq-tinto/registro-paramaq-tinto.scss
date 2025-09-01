@@ -1,0 +1,215 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+  
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 640px;
+    //position: absolute;  
+}
+   
+.title {
+    background-color: #337ab7;
+    color: rgb(255, 248, 248);
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: end;
+}
+
+.fila1-codUbica {
+    grid-area: col1;         
+}
+
+.fila1-buscar {
+    width: 100%;
+    grid-area: col2;
+    height: 36px;
+    max-width: 103px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #108fe4;
+    color: #ffffff;    
+}
+
+
+
+.example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;        
+  }
+
+ .mat-expansion-panel-header{
+    background: florlwhite;
+ }
+  
+  .example-headers-align .mat-mdc-form-field + .mat-mdc-form-field {
+    margin-left: 8px;
+  }
+
+  .mat-input-element{
+    text-align: center;
+
+  }
+
+
+.example-content {
+    display:inline;
+    flex-direction: column;
+    align-items: flex-start; 
+    text-align: left;
+    span {
+        display: inline;
+        // margin-bottom: 16px;
+    };
+    // width: 250px; 
+    width: 151px;
+}
+
+.ciclo {
+    margin: 0 -53px -35px;
+}
+
+.banomaq {
+    // margin: 0 -60px -37px;
+    margin: 0 -70px -37px;
+}
+
+.cantdosif {
+    // margin: 0 -60px -37px;
+    margin: 0 -77px -37px;
+}
+
+.volini {
+    // margin: 0 -60px -37px;
+    margin: 0 -100px -37px;
+}
+
+.phinicio {
+    margin: 0 -60px -38px;
+}
+
+.phiniciosal
+{
+    // margin: 0 -69px -38px;
+    margin: 0 -79px -38px;
+}
+
+.densal {
+    // margin: 0 -60px -38px;
+    margin: 0 -68px -38px;
+}
+
+.tentemp{
+    // margin: 0 -50px -38px;
+    margin: 0 -48px -38px;
+}
+
+.phalcali1{
+    margin: 0 -78px -36px;
+}
+
+.phpilling{
+    margin: 0 -76px -36px;
+}
+
+.phagota{
+    margin: 0 -69px -38px;
+}
+
+.prvelocidad{
+    margin: 0 -70px -38px;
+}
+
+.neph{
+    margin: 0 -92px -39px;
+}
+
+
+.jabph{
+    margin: 0 -70px -39px;
+}
+
+.tenph{
+    margin: 0 -89px -39px;
+}
+
+.descph{
+    margin: 0 -100px -39px; 
+}
+
+.button-registrar {
+    grid-area: fcol1;
+    background-color: #108fe4;
+}
+
+.button-Imprimir {
+    background-color: #ffc107;
+}
+
+.button-cancelar {
+    grid-area: fcol2;
+    background-color: #d32f2f;
+}
+
+.botones{
+    //text-align: center;
+    display: flex; /* Flexbox para organizar botones */
+    gap: 10px; /* Espacio entre botones */
+    justify-content: flex-start; /* Alinea los botones a la izquierda */
+    margin-top: 10px; /* Espacio superior opcional */    
+}
+
+.cuerdas {
+    // margin: 0 -58px -41px;
+    margin: 0 -65px -41px;
+}
+
+// .mat-radio-outer-circle {
+//     box-sizing: border-box;
+//     display: block;
+//     height: 20px;
+//     left: 5px;
+//     position: absolute;
+//     top: 0;
+//     transition: border-color ease 280ms;
+//     width: 20px;
+//     border-width: 2px;
+//     border-style: solid;
+//     border-radius: 50%;
+// }
+
+.mat-radio-button{
+    display: block;
+}
+
+.deshabilitar{
+    color:red;
+    font-weight: normal;
+}

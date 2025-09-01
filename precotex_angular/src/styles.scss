@@ -1,0 +1,131 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'ag-grid-community/dist/styles/ag-grid.css';
+@import 'ag-grid-community/dist/styles/ag-theme-material.css';
+
+
+.ag-theme-material .ag-overlay-loading-center {
+    display: none
+}
+
+.ag-theme-balham .ag-row-selected {
+    background-color: #4abbff;
+}
+
+.ag-theme-balham .ag-ltr .ag-row-focus {
+    border: 1px solid red;
+}
+
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url(../assets/fonts/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+}
+
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    overscroll-behavior: contain;
+}
+
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+    border-radius: 4px 4px 0 0;
+    padding: 0 0 0 0 !important;
+    background: none;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-infix {
+    margin-top: 2px
+}
+
+.mat-expansion-panel-content>.mat-expansion-panel-header {
+    padding: 0 8px !important;
+}
+
+.mat-expansion-panel-content>.mat-expansion-panel-body {
+    padding: 0 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*@media screen and (max-width: 650px){
+.my-class .mat-dialog-container{
+    height: 100% !important;
+    width: 1600px !important;
+  }
+}*/
+/*.mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination{
+    display: none !important;
+}
+
+.mat-ink-bar{
+    width: 100%!important;
+    left: 0px!important;
+}*/
+
+
+// Valido para ampliar imagen ZOOM -> AuditoriaEmpaqueCajas
+//* {box-sizing: border-box;}
+
+.img-zoom-container {
+  position: relative;
+} 
+
+.img-zoom-lens {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  /*set the size of the lens:*/
+  width: 40px;
+  height: 40px;
+}
+
+.img-zoom-result {
+  border: 1px solid #d4d4d4;
+  /*set the size of the result div:*/
+  width: 400px;
+  height: 400px;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

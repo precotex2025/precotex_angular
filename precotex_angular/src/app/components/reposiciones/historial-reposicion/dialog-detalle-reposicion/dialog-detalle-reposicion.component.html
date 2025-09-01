@@ -1,0 +1,283 @@
+<div class="container-fluid">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title">Detalle Reposición</div>
+
+        <div class="contenedor">
+            <mat-card>
+                <mat-card-header>Datos del Solicitante</mat-card-header>
+                <mat-card-content>
+                    <div class="formulario">
+                        <div class="form-group">
+                            <p>N° de Solicitud</p>
+                            <p><b>{{this.data.datos.Num_Solicitud}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Cliente</p>
+                            <p><b>{{this.data.datos.Des_Cliente}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Tipo</p>
+                            <p><b>{{this.data.datos.Tipo}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Sede</p>
+                            <p><b>Costura {{this.data.datos.Sede}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Línea</p>
+                            <p><b>{{this.data.datos.Num_Linea}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Artes</p>
+                            <p><b>{{this.data.datos.Artes}}</b></p>
+                        </div>
+                        <div class="form-group">
+                            <p>Taller Externo</p>
+                            <p><b>{{this.data.datos.Taller_Externo}}</b></p>
+                        </div>
+                    </div>
+
+                </mat-card-content>
+            </mat-card>
+<!-- 
+            <mat-card>
+                <mat-card-header>Detalle de Solicitud de Reposición</mat-card-header>
+                <mat-card-content>
+                    <div class="formulario2">
+                        <div class="form-group2">
+                            <span>Motivos de Solicitud</span><br>
+                            <div class="fila">
+                                <div class="form-group3">
+                                    <p>Piezas Falladas</p>
+                                    <p style="text-align: center;"><b>{{this.data.datos.Piezas_Falladas}}</b></p>
+                                </div>
+                                <div class="form-group3">
+                                    <p>Piezas Malogradas</p>
+                                    <p style="text-align: center;"><b>{{this.data.datos.Piezas_Malogradas}}</b></p>
+                                </div>
+                                <div class="form-group3">
+                                    <p>Piezas Faltantes</p>
+                                    <p style="text-align: center;"><b>{{this.data.datos.Piezas_Faltantes}}</b></p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card> -->
+
+            <mat-card>
+                <mat-card-header>Detalle Aprobaciones</mat-card-header>
+                <mat-card-content>
+                    <div class="formulario">
+                        <div class="form-group">
+                            <p>Usuario Creación</p>
+                            <p><b>{{this.data.datos.Cod_usuario}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Fecha de Solicitud</p>
+                            <p><b>{{this.data.datos.Fecha_Solicitud}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Aprobación de Costura</p>
+                            <p><b>{{this.data.datos.Aprobacion_Costura == '1' ? 'SI' : this.data.datos.Aprobacion_Costura == '0' ? 'NO' : ''}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Observacion Costura</p>
+                            <p><b>{{this.data.datos.Observacion_Aprobacion}}</b></p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <p>Aprobación Control Interno</p>
+                            <p><b>{{this.data.datos.Aprob_Control_Interno == '1' ? 'SI' : this.data.datos.Aprob_Control_Interno == '0' ? 'NO' : ''}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Observacion Control Interno</p>
+                            <p><b>{{ this.data.datos.Obs_Control_Interno }}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Aprobación de Calidad</p>
+                            <p><b>{{this.data.datos.Aprobacion_Calidad == '1' ? 'SI' : this.data.datos.Aprobacion_Calidad == '0' ? 'NO' : ''}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Observacion Calidad</p>
+                            <p><b>{{this.data.datos.Observacion_Calidad}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Usuario Registro Salida</p>
+                            <p><b>{{this.data.datos.Usuario_Registra_Salida}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Registro Salida</p>
+                            <p><b>{{this.data.datos.Fecha_Salida != null ? 'SI' : 'NO'}}</b></p>
+                        </div>
+                        <div class="form-group">
+                            <p>Fecha Salida</p>
+                            <p><b>{{this.data.datos.Fecha_Salida}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Fecha Ingreso</p>
+                            <p><b>{{this.data.datos.Fecha_Ingreso}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Usuario Registro Ingreso</p>
+                            <p><b>{{this.data.datos.Usuario_Registra_Ingreso}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Aprobación Corte</p>
+                            <p><b>{{this.data.datos.Aprobacion_Corte == '1' ? 'SI' : this.data.datos.Aprobacion_Corte == '0' ? 'NO' : ''}}</b></p>
+                        </div>
+                        <div class="form-group">
+                            <p>Obs. Corte</p>
+                            <p><b>{{this.data.datos.Observacion_Corte}}</b></p>
+                        </div>
+                        <div class="form-group">
+                            <p>Tela Opcional</p>
+                            <p><b>{{ this.data.datos.Tela_Opcional }}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Aprobación Calidad Corte</p>
+                            <p><b>{{this.data.datos.Aprobacion_Calidad_Corte == '1' ? 'SI' : this.data.datos.Aprobacion_Calidad_Corte == '0' ? 'NO' : ''}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Obs. Calidad Corte</p>
+                            <p><b>{{ this.data.datos.Obs_Calidad_Corte }}</b></p>
+                        </div>
+                        <div class="form-group">
+                            <p>Aprobación Con Tela Opcional?</p>
+                            <p><b>{{this.data.datos.Aprob_Cal_Opcional == '1' ? 'SI' : ''}}</b></p>
+                        </div>
+                        <div class="form-group">
+                            <p>Reposición Completa</p>
+                            <p><b>{{this.data.datos.Reposicion_Completa  == 'SI' ? 'SI' : this.data.datos.Reposicion_Completa == 'NO' ? 'NO' :  this.data.datos.Reposicion_Completa == 'ST' ? 'SIN TELA' : ''}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Cantidad Piezas ML</p>
+                            <p><b>{{this.data.datos.Piezas_ML}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Cantidad Piezas Prod.</p>
+                            <p><b>{{this.data.datos.Piezas_Prod}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Fecha Despacho</p>
+                            <p><b>{{this.data.datos.Fecha_Despacho}}</b></p>
+                        </div>
+                        <div class="form-group">
+                            <p>Observaciones Despacho</p>
+                            <p><b>{{this.data.datos.Observaciones_Despacho}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Fecha Salida Despacho</p>
+                            <p><b>{{this.data.datos.Fecha_Salida_Despacho}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Usuario Salida Despacho</p>
+                            <p><b>{{this.data.datos.Usuario_Salida_Despacho}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Fecha Recepción Despacho</p>
+                            <p><b>{{this.data.datos.Fecha_Recepcion_Despacho}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Fecha Recepción Transito Costura</p>
+                            <p><b>{{this.data.datos.Fec_Recepcion_Transito_Cost}}</b></p>
+                        </div>
+                        <div class="form-group">
+                            <p>Fecha Recepción Salida Transito Costura</p>
+                            <p><b>{{this.data.datos.Fec_Recepcion_Salida_Transito}}</b></p>
+                        </div>
+                        
+                        
+                        <div class="form-group">
+                            <p>Fecha Recepción Sup.</p>
+                            <p><b>{{this.data.datos.Fecha_Recepcion}}</b></p>
+                        </div>
+
+                        <div class="form-group">
+                            <p>Recepción Conforme.</p>
+                            <p><b>{{this.data.datos.Recepcion_Conforme}}</b></p>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card>
+                <mat-card-header>Detalle Piezas</mat-card-header>
+                <mat-card-content>
+                    <div class="body-tabla">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>N°</th>
+                              <th>Orden de Corte</th>
+                              <th>Estilo</th>
+                              <th>OP</th>
+                              <th>Color</th>
+                              <th>Pieza</th>
+                              <th>Talla</th>
+                              <th>Cantidad</th>
+                              <th>Tipo</th>
+                              <th>Detalle</th>
+                              <th>Tipo de Tela</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of dataItems; let i = index">
+                              <td>{{i + 1}}</td>
+                              <td>{{item.Co_CodOrdPro}}</td>
+                              <td>{{item.Cod_Est}}</td>
+                              <td>{{item.Cod_OrdPro}}</td>
+                              <td>{{item.Des_Present}}</td>
+                              <td>{{item.Pieza}}</td>
+                              <td>{{item.Cod_Talla}}</td>
+                              <td>{{item.Cantidad}}</td>
+                              <td>{{item.Tipo == '1' ? 'Piezas Falladas' : item.Tipo == '2' ? 'Piezas Malogradas' : 'Piezas Faltantes'}}</td>
+                              <td>{{item.Obs_Defecto}}</td>
+                              <td>{{item.Tipo_Tela | slice:0:30}}</td>
+                              
+                            </tr>
+                            <tr *ngIf="dataItems.length == 0">
+                              <td colspan="10">No has agregado registros aún</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                </mat-card-content>
+            </mat-card>
+
+            <div class="botones">
+                <button mat-flat-button color="primary" (click)="imprimirReposicion()" type="submit" class="button-registrar"><mat-icon>print</mat-icon> Imprimir
+                  Reposición</button>
+                <button mat-flat-button color="warn" mat-dialog-close class="button-cancel"><mat-icon>cancel</mat-icon>
+                  Cerrar</button>
+            </div>
+        </div>
+    </div>

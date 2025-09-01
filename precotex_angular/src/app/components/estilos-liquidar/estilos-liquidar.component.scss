@@ -1,0 +1,284 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+  
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 320px;
+    min-height: 100%;
+    height: 1100px;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 8px 10px 10px;
+    text-align: center;
+    border-radius: 4px 4px 0 0;
+    border-bottom: 1px solid #337ab7;
+    font-weight: 700;
+    font-family: sans-serif;
+    font-size: 23px;
+}
+
+
+
+.container-cuerpo {
+    width: 100%;
+    height: 95%;
+    margin: 0;
+    padding: 10px 10px;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 400px/ 
+        100%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+
+    display: grid;
+    grid-template:
+    "col1" 70px/
+     100% auto;
+}
+
+
+.container-tables{
+    display: flex;
+    width: 100%;
+}
+
+.container-title{
+    font-size: 21px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.container-table{
+    width: 35%;
+    margin: 5px;
+   
+}
+
+.container-title2{
+    font-size: 21px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.container-table2{
+    width: 65%;
+    margin: 5px;
+    
+   
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+
+
+.button-agregar{
+    background-color: #3f51b5;
+    height: 20px;
+    margin: 15px 10px 10px 10px;
+    min-height: 20px;
+    max-width: 20px;
+    min-width: 10px;
+   
+}
+
+
+
+//fila 1
+.mat-column-Estilo, 
+.mat-column-Cliente,
+.mat-column-Des_Cliente,
+.mat-column-Icono_Web,
+.mat-column-Des_Present,
+.mat-column-Por_Liquidar,
+
+
+.mat-column-Fecha_Ingreso,
+.mat-column-Ingreso,
+.mat-column-Fec_Lectura,
+.mat-column-Salida,
+.mat-column-Dias
+
+{
+	
+	font-size: 15px;
+    font-family: arial;
+    padding: 15px;
+    font-weight: bold;
+}
+.mat-column-Estilo {text-align: left}
+.mat-column-Cliente {text-align: left}
+.mat-column-Des_Cliente {text-align: left}
+.mat-column-Icono_Web {text-align: center}
+.mat-column-Des_Present {text-align: left}
+.mat-column-Por_Liquidar {text-align: right}
+
+
+
+.mat-column-Fecha_Ingreso {text-align: center;  background: #FFFA98;}
+.mat-column-Ingreso {text-align: right; background: #FFFA98;}
+.mat-column-Fec_Lectura {text-align: center; background: #BEF6FF;}
+.mat-column-Salida {text-align: right; background: #FFDEBE;}
+.mat-column-Por_Liquidar {text-align: right;  background: #91FF84;}
+.mat-column-Dias {text-align: center}
+ 
+
+.mat-header-cell {text-align: center; padding: 15px; }
+
+
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+ 
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+
+}
+th.mat-cell{
+    padding:15px;
+    text-align: center;
+    background: #cfcfcf;
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+
+
+@media screen and (max-width: 868px){
+    .grid-container{
+        height: 430px;
+    }
+
+    .container-cuerpo {
+        display: grid;
+        grid-template:
+        "fila1" 160px
+        "fila2" 400px
+        "foot" 0px / 
+        99%;
+    }
+
+    .container-cuerpo-fila1{
+        display: grid;
+        
+        grid-template:
+        "col1 col2 col2"   70px 
+        "col3 col3 col4"   70px/
+        150px 150px 150px  auto;
+    }
+    
+    .fila1-Modulo {
+        grid-area: col1;
+        width: 100%;
+    }
+
+    .fila1-Tipo_Proceso {
+        grid-area: col2;
+        width: 50%
+    }
+
+    .fila1-Ticket {
+        grid-area: col3;
+        width: 100%;
+    }
+
+
+    .button-finalizar {
+        grid-area: col4;
+    }
+
+  }
+
+
+  @media screen and (max-width: 600px){
+   .grid-container{
+       height: 640px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila1" 210px
+        "fila2" 400px
+        "foot" 0px / 
+        99%;
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        
+        grid-template:
+        "col1 col2"   70px 
+        "col3 col3"   70px
+        "col4 col4"   70px/
+        50% 50%  auto;
+    }
+    
+    .fila1-Modulo {
+        grid-area: col1;
+        width: 100%;
+    }
+
+    .fila1-Tipo_Proceso {
+        grid-area: col2;
+        width: 100%
+    }
+
+    .fila1-Ticket {
+        grid-area: col3;
+        width: 100%;
+    }
+
+
+    .button-finalizar {
+        grid-area: col4;
+        width: 50%;
+    }
+    
+  }

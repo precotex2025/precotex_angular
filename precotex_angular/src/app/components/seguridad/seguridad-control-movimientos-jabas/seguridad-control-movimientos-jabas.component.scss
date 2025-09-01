@@ -1,0 +1,362 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+   
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 700px;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #ffffff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 80px
+        "fila2" 80px
+        "fila3" 400px
+        "foot" 55px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    margin-top: 15px;
+}
+.container-cuerpo-fila3 {
+    grid-area: fila3;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+//fila 1 
+.container-cuerpo-fila1 {
+    display: grid;
+
+    grid-template:
+     "col1 col2 col3" 70px/
+     180px 180px 350px 
+}
+
+
+.fila1-guia {
+    grid-area: col1;
+    width: 185px; 
+    
+}
+
+.fila1-ruc-proveedor {
+    grid-area: col2;
+    width: 185px; 
+    
+}
+
+.fila1-nom-proveedor {
+    grid-area: col3;
+    width: 350px; 
+    
+}
+
+
+.container-cuerpo-fila2 {
+    display: grid;
+
+    grid-template:
+     "col1 col2 col3 col4 col5" 70px/
+     180px 80px 80px 180px 180px
+}
+
+.fila2-anadir {
+    grid-area: col1;
+    width: 185px; 
+    
+}
+.fila2-btn_anadir {
+    grid-area: col2;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #155724;
+    color: #ffffff;
+    width: 70px; 
+}
+
+
+
+.fila2-btn_regresar{
+    grid-area: col3;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 70px; 
+}
+
+.fila2-btn_agreagr_estado {
+    grid-area: col4;
+    margin-left: 0px;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width:130px;
+}
+
+.fila2-btn_limpiar {
+    grid-area: col5;
+    margin-left: 0px;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width:130px;
+ }
+
+
+/*.fila1-btn_baja{
+    grid-area: col8;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #e91919;
+    color: #ffffff;
+    width: 130px; 
+}*/
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot{
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+.mat-column-Des_Jaba,
+.mat-column-Estado,
+.mat-column-Operacion,
+.mat-column-Fecha, 
+.mat-column-Hora,
+.mat-column-Observacion,
+.mat-column-Usuario,
+.mat-column-Acciones
+{
+	text-align: center;
+	font-size: 13px;
+    font-family: arial;
+    padding: 10px;
+   
+}
+ 
+.mat-column-Des_Jaba{
+    width: 10px;
+}
+.mat-column-Estado{
+    width: 120px;
+}
+.mat-column-Observacion{
+    width: 120px;
+}
+.mat-column-Fecha{
+    width: 120px;
+}
+.mat-column-Hora{
+    width: 120px;
+}
+.mat-column-Usuario{
+    width: 50px;
+}
+.mat-column-Acciones{
+    width: 50px;
+}
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+ 
+}
+.paginador{
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+
+
+
+
+
+
+  @media screen and (max-width: 730px){
+   .grid-container{
+       height: 720px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila1" 160px
+        "fila2" 160px
+        "fila3" 400px
+        "foot" 55px /
+        99%; 
+    }
+    .container-cuerpo-fila1 {
+        display: grid;
+    
+        grid-template:
+         "col1 col2" 70px
+         "col3 col3" 70px/
+         170px 170px 
+    }
+    
+    
+    .fila1-guia {
+        grid-area: col1;
+        width: 170px;
+        
+    }
+    
+    .fila1-ruc-proveedor {
+        grid-area: col2;
+        width: 170px;
+        
+    }
+    
+    .fila1-nom-proveedor {
+        grid-area: col3;
+        width: 340px;
+        
+    }
+    
+    
+    .container-cuerpo-fila2 {
+        display: grid;
+    
+        grid-template:
+         "col1 col2 col3" 90px
+         "col4 col5 col5" 70px/
+         170px 85px 85px
+    }
+    
+    .fila2-anadir {
+        grid-area: col1;
+        width: 170px;
+        
+    }
+    .fila2-btn_anadir {
+        grid-area: col2;
+        width: 80px;
+    }
+        
+    .fila2-btn_regresar{
+        grid-area: col3;
+        width: 80px;
+    }
+    
+    .fila2-btn_agreagr_estado {
+       grid-area: col4;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       width: 160px
+    }
+
+    .fila2-btn_limpiar {
+        grid-area: col5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 160px
+     }
+    
+  }

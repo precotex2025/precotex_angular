@@ -1,0 +1,377 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+   
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; 
+
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+  
+    min-width: 350px;
+    min-height: 400px;
+    height: 640px;
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #ffffff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    margin-top: 30px;
+    padding: 10px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila0" 90px
+        "fila1" 90px
+        "fila2" 400px
+        "foot" 55px / 
+        99%;
+}
+
+.container-cuerpo-fila0 {
+    grid-area: fila0;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.fila0-grupo {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: -30px;
+    margin-bottom: auto;
+}
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    overflow: auto;
+    margin-top: -35px;
+    margin-bottom: -10px;
+    width: 100%;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+
+.container-cuerpo-fila1 {
+    display: grid;
+
+    grid-template:
+   /* "col1 col2 auto auto" 70px 
+    "col3 col4 col5 col6" 70px /
+    185px 70px 185px 70px;*/
+    "col3 col4 col5 col6 col2" 70px /
+    185px 70px 185px 70px 80px;
+}
+
+
+
+/*.fila1-Orden_Servicio {
+    grid-area: col1;
+    width: 180px; 
+}*/
+
+.fila1-btn_regresar {
+    grid-area: col2;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 70px; 
+}
+
+.fila1-anadir {
+    grid-area: col3;
+    width: 180px; 
+    
+}
+.fila1-btn_anadir {
+    grid-area: col4;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #155724;
+    color: #ffffff;
+    width: 70px; 
+}
+
+.fila1-eliminar {
+    grid-area: col5;
+    width: 180px;
+    
+}.fila1-btn_eliminar {
+    grid-area: col6;
+    width: 100%;
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #e91919;
+    color: #ffffff;
+    width: 70px; 
+}
+
+
+
+
+
+
+
+
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot{
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+.mat-column-Secuencia,
+.mat-column-Tela, 
+.mat-column-Peso,
+.mat-column-Bultos
+{
+	text-align: center;
+	font-size: 13px;
+    font-family: arial;
+    padding: 10px;
+   
+}
+ 
+.mat-column-Secuencia{
+    width: 10px;
+}
+.mat-column-Tela{
+    width: 120px;
+}
+.mat-column-Peso{
+    width: 120px;
+}
+.mat-column-Bultos{
+    width: 50px;
+}
+
+
+
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+ 
+}
+.paginador{
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+
+@media screen and (max-width: 1513px){
+    
+    .grid-container{
+        height: 710px;
+    }
+    .container-cuerpo {
+        display: grid;
+        margin-top: auto;
+        grid-template:
+        "fila0" 90px
+        "fila1" 90px
+        "fila2" 535px
+        "foot" 55px /
+        99%;
+    }
+    .container-cuerpo-fila0{
+        display: contents;
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        
+        grid-template:
+        /*"col1 col2 auto auto" 70px 
+        "col3 col4 col5 col6" 70px /
+        185px 70px 185px 70px;*/
+
+        "col3 col4 col5 col6 col2" 70px /
+        185px 70px 185px 70px 80px;
+    }
+
+    /*.fila1-Orden_Servicio {
+        grid-area: col1;
+        width: 180px;
+    }*/
+
+    .fila1-btn_regresar {
+        grid-area: col2;
+        width: 70px; 
+    }
+
+    .fila1-anadir {
+        grid-area: col3;
+        width: 180px;       
+    }
+    .fila1-btn_anadir {
+        grid-area: col4;
+        width: 70px; 
+    }
+
+    .fila1-eliminar {
+        grid-area: col5; 
+        width: 180px;
+    }
+    .fila1-btn_eliminar {
+        grid-area: col6;
+        width: 70px; 
+    }
+
+}
+
+
+
+
+  @media screen and (max-width: 683px){
+   .grid-container{
+       height: 620px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila0" 90px
+        "fila1" 90px
+        "fila2" 400px
+        "foot" 55px /
+        99%; 
+
+        margin-top: auto;
+    }
+    .container-cuerpo-fila0{
+        display: grid;
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        grid-template:
+        /*"col1 col2 auto auto" 70px 
+        "col3 col4 col5 col6" 70px /
+        115px 70px 115px 70px;*/
+      
+        "col3 col4 col5 col6 col2" 70px /
+        115px 70px 115px 70px 80px;
+    } 
+    /*.fila1-Orden_Servicio {
+        grid-area: col1;
+        width: 110px;
+    }*/
+
+    .fila1-btn_regresar {
+        grid-area: col2;
+        width: 70px; 
+    }
+
+    .fila1-anadir {
+        grid-area: col3;
+        width: 110px;
+        
+    }.fila1-btn_anadir {
+        grid-area: col4;
+        width: 70px; 
+    }
+
+    .fila1-eliminar {
+        grid-area: col5; 
+        width: 110px;
+    }
+    .fila1-btn_eliminar {
+        grid-area: col6;
+        width: 70px; 
+    
+    }
+  }
+
+
+  .boton-regresar {
+    position: fixed;  /* Fija el botón en la pantalla */
+    top: 60px;         /* 5 píxeles desde el borde superior de la ventana */
+    right: 5px;       /* 5 píxeles desde el borde derecho de la ventana */
+    padding: 10px 20px;  /* Espaciado dentro del botón */
+    background-color: #007bff; /* Color de fondo del botón */
+    color: white;     /* Color del texto */
+    border: none;     /* Sin borde */
+    border-radius: 70px; /* Bordes redondeados */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    font-size: 16px;  /* Tamaño de fuente */
+    cursor: pointer; /* Cambia el cursor a mano */
+    z-index: 1000;    /* Asegura que el botón esté sobre otros elementos */
+    transition: background-color 0.3s ease; /* Transición suave al pasar el ratón */
+  }
+
+  /* Estilo para cuando el ratón pasa sobre el botón */
+.boton-regresar:hover {
+    background-color: #0056b3; /* Color de fondo cuando pasa el ratón */
+  }

@@ -1,0 +1,157 @@
+
+<div class="container">
+
+    <div class="grid-container">
+
+        <div class="title">ESTILOS POR LIQUIDAR</div>
+
+        <form class="container-cuerpo" [formGroup]="formulario">
+        
+            <div class="container-cuerpo-fila1">
+
+
+            <div class="container-tables">
+                <div class="container-table">
+                    <div class="container-title">
+                        ESTILOS PENDIENTES POR LIQUIDAR DEL PROGRAMA DE HOY
+                    </div>
+                    <table mat-table #table  [dataSource]="dataSource"   class="mat-elevation-z8" >
+                        <ng-container matColumnDef="Estilo">
+                            <th mat-header-cell *matHeaderCellDef> ESTILO </th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.COD_ESTCLI}} </td>
+                        </ng-container>
+    
+                  
+                        <ng-container matColumnDef="Des_Cliente">
+                            <th mat-header-cell *matHeaderCellDef> CLIENTE </th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.DES_CLIENTE}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="Icono_Web">
+                            <th mat-header-cell *matHeaderCellDef> IMAGEN </th>
+                            <td mat-cell *matCellDef="let data_det"> 
+                                <img [src] ="data_det.ICONO_WEB" 
+                                style="width: 150px;height: 150px; object-fit: contain;">
+                            </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="Des_Present">
+                            <th mat-header-cell *matHeaderCellDef> COLOR </th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.DES_PRESENT}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="Por_Liquidar">
+                            <th mat-header-cell *matHeaderCellDef> POR LIQUIDAR </th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.POR_LIQUIDAR}} </td>
+                        </ng-container>
+    
+                        <!--<ng-container matColumnDef="Acciones">
+                            <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
+                            <td mat-cell *matCellDef="let data_det">
+                                <a mat-icon-button *ngIf="data_det.COD_ORDPRO.length>0"
+                                    >
+                                    <mat-icon color="warn">delete</mat-icon>
+                                </a>
+                            </td>
+                            
+                        </ng-container>
+                    -->
+    
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns_cab; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;">
+                        </tr>
+                    </table>
+                    <mat-paginator  class="paginador" #MatPaginator1 [pageSizeOptions]="[4]" showFirstLastButtons aria-label="Select page of periodic elements">
+                    </mat-paginator>
+                </div>
+                <div class="container-table2">
+                    <div class="container-title2">
+                        ESTILOS ACUMULADOS PENDIENTES POR LIQUIDAR
+                    </div>
+                    <table mat-table #table  [dataSource]="dataSource2"   class="mat-elevation-z8" >
+                        <ng-container matColumnDef="Estilo">
+                            <th mat-header-cell *matHeaderCellDef> ESTILO </th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.COD_ESTCLI}} </td>
+                        </ng-container>
+    
+                  
+                        <ng-container matColumnDef="Des_Cliente">
+                            <th mat-header-cell *matHeaderCellDef> CLIENTE </th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.DES_CLIENTE}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="Des_Present">
+                            <th mat-header-cell *matHeaderCellDef> COLOR </th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.DES_PRESENT}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="Fecha_Ingreso">
+                            <th mat-header-cell *matHeaderCellDef> FEC. INGRESO </th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.FECHA_INGRESO}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="Ingreso">
+                            <th mat-header-cell *matHeaderCellDef> INGRESO A INSPECCION </th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.INGRESO}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Fec_Lectura">
+                            <th mat-header-cell *matHeaderCellDef> FEC. LECTURA </th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.FEC_LECTURA}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Salida">
+                            <th mat-header-cell *matHeaderCellDef> SALIDA A ACABADOS </th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.SALIDA}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Por_Liquidar">
+                            <th mat-header-cell *matHeaderCellDef> POR LIQUIDAR </th>
+                            <td mat-cell *matCellDef="let data_det2"> {{data_det2.POR_LIQUIDAR}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Dias">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell"></th>
+                            <td mat-cell *matCellDef="let data_det2" > <button *ngIf="data_det2.DIAS == 'S'; else btnerr" type="button"style="background:#f44336; width: 10px;" class="button-agregar" mat-flat-button></button>   
+                                <ng-template #btnerr><button type="button" style="background:#fcc5ff; width: 10px;" class="button-agregar" mat-flat-button ></button></ng-template>
+                            </td>
+                        </ng-container>
+
+
+                         
+                        <!--<ng-container matColumnDef="Acciones">
+                            <th mat-header-cell *matHeaderCellDef>ACCIONES</th>
+                            <td mat-cell *matCellDef="let data_det">
+                                <a mat-icon-button *ngIf="data_det.COD_ORDPRO.length>0"
+                                    >
+                                    <mat-icon color="warn">delete</mat-icon>
+                                </a>
+                            </td>
+                            
+                        </ng-container>
+                    -->
+    
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns_cab2; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns_cab2;">
+                        </tr>
+                    </table>
+                    <mat-paginator  class="paginador" #MatPaginator2 [pageSizeOptions]="[10]" showFirstLastButtons aria-label="Select page of periodic elements">
+                    </mat-paginator>
+                </div>
+            </div>
+          
+
+            </div>
+
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

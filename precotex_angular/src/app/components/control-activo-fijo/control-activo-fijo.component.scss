@@ -1,0 +1,565 @@
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+   
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 640px;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #ffffff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 115px
+        "fila2" 115px
+        "foot" 55px / 
+        99%;
+}
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+.container-cuerpo-panel1 {
+    grid-area: fila2;
+    margin-top: 15px;
+}
+.container-cuerpo-panel2 {
+    grid-area: fila2;
+    margin-top: 15px;
+}
+.container-cuerpo-panel3 {
+    grid-area: fila2;
+    margin-top: 15px;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+::ng-deep .mat-expansion-panel-content>.mat-expansion-panel-body{
+    display: block !important;
+    padding: 10px!important;
+}
+
+//fila 1 
+.container-cuerpo-fila1 {
+    display: grid;
+
+    grid-template:
+        "col1 col2 col3 col4 col5 col6 col7 col8" auto /
+        120px 120px 120px 120px 120px 120px 120px auto;
+}
+
+
+.fila1-Empresa {
+    grid-area: col1;
+    width: 120px;
+}
+.fila1-Sede {
+    grid-area: col2;
+    width: 120px; 
+}
+.fila1-Piso {
+    grid-area: col3;
+    width: 120px;
+}
+.fila1-Ccosto {
+    grid-area: col4;
+    width: 120px;
+}
+.fila1-Responsable {
+    grid-area: col5;
+    width: 120px;
+}
+.fila1-CodAct {
+    grid-area: col6;
+    width: 120px;
+}
+.fila1-ClaseAct {
+    grid-area: col7;
+    width: 120px;   
+}
+.fila1-Fijar {
+    grid-area: col8;
+    width: 120px;
+    margin-left: 10px; 
+}
+
+.container-cuerpo-panel1 {
+    display: grid;
+    grid-template:
+        "col1 col2 col3 col4 col5 col6 col7" auto /
+        120px 120px 120px 120px 120px 120px auto;
+}
+.fila1-Descripcion-Equipo {
+    grid-area: col1;
+    width: 120px;
+}
+.fila1-Marca-Equipo {
+    grid-area: col2;
+    width: 120px; 
+}
+.fila1-Modelo-Equipo {
+    grid-area: col3;
+    width: 120px;
+}
+.fila1-Serie-Equipo {
+    grid-area: col4;
+    width: 120px;
+}
+.fila1-Estado-Equipo {
+    grid-area: col5;
+    width: 120px;
+}
+.fila1-Uso-Equipo {
+    grid-area: col6;
+    width: 120px;
+}
+.fila1-Observacion-Equipo {
+    grid-area: col7;
+    width: 120px;   
+}
+
+.container-cuerpo-panel2 {
+    display: grid;
+    grid-template:
+        "col1 col2 col3 col4 col5 col6" auto /
+        120px 120px 120px 120px 120px auto;
+}
+.fila1-Descripcion-Mueble {
+    grid-area: col1;
+    width: 120px;
+}
+.fila1-Color-Mueble {
+    grid-area: col2;
+    width: 120px; 
+}
+.fila1-Medidas-Mueble {
+    grid-area: col3;
+    width: 120px;
+}
+.fila1-Estado-Mueble {
+    grid-area: col4;
+    width: 120px;
+}
+.fila1-Uso-Mueble {
+    grid-area: col5;
+    width: 120px;
+}
+.fila1-Observacion-Mueble {
+    grid-area: col6;
+    width: 120px;
+}
+
+.container-cuerpo-panel3 {
+    display: grid;
+    grid-template:
+    "col1 col2 col3 col4 col5 col6 col7" auto
+    "col8 col9 col10 col11 col12 col13 col13" auto /
+    120px 120px 120px 120px 120px 120px 120px auto;
+}
+.fila1-Descripcion-Vehiculo {
+    grid-area: col1;
+    width: 120px;
+}
+.fila1-Marca-Vehiculo {
+    grid-area: col2;
+    width: 120px; 
+}
+.fila1-Modelo-Vehiculo {
+    grid-area: col3;
+    width: 120px;
+}
+.fila1-Motor-Vehiculo {
+    grid-area: col4;
+    width: 120px;
+}
+.ffila1-Chasis-Vehiculo {
+    grid-area: col5;
+    width: 120px;
+}
+.fila1-Placa-Vehiculo {
+    grid-area: col6;
+    width: 120px;
+}
+.fila1-Color-Vehiculo {
+    grid-area: col7;
+    width: 120px;
+}
+
+.fila1-Combustible-Vehiculo {
+    grid-area: col8;
+    width: 120px;
+}
+
+.fila1-Caja-Vehiculo {
+    grid-area: col9;
+    width: 120px;
+}
+
+.fila1-Asiento-Vehiculo {
+    grid-area: col10;
+    width: 120px;
+}
+
+.fila1-Fabricacion-Vehiculo {
+    grid-area: col11;
+    width: 120px;
+}
+
+.fila1-Ejes-Vehiculo {
+    grid-area: col12;
+    width: 120px;
+}
+
+.fila1-Observacion-Vehiculo {
+    grid-area: col13;
+    width: 120px;
+}
+
+.example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.fila1-clear {
+    width: 100%;
+    height: 40px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 80px;  
+}
+
+.fila1-check {
+    width: 100%;
+    height: 40px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 80px;  
+}
+
+.example-section {
+    //display: flex;
+    align-content: center;
+    align-items: center; 
+    height: 60px;
+  }
+  
+  .example-margin {
+    //margin: 0 10px 20px 15px;
+    //margin: 0 0px 20px 0px;
+  }
+
+mat-checkbox-inner-container{
+    height: 20px;
+    width: 20px;    
+}
+
+.button-agregar {
+    margin: 0 auto;
+    margin: 0px 0px 0px 10px;
+    //margin: 0px 0px 0px 5px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 45px;
+    background-color: #3f51b5;
+    color: #ffffff;
+}
+
+
+
+  @media screen and (max-width: 683px){
+ 
+   .grid-container{
+       height: 1100px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila1" 420px
+        "fila2" 400px
+        "foot" 55px /
+        99%; 
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        grid-template:
+        "col1 col2" 70px 
+        "col3 col4" 70px
+        "col5 col6" 70px  
+        "col7 col8" 70px
+        "col9 col10" 70px/
+        49% 49%;
+    } 
+    .fila1-Empresa {
+        grid-area: col1;
+        width: 100%;
+    }
+    .fila1-Sede {
+        grid-area: col2; 
+        width: 100%;
+    }
+    .fila1-Piso {
+        grid-area: col3;
+        width: 100%;
+    }      
+    .fila1-Ccosto {
+        grid-area: col4;
+        width: 100%;
+    }
+    .fila1-Area {
+        grid-area: col5;
+        width: 100%;
+    }
+    .fila1-Responsable {
+        grid-area: col6;
+        width: 100%;
+    }
+    .fila1-Usuario {
+        grid-area: col7;
+        width: 100%;
+    }
+    .fila1-Ubicacion {
+        grid-area: col11;
+        width: 100%;
+    }
+    .fila1-CodAct {
+        grid-area: col8;
+        width: 100%;
+    }
+    .fila1-ClaseAct {
+        grid-area: col9;
+        width: 100%;
+    }
+
+    /*.fila1-UsuarioLog {
+        grid-area: col10;
+        width: 100%;
+    }*/
+
+    .fila1-Fijar {
+        grid-area: col10;
+        width: 100%;
+           
+    }
+    .btn-container{
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+    }
+
+
+    .container-cuerpo-panel1{
+        display: grid;
+        
+        grid-template:
+        "col1 col2" 70px 
+        "col3 col4" 70px
+        "col5 col6" 70px  
+        "col7 col7" 70px /
+        49% 49%;
+    
+    .fila1-Descripcion-Equipo {
+        grid-area: col1;
+        width: 100%;
+    }
+    .fila1-Marca-Equipo {
+        grid-area: col2;
+        width: 100%;
+    }
+    .fila1-Modelo-Equipo {
+        grid-area: col3;
+        width: 100%;
+    }
+    .fila1-Serie-Equipo {
+        grid-area: col4;
+        width: 100%;
+    }
+    .fila1-Estado-Equipo {
+        grid-area: col5;
+        width: 100%;
+    }
+    .fila1-Uso-Equipo {
+        grid-area: col6;
+        width: 100%;
+    }
+    .fila1-Observacion-Equipo {
+        grid-area: col7;
+        width: 100%;
+    }
+}
+
+
+    .container-cuerpo-panel2{
+        display: grid;
+        
+        grid-template:
+        "col1 col2" 70px 
+        "col3 col4" 70px
+        "col5 col5" 70px
+        "col6 col6" 70px/
+        49% 49%;
+    
+    .fila1-Descripcion-Mueble {
+        grid-area: col1;
+        width: 100%;
+    }
+    .fila1-Color-Mueble {
+        grid-area: col2;
+        width: 100%;
+    }
+    .fila1-Medidas-Mueble {
+        grid-area: col3;
+        width: 100%;
+    }
+    .fila1-Estado-Mueble {
+        grid-area: col4;
+        width: 100%;
+    }
+    .fila1-Uso-Mueble {
+        grid-area: col5;
+        width: 100%;
+    }
+    .fila1-Observacion-Mueble {
+        grid-area: col6;
+        width: 100%;
+    }
+} 
+
+    .container-cuerpo-panel3{
+        display: grid;
+        
+        grid-template:
+        "col1 col2" 70px 
+        "col3 col4" 70px
+        "col5 col6" 70px 
+        "col7 col8" 70px
+        "col9 col10" 70px
+        "col11 col12" 70px
+        "col13 col13" 70px/
+        49% 49%;
+    
+    .fila1-Descripcion-Vehiculo {
+        grid-area: col1;
+        width: 100%;
+    }
+    .fila1-Marca-Vehiculo {
+        grid-area: col2;
+        width: 100%;
+    }
+    .fila1-Modelo-Vehiculo {
+        grid-area: col3;
+        width: 100%;
+    }
+    .fila1-Motor-Vehiculo {
+        grid-area: col4;
+        width: 100%;
+    }
+    .ffila1-Chasis-Vehiculo {
+        grid-area: col5;
+        width: 100%;
+    }
+    .fila1-Placa-Vehiculo {
+        grid-area: col6;
+        width: 100%;
+    }
+    .fila1-Color-Vehiculo {
+        grid-area: col7;
+        width: 100%;
+    }
+    
+    .fila1-Combustible-Vehiculo {
+        grid-area: col8;
+        width: 100%;
+    }
+    
+    .fila1-Caja-Vehiculo {
+        grid-area: col9;
+        width: 100%;
+    }
+    
+    .fila1-Asiento-Vehiculo {
+        grid-area: col10;
+        width: 100%;
+    }
+    
+    .fila1-Fabricacion-Vehiculo {
+        grid-area: col11;
+        width: 100%;
+    }
+    
+    .fila1-Ejes-Vehiculo {
+        grid-area: col12;
+        width: 100%;
+    }
+    
+    .fila1-Observacion-Vehiculo {
+        grid-area: col13;
+        width: 100%;
+    }
+}
+}
+
+::ng-deep .mat-input-element:disabled{
+    color: #222;
+}
+
+::ng-deep .mat-flat-button{
+    padding: 0;
+}
+

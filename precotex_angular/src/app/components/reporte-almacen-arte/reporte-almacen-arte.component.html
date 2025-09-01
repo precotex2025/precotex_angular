@@ -1,0 +1,125 @@
+<!--Produccion de artes-->
+<div class="container">
+    <div class="grid-container">
+
+      <div class="title">Reporte Almacen Artes</div>
+      
+      <form class="container-cuerpo" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1">
+
+              <mat-form-field class="fila1-op">
+                <mat-label>OP*</mat-label>
+                <input matInput type="text" placeholder="OP" formControlName="sOP" maxlength="5" autocomplete="off" (input)="buscarEstiloClientexOP()">
+              </mat-form-field>
+
+              <mat-form-field class="fila1-estilo"> 
+                <mat-label>Estilo</mat-label>
+                <input matInput type="text" placeholder="Estilo" value="" autocomplete="off" formControlName="sEstilo">
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="fila1-color">
+                <mat-label>Color*</mat-label>
+                <mat-select formControlName="sColor">
+                    <mat-option [value]="">
+                    -- Todos --
+                    </mat-option>
+                    <mat-option *ngFor="let option of lstOperacionColor" [value]="option.Cod_Present">
+                        {{option.Des_Present}}
+                    </mat-option>
+                </mat-select>
+              </mat-form-field>
+            
+              <button type="button" class="fila1-buscar" mat-flat-button (click)="buscarInfoBolsasArte()">                    
+                  <mat-icon aria-label="person">search</mat-icon>Buscar
+              </button>
+
+              <button type="button" class="fila1-excel" mat-flat-button (click)="generateExcel()">
+                <mat-icon aria-label="create_new_folder">create_new_folder </mat-icon>
+                Reporte Excel
+              </button>
+            
+            </div>  
+
+            <div class="container-cuerpo-fila2">
+              <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+      
+                <ng-container matColumnDef="TEMPORADA">
+                  <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                    TEMPORADA
+                  </th>
+                  <td mat-cell *matCellDef="let data_det">
+                    {{ data_det.TEMPORADA }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ESTILO_CLIENTE">
+                  <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                    ESTILO CLIENTE
+                  </th>
+                  <td mat-cell *matCellDef="let data_det">
+                      {{ data_det.ESTILO_CLIENTE }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="OP">
+                  <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                    O/P 
+                  </th>
+                  <td mat-cell *matCellDef="let data_det">
+                      {{ data_det.OP }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="TIPO_PRENDA">
+                  <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                    TIPO PRENDA
+                  </th>
+                  <td mat-cell *matCellDef="let data_det">
+                      {{ data_det.TIPO_PRENDA }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="COLOR">
+                  <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                    COLOR
+                  </th>
+                  <td mat-cell *matCellDef="let data_det">
+                      {{ data_det.COLOR }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="TALLA">
+                  <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                    TALLA
+                  </th>
+                  <td mat-cell *matCellDef="let data_det">
+                      {{ data_det.TALLA }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="STOCK_PRENDA">
+                  <th mat-header-cell *matHeaderCellDef class="mat-header-cell">
+                    STOCK PRENDA
+                  </th>
+                  <td mat-cell *matCellDef="let data_det">
+                      {{ data_det.STOCK_PRENDA }}
+                  </td>
+                </ng-container>
+
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="displayedColumns_cab; sticky: true"
+                ></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns_cab"></tr>
+              </table>
+          </div>
+          
+        </form>
+
+    </div>
+  </div>
+  
+  <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center">Cargando...</p>
+  </ngx-spinner>
+  

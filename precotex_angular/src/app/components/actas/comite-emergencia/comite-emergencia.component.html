@@ -1,0 +1,235 @@
+<div class="container-fluid">
+    <div class="grid-container">
+        <div class="title">Acta Comite de Emergencia</div>
+
+        <div class="find">
+            <mat-card class="list-form">
+                <mat-card-header>
+                    <mat-card-subtitle>Listado de Actas</mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content>
+                    <div>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Rango de Fecha</mat-label>
+                            <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                                <input matStartDate formControlName="start" placeholder="Fecha inicio">
+                                <input matEndDate formControlName="end" placeholder="Fecha fin">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-label>Filtrar</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar busqueda" #input>
+                        </mat-form-field>
+
+                        <button mat-button type="button" color="primary" (click)="listarComiteEmergencia()"><mat-icon>search</mat-icon>Buscar</button>
+                        <button mat-button type="button" color="primary" (click)="onInsertarRegistro()"><mat-icon>add</mat-icon>Nuevo</button>
+                        <!--<button mat-button type="button" color="primary" (click)="onExportarRegistro()"><mat-icon>file_download</mat-icon>Descargar</button>-->
+                    </div>
+                    <div class="col-md-12 tabla">
+                        <table mat-table [dataSource]='dataSource' matSort #sortData1="matSort" matSortActive="Fec_ActaComite" matSortDirection="desc" class="mat-elevation-z8">
+                            <ng-container matColumnDef="Num_Acta">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Número </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Num_Acta }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Fec_ActaComite">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Comite </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Fec_ActaComite | date: 'dd-MM-yyyy HH:mm' }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Des_Sede">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Sede </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Des_Sede }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Des_Area">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Dependencia </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Des_Area }} </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="Des_Proceso">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Proceso </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Des_Proceso }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Des_Problema">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Problema </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Des_Problema }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Cod_OrdPro">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> OP </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.Cod_OrdPro }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Flg_Estado">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span [ngClass]="{'flg_grey':element.Flg_Estado=='P', 'flg_green':element.Flg_Estado=='A', 'flg_red':element.Flg_Estado=='D'}">
+                                        {{ element.Flg_Estado == 'P' ? 'PENDIENTE' : element.Flg_Estado == 'A' ? 'APROBADO' : 'DESAPROBADO' }}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Acciones">
+                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                <td class="mat-header-cell" mat-cell *matCellDef="let element">
+                                    <a mat-icon-button (click)="onEditarRegistro(element)" matTooltip="Editar Acta">
+                                        <mat-icon color="primary">edit</mat-icon>
+                                    </a>
+
+                                    <a mat-icon-button (click)="onAnularRegistro(element.Id_ActaComite)" matTooltip="Anular Acta" *ngIf="element.Flg_Estado == 'P'">
+                                        <mat-icon color="warn">delete</mat-icon>
+                                    </a>
+
+                                    <a mat-icon-button (click)="onImprimirRegistro(element)" matTooltip="Generar Acta (PDF)" *ngIf="element.Flg_Estado != 'P'">
+                                        <mat-icon color="accent">picture_as_pdf</mat-icon>
+                                    </a>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+
+                        <mat-paginator #paginatorData1 [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>                        
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>
+
+<div id="contentToConvert" *ngIf="verPdf">
+    <table style="width:60%" border="1px">
+        <!--<th witdh="30%"></th>
+        <th witdh="40%"></th>
+        <th witdh="15%"></th>
+        <th witdh="15%"></th>-->
+
+        <tr>
+            <td colspan="1" rowspan="2" witdh="30%">
+                <img src="assets/logo.jpg" alt="" srcset="">
+            </td>
+            <th colspan="1" rowspan="2" witdh="40%">
+                <h2>FORMATO <br> ACTA DE COMITE DE EMERGENCIA</h2>
+            </th>
+            <td colspan="1" witdh="15%">FOR-GG-DIR-001</td>
+            <td colspan="1" witdh="15%">27/05/2025</td>
+        </tr>
+        <tr>
+            <td colspan="1">Versión 01</td>
+            <td colspan="1">Página 1 de 1</td>
+        </tr>
+    </table>
+    <br>
+    <table style="width:60%" border="1px">
+        <tr>
+            <th colspan="2" rowspan="1">
+                <h3><b>ACTA DE REUNION DE COMITE N° {{ acta[0].Num_Acta }}</b></h3>
+            </th>
+        </tr>
+        <tr>
+            <!--<td colspan="1" rowspan="1">Hora: {{ horaActa }} </td>
+            <td colspan="1" rowspan="1">Fecha:  {{ fechaActa }} </td>-->
+            <td>Fecha/Hora:</td>
+            <td>{{ fechaActa }}</td>
+        </tr>
+        <tr>
+            <td>Sede</td>
+            <td>{{ acta[0].Des_Sede }}</td>
+        </tr>
+        <tr>
+            <td>Dependencia que convoca</td>
+            <td>{{ acta[0].Des_Area }}</td>
+        </tr>
+        <tr>
+            <td>Proceso</td>
+            <td>{{ acta[0].Des_Proceso }}</td>
+        </tr>
+        <tr>
+            <td>Problema a debatir</td>
+            <td>{{ acta[0].Det_Problema }}</td>
+        </tr>
+        <tr>
+            <td>Cliente/Estilo/OP/Partida/Color</td>
+            <td>{{ acta[0].Nom_Cliente + " / " + acta[0].Cod_EstCli + " / " + acta[0].Cod_OrdPro + " / " + acta[0].Cod_OrdTra + " / " + acta[0].Des_Present }}</td>
+        </tr>
+    </table>
+
+    <table style="width:60%" border="1px">
+        <tr>
+            <td>
+                Detalle de la No Coformidad/Problema:
+                <br>
+                {{ acta[0].Des_Detalle }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Decisión Final:
+                <br>
+                {{ acta[0].Des_Decision }}
+            </td>
+        </tr>        
+    </table>
+
+    <table style="width:60%" border="1px">
+        <tr>
+            <td>Votos a favor</td>
+            <td>{{ votoFavor }}</td>
+            <td>Votos en contra</td>
+            <td>{{ votoContra }}</td>
+            <td>Resultado</td>
+            <td><b>{{ acta[0].Detalle.length == 0 ? 'PENDIENTE' : (votoFavor > votoContra ? 'APROBADO' : 'DESAPROBADO') }}</b></td>
+        </tr>
+    </table>
+
+    <table style="width:60%" border="1px">
+        <tr>
+            <th colspan="6" rowspan="1">
+                FIRMAS DEL COMITE DE EMERGENCIA
+            </th>
+        </tr>
+        <tr>
+            <th witdh="30%">Apellidos y Nombres</th>
+            <th witdh="20%">Cargo</th>
+            <th witdh="10%">Voto Favor</th>
+            <th witdh="10%">Voto Contra</th>
+            <th witdh="15%">Area</th>
+            <th witdh="15%">Firma</th>
+        </tr>
+        <tr *ngFor="let item of acta[0].Detalle">
+            <td>{{ item.Nom_Trabajador }}</td>
+            <td>{{ item.Des_Ocupacion }}</td>
+            <td>{{ item.Flg_Voto == 1 ? 'X' : '' }}</td>
+            <td>{{ item.Flg_Voto == 0 ? 'X' : '' }}</td>
+            <td>{{ item.Des_Area }}</td>
+            <td>
+                <img [src]="item.Signatura64" width="80px" id="img1" alt="" srcset="">
+            </td>
+        </tr>
+    </table>
+
+    <table style="width:60%" border="1px">
+        <tr>
+            <td>
+                Apellido y Nombre que elabora el acta:
+                <br>
+                {{ acta[0].Nom_Responsable }}
+            </td>            
+            <td>Firma</td>
+            <td>
+                <img [src]="acta[0].Signatura64" width="80px" id="img1" alt="" srcset="">
+            </td>
+        </tr>
+    </table>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner> 

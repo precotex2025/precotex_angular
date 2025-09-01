@@ -1,0 +1,19 @@
+<mat-card>
+    <mat-card-header style="display: flex; justify-content: space-around;">
+        <strong>Crear Nuevo Rol</strong>
+        <span aria-label="Close" class="cerrar" (click)="closeModal()" aria-hidden="true">&times;</span>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="row">
+            <div class="columna">
+                <mat-form-field class="fila1-nombres" appearance="fill">
+                    <mat-label>Descripción Del Rol </mat-label>
+                    <input matInput type="text"  placeholder="Rol" autocomplete="off" [(ngModel)]="Des_Rol"/>
+                </mat-form-field>    
+            </div>
+            <div class="columna">
+                <button (click)="guardarRol()" mat-flat-button color="primary"><mat-icon>save</mat-icon> Guardar</button>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,118 @@
+ 
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container">  
+ <!--*ngIf="Titulo == undefined; else titulomodificar"-->
+        <div class="title"><strong  *ngIf="Titulo == undefined; else titulomodificar">Registrar </strong>Detalle Liquidacion Avios Costura {{this.Num_Item}}</div>
+        <ng-template #titulomodificar><strong>Modificar </strong></ng-template>
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)" >
+        
+            <div class="container-cuerpo-fila1">
+                    <mat-form-field class="fila1-Estado">
+                        <mat-label>Estado</mat-label>
+                        <mat-select formControlName="Estado">
+                        <mat-option value="Nuevo">Nuevo</mat-option>    
+                        <mat-option value="Usado">Usado</mat-option>                   
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="fila1-OP">  
+                        <mat-label>OP/Estilo</mat-label>
+                        <input matInput type="text" maxlength="10"  placeholder="OP" value="" 
+                            autocomplete="off" formControlName="OP" (input)="buscarEstiloOP()">
+                    </mat-form-field>   
+
+                    <input matInput type="text"  style="display: none;" formControlName="IdLiquidacion" value="" >
+  
+                    <mat-form-field appearance="fill" class="fila1-Item" >
+                        <mat-label>Item</mat-label>
+                        <mat-select formControlName="Item" (selectionChange)="selectItem($event)" >                           
+                          <mat-option *ngFor="let option of listar_OP" [value]="option.N"  >
+                            {{option.item}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field> 
+                   
+                    <mat-form-field class="fila1-Artículo"> 
+                        <mat-label>Articulo</mat-label>
+                        <input matInput type="text"   placeholder="Artículo" value="" 
+                            autocomplete="off" formControlName="Articulo" maxlength="100" readonly>
+                    </mat-form-field>  
+                    <mat-form-field class="fila1-Grosor"> 
+                        <mat-label>Grosor Hilo</mat-label>
+                        <input matInput type="text"   placeholder="Grosor Hilo" value="" 
+                            autocomplete="off" formControlName="Grosor" maxlength="20">
+                            <mat-error *ngIf="grosorErrors">{{ grosorErrors }}</mat-error>  
+                    </mat-form-field>  
+                    <mat-form-field class="fila1-Talla"> 
+                        <mat-label>Talla(Medida)</mat-label>
+                        <input matInput type="text"   placeholder="Talla(Medida)" value="" 
+                            autocomplete="off" formControlName="Talla" maxlength="20" style="text-transform:uppercase;">
+                            <mat-error *ngIf="tallaErrors">{{ tallaErrors }}</mat-error>  
+                    </mat-form-field> 
+                    <mat-form-field class="fila1-ColorPro"> 
+                        <mat-label>Código Color Proveedor</mat-label>
+                        <input matInput type="text"   placeholder="Código Color Proveedor" value="" 
+                            autocomplete="off" formControlName="CodigoColorPro" maxlength="10" style="text-transform:uppercase;">
+                            <mat-error *ngIf="codigoColorErrors">{{ codigoColorErrors }}</mat-error>  
+                    </mat-form-field>   
+                    <mat-form-field class="fila1-Color"> 
+                        <mat-label>Color</mat-label>
+                        <input matInput type="text"   placeholder="Color" value="" 
+                            autocomplete="off" formControlName="Color" maxlength="30" readonly>
+                    </mat-form-field> 
+                    <mat-form-field class="fila1-Lote"> 
+                        <mat-label>Lote Hilo</mat-label>
+                        <input matInput type="number" placeholder="Lote Hilo" value="" 
+                            autocomplete="off" formControlName="Lote" maxlength="10">
+                            <mat-error *ngIf="loteErrors">{{ loteErrors }}</mat-error>  
+                    </mat-form-field>  
+                    <mat-form-field class="fila1-Marca"> 
+                        <mat-label>Marca</mat-label>
+                        <input matInput type="text"   placeholder="Marca" value="" 
+                            autocomplete="off" formControlName="Marca" maxlength="20" style="text-transform:uppercase;">
+                            <mat-error *ngIf="marcaErrors">{{ marcaErrors }}</mat-error>  
+                    </mat-form-field> 
+                    <mat-form-field class="fila1-Conos"> 
+                        <mat-label>Cantidad N° Conos</mat-label>
+                        <input matInput type="number" placeholder="Cantidad N° Conos" value="" 
+                            autocomplete="off" formControlName="CantidadConos" maxlength="3">
+                            <mat-error *ngIf="conosErrors">{{ conosErrors }}</mat-error>  
+                    </mat-form-field>  
+                    <mat-form-field class="fila1-Descripcion"> 
+                        <mat-label>Descripción</mat-label>
+                        <textarea matInput type="text"  placeholder="Descripción" value="" 
+                            autocomplete="off" formControlName="Descripcion" maxlength="150"></textarea>
+                    </mat-form-field>   
+
+                
+            </div>     
+ 
+
+  
+            <div class="container-cuerpo-foot">
+               <!-- *ngIf="Titulo == undefined; else btnmodificar"  [disabled]="!formulario.valid"-->
+               <button  type="submit" class="button-agregar"*ngIf="Titulo == undefined; else btnmodificar"  mat-dialog-close="false" mat-flat-button [disabled]="!formulario.valid" >
+                    <mat-icon aria-label="person" >save
+                    </mat-icon>  Registrar
+                </button> 
+                <ng-template #btnmodificar><button type="submit" class="button-agregar" mat-dialog-close="false" [disabled]="!formulario.valid"  mat-flat-button>
+                    <mat-icon aria-label="person" >create
+                    </mat-icon>  Modificar
+                </button></ng-template>
+               
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>               
+            </div>
+        </form>
+
+    </div> 
+
+
+</div>
+
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner>      

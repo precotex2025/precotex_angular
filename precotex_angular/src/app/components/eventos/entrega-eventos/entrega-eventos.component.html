@@ -1,0 +1,262 @@
+<div class="container-fluid">
+    <div class="grid-container">
+        <div class="title">Lectura de Entregas - Eventos</div>
+
+        <div class="find">
+            <mat-card class="list-form">
+                <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)">
+                    <mat-tab label="Registro">
+                        <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+                            <mat-card class="example-card">
+                                <mat-card-header>
+                                    <mat-card-subtitle>Datos de Colaborador</mat-card-subtitle>
+                                </mat-card-header>
+
+                                <mat-card-content>
+                                    <mat-divider></mat-divider>
+                                    <br>
+                                    <p>
+                                        <mat-form-field class="example-width-30" appearance="outline">
+                                            <mat-label>Evento</mat-label>
+                                            <mat-select formControlName="Id_Evento" (selectionChange)="selectEvento($event)">
+                                                <mat-option *ngFor="let item of dataEventos" [value]="item.Id_Evento">
+                                                    {{ item.Des_Evento }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+
+                                        <mat-form-field class="example-width-30" appearance="outline">
+                                            <mat-label>Lugar</mat-label>
+                                            <input matInput type="text" value="" autocomplete="off" formControlName="Lugar" placeholder="Lugar">
+                                        </mat-form-field>
+
+                                        <mat-form-field class="example-width-20" appearance="outline">
+                                            <mat-label>Fecha Evento</mat-label>
+                                            <input matInput type="datetime-local" formControlName="Fec_Evento">
+                                        </mat-form-field>
+                                    </p>
+                                    <div class="form-row">
+                                        <ng-select class="example-width-30" [items]="dataDetalle" bindLabel="Des_Entrega"
+                                            bindValue="Id_DetalleEvento" (change)="selectEntregas($event)" [multiple]="true" [searchable]="false"
+                                            placeholder="Seleccionar Entregas" formControlName="Entregas" appearance="outline">
+                                        </ng-select>
+                                        
+                                        <mat-form-field class="example-width-20" appearance="outline">
+                                            <mat-label>Fecha Entrega</mat-label>
+                                            <input matInput [matDatepicker]="dp1" autocomplete="off" formControlName="Fec_Entrega" >
+                                            <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+                                            <mat-datepicker #dp1></mat-datepicker>
+                                        </mat-form-field>
+
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Documento Identidad</mat-label>
+                                            <input matInput type="number" name="DocumentoIdentidad" formControlName="DocumentoIdentidad" placeholder="N° Documento Identidad" (blur)="onBuscarDocumento($any($event).target.value)">
+                                        </mat-form-field>
+
+                                        <p class="flg_red" *ngIf="!ll_firma">
+                                            Colaborador No tiene firma registrada
+                                        </p>
+
+                                        <p class="flg_green" *ngIf="ll_total">
+                                            Colaborador No tiene entregas pendientes
+                                        </p>
+                                        
+                                    </div>
+
+                                    <div class="col-md-12 tabla">
+                                        <table mat-table [dataSource]='dataSource1' matSort #sortData1="matSort" matSortActive="NombreCompleto" matSortDirection="asc" class="mat-elevation-z8">
+                                            <ng-container matColumnDef="DocumentoIdentidad">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Documento Identidad </th>
+                                                <td mat-cell *matCellDef="let element"> {{ element.DocumentoIdentidad }} </td>
+                                            </ng-container>
+                    
+                                            <ng-container matColumnDef="NombreCompleto">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellidos y Nombres </th>
+                                                <td mat-cell *matCellDef="let element"> {{ element.NombreCompleto }} </td>
+                                            </ng-container>
+                    
+                                            <ng-container matColumnDef="DesTrabajador">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Planilla </th>
+                                                <td mat-cell *matCellDef="let element"> {{ element.DesTrabajador }} </td>
+                                            </ng-container>
+                    
+                                            <ng-container matColumnDef="NombreSede">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Sede </th>
+                                                <td mat-cell *matCellDef="let element"> {{ element.NombreSede }} </td>
+                                            </ng-container>
+                    
+                                            <ng-container matColumnDef="NombreArea">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Area </th>
+                                                <td mat-cell *matCellDef="let element"> {{ element.NombreArea }} </td>
+                                            </ng-container>
+                    
+                                            <ng-container matColumnDef="NombrePuesto">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Puesto </th>
+                                                <td mat-cell *matCellDef="let element"> {{ element.NombrePuesto }} </td>
+                                            </ng-container>
+                    
+                                            <ng-container matColumnDef="Des_Entrega">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Entrega </th>
+                                                <td mat-cell *matCellDef="let element"><b> {{ element.Des_Entrega }} </b></td>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="Acciones">
+                                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                                <td class="mat-header-cell" mat-cell *matCellDef="let element">
+                                                    <a mat-icon-button (click)="onQuitarEntrega(element)" matTooltip="Quitar entrega">
+                                                        <mat-icon color="warn">highlight_off</mat-icon>
+                                                    </a>
+                                                </td>
+                                            </ng-container>
+
+                                            <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+                                            <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+                                        
+                                            <!-- Row shown when there is no matching data. -->
+                                            <tr class="mat-row" *matNoDataRow>
+                                                <td class="mat-cell" colspan="7">No existen entregas programadas</td>
+                                            </tr>
+                                        </table>
+                    
+                                        <mat-paginator #paginatorData1 [pageSizeOptions]="[3, 5, 10]" showFirstLastButtons></mat-paginator>
+                                    </div>
+                                </mat-card-content>
+
+                                <mat-card-actions>
+                                    <button mat-button type="button" color="primary" [disabled]="!ll_nuevo" (click)="onLimpiarEntrega()"><mat-icon>add</mat-icon>Nuevo Registro</button>
+                                    <button mat-button type="submit" color="primary" [disabled]="formulario.invalid"><mat-icon>save</mat-icon>Confirmar Registro</button>
+                                </mat-card-actions>
+                            </mat-card>
+                        </form>
+                    </mat-tab>
+
+                    <mat-tab label="Listado" [disabled]="!ll_lista">
+                        <mat-card class="example-card">
+                            <mat-card-header>
+                                <mat-card-subtitle>Listado de Entregas</mat-card-subtitle>
+                            </mat-card-header>
+
+                            <mat-card-content>
+                                <mat-divider></mat-divider>
+                                <br>
+                                <div [formGroup]="formulario">
+                                    <mat-form-field class="example-width-30" appearance="outline">
+                                        <mat-label>Evento</mat-label>
+                                        <mat-select formControlName="Id_Evento" (selectionChange)="selectEvento($event)">
+                                            <mat-option *ngFor="let item of dataEventos" [value]="item.Id_Evento">
+                                                {{ item.Des_Evento }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="example-width-15" appearance="outline">
+                                        <mat-label>Entrega</mat-label>
+                                        <mat-select formControlName="Id_DetalleEvento">
+                                            <mat-option *ngFor="let item of dataDetalle" [value]="item.Id_DetalleEvento">
+                                                {{ item.Des_Entrega }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-form-field class="example-width-15" appearance="outline">
+                                        <mat-label>Participantes</mat-label>
+                                        <mat-select formControlName="Flg_Estado">
+                                            <mat-option *ngFor="let item of filtroParticipantes" [value]="item.flg_Estado">
+                                                {{ item.des_Estado }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <button mat-button type="button" color="primary" (click)="onListarRegistro()"><mat-icon>search</mat-icon>Buscar</button>
+                                    <!--<button mat-button type="button" color="primary" (click)="onExportarRegistro()"><mat-icon>file_download</mat-icon>Descargar</button>-->
+
+                                    <button mat-button type="button" color="primary" [matMenuTriggerFor]="menu"><mat-icon>file_download</mat-icon>Descargar</button>
+
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item (click)="onExportarRegistro(true)">Con firmas</button>
+                                        <button mat-menu-item (click)="onExportarRegistro(false)">Sin firmas</button>
+                                    </mat-menu>
+
+                                    <mat-form-field>
+                                        <mat-label>Filtrar</mat-label>
+                                        <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar busqueda" #input>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-12 tabla">
+                                    <table mat-table [dataSource]='dataSource2' matSort #sortData2="matSort" matSortActive="NombreCompleto" matSortDirection="asc" class="mat-elevation-z8">
+                                        <ng-container matColumnDef="DocumentoIdentidad">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Doc. Identidad </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.DocumentoIdentidad }} </td>
+                                        </ng-container>
+                
+                                        <ng-container matColumnDef="NombreCompleto">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellidos y Nombres </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.NombreCompleto }} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="DesTrabajador">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Planilla </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.DesTrabajador }} </td>
+                                        </ng-container>
+                
+                                        <ng-container matColumnDef="NombreSede">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Sede </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.NombreSede }} </td>
+                                        </ng-container>
+                
+                                        <ng-container matColumnDef="NombreGerencia">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Gerencia </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.NombreGerencia }} </td>
+                                        </ng-container>
+                
+                                        <ng-container matColumnDef="NombreArea">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Area </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.NombreArea }} </td>
+                                        </ng-container>
+                
+                                        <ng-container matColumnDef="NombrePuesto">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Puesto </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.NombrePuesto }} </td>
+                                        </ng-container>
+                
+                                        <ng-container matColumnDef="Des_Entrega">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Entrega </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Des_Entrega }} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="Signatura64">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Firma </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <img [src]="element.Signatura64" width="80px"/>
+                                            </td>
+                                        </ng-container>
+                    
+                                        <ng-container matColumnDef="Fec_Entrega">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Entrega </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Fec_Entrega | date: 'dd-MM-yyyy' }} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="Usu_Registro">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Responsable </th>
+                                            <td mat-cell *matCellDef="let element"> {{ element.Usu_Registro }} </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+                                    </table>
+                
+                                    <mat-paginator #paginatorData2 [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </mat-tab>
+                </mat-tab-group>
+            </mat-card>
+        </div>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner> 

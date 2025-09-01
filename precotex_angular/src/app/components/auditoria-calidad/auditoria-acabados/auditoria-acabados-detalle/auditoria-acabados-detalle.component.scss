@@ -1,0 +1,531 @@
+
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    //background-color: blue;
+    padding: 5px 5px 5px 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+}
+   
+.grid-container {
+    border-radius: 4px;
+    width: 100%; 
+    height: auto; //93%;
+    //background-color: green;
+    border: 1px solid #337ab7;
+    margin: 0; 
+    padding: 0px 0px 0px 0px;
+    //padding-bottom: 10px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 730px;
+    //position: absolute;  
+}
+  
+.title {
+    background-color: #3f51b5;
+    color: #ffffff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    //border-bottom: 1px solid #337AB7;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-weight: bold;
+}
+
+.container-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 5px 0;
+    justify-content: center;
+}
+
+.container-cuerpo {
+    display: grid;
+
+    grid-template:
+        "fila1" 85px
+        "fila2" 85px
+        "fila3" 500px
+        "foot" 55px / 
+        99%;
+}
+
+
+
+.container-cuerpo-fila1 {
+    grid-area: fila1;
+    margin-top: 15px;
+}
+
+.container-cuerpo-fila2 {
+    grid-area: fila2;
+    margin-top: 15px;
+}
+.container-cuerpo-fila3 {
+    grid-area: fila3;
+    overflow: auto;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.container-cuerpo-foot {
+    grid-area: foot;
+    
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 0px 10px;
+
+}
+
+//fila 1 
+/*.container-cuerpo-fila1 {
+    display: grid;
+
+    grid-template:
+    "col1 col2 col3 col4 col5 col6 col7 col8 col9 col10" 80px/
+    80px 110px 110px 80px 270px 80px 270px 120px 160px 50px;
+}*/
+.container-cuerpo-fila1 {
+    display: grid;
+
+    grid-template:
+    "col1 col2 col3 col4 col5 col6 col7 col8 col9 col10" 80px/
+    80px 160px 160px 160px 240px 80px 300px 300px 80px 80px
+}
+
+.fila1-OP {
+    grid-area: col1;
+     
+}
+.fila1-Cliente {
+    grid-area: col2;
+     
+}
+.fila1-EstCli {
+    grid-area: col3;
+    
+}
+.fila1-EstPro {
+    grid-area: col4;
+    
+}
+.fila1-Version {
+    grid-area: col5;
+    
+}
+
+.fila1-Color {
+    grid-area: col5;
+    
+}
+.fila1-Ops {
+    grid-area: col7;
+    
+}
+.fila1-Linea{
+    grid-area: col6;
+}
+
+.fila1-Supervisor {
+    grid-area: col7;
+    
+}
+
+.fila1-Auditor {
+    grid-area: col8;
+    
+}
+.fila1-Hoja{
+    grid-area: col9;
+}
+.fila1-Tipo{
+    grid-area: col10;
+}
+
+//fila 2 
+/*.container-cuerpo-fila2 {
+    display: grid;
+
+    grid-template:
+    "col1 col2 col3 col4 col5" 80px/
+    150px 200px 280px 280px 280px;
+}*/
+
+.container-cuerpo-fila2 {
+    display: grid;
+
+    grid-template:
+    /*"col1 col2 col3 col4 col5 col6 col7 col8" 80px/
+    80px 80px 270px 80px 270px 120px 160px 50px;*/
+    "col8 col7 col9" 80px/
+    80px 90px 230px;
+
+    justify-content: center;
+    
+}
+
+
+.fila2-Linea {
+    grid-area: col1;
+     
+}
+.fila2-CodSupervisor {
+    grid-area: col2;
+    
+}
+.fila2-Supervisor {
+    grid-area: col3;
+    
+}
+.fila2-CodAuditor {
+    grid-area: col4;
+    
+}
+.fila2-Auditor {
+    grid-area: col5;
+    
+}
+ 
+.button-finalizar {
+    width: 100%;
+    height: 40px;
+    grid-area: col9;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 150px;
+}  
+
+.button-agregar {
+    width: 100%;
+    height: 40px;
+    grid-area: col7;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 120px;
+}  
+
+.button-regresar {
+    width: 100%;
+    height: 40px;
+    grid-area: col8;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 50px;
+}
+
+
+
+
+
+
+
+//fila foot
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    justify-content: center;
+    display: grid;
+
+    grid-template:
+        "fcol1 fcol2" auto /
+        200px auto;
+}
+
+
+.container-cuerpo-foot,
+.button-cancelar {
+    height: 10%;
+    margin: 0 auto;
+    margin: 15px 10px 10px 10px;
+    min-height: 42px;
+    max-width: 300px;
+    min-width: 120px;
+}
+
+
+
+
+
+/*.button-cancelar {
+    grid-area: fcol2;
+    background-color: #d32f2f;
+    color: #ffffff;
+}*/
+
+
+
+
+/* ------------------------- */
+/* TABLA */
+/* ------------------------- */
+
+.mat-elevation-z8 {
+    width: 100%;
+	font-family: arial;
+	font-size: 10px;
+ 
+}
+.mat-header-cell {
+    text-align: center; 
+    padding: 30px; 
+    width: 10px;
+   
+}
+.paginador{
+    width: auto
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+}
+  
+tr:active {
+    background: #efefef;
+}
+
+th.mat-cell{
+    padding:15px;
+    text-align: center;
+}
+
+td.mat-cell{
+    padding:15px;
+    text-align: center;
+}
+
+@media screen and (max-width: 1490px){
+    
+    .grid-container{
+        height: 800px;
+    }
+    .container-cuerpo {
+        display: grid;
+    
+        grid-template:
+        "fila1" 195px
+        "fila2" 80px
+        "fila3" 500px
+        "foot" 55px / 
+        99%;
+    }
+    .container-cuerpo-fila1{
+        display: grid;
+        grid-template:
+        "col1 col2 col3 col4 "
+        "col6 col7 col8 col9" 
+        "col10 col11 col12 col12"
+        
+        ;
+        }
+
+    .fila1-OP {
+        grid-area: col1;
+        
+    }
+    .fila1-Cliente {
+        grid-area: col2;
+        
+    }
+    .fila1-EstCli {
+        grid-area: col3;
+        
+    }
+    .fila1-EstPro {
+        grid-area: col4;
+        
+    }
+    .fila1-Version {
+        grid-area: col5;
+        
+    }
+   
+    .fila1-Color {
+        grid-area: col6;
+        
+    }
+    .fila1-Ops {
+        grid-area: col7;
+        
+    }
+    .fila1-Linea{
+        grid-area: col7;
+    }
+
+    .fila1-Supervisor {
+        grid-area: col8;
+        
+    }
+
+    .fila1-Auditor {
+        grid-area: col9;
+        
+    }
+    .fila1-Hoja{
+        grid-area: col10;
+    }
+    .fila1-Tipo{
+        grid-area: col11;
+    }
+    
+    .container-cuerpo-fila2 {
+        display: grid;
+    
+        grid-template:
+        /*"col3 col9 auto" 80px
+        "col5 col8 auto" 80px/
+         420px 160px 50px;*/
+        "col9 col8 col10" 80px/
+         80px 115px 180px;
+         justify-content: center;
+         margin-left: 25px;
+    }
+   
+
+    .fila2-Linea {
+        grid-area: col1;
+        
+    }
+    .fila2-CodSupervisor {
+        grid-area: col2;
+        
+    }
+    .fila2-Supervisor {
+        grid-area: col3;
+        
+    }
+    .fila2-CodAuditor {
+        grid-area: col4;
+        
+    }
+    .fila2-Auditor {
+        grid-area: col5;
+        
+    }
+    .fila2-Fecha {
+        grid-area: col7;   
+    }
+
+    .button-finalizar {
+        grid-area: col10;
+    }  
+    .button-agregar {
+        grid-area: col8;
+    }  
+
+    .button-regresar {
+        grid-area: col9;
+    }
+
+    
+
+}
+
+
+@media screen and (max-width: 750px){
+    .grid-container{
+        height: 730px;
+    }
+    .container-cuerpo {
+        display: grid;
+    
+        grid-template:
+        "fila2" 170px
+        "fila3" 330px
+        "foot" 55px /
+        99%;
+    }
+    .container-cuerpo-fila2{
+        display: grid;
+        
+        grid-template:
+        "col1 col2 col3" 80px 
+        "col4 col5 auto" 80px/
+        200px 300px 300px ;
+    }
+    
+    
+    .fila2-Cliente {
+        grid-area: col1;
+         
+    }
+    .fila2-EstCli {
+        grid-area: col2;
+        
+    }
+    .fila2-EstPro {
+        grid-area: col3;
+        
+    }
+    .fila2-Version {
+        grid-area: col4;
+        
+    }
+    .fila2-Ops {
+        grid-area: col5;
+        
+    }
+
+  }
+
+
+  @media screen and (max-width: 683px){
+   .grid-container{
+       height: 680px;
+   } 
+    .container-cuerpo {
+        display: grid;
+     
+        grid-template:
+        "fila2" 220px
+        "fila3" 400px
+        "foot" 55px /
+        99%; 
+    }
+    .container-cuerpo-fila2{
+        display: grid;
+        
+        grid-template:
+        "col1 col2" 70px 
+        "col3 col4" 70px 
+        "col5 auto" 70px /
+        200px 200px;
+    } 
+    .fila2-Codigo {
+        grid-area: col1;
+        width: 100px; 
+    }
+    .fila2-Cliente {
+        grid-area: col2;
+        
+    }
+    .fila2-Estilo {
+        grid-area: col3;
+        
+    }
+    .fila2-Prenda {
+        grid-area: col4;
+        
+    }
+    .fila2-buscar {   
+        grid-area: col5;    
+    }
+
+  }
+
+
+

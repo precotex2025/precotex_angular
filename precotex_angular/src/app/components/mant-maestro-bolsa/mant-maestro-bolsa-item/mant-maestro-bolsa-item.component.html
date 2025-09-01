@@ -1,0 +1,281 @@
+<div class="container">
+
+    <div class="grid-container">
+
+        <div class="title">Detalle Bolsa (Artes) Id. {{this.Id}} </div>
+
+        <form class="container-cuerpo">
+
+            <div class="container-cuerpo-fila1">
+
+                <button type="button" class="fila1-imprimir" mat-flat-button (click)="openImprimir()">
+                    <mat-icon aria-label="person">print</mat-icon>Imprimir
+                </button>
+
+                <button type="button" class="fila1-agregar" mat-flat-button (click)="openDialogBarra()" *ngIf="Flg_Edita">
+                    <mat-icon aria-label="person">add</mat-icon>Agregar Barra
+                </button>
+
+                <button type="button" class="fila1-volver" mat-flat-button routerLink="/MantMaestroBolsa">
+                    <mat-icon aria-label="person">replay</mat-icon>Volver
+                </button>
+
+            </div>
+
+            <div class="container-cuerpo-fila2">
+
+                <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+                    <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                [aria-label]="checkboxLabel()">
+                            </mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"
+                                [aria-label]="checkboxLabel(row)">
+                            </mat-checkbox>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Id_Bolsa">
+                        <th mat-header-cell *matHeaderCellDef>Id Bolsa</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Id_Bolsa}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Id_Bolsa_Det">
+                        <th mat-header-cell *matHeaderCellDef>Id Bolsa Det</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Id_Bolsa_Det}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Barra">
+                        <th mat-header-cell *matHeaderCellDef>Cod. Barra</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_Barra}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Almacen_Ult">
+                        <th mat-header-cell *matHeaderCellDef>Cod. Almacen</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_Almacen_Ult}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Num_MovStk_Ult">
+                        <th mat-header-cell *matHeaderCellDef>Num. Movi.</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Num_MovStk_Ult}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Usuario_Creacion">
+                        <th mat-header-cell *matHeaderCellDef>Usu. Creacion </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Cod_Usuario_Creacion }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Fecha_Creacion">
+                        <th mat-header-cell *matHeaderCellDef>Fec. Creacion </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Fecha_Creacion }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Usuario_Modificacion">
+                        <th mat-header-cell *matHeaderCellDef>Usu. Modificacion </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.sCod_Usuario_Modificacion }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Fecha_Modificacion">
+                        <th mat-header-cell *matHeaderCellDef>Fec. Modificacion </th>
+                        <td mat-cell *matCellDef="let data_det"> {{ data_det.Fecha_Modificacion }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let data_det">
+
+                            <a mat-icon-button style="margin-right:5px;" (click)="openDialogTransferencia(data_det)" *ngIf="Flg_Edita" matTooltip="Transferencia">
+                                <mat-icon color="success">repeat one</mat-icon>
+                            </a>
+
+                            <a mat-icon-button style="margin-right:5px;" (click)="OpenDetalleItem(data_det)" matTooltip="Ver Detalle">
+                                <mat-icon color="primary">assignment</mat-icon>
+                            </a>
+
+                            <a mat-icon-button color="warn" style="margin-right:5px;" (click)="OpenDeleteConfirmacion(data_det)" *ngIf="Flg_Edita" matTooltip="Eliminar">
+                                <mat-icon color="warn">delete</mat-icon>
+                            </a>   
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                </table>
+                <mat-paginator #MatPaginator [pageSizeOptions]="[20,50,100]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<!-- <ng-container *ngIf="imprimirTicket">
+    <div style="display:flex; position:absolute; bottom: 1000px;" id="ticket">
+        <div class="total2">
+            <div class="total">
+                <div class="caja" style="width:590px;font-size:9px;">
+                    <div class="flex">
+
+                        <div class="container-cuerpo-fila2-dialog">
+                            <div>
+                                <div class="head" style="width:550px;font-size:15px;">
+                                    <span class="body">OP: {{dataTickets[0].Cod_OrdPro}}</span>
+                                    <span>Color: {{dataTickets[0].Des_Present}}</span>
+                                </div>
+                                <div class="head2" style="width:550px;font-size:15px;">
+                                    <span class="body2">Sec. Ord. : {{dataTickets[0].Num_SecOrd}}</span>
+                                    <span> {{dataTickets[0].Org}} </span>
+                                </div>
+                                <div>
+                                    <span>_________________________________________________________________________________________________________________________</span>
+                                    <span>.</span>
+                                </div>
+                            </div>
+                            <table mat-table class="flex" style="width:550px;font-size:15px;" #table
+                                [dataSource]="dataSource2">
+
+                                <ng-container [matColumnDef]="column"
+                                    *ngFor="let column of displayedColumns; let i = index">
+                                    <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+                                    <td mat-cell *matCellDef="let data; let i = index"> {{ data[column] }} </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+                    <div style="width:100%; text-align:center;">
+                        <span>{{Cod_Barra}}</span>
+                    </div>
+                    <div class="barra">
+                        <div id="print-section">
+                            <svg class="barcode" id="barcode" viewBox="0 0 85 85"></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</ng-container> -->
+
+<ng-container *ngIf="imprimirTicket2">
+    <div style="display:flex; position:absolute; bottom: 1000px;" id="ticket">
+        <ng-container *ngFor="let item of dataTickets2; let i = index">
+            <div class="total2">
+                <div class="total2">
+                    <div class="caja" style="width:590px;font-size:9px;">
+                        <div class="flex">
+
+                            <div class="container-cuerpo-fila2-dialog">
+                                <div>
+                                    <div class="head" style="width:550px;font-size:15px;">
+                                        <span class="body">
+                                            OP: {{item.data[0].Cod_OrdPro}} 
+                                            &nbsp;&nbsp; Est.Cli: {{item.data[0].Cod_EstCli}}
+                                            &nbsp;&nbsp; Color: {{item.data[0].Des_Present}}
+                                        </span>
+                                        <!--<span>Color: {{item.data[0].Des_Present}}</span>-->
+                                        <span class="body2">
+                                            Sec.Ord. : {{item.data[0].Num_SecOrd}}
+                                            &nbsp;&nbsp;&nbsp; ID: {{item.data[0].Id_Bolsa}}
+                                            &nbsp;&nbsp; {{item.data[0].Cod_Barra}}
+                                        </span>
+                                    </div>
+                                    <!--<div class="head2" style="width:550px;font-size:15px;">
+                                        <span class="body2" style="width: 120px;">Sec. Ord. : {{item.data[0].Num_SecOrd}}</span>
+                                        <span>&nbsp;{{item.data[0].Cod_Barra}} </span>
+                                    </div>-->
+                                    <div>
+                                        <span>_________________________________________________________________________________________________________________________</span>
+                                        <span>.</span>
+                                    </div>
+                                </div>
+                                <table class="flex" style="width:550px;font-size:15px;">
+                                    <thead>
+                                        <tr>
+                                            <th > Talla </th>
+                                            <th *ngFor="let column1 of item.data; let i = index"> {{ column1.Cod_Talla}} </th>
+                                            <th > Total </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td > Cantidad </td>
+                                            <td *ngFor="let column2 of item.data; let i = index"> {{ column2.Cantidad }} </td>
+                                            <td> {{item.total}} </td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+                        <!--<div style="width:100%; text-align:center;">
+                            <span>{{Cod_Barra}}</span>
+                        </div>-->
+                        <div class="barra">
+                            <div id="print-section">
+                                <svg class="barcode"  id="barcode{{i}}" viewBox="0 0 85 85"></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+    </div>
+</ng-container>
+
+<!-- <ng-container *ngIf="imprimirTicket">
+    <div style="display:flex; position:absolute; bottom: 1000px;" id="ticket">
+        <div class="total2">
+            <div class="total">
+                <div class="caja" style="width:590px;font-size:9px;">
+                    <div class="flex">
+                        <table>
+                            <tr style="width:100px; font-size:9px; text-align:center;">
+                                <th>OP: </th>
+                                <th>Color: </th>
+                                <th>Secuencia: </th>
+                                <th>Tallas: </th>
+                                <th>Cantidad: </th>
+                            </tr>
+                            <tr class="print" *ngFor="let item of dataTickets; let i = index"
+                                style="width:80px;font-size:9px">
+                                <td>{{item.Cod_OrdPro}}</td>
+                                <td>{{item.Des_Present}}</td>
+                                <td>{{item.Num_SecOrd}}</td>
+                                <td>{{item.Cod_Talla}}</td>
+                                <td>{{item.Cantidad}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div style="width:100%; text-align:center;">
+                        <span>{{Cod_Barra}}</span>
+                    </div>
+                    <div class="barra">
+                        <div id="print-section">
+                            <svg class="barcode" id="barcode" viewBox="0 0 100 100"></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container> -->
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

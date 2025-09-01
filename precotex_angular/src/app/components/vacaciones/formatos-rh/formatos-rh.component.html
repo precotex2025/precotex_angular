@@ -1,0 +1,93 @@
+<mat-tab-group>
+    <mat-tab label="CARTA DE RENUNCIA"> 
+        <div class="row">
+            <div class="col-md-3">
+                <mat-form-field class="fila1-Estado-Equipo" appearance="fill">
+                    <mat-label>Empresa</mat-label>
+                    <mat-select [(ngModel)]="Empresa">
+                        <mat-option  value="07"> PRECOTEX </mat-option>
+                        <mat-option  value="56"> VYD </mat-option>
+                        <mat-option  value="77"> SABOR CRIOLLO </mat-option>
+                        <mat-option  value="78"> KAPRA </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <mat-form-field class="fila1-Codigo">
+                    <mat-label>DNI o CE</mat-label>
+                    <input matInput type="text" placeholder="Dni de Trabajador" [(ngModel)]="cod_Trabajador"  autocomplete="off" maxLength="9">
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <mat-form-field class="fila1-Codigo">
+                    <mat-label>Fecha Fin</mat-label>
+                    <input matInput type="text" placeholder="Fecha Fin"  autocomplete="off" [(ngModel)]="Fecha_Fin">
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <button mat-flat-button color="primary" (click)="imprimirFormato()"><mat-icon>print</mat-icon> Imprimir Formato</button>
+            </div>
+        </div> 
+    </mat-tab>
+    <mat-tab label="MEMORANDUM DNI EXTRAVIADO">
+        <div class="row">
+            <div class="col-md-3">
+                <mat-form-field class="fila1-Codigo">
+                    <mat-label>DNI o CE</mat-label>
+                    <input matInput type="text" placeholder="Dni de Trabajador" [(ngModel)]="cod_Trabajador"  autocomplete="off" maxLength="9">
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <mat-form-field class="fila1-Codigo">
+                    <mat-label>Fecha Inicio</mat-label>
+                    <input matInput type="date" placeholder="Fecha Inicio"  autocomplete="off" [(ngModel)]="Fecha_Inicio">
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <mat-form-field class="fila1-Codigo">
+                    <mat-label>Fecha Fin</mat-label>
+                    <input matInput type="date" placeholder="Fecha Fin"  autocomplete="off" [(ngModel)]="Fecha_Fin">
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <button mat-flat-button color="primary" (click)="imprimirFormatoM()"><mat-icon>print</mat-icon> Imprimir Formato</button>
+            </div>
+        </div> 
+    </mat-tab>
+    <mat-tab label="LICENCIA"> 
+        <div class="row">
+            <div class="col-md-3">
+                <mat-form-field class="fila1-Estado-Equipo" appearance="fill">
+                    <mat-label>Empresa</mat-label>
+                    <mat-select [(ngModel)]="Empresa">
+                        <mat-option  value="07"> PRECOTEX </mat-option>
+                        <mat-option  value="56"> VYD </mat-option>
+                        <mat-option  value="77"> SABOR CRIOLLO </mat-option>
+                        <mat-option  value="78"> KAPRA </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <mat-form-field class="fila1-Codigo">
+                    <mat-label>DNI o CE</mat-label>
+                    <input matInput type="text" placeholder="Dni de Trabajador" [(ngModel)]="cod_Trabajador"  autocomplete="off" maxLength="9">
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <mat-form-field class="fila1-Codigo">
+                    <mat-label>Fecha Inicio</mat-label>
+                    <input matInput type="date" placeholder="Fecha Inicio"  autocomplete="off" [(ngModel)]="Fecha_Inicio">
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <mat-form-field class="fila1-Codigo">
+                    <mat-label>Fecha Fin</mat-label>
+                    <input matInput type="date" placeholder="Fecha Fin"  autocomplete="off" [(ngModel)]="Fecha_Fin">
+                </mat-form-field>
+            </div>
+            <div class="col-md-3">
+                <button mat-flat-button color="primary" (click)="imprimirFormatoL()"><mat-icon>print</mat-icon> Imprimir Formato</button>
+            </div>
+        </div> 
+    </mat-tab>
+  </mat-tab-group>

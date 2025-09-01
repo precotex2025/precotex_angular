@@ -1,0 +1,90 @@
+ 
+<div class="container"> 
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container">  
+ <!--*ngIf="Titulo == undefined; else titulomodificar"-->
+        <div class="title"><strong *ngIf="Titulo == undefined; else titulomodificar">Registrar </strong>Cabecera Auditoria Final</div>
+        <ng-template #titulomodificar><strong>Modificar </strong></ng-template>
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm" (ngSubmit)="submit(formDirective)" >
+            <div class="container-cuerpo-fila1">
+                
+                    <!-- <mat-form-field class="fila1-CodSupervisor"> 
+                        <mat-label>Codigo</mat-label>
+                        <input matInput type="text"  placeholder="Codigo" value=""  (keyup.enter)="BuscarSupervisor()" 
+                            autocomplete="off" formControlName="CodSupervisor" >
+                    </mat-form-field> -->
+
+
+                    <mat-form-field class="fila1-CodAuditor"> 
+                        <mat-label>Codigo</mat-label>
+                        <input matInput type="text"  placeholder="Codigo" value="" 
+                            autocomplete="off" formControlName="CodAuditor" >
+                    </mat-form-field>
+
+                    <!--<mat-form-field class="fila1-Auditor"> 
+                        <mat-label>Auditor</mat-label>
+                        <input matInput type="text"  placeholder="Auditor" value="" 
+                            autocomplete="off" formControlName="Auditor" >
+                    </mat-form-field>-->  
+                    
+                    <mat-form-field class="fila1-Auditor" appearance="fill">
+                        <mat-label>Auditor</mat-label>
+                        <input matInput type="text"  #trigger="matAutocompleteTrigger" placeholder="Auditor" formControlName="Auditor"  [matAutocomplete]="autoDataAuditor" />
+                        <mat-autocomplete autoActiveFirstOption #autoDataAuditor="matAutocomplete">
+                            <mat-option *ngFor="let option of filtroOperacionAuditor | async" [value]="option.Nom_Auditor" (click)="CambiarValorCodAuditor(option.Cod_Auditor,option.Tip_Trabajador)">
+                                {{option.Nom_Auditor}}
+                            </mat-option> 
+                        </mat-autocomplete>                            
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-Fecha" >
+                        <input matInput [matDatepicker]="picker1" placeholder="Fecha Registro" [disabled]="InputFechaDesHabilitado" [formControl]="Fecha" >
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker  #picker1></mat-datepicker>
+                    </mat-form-field>
+
+  
+
+                    <!-- <mat-form-field class="fila1-Linea"> 
+                        <mat-label>Linea</mat-label>
+                        <input matInput type="number" maxlength="3"  placeholder="Linea" value="" 
+                            autocomplete="off" formControlName="Linea">
+                    </mat-form-field>  -->
+                    <ng-select  [items]="listar_lineas" bindLabel="descripcion"  class="fila1-Linea"
+                    bindValue="cod_linea" [multiple]="false" [searchable]="true"
+                    placeholder="Selecciona N° de Linea" formControlName="Linea">
+                    </ng-select>   
+                    
+                    <mat-form-field class="fila1-Observacion"> 
+                        <mat-label>Observacion</mat-label>
+                        <textarea matInput type="text"  placeholder="Observacion" value="" id="Observacion" 
+                            autocomplete="off" formControlName="Observacion"></textarea>
+                    </mat-form-field>   
+
+                
+            </div>     
+ 
+
+ 
+            <div class="container-cuerpo-foot">
+               <!-- *ngIf="Titulo == undefined; else btnmodificar"  [disabled]="!formulario.valid"-->
+                <button  type="submit" class="button-agregar" *ngIf="Titulo == undefined; else btnmodificar" mat-dialog-close="false" [disabled]="!formulario.valid" mat-flat-button>
+                    <mat-icon aria-label="person" >save
+                    </mat-icon>  Registrar
+                </button>
+
+                <ng-template #btnmodificar><button type="submit" class="button-agregar" mat-dialog-close="false" [disabled]="!formulario.valid"  mat-flat-button>
+                    <mat-icon aria-label="person" >create
+                    </mat-icon>  Modificar
+                </button></ng-template>
+               
+                <button type="button" class="button-cancelar" mat-button mat-dialog-close mat-dialog-close  mat-flat-button>
+                    <mat-icon aria-label="person">highlight_off
+                    </mat-icon>  Cancelar
+                </button>               
+            </div> 
+        </form>
+
+    </div>
+
+</div>

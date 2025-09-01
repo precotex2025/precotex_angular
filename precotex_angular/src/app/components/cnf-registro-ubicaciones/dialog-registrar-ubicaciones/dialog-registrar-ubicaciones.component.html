@@ -1,0 +1,63 @@
+<div class="card">
+    <div class="card-header">
+        {{data.Title}}
+    </div>
+
+    <div class="container">
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+             <div class="row">
+                    <mat-form-field class="col col-12">
+                        <mat-label>Tipo Ubicación</mat-label> 
+                        <mat-select formControlName="ctrol_TipoUbicacion" (selectionChange)="onChangeTipUbi($event)"> 
+                            <mat-option *ngFor="let tipUbi of dataTipoUbicaciones" [value]="tipUbi.id_Tipo_Ubicacion_Colgador">{{ tipUbi.descripcion }}</mat-option> 
+                        </mat-select> 
+                    </mat-form-field> 
+             </div>
+
+            <div class="row" *ngIf="showItemRepisa">
+                <mat-form-field class="col col-12">
+                    <mat-label>Repisa</mat-label>
+                    <input matInput formControlName="ctrol_Repisa" value="REPISA PRINCIPAL">
+                </mat-form-field>
+            </div>  
+            
+             <div class="row" *ngIf="showItemRepisa">
+                <mat-form-field class="col col-12">
+                    <mat-label>Familia Tela</mat-label> 
+                    <mat-select formControlName="ctrol_TipoFamTel" (selectionChange)="onChangeFamTela($event)"> 
+                        <mat-option *ngFor="let tipFamTel of dataTipoFamTela" [value]="tipFamTel.cod_FamTela">{{ tipFamTel.des_FamTela }}</mat-option> 
+                    </mat-select> 
+                </mat-form-field> 
+             </div>   
+             
+            <div class="row">
+                <mat-form-field class="col col-12">
+                    <mat-label>Descripción Codigo QR</mat-label>
+                    <input matInput formControlName="ctrol_CodigoQR" >
+                </mat-form-field>
+            </div>  
+            
+            <div class="button-row"> 
+
+                <button mat-flat-button color="primary" class="form-button" (click)="onSave()" [disabled]="btnGuardarDeshabilitado"> 
+                    <mat-icon>save</mat-icon> {{tituloBtnProceso}} 
+                </button>
+
+                <button mat-flat-button color="accent" class="form-button" (click)="onPrint()" [disabled]="btnImprimirDeshabilitado">
+                    <mat-icon>print</mat-icon> Imprimir
+                </button>
+                
+                <button mat-flat-button color="warn" mat-dialog-close class="form-button">
+                    <mat-icon>close</mat-icon> Salir
+                </button>
+                
+            </div>             
+
+        </form>
+    </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

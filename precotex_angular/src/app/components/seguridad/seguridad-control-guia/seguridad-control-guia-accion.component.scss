@@ -1,0 +1,61 @@
+// .contenedor-ventana-accion {
+//     // 	//background: rgba(0,0,0,.3);
+//     //     // width: 100%;
+//     //     // height: 100%;
+//     // -webkit-transition: all 0.5s;
+//     // -moz-transition: all 0.5s;
+//     // -mos-transition: all 0.5s;
+//     // -o-transition: all 0.5s;
+//     // transition: all 0.5s;
+//     opacity: 0;
+
+//     //     //background-color: blue;
+// }
+
+.container-ventana-accion-cuerpo {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px 5px 5px 5px;
+    justify-content: center;
+}
+
+.container-ventana-accion-cuerpo button {
+    width: 300px;
+    height: 18%;
+    display: block;
+
+    margin: 0 auto;
+    margin-bottom: 10px;
+    min-height: 59.5px;
+
+    border: 1px solid #2f528f;
+    color: black;
+}
+
+.button-accion1 {
+    background-color: #EBC016;
+}
+.button-accion2 {
+    background-color: #9dc3e6;
+}
+.button-accion3 {
+    background-color: #548235;
+}
+.button-accion4 {
+    background-color: #c55a11;
+}
+.button-accion5 {
+    background-color: #afabab;
+}
+
+/* Animacion de la ventana */
+.contenedor-ventana-accion-activo-no {
+    opacity: 0;
+    visibility: hidden;
+}
+.contenedor-ventana-accion-activo-si {
+    transform: scale(1);
+    opacity: 1;
+    visibility: visible;
+}

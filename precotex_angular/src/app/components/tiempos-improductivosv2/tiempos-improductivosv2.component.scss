@@ -1,0 +1,264 @@
+.registro-container {
+  border: 1px solid #d0d0ff;
+  padding: 10px;
+  border-radius: 12px;
+  background: linear-gradient(to bottom, #fefefe, #f3f6ff);
+  max-width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+.title {
+  background-color: #3f51b5;
+  color: #ffffff;
+  padding: 10px 14px;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+  border-bottom: 2px solid #2c3e95;
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
+}
+
+h3 {
+  color: #5888f1c7; /* azul estilo Bootstrap */
+  font-weight: bold;
+}
+
+.filtros {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 4 columnas iguales */
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.filtros label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+}
+
+input, select {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+.main-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.panel {
+  border: 2px solid rgba(137, 231, 238, 0.89);
+  border-radius: 10px;
+  padding: 1rem;
+  flex: 1 1 45%;
+  background: #fff;
+}
+
+.datos-partida input,
+.datos-partida select {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.4rem;
+}
+
+.buscar-btn {
+  background: orange;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
+.btnAgregar {
+  padding: 6px 12px;
+  font-size: 0.85em;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  background-color: #dc3545; /* Rojo */
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.btnAgregar:hover {
+  background-color: #c82333; /* Rojo más oscuro al pasar el mouse */
+}
+
+.btnAgregar:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5); /* Resaltado al enfocar */
+}
+
+
+
+.title2 {
+  background-color: #420a83;
+  color: #ffffff;
+  padding: 10px 14px;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+  border-bottom: 2px solid #2c3e95;
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
+}
+
+
+.modulo-desglose {
+  background-color: #f9fafb;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.filtros-container label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+}
+
+.filtro-input {
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.tabla-container {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.tabla-desglose {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  text-align: center;
+}
+
+.tabla-desglose th,
+.tabla-desglose td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.tabla-desglose thead {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.btn-editar {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-editar:hover {
+  background-color: #0056b3;
+}
+
+.boton-exportar-container {
+  text-align: right;
+  margin-top: 10px;
+}
+
+.btn-exportar {
+  background-color: #28a745;
+  color: white;
+  padding: 6px 16px;
+  border: none;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-exportar:hover {
+  background-color: #218838;
+}
+
+
+.filtros-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filtros-container label,
+.filtros-container .boton-container {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+}
+
+.filtro-input {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.boton-container {
+  align-self: end;
+}
+
+.filtrar-btn {
+  background-color: #2563eb;
+  color: white;
+  font-weight: bold;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.filtrar-btn:hover {
+  background-color: #1d4ed8;
+}
+
+
+.btn-editar,
+.btn-eliminar {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-editar {
+  background-color: #007bff;
+  color: white;
+  margin-right: 6px;
+}
+
+.btn-editar:hover {
+  background-color: #0056b3;
+}
+
+.btn-eliminar {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-eliminar:hover {
+  background-color: #a71d2a;
+}
+
+
+

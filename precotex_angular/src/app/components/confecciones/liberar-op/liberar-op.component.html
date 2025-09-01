@@ -1,0 +1,89 @@
+<div class="container">
+    <!-- ventana nro 4 - historial -->
+    <div class="grid-container">
+
+        <div class="title" style="color:white;">LIBERACIÓN DE OP</div>
+
+        <div class="container-cuerpo">
+            <div class="container-cuerpo-fila1">
+
+                <mat-form-field class="fila1-fecha" appearance="fill">
+                    <mat-label>Buscar</mat-label>
+                    <input matInput type="text" [(ngModel)]="Buscar" name="Buscar" placeholder="Ingrese la OP"
+                        autocomplete="off">
+                </mat-form-field>
+
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="applyFilter()">
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button>
+
+                <mat-form-field class="fila1-Filtro" appearance="fill">
+                    <mat-label>Estado</mat-label>
+                    <mat-select (selectionChange)="obtenerLista($event)" [(ngModel)]="Estado" name="Estado">
+                      <mat-option value="P">PENDIENTE</mat-option>
+                      <mat-option value="A">APROBADO</mat-option>
+                      <mat-option value="L">TODOS</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+            </div>
+
+            <div class="container-cuerpo-fila2">
+                <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+                    <ng-container matColumnDef="Fecha_Registro">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha de Registro</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Fecha_Registro}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Usuario">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Usuario</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_Usuario}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_OrdPro">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">OP</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_OrdPro}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Flg_Estado">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Estado</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <b>
+                            <span style="color: rgb(11, 190, 1);" *ngIf="data_det.Flg_Estado == 'A'">APROBADO</span>
+                            <span style="color: rgba(245, 1, 1, 0.853);" *ngIf="data_det.Flg_Estado == 'P'">PENDIENTE</span>
+                            </b>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Fecha_Validacion">
+                        <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fecha de Validación</th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.Fecha_Validacion}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let data_det">
+
+                            <a mat-icon-button style="margin-right:5px;" (click)="OpenDialogConfirmacion(data_det.Cod_OrdPro)">
+                                <mat-icon color="success">assignment_turned_in</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <mat-paginator #MatPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+                </mat-paginator>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

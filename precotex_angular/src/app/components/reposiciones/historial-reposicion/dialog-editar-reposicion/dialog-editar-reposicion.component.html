@@ -1,0 +1,233 @@
+<div class="container-fluid">
+    <!-- ventana nro 4 - historial -->
+    <form class="grid-container" [formGroup]="formulario" (ngSubmit)="editarReposicion()">
+  
+      <div class="title">Editar Reposición</div>
+      <div class="contenedor" >
+        <mat-card>
+          <mat-card-header>Datos del Solicitante</mat-card-header>
+          <mat-card-content>
+            <div class="formulario">
+              <div class="form-group">
+                <ng-select  [items]="listar_operacionCliente" bindLabel="Nom_Cliente" style="padding-bottom: 10px;"
+                bindValue="Cod_Cliente" [multiple]="false" [searchable]="true"  formControlName="Cod_Cliente"
+                placeholder="Selecciona un Cliente">
+                </ng-select> 
+              </div>
+              <div class="form-group">
+                <mat-form-field appearance="fill">
+                  <mat-label>Tipo</mat-label>
+                  <mat-select formControlName="Tipo" [disabled]="true">
+                    <mat-option value="Interno">Interno</mat-option>
+                    <mat-option value="Externo">Externo</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <mat-form-field appearance="fill">
+                  <mat-label>Sede</mat-label>
+                  <mat-select formControlName="Sede">
+                    <mat-option value="Ate">Costura Ate</mat-option>
+                    <mat-option value="Independencia">Costura Independencia</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <mat-form-field appearance="fill">
+                  <mat-label>Linea</mat-label>
+                  <input matInput type="text" formControlName="Num_Linea" placeholder="" autocomplete="off" />
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <mat-form-field appearance="fill">
+                  <mat-label>Artes</mat-label>
+                  <input matInput type="text" formControlName="Artes" placeholder="" autocomplete="off" />
+                </mat-form-field>
+              </div>
+              <div class="form-group">
+                <mat-form-field appearance="fill">
+                  <mat-label>Taller Externo</mat-label>
+                  <input matInput type="text" placeholder="" autocomplete="off" />
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+  
+      <div class="contenedor">
+        <mat-card>
+          <mat-card-header>Detalle de la Solicitud de Reposición</mat-card-header>
+          <mat-card-content>
+            <div class="formulario2">
+              <div class="form-group2">
+                <span>Motivos de Solicitud</span><br>
+                <div class="fila">
+                  <div class="form-group">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Piezas Falladas</mat-label>
+                      <input matInput type="number" formControlName="Piezas_Falladas" placeholder="" autocomplete="off" />
+                    </mat-form-field>
+                  </div>
+                  <div class="form-group">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Piezas Malogradas</mat-label>
+                      <input matInput type="number" placeholder="" autocomplete="off" formControlName="Piezas_Malogradas" />
+                    </mat-form-field>
+                  </div>
+                  <div class="form-group">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Piezas Faltantes</mat-label>
+                      <input matInput type="number" placeholder="" autocomplete="off" formControlName="Piezas_Faltantes"/>
+                    </mat-form-field>
+                  </div>
+                </div>
+  
+              </div>
+              <!-- <div class="form-group2">
+                <p>Muestra de Tela</p>
+                <div class="caja">
+  
+                </div>
+              </div> -->
+  
+            </div>
+            <br>
+            <hr>
+            <br>
+            <form [formGroup]="formularioTabla" class="sup_tabla">
+              <div class="fila">
+                <div class="form-tabla">
+                  <mat-form-field appearance="fill">
+                    <mat-label>OC</mat-label>
+                    <input matInput type="text" (change)="getValidarOC($event)" formControlName="Co_CodOrdPro" maxlength="5" autocomplete="off" />
+                  </mat-form-field>
+                </div>
+                <div class="form-group">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Componente</mat-label>
+                    <mat-select formControlName="Cod_Compest" placeholder="Seleccione" (selectionChange)="changeComponente($event)">
+                      <mat-option  *ngFor="let item of dataComponentes" [value]="item.COD_COMPEST">{{item.COMBO}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="form-group">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Pieza</mat-label>
+                    <mat-select formControlName="Pieza" placeholder="Seleccione">
+                      <mat-option  *ngFor="let item of dataPiezas" [value]="item.Descripcion">{{item.Descripcion}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="form-group">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Talla</mat-label>
+                    <mat-select formControlName="Cod_Talla" placeholder="Seleccione">
+                      <mat-option  *ngFor="let item of dataTallas" [value]="item.cod_talla">{{item.cod_talla}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="form-tabla">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Cantidad</mat-label>
+                    <input matInput type="number" formControlName="Cantidad" autocomplete="off" />
+                  </mat-form-field>
+                </div>
+                <div class="form-group">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Motivo</mat-label>
+                    <mat-select formControlName="Tipo" placeholder="Seleccione" (selectionChange)="changeMotivo($event)">
+                      <mat-option  value="1">Piezas Falladas</mat-option>
+                      <mat-option  value="2">Piezas Malogradas</mat-option>
+                      <mat-option  value="3">Piezas Faltantes</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="form-group" *ngIf="Tipo == '1'">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Detalle</mat-label>
+                    <mat-select formControlName="Obs_Defecto" placeholder="Seleccione" [required]="Tipo == '1'">
+                      <mat-option  value="Corte">Corte</mat-option>
+                      <mat-option  value="Tela">Tela</mat-option>
+                      <mat-option  value="Otros">Otros</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="form-group" *ngIf="Tipo == '2'">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Detalle</mat-label>
+                    <mat-select formControlName="Obs_Defecto" placeholder="Seleccione" [required]="Tipo == '2'">
+                      <mat-option  value="Corte">Corte</mat-option>
+                      <mat-option  value="Tela">Tela</mat-option>
+                      <mat-option  value="Otros">Otros</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="form-tabla">
+                  <button mat-flat-button class="button-agregar" (click)="agregarItem()" type="button" color="success"><mat-icon>add</mat-icon> Agregar</button>
+                </div>
+              </div>
+            </form>
+            <div class="body-tabla">
+              <table>
+                <thead>
+                  <tr>
+                    <th>N°</th>
+                    <th>Orden de Corte</th>
+                    <th>Estilo</th>
+                    <th>OP</th>
+                    <th>Color</th>
+                    <th>Pieza</th>
+                    <th>Talla</th>
+                    <th>Cantidad</th>
+                    <th>Motivo</th>
+                    <th>Detalle</th>
+                    <th>Tipo de Tela</th>
+                    <th>Eliminar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of dataItems; let i = index">
+                    <td>{{i + 1}}</td>
+                    <td>{{item.Co_CodOrdPro}}</td>
+                    <td>{{item.Cod_Est}}</td>
+                    <td>{{item.Cod_OrdPro}}</td>
+                    <td>{{item.Des_Present}}</td>
+                    <td>{{item.Pieza}}</td>
+                    <td>{{item.Cod_Talla}}</td>
+                    <td>{{item.Cantidad}}</td>
+                    <td>{{item.Tipo == '1' ? 'Piezas Falladas' : item.Tipo == '2' ? 'Piezas Malogradas' : 'Piezas Faltantes'}}</td>
+                    <td>{{item.Obs_Defecto}}</td>
+                    <td>{{item.Tipo_Tela | slice:0:30}}</td>
+                    <td>
+                      <button mat-icon-button type="button" color="warn" (click)="addItem('D', item.Id_Reposicion_Detalle)"><mat-icon>delete</mat-icon></button>
+                    </td>
+                  </tr>
+                  <tr *ngIf="dataItems.length == 0">
+                    <td colspan="10">No has agregado registros aún</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+  
+            <div class="observaciones">
+              <label for="">Observaciones</label>
+              <textarea name="observaciones" id="observaciones" maxlength="200" cols="30" rows="10" formControlName="Observacion"
+                placeholder="Ingrese Observaciones"></textarea>
+            </div>
+            <div class="botones">
+              <button mat-flat-button color="primary" type="submit" class="button-registrar"><mat-icon>save</mat-icon> Actualizar
+                Reposición</button>
+              <button mat-flat-button color="warn" mat-dialog-close class="button-cancel"><mat-icon>cancel</mat-icon>
+                Cancelar</button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+  
+    </form>
+  </div>
+  
+  <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+  </ngx-spinner>

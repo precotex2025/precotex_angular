@@ -1,0 +1,206 @@
+<div class="card">
+    <div class="card-header">
+        {{data.Title}}
+    </div>    
+
+    <div class="container">
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+
+                <div class="row"> 
+                    <!-- Memo --> 
+                    <mat-form-field class="col col-6"> 
+                        <mat-label>Memo</mat-label> 
+                        <input matInput formControlName="ctrol_memo"> 
+                    </mat-form-field> 
+
+                    <!-- Fecha --> 
+                    <mat-form-field class="col col-5"> 
+                        <mat-label>Fecha</mat-label> 
+                        <input matInput formControlName="ctrol_fecha"> 
+                    </mat-form-field> 
+                </div>  
+                
+                <div class="row">
+                    <!-- De --> 
+                    <mat-form-field class="col col-6"> 
+                        <mat-label>De :</mat-label> 
+                        <input matInput formControlName="ctrol_user_ori"> 
+                    </mat-form-field>         
+
+                    <!-- Planta Origen --> 
+                    <mat-form-field class="col col-5"> 
+                        <mat-label>Planta Origen :</mat-label> 
+                        <mat-select formControlName="ctrol_planta_ori"> 
+                            <mat-option *ngFor="let planta of dataPlantas" [value]="planta.num_Planta">{{ planta.des_Planta }}</mat-option> 
+                        </mat-select> 
+                    </mat-form-field> 
+
+                    <!-- <div class="col col-5 mat-form-field">
+                        <ng-select  [items]="dataPlantas" bindLabel="des_Planta" bindValue="num_Planta" 
+                                    [multiple]="false" [searchable]="true" placeholder="Planta Destino :" [(ngModel)]="Num_Planta_Ori">
+                        </ng-select>   
+                    </div> -->
+                </div>
+
+                <div class="row">
+                    <!-- Para --> 
+                    <mat-form-field style="width: 100%;"> 
+                        <mat-label>Para :</mat-label> 
+                        <mat-select formControlName="ctrol_user_des" (selectionChange)="onUsuarioSeleccionado($event)" #select> 
+
+                           <!-- Input para filtrar -->
+                            <mat-option>
+                                <mat-form-field appearance="standard" style="width: 100%; margin: 0;">
+                                <input
+                                    matInput
+                                    placeholder="Buscar usuario..."
+                                    [formControl]="filtroUsuarioCtrl"
+                                    (click)="$event.stopPropagation()"
+                                    autocomplete="off">
+                                </mat-form-field>
+                            </mat-option>
+
+                            <!-- Opciones filtradas -->
+                            <mat-option 
+                                *ngFor="let usuario of usuariosFiltrados" 
+                                [value]="usuario.Cod_Usuario">
+                                {{ usuario.Nom_usuario }}
+                            </mat-option>
+
+
+                            <!-- <mat-option *ngFor="let usuario of dataUsuarios" [value]="usuario.Cod_Usuario">{{ usuario.Nom_usuario }}</mat-option>  -->
+                        </mat-select> 
+                    </mat-form-field> 
+                </div>                   
+
+                <div class="row">
+                    <!-- Planta Destino --> 
+                    <mat-form-field style="width: 100%;"> 
+                        <mat-label>Planta Destino :</mat-label> 
+                        <mat-select formControlName="ctrol_planta_des"> 
+                            <mat-option *ngFor="let planta of dataPlantas" [value]="planta.num_Planta">{{ planta.des_Planta }}</mat-option> 
+                        </mat-select> 
+                    </mat-form-field> 
+                </div>      
+
+                <div class="row">
+                    <!-- Tipo --> 
+                    <mat-form-field style="width: 100%;"> 
+                        <mat-label>Tipo :</mat-label> 
+                        <mat-select formControlName="ctrol_tip_memo"> 
+                            <mat-option *ngFor="let tipomemo of dataTipoMemo" [value]="tipomemo.cod_Tipo_Memo">{{ tipomemo.descripcion }}</mat-option> 
+                        </mat-select> 
+                    </mat-form-field>                     
+                </div>
+                
+                <div class="row">
+                    <!-- Motivo --> 
+                    <mat-form-field style="width: 100%;"> 
+                        <mat-label>Motivo :</mat-label> 
+                        <mat-select formControlName="ctrol_motivo"> 
+                            <mat-option *ngFor="let motivo of dataMotivos" [value]="motivo.cod_Motivo_Memo">{{ motivo.descripcion }}</mat-option> 
+                        </mat-select> 
+                    </mat-form-field> 
+                </div>                    
+
+                <br>
+                <hr style="border: none; border-top: 1px solid lightgray;" />
+                <div class="titulo-detalle">Detalle</div>
+                <hr style="border: none; border-top: 1px solid lightgray;" />
+     
+                <div class="row">
+
+                    <mat-form-field appearance="outline" style="flex: 1;">
+                        <mat-label>Articulo :</mat-label>
+                        <textarea matInput rows="3" formControlName="ctrol_glosa" placeholder="Ingrese una descripción"></textarea>
+                    </mat-form-field>                        
+
+                    <!-- <mat-form-field style="width: 100%;"> 
+                        <mat-label>Material :</mat-label> 
+                        <mat-select formControlName="ctrol_material" (selectionChange)="onMaterialSeleccionado($event)"> 
+                            <mat-option *ngFor="let material of dataMateriales" [value]="material.cod_Material_Memo">{{ material.descripcion }}</mat-option> 
+                        </mat-select> 
+                    </mat-form-field> -->
+
+                    <!-- <div class="col col-12 mat-form-field">
+                        <ng-select  [items]="dataMateriales" bindLabel="descripcion" bindValue="cod_Material_Memo" 
+                                    [multiple]="false" [searchable]="true" placeholder="Seleccione Material" [(ngModel)]="cod_Material_Memo">
+                        </ng-select>   
+                    </div>       -->
+                    
+                </div>
+
+                <div class="row">
+                    <mat-form-field class="col col-6"> 
+                        <mat-label>Cantidad :</mat-label> 
+                        <input matInput type="number" formControlName="ctrol_cantidad"> 
+                    </mat-form-field>    
+                    <div class="col col-5">
+                        <button type="button" class="fila1-BtnBuscar" mat-flat-button (click)="onAddMaterial()">
+                            <mat-icon aria-label="create_new_folder">add
+                            </mat-icon> Agregar Detalle
+                        </button>   
+                    </div>
+                </div>
+
+                <br>
+
+                <mat-card class="full-width-card">
+                    <mat-card-content>
+                        <div class="container-cuerpo-fila2">
+                            <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+
+                                <!-- <ng-container matColumnDef="codigo">
+                                    <th mat-header-cell *matHeaderCellDef> Codigó </th>
+                                    <td mat-cell *matCellDef="let data_det"> {{data_det.codigo}}</td>
+                                </ng-container>               -->
+                                
+                                <ng-container matColumnDef="descripcion">
+                                    <th mat-header-cell *matHeaderCellDef> Material </th>
+                                    <td mat-cell *matCellDef="let data_det"> {{data_det.glosa}}</td>
+                                </ng-container>     
+                                
+                                <ng-container matColumnDef="cantidad">
+                                    <th mat-header-cell *matHeaderCellDef> Cantidad </th>
+                                    <td mat-cell *matCellDef="let data_det"> {{data_det.cantidad}}</td>
+                                </ng-container>      
+                                
+                                <ng-container matColumnDef="opciones">
+                                    <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                                    <td mat-cell *matCellDef="let row; let i = index">
+        
+                                        <a mat-icon-button color="warn" style="margin-right:5px;">
+                                            <mat-icon color="warn" (click)="quitarDetalle(i)">delete</mat-icon>
+                                        </a>                       
+
+                                    </td>
+                                </ng-container> 
+                                
+                                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                                <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>                                   
+
+                            </table>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+
+            <div class="button-row"> 
+
+                <button mat-flat-button color="primary" class="form-button" (click)="onSave()"> 
+                    <mat-icon>save</mat-icon> Grabar
+                </button>
+
+                <button mat-flat-button color="warn" mat-dialog-close class="form-button">
+                    <mat-icon>close</mat-icon> Salir
+                </button>
+                
+            </div>                   
+
+        </form> 
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

@@ -1,0 +1,205 @@
+<!--DefectosAlamacenDerivados-->
+   
+
+<div class="container-dialog">
+    <!-- ventana nro 4 - historial --> 
+    <div class="grid-container-dialog"> 
+ 
+        <div class="title-dialog">Modificar Registro - Auditoria Nº {{data}} </div>
+
+        <form class="container-cuerpo-dialog" [formGroup]="formulario">
+            <div class="container-cuerpo-fila1-dialog">
+                
+                
+                
+    
+
+                    <mat-form-field class="fila1-abr-dialog"> 
+                        <mat-label>Abr</mat-label>
+                        <input matInput type="text"  placeholder="Abr" value=""
+                            autocomplete="off" formControlName="sAbr" >
+                    </mat-form-field>
+                
+ 
+                    <mat-form-field class="fila1-cliente-dialog"> 
+                        <mat-label>Cliente</mat-label>
+            
+                        <input matInput type="text"  placeholder="Cliente" value=""
+                            autocomplete="off" formControlName="sCliente" >
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-estilo-dialog"> 
+                        <mat-label>Estilo</mat-label>
+                        <input matInput type="text"  placeholder="Estilo" value=""
+                            autocomplete="off" formControlName="sEstilo" >
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-temporada-dialog"> 
+                        <mat-label>Temporada</mat-label>
+                      
+                        <input matInput type="text"  placeholder="Temporada" value=""
+                            autocomplete="off" formControlName="sTemporada" >
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-color-dialog"> 
+                        <mat-label>Color</mat-label>
+                        <input matInput type="text"  placeholder="Color" value=""
+                            autocomplete="off" formControlName="sColor" >
+                    </mat-form-field>
+        
+
+                    <mat-form-field class="fila1-fecha-dialog">
+                        <input matInput [matDatepicker]="picker1" placeholder="Fecha Regegistro" [formControl]="fec_registro">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker  #picker1></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="fila1-auditor-dialog"> 
+                        <mat-label>Auditor</mat-label>
+                        <input matInput type="text"  placeholder="Auditor" value=""
+                            autocomplete="off" formControlName="sAuditor" >
+                    </mat-form-field>
+                    
+                    <p *ngIf="Altertas_Caidas_Global" class="fila1-alerta-dialog" style="color:red; font-size: 15px; margin:15px; font: bold sans-serif; font-weight: bold;">{{Altertas_Caidas_Global}}</p>
+            </div>    
+            
+          <div class="container-cuerpo-fila4-dialog"> 
+              <h5 class="titulo_datos">Datos a Registrar:</h5>
+          </div>
+
+            <div class="container-cuerpo-fila3-dialog">
+               
+                <mat-form-field class="fila3-codigo-dialog"> 
+                    <mat-label>Codigo</mat-label>
+                    <input matInput type="number" #cod placeholder="Codigo" value="" (input)="BuscarMotivo()" #abr
+                        autocomplete="off" formControlName="cod"  >
+                </mat-form-field>
+                <mat-form-field class="fila3-defecto-dialog"> 
+                    <mat-label>Defecto</mat-label>
+                    <input matInput type="text" #defecto  placeholder="Defecto" value=""  
+                        autocomplete="off" formControlName="defecto" >
+                </mat-form-field>
+                
+                <mat-form-field appearance="fill" class="fila3-tallas-dialog" >
+                    <mat-label>Tallas</mat-label>
+                    <mat-select formControlName="s">
+                      <mat-option *ngFor="let talla of tallas" [value]="talla.Cod_Talla" >
+                        {{talla.Cod_Talla}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> 
+
+
+                  <mat-form-field class="fila3-cant-dialog">  
+                    <mat-label>Cantidad</mat-label>
+                    <input matInput type="number" #cod placeholder="" value="" 
+                        autocomplete="off" formControlName="cant"  >
+                </mat-form-field>
+    
+                 <div class="fila3-insertarFila-dialog" >
+                  <button type="button" (click)="InsertarFila()" [disabled]="!flg_btn_detalle" class="button-fila-dialog" mat-flat-button >
+                  <mat-icon aria-label="person">save
+                  </mat-icon> Guardar
+                </button>
+                </div> 
+
+               <div class="fila3-modificarFila-dialog" >
+                    <button type="button" (click)="ModificarRegistro()"  class="button-fila-dialog" mat-flat-button >
+                    <mat-icon aria-label="person">remove
+                    </mat-icon>
+                  </button>
+                </div>
+
+                
+
+            </div>
+
+
+        <div class="container-cuerpo-fila5-dialog">
+            
+            
+            </div>  
+
+
+
+            <!-- hora	tipo	num_guia	cod_proveedor	des_proveedor	cod_usuario -->
+            <div class="container-cuerpo-fila2-dialog">
+                   
+               <table mat-table   class="mat-elevation-z8" #table [dataSource]="dataSource">
+                    
+  
+                   
+
+                    <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns"  >
+                        <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+    
+                        <td  mat-cell *matCellDef="let element" > {{element[column]}} </td>
+                      </ng-container>
+
+                      
+
+              
+                    
+                      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                      <!--<tr mat-row *matRowDef="let row; columns: columnsToDisplay;">(click)="EliminarRegistro(row.Abr_Motivo)"</tr>-->
+                      <tr
+                      mat-row
+                      (click)="AsignarCodRegistroVariableEliminar(row.Cod_Motivo)"
+           
+
+                       
+                      *matRowDef="let row; columns: columnsToDisplay;"
+                      ></tr>
+
+   
+
+                    <!--<tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
+                    <tr mat-row *matRowDef="let fila; columns: displayedColumns_cab;" class="example-element-row"></tr>
+                    -->
+
+
+                </table>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons 
+                aria-label="Select page of periodic elements">
+               </mat-paginator>
+            </div>
+
+
+               <!-- <ul>
+                <li *ngFor="let clickedRow of clickedRows">
+                  Clicked on {{clickedRow.Abr_Motivo}}
+                </li>
+              </ul>-->
+
+            <div class="container-cuerpo-foot-dialog">
+        
+
+              <!--  <button type="button" (click)="ModificarRegistro()" class="button-agregar-dialog" mat-flat-button 
+                >
+                <mat-icon aria-label="person">create</mat-icon>
+                Modificar
+            </button>-->
+
+                <button  type="button" (click)="EliminarRegistro()" class="button-Eliminar-dialog" mat-flat-button 
+                >
+                <mat-icon aria-label="person">delete_forever</mat-icon>
+                Eliminar
+                </button>
+
+                <button mat-dialog-close type="button" class="button-modificar-dialog"  
+                mat-button mat-dialog-close mat-dialog-close="false" >
+                    <mat-icon   aria-label="person" >cancel
+                    </mat-icon>  Cancelar
+                </button>                
+            </div>
+        </form>
+
+    </div>
+
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

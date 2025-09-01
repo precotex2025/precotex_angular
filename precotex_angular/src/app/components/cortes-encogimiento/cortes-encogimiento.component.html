@@ -1,0 +1,341 @@
+<div class="container">
+  <div class="grid-container">
+
+      <div class="title">Cortes Encogimientos</div>
+
+      <form class="container-cuerpo" [formGroup]="formulario" >
+
+        <mat-card>
+          <mat-card-content>
+            <div class="container-cuerpo-fila1">
+
+              <mat-form-field class="fila1-fecha" appearance="fill">
+                <mat-label>Partida</mat-label>
+                <input matInput placeholder="" value=""
+                autocomplete="off" formControlName="Programa" style="text-transform: uppercase">
+              </mat-form-field>
+
+              <button type="button" class="fila1-buscar" mat-flat-button (click)="BuscarDatos()" >
+                <mat-icon aria-label="person">search</mat-icon>Buscar
+              </button>
+
+              <mat-form-field class="fila1-fecha" appearance="fill">
+                  <mat-label>Partida</mat-label>
+                  <input matInput placeholder="" value=""
+                  autocomplete="off" formControlName="Cod_Ordtra" style="text-transform: uppercase">
+              </mat-form-field>
+
+              <button type="button" class="fila1-agregar" mat-flat-button mat-flat-button (click)="AgregaItem('I')">
+                  <mat-icon aria-label="person">add_box</mat-icon>Agregar
+              </button>
+<br>
+              <button type="button" class="fila1-confirmar " mat-flat-button (click)="GrabarData()" [disabled]="this.PerfilUsuario == 2">
+                  <mat-icon aria-label="person">save</mat-icon>Confirmar Aprobaciones
+              </button>
+
+          </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-content>
+
+            <!--VISTA ADMINISTRADOR-->
+            <div class="container-cuerpo-fila2" *ngIf="this.PerfilUsuario == 1">
+
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z8"
+              cdkDropList (cdkDropListDropped)="drop($event)"
+              cdkDropListData="dataSource">
+
+                  <ng-container matColumnDef="Check_Seleccionado">
+                    <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+                    <mat-cell *matCellDef="let programa">
+                      <mat-slide-toggle  class="example-margin" (change)="ChangeAprobacion($event, programa.cod_Partida,programa.num_Secuencia
+                        ,programa.encogimiento_Ancho_Lab,programa.encogimiento_Largo_Lab,programa.ancho_Antes_Lav,programa.alto_Antes_Lav
+                        ,programa.ancho_Despues_Lav,programa.alto_Despues_Lav)" color="warn" [checked]="programa.check_Seleccionado == '1'" [disabled]="programa.check_Seleccionado == '1'">
+                        <span style="background-color: rgb(209, 59, 33);  color: white; padding: 2px;" *ngIf="programa.check_Seleccionado == '1'" >Aprobado</span>
+                        <span style="background-color: rgb(80, 143, 72);  color: white; padding: 2px;" *ngIf="programa.check_Seleccionado == '0'" >Por Aprobar</span>
+                        <!--<span *ngIf="programa.check_Seleccionado == null" >Por Aprobar</span>-->
+                      </mat-slide-toggle>
+                    </mat-cell>
+                  </ng-container>
+
+                    <ng-container matColumnDef="Num_Secuencia">
+                      <mat-header-cell *matHeaderCellDef>Sec</mat-header-cell>
+                      <mat-cell  *matCellDef="let programa">
+                          {{programa.num_Secuencia}}
+                      </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Nom_Cliente">
+                        <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
+                        <mat-cell  *matCellDef="let programa">
+                            <!--<mat-icon class="example-drag-cursor">reorder</mat-icon>-->
+                            <span>{{programa.nom_Cliente}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Partida">
+                        <mat-header-cell *matHeaderCellDef>Partida</mat-header-cell>
+                        <mat-cell  *matCellDef="let programa">
+                            {{programa.cod_Partida}}
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Tela">
+                        <mat-header-cell *matHeaderCellDef class="mat-header-cell">Codigo Tela</mat-header-cell>
+                        <mat-cell *matCellDef="let programa">  {{programa.cod_Tela}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Des_Tela">
+                      <mat-header-cell *matHeaderCellDef class="mat-header-cell">Tela</mat-header-cell>
+                      <mat-cell *matCellDef="let programa">  {{programa.des_Tela}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Des_Color">
+                      <mat-header-cell *matHeaderCellDef class="mat-header-cell">Color</mat-header-cell>
+                      <mat-cell *matCellDef="let programa">  {{programa.des_Color}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Ancho_Real_cm">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Ancho <br>Real<br>Calidad</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.ancho_Real_cm}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Encogimiento_AnchoA">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">1er Lavado <br>Encog. Ancho</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.encogimiento_AnchoA}}% </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Encogimiento_LargoA">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">1er Lavado <br>Encog. Largo</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.encogimiento_LargoA}}% </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Encogimiento_Ancho_Lab">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">3er Lavado <br>Encog. Ancho</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.encogimiento_Ancho_Lab}}% </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Encogimiento_Largo_Lab">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">3er Lavado <br>Encog. Largo</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.encogimiento_Largo_Lab}}% </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Ancho_Antes_Lav_cm">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Ancho <br>Antes <br>Lavado</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.ancho_Antes_Lav}} </mat-cell>
+                    </ng-container>
+
+                     <ng-container matColumnDef="Largo_Antes_Lav_cm">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Largo <br>Antes <br>Lavado</mat-header-cell>
+                        <mat-cell mat-cell  *matCellDef="let programa">  {{programa.alto_Antes_Lav}} </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Ancho_Despues_Lav_cm">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Ancho <br> Despues <br> Lavado</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.ancho_Despues_Lav}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Largo_Despues_Lav_cm">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Largo <br>Despues <br>Lavado</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.alto_Despues_Lav}} </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Sesgadura">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Sesgadura</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.sesgadura}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Encogimiento_Largo">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Enc.<br>ancho</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.encogimiento_Largo}}% </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Encogimiento_Ancho">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Enc.<br>largo</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.encogimiento_Ancho}}% </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Acciones">
+                        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                        <mat-cell *matCellDef="let programa; let i = index" >
+                            <a mat-icon-button
+                            (click)="ModificarObs(programa)">
+                            <mat-icon color="blue">{{icon }}</mat-icon>
+                            </a>
+                            <!--<a mat-icon-button [disabled]="programa.check_Seleccionado == '1'">
+                                <mat-icon color="warn"  (click)="EliminarRegistro($event, programa.cod_Partida,programa.num_Secuencia,programa.check_Seleccionado)">delete</mat-icon>
+                            </a>-->
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+
+                  </table>
+
+              <mat-paginator  class="paginador" #paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons aria-label="Select page of periodic elements">
+              </mat-paginator>
+
+            </div>
+
+            <!--VISTA OPERARIO-->
+            <div class="container-cuerpo-fila2" *ngIf="this.PerfilUsuario == 2">
+
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z8"
+              cdkDropList (cdkDropListDropped)="drop($event)"
+              cdkDropListData="dataSource">
+
+                  <ng-container matColumnDef="Check_Seleccionado">
+                    <mat-header-cell *matHeaderCellDef style="width: 100px;"> Estado </mat-header-cell>
+                    <mat-cell *matCellDef="let programa">
+                      <mat-slide-toggle  class="example-margin" (change)="ChangeAprobacion($event, programa.cod_Partida,programa.num_Secuencia
+                        ,programa.encogimiento_Ancho_Lab,programa.encogimiento_Largo_Lab,programa.ancho_Antes_Lav,programa.alto_Antes_Lav
+                        ,programa.ancho_Despues_Lav,programa.alto_Despues_Lav)" color="warn" [checked]="programa.check_Seleccionado == '1'" [disabled] = "programa.check_Seleccionado == '1' || programa.check_Seleccionado == '0'">
+                        <span style="background-color: rgb(209, 59, 33);  color: white; padding: 2px;" *ngIf="programa.check_Seleccionado == '1'" >Aprobado</span>
+                        <span style="background-color: rgb(80, 143, 72);  color: white; padding: 2px;" *ngIf="programa.check_Seleccionado == '0'" >Por Aprobar</span>
+                        <!--<span *ngIf="programa.check_Seleccionado == null" >Por Aprobar</span>-->
+                      </mat-slide-toggle>
+                    </mat-cell>
+                  </ng-container>
+
+                    <ng-container matColumnDef="Num_Secuencia">
+                      <mat-header-cell *matHeaderCellDef>Sec</mat-header-cell>
+                      <mat-cell  *matCellDef="let programa">
+                          {{programa.num_Secuencia}}
+                      </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Nom_Cliente">
+                        <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
+                        <mat-cell  *matCellDef="let programa">
+                            <!--<mat-icon class="example-drag-cursor">reorder</mat-icon>-->
+                            <span>{{programa.nom_Cliente}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Partida">
+                        <mat-header-cell *matHeaderCellDef>Partida</mat-header-cell>
+                        <mat-cell  *matCellDef="let programa">
+                            {{programa.cod_Partida}}
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Cod_Tela">
+                        <mat-header-cell *matHeaderCellDef class="mat-header-cell">Codigo Tela</mat-header-cell>
+                        <mat-cell *matCellDef="let programa">  {{programa.cod_Tela}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Des_Tela">
+                      <mat-header-cell *matHeaderCellDef>Tela</mat-header-cell>
+                      <mat-cell *matCellDef="let programa">  {{programa.des_Tela}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Des_Color">
+                      <mat-header-cell *matHeaderCellDef class="mat-header-cell">Color</mat-header-cell>
+                      <mat-cell *matCellDef="let programa">  {{programa.des_Color}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Ancho_Real_cm">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Ancho<br>Real<br>Calidad</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.ancho_Real_cm}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Encogimiento_AnchoA">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">1er Lavado <br>Encog. Ancho</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.encogimiento_AnchoA}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Encogimiento_LargoA">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">1er Lavado <br>Encog. Largo</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.encogimiento_LargoA}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Encogimiento_Ancho_Lab">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">3er Lavado <br>Enc. Ancho</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.encogimiento_Ancho_Lab}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Encogimiento_Largo_Lab">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">3er Lavado <br>Enc. Largo</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.encogimiento_Largo_Lab}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Ancho_Antes_Lav_cm">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Ancho<br> Antes<br>Lavado (cm)</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.ancho_Antes_Lav}} </mat-cell>
+                    </ng-container>
+
+                     <ng-container matColumnDef="Largo_Antes_Lav_cm">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Largo<br> Antes<br>Lavado (cm)</mat-header-cell>
+                        <mat-cell mat-cell  *matCellDef="let programa">  {{programa.alto_Antes_Lav}} </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Ancho_Despues_Lav_cm">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Ancho Después<br> Lavado (cm)</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.ancho_Despues_Lav}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Largo_Despues_Lav_cm">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Largo Después<br>Lavado (cm)</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.alto_Despues_Lav}} </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Sesgadura">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Sesgadura.</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.sesgadura}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Encogimiento_Largo">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Enc.<br>ancho</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.encogimiento_Largo}}% </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Encogimiento_Ancho">
+                      <mat-header-cell mat-header-cell *matHeaderCellDef class="mat-header-cell">Enc.<br>largo</mat-header-cell>
+                      <mat-cell mat-cell  *matCellDef="let programa">  {{programa.encogimiento_Ancho}}% </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Acciones">
+                        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                        <mat-cell *matCellDef="let programa; let i = index" >
+                            <a mat-icon-button *ngIf="programa.check_Seleccionado != '1'"
+                            (click)="ModificarObs(programa)">
+                            <mat-icon color="blue">{{icon }}</mat-icon>
+                            </a>
+                            <!--<a mat-icon-button [disabled]="programa.check_Seleccionado == '1'">
+                                <mat-icon color="warn"  (click)="EliminarRegistro($event, programa.cod_Partida,programa.num_Secuencia,programa.check_Seleccionado)">delete</mat-icon>
+                            </a>-->
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+
+                  </table>
+
+              <mat-paginator  class="paginador" #paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons aria-label="Select page of periodic elements">
+              </mat-paginator>
+
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+
+      </form>
+
+  </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center; " >Cargando... </p>
+</ngx-spinner>

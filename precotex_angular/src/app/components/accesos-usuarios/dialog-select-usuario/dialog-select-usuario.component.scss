@@ -1,0 +1,99 @@
+mat-card {
+    margin-top: 10px;
+    padding: 0px;
+}
+
+mat-card-header {
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+}
+
+mat-card-content {
+    margin-top: 10px;
+    padding: 10px 15px;
+}
+
+.mat-column-Cod_Trabajador,
+.mat-column-Apellidos,
+.mat-column-Nombre_Trabajador,
+.mat-column-Email,
+.mat-column-Nro_DNI,
+.mat-column-Tip_Trabajador,
+.mat-column-acciones //.mat-column-eliminar 
+
+    {
+    text-align: center;
+    font-size: 13px;
+    font-family: arial;
+    padding: 10px;
+}
+
+.mat-column-Cod_Trabajador {
+    width: 30px !important;
+    text-align: center
+}
+
+.mat-column-Apellidos {
+    width: 30px !important;
+    text-align: center
+}
+
+.mat-column-Nombre_Trabajador {
+    width: 30px !important;
+    text-align: center
+}
+
+.mat-column-Email {
+    width: 50px !important;
+    text-align: center
+}
+
+.mat-column-Nro_DNI {
+    width: 100px !important;
+    text-align: center
+}
+
+.mat-column-Tip_Trabajador {
+    width: 80px !important;
+    text-align: center
+}
+
+.mat-column-Flg_Activo {
+    width: 80px !important;
+    text-align: center;
+}
+
+.mat-column-acciones {
+    width: 30px !important;
+    text-align: center
+}
+
+//.mat-column-eliminar {width: 30px !important;text-align: center}
+.mat-header-cell {
+    text-align: center;
+}
+
+.cerrar {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+}
+
+.mat-mdc-row:hover, .mat-row cdk-row:hover,  .mat-mdc-cell {
+    border-color: currentColor;
+}
+
+.demo-row-is-clicked {
+    font-weight: bold;
+}
+
+tr:hover {
+    border-color: currentColor;
+    background: #E1E1E1;
+    cursor: pointer;
+}
