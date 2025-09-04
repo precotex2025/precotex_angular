@@ -4,8 +4,8 @@ export const GlobalVariable = {
   vusu: '',
   vCod_Rol: 0,
 
-  //baseUrl: "/ws_android", //PRODUCCION
-  baseUrl: "http://192.168.1.36/ws_android", //LOCAL
+  baseUrl: "/ws_android", //PRODUCCION
+  //baseUrl: "http://192.168.1.36/ws_android", //LOCAL
   //baseUrl: "http://192.168.1.36/ws_android_dev", //LOCAL
   baseUrlLocal: "/ws_local",
   //baseUrlVb: "http://192.168.5.105/publicaWs/",
@@ -13,9 +13,9 @@ export const GlobalVariable = {
   baseUrlVbTinto: "http://192.168.1.36/publicaWs2/",
 
   //Base URL BackEnd - ic.backend.precotex.web - HM
-  baseUrlProcesoTenido: "https://localhost:7093/api/", //LOCAL
+  //baseUrlProcesoTenido: "https://localhost:7093/api/", //LOCAL
   //baseUrlProcesoTenido: "http://192.168.1.36:8062/api/",
-  //baseUrlProcesoTenido: "https://gestion.precotex.com:444/ubicaciones/api/", // PRODUCCION EIQ
+  baseUrlProcesoTenido: "https://gestion.precotex.com:444/ubicaciones/api/", // PRODUCCION EIQ
 
 
 

@@ -41,9 +41,8 @@ export class SeguridadVisitasService {
 
 
   consultaDNI(DNI: any){    
-    return this.http.get(`https://consultaruc.win/api/dni/${DNI}`);
+    return this.http.get(`https://dniruc.apisperu.com/api/v1/dni/${DNI}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImRlYXRobWlsZXhAZ21haWwuY29tIn0.OA-i30hxgqCvZhn-MtedXZsjGCRwApDwYXP7D40cB74`);
   }
-
   
   SEG_TRAER_DATOS_VISITA(Opcion: string, Nro_DNI: string, Num_Planta: any){    
     return this.http.get(`${this.baseUrl}/app_SEG_TRAER_DATOS_VISITA.php?Opcion=${Opcion}&Nro_DNI=${Nro_DNI}&Num_Planta=${Num_Planta}`);

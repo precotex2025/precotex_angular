@@ -4,6 +4,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GlobalVariable } from 'src/app/VarGlobals';
 import { SeguridadVisitasService } from 'src/app/services/seguridad-visitas.service';
+import { FormsModule } from '@angular/forms';
+
+interface DniResponse {
+  success: boolean;
+  dni: string;
+  nombres: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string;
+}
 
 @Component({
   selector: 'app-crear-visita',
@@ -148,6 +157,7 @@ export class CrearVisitaComponent implements OnInit {
     }
     
   }
+  
 
 
   changeDni(){
@@ -161,11 +171,12 @@ export class CrearVisitaComponent implements OnInit {
             this.SpinnerService.hide();
           }else{
             this.Nombres_Visita = '';
-            this.seguridadVisitasService.consultaDNI(this.Nro_DNI).subscribe(result => {
+            this.seguridadVisitasService.consultaDNI(this.Nro_DNI).subscribe((result: DniResponse) => {
               console.log(result);
               this.SpinnerService.hide();
-              if(result['response'] == 'true'){
-                this.Nombres_Visita = result['result']['Paterno'] + ' '  + result['result']['Materno'] + ' ' + result['result']['Nombres']
+              if(result['success'] == true){
+                //this.Nombres_Visita = result['result']['apellidoPaterno'] + ' ' + result['result']['apellidoMaterno'] + ' ' + result['result']['nombres']
+                this.Nombres_Visita =  `${result.apellidoPaterno} ${result.apellidoMaterno} ${result.nombres}`;
               }else{
                 this.Nombres_Visita = '';
               }
