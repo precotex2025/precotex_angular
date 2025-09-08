@@ -4,9 +4,9 @@ export const GlobalVariable = {
   vusu: '',
   vCod_Rol: 0,
 
-  baseUrl: "/ws_android", //PRODUCCION
+  //baseUrl: "/ws_android", //PRODUCCION
   //baseUrl: "http://192.168.1.36/ws_android", //LOCAL
-  //baseUrl: "http://192.168.1.36/ws_android_dev", //LOCAL
+  baseUrl: "http://192.168.1.36/ws_android_dev", //LOCAL
   baseUrlLocal: "/ws_local",
   //baseUrlVb: "http://192.168.5.105/publicaWs/",
   baseUrlVb: "http://192.168.1.36/publicaWs/",

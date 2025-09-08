@@ -104,7 +104,7 @@ export class DefectosAlmacenDerivadosService {
     return this.http.get(`${this.baseUrl}/app_Mostrar_Reporte_Derivados.php?Accion=${Accion}&Cod_Cliente=${Cod_Cliente}&Cod_Auditor=${Nom_Auditor}&Cod_EstCli=${Cod_EstCli}&Cod_ColCli=${Cod_ColCli}`);
   }
 
-  ListarReporteDetalladoService(Accion: string, Cod_Cliente: string, Cod_EstCli: string, Cod_TemCli:string, Cod_ColCli: string, fIni: string,fFin: string) {
+  ListarReporteDetalladoService(Accion: string, Cod_Cliente: string, Cod_EstCli: string, Cod_TemCli:string, Cod_ColCli: string, Cod_OrdPro: string, fIni: string,fFin: string) {
     if (!_moment(fIni).isValid()) {
       fIni = '';
     }else{
@@ -116,10 +116,10 @@ export class DefectosAlmacenDerivadosService {
     }else{
       fFin = _moment(fFin.valueOf()).format('DD/MM/YYYY');
     }
-    return this.http.get(`${this.baseUrl}/app_Mostrar_Reporte_Detallado_Derivados_V3.php?Accion=${Accion}&Cod_Cliente=${Cod_Cliente}&Cod_EstCli=${Cod_EstCli}&Cod_TemCli=${Cod_TemCli}&Cod_ColCli=${Cod_ColCli}&fIni=${fIni}&fFin=${fFin}`);
+    return this.http.get(`${this.baseUrl}/app_Mostrar_Reporte_Detallado_Derivados_V3.php?Accion=${Accion}&Cod_Cliente=${Cod_Cliente}&Cod_EstCli=${Cod_EstCli}&Cod_TemCli=${Cod_TemCli}&Cod_ColCli=${Cod_ColCli}&Cod_OrdPro=${Cod_OrdPro}&fIni=${fIni}&fFin=${fFin}`);
   }
   
-  ListarReporteDetallado3Service(Accion: string, Cod_Cliente: string, Cod_EstCli: string, Cod_TemCli:string, Cod_ColCli: string, fIni: string,fFin: string) {
+  ListarReporteDetallado3Service(Accion: string, Cod_Cliente: string, Cod_EstCli: string, Cod_TemCli:string, Cod_ColCli: string, Cod_OrdPro: string, fIni: string,fFin: string) {
     if (!_moment(fIni).isValid()) {
       fIni = '';
     }else{
@@ -131,7 +131,7 @@ export class DefectosAlmacenDerivadosService {
     }else{
       fFin = _moment(fFin.valueOf()).format('DD/MM/YYYY');
     }
-    return this.http.get(`${this.baseUrl}/app_Mostrar_Reporte_Detallado3_Derivados.php?Accion=${Accion}&Cod_Cliente=${Cod_Cliente}&Cod_EstCli=${Cod_EstCli}&Cod_TemCli=${Cod_TemCli}&Cod_ColCli=${Cod_ColCli}&fIni=${fIni}&fFin=${fFin}`);
+    return this.http.get(`${this.baseUrl}/app_Mostrar_Reporte_Detallado3_Derivados.php?Accion=${Accion}&Cod_Cliente=${Cod_Cliente}&Cod_EstCli=${Cod_EstCli}&Cod_TemCli=${Cod_TemCli}&Cod_ColCli=${Cod_ColCli}&Cod_OrdPro=${Cod_OrdPro}&fIni=${fIni}&fFin=${fFin}`);
   }
 
   

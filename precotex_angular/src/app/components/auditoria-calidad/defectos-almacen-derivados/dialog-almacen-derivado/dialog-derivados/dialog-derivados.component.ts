@@ -295,7 +295,7 @@ export class DialogDerivadosComponent implements OnInit, AfterViewInit {
         if (this.tallas.length > 0) {
           this.tallas.forEach((currentValue, index) => {
 
-            this.displayedColumns.push(this.tallas[index].Cod_Talla)
+            this.displayedColumns.push(' ' + this.tallas[index].Cod_Talla)
           })
 
           this.columnsToDisplay = this.displayedColumns.slice()

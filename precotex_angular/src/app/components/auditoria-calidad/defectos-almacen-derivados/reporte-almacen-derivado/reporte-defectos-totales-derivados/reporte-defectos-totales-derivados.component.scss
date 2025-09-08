@@ -83,16 +83,18 @@ mat-form-field {
     display: grid;
 
     grid-template:
-    "col1 col2 col3 col4 col5 col6" 60px 
-    "col7 col7 col7 col7 col7 col7" 80px 
-    "col8 col8 col8 col8 col8 col18" auto /
-    280px 280px 280px 280px 280px 50px;
+    "col0 col1 col2 col3 col4 col5 col6" 60px 
+    "col7 col7 col7 col7 col7 col7 col7" 80px 
+    "col8 col8 col8 col8 col8 col8 col18" auto /
+    280px 280px 280px 280px 280px 280px 50px;
 
 }
 
-
-
 .fila1-fecha {
+    grid-area: col0;
+}
+
+.fila1-OP {
     grid-area: col1;
 }
 
@@ -337,15 +339,16 @@ tr:active {
         280px 280px 280px 280px 280px 50px;*/
     }
     .fila1-fecha {
-        grid-area: col1;
-       
+        grid-area: col1;   
+    }
+    .fila1-OP {
+        grid-area: col2;  
     }
     .fila1-cliente {
-        grid-area: col2;
-       
+        grid-area: col3;
     }
     .fila1-estilo {
-        grid-area: col3;
+        grid-area: col9;
         width: 280px;
     }
 
@@ -405,6 +408,7 @@ tr:active {
         display: grid;
         
         grid-template:
+        "col0 col0" 65px
         "col1 col1" 65px
         "col2 col2" 65px
         "col3 col3" 65px
@@ -416,12 +420,13 @@ tr:active {
         180px 180px;
     }
     .fila1-fecha {
-        grid-area: col1;
-       
+        grid-area: col0;   
+    }
+    .fila1-OP {
+        grid-area: col1;   
     }
     .fila1-cliente {
-        grid-area: col2;
-       
+        grid-area: col2;   
     }
     .fila1-estilo {
         grid-area: col3;
