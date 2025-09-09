@@ -141,6 +141,7 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
     sTemporada: [''],
     sCodCli: [''],
     sCodTemp: [''],
+    sTotal:[0],
     Cod_Motivo: ['']
   })
 
@@ -441,6 +442,7 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
         this.formulario.controls['sTemporada'].setValue(result[0].Nom_TemCli)
         this.formulario.controls['sColor'].setValue(result[0].Cod_ColCli)
         this.formulario.controls['sAbr'].setValue(result[0].Abr_Cliente)
+        this.formulario.controls['sTotal'].setValue(result[0].Total)
         this.formulario.controls['sCodCli'].setValue(result[0].Cod_Cliente)
         this.formulario.controls['sCodTemp'].setValue(result[0].Cod_TemCli)
 
@@ -642,6 +644,7 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
     this.formulario.controls['sTemporada'].disable()
     this.formulario.controls['sColor'].disable()
     this.formulario.controls['sAbr'].disable()
+    this.formulario.controls['sTotal'].disable()
 
   }
   /*****************DESHABILITAR INPUTS DE LA CABECERA************************ */
