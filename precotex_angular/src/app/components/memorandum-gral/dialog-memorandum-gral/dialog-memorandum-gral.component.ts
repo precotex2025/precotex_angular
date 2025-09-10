@@ -13,6 +13,7 @@ import { MatSelectChange } from '@angular/material/select';
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { MatIconModule } from '@angular/material/icon';
 
 
 
@@ -176,6 +177,7 @@ filtrarUsuarios(valor: string) {
     ).subscribe(
       (result: any) => {
         if (result.length > 0) {
+          console.log("longitud", result.length);
           this.dataUsuarios = result;
         }
         else {

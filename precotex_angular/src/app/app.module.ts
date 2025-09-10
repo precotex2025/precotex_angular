@@ -15,7 +15,6 @@ import { PrincipalComponent } from './components/principal/principal.component'
 import { FilterByValuePipe } from './pipes/filter-by-value.pipe';
 
 import { MAT_DATE_FORMATS } from '@angular/material/core';
-
 import { MY_DATE_FORMATS } from '../app/my-date-formats';
 import { DatePipe, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { SeguridadControlGuiaComponent } from './components/seguridad/seguridad-control-guia/seguridad-control-guia.component';
@@ -567,6 +566,13 @@ import { DialogMemorandumPlantaComponent } from './components/memorandum-gral/di
 import { LiberaOpColorComponent } from './components/auditoria-corte/libera-op-color/libera-op-color.component';
 import { DialogColorComponent } from './components/auditoria-corte/libera-op-color/dialog-color/dialog-color.component';
 
+//RETIRO DE REPUESTOS
+import { RetiroRepuestosComponent } from './components/retiro-repuestos/retiro-repuestos.component';
+import { DialogRetiroRepuestosComponent } from './components/retiro-repuestos/dialog-retiro-repuestos/dialog-retiro-repuestos/dialog-retiro-repuestos.component';
+import { DialogRetiroRepuestosCierreComponent } from './components/retiro-repuestos/dialog-retiro-repuestos-cierre/dialog-retiro-repuestos-cierre.component';
+import { DialogRetiroRepuestosDetalleComponent } from './components/retiro-repuestos/dialog-retiro-repuestos-detalle/dialog-retiro-repuestos-detalle.component';
+import { DialogRetiroRepuestosDetalleNuevoComponent } from './components/retiro-repuestos/dialog-retiro-repuestos-detalle-nuevo/dialog-retiro-repuestos-detalle-nuevo.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -1057,7 +1063,15 @@ import { DialogColorComponent } from './components/auditoria-corte/libera-op-col
     DialogPendienteEmpaqueCajasComponent, 
     EncogimientoPrendaComponent, 
     DialogEncogimientoPrendaRegistroComponent, 
-    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent 
+    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent,
+    
+    //RETIRO DE REPUESTOS
+    RetiroRepuestosComponent,
+    DialogRetiroRepuestosComponent,
+    DialogRetiroRepuestosCierreComponent,
+    DialogRetiroRepuestosDetalleComponent,
+    DialogRetiroRepuestosDetalleNuevoComponent
+  
   ],
   entryComponents: [DialogJabaComponent],
   imports: [

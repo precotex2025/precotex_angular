@@ -1,0 +1,30 @@
+<div class="card">
+    <div class="card-header">
+        {{data.Title}}
+    </div>
+    <div class="container">
+        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+            <div class="row">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>N° Precinto Cierre</mat-label>
+                    <input matInput formControlName="ctrol_pre_cier">
+                </mat-form-field>
+            </div>
+
+            <div class="button-row">    
+                <button mat-flat-button color="primary" class="form-button" (click)="onSave()"> 
+                    <mat-icon>save</mat-icon> Grabar
+                </button>
+
+                <button mat-flat-button color="warn" mat-dialog-close class="form-button">
+                    <mat-icon>close</mat-icon> Salir
+                </button>
+            </div>  
+
+
+        </form>
+    </div>
+</div>
+
+
+

@@ -305,6 +305,7 @@ import { ComiteEmergenciaComponent } from './components/actas/comite-emergencia/
 import { ValidaCorteDespachoComponent } from './components/auditoria-corte/valida-corte-despacho/valida-corte-despacho.component';
 import { LiberaOpColorComponent } from './components/auditoria-corte/libera-op-color/libera-op-color.component';
 import { SalidaTiendaComponent } from './components/seguridad/salida-tienda/salida-tienda.component';
+import { RetiroRepuestosComponent } from './components/retiro-repuestos/retiro-repuestos.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -656,6 +657,9 @@ const routes: Routes = [
 
   //MEMORANDUM GRAL
   { path: "MemorandumGral", component: MemorandumGralComponent },
+
+  //RETIRO DE REPUESTOS
+  {path: 'RetiroRepuestos', component: RetiroRepuestosComponent},
 
   //LIBERAR OP TENDIDO
   { path: 'liberacionOP', component: LiberarOpComponent },
