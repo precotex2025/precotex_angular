@@ -161,6 +161,7 @@ export class ReporteDefectosTotalesDerivadosComponent implements OnInit {
     this.formulario.controls['sEstilo'].disable()
     this.formulario.controls['sTemporada'].disable()
     this.formulario.controls['sColor'].disable()
+    this.formulario.controls['sCliente'].enable()
     this.SpinnerService.hide();
     //this.formulario.controls['sColor'].disable()
   }
@@ -191,6 +192,7 @@ generateExcel() {
 generateExcel2() {
 
   this.SpinnerService.show();
+  let lc_Op = this.formulario.get('sOP')?.value
   
   /*if(this.formulario.get('sCliente')?.value == ''){
     this.vCliente = ''
@@ -206,6 +208,7 @@ generateExcel2() {
     this.vEstilo, 
     this.vTemporada,
     this.vColor,
+    lc_Op.trim(),
     this.range.get('start')?.value,
     this.range.get('end')?.value
     ).subscribe(
@@ -289,6 +292,8 @@ buscarDefectosDerivados(){
     }
   });
   
+  let lc_Op = this.formulario.get('sOP')?.value
+
   console.log(
     'accion: ', this.vCod_Accion,
     'cliente: ', this.vCliente, 
@@ -304,6 +309,7 @@ buscarDefectosDerivados(){
     this.vEstilo, 
     this.vTemporada,
     this.vColor,
+    lc_Op.trim(),
     this.range.get('start')?.value,
     this.range.get('end')?.value
     ).subscribe(
@@ -334,6 +340,7 @@ buscarDefectosDerivados(){
             this.vEstilo,
             this.vTemporada,
             this.vColor,
+            lc_Op.trim(),
             this.range.get('start')?.value,
             this.range.get('end')?.value
             ).subscribe(
@@ -465,8 +472,8 @@ limpiarCampos(){
     sColor: '',
     sOP: ''
   })
-  this.clearDate()
-  this.loadDataInicial()
+  this.clearDate();
+  this.loadDataInicial();
   this.ItemsSearch.forEach(element => {
       element.checked = '0';
   })
@@ -591,6 +598,7 @@ generateRptSegundas(){
   
   this.vCod_Accion = 'Z'
   this.SpinnerService.show();
+  let lc_Op = this.formulario.get('sOP')?.value
   
   this.defectosAlmacenDerivadosService.ListarReporteDetalladoService(
     this.vCod_Accion,
@@ -598,6 +606,7 @@ generateRptSegundas(){
     this.vEstilo, 
     this.vTemporada,
     this.vColor,
+    lc_Op.trim(),
     this.range.get('start')?.value,
     this.range.get('end')?.value
     ).subscribe(
@@ -636,6 +645,7 @@ generateRptSegundas(){
 generateRptPedidos(){
   this.vCod_Accion = 'P'
   this.SpinnerService.show();
+  let lc_Op = this.formulario.get('sOP')?.value;
   
   this.defectosAlmacenDerivadosService.ListarReporteDetalladoService(
     this.vCod_Accion,
@@ -643,6 +653,7 @@ generateRptPedidos(){
     this.vEstilo, 
     this.vTemporada,
     this.vColor,
+    lc_Op.trim(),
     this.range.get('start')?.value,
     this.range.get('end')?.value
     ).subscribe(
@@ -678,6 +689,38 @@ generateRptPedidos(){
         duration: 1500,
     }))
 }
+
+
+BuscarPorOP() {
+    let lc_Op = this.formulario.get('sOP')?.value
+    this.defectosAlmacenDerivadosService.Cf_Busca_Derivado_OP_Cliente_Estilo_Temporada(lc_Op).subscribe(
+      (result: any) => {
+        if (result.length > 0) {
+          console.log(result)
+          this.dCod_Cliente = result[0].COD_CLIENTE;
+          this.dCod_TemCli = result[0].COD_TEMCLI;
+          this.formulario.controls['sCliente'].setValue(result[0].NOM_CLIENTE);
+          this.formulario.controls['sEstilo'].setValue(result[0].COD_ESTCLI);
+          this.formulario.controls['sTemporada'].setValue(result[0].NOM_TEMCLI);
+
+          this.ItemsSearch.forEach(element => {
+            if (element.id != 4) {
+              element.checked = '1';
+            }
+          });
+
+          this.formulario.controls['sCliente'].disable()
+          this.seleccionColorxTemporada();
+        } else {
+          this.matSnackBar.open('La OP no existe...!!!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          //this.mostrarAlertaCaidasMayora1()
+        }
+
+
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
+
+  }
 
 }
 

@@ -70,13 +70,18 @@
                       [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
                       (select)="onSelect($event)">
                   </ngx-charts-bar-vertical> -->
-          <ngx-charts-bar-vertical-2d [view]="view" id="imagen" [scheme]="colorScheme" [results]="multi" [gradient]="gradient"
-            [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
-            [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
-            [legendTitle]="legendTitle" (select)="onSelect($event)" [showDataLabel]=true>
-          </ngx-charts-bar-vertical-2d>
+          
 
           <div id="contentToConvert" >
+            <div>
+              <ngx-charts-bar-vertical-2d [view]="view" id="imagen" [scheme]="colorScheme" [results]="multi" [gradient]="gradient"
+              [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+              [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+              [legendTitle]="legendTitle" (select)="onSelect($event)" [showDataLabel]=true>
+              </ngx-charts-bar-vertical-2d>
+            </div>
+            <mat-divider></mat-divider>
+            <br>
             <p style="font-size:20px;">Fecha Inicio: {{Fecha1tring | date: 'dd/MM/Y'}} </p>
             <p style="font-size:20px;">Fecha Fin: {{Fecha2tring | date: 'dd/MM/Y'}} </p>
             <p style="font-size:20px;">Sede: {{Sede == 'ATE' ? 'SANTA MARIA' : Sede == 'SANTA_CECILIA' ? 'SANTA CECILIA' : Sede == 'SANTA_ROSA' ? 'SANTA ROSA' : Sede == 'HUACHIPA_I' ? 'HUACHIPA I' : Sede == 'HUACHIPA_II' ? 'HUACHIPA II' : ''}}</p>
@@ -95,7 +100,7 @@
                 <p><mat-icon>assessment</mat-icon> {{item.Aprobacion}}% de aprobación</p>
               </div>
             </div>
-
+            <br>
             <h2 style="margin-top:10px">Almuerzos ({{totalAlmuerzo}} Votos Registrados)</h2>
             <div class="caja-preguntas" *ngFor="let item of dataAlmuerzo">
 
@@ -109,7 +114,7 @@
                 <p><mat-icon>assessment</mat-icon> {{item.Aprobacion}}% de aprobación</p>
               </div>
             </div>
-
+            <br>
             <h2>Cena ({{totalCena}} Votos Registrados)</h2>
             <div class="caja-preguntas" *ngFor="let item of dataCena">
 

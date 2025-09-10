@@ -125,6 +125,7 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
   fec_registro = new FormControl(new Date())
 
   formulario = this.formBuilder.group({
+    sOP: [''],
     sCliente: [''],
     sEstilo: [''],
     sColor: [''],
@@ -140,6 +141,7 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
     sTemporada: [''],
     sCodCli: [''],
     sCodTemp: [''],
+    sTotal:[0],
     Cod_Motivo: ['']
   })
 
@@ -431,13 +433,16 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
         this.Cod_EstCli = result[0].Cod_EstCli
         this.Cod_ColCli = result[0].Cod_ColCli
 
-
-
+        console.log(result)
+        
+        
+        this.formulario.controls['sOP'].setValue(result[0].Cod_OrdPro)
         this.formulario.controls['sEstilo'].setValue(result[0].Cod_EstCli)
         this.formulario.controls['sCliente'].setValue(result[0].Des_Cliente)
         this.formulario.controls['sTemporada'].setValue(result[0].Nom_TemCli)
         this.formulario.controls['sColor'].setValue(result[0].Cod_ColCli)
         this.formulario.controls['sAbr'].setValue(result[0].Abr_Cliente)
+        this.formulario.controls['sTotal'].setValue(result[0].Total)
         this.formulario.controls['sCodCli'].setValue(result[0].Cod_Cliente)
         this.formulario.controls['sCodTemp'].setValue(result[0].Cod_TemCli)
 
@@ -466,7 +471,7 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
         if (this.tallas.length > 0) {
           this.tallas.forEach((currentValue, index) => {
 
-            this.displayedColumns.push(this.tallas[index].Cod_Talla)
+            this.displayedColumns.push(' ' + this.tallas[index].Cod_Talla)
           })
 
           this.columnsToDisplay = this.displayedColumns.slice()
@@ -632,13 +637,14 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
 
   DeshabilitarCabcera() {
 
-
+    this.formulario.controls['sOP'].disable()
     this.formulario.controls['sAuditor'].disable()
     this.formulario.controls['sEstilo'].disable()
     this.formulario.controls['sCliente'].disable()
     this.formulario.controls['sTemporada'].disable()
     this.formulario.controls['sColor'].disable()
     this.formulario.controls['sAbr'].disable()
+    this.formulario.controls['sTotal'].disable()
 
   }
   /*****************DESHABILITAR INPUTS DE LA CABECERA************************ */
