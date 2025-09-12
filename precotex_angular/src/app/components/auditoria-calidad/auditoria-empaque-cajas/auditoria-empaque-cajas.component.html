@@ -137,6 +137,7 @@
                         <th mat-header-cell *matHeaderCellDef> Acciones </th>
                         <td mat-cell *matCellDef="let data_det">    
                             <a mat-icon-button (click)="onEditarAuditoria(data_det)"><mat-icon color="success">create</mat-icon></a> 
+                            <a mat-icon-button (click)="onEvidenciaAuditoria(data_det)" *ngIf="ll_Supervisor && !data_det.Peso_Caja"><mat-icon color="primary">photo_camera</mat-icon></a>
                             <a mat-icon-button (click)="onEliminarAuditoria(data_det)" *ngIf="ll_Supervisor"><mat-icon color="warn">delete</mat-icon></a>
                         </td>
                     </ng-container> 

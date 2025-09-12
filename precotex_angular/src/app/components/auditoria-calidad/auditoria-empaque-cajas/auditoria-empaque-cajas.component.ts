@@ -22,6 +22,7 @@ import { DialogRegistroEmpaqueCajasComponent } from './dialog-registro-empaque-c
 import { DialogResumenEmpaqueCajasComponent } from './dialog-resumen-empaque-cajas/dialog-resumen-empaque-cajas.component'
 import { DialogPendienteEmpaqueCajasComponent } from './dialog-pendiente-empaque-cajas/dialog-pendiente-empaque-cajas.component';
 import { DialogEliminarComponent} from 'src/app/components/dialogs/dialog-eliminar/dialog-eliminar.component';
+import { DialogEvidenciaEmpaqueCajaComponent } from './dialog-evidencia-empaque-caja/dialog-evidencia-empaque-caja.component'
 
 interface data_det {
   Num_Auditoria?: number; 
@@ -34,6 +35,7 @@ interface data_det {
   Cod_Supervisor?: string;
   Flg_Estado?: string;
   Num_Packing?: number;
+  Peso_Caja?: number;
   Cod_Modulo?: string;
   Cod_Cliente?: string;
   Des_Modulo?: string;
@@ -253,6 +255,49 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
     });
   }
 
+  onEvidenciaAuditoria(data_det: data_det){
+    let evidencia: any = {Accion: 'G', Num_Auditoria: data_det.Num_Auditoria, Num_Caja: data_det.Num_Caja,  Peso_Caja: '', Evidencia: '', Cod_Usuario: GlobalVariable.vusu};
+
+    let dialogRef = this.dialog.open(DialogEvidenciaEmpaqueCajaComponent, {
+      disableClose: true,
+      width: "600px",
+      data: evidencia
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+
+      this.onGuardarEvidencia(result)
+      this.formulario.controls['NumCaja'].setValue('');
+      this.numCajaInput.nativeElement.focus();
+    });
+
+  }
+
+  onGuardarEvidencia(evidencia: any){
+    const formData = new FormData();
+    formData.append('Accion', evidencia.Accion);
+    formData.append('Num_Auditoria', evidencia.Num_Auditoria.toString());
+    formData.append('Peso_Caja', evidencia.Peso_Caja.toString());
+    formData.append('Evidencia', evidencia.Evidencia);
+    formData.append('Cod_Usuario', GlobalVariable.vusu);
+    
+    this.spinnerService.show();
+    this.auditoriaAcabadosService.Mant_EvidenciaEmpaque (formData)
+      .subscribe((result: any) => {
+        if (result.length > 0) {
+          this.matSnackBar.open(result[0].Respuesta, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          this.onListarAuditoriaEmpaqueCajas();
+          this.spinnerService.hide();
+        } else {
+          this.matSnackBar.open('Error en el registro de la evidencia!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          this.spinnerService.hide();
+        }
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+    );
+  }
+
   onAvanceAuditoria(){
     let numPacking = this.formulario.get('NumPacking').value ? this.formulario.get('NumPacking').value : 0;
 
@@ -314,7 +359,7 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
       duration: 1500,
     }));
   }
-
+  
   onGenerarReporteAuditoria(tipo: string){
     let numPacking = this.formulario.get('NumPacking').value ? this.formulario.get('NumPacking').value : 0;
 
@@ -380,10 +425,6 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
           }
         
           this.exceljsService.exportExcel(reportData);
-
-
-
-
         }
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
@@ -452,9 +493,6 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
   }
 
   generateExcelPacking(){
-
-
-
     this.dataForExcel = [];
     if(this.dataReporteAuditoria[0].Num_Caja != 0){
       let dataReporte: any[] = [];

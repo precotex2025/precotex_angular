@@ -566,6 +566,7 @@ import { ModalSeleccionPartidaQrComponent } from './components/quejas-reclamos/m
 import { DialogMemorandumPlantaComponent } from './components/memorandum-gral/dialog-memorandum-planta/dialog-memorandum-planta.component';
 import { LiberaOpColorComponent } from './components/auditoria-corte/libera-op-color/libera-op-color.component';
 import { DialogColorComponent } from './components/auditoria-corte/libera-op-color/dialog-color/dialog-color.component';
+import { DialogEvidenciaEmpaqueCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-evidencia-empaque-caja/dialog-evidencia-empaque-caja.component';
 
 @NgModule({
   declarations: [
@@ -1057,7 +1058,7 @@ import { DialogColorComponent } from './components/auditoria-corte/libera-op-col
     DialogPendienteEmpaqueCajasComponent, 
     EncogimientoPrendaComponent, 
     DialogEncogimientoPrendaRegistroComponent, 
-    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent 
+    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent 
   ],
   entryComponents: [DialogJabaComponent],
   imports: [
