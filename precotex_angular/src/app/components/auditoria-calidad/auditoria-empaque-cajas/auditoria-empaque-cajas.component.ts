@@ -22,6 +22,7 @@ import { DialogRegistroEmpaqueCajasComponent } from './dialog-registro-empaque-c
 import { DialogResumenEmpaqueCajasComponent } from './dialog-resumen-empaque-cajas/dialog-resumen-empaque-cajas.component'
 import { DialogPendienteEmpaqueCajasComponent } from './dialog-pendiente-empaque-cajas/dialog-pendiente-empaque-cajas.component';
 import { DialogEliminarComponent} from 'src/app/components/dialogs/dialog-eliminar/dialog-eliminar.component';
+import { DialogEvidenciaEmpaqueCajaComponent } from './dialog-evidencia-empaque-caja/dialog-evidencia-empaque-caja.component'
 
 interface data_det {
   Num_Auditoria?: number; 
@@ -34,12 +35,15 @@ interface data_det {
   Cod_Supervisor?: string;
   Flg_Estado?: string;
   Num_Packing?: number;
+  Peso_Caja?: number;
+  Evidencia?: string;
   Cod_Modulo?: string;
   Cod_Cliente?: string;
   Des_Modulo?: string;
   Des_Cliente?: string;
   Des_Destino?: string;
   Cod_Usuario?: string;
+  Evidencia_64?: string;
 }
 
 interface Auditor {
@@ -253,6 +257,84 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
     });
   }
 
+  onEvidenciaAuditoria(data_det: data_det){
+    let evidencia: any = {Accion: 'G', Num_Auditoria: data_det.Num_Auditoria, Num_Caja: data_det.Num_Caja,  Peso_Caja: '', Evidencia: '', Cod_Usuario: GlobalVariable.vusu};
+
+    let dialogRef = this.dialog.open(DialogEvidenciaEmpaqueCajaComponent, {
+      disableClose: true,
+      width: "600px",
+      data: evidencia
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+
+      this.onGuardarEvidencia(result)
+      this.formulario.controls['NumCaja'].setValue('');
+      this.numCajaInput.nativeElement.focus();
+    });
+
+  }
+
+  onGuardarEvidencia(evidencia: any){
+    const formData = new FormData();
+    formData.append('Accion', evidencia.Accion);
+    formData.append('Num_Auditoria', evidencia.Num_Auditoria.toString());
+    formData.append('Peso_Caja', evidencia.Peso_Caja.toString());
+    formData.append('Evidencia', evidencia.Evidencia);
+    formData.append('Cod_Usuario', GlobalVariable.vusu);
+    
+    this.spinnerService.show();
+    this.auditoriaAcabadosService.Mant_EvidenciaEmpaque (formData)
+      .subscribe((result: any) => {
+        if (result.length > 0) {
+          this.matSnackBar.open(result[0].Respuesta, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          this.onListarAuditoriaEmpaqueCajas();
+          this.spinnerService.hide();
+        } else {
+          this.matSnackBar.open('Error en el registro de la evidencia!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          this.spinnerService.hide();
+        }
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+    );
+  }
+
+  onVisualizarEvidencia(data_det: data_det){
+    const formData = new FormData();
+    formData.append('Accion', 'C');
+    formData.append('Num_Auditoria', data_det.Num_Auditoria.toString());
+    formData.append('Peso_Caja', data_det.Peso_Caja.toString());
+    formData.append('Evidencia', data_det.Evidencia);
+    formData.append('Cod_Usuario', GlobalVariable.vusu);
+
+    this.spinnerService.show();
+    this.auditoriaAcabadosService.Mant_EvidenciaEmpaque (formData)
+      .subscribe((result: any) => {
+        if (result.length > 0) {
+          console.log(result)
+          this.spinnerService.hide();
+
+          let evidencia: any = {Accion: 'C', Num_Auditoria: result[0].Num_Auditoria, Num_Caja: result[0].Num_Caja,  Peso_Caja: result[0].Peso_Caja , Evidencia: result[0].Evidencia, Captura_64: result[0].Evidencia_64, Fec_Evidencia: result[0].Fec_Evidencia, Cod_Usuario: GlobalVariable.vusu};
+
+          let dialogRef = this.dialog.open(DialogEvidenciaEmpaqueCajaComponent, {
+            disableClose: true,
+            width: "600px",
+            data: evidencia
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            console.log(result)
+          });
+
+
+        }
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+    );    
+
+  }
+
   onAvanceAuditoria(){
     let numPacking = this.formulario.get('NumPacking').value ? this.formulario.get('NumPacking').value : 0;
 
@@ -314,7 +396,7 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
       duration: 1500,
     }));
   }
-
+  
   onGenerarReporteAuditoria(tipo: string){
     let numPacking = this.formulario.get('NumPacking').value ? this.formulario.get('NumPacking').value : 0;
 
@@ -380,10 +462,6 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
           }
         
           this.exceljsService.exportExcel(reportData);
-
-
-
-
         }
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
@@ -452,9 +530,6 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
   }
 
   generateExcelPacking(){
-
-
-
     this.dataForExcel = [];
     if(this.dataReporteAuditoria[0].Num_Caja != 0){
       let dataReporte: any[] = [];
@@ -579,7 +654,10 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
           this.range.controls['start'].setValue(new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
           this.range.controls['end'].setValue(new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
         } else {
-          this.range.controls['start'].setValue(new Date(fecha.getFullYear(), fecha.getMonth() - 1, fecha.getDate()));
+          //this.range.controls['start'].setValue(new Date(fecha.getFullYear(), fecha.getMonth() - 1, fecha.getDate()));
+          //this.range.controls['end'].setValue(new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
+
+          this.range.controls['start'].setValue(new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
           this.range.controls['end'].setValue(new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
         }
 
