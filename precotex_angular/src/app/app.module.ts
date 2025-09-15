@@ -566,6 +566,8 @@ import { ModalSeleccionPartidaQrComponent } from './components/quejas-reclamos/m
 import { DialogMemorandumPlantaComponent } from './components/memorandum-gral/dialog-memorandum-planta/dialog-memorandum-planta.component';
 import { LiberaOpColorComponent } from './components/auditoria-corte/libera-op-color/libera-op-color.component';
 import { DialogColorComponent } from './components/auditoria-corte/libera-op-color/dialog-color/dialog-color.component';
+import { ModalInformeComponent } from './components/quejas-reclamos/modal-informe/modal-informe.component';
+import { ModalInformeCierreComponent } from './components/quejas-reclamos/modal-informe-cierre/modal-informe-cierre.component';
 
 @NgModule({
   declarations: [
@@ -1052,6 +1054,8 @@ import { DialogColorComponent } from './components/auditoria-corte/libera-op-col
     DialogMemorandumPlantaComponent,
     //Quejas y reclamos V2
     ModalSeleccionPartidaQrComponent,
+    ModalInformeComponent,
+    ModalInformeCierreComponent,
     CalificacionRollosFinalComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ModalEditarDesgloseComponent, ConfirmDialogComponent, QuejasReclamosv2Component,
     ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent,
     DialogPendienteEmpaqueCajasComponent, 
