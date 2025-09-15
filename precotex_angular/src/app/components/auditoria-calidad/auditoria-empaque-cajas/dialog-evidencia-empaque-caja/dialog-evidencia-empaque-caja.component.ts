@@ -20,12 +20,14 @@ export class DialogEvidenciaEmpaqueCajaComponent implements OnInit {
     Num_Caja: [0, Validators.required],
     Peso_Caja: [0, Validators.required],
     Evidencia: ['', Validators.required],
+    Fec_Evidencia: [''],
     Cod_Usuario: ['']
   }) 
 
   lc_Numero: string = '';
   Imagen64: string = '';
   numImg: number = 0;
+  ll_nuevo: boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -36,19 +38,27 @@ export class DialogEvidenciaEmpaqueCajaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.data.Num_Auditoria)
+    //console.log(this.data)
     this.formulario.reset();
     this.formulario.patchValue({
       Accion: this.data.Accion,
       Num_Auditoria: this.data.Num_Auditoria,
       Num_Caja: this.data.Num_Caja,
-      Peso_Caja: this.data.Peso_Caja,      
+      Peso_Caja: this.data.Peso_Caja,
       Evidencia: this.data.Evidencia,
+      Fec_Evidencia: new Date(this.data.Fec_Evidencia),
       Cod_Usuario: this.data.Cod_Usuario
     });
 
     this.Imagen64 = this.data.Captura_64 ? this.data.Captura_64 : "";
     this.numImg = this.numImg + (this.data.Evidencia ? 1 : 0);
+
+    if(this.data.Accion == 'C'){
+      this.ll_nuevo = false;
+      this.formulario.controls['Peso_Caja'].disable();
+      this.formulario.controls['Fec_Evidencia'].disable();
+    }
+    
   }
 
   onGuardarImagen(event: any){
@@ -79,11 +89,10 @@ export class DialogEvidenciaEmpaqueCajaComponent implements OnInit {
   
     // Generar imagen para previsualización
     extraerBase64(archivoCapturado).then((imagen: any) => {
-      console.log("aquio")
         this.Imagen64 = imagen.base;
         this.formulario.controls['Evidencia'].setValue(imagen.base);
         this.numImg = this.numImg + 1;
-        console.log(this.Imagen64)
+        //console.log(this.Imagen64)
     });
 
     // Preperar imagen string a binario para grabar en servidor

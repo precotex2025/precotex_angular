@@ -11,8 +11,13 @@
                             <input matInput type="number" placeholder="Peso Caja" autocomplete="off" formControlName="Peso_Caja" >
                         </mat-form-field>
 
+                        <mat-form-field class="example-width-35" *ngIf="!ll_nuevo"> 
+                            <mat-label>Fecha Evidencia</mat-label>
+                            <input matInput type="text" placeholder="Fecha Evidencia" autocomplete="off" formControlName="Fec_Evidencia" >
+                        </mat-form-field>
+
                         <input type="file" accept="image/png,image/jpeg" style="display:none;" #inputFile (change)="onGuardarImagen($event)">
-                        <button type="button" (click)="inputFile.click()" mat-mini-fab color="primary"><mat-icon>add_photo_alternate</mat-icon></button>    
+                        <button type="button" (click)="inputFile.click()" mat-mini-fab color="primary" *ngIf="ll_nuevo"><mat-icon>add_photo_alternate</mat-icon></button>    
 
                         <div class="image-container">
                             <div *ngIf="Imagen64">

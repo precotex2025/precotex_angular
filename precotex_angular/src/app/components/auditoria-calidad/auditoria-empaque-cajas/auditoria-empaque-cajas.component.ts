@@ -36,12 +36,14 @@ interface data_det {
   Flg_Estado?: string;
   Num_Packing?: number;
   Peso_Caja?: number;
+  Evidencia?: string;
   Cod_Modulo?: string;
   Cod_Cliente?: string;
   Des_Modulo?: string;
   Des_Cliente?: string;
   Des_Destino?: string;
   Cod_Usuario?: string;
+  Evidencia_64?: string;
 }
 
 interface Auditor {
@@ -296,6 +298,41 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
     );
+  }
+
+  onVisualizarEvidencia(data_det: data_det){
+    const formData = new FormData();
+    formData.append('Accion', 'C');
+    formData.append('Num_Auditoria', data_det.Num_Auditoria.toString());
+    formData.append('Peso_Caja', data_det.Peso_Caja.toString());
+    formData.append('Evidencia', data_det.Evidencia);
+    formData.append('Cod_Usuario', GlobalVariable.vusu);
+
+    this.spinnerService.show();
+    this.auditoriaAcabadosService.Mant_EvidenciaEmpaque (formData)
+      .subscribe((result: any) => {
+        if (result.length > 0) {
+          console.log(result)
+          this.spinnerService.hide();
+
+          let evidencia: any = {Accion: 'C', Num_Auditoria: result[0].Num_Auditoria, Num_Caja: result[0].Num_Caja,  Peso_Caja: result[0].Peso_Caja , Evidencia: result[0].Evidencia, Captura_64: result[0].Evidencia_64, Fec_Evidencia: result[0].Fec_Evidencia, Cod_Usuario: GlobalVariable.vusu};
+
+          let dialogRef = this.dialog.open(DialogEvidenciaEmpaqueCajaComponent, {
+            disableClose: true,
+            width: "600px",
+            data: evidencia
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            console.log(result)
+          });
+
+
+        }
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+    );    
+
   }
 
   onAvanceAuditoria(){
@@ -617,7 +654,10 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
           this.range.controls['start'].setValue(new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
           this.range.controls['end'].setValue(new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
         } else {
-          this.range.controls['start'].setValue(new Date(fecha.getFullYear(), fecha.getMonth() - 1, fecha.getDate()));
+          //this.range.controls['start'].setValue(new Date(fecha.getFullYear(), fecha.getMonth() - 1, fecha.getDate()));
+          //this.range.controls['end'].setValue(new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
+
+          this.range.controls['start'].setValue(new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
           this.range.controls['end'].setValue(new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
         }
 
