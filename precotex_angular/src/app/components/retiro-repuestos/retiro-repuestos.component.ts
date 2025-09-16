@@ -20,6 +20,8 @@ import { TOOLTIP_PANEL_CLASS } from '@angular/material/tooltip';
 import { DialogRetiroRepuestosCierreComponent } from './dialog-retiro-repuestos-cierre/dialog-retiro-repuestos-cierre.component';
 import { ExceljsService } from 'src/app/services/exceljs.service';
 import * as _moment from 'moment';
+import { Router } from '@angular/router';
+import { HttpClient,HttpHeaders, HttpParams } from '@angular/common/http';
 
 interface data_req{
   num_requerimiento: number,
@@ -36,7 +38,7 @@ interface data_req{
   styleUrls: ['./retiro-repuestos.component.scss']
 })
 export class RetiroRepuestosComponent implements OnInit {
-
+ FormData: FormGroup;
  @ViewChild(MatSort) sort!: MatSort;   
   constructor(
     private dialog: MatDialog,
@@ -46,6 +48,8 @@ export class RetiroRepuestosComponent implements OnInit {
     private toastr: ToastrService,
     private serviceRetiroRepuestos: RetiroRepuestosService,
     private exceljsService: ExceljsService,
+    private router: Router,
+    private http: HttpClient
   ) { }
 
   range = new FormGroup({
@@ -54,9 +58,12 @@ export class RetiroRepuestosComponent implements OnInit {
       end: new FormControl(new Date),
   });    
 
-
+  
 
   ngOnInit(): void {
+    this.onGetRetiros();
+
+
   }
 
   ngAfterViewInit(){
@@ -97,6 +104,12 @@ export class RetiroRepuestosComponent implements OnInit {
   }
   
   onCreate(){
+    // this.router.navigate(['/DialogRetiroRepuestos'],
+    //   {queryParams: { 
+    //                   Accion: 'Insertar',
+    //                   Num_Requerimiento: ''
+    //                 }}
+    // );
     let dialogRef = this.dialog.open(DialogRetiroRepuestosComponent,{
       width:'500px',
       disableClose: true,
@@ -139,22 +152,22 @@ export class RetiroRepuestosComponent implements OnInit {
   onGetRetiros(){
     const sFecIni: string = this.range.get('start').value;
     const sFecFin: string = this.range.get('end').value;
-
-    if(sFecIni == '' || sFecFin == ''){
-      this.matSnackBar.open("Seleccione Rango de Fechas", "Cerrar",
+    
+    if(sFecIni == '' || sFecIni == null || sFecFin == '' || sFecFin == null){
+      this.matSnackBar.open("Ingrese Rango de Fechas", "Cerrar",
         {horizontalPosition:'center', verticalPosition:'top', duration: 1500}
       );
       return;
-    }
+    }else{
 
     this.SpinnerService.show();
     this.dataListadoRequerimientos = [];
     this.serviceRetiroRepuestos.getListaRetiros(sFecIni, sFecFin).subscribe({
-      next: (Response: any) => {
-        if(Response.success){
-          if(Response.totalElements > 0){
-            console.log('Reparto', Response.elements);
-            this.dataListadoRequerimientos = Response.elements;
+      next: (response: any) => {
+        if(response.success){
+          if(response.totalElements > 0){
+            console.log('Reparto', response.elements);
+            this.dataListadoRequerimientos = response.elements;
             this.dataSource.data = this.dataListadoRequerimientos;
             this.dataSource.sort = this.sort;
             this.SpinnerService.hide();
@@ -175,11 +188,14 @@ export class RetiroRepuestosComponent implements OnInit {
         })
       }
     })
-  }
+   }
+}
 
   onInsertarDetalle(objeto: any){
 
     let num = objeto.num_Requerimiento;
+
+    // this.router.navigate(['/ruta-al-otro-componente']);
 
     let dialogRef = this.dialog.open(DialogRetiroRepuestosDetalleComponent,{
       width:'1165px',
@@ -204,7 +220,7 @@ export class RetiroRepuestosComponent implements OnInit {
       disableClose: true,
       panelClass: 'my-class',
       data:{
-        Title: "Detalle de Retiro ",  
+        Title: "Precinto de Cierre",  
         num_requerimiento: num
       }
     });
@@ -214,8 +230,7 @@ export class RetiroRepuestosComponent implements OnInit {
   }
 
   onExportarExcel(){
-    this.SpinnerService.show();
-
+    
     this.dataForExcel = [];
     this.dataSourceExcel = [];
     this.dataReporteRetiros = [];
@@ -223,76 +238,78 @@ export class RetiroRepuestosComponent implements OnInit {
     const sFecIni: string = this.range.get('start').value;
     const sFecFin: string = this.range.get('end').value;
 
-    if(sFecIni == '' || sFecFin == ''){
-      this.matSnackBar.open("Seleccione Rango de Fechas", "Cerrar",
+    if(sFecIni == '' || sFecIni == null || sFecFin == '' || sFecFin == null){
+      this.matSnackBar.open("Ingrese Rango de Fechas", "Cerrar",
         {horizontalPosition:'center', verticalPosition:'top', duration: 1500}
       );
       return;
-    }
+    }else{
+      this.SpinnerService.show();
+      this.serviceRetiroRepuestos.getDatosReporte(sFecIni, sFecFin).subscribe({
+        next: (response: any)=> {
+          if(response.success){
+            if (response.totalElements > 0){
 
-    this.serviceRetiroRepuestos.getDatosReporte(sFecIni, sFecFin).subscribe({
-      next: (response: any)=> {
-        if(response.success){
-          if (response.totalElements > 0){
+              this.dataReporteRetiros = response.elements;
 
-            this.dataReporteRetiros = response.elements;
+              //QUE COMIENCE EL JUEGO DE LA EXPORTACION
+              this.dataReporteRetiros.forEach((item: any) => {
 
-            //QUE COMIENCE EL JUEGO DE LA EXPORTACION
-            this.dataReporteRetiros.forEach((item: any) => {
-              //let fechaMostrada = this.formatearFechaValida(item.fch_Hora_Entrega);
-              let datos = {
-                
-                ['Fec. Aprobacion']: _moment(item.fec_Aprobacion.valueOf()).format('DD/MM/YYYY'),
-                ['Hora Aprobacion']: item.hora_Aprobacion ,
-                ['Nom. Seguridad']: item.nom_Seguridad,
-                ['Fec. Requerimiento']: _moment(item.fec_Creacion.valueOf()).format('DD/MM/YYYY')   ,
-                ['Nom. Mantenimiento']: item.nom_Mantenimiento,
-                ['# Precinto Apertura']: item.nro_Precinto_Apertura,
-                ['# Precinto Cierre']: item.nro_Precinto_Cierre,
-                ['# Requerimiento']: item.num_Requerimiento,
-                ['Secuencia']: item.nro_Secuencia       ,
-                ['Cod. Item']: item.cod_Item ,
-                ['Descripcion']: item.des_Item       ,
-                ['Can. Requerida']: item.can_Requerida           ,
-                ['UM']: item.cod_UniMed,
-                ['Repuesto de Cambio']: item.rpt_Cambio ,
-                ['Foto']: item.itm_Foto   
-              };
-              this.dataForExcel.push(datos);              
-            });        
-            
-            if (this.dataForExcel.length > 0) {
+                let datos = {
+                  
+                  ['Fec. Aprobacion']: _moment(item.fec_Aprobacion.valueOf()).format('DD/MM/YYYY'),
+                  ['Hora Aprobacion']: item.hora_Aprobacion ,
+                  ['Nom. Seguridad']: item.nom_Seguridad,
+                  ['Fec. Requerimiento']: _moment(item.fec_Creacion.valueOf()).format('DD/MM/YYYY')   ,
+                  ['Nom. Mantenimiento']: item.nom_Mantenimiento,
+                  ['# Precinto Apertura']: item.nro_Precinto_Apertura,
+                  ['# Precinto Cierre']: item.nro_Precinto_Cierre,
+                  ['# Requerimiento']: item.num_Requerimiento,
+                  ['Secuencia']: item.nro_Secuencia       ,
+                  ['Cod. Item']: item.cod_Item ,
+                  ['Descripcion']: item.des_Item       ,
+                  ['Can. Requerida']: item.can_Requerida           ,
+                  ['UM']: item.cod_UniMed,
+                  ['Repuesto de Cambio']: item.rpt_Cambio ,
+                  ['Foto']: item.itm_Foto   
+                };
+                this.dataForExcel.push(datos);              
+              });        
+              
+              if (this.dataForExcel.length > 0) {
 
-              this.dataForExcel.forEach((row: any) => {
-                this.dataSourceExcel.push(Object.values(row))
-              })              
+                this.dataForExcel.forEach((row: any) => {
+                  this.dataSourceExcel.push(Object.values(row))
+                })              
 
-              let reportData = {
-                title: 'REPORTE ',
-                data: this.dataSourceExcel,
-                headers: Object.keys(this.dataForExcel[0])
+                let reportData = {
+                  title: 'REPORTE ',
+                  data: this.dataSourceExcel,
+                  headers: Object.keys(this.dataForExcel[0])
+                }
+
+                this.exceljsService.exportExcel4(reportData);
+
+              } else {
+                // this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+                this.SpinnerService.hide();
               }
-
-              this.exceljsService.exportExcelReporteColgadoresDetalles(reportData);
-
-            } else {
-              this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
               this.SpinnerService.hide();
             }
-            this.SpinnerService.hide();
+            else{
+              this.SpinnerService.hide();
+            };
           }
-          else{
-            this.SpinnerService.hide();
-          };
+        },
+        error: (error) => {
+          this.SpinnerService.hide();
+          console.log(error.error.message, 'Cerrar', {
+          timeOut: 2500,
+          });
         }
-      },
-      error: (error) => {
-        this.SpinnerService.hide();
-        console.log(error.error.message, 'Cerrar', {
-        timeOut: 2500,
-         });
-      }
-    });        
+      });
+      this.SpinnerService.hide();
+    }
   }
 
 }

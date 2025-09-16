@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -23,6 +23,7 @@ interface data {
    num_requerimiento: number,
    nro_secuencia: number,
    cod_Item: string,
+   des_Item: string
 }
 
 @Component({
@@ -32,15 +33,23 @@ interface data {
 })
 export class DialogRetiroRepuestosDetalleNuevoComponent implements OnInit {
 
+  fileName: string = '';
+  selectedFile: File | null = null;
+
   formulario = this.formBuilder.group({
     ctrol_cod_item: [''],
     ctrol_des_item: [''],
-    ctrol_uni_med: [''],
+    ctrol_uni_med: ['', [Validators.pattern]],
     ctrol_cant: [''],
     ctrol_rpt_cambio: [''],
+    ctrol_itm_foto: [''],
 
     filtroProducto:['']
   });
+
+  getErrorMessage() {
+      return this.formulario.get('ctrol_uni_med')?.hasError('pattern') ? 'Ingrese solo números' : '';
+  }
 
   dataProductos: any[] = [];
   ProductosFiltrados: any[] = [];
@@ -58,16 +67,17 @@ export class DialogRetiroRepuestosDetalleNuevoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     //this.formulario.get('ctrol_cod_item')?.disable();
+    this.formulario.get('ctrol_des_item')?.disable();
     this.formulario.get('ctrol_uni_med')?.disable();
+    this.formulario.get('ctrol_cant')?.disable();
     // this.getItems();
     
     if(this.data.Accion === 'Insertar'){
-      this.cargarProductos(null);
+      //this.cargarProductos(null);
     }else
     {
-
+      this.formulario.get('ctrol_des_item')?.setValue(this.data.des_Item);
       //this.cargarDatosItem(this.data.num_requerimiento, this.data.nro_secuencia);
       this.DatosCompletos();
     }
@@ -75,15 +85,15 @@ export class DialogRetiroRepuestosDetalleNuevoComponent implements OnInit {
 
   Procesar(){
    if(this.data.Accion === 'Insertar'){
-      this.onSave();
+      this.onConfirma();
    }else{
-      this.onEdit();
+      this.onConfirma();
    } 
   }
 
   DatosCompletos(){
     this.cargarDatosItem(this.data.num_requerimiento, this.data.nro_secuencia);
-    this.cargarProductos(this.data.cod_Item);
+    //this.cargarProductos();
   }
 
   filtrarProductos(){
@@ -101,13 +111,14 @@ export class DialogRetiroRepuestosDetalleNuevoComponent implements OnInit {
       (result:any) => {
         if(result.totalElements > 0){
           this.dataListaRetirosPorNumReqySec = result.elements;
-          console.log('rst', this.dataListaRetirosPorNumReqySec[0].cod_Item);
-          this.cargarProductos(this.dataListaRetirosPorNumReqySec[0].cod_Item);
-          //this.formulario.get('ctrol_des_item')?.setValue(this.dataListaRetirosPorNumReqySec[0].cod_Item);
+          console.log(this.dataListaRetirosPorNumReqySec);
+          // this.cargarProductos(this.dataListaRetirosPorNumReqySec[0].cod_Item);
+          
           this.formulario.get('ctrol_uni_med')?.setValue(this.dataListaRetirosPorNumReqySec[0].cod_UniMed);
           this.formulario.get('ctrol_cant')?.setValue(this.dataListaRetirosPorNumReqySec[0].can_Requerida);
           this.formulario.get('ctrol_rpt_cambio')?.setValue(this.dataListaRetirosPorNumReqySec[0].rpt_Cambio);
-          // this.formulario.get('ctrol_des_mant')?.setValue(this.dataListaRetirosPorNumReqySec[0].cod_Mantenimiento);
+          this.formulario.get('ctrol_itm_foto')?.setValue(this.dataListaRetirosPorNumReqySec[0].itm_Foto);
+          
         }else{
           this.matSnackBar.open("No existen registros!", 'Cerrar',{
             horizontalPosition: 'center', verticalPosition: 'top', duration: 1500
@@ -120,7 +131,7 @@ export class DialogRetiroRepuestosDetalleNuevoComponent implements OnInit {
     )
   }
 
-  cargarProductos(codProducto: string){
+  cargarProductos(){
     this.dataProductos = [];
     this.SpinnerService.show();
     this.serviceRetiroRepuestos.getItems().subscribe({
@@ -130,10 +141,10 @@ export class DialogRetiroRepuestosDetalleNuevoComponent implements OnInit {
             this.dataProductos = response.elements;
             this.SpinnerService.hide();
 
-            if (codProducto && codProducto.trim() !== ''){
-                console.log('1', codProducto);
-                this.usarProducto(codProducto);
-              }
+            // if (codProducto && codProducto.trim() !== ''){
+            //     console.log('1', codProducto);
+            //     this.usarProducto(codProducto);
+            //   }
 
 
           }else{
@@ -266,13 +277,13 @@ export class DialogRetiroRepuestosDetalleNuevoComponent implements OnInit {
         cancelButtonText: 'No'
       }).then((result) =>{
         if(result.isConfirmed){
-          const sCodItm = String(this.formulario.get('ctrol_des_item')?.value);
+          //const sCodItm = String(this.formulario.get('ctrol_des_item')?.value);
           const sCant = (this.formulario.get('ctrol_cant')?.value);
           const sRptCambio = (this.formulario.get('ctrol_rpt_cambio')?.value);
           
           let data: any = {
             "Num_Requerimiento": this.data.num_requerimiento,
-            "Cod_Item": sCodItm,
+            //"Cod_Item": sCodItm,
             "Can_Requerida": sCant,
             "Rpt_Cambio": sRptCambio,
             "Itm_Foto": ""
@@ -312,4 +323,93 @@ export class DialogRetiroRepuestosDetalleNuevoComponent implements OnInit {
       })
     }
 
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.fileName = file.name;
+      this.selectedFile = file;
+    }
+  }
+
+  onConfirma(){
+      let nombre = (this.formulario.get('ctrol_itm_foto')?.value);
+      console.log('selectedFile', String(this.selectedFile).replace(/ /g,'%20'));
+      console.log('filename', nombre);
+      // let NombreArchivoSinEspacio = String(this.fileName).replace(/ /g, '%20'); 
+      if(!this.selectedFile){
+        this.selectedFile = nombre;
+      }
+      
+      if (!this.selectedFile) {
+          this.matSnackBar.open("No hay archivo seleccionado.", 'Cerrar', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 1500,
+        });
+        return;    
+      }
+      Swal.fire({
+        title: '¿Actualizar Detalle?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No'
+      }).then((result) => {    
+
+        if (result.isConfirmed) {
+
+          const sNum_Req = String(this.data.num_requerimiento);
+          const sNum_Seq = String(this.data.nro_secuencia);
+          const sCant = (this.formulario.get('ctrol_cant')?.value);
+          const sRptCambio = (this.formulario.get('ctrol_rpt_cambio')?.value);
+
+          
+          const formData = new FormData();
+
+          formData.append("nNum_Requerimiento", sNum_Req);
+          formData.append("nNum_Secuencia", sNum_Seq);
+          formData.append("nCan_Requerida", sCant);
+          formData.append("sRpt_Cambio", sRptCambio);  
+          formData.append("itm_Foto", this.selectedFile); // el archivo real 
+          formData.append("sNombre_Archivo", this.selectedFile.name);  
+
+          console.log('formData', formData);     
+          
+      this.SpinnerService.show();
+      this.serviceRetiroRepuestos.patchActualizarRequerimientoDetalle(formData).subscribe({
+          next: (response: any)=> {
+            if(response.success){
+              if (response.codeResult == 200){
+                this.toastr.success(response.message, '', {
+                  timeOut: 2500,
+                });
+                this.dialogRef.close();
+
+              }else if(response.codeResult == 201){
+                this.toastr.info(response.message, '', {
+                  timeOut: 2500,
+                });
+              }
+              this.SpinnerService.hide();
+            }else{
+              this.toastr.error(response.message, 'Cerrar', {
+                timeOut: 2500,
+              });
+              this.SpinnerService.hide();
+            }
+          },
+          error: (error) => {
+            this.SpinnerService.hide();
+            this.toastr.error(error.message, 'Cerrar', {
+            timeOut: 2500,
+            });
+          }
+        });     
+        }        
+      });
+    
+  }
 }

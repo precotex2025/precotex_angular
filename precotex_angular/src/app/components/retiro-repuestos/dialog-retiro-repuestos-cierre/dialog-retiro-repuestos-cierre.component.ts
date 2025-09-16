@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RetiroRepuestosService } from 'src/app/services/RetiroRepuestos/retiro-repuestos.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -25,8 +25,13 @@ interface data {
 export class DialogRetiroRepuestosCierreComponent implements OnInit {
 
   formulario = this.formBuilder.group({
-    ctrol_pre_cier: ['']
+    ctrol_pre_cier: ['', [Validators.pattern('[0-9]*')]]
   });
+
+  // ctrol_pre_cier = new FormControl ('', [Validators.pattern('[0-9]*')])
+  getErrorMessage() {
+      return this.formulario.get('ctrol_pre_cier')?.hasError('pattern') ? 'Ingrese solo números' : '';
+  }
 
   constructor(        
           private formBuilder       : FormBuilder,
@@ -43,7 +48,13 @@ export class DialogRetiroRepuestosCierreComponent implements OnInit {
   }
 
   onSave(){
-      Swal.fire({
+      if((this.formulario.get('ctrol_pre_cier')?.value) == '' || (this.formulario.get('ctrol_pre_cier')?.value) == null){
+            this.matSnackBar.open("Ingrese N° Precinto de Cierre", "Cerrar",
+              {horizontalPosition:'center', verticalPosition:'top', duration: 1500}
+            );
+            return;
+      }else{
+        Swal.fire({
         title: "¿Desea Ingresar el Precinto de Cierre?",
         icon: 'question',
         showCancelButton: true,
@@ -55,45 +66,45 @@ export class DialogRetiroRepuestosCierreComponent implements OnInit {
         if(result.isConfirmed){
           const nNum_Req = this.data.num_requerimiento;
           const sPre_Cier = (this.formulario.get('ctrol_pre_cier')?.value);
-          console.log('numreq', nNum_Req);
-          console.log('precier', sPre_Cier);
-          let data: any = {
+          
+          
+            let data: any = {
             "Num_Requerimiento": nNum_Req,
             "Nro_Precinto_Cierre": sPre_Cier,
-          };
-  
-  
-          this.SpinnerService.show();
-          this.serviceRetiro.patchActualizarPrecintoCierre(data).subscribe({
-            next: (response: any) => {
-              if(response.success){
-                if(response.codeResult == 200){
-                  this.toastr.success(response.message, '', {
-                    timeOut: 2500,
+            };
+            this.SpinnerService.show();
+            this.serviceRetiro.patchActualizarPrecintoCierre(data).subscribe({
+              next: (response: any) => {
+                if(response.success){
+                  if(response.codeResult == 200){
+                    this.toastr.success(response.message, '', {
+                      timeOut: 2500,
+                    });
+                    this.dialogRef.close();
+                  }else if(response.codeResult == 201){
+                    this.toastr.info(response.message, '', {
+                      timeOut: 2500,
+                    });
+                  }
+                  this.SpinnerService.hide();
+                }else{
+                  this.toastr.error(response.message, 'Cerrar', {
+                    timeOut:2500
                   });
-                  this.dialogRef.close();
-                }else if(response.codeResult == 201){
-                  this.toastr.info(response.message, '', {
-                    timeOut: 2500,
-                  });
+                  this.SpinnerService.hide();
                 }
-                this.SpinnerService.hide();
-              }else{
-                this.toastr.error(response.message, 'Cerrar', {
-                  timeOut:2500
+              },
+              error:(error) => {
+                this. SpinnerService.hide();
+                this.toastr.error(error.message, 'Cerrar', {
+                  timeOut: 2500
                 });
-                this.SpinnerService.hide();
               }
-            },
-            error:(error) => {
-              this. SpinnerService.hide();
-              this.toastr.error(error.message, 'Cerrar', {
-                timeOut: 2500
-              });
-            }
-          })
+            })
+          
         }
       })
+      }
     }
 
 }

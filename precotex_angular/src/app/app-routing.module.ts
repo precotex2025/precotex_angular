@@ -306,6 +306,7 @@ import { ValidaCorteDespachoComponent } from './components/auditoria-corte/valid
 import { LiberaOpColorComponent } from './components/auditoria-corte/libera-op-color/libera-op-color.component';
 import { SalidaTiendaComponent } from './components/seguridad/salida-tienda/salida-tienda.component';
 import { RetiroRepuestosComponent } from './components/retiro-repuestos/retiro-repuestos.component';
+import { DialogRetiroRepuestosComponent } from './components/retiro-repuestos/dialog-retiro-repuestos/dialog-retiro-repuestos/dialog-retiro-repuestos.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -660,6 +661,7 @@ const routes: Routes = [
 
   //RETIRO DE REPUESTOS
   {path: 'RetiroRepuestos', component: RetiroRepuestosComponent},
+  {path: 'DialogRetiroRepuestos', component: DialogRetiroRepuestosComponent},
 
   //LIBERAR OP TENDIDO
   { path: 'liberacionOP', component: LiberarOpComponent },

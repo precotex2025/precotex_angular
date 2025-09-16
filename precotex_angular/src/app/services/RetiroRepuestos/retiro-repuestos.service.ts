@@ -3,6 +3,7 @@ import { HttpClient,HttpHeaders, HttpParams } from '@angular/common/http';
 import { GlobalVariable } from 'src/app/VarGlobals';
 import * as _moment from 'moment';
 import { param } from 'jquery';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -98,14 +99,26 @@ export class RetiroRepuestosService {
     return this.http.get(this.baseUrlTinto + 'TxRetiroRepuestos/getListaDatosReporte', {headers, params});
   }
 
+  getGetImageBase64FromUrlAsync(imageUrl: string): Observable<{ base64Image: string }>{
+    const headers = this.Header;
+      let params = new HttpParams();
+      params = params.append('imageUrl', imageUrl!);
+    
+      return this.http.get<{ base64Image: string }>(this.baseUrlTinto + 'TxRetiroRepuestos/GetImageBase64FromUrlAsync', { headers, params });
+  }
+
   postRegistrarRequerimiento(data: any){
     const headers = this.Header;
     return this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postRegistrarRequerimiento', data, {headers});
   }
 
+  // postRegistrarRequerimientoDetalle(data: any){
+  //   const headers = this.Header;
+  //   return this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postRegistrarRequerimientoDetalle', data, {headers});
+  // }
+
   postRegistrarRequerimientoDetalle(data: any){
-    const headers = this.Header;
-    return this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postRegistrarRequerimientoDetalle', data, {headers});
+    return this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postProcesoConfirmarReclamo', data);
   }
 
   patchActualizarRequerimiento(data: any){
@@ -118,9 +131,13 @@ export class RetiroRepuestosService {
     return this.http.patch(this.baseUrlTinto + 'TxRetiroRepuestos/patchActualizarRequerimientoPrecintoCierre', data, {headers})
   }
 
+  // patchActualizarRequerimientoDetalle(data: any){
+  //   const headers = this.Header;
+  //   return this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/patchActualizarRequerimientoDetalle', data, {headers});
+  // }
+
   patchActualizarRequerimientoDetalle(data: any){
-    const headers = this.Header;
-    return this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/patchActualizarRequerimientoDetalle', data, {headers});
+    return this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/patchActualizarRequerimientoDetalle', data);
   }
 
 

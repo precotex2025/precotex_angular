@@ -1,80 +1,82 @@
-<div class="card">
-    <div class="card-header">
-        {{data.Title}}
+<div class="container">
+  <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+    
+    <div class="form-row">
+      <!-- <mat-form-field class="full-width">
+        <mat-label>Descripción</mat-label>
+        <mat-select formControlName="ctrol_des_item" (selectionChange)="onProductoSeleccionado($event)" #select>
+          <mat-option>
+            <input
+              matInput
+              placeholder="Buscar Producto"
+              formControlName="filtroProducto"
+              (ngModelChange)="filtrarProductos()"
+              (click)="$event.stopPropagation()"
+              (keydown)="$event.stopPropagation()"
+              autocomplete="off">
+          </mat-option>
+
+          <mat-option *ngFor="let producto of ProductosFiltrados" [value]="producto.cod_Item">
+            {{producto.des_Item}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field> -->
     </div>
-    <div class="container">
-        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
-            <div class="row">
-                <mat-form-field style="width: 100%;">
-                    <mat-label>Descripcion</mat-label>
-                    <mat-select formControlName="ctrol_des_item" 
-                    (selectionChange)="onProductoSeleccionado($event)" 
-                    #select>
-                        <mat-option>
-                            <input
-                            matInput
-                            placeholder="Buscar Producto"
-                            formControlName="filtroProducto"
-                            (ngModelChange)="filtrarProductos()"
-                            (click)="$event.stopPropagation()" 
-                            (keydown)="$event.stopPropagation()" 
-                            autocomplete="off">
-                        </mat-option>
-
-                        <mat-option
-                        *ngFor = "let producto of ProductosFiltrados"
-                        [value] = "producto.cod_Item">
-                        {{producto.des_Item}}                            
-                        </mat-option>
-                    </mat-select>
-                    <!-- <input matInput formControlName="ctrol_cod_item"> -->
-                </mat-form-field>
-            </div>
-
-            <div class="row">
-                <mat-form-field style="width: 100%;">
-                    <mat-label>Unidad de Medida</mat-label>
-                    <input matInput formControlName="ctrol_uni_med">
-                </mat-form-field>
-            </div>
-
-            <div class="row">
-                <mat-form-field style="width: 100%;">
-                    <mat-label>Cantidad</mat-label>
-                    <input matInput formControlName="ctrol_cant">
-                </mat-form-field>
-            </div>
-
-            <div class="row">
-                <mat-form-field style="width: 100%;"> 
-                    <mat-label>Repuesto de Cambio:</mat-label> 
-                        <mat-select matNativeControl formControlName="ctrol_rpt_cambio"> 
-                            <mat-option value="0">No</mat-option> 
-                            <mat-option value="1">Si</mat-option> 
-                        </mat-select> 
-                </mat-form-field>                     
-            </div>
-
-            <div class="button-row">    
-                <button mat-flat-button color="primary" class="form-button"> 
-                    <mat-icon>add_a_photo</mat-icon> Tomar Foto
-                </button>
-            </div>  
-
-            <div class="button-row">    
-                <button mat-flat-button color="primary" class="form-button" (click)="Procesar()"> 
-                    <mat-icon>save</mat-icon> Grabar
-                </button>
-
-                <button mat-flat-button color="warn" mat-dialog-close class="form-button">
-                    <mat-icon>close</mat-icon> Salir
-                </button>
-            </div>  
-
-
-        </form>
+  
+    <div class="form-row">
+      <mat-form-field class="full-width">
+        <mat-label>Producto</mat-label>
+        <input matInput formControlName="ctrol_des_item">
+      </mat-form-field>
     </div>
+
+    <div class="form-row">
+      <mat-form-field class="full-width">
+        <mat-label>Unidad de Medida</mat-label>
+        <input matInput formControlName="ctrol_uni_med">
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field class="full-width">
+        <mat-label>Cantidad</mat-label>
+        <input matInput formControlName="ctrol_cant" pattern="[0-9]*">
+        <mat-error *ngIf="formulario.get('ctrol_cant').hasError('pattern')">
+          {{getErrorMessage()}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field class="full-width">
+        <mat-label>Repuesto de Cambio:</mat-label>
+        <mat-select matNativeControl formControlName="ctrol_rpt_cambio">
+          <mat-option value="0">No</mat-option>
+          <mat-option value="1">Sí</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row file-upload-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Archivo</mat-label>
+        <input matInput [value]="fileName" readonly formControlName="ctrol_itm_foto" />
+        <button mat-icon-button matSuffix (click)="fileInput.click()">
+          <mat-icon>attach_file</mat-icon>
+        </button>
+      </mat-form-field>
+      <input type="file" hidden #fileInput (change)="onFileSelected($event)" />
+    </div>
+
+    <div class="button-row">
+      <button mat-flat-button color="primary" class="form-button" (click)="Procesar()">
+        <mat-icon>save</mat-icon> Grabar
+      </button>
+
+      <button mat-flat-button color="warn" mat-dialog-close class="form-button">
+        <mat-icon>close</mat-icon> Salir
+      </button>
+    </div>
+
+  </form>
 </div>
-
-
-

@@ -1,64 +1,58 @@
-<div class="card">
-    <div class="card-header">
-        {{data.Title}}
+<div class="container">
+  <div class="grid-container">
+    <div>
+      <strong>{{data.Title}}</strong>
     </div>
-    <div class="container">
-        <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
-            <div class="row">
-                <mat-form-field style="width: 100%;">
-                    <mat-label>N° Requerimiento</mat-label>
-                    <input matInput formControlName="ctrol_req">
-                </mat-form-field>
-            </div>
 
-            <div class="row">
-                <mat-form-field style="width: 100%;">
-                    <mat-label>Nombre Seguridad</mat-label>
-                    <mat-select formControlName="ctrol_des_seg">                      
-                        <mat-option 
-                            *ngFor="let usuarioSeguridad of dataUsuariosSeguridad"
-                            [value]="usuarioSeguridad.id_Usuario">
-                            {{usuarioSeguridad.nom_Usuario}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
+    <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+      <div class="form-row">
+        <mat-form-field class="full-width">
+          <mat-label>N° Requerimiento</mat-label>
+          <input matInput formControlName="ctrol_req" type="number" min="1">
+        </mat-form-field>
+      </div>
 
-            <div class="row">
-                <mat-form-field style="width: 100%;">
-                    <mat-label>Nombre Mantenimiento</mat-label>
-                    <mat-select formControlName="ctrol_des_mant">
-                        <mat-option
-                            *ngFor="let usuarioMantenimiento of dataUsuariosMantenimiento"
-                            [value]="usuarioMantenimiento.id_Usuario">
-                            {{usuarioMantenimiento.nom_Usuario}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
+      <div class="form-row">
+        <mat-form-field class="full-width">
+          <mat-label>Nombre Seguridad</mat-label>
+          <mat-select formControlName="ctrol_des_seg">
+            <mat-option *ngFor="let usuarioSeguridad of dataUsuariosSeguridad" [value]="usuarioSeguridad.id_Usuario">
+              {{usuarioSeguridad.nom_Usuario}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-            <div class="row">
-                <mat-form-field style="width: 100%;">
-                    <mat-label>N° Precinto Apertura</mat-label>
-                    <input matInput formControlName="ctrol_pre_aper">
-                </mat-form-field>
-            </div>
+      <div class="form-row">
+        <mat-form-field class="full-width">
+          <mat-label>Nombre Mantenimiento</mat-label>
+          <mat-select formControlName="ctrol_des_mant">
+            <mat-option *ngFor="let usuarioMantenimiento of dataUsuariosMantenimiento" [value]="usuarioMantenimiento.id_Usuario">
+              {{usuarioMantenimiento.nom_Usuario}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
+      <div class="form-row">
+        <mat-form-field class="full-width">
+          <mat-label>N° Precinto Apertura</mat-label>
+          <input matInput formControlName="ctrol_pre_aper" pattern="[0-9]*">
+          <mat-error *ngIf="formulario.get('ctrol_pre_aper').hasError('pattern')">
+            {{getErrorMessage()}}
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-            <div class="button-row">    
-                <button mat-flat-button color="primary" class="form-button" (click)="Procesar()"> 
-                    <mat-icon>save</mat-icon> Grabar
-                </button>
+      <div class="button-row">
+        <button mat-flat-button color="primary" class="form-button" (click)="Procesar()">
+          <mat-icon>save</mat-icon> Grabar
+        </button>
 
-                <button mat-flat-button color="warn" mat-dialog-close class="form-button">
-                    <mat-icon>close</mat-icon> Salir
-                </button>
-            </div>  
-
-
-        </form>
-    </div>
+        <button mat-flat-button color="warn" mat-dialog-close class="form-button">
+          <mat-icon>close</mat-icon> Salir
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
-
-
-

@@ -1,93 +1,85 @@
-.card {
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 8px;
-    // min-width: 350px;
-    // min-height: 400px;
-    height: 600px; 
-    width: 1100px;
-}
-
-.body {
-    grid-template:
-    "fila1" 90px
-    "fila2" 400px/99%;
-    padding: 20px; /* Relleno alrededor del contorno */
-    gap: 10px; /* Espacio entre las columnas (opcional) */
-  }
-
-.card-header {
-    background-color: #3f51b5;
-    color: #ffffff;
-    padding: 8px 10px 10px 10px;
-    text-align: center;
-    /* border-bottom: 1px solid #337AB7; */
-    border-radius: 4px 4px 0px 0px;
-    border-bottom: 1px solid #337ab7;
-    font-family: corbel, arial; 
-    font-size: 15px;
-    font-weight: bold;
-}
-
 .container {
-    box-sizing: border-box;
-    width: 100%;
-    height: 90%;
-    padding: 5px;
-    font-family: corbel, arial;
-    font-size: 15px;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #337ab7;
-  }
-
-
-
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: -25px !important;
-    padding: 8px !important;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.button-row {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 25px;
-    margin-bottom: -15px; /* Agrega espacio hacia abajo */
-    flex-wrap: wrap;
-}
-    
-.form-button {
-min-width: 120px;
-height: 40px;
-display: flex;
-align-items: center;
-justify-content: center;
+.grid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.fila1-BtnNuevo{
-    grid-area: col1;
+strong {
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.container-cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.button-nuevo {
+  display: flex;
+  justify-content: center;
+
+  button {
+    min-width: 150px;
+  }
+}
+
+.responsive-table {
+  overflow-x: auto;
+  width: 100%;
+
+  table {
+    min-width: 800px;
     width: 100%;
-    height: 40px;
-    max-width: 180px;
-    margin: auto;
-    margin-top: 3px;
-    background-color: #3f51b5;
-    color: #ffffff;
+    border-collapse: collapse;
   }
 
-.fila1-BtnEditar{
-    grid-area: col2;
-    width: 100%;
-    height: 40px;
-    max-width: 180px;
-    margin: auto;
-    margin-top: 3px;
-    background-color: #3f51b5;
-    color: #ffffff;
+  th, td {
+    white-space: nowrap;
+    padding: 0.5rem;
+    text-align: left;
   }
 
+  td[align="center"] {
+    text-align: center;
+  }
+}
+
+.button-salir {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+
+  button {
+    min-width: 150px;
+  }
+}
+
+/* 📱 Mobile styles */
+@media (max-width: 768px) {
+  strong {
+    font-size: 1.4rem;
+  }
+
+  .button-nuevo button,
+  .button-salir button {
+    width: 100%;
+  }
+
+  .responsive-table table {
+    min-width: unset;
+  }
+
+  th, td {
+    font-size: 0.85rem;
+    padding: 0.4rem;
+  }
+}

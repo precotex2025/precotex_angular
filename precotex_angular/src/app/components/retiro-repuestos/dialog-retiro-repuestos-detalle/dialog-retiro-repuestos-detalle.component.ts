@@ -79,7 +79,6 @@ export class DialogRetiroRepuestosDetalleComponent implements OnInit {
   dataListadoRequerimientoDetalle: Array<any> = [];
 
   onGetDetalleRequerimiento(nNum_Requerimiento){
-    //const nNum_Requerimiento: number = 1;
     if(nNum_Requerimiento == 0){
       this.matSnackBar.open("No existe numero de requerimiento", "Cerrar",
         {horizontalPosition:'center', verticalPosition:'top', duration:1500}
@@ -90,13 +89,10 @@ export class DialogRetiroRepuestosDetalleComponent implements OnInit {
     this.dataListadoRequerimientoDetalle = [];
     this.serviceRetiro.getDetalleRequerimiento(nNum_Requerimiento).subscribe({
       next: (Response: any) => {
-        //console.log(Response);
         if(Response.success){
-          //console.log(Response.totalElements);
           if(Response.totalElements > 0){
             this.dataListadoRequerimientoDetalle = Response.elements;
             this.dataSource.data = this.dataListadoRequerimientoDetalle;
-            //this.dataSource.sort = this.sort;
             this.SpinnerService.hide();
 
           }else{
@@ -123,8 +119,7 @@ export class DialogRetiroRepuestosDetalleComponent implements OnInit {
     //let secuencia = objeto.secuencia;
 
     let dialogRef = this.dialog.open(DialogRetiroRepuestosDetalleNuevoComponent,{
-      width:'1500px',
-      height: '600px',
+      width:'500px',
       disableClose: true,
       panelClass: 'my-class',
       data:{
@@ -143,7 +138,8 @@ export class DialogRetiroRepuestosDetalleComponent implements OnInit {
     let num_req = objeto.num_Requerimiento;
     let num_sec= objeto.nro_Secuencia;
     let cod_Item = objeto.cod_Item;
-
+    let des_Item = objeto.des_Item;
+    console.log(cod_Item);
     let dialogRef = this.dialog.open(DialogRetiroRepuestosDetalleNuevoComponent,{
       width:'500px',
       disableClose: true,
@@ -154,6 +150,7 @@ export class DialogRetiroRepuestosDetalleComponent implements OnInit {
         num_requerimiento: num_req,
         nro_secuencia: num_sec,
         cod_Item: cod_Item,
+        des_Item: des_Item,
         
       }
     });
