@@ -566,7 +566,7 @@ export class QuejasReclamosComponent implements OnInit {
         this.nuevoReclamo.cod_Motivo          = String(reclamos.elements[0].cod_Motivo);
         this.nuevoReclamo.responsable         = String(reclamos.elements[0].responsable);
         this.nuevoReclamo.observacion         = String(reclamos.elements[0].observacion);
-
+        this.nuevoReclamo.tipoRegistro        = String(reclamos.elements[0].tipoRegistro);
 
         // Suponiendo que solo es un reclamo para editar: 
         /*
