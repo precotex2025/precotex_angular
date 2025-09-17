@@ -569,6 +569,7 @@ import { DialogColorComponent } from './components/auditoria-corte/libera-op-col
 import { ModalInformeComponent } from './components/quejas-reclamos/modal-informe/modal-informe.component';
 import { ModalInformeCierreComponent } from './components/quejas-reclamos/modal-informe-cierre/modal-informe-cierre.component';
 import { DialogEvidenciaEmpaqueCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-evidencia-empaque-caja/dialog-evidencia-empaque-caja.component';
+import { DialogEvidenciaPackingCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-evidencia-packing-caja/dialog-evidencia-packing-caja.component';
 
 @NgModule({
   declarations: [
@@ -1062,7 +1063,7 @@ import { DialogEvidenciaEmpaqueCajaComponent } from './components/auditoria-cali
     DialogPendienteEmpaqueCajasComponent, 
     EncogimientoPrendaComponent, 
     DialogEncogimientoPrendaRegistroComponent, 
-    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent 
+    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent 
   ],
   entryComponents: [DialogJabaComponent],
   imports: [
