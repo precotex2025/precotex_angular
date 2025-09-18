@@ -101,12 +101,15 @@ export class RetiroRepuestosService {
 
   getGetImageBase64FromUrlAsync(imageUrl: string): Observable<{ base64Image: string }>{
     const headers = this.Header;
-      let params = new HttpParams();
-      params = params.append('imageUrl', imageUrl!);
-    
-      return this.http.get<{ base64Image: string }>(this.baseUrlTinto + 'TxRetiroRepuestos/GetImageBase64FromUrlAsync', { headers, params });
+    let params = new HttpParams();
+    params = params.append('imageUrl', imageUrl!); 
+    return this.http.get<{ base64Image: string }>(this.baseUrlTinto + 'TxRetiroRepuestos/GetImageBase64FromUrlAsync', { headers, params });
   }
 
+  getListaRetiroRepuestosPorIdRequerimientoMAX(){
+    const headers = this.Header;
+    return this.http.get(this.baseUrlTinto + 'TxRetiroRepuestos/getListaRetiroRepuestosPorIdRequerimientoMAX', {headers});
+  }
   postRegistrarRequerimiento(data: any){
     const headers = this.Header;
     return this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postRegistrarRequerimiento', data, {headers});
@@ -140,16 +143,10 @@ export class RetiroRepuestosService {
     return this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/patchActualizarRequerimientoDetalle', data);
   }
 
-
-
-
-
-
-
-
-
-
-
-
+  EnviarCorreo(){
+    console.log('ENTRA AL SERVICIO');
+    const headers = this.Header;
+    return this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo', '"1"', {headers});
+  }
 
 }

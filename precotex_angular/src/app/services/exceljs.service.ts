@@ -5,14 +5,24 @@ import * as logo from './mylogo.js';
 import { firstValueFrom } from 'rxjs';
 import { TiProcesosTintoreriaService } from 'src/app/services/ti-procesos-tintoreria.service';
 import { RetiroRepuestosService } from './RetiroRepuestos/retiro-repuestos.service';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { GlobalVariable } from '../VarGlobals';
+import { param } from 'jquery';
 @Injectable({
   providedIn: 'root'
 })
 export class ExceljsService {
+  baseUrlTinto = GlobalVariable.baseUrlProcesoTenido;
+  Header = new HttpHeaders({
+    'Content-type': 'application/json'
+  });
+  
   imageBase64: string | null = null;
+
   constructor(
               private serviceTiProcesoTintoreria: TiProcesosTintoreriaService,
-              private serviceRetiroRepuestos: RetiroRepuestosService
+              private serviceRetiroRepuestos: RetiroRepuestosService,
+              private http: HttpClient
   ) {}
 
 
@@ -23,6 +33,7 @@ export class ExceljsService {
     const header = excelData.headers
     const data = excelData.data;
 
+    
     var abc = 64
     var abcIni = ''
     var abcFin = ''
@@ -990,6 +1001,7 @@ async exportExcel4(excelData){
     const title = excelData.title;
     const header = excelData.headers
     const data = excelData.data;
+    const Num_Requerimiento = excelData.Num_Requerimiento;
 
     var abc = 64
     var abcIni = ''
@@ -1087,10 +1099,11 @@ async exportExcel4(excelData){
           base64: this.imageBase64,
           extension: 'jpeg',
         });
-
+        //asignar columna
         worksheet.addImage(myLogoImage900, {
           tl: { col: 14, row: row.number - 1 }, // Columna 3 (2 base 0) y fila actual
           ext: { width: 67, height: 40 }, // Tamaño de la imagen
+          
         });   
       }
       // Limpia el valor textual de la celda
@@ -1132,11 +1145,31 @@ async exportExcel4(excelData){
 
     //Merge Cells
     worksheet.mergeCells(`` + abcIni + `${footerRow.number}:` + abcFin + `${footerRow.number}`);
-
     //Generate & Save Excel File
     workbook.xlsx.writeBuffer().then((data) => {
+      
+      
       let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      FileSaver.saveAs(blob, title + '.xlsx');
+      if(Num_Requerimiento === 0){
+        FileSaver.saveAs(blob, title + '.xlsx');
+      }else{
+        let params = new HttpParams();
+        params = params.append('Num_Requerimiento', Num_Requerimiento)
+
+        this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/guardar-excel', blob, {
+        headers: { 'Content-Type': 'application/octet-stream' },
+        params
+        }).subscribe(() => {
+          console.log('Archivo guardado en el servidor');
+        });
+
+        // const headers = this.Header;
+        this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo', '"1"',
+          {headers: { 'Content-Type': 'application/json' }}
+        ).subscribe(() => {
+          console.log('Se envio el correo');
+        });        
+      }
     })
   }
 

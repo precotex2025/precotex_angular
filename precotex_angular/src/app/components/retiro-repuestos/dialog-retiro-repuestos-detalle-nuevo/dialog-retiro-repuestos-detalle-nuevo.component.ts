@@ -342,7 +342,7 @@ export class DialogRetiroRepuestosDetalleNuevoComponent implements OnInit {
       }
       
       if (!this.selectedFile) {
-          this.matSnackBar.open("No hay archivo seleccionado.", 'Cerrar', {
+          this.matSnackBar.open("No hay foto adjunta", 'Cerrar', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
           duration: 1500,
