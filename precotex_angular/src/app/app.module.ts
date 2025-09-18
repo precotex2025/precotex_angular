@@ -565,6 +565,10 @@ import { ModalSeleccionPartidaQrComponent } from './components/quejas-reclamos/m
 import { DialogMemorandumPlantaComponent } from './components/memorandum-gral/dialog-memorandum-planta/dialog-memorandum-planta.component';
 import { LiberaOpColorComponent } from './components/auditoria-corte/libera-op-color/libera-op-color.component';
 import { DialogColorComponent } from './components/auditoria-corte/libera-op-color/dialog-color/dialog-color.component';
+import { ModalInformeComponent } from './components/quejas-reclamos/modal-informe/modal-informe.component';
+import { ModalInformeCierreComponent } from './components/quejas-reclamos/modal-informe-cierre/modal-informe-cierre.component';
+import { DialogEvidenciaEmpaqueCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-evidencia-empaque-caja/dialog-evidencia-empaque-caja.component';
+import { DialogEvidenciaPackingCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-evidencia-packing-caja/dialog-evidencia-packing-caja.component';
 
 //RETIRO DE REPUESTOS
 import { RetiroRepuestosComponent } from './components/retiro-repuestos/retiro-repuestos.component';
@@ -1058,6 +1062,8 @@ import { DialogRetiroRepuestosDetalleNuevoComponent } from './components/retiro-
     DialogMemorandumPlantaComponent,
     //Quejas y reclamos V2
     ModalSeleccionPartidaQrComponent,
+    ModalInformeComponent,
+    ModalInformeCierreComponent,
     CalificacionRollosFinalComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ModalEditarDesgloseComponent, ConfirmDialogComponent, QuejasReclamosv2Component,
     ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent,
     DialogPendienteEmpaqueCajasComponent, 
@@ -1070,8 +1076,9 @@ import { DialogRetiroRepuestosDetalleNuevoComponent } from './components/retiro-
     DialogRetiroRepuestosComponent,
     DialogRetiroRepuestosCierreComponent,
     DialogRetiroRepuestosDetalleComponent,
-    DialogRetiroRepuestosDetalleNuevoComponent
+    DialogRetiroRepuestosDetalleNuevoComponent,
   
+    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent 
   ],
   entryComponents: [DialogJabaComponent],
   imports: [

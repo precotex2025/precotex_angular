@@ -19,28 +19,35 @@
       </div>
 
       <div>
-        <label for="clienteSelect">Seleccione Tipo Registro</label>
+        <!--REEMPLAZADO POR NRO DE PARTIDA-->
+        <!-- <label for="clienteSelect">Seleccione Tipo Registro</label>
         <select id="clienteSelect" [(ngModel)]="nuevoReclamo.tipoRegistro" (change)="reiniciarEstado()">
-          <!--<option value="" disabled selected>Seleccione tipo Registro</option>   Opción por defecto -->
           <option *ngFor="let c of tipoRegistro" [value]="c.estado">{{ c.estado }}</option>
-        </select>
+        </select> -->
+
+        <label for="clienteSelect">Nro Partida:</label>
+        <input [(ngModel)]="nuevoReclamo.cod_Ordtra" />
+
       </div>
 
       <div>
-        <label for="clienteSelect">Seleccione Estado Solicitud</label>
+        <!-- <label for="clienteSelect">Seleccione Estado Solicitud</label>
         <select id="clienteSelect" [(ngModel)]="nuevoReclamo.estadoSolicitud" (change)="reiniciarEstado()">
-          <!--<option value="" disabled selected>Seleccione Estado Solicitud</option> -->
-          <option *ngFor="let c of estados" [value]="c.estado">{{ c.estado }}</option>
-        </select>
+          <option *ngFor="let c of estados" [value]="c.cod_Estado"> {{ c.nombre_Estado }}</option>
+        </select> -->
+
+        <label for="clienteSelect">Seleccione Estado Solicitud</label>
+        <select id="clienteSelect" [(ngModel)]="nuevoReclamo.estadoSolicitud">
+          <option *ngFor="let c of estados" [value]="c.cod_Estado"> {{ c.nombre_Estado }}</option>
+        </select>        
       </div>
 
-      <div>
+      <!-- <div>
         <label for="clienteSelect">Seleccione Area responsable</label>
         <select id="clienteSelect" [(ngModel)]="nuevoReclamo.responsable" (change)="reiniciarEstado()">
-          <!--<option value="" disabled selected>Seleccione responsable</option>  Opción por defecto -->
           <option *ngFor="let c of responsable" [value]="c.nombreArea">{{ c.nombreArea }}</option>
         </select>
-      </div>
+      </div> -->
 
       <button mat-raised-button color="primary" class="boton-buscar" (click)="buscar()">
         🔍Buscar
@@ -84,17 +91,25 @@
         <span style="display: inline-flex; align-items: center;">
           <span style="width: 30px; height: 30px; border-radius: 80%; margin-right: 5px;"
                 [style.background-color]="
-                  isOlderThan(item.fechaRegistro, 48) ? 'red' :
-                  (isBetween(item.fechaRegistro, 24, 48) ? 'yellow' : 'green')
+            item.cod_Estado === '03' ? 'blue' :
+            (item.cod_Estado === '04' ? 'lightblue' :
+              (isOlderThan(item.fechaRegistro, 48) ? 'red' :
+               (isBetween(item.fechaRegistro, 24, 48) ? 'yellow' : 'green')))
                 ">
           </span>
         </span>
       </td>
         <td>
-          <button mat-icon-button color="warn" (click)="editar(item)" matTooltip="Editar reclamo">
+          <button *ngIf="mostrarBotonInforme(item)" mat-icon-button color="primary" (click)="informe(item)" matTooltip="Crear/Ver Informe Calidad">
+            <mat-icon>assignment</mat-icon>
+          </button>   
+          <button *ngIf="mostrarBotonCerrar(item)" mat-icon-button color="primary" (click)="cerrarCaso(item)" matTooltip="Cerrar/Ver Informe Comercial">
+            <mat-icon>cancel_presentation</mat-icon>
+          </button>                    
+          <button mat-icon-button color="primary" (click)="editar(item)" matTooltip="Editar reclamo">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button color="warn" (click)="eliminar(item)" matTooltip="Eliminar reclamo">
+          <button *ngIf="mostrarBotonEliminar(item)" mat-icon-button color="warn" (click)="eliminar(item)" matTooltip="Eliminar reclamo">
             <mat-icon>delete</mat-icon>
           </button>
         </td>
@@ -126,8 +141,8 @@
     <div>
       <div>
         <label for="clienteSelect">Partida</label>
-        <input placeholder="Ingrese Partida" [(ngModel)]="nuevoReclamo.codOrdtra" (keydown.enter)="buscarTelasXPartida()" />
-        <input [(ngModel)]="nuevoReclamo.cadenaCodOrdtra" disabled />
+        <input placeholder="Ingrese Partida" [(ngModel)]="nuevoReclamo.cod_Ordtra" (keydown.enter)="buscarTelasXPartida()" [disabled]="!esNuvoReclamo"/>
+        <input *ngIf="esNuvoReclamo" [(ngModel)]="nuevoReclamo.cadenaCodOrdtra" disabled />
       </div>    
     </div>    
 
@@ -141,20 +156,27 @@
         placeholder="Buscar cliente..."
       /> -->
 
-      <select [(ngModel)]="nuevoReclamo.cliente" disabled>
-        <option *ngFor="let c of clientes" [value]="c.nom_Cliente">
+      <select [(ngModel)]="nuevoReclamo.cod_Cliente_Tex" disabled>
+        <option *ngFor="let c of clientes" [value]="c.cod_Cliente_Tex">
           {{ c.nom_Cliente }}
         </option>
       </select>
     </div>
 
     <div>
+      <label for="clienteSelect">Unidad Negocio</label> 
+      <select id="clienteSelect" [(ngModel)]="nuevoReclamo.cod_Unidad_Negocio" disabled>
+        <option *ngFor="let c of this.unidadNegocio2" [value]="c.cod_Unidad_Negocio">{{ c.des_Unidad_Negocio }}</option>
+      </select>
+    </div>    
+    
+    <div>
       <label for="clienteSelect">Area responsable</label>
       <select id="clienteSelect" [(ngModel)]="nuevoReclamo.responsable">
         <!--<option value="" disabled selected>Seleccione responsable</option>   Opción por defecto -->
         <option *ngFor="let c of responsable" [value]="c.nombreArea">{{ c.nombreArea }}</option>
       </select>
-    </div>    
+    </div>      
 
     <div>
       <label for="clienteSelect">Usuario responsable</label>
@@ -172,9 +194,8 @@
       </select>
     </div> -->
 
-    <div>
 
-      <div>
+          <div>
         <label for="clienteInput">Seleccione Motivo</label>
         <input
           id="motivoInput"
@@ -184,27 +205,20 @@
           placeholder="Buscar motivo..."
         />
 
-        <select [(ngModel)]="nuevoReclamo.motivoRegistro">
+        <!-- <select [(ngModel)]="nuevoReclamo.motivoRegistro">
           <option *ngFor="let c of motivoReclamo" [value]="c.descripcion">
             {{ c.cod_Unidad_Negocio }} - {{ c.descripcion }}
           </option>
-        </select>
+        </select> -->
+
+        <select [(ngModel)]="nuevoReclamo.cod_Motivo" (ngModelChange)="actualizarDescripcionMotivo($event)">
+          <option *ngFor="let c of motivoReclamo" [value]="c.cod_Motivo">
+            {{ c.descripcion }}
+          </option>
+        </select>        
         
       </div>
-
-    </div>    
-
-    <div>
-      <label for="clienteSelect">Seleccione Unidad Negocio</label>  <!-- Título encima del comboBox -->
-      <select id="clienteSelect" [(ngModel)]="nuevoReclamo.id_Unidad_NegocioKey">
-        <!--<option value="" disabled selected>Seleccione Unidad Negocio</option>   Opción por defecto -->
-        <option *ngFor="let c of this.unidadNegocio2" [value]="c.id_Unidad_NegocioKey">{{ c.descripcion }}</option>
-      </select>
-    </div>    
-
-    <div>
-
-    </div>
+ 
 
     <div>
       <label for="clienteSelect">Observacion</label>
@@ -217,7 +231,7 @@
   </div>
 
   <div>
-    <button (click)="agregarReclamo()" class="buton-cab" mat-raised-button color="accent">
+    <button *ngIf="esNuvoReclamo" (click)="agregarReclamo()" class="buton-cab" mat-raised-button color="accent">
       ➕ Agregar
     </button>
   </div>
@@ -246,12 +260,13 @@
         <td>{{ reclamo.id }}</td>
         <td>{{ reclamo.cliente }}</td>  
 
-        <td>{{ reclamo.codOrdtra }}</td><!--NUEVO-->
+        <td>{{ reclamo.cod_Ordtra }}</td><!--NUEVO-->
         <td>{{ reclamo.cod_Tela + ' - ' + reclamo.des_Tela }}</td><!--NUEVO-->
         <td>{{ reclamo.cod_Color+ ' - ' + reclamo.des_Color }}</td><!--NUEVO-->
 
         <td>{{ reclamo.tipoRegistro }}</td>
-        <td>{{ reclamo.unidadNegocio }}</td>
+        <td>{{ reclamo.des_Unidad_Negocio }}</td>
+        <!-- <td>{{ reclamo.unidadNegocio }}</td> -->
         <td>{{ reclamo.usuarioRegistro }}</td>
         <td>{{ reclamo.responsable }}</td>
         <td>{{ reclamo.motivoRegistro }}</td>
@@ -283,12 +298,18 @@
 
   </table>
 <!-- Asegúrate de que FontAwesome esté cargado, o puedes usar material icons también -->
-<button class="buton-cab" mat-raised-button color="primary" (click)="guardar()">
+<button *ngIf="nuevoReclamo?.cod_Estado === '01' || nuevoReclamo?.cod_Estado === undefined" class="buton-cab" mat-raised-button color="primary" (click)="guardar()">
   <ng-container>
     💾 Guardar
   </ng-container>
 
 </button>
+
+<!-- <button class="buton-cab" mat-raised-button color="primary" (click)="recepcionar()">
+  <ng-container>
+    📩 Recepcionar
+  </ng-container>
+</button> -->
 
 <div class="boton-derecha">
   <button
@@ -305,4 +326,7 @@
 </div>
 
 </div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>
 

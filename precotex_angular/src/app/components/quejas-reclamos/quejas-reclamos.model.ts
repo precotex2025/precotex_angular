@@ -1,5 +1,5 @@
 export interface ReclamoCliente {
-
+  id: number,
   cliente?: string;
   nroCaso?: string;
   fechaInicio?: string;
@@ -16,13 +16,17 @@ export interface ReclamoCliente {
   cadenaCodOrdtra: string;
     
   //Nuevos Campos
-  codOrdtra: string;
+  cod_Ordtra: string;
   cod_Tela: string;
   des_Tela: string;
   cod_Color: string;
   des_Color: string;
   num_Secuencia: number;
-  id_Unidad_NegocioKey: number;
+  cod_Unidad_Negocio: string;
+  des_Unidad_Negocio: string;
+  cod_Cliente_Tex : string;
+  cod_Motivo: string;
+  cod_Estado?: string;
 }
 
 export interface Cliente {
@@ -33,6 +37,15 @@ export interface Cliente {
 
 export interface ClientesResponse {
   elements: Cliente[];
+}
+
+export interface EstadosOficial {
+  cod_Estado    : string;
+  nombre_Estado : string;
+}
+
+export interface EstadoOficialResponse {
+  elements: EstadosOficial[];
 }
 
 export interface Estados {
@@ -64,7 +77,7 @@ export interface UsuarioResponsableResponse {
 }
 
 export interface MotivoReclamo {
-  cod_Unidad_Negocio : string;
+  cod_Motivo : string;
   descripcion : string;
 }
 
@@ -74,8 +87,8 @@ export interface MotivoReclamoResponse {
 
 //Nuevo
 export interface UnidadNegocio2 {
-  id_Unidad_NegocioKey : string;
-  descripcion : string;
+  cod_Unidad_Negocio : string;
+  des_Unidad_Negocio : string;
 }
 
 export interface UnidadNegocio2Response {

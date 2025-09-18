@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GlobalVariable } from '../VarGlobals';
 import * as _moment from 'moment';
-
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -288,7 +288,6 @@ export class AuditoriaAcabadosService {
   }
 
   Mant_AuditoriaEmpaqueCajasDetalle(Cod_Accion: string, Num_Auditoria_Detalle: number, Num_Auditoria: number, Cod_Motivo: string, Cantidad: number) {
-    
     return this.http.get(`${this.baseUrl}/app_Cc_Man_Auditoria_Empaque_Cajas_Det.php?Accion=${Cod_Accion}&Num_Auditoria_Detalle=${Num_Auditoria_Detalle}&Num_Auditoria=${Num_Auditoria}&Cod_Motivo=${Cod_Motivo}&Cantidad=${Cantidad}&Cod_Usuario=${this.sCod_Usuario}`);
   }
 
@@ -302,6 +301,10 @@ export class AuditoriaAcabadosService {
 
   Get_PackingCajaEmpaque(Num_Packing: string){
     return this.http.get(`${this.baseUrl}/app_Cc_Man_Auditoria_Empaque_Cajas_Packing.php?Num_Packing=${Num_Packing}`);
+  }
+
+  Mant_EvidenciaEmpaque(data: any): Observable<any[]> {
+    return this.http.post<any[]>(`${this.baseUrl}/app_Man_CC_Evidencia_Empaque_Cajas.php`, data);
   }
 
   //- PROGRAMACION AUDITORIAS

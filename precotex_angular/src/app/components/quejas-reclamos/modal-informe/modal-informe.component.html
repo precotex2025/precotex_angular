@@ -1,0 +1,83 @@
+<div class="dialog-scroll">
+      <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+            <mat-card class="example-card" appearance="outlined">
+                <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"></div>
+                    <mat-card-title>INFORME DE CALIDAD </mat-card-title>
+                    <mat-card-subtitle>Caso N°: {{data.Datos.nroCaso}} </mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content>
+                    <div class="row" style="display: flex; align-items: center; gap: 8px;">
+
+                         <div style="flex: 0 0 90%;">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-label>Archivo</mat-label>
+                        <input matInput [value]="fileName" [disabled]="isHabilitaButtonAttach" readonly />
+                        <button  mat-icon-button matSuffix (click)="fileInput.click()" [disabled]="isHabilitaButtonAttach">
+                            <mat-icon>attach_file</mat-icon>
+                        </button>
+                        </mat-form-field>
+                        </div>
+
+                        <!-- 20%: Botón de eliminar -->
+                        <div style="flex: 0 0 5%; display: flex; justify-content: center;">
+                            <button  *ngIf="isVisibleButtonDownload" mat-icon-button color="warn"  aria-label="Descargar archivo" (click)="download()">
+                            <mat-icon>download</mat-icon>
+                            </button>
+                        </div>        
+<!-- 
+                        <div style="flex: 0 0 5%; display: flex; justify-content: center;">
+                            <button mat-icon-button color="warn"  aria-label="Eliminar archivo">
+                            <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>                         -->
+
+                        <input 
+                        type="file" 
+                        hidden 
+                        #fileInput 
+                        (change)="onFileSelected($event)" />                     
+
+                    </div>
+
+                    <div class="row">
+
+                        <mat-form-field appearance="outline" style="flex: 1;">
+                            <mat-label>Comentario :</mat-label>
+                            <textarea matInput rows="3" formControlName="ctrol_comentario" placeholder="Ingrese un comentario"></textarea>
+                        </mat-form-field>   
+
+                    </div>     
+                    
+                    <div class="row">
+                        
+                        <mat-form-field appearance="outline" style="flex: 1;"> 
+                            <mat-label>Responsable Final :</mat-label> 
+                            <mat-select formControlName="ctrol_responsable_final" > 
+                                <mat-option *ngFor="let respFinal of dataResponsableFinal" [value]="respFinal.cod_Area_CC">{{ respFinal.cod_Area_CC }} - {{ respFinal.descripcion }}</mat-option>  
+                            </mat-select> 
+                        </mat-form-field>                                 
+
+                    </div>
+                    
+                </mat-card-content>
+            </mat-card>
+      </form>
+</div>
+<br>
+<div class="button-row"> 
+    <!-- [disabled]="data.Datos.cod_Estado_Memo !== '04' && bEdita" -->
+    <button *ngIf="isVisibleButtonConfirmaEnvio" mat-flat-button color="primary" class="form-button" (click)="onConfirma()"> 
+        <mat-icon>save</mat-icon> Confirmar Envio
+    </button>
+
+    <button mat-flat-button color="warn" mat-dialog-close class="form-button">
+        <mat-icon>close</mat-icon> Cancelar
+    </button>
+    
+</div> 
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

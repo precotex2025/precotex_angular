@@ -54,7 +54,7 @@ export interface UsuarioResponsableResponse {
 }
 
 export interface MotivoReclamo {
-  cod_Unidad_Negocio : string;
+  cod_Motivo : string;
   descripcion : string;
 }
 

@@ -375,8 +375,11 @@ export class CalificacionRollosFinalComponent implements OnInit {
               const sArticulo = sArticuloLargo.substring(0, 8);
               this.codTelaGral = sArticulo;
 
-              const index = result + 1;
+              //const index = result + 1;
+              //this.secuencia = index;
+              const index = data.elements[result].secuencia;
               this.secuencia = index;
+              //console.log('this.secuencia', data.elements[result].secuencia);
 
               this.primerosDos = this.PartidaCab.datosTela.substring(0, 2);
 

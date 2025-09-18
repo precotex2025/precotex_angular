@@ -88,7 +88,62 @@ export class RegistroQuejasReclamosService {
     ListaUnidadNegocio(): Observable<UnidadNegocio2Response> {
       return this.http.get<UnidadNegocio2Response>(`${this.url}/getListaUnidadNegocio`);
     }
-    
 
+    ListaAreasCalidad(): Observable<any> {
+      return this.http.get<any>(`${this.url}/getListaAreasCalidad`);
+    }        
+
+    AvanzaEstadoReclamo(sId: number){
+      const headers = this.Header;
+      return this.http.post(`${this.url}/postAvanzaEstadoReclamo`, sId, { headers })
+    }   
+
+    ProcesoConfirmarReclamo(data: any){
+      return this.http.post(`${this.url}/postProcesoConfirmarReclamo`, data)
+    }  
+
+    ListaTipoConsecuencia(): Observable<any> {
+      return this.http.get<any>(`${this.url}/getListaTipoConsecuencia`);
+    }    
+
+    ListaSubTipoDevolucion(sCod_Tipo_Consecuencia: string): Observable<any> {
+      const params = new HttpParams().set('sCod_Tipo_Consecuencia', sCod_Tipo_Consecuencia);
+      return this.http.get<any>(`${this.url}/getListaSubTipoDevolucion`, { params });
+    }    
+
+    ProcesoCerrarReclamo(data: any){
+      return this.http.post(`${this.url}/postProcesoCerrarReclamo`, data)
+    }  
+
+    ObtieneUsuarioArea(Cod_Trabajador: string): Observable<any> {
+      const params = new HttpParams().set('Cod_Trabajador', Cod_Trabajador);
+      return this.http.get<any>(`${this.url}/getObtieneUsuarioArea`, { params });
+    }  
+    
+    ObtieneDetalleInformeCalidad(Id: number): Observable<any> {
+      const params = new HttpParams().set('Id', Id);
+      return this.http.get<any>(`${this.url}/getObtieneDetalleInformeCalidad`, { params });
+    }   
+    
+    ObtieneDetalleInformeComercial(Id: number): Observable<any> {
+      const params = new HttpParams().set('Id', Id);
+      return this.http.get<any>(`${this.url}/getObtieneDetalleInformeComercial`, { params });
+    }        
+
+    descargarArchivo(nombre: string): Observable<Blob> {
+      const params = new HttpParams().set('fileName', nombre);
+      return this.http.get(`${this.url}/getDescargar`, {
+        responseType: 'blob',
+        params  // 👈 importante
+      });
+    }
+
+    ListaEstadosOficial(): Observable<any> {
+      return this.http.get<any>(`${this.url}/getListaEstados`);
+    }       
+
+    ExportarReclamo(filtros: any): Observable<any> {
+      return this.http.post(`${this.url}/getExportarReclamo`, filtros);
+    }      
 
   }

@@ -207,7 +207,7 @@
 
         <select [(ngModel)]="nuevoReclamo.motivoRegistro">
           <option *ngFor="let c of motivoReclamo" [value]="c.descripcion">
-            {{ c.cod_Unidad_Negocio }} - {{ c.descripcion }}
+            {{ c.cod_Motivo }} - {{ c.descripcion }}
           </option>
         </select>
       </div>

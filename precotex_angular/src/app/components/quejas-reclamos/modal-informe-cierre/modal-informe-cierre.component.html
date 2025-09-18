@@ -1,0 +1,66 @@
+<div class="dialog-scroll">
+    <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+        <mat-card class="example-card" appearance="outlined">
+                <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"></div>
+                    <mat-card-title>CIERRE  DEL CASO COMERCIAL </mat-card-title>
+                    <mat-card-subtitle>Caso N°: {{data.Datos.nroCaso}} </mat-card-subtitle>
+                </mat-card-header>      
+                <mat-card-content>
+
+                    <div class="row">
+                        
+                        <mat-form-field appearance="outline" style="flex: 1;"> 
+                            <mat-label>Consecuencia Principal :</mat-label> 
+                            <mat-select formControlName="ctrol_consecuencia_principal" (selectionChange)="onConsecuenciaChange($event)"> 
+                                <mat-option *ngFor="let tipoConsecuencia of dataTipoConsecuencia" [value]="tipoConsecuencia.cod_Tipo_Consecuencia">{{ tipoConsecuencia.cod_Tipo_Consecuencia }} - {{ tipoConsecuencia.tipo_Consecuencia }}</mat-option>  
+                            </mat-select> 
+                        </mat-form-field>                                 
+
+                    </div>
+
+                    <div class="row">
+                        
+                        <mat-form-field appearance="outline" style="flex: 1;"> 
+                            <mat-label>SubTipo de Devolución :</mat-label> 
+                            <mat-select formControlName="ctrol_subtipo_devolucion" > 
+                                <mat-option *ngFor="let tipoDevolucion of dataSubTipoDevolucion" [value]="tipoDevolucion.cod_SubTipo_Devolucion">{{ tipoDevolucion.cod_SubTipo_Devolucion }} - {{ tipoDevolucion.subTipo_Devolucion }}</mat-option>  
+                            </mat-select> 
+                        </mat-form-field>                                 
+
+                    </div> 
+                    
+                    <div class="row" style="align-items: center; margin-top: 16px;">
+                        <label style="flex: 1; font-weight: 500;">¿Incluye Nota de Crédito?</label>
+
+                        <mat-radio-group formControlName="ctrol_incluye_nota_credito" style="flex: 2; display: flex; gap: 24px;">
+                            <mat-radio-button [value]="true">Sí</mat-radio-button>
+                            <mat-radio-button [value]="false">No</mat-radio-button>
+                        </mat-radio-group>
+                    </div>   
+                    
+                    <div class="row">
+
+                        <mat-form-field appearance="outline" style="flex: 1;">
+                            <mat-label>Comentario :</mat-label>
+                            <textarea matInput rows="3" formControlName="ctrol_comentario_comercial" placeholder="Ingrese un comentario"></textarea>
+                        </mat-form-field>   
+
+                    </div>                      
+
+                </mat-card-content>      
+        </mat-card>
+    </form>
+</div>
+
+<div class="button-row"> 
+    <!-- [disabled]="data.Datos.cod_Estado_Memo !== '04' && bEdita" -->
+    <button *ngIf="isVisibleButtonCerrar" mat-flat-button color="primary" class="form-button" (click)="onCierreInforme()"> 
+        <mat-icon>save</mat-icon> Confirmar Cierre
+    </button>
+
+    <button mat-flat-button color="warn" mat-dialog-close class="form-button">
+        <mat-icon>close</mat-icon> Cancelar
+    </button>
+    
+</div> 

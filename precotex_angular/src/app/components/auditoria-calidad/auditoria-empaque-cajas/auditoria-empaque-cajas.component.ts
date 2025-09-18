@@ -22,6 +22,8 @@ import { DialogRegistroEmpaqueCajasComponent } from './dialog-registro-empaque-c
 import { DialogResumenEmpaqueCajasComponent } from './dialog-resumen-empaque-cajas/dialog-resumen-empaque-cajas.component'
 import { DialogPendienteEmpaqueCajasComponent } from './dialog-pendiente-empaque-cajas/dialog-pendiente-empaque-cajas.component';
 import { DialogEliminarComponent} from 'src/app/components/dialogs/dialog-eliminar/dialog-eliminar.component';
+import { DialogEvidenciaEmpaqueCajaComponent } from './dialog-evidencia-empaque-caja/dialog-evidencia-empaque-caja.component';
+import { DialogEvidenciaPackingCajaComponent } from './dialog-evidencia-packing-caja/dialog-evidencia-packing-caja.component';
 
 interface data_det {
   Num_Auditoria?: number; 
@@ -34,12 +36,15 @@ interface data_det {
   Cod_Supervisor?: string;
   Flg_Estado?: string;
   Num_Packing?: number;
+  Peso_Caja?: number;
+  Evidencia?: string;
   Cod_Modulo?: string;
   Cod_Cliente?: string;
   Des_Modulo?: string;
   Des_Cliente?: string;
   Des_Destino?: string;
   Cod_Usuario?: string;
+  Evidencia_64?: string;
 }
 
 interface Auditor {
@@ -59,7 +64,7 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
 
   dataForExcel = [];
   dataReporteAuditoria: any[] = [];
-  displayedColumns: string[] = ['Num_Auditoria','Fec_Ini_Auditoria','Num_Packing','Num_Caja','Des_Cliente','Des_Modulo','Num_Vez','Nom_Auditor','Flg_Estado','Acciones']
+  displayedColumns: string[] = ['Num_Auditoria','Fec_Ini_Auditoria','Num_Packing','Num_SecPacking','Num_Caja','Des_Cliente','Des_Modulo','Num_Vez','Nom_Auditor','Flg_Estado','Acciones']
   dataSource: MatTableDataSource<data_det>;
   //@ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
@@ -84,6 +89,7 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
   ln_TotalCajas: number = 0;
   ln_CajasDefecto: number = 0;
   ll_Supervisor: boolean = false;
+  ll_Consultar: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -253,6 +259,107 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
     });
   }
 
+  onEvidenciaPacking(){
+    let evidencia: any = {Num_Packing: this.formulario.get('NumPacking')?.value, Cod_Usuario: GlobalVariable.vusu}
+
+    let dialogRef = this.dialog.open(DialogEvidenciaPackingCajaComponent, {
+      disableClose: true,
+      width: "600px",
+      data: evidencia
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+
+      this.formulario.controls['NumCaja'].setValue('');
+      this.numCajaInput.nativeElement.focus();
+    });
+  }
+
+  onEvidenciaAuditoria(data_det: data_det){
+    let evidencia: any = {Accion: 'G', Num_Auditoria: data_det.Num_Auditoria, Num_Caja: data_det.Num_Caja, Carton_Label: '', Peso_Caja: 0, Evidencia: '', Cod_Usuario: GlobalVariable.vusu};
+
+    let dialogRef = this.dialog.open(DialogEvidenciaEmpaqueCajaComponent, {
+      disableClose: true,
+      width: "600px",
+      data: evidencia
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+
+      this.onGuardarEvidencia(result)
+      this.formulario.controls['NumCaja'].setValue('');
+      this.numCajaInput.nativeElement.focus();
+    });
+
+  }
+
+  onGuardarEvidencia(evidencia: any){
+    const formData = new FormData();
+    formData.append('Accion', evidencia.Accion);
+    formData.append('Num_Packing', '0');
+    formData.append('Num_SecPacking', '0');
+    formData.append('Num_Auditoria', evidencia.Num_Auditoria.toString());
+    formData.append('Carton_Label', '');
+    formData.append('Peso_Caja', evidencia.Peso_Caja.toString());
+    formData.append('Evidencia', evidencia.Evidencia);
+    formData.append('Cod_Usuario', GlobalVariable.vusu);
+    
+    this.spinnerService.show();
+    this.auditoriaAcabadosService.Mant_EvidenciaEmpaque (formData)
+      .subscribe((result: any) => {
+        if (result.length > 0) {
+          this.matSnackBar.open(result[0].Respuesta, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          this.onListarAuditoriaEmpaqueCajas();
+          this.spinnerService.hide();
+        } else {
+          this.matSnackBar.open('Error en el registro de la evidencia!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          this.spinnerService.hide();
+        }
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+    );
+  }
+
+  onVisualizarEvidencia(data_det: data_det){
+    const formData = new FormData();
+    formData.append('Accion', 'C');
+    formData.append('Num_Packing', '0');
+    formData.append('Num_SecPacking', '0');
+    formData.append('Num_Auditoria', data_det.Num_Auditoria.toString());
+    formData.append('Carton_Label', '');
+    formData.append('Peso_Caja', data_det.Peso_Caja.toString());
+    formData.append('Evidencia', data_det.Evidencia);
+    formData.append('Cod_Usuario', GlobalVariable.vusu);
+
+    this.spinnerService.show();
+    this.auditoriaAcabadosService.Mant_EvidenciaEmpaque (formData)
+      .subscribe((result: any) => {
+        if (result.length > 0) {
+          console.log(result)
+          this.spinnerService.hide();
+
+          let evidencia: any = {Accion: 'C', Num_Auditoria: result[0].Num_Auditoria, Num_Caja: result[0].Num_Caja, Carton_Label: result[0].Carton_Label, Peso_Caja: result[0].Peso_Caja , Evidencia: result[0].Evidencia, Captura_64: result[0].Evidencia_64, Fec_Evidencia: result[0].Fec_Evidencia, Cod_Usuario: GlobalVariable.vusu};
+
+          let dialogRef = this.dialog.open(DialogEvidenciaEmpaqueCajaComponent, {
+            disableClose: true,
+            width: "600px",
+            data: evidencia
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            console.log(result)
+          });
+
+
+        }
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+    );    
+
+  }
+
   onAvanceAuditoria(){
     let numPacking = this.formulario.get('NumPacking').value ? this.formulario.get('NumPacking').value : 0;
 
@@ -314,7 +421,7 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
       duration: 1500,
     }));
   }
-
+  
   onGenerarReporteAuditoria(tipo: string){
     let numPacking = this.formulario.get('NumPacking').value ? this.formulario.get('NumPacking').value : 0;
 
@@ -380,10 +487,6 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
           }
         
           this.exceljsService.exportExcel(reportData);
-
-
-
-
         }
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
@@ -452,9 +555,6 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
   }
 
   generateExcelPacking(){
-
-
-
     this.dataForExcel = [];
     if(this.dataReporteAuditoria[0].Num_Caja != 0){
       let dataReporte: any[] = [];
@@ -569,6 +669,8 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
 
         if(crud.length > 0){
           this.ll_Supervisor = crud[0].Flg_Verificar == 1 ? true : false;
+          this.ll_Consultar = crud[0].Flg_Consultar == 1 ? true : false;
+          console.log(this.ll_Consultar)
         } else {
           this.formulario.patchValue({
             CodAuditor: GlobalVariable.vtiptra.trim().concat("-").concat(GlobalVariable.vcodtra.trim())
@@ -579,7 +681,10 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
           this.range.controls['start'].setValue(new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
           this.range.controls['end'].setValue(new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
         } else {
-          this.range.controls['start'].setValue(new Date(fecha.getFullYear(), fecha.getMonth() - 1, fecha.getDate()));
+          //this.range.controls['start'].setValue(new Date(fecha.getFullYear(), fecha.getMonth() - 1, fecha.getDate()));
+          //this.range.controls['end'].setValue(new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
+
+          this.range.controls['start'].setValue(new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
           this.range.controls['end'].setValue(new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
         }
 
