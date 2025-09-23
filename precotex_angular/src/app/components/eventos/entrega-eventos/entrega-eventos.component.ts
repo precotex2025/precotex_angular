@@ -22,6 +22,10 @@ interface Detalle {
   Flg_Dependiente?: number;
   Flg_Activo?: number;
   Sede?: string;
+  Dependiente?: string;
+  Usu_registro?: string;
+  Fec_Registro?: Date;
+  Num_Item?: string;
 }
 
 interface Evento {
@@ -274,8 +278,12 @@ export class EntregaEventosComponent implements OnInit {
     this.eventosService.registroEventosColaborador(data)
       .subscribe((result: any) => {
         if (result.length > 0) {
+          let detalleEntrega: any[];
+          this.dataDetalle = [{Dependiente: 'NO', Des_Entrega: 'TODOS', Fec_Registro: new Date(), Flg_Activo: 1, Flg_Dependiente: 0, Id_DetalleEvento: 0, Id_Evento: 0, Num_Item: "1", Usu_registro:''}]
+
           this.evento = result;
-          this.dataDetalle = result[0].Detalle;
+          detalleEntrega = result[0].Detalle;
+          this.dataDetalle = this.dataDetalle.concat(detalleEntrega);
           this.formulario.controls['Id_Evento'].setValue(result[0].Id_Evento);
           this.formulario.controls['Id_DetalleEvento'].setValue(result[0].Detalle[0].Id_DetalleEvento);
           this.formulario.controls['Fec_Evento'].setValue(this.datePipe.transform(result[0].Fec_Evento['date'], 'yyyy-MM-ddTHH:mm'));
@@ -357,6 +365,7 @@ export class EntregaEventosComponent implements OnInit {
         data.Area = row.NombreArea;
         data.SubArea = row.NombreSubArea;
         data.Puesto = row.NombrePuesto;
+        data.Entrega = row.Des_Entrega;
         data.FirmaDigital = firmas ? row.Signatura64 : (row.Signatura64 != '' ? 'SI' : 'NO');
         data.FechaEntrega = this.datePipe.transform(row.Fec_Entrega, 'yyyy-MM-dd HH:mm');  //row.Fec_Entrega;
         data.Responsable = row.Usu_Registro;
