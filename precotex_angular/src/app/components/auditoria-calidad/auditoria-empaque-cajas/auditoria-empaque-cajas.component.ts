@@ -115,9 +115,10 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
 
   onListarAuditoriaEmpaqueCajas(){
     let numPacking = this.formulario.get('NumPacking').value ? this.formulario.get('NumPacking').value : 0;
-    
+    let flgPO = this.ll_Consultar ? 'S' : 'N';
+
     this.spinnerService.show();
-    this.auditoriaAcabadosService.Mant_AuditoriaEmpaqueCajas('L', 0, 0, numPacking, this.formulario.get('CodAuditor').value, this.range.get('start')?.value, this.range.get('end').value, 0, '', '')
+    this.auditoriaAcabadosService.Mant_AuditoriaEmpaqueCajas('L', 0, 0, numPacking, this.formulario.get('CodAuditor').value, this.range.get('start')?.value, this.range.get('end').value, 0, '', flgPO)
       .subscribe((result: any) => {
         if (result.length > 0) {     
           let cajasDefecto: data_det[]
@@ -264,7 +265,7 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
 
     let dialogRef = this.dialog.open(DialogEvidenciaPackingCajaComponent, {
       disableClose: true,
-      width: "600px",
+      width: "700px",
       data: evidencia
     });
 
@@ -675,6 +676,10 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
           this.formulario.patchValue({
             CodAuditor: GlobalVariable.vtiptra.trim().concat("-").concat(GlobalVariable.vcodtra.trim())
           });
+        }
+
+        if(this.ll_Consultar){
+          this.displayedColumns = ['Num_Auditoria','Fec_Ini_Auditoria','Cod_PurOrd','Num_Packing','Num_SecPacking','Num_Caja','Des_Cliente','Des_Modulo','Num_Vez','Nom_Auditor','Flg_Estado','Acciones']
         }
 
         if(!this.ll_Supervisor){

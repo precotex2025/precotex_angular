@@ -576,6 +576,7 @@ import { DialogRetiroRepuestosComponent } from './components/retiro-repuestos/di
 import { DialogRetiroRepuestosCierreComponent } from './components/retiro-repuestos/dialog-retiro-repuestos-cierre/dialog-retiro-repuestos-cierre.component';
 import { DialogRetiroRepuestosDetalleComponent } from './components/retiro-repuestos/dialog-retiro-repuestos-detalle/dialog-retiro-repuestos-detalle.component';
 import { DialogRetiroRepuestosDetalleNuevoComponent } from './components/retiro-repuestos/dialog-retiro-repuestos-detalle-nuevo/dialog-retiro-repuestos-detalle-nuevo.component';
+import { DialogCapturarFotoCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-capturar-foto-caja/dialog-capturar-foto-caja.component';
 
 @NgModule({
   declarations: [
@@ -1069,6 +1070,7 @@ import { DialogRetiroRepuestosDetalleNuevoComponent } from './components/retiro-
     DialogPendienteEmpaqueCajasComponent, 
     EncogimientoPrendaComponent, 
     DialogEncogimientoPrendaRegistroComponent, 
+    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent, DialogCapturarFotoCajaComponent 
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent,
     
     //RETIRO DE REPUESTOS
