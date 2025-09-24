@@ -29,9 +29,14 @@
                     <input matInput type="number" name="numSemana" placeholder="Semana" value="" autocomplete="off" formControlName="numSemana" #numSemana (blur)="onNumeroSemana()">
                 </mat-form-field>    
 
-                <mat-form-field class="example-margin">
+                <mat-form-field class="example-margin" *ngIf="!ll_Consultar">
                     <mat-label>Packing List</mat-label>
                     <input matInput type="number" name="NumPacking" placeholder="Packing List" value="" autocomplete="off" formControlName="NumPacking" >
+                </mat-form-field>
+
+                <mat-form-field class="example-margin" *ngIf="ll_Consultar">
+                    <mat-label>P.O.</mat-label>
+                    <input matInput type="number" name="NumPacking" placeholder="P.O." value="" autocomplete="off" formControlName="NumPacking" >
                 </mat-form-field>
                 
                 <mat-form-field class="lista-auditor" appearance="fill" *ngIf="ll_Supervisor">
@@ -97,6 +102,11 @@
                         <td mat-cell *matCellDef="let data_det"> {{ data_det.Fec_Ini_Auditoria | date: 'dd-MM-yyyy hh:mm' }} </td>
                     </ng-container>
 
+                    <ng-container matColumnDef="Cod_PurOrd">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell"> P.O. </th>
+                        <td mat-cell  *matCellDef="let data_det"> {{data_det.Cod_PurOrd}} </td>
+                    </ng-container>
+  
                     <ng-container matColumnDef="Num_Packing">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell"> Packing List </th>
                         <td mat-cell  *matCellDef="let data_det"> {{data_det.Num_Packing}} </td>

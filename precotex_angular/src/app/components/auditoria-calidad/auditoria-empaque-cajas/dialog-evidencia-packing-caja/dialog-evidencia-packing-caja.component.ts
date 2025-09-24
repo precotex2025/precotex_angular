@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ElementRef, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog'
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,6 +8,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { AuditoriaAcabadosService } from 'src/app/services/auditoria-acabados.service';
+import { DialogCapturarFotoCajaComponent } from './../dialog-capturar-foto-caja/dialog-capturar-foto-caja.component';
 
 @Component({
   selector: 'app-dialog-evidencia-packing-caja',
@@ -15,6 +16,12 @@ import { AuditoriaAcabadosService } from 'src/app/services/auditoria-acabados.se
   styleUrls: ['./dialog-evidencia-packing-caja.component.scss']
 })
 export class DialogEvidenciaPackingCajaComponent implements OnInit {
+
+  @ViewChild('video', { static: true }) video!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
+
+  videoDevices: MediaDeviceInfo[] = [];
+  selectedDeviceId: string | null = null;
 
   formulario = this.formBuilder.group({
     Accion: [''],
@@ -33,6 +40,8 @@ export class DialogEvidenciaPackingCajaComponent implements OnInit {
   Imagen64: string = '';
   numImg: number = 0;
   ll_nuevo: boolean = true;
+  ll_caja: boolean = false;
+  camaraActiva: boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -45,7 +54,6 @@ export class DialogEvidenciaPackingCajaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    //console.log(this.data)
     this.formulario.controls['Num_Packing'].setValue(this.data.Num_Packing);
     this.formulario.controls['Cod_Usuario'].setValue(this.data.Cod_Usuario);
   }
@@ -88,6 +96,7 @@ export class DialogEvidenciaPackingCajaComponent implements OnInit {
       Evidencia: ''
     });
     this.Imagen64 = '';
+    this.ll_caja = false;
   }
 
   onValidarSecuencia(){
@@ -113,7 +122,7 @@ export class DialogEvidenciaPackingCajaComponent implements OnInit {
             //console.log(result)
             this.formulario.controls['Num_Auditoria'].setValue(result[0].Num_Auditoria);
             this.formulario.controls['Num_Caja'].setValue(result[0].Num_Caja);
-
+            this.ll_caja = true;
             this.spinnerService.hide();
           } else {
             this.matSnackBar.open('Error en el registro de la evidencia!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
@@ -177,5 +186,24 @@ export class DialogEvidenciaPackingCajaComponent implements OnInit {
 
   }
 
+  capturarFoto(){
+    let photo: any = {numCaja: this.formulario.get('Num_Caja')?.value, capturedImage: ''}
 
+    let dialogRef = this.dialog.open(DialogCapturarFotoCajaComponent, {
+      disableClose: true,
+      width: "700px",
+      data: photo
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+      //alert(result)
+      this.Imagen64 = result;
+      this.formulario.controls['Evidencia'].setValue(result);
+      this.numImg = this.numImg + 1;
+
+    });
+  }
+
+    
 }
