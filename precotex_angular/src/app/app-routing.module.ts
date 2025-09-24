@@ -34,7 +34,7 @@ import { SeguridadControlJabasExternoComponent } from './components/seguridad/se
 import { SeguridadControlJabasHistorialComponent } from './components/seguridad/seguridad-control-jabas/seguridad-control-jabas-historial/seguridad-control-jabas-historial.component';
 import { SeguridadActivoFijoReporteComponent } from './components/seguridad-activo-fijo-reporte/seguridad-activo-fijo-reporte.component';
 import { TiemposImproductivosComponent } from './components/tiempos-improductivos/tiempos-improductivos.component';
-//import { TiemposImproductivosv2Component } from './components/tiempos-improductivosv2/tiempos-improductivosv2.component';
+import { TiemposImproductivosv2Component } from './components/tiempos-improductivosv2/tiempos-improductivosv2.component';
 
 import { DefectosAlmacenDerivadosComponent } from './components/auditoria-calidad/defectos-almacen-derivados/defectos-almacen-derivados.component';
 import { ReporteDefectosAlmacenDerivadosComponent } from './components/auditoria-calidad/defectos-almacen-derivados/reporte-almacen-derivado/reporte-defectos-almacen-derivados/reporte-defectos-almacen-derivados.component';
@@ -404,7 +404,7 @@ const routes: Routes = [
 
   { path: "SeguridadActivoFijoReporte", component: SeguridadActivoFijoReporteComponent},
   { path: "TiemposImproductivos", component: TiemposImproductivosComponent},
-  //{ path: "TiemposImproductivosv2", component: TiemposImproductivosv2Component},
+  { path: "TiemposImproductivosv2", component: TiemposImproductivosv2Component},
   { path: "DialogTiemposImproductivos", component: DialogTiemposImproductivosComponent},
   { path: "DialogModificaTiemposImproductivos", component: DialogModificaTiemposImproductivosComponent},
   { path: "DialogModificaTelas", component: DialogModificaTelasComponent},
