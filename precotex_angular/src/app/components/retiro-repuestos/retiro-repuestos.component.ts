@@ -155,7 +155,7 @@ export class RetiroRepuestosComponent implements OnInit {
       this.matSnackBar.open("Ingrese Rango de Fechas", "Cerrar",
         {horizontalPosition:'center', verticalPosition:'top', duration: 1500}
       );
-      return;
+      return; 
     }else{
 
     this.SpinnerService.show();

@@ -12,6 +12,7 @@ import { param } from 'jquery';
   providedIn: 'root'
 })
 export class ExceljsService {
+  imagenUrl: string = '';
   baseUrlTinto = GlobalVariable.baseUrlProcesoTenido;
   Header = new HttpHeaders({
     'Content-type': 'application/json'
@@ -1081,10 +1082,16 @@ async exportExcel4(excelData){
       }
 
     })
+
+      
     
     //Recorre la data y pinta 
     for (const d of data) {
       let row = worksheet.addRow(d);
+
+      
+      console.log('El valor actual es',row.getCell(15).value);
+      
       //String(d[9]).replace(' ','%20')
       if (!(d[9] == '')) {
         // console.log('Columna', (d[9]));
@@ -1095,6 +1102,7 @@ async exportExcel4(excelData){
         const response = await firstValueFrom(this.serviceRetiroRepuestos.getGetImageBase64FromUrlAsync(URL_BASE));      
         this.imageBase64 = `data:image/jpeg;base64,${response.base64Image}`;
 
+        row.getCell(15).value = null;
         let myLogoImage900 = workbook.addImage({
           base64: this.imageBase64,
           extension: 'jpeg',
@@ -1139,7 +1147,7 @@ async exportExcel4(excelData){
     worksheet.getColumn(13).width = 40;    
     worksheet.getColumn(14).width = 40;    
     worksheet.getColumn(15).width = 40;    
-
+    
     //Footer Row
     let footerRow = worksheet.addRow(['']);
 
@@ -1152,7 +1160,16 @@ async exportExcel4(excelData){
       let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       if(Num_Requerimiento === 0){
         FileSaver.saveAs(blob, title + '.xlsx');
+        
+        // this.http.get('https://gestion.precotex.com:444/getImagen/' + '54dfd366-bd41-4e2b-9a41-4f5259e00479_TUBO ESTRUCTURAL REDONDO INOX.jpg', { responseType: 'blob' })
+        // .subscribe(blob => {
+        // const url = URL.createObjectURL(blob);
+        // this.imagenUrl = url;
+        // });
       }else{
+
+        
+
         let params = new HttpParams();
         params = params.append('Num_Requerimiento', Num_Requerimiento)
 
@@ -1162,13 +1179,14 @@ async exportExcel4(excelData){
         }).subscribe(() => {
           console.log('Archivo guardado en el servidor');
         });
-
+        
         // const headers = this.Header;
         this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo', '"1"',
           {headers: { 'Content-Type': 'application/json' }}
         ).subscribe(() => {
           console.log('Se envio el correo');
-        });        
+        });      
+
       }
     })
   }
