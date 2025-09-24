@@ -31,9 +31,9 @@
                   <mat-icon>note_add</mat-icon>Nuevo
                 </button>
 
-                <button type="button" mat-flat-button (click)="onEnviarCorreo()">
+                <!-- <button type="button" mat-flat-button (click)="onEnviarCorreo()">
                   <mat-icon>send</mat-icon>Enviar Informe
-                </button>
+                </button> -->
 
                 <button type="button" mat-flat-button (click)="onExportarExcel()">
                   <mat-icon>import_export</mat-icon>Exportar
@@ -87,8 +87,8 @@
                 <ng-container matColumnDef="nro_precinto_cierre">
                   <th mat-header-cell *matHeaderCellDef>N° Precinto Cierre</th>
                   <td mat-cell *matCellDef="let data_req">
-                    <a mat-button *ngIf="data_req.nro_Precinto_Cierre == ''" (click)="onUpdatePrecintoCierre(data_req)" class="link">Agregar</a>
-                    <a mat-button *ngIf="data_req.nro_Precinto_Cierre != ''" (click)="onUpdatePrecintoCierre(data_req)" class="link">{{data_req.nro_Precinto_Cierre}}</a>
+                    <a mat-button *ngIf="data_req.nro_Precinto_Cierre == ''" (click)="onUpdatePrecintoCierre(data_req)" class="Boton">AGREGAR</a>
+                    <a mat-button *ngIf="data_req.nro_Precinto_Cierre != ''" (click)="onUpdatePrecintoCierre(data_req)" class="Boton">{{data_req.nro_Precinto_Cierre}}</a>
                   </td>
                 </ng-container>
 
@@ -102,7 +102,7 @@
                 <ng-container matColumnDef="opcion">
                   <th mat-header-cell *matHeaderCellDef>Ver Detalle</th>
                   <td mat-cell *matCellDef="let data_req">
-                    <a><mat-icon color="success" (click)="onInsertarDetalle(data_req)">details</mat-icon></a>
+                    <a><mat-icon color="success" (click)="onInsertarDetalle(data_req)">receipt</mat-icon></a>
                   </td>
                 </ng-container>
 

@@ -192,10 +192,11 @@ export class RetiroRepuestosComponent implements OnInit {
   onInsertarDetalle(objeto: any){
 
     let num = objeto.num_Requerimiento;
-
+    let Precinto_Cierre = objeto.nro_Precinto_Cierre;
     // this.router.navigate(['/ruta-al-otro-componente']);
-
-    let dialogRef = this.dialog.open(DialogRetiroRepuestosDetalleComponent,{
+    console.log('NroPrecinto', Precinto_Cierre);
+    
+      let dialogRef = this.dialog.open(DialogRetiroRepuestosDetalleComponent,{
       width:'1165px',
       height: '600px',
       disableClose: true,
@@ -204,10 +205,11 @@ export class RetiroRepuestosComponent implements OnInit {
         Title: "Detalle de Retiro ",  
         num_requerimiento: num
       }
-    });
-    dialogRef.afterClosed().subscribe(result =>{
-      this.onGetRetiros()
-    });
+      });
+      dialogRef.afterClosed().subscribe(result =>{
+        this.onGetRetiros()
+      });
+    
   }
 
   onUpdatePrecintoCierre(objeto: any){
@@ -314,85 +316,85 @@ export class RetiroRepuestosComponent implements OnInit {
     }
   }
 
-  onEnviarCorreo(){
-    this.dataForExcel = [];
-    this.dataSourceExcel = [];
-    this.dataReporteRetiros = [];
+  // onEnviarCorreo(){
+  //   this.dataForExcel = [];
+  //   this.dataSourceExcel = [];
+  //   this.dataReporteRetiros = [];
  
-      this.SpinnerService.show();
-      this.serviceRetiroRepuestos.getListaRetiroRepuestosPorIdRequerimientoMAX().subscribe({
-        next: (response: any)=> {
-          if(response.success){
-            if (response.totalElements > 0){
+  //     this.SpinnerService.show();
+  //     this.serviceRetiroRepuestos.getListaRetiroRepuestosPorIdRequerimientoMAX().subscribe({
+  //       next: (response: any)=> {
+  //         if(response.success){
+  //           if (response.totalElements > 0){
 
-              this.dataReporteRetiros = response.elements;
+  //             this.dataReporteRetiros = response.elements;
 
-              //QUE COMIENCE EL JUEGO DE LA EXPORTACION
-              this.dataReporteRetiros.forEach((item: any) => {
+  //             //QUE COMIENCE EL JUEGO DE LA EXPORTACION
+  //             this.dataReporteRetiros.forEach((item: any) => {
 
-                let datos = {
+  //               let datos = {
                   
-                  ['Fec. Aprobacion']: _moment(item.fec_Aprobacion.valueOf()).format('DD/MM/YYYY'),
-                  ['Hora Aprobacion']: item.hora_Aprobacion ,
-                  ['Nom. Seguridad']: item.nom_Seguridad,
-                  ['Fec. Requerimiento']: _moment(item.fec_Creacion.valueOf()).format('DD/MM/YYYY')   ,
-                  ['Nom. Mantenimiento']: item.nom_Mantenimiento,
-                  ['# Precinto Apertura']: item.nro_Precinto_Apertura,
-                  ['# Precinto Cierre']: item.nro_Precinto_Cierre,
-                  ['# Requerimiento']: item.num_Requerimiento,
-                  ['Secuencia']: item.nro_Secuencia       ,
-                  ['Cod. Item']: item.cod_Item ,
-                  ['Descripcion']: item.des_Item       ,
-                  ['Can. Requerida']: item.can_Requerida           ,
-                  ['UM']: item.cod_UniMed,
-                  ['Repuesto de Cambio']: item.rpt_Cambio ,
-                  ['Foto']: item.itm_Foto   
-                };
-                this.dataForExcel.push(datos);              
-              });        
+  //                 ['Fec. Aprobacion']: _moment(item.fec_Aprobacion.valueOf()).format('DD/MM/YYYY'),
+  //                 ['Hora Aprobacion']: item.hora_Aprobacion ,
+  //                 ['Nom. Seguridad']: item.nom_Seguridad,
+  //                 ['Fec. Requerimiento']: _moment(item.fec_Creacion.valueOf()).format('DD/MM/YYYY')   ,
+  //                 ['Nom. Mantenimiento']: item.nom_Mantenimiento,
+  //                 ['# Precinto Apertura']: item.nro_Precinto_Apertura,
+  //                 ['# Precinto Cierre']: item.nro_Precinto_Cierre,
+  //                 ['# Requerimiento']: item.num_Requerimiento,
+  //                 ['Secuencia']: item.nro_Secuencia       ,
+  //                 ['Cod. Item']: item.cod_Item ,
+  //                 ['Descripcion']: item.des_Item       ,
+  //                 ['Can. Requerida']: item.can_Requerida           ,
+  //                 ['UM']: item.cod_UniMed,
+  //                 ['Repuesto de Cambio']: item.rpt_Cambio ,
+  //                 ['Foto']: item.itm_Foto   
+  //               };
+  //               this.dataForExcel.push(datos);              
+  //             });        
               
-              if (this.dataForExcel.length > 0) {
+  //             if (this.dataForExcel.length > 0) {
 
-                this.dataForExcel.forEach((row: any) => {
-                  this.dataSourceExcel.push(Object.values(row))
-                })              
+  //               this.dataForExcel.forEach((row: any) => {
+  //                 this.dataSourceExcel.push(Object.values(row))
+  //               })              
 
-                let num = this.dataReporteRetiros[0].num_Requerimiento;
+  //               let num = this.dataReporteRetiros[0].num_Requerimiento;
 
-                let reportData = {
-                  title: 'REPORTE',
-                  data: this.dataSourceExcel,
-                  headers: Object.keys(this.dataForExcel[0]),
-                  Num_Requerimiento: num
-                }
+  //               let reportData = {
+  //                 title: 'REPORTE',
+  //                 data: this.dataSourceExcel,
+  //                 headers: Object.keys(this.dataForExcel[0]),
+  //                 Num_Requerimiento: num
+  //               }
 
-                //GUARDA ARCHIVO
-                this.exceljsService.exportExcel4(reportData);
+  //               //GUARDA ARCHIVO
+  //               this.exceljsService.exportExcel4(reportData);
 
-                this.toastr.success('Correo Enviado', '', {
-                  timeOut: 5500,
-                });
+  //               this.toastr.success('Correo Enviado', '', {
+  //                 timeOut: 5500,
+  //               });
 
-              } else {
-                this.SpinnerService.hide();
-              }
-              this.SpinnerService.hide();
-            }
-            else{
-              this.SpinnerService.hide();
-            };
-          }
-        },
-        error: (error) => {
-          this.SpinnerService.hide();
-          console.log(error.error.message, 'Cerrar', {
-          timeOut: 2500,
-          });
-        }
-      });
+  //             } else {
+  //               this.SpinnerService.hide();
+  //             }
+  //             this.SpinnerService.hide();
+  //           }
+  //           else{
+  //             this.SpinnerService.hide();
+  //           };
+  //         }
+  //       },
+  //       error: (error) => {
+  //         this.SpinnerService.hide();
+  //         console.log(error.error.message, 'Cerrar', {
+  //         timeOut: 2500,
+  //         });
+  //       }
+  //     });
       
-      this.SpinnerService.hide();
+  //     this.SpinnerService.hide();
     
-  }
+  // }
 
 }

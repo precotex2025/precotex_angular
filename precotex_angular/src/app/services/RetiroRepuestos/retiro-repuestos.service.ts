@@ -110,6 +110,14 @@ export class RetiroRepuestosService {
     const headers = this.Header;
     return this.http.get(this.baseUrlTinto + 'TxRetiroRepuestos/getListaRetiroRepuestosPorIdRequerimientoMAX', {headers});
   }
+
+  getListaRetiroRepuestosDetallePorNumRequerimiento(Num_Requerimiento: number){
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('Num_Requerimiento', Num_Requerimiento)
+    return this.http.get(this.baseUrlTinto + 'TxRetiroRepuestos/getListaRetiroRepuestosPorIdRequerimientoMAX', {headers, params});
+  }
+  
   postRegistrarRequerimiento(data: any){
     const headers = this.Header;
     return this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postRegistrarRequerimiento', data, {headers});
@@ -144,9 +152,24 @@ export class RetiroRepuestosService {
   }
 
   EnviarCorreo(){
-    console.log('ENTRA AL SERVICIO');
+    // console.log('ENTRA AL SERVICIO');
     const headers = this.Header;
     return this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo', '"1"', {headers});
+    
+  }
+
+  EnviarCorreo2(Num_Requerimiento: any){
+    const headers = this.Header;
+    console.log('Entra a enviar correo 2');
+    console.log('NroReq',Num_Requerimiento);
+    return this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo2', Num_Requerimiento, {headers});
+  }
+
+  getimagen(imageId: string):Observable<Blob>{
+
+    const url = `${this.baseUrlTinto}/${imageId}`;
+    return this.http.get(url, { responseType: 'blob' });
+
   }
 
 }

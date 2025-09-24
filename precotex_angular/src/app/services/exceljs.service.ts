@@ -8,6 +8,7 @@ import { RetiroRepuestosService } from './RetiroRepuestos/retiro-repuestos.servi
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { GlobalVariable } from '../VarGlobals';
 import { param } from 'jquery';
+import { ToastrService } from 'ngx-toastr';
 @Injectable({
   providedIn: 'root'
 })
@@ -23,6 +24,7 @@ export class ExceljsService {
   constructor(
               private serviceTiProcesoTintoreria: TiProcesosTintoreriaService,
               private serviceRetiroRepuestos: RetiroRepuestosService,
+              private toastr: ToastrService,
               private http: HttpClient
   ) {}
 
@@ -1090,15 +1092,14 @@ async exportExcel4(excelData){
       let row = worksheet.addRow(d);
 
       
-      console.log('El valor actual es',row.getCell(15).value);
       
       //String(d[9]).replace(' ','%20')
       if (!(d[9] == '')) {
         // console.log('Columna', (d[9]));
-        console.log('Columna', (d[14]));
         const URL_BASE = String(d[14]);
         // const URL_BASE = String(d[14]).replace(/ /g, '%20');
         // console.log(URL_BASE);
+        row.height = 40;
         const response = await firstValueFrom(this.serviceRetiroRepuestos.getGetImageBase64FromUrlAsync(URL_BASE));      
         this.imageBase64 = `data:image/jpeg;base64,${response.base64Image}`;
 
@@ -1146,7 +1147,8 @@ async exportExcel4(excelData){
     worksheet.getColumn(12).width = 40;    
     worksheet.getColumn(13).width = 40;    
     worksheet.getColumn(14).width = 40;    
-    worksheet.getColumn(15).width = 40;    
+    worksheet.getColumn(15).width = 40;
+
     
     //Footer Row
     let footerRow = worksheet.addRow(['']);
@@ -1168,8 +1170,6 @@ async exportExcel4(excelData){
         // });
       }else{
 
-        
-
         let params = new HttpParams();
         params = params.append('Num_Requerimiento', Num_Requerimiento)
 
@@ -1180,15 +1180,23 @@ async exportExcel4(excelData){
           console.log('Archivo guardado en el servidor');
         });
         
-        // const headers = this.Header;
-        this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo', '"1"',
-          {headers: { 'Content-Type': 'application/json' }}
-        ).subscribe(() => {
-          console.log('Se envio el correo');
-        });      
+        // // const headers = this.Header;
+        // this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo', '"1"',
+        //   {headers: { 'Content-Type': 'application/json' }}
+        // ).subscribe(() => {
+        //   console.log('Se envio el correo');
+        // });      
 
       }
     })
+
+
+        // const headers = this.Header;
+        this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo2', Num_Requerimiento,
+          {headers: { 'Content-Type': 'application/json' }}
+        ).subscribe(() => {
+          console.log('Correo Enviado');
+        });   
   }
 
 
