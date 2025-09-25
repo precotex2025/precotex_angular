@@ -1099,7 +1099,7 @@ async exportExcel4(excelData){
         const URL_BASE = String(d[14]);
         // const URL_BASE = String(d[14]).replace(/ /g, '%20');
         // console.log(URL_BASE);
-        row.height = 40;
+        row.height = 200;
         const response = await firstValueFrom(this.serviceRetiroRepuestos.getGetImageBase64FromUrlAsync(URL_BASE));      
         this.imageBase64 = `data:image/jpeg;base64,${response.base64Image}`;
 
@@ -1111,7 +1111,7 @@ async exportExcel4(excelData){
         //asignar columna
         worksheet.addImage(myLogoImage900, {
           tl: { col: 14, row: row.number - 1 }, // Columna 3 (2 base 0) y fila actual
-          ext: { width: 67, height: 40 }, // Tamaño de la imagen
+          ext: { width: 200, height: 200 }, // Tamaño de la imagen
           
         });   
       }
@@ -1178,6 +1178,11 @@ async exportExcel4(excelData){
         params
         }).subscribe(() => {
           console.log('Archivo guardado en el servidor');
+          this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo2', Num_Requerimiento,
+            {headers: { 'Content-Type': 'application/json' }}
+          ).subscribe(() => {
+            console.log('Correo Enviado');
+          });
         });
         
         // // const headers = this.Header;
@@ -1192,11 +1197,7 @@ async exportExcel4(excelData){
 
 
         // const headers = this.Header;
-        this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo2', Num_Requerimiento,
-          {headers: { 'Content-Type': 'application/json' }}
-        ).subscribe(() => {
-          console.log('Correo Enviado');
-        });   
+       
   }
 
 
