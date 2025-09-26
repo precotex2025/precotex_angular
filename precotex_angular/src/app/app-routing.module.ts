@@ -34,7 +34,7 @@ import { SeguridadControlJabasExternoComponent } from './components/seguridad/se
 import { SeguridadControlJabasHistorialComponent } from './components/seguridad/seguridad-control-jabas/seguridad-control-jabas-historial/seguridad-control-jabas-historial.component';
 import { SeguridadActivoFijoReporteComponent } from './components/seguridad-activo-fijo-reporte/seguridad-activo-fijo-reporte.component';
 import { TiemposImproductivosComponent } from './components/tiempos-improductivos/tiempos-improductivos.component';
-//import { TiemposImproductivosv2Component } from './components/tiempos-improductivosv2/tiempos-improductivosv2.component';
+import { TiemposImproductivosv2Component } from './components/tiempos-improductivosv2/tiempos-improductivosv2.component';
 
 import { DefectosAlmacenDerivadosComponent } from './components/auditoria-calidad/defectos-almacen-derivados/defectos-almacen-derivados.component';
 import { ReporteDefectosAlmacenDerivadosComponent } from './components/auditoria-calidad/defectos-almacen-derivados/reporte-almacen-derivado/reporte-defectos-almacen-derivados/reporte-defectos-almacen-derivados.component';
@@ -305,6 +305,8 @@ import { ComiteEmergenciaComponent } from './components/actas/comite-emergencia/
 import { ValidaCorteDespachoComponent } from './components/auditoria-corte/valida-corte-despacho/valida-corte-despacho.component';
 import { LiberaOpColorComponent } from './components/auditoria-corte/libera-op-color/libera-op-color.component';
 import { SalidaTiendaComponent } from './components/seguridad/salida-tienda/salida-tienda.component';
+import { RetiroRepuestosComponent } from './components/retiro-repuestos/retiro-repuestos.component';
+import { DialogRetiroRepuestosComponent } from './components/retiro-repuestos/dialog-retiro-repuestos/dialog-retiro-repuestos/dialog-retiro-repuestos.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -402,7 +404,7 @@ const routes: Routes = [
 
   { path: "SeguridadActivoFijoReporte", component: SeguridadActivoFijoReporteComponent},
   { path: "TiemposImproductivos", component: TiemposImproductivosComponent},
-  //{ path: "TiemposImproductivosv2", component: TiemposImproductivosv2Component},
+  { path: "TiemposImproductivosv2", component: TiemposImproductivosv2Component},
   { path: "DialogTiemposImproductivos", component: DialogTiemposImproductivosComponent},
   { path: "DialogModificaTiemposImproductivos", component: DialogModificaTiemposImproductivosComponent},
   { path: "DialogModificaTelas", component: DialogModificaTelasComponent},
@@ -656,6 +658,10 @@ const routes: Routes = [
 
   //MEMORANDUM GRAL
   { path: "MemorandumGral", component: MemorandumGralComponent },
+
+  //RETIRO DE REPUESTOS
+  {path: 'RetiroRepuestos', component: RetiroRepuestosComponent},
+  {path: 'DialogRetiroRepuestos', component: DialogRetiroRepuestosComponent},
 
   //LIBERAR OP TENDIDO
   { path: 'liberacionOP', component: LiberarOpComponent },

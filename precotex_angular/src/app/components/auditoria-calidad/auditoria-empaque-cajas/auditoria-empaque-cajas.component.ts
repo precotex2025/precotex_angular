@@ -22,7 +22,8 @@ import { DialogRegistroEmpaqueCajasComponent } from './dialog-registro-empaque-c
 import { DialogResumenEmpaqueCajasComponent } from './dialog-resumen-empaque-cajas/dialog-resumen-empaque-cajas.component'
 import { DialogPendienteEmpaqueCajasComponent } from './dialog-pendiente-empaque-cajas/dialog-pendiente-empaque-cajas.component';
 import { DialogEliminarComponent} from 'src/app/components/dialogs/dialog-eliminar/dialog-eliminar.component';
-import { DialogEvidenciaEmpaqueCajaComponent } from './dialog-evidencia-empaque-caja/dialog-evidencia-empaque-caja.component'
+import { DialogEvidenciaEmpaqueCajaComponent } from './dialog-evidencia-empaque-caja/dialog-evidencia-empaque-caja.component';
+import { DialogEvidenciaPackingCajaComponent } from './dialog-evidencia-packing-caja/dialog-evidencia-packing-caja.component';
 
 interface data_det {
   Num_Auditoria?: number; 
@@ -63,7 +64,7 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
 
   dataForExcel = [];
   dataReporteAuditoria: any[] = [];
-  displayedColumns: string[] = ['Num_Auditoria','Fec_Ini_Auditoria','Num_Packing','Num_Caja','Des_Cliente','Des_Modulo','Num_Vez','Nom_Auditor','Flg_Estado','Acciones']
+  displayedColumns: string[] = ['Num_Auditoria','Fec_Ini_Auditoria','Num_Packing','Num_SecPacking','Num_Caja','Des_Cliente','Des_Modulo','Num_Vez','Nom_Auditor','Flg_Estado','Acciones']
   dataSource: MatTableDataSource<data_det>;
   //@ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
@@ -88,6 +89,7 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
   ln_TotalCajas: number = 0;
   ln_CajasDefecto: number = 0;
   ll_Supervisor: boolean = false;
+  ll_Consultar: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -113,9 +115,10 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
 
   onListarAuditoriaEmpaqueCajas(){
     let numPacking = this.formulario.get('NumPacking').value ? this.formulario.get('NumPacking').value : 0;
-    
+    let flgPO = this.ll_Consultar ? 'S' : 'N';
+
     this.spinnerService.show();
-    this.auditoriaAcabadosService.Mant_AuditoriaEmpaqueCajas('L', 0, 0, numPacking, this.formulario.get('CodAuditor').value, this.range.get('start')?.value, this.range.get('end').value, 0, '', '')
+    this.auditoriaAcabadosService.Mant_AuditoriaEmpaqueCajas('L', 0, 0, numPacking, this.formulario.get('CodAuditor').value, this.range.get('start')?.value, this.range.get('end').value, 0, '', flgPO)
       .subscribe((result: any) => {
         if (result.length > 0) {     
           let cajasDefecto: data_det[]
@@ -257,8 +260,25 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
     });
   }
 
+  onEvidenciaPacking(){
+    let evidencia: any = {Num_Packing: this.formulario.get('NumPacking')?.value, Cod_Usuario: GlobalVariable.vusu}
+
+    let dialogRef = this.dialog.open(DialogEvidenciaPackingCajaComponent, {
+      disableClose: true,
+      width: "700px",
+      data: evidencia
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+
+      this.formulario.controls['NumCaja'].setValue('');
+      this.numCajaInput.nativeElement.focus();
+    });
+  }
+
   onEvidenciaAuditoria(data_det: data_det){
-    let evidencia: any = {Accion: 'G', Num_Auditoria: data_det.Num_Auditoria, Num_Caja: data_det.Num_Caja,  Peso_Caja: '', Evidencia: '', Cod_Usuario: GlobalVariable.vusu};
+    let evidencia: any = {Accion: 'G', Num_Auditoria: data_det.Num_Auditoria, Num_Caja: data_det.Num_Caja, Carton_Label: '', Peso_Caja: 0, Evidencia: '', Cod_Usuario: GlobalVariable.vusu};
 
     let dialogRef = this.dialog.open(DialogEvidenciaEmpaqueCajaComponent, {
       disableClose: true,
@@ -279,7 +299,10 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
   onGuardarEvidencia(evidencia: any){
     const formData = new FormData();
     formData.append('Accion', evidencia.Accion);
+    formData.append('Num_Packing', '0');
+    formData.append('Num_SecPacking', '0');
     formData.append('Num_Auditoria', evidencia.Num_Auditoria.toString());
+    formData.append('Carton_Label', '');
     formData.append('Peso_Caja', evidencia.Peso_Caja.toString());
     formData.append('Evidencia', evidencia.Evidencia);
     formData.append('Cod_Usuario', GlobalVariable.vusu);
@@ -303,7 +326,10 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
   onVisualizarEvidencia(data_det: data_det){
     const formData = new FormData();
     formData.append('Accion', 'C');
+    formData.append('Num_Packing', '0');
+    formData.append('Num_SecPacking', '0');
     formData.append('Num_Auditoria', data_det.Num_Auditoria.toString());
+    formData.append('Carton_Label', '');
     formData.append('Peso_Caja', data_det.Peso_Caja.toString());
     formData.append('Evidencia', data_det.Evidencia);
     formData.append('Cod_Usuario', GlobalVariable.vusu);
@@ -315,7 +341,7 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
           console.log(result)
           this.spinnerService.hide();
 
-          let evidencia: any = {Accion: 'C', Num_Auditoria: result[0].Num_Auditoria, Num_Caja: result[0].Num_Caja,  Peso_Caja: result[0].Peso_Caja , Evidencia: result[0].Evidencia, Captura_64: result[0].Evidencia_64, Fec_Evidencia: result[0].Fec_Evidencia, Cod_Usuario: GlobalVariable.vusu};
+          let evidencia: any = {Accion: 'C', Num_Auditoria: result[0].Num_Auditoria, Num_Caja: result[0].Num_Caja, Carton_Label: result[0].Carton_Label, Peso_Caja: result[0].Peso_Caja , Evidencia: result[0].Evidencia, Captura_64: result[0].Evidencia_64, Fec_Evidencia: result[0].Fec_Evidencia, Cod_Usuario: GlobalVariable.vusu};
 
           let dialogRef = this.dialog.open(DialogEvidenciaEmpaqueCajaComponent, {
             disableClose: true,
@@ -644,10 +670,16 @@ export class AuditoriaEmpaqueCajasComponent implements OnInit {
 
         if(crud.length > 0){
           this.ll_Supervisor = crud[0].Flg_Verificar == 1 ? true : false;
+          this.ll_Consultar = crud[0].Flg_Consultar == 1 ? true : false;
+          console.log(this.ll_Consultar)
         } else {
           this.formulario.patchValue({
             CodAuditor: GlobalVariable.vtiptra.trim().concat("-").concat(GlobalVariable.vcodtra.trim())
           });
+        }
+
+        if(this.ll_Consultar){
+          this.displayedColumns = ['Num_Auditoria','Fec_Ini_Auditoria','Cod_PurOrd','Num_Packing','Num_SecPacking','Num_Caja','Des_Cliente','Des_Modulo','Num_Vez','Nom_Auditor','Flg_Estado','Acciones']
         }
 
         if(!this.ll_Supervisor){

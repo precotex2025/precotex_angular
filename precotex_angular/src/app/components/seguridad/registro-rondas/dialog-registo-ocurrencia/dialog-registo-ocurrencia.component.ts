@@ -48,8 +48,8 @@ export class DialogRegistoOcurrenciaComponent implements OnInit {
   filtroRespArea: Observable<any[]> | undefined;
 
   dataTipoEstandar: any[] = [
-    {Tip_Estandar: 'A', Des_TipoEstandar: 'ACTO SUB ESTANDAR'},
-    {Tip_Estandar: 'C', Des_TipoEstandar: 'CONDICION SUB ESTANDAR'}
+    {Tip_Estandar: 'A', Des_TipoEstandar: 'ACTO INSEGURO'},
+    {Tip_Estandar: 'C', Des_TipoEstandar: 'CONDICION INSEGURA'}
   ];
 
   dataTipoRiesgo: any[] = [

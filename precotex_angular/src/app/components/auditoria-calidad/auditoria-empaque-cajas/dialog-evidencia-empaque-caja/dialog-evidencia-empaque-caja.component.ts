@@ -2,9 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog'
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef } from '@angular/material/dialog';
-import { NgxSpinnerService } from "ngx-spinner";
+import { DatePipe } from "@angular/common";
 
 import { AuditoriaAcabadosService } from 'src/app/services/auditoria-acabados.service';
 
@@ -14,11 +13,13 @@ import { AuditoriaAcabadosService } from 'src/app/services/auditoria-acabados.se
   styleUrls: ['./dialog-evidencia-empaque-caja.component.scss']
 })
 export class DialogEvidenciaEmpaqueCajaComponent implements OnInit {
+
   formulario = this.formBuilder.group({
     Accion: ['', Validators.required],
     Num_Auditoria: [0, Validators.required],
     Num_Caja: [0, Validators.required],
-    Peso_Caja: [0, Validators.required],
+    Peso_Caja: [0],
+    Carton_Label: [''],
     Evidencia: ['', Validators.required],
     Fec_Evidencia: [''],
     Cod_Usuario: ['']
@@ -33,6 +34,7 @@ export class DialogEvidenciaEmpaqueCajaComponent implements OnInit {
     private formBuilder: FormBuilder,
     private auditoriaAcabadosService: AuditoriaAcabadosService,   
     public dialog: MatDialog,
+    private datePipe: DatePipe,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<DialogEvidenciaEmpaqueCajaComponent>
   ) { }
@@ -45,8 +47,9 @@ export class DialogEvidenciaEmpaqueCajaComponent implements OnInit {
       Num_Auditoria: this.data.Num_Auditoria,
       Num_Caja: this.data.Num_Caja,
       Peso_Caja: this.data.Peso_Caja,
+      Carton_Label: this.data.Carton_Label,
       Evidencia: this.data.Evidencia,
-      Fec_Evidencia: new Date(this.data.Fec_Evidencia),
+      Fec_Evidencia: this.datePipe.transform(this.data.Fec_Evidencia, 'yyyy-MM-dd HH:mm'),
       Cod_Usuario: this.data.Cod_Usuario
     });
 
@@ -56,6 +59,7 @@ export class DialogEvidenciaEmpaqueCajaComponent implements OnInit {
     if(this.data.Accion == 'C'){
       this.ll_nuevo = false;
       this.formulario.controls['Peso_Caja'].disable();
+      this.formulario.controls['Carton_Label'].disable();
       this.formulario.controls['Fec_Evidencia'].disable();
     }
     

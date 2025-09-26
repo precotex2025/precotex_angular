@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { LoginService } from './services/login.service';
-
+import { MatIconModule } from '@angular/material/icon';
 
 
 

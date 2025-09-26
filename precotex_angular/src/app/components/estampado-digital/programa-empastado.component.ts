@@ -285,6 +285,7 @@ export class ProgramaEmpastadoComponent implements OnInit {
       (result: any) => {
         if (result.length > 0) {
           this.dataSource.data = result
+          console.log('Resultado', result);
           this.SpinnerService.hide();
         }
         else {

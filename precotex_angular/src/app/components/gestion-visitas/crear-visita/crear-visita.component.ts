@@ -65,7 +65,7 @@ export class CrearVisitaComponent implements OnInit {
 
 
   guardarVisita(){
-    if(GlobalVariable.num_planta > 0){
+    if(GlobalVariable.num_planta > 0){  
       if(this.Nro_DNI != ''){
         if(this.Empresa != ''){
           if(this.Cod_Empresa != ''){
@@ -236,6 +236,4 @@ export class CrearVisitaComponent implements OnInit {
       })      
     })
   }
-
-  
 }

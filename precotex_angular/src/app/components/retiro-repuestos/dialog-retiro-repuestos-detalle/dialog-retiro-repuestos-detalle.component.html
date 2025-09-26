@@ -1,0 +1,92 @@
+<div class="container">
+  <div class="grid-container">
+    <div>
+      <strong>Detalle de Retiro</strong>
+    </div>
+
+    <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+      <!-- <mat-card>
+        <mat-card-content>
+          <div class="button-nuevo">
+            <button type="button" mat-flat-button (click)="onCreateRequerimientoDetalle()">
+              <mat-icon>note_add</mat-icon>Nuevo
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <br> -->
+
+      <mat-card>
+        <mat-card-content>
+          <div class="responsive-table">
+            <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource" matSort>
+              <ng-container matColumnDef="nro_secuencia">
+                <th mat-header-cell *matHeaderCellDef>Secuencia</th>
+                <td mat-cell align="center" *matCellDef="let data_req">{{data_req.nro_Secuencia}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="cod_item">
+                <th mat-header-cell *matHeaderCellDef>Cod. Item</th>
+                <td mat-cell *matCellDef="let data_req">{{data_req.cod_Item}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="des_item">
+                <th mat-header-cell *matHeaderCellDef>Descripcion</th>
+                <td mat-cell *matCellDef="let data_req">{{data_req.des_Item}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="can_requerida">
+                <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+                <td mat-cell align="center" *matCellDef="let data_req">{{data_req.can_Requerida}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="cod_unimed">
+                <th mat-header-cell *matHeaderCellDef>Uni. Medida</th>
+                <td mat-cell align="center" *matCellDef="let data_req">{{data_req.cod_UniMed}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="rpt_cambio">
+                <th mat-header-cell *matHeaderCellDef>Cambio</th>
+                <td mat-cell align="center" *matCellDef="let data_req">{{data_req.rpt_Cambio}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="itm_foto">
+                <th mat-header-cell *matHeaderCellDef>Foto</th>
+                <td mat-cell align="center" *matCellDef="let data_req">
+                  <!-- <img *ngIf="data_req.itm_Foto != ''" src='../assets/imgRetiro/{{data_req.itm_Foto}}' alt='Foto' width="40" height="40" /> -->
+                  <img *ngIf="data_req.itm_Foto != ''" src='{{data_req.itm_Foto}}' alt='Foto' width="40" height="40" />
+                  <!-- <img *ngIf="data_req.itm_Foto != ''" src='http://192.168.1.36/imagenes/{{data_req}}' alt='Foto' width="40" height="40" /> -->
+                  <a *ngIf = "data_req.itm_Foto == '' "></a>
+                  <!-- {{data_req.itm_Foto}} -->
+                </td> 
+              </ng-container>
+
+              <ng-container matColumnDef="editar">
+                <th mat-header-cell *matHeaderCellDef>Editar</th>
+                <td mat-cell *matCellDef="let data_det">
+                  <a>
+                    <mat-icon color="success" (click)="onEdit(data_det)">edit</mat-icon>
+                  </a>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+              <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <div class="button-salir">
+        <button mat-flat-button color="warn" mat-dialog-close>
+          <mat-icon>close</mat-icon> Salir
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+  <p style="color: white; text-align: center;">Cargando... </p>
+</ngx-spinner>

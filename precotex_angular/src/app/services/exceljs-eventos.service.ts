@@ -62,10 +62,10 @@ export class ExceljsEventosService {
     titleRow.alignment = { vertical: 'middle', horizontal: 'center' }
 
     // Fecha
-    worksheet.mergeCells('K1:L4');
+    worksheet.mergeCells('L1:M4');
     let d = new Date();
     let date = d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear();
-    let dateCell = worksheet.getCell('K1');
+    let dateCell = worksheet.getCell('L1');
     dateCell.value = date;
     dateCell.font = {
       name: 'Calibri',
@@ -182,9 +182,10 @@ export class ExceljsEventosService {
     worksheet.getColumn(7).width = 30;
     worksheet.getColumn(8).width = 30;
     worksheet.getColumn(9).width = 40;
-    worksheet.getColumn(10).width = 15;
+    worksheet.getColumn(10).width = 40;
     worksheet.getColumn(11).width = 15;
     worksheet.getColumn(12).width = 15;
+    worksheet.getColumn(13).width = 15;
 
     // Adding Data with Conditional Formatting
     if(excelData.firma){
@@ -199,21 +200,22 @@ export class ExceljsEventosService {
           item[6],
           item[7],
           item[8],
+          item[9],
           '',
-          item[10],
-          item[11]
+          item[11],
+          item[12]
         ]);
 
         // Añadir firma
-        if (!(item[9] == '')) {
-          const myBase64Image = item[9];
+        if (!(item[10] == '')) {
+          const myBase64Image = item[10];
           let img64 = workbook.addImage({
             base64: myBase64Image,
             extension: 'jpeg',
           });
 
           worksheet.addImage(img64, {
-            tl: { col: 9, row: row.number - 1.1 }, // tl: { col: 9, row: row.number - 1.5 }, top/left Columna 9 y fila actual
+            tl: { col: 10, row: row.number - 1.1 }, // tl: { col: 9, row: row.number - 1.5 }, top/left Columna 9 y fila actual
             ext: { width: 80, height: 40 }, // Tamaño de la imagen
             editAs: 'absolute'
           });
