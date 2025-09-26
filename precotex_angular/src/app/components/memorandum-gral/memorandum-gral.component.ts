@@ -17,6 +17,8 @@ import { ToastrService } from 'ngx-toastr';
 import { DialogMemorandumSeguimientoComponent } from './dialog-memorandum-seguimiento/dialog-memorandum-seguimiento.component';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { DialogMemorandumPlantaComponent } from './dialog-memorandum-planta/dialog-memorandum-planta.component';
+import { ExceljsService } from 'src/app/services/exceljs.service';
+import { DialogMemorandumLineaTiempoComponent } from './dialog-memorandum-linea-tiempo/dialog-memorandum-linea-tiempo.component';
 
 interface data_detalle {
   //codigo       : string,
@@ -80,11 +82,15 @@ export class MemorandumGralComponent implements OnInit {
   sNum_Memo_Seleccionado = "";
   sCod_Tipo_Memo = "";
 
+  sCod_Estado_Memo      = ""; //Nuevo
+  sCod_Tipo_Movimiento  = ""; //Nuevo
+
   bBotonCrear            : boolean;
   bBotonProcesoSiguiente : boolean;
   bBotonProcesoDevolver : boolean;
   
   _sCodPlantaGarita: string = ""; 
+  fileName: string = 'Memorandum_';
 
   @ViewChild('btnBuscar') btnBuscar: ElementRef<HTMLButtonElement>;
   @ViewChild(MatSort) sort!: MatSort;
@@ -96,6 +102,7 @@ export class MemorandumGralComponent implements OnInit {
     private SpinnerService    : NgxSpinnerService ,
     private serviceMemorandum : MemorandumGralService,
     private toastr            : ToastrService,
+    private exceljsService    : ExceljsService
   ) { }
 
   ngOnInit(): void {
@@ -130,6 +137,11 @@ export class MemorandumGralComponent implements OnInit {
    columnsToDisplay: string[] = this.displayedColumns.slice();
    dataListadoMemorandums: Array<any> = []; 
    selectListadoMemorandums: Array<data_det> = [];
+
+   dataListadoMemorandumsExportar: Array<any> = []; 
+
+   dataForExcel: any = [];
+   dataSourceExcel: any = [];     
 
   formulario = this.formBuilder.group({
     NroMemo:         [''],
@@ -354,9 +366,14 @@ export class MemorandumGralComponent implements OnInit {
                       timeOut: 2500,
                     });
                     this.selectListadoMemorandums = [];
-                    //this.btnBuscar.nativeElement.click();
                     this.onGetMemorandums();
-                    
+
+                    //Descargar El memorandum para mandar a imprimir
+                    if (this.sCod_Tipo_Movimiento == 'E' && this.sCod_Estado_Memo == '02'){
+                        //FALTA DESCARGAR
+                        //this.onPrint2(this.sNum_Memo_Seleccionado);
+                    }
+                            
                   }else {
                     this.toastr.info(response.message, '', {
                       timeOut: 2500,
@@ -564,6 +581,8 @@ export class MemorandumGralComponent implements OnInit {
 
     this.sNum_Memo_Seleccionado = String(row.num_Memo);
     this.sCod_Tipo_Memo = String(row.cod_Tipo_Memo);
+    this.sCod_Estado_Memo      = String(row.cod_Estado_Memo);
+    this.sCod_Tipo_Movimiento  = String(row.cod_Tipo_Movimiento);
 
     this.selectListadoMemorandums = [];
     //this.selectListadoMemorandums = row;
@@ -583,7 +602,6 @@ export class MemorandumGralComponent implements OnInit {
       //When Estado es igual '05' - Recepcion Final
       //When Tipo de Memo '02'    - Con Retorno 
       if (sCodEstadoMemo === '05' && sCod_Tipo_Memo === '02' && scod_Usuario_Receptor.trim().toLowerCase() === this.sUsuario.trim().toLowerCase()){
-        console.log('marca 500')
         this.bBotonProcesoDevolver = true;
       }else{
         this.bBotonProcesoDevolver = false;
@@ -602,6 +620,185 @@ export class MemorandumGralComponent implements OnInit {
 
   isIndeterminate() {
     return this.selection.selected.length > 0 && !this.isAllSelected();
+  }
+
+  getObtieneInformacionByExportarExcel(){
+
+    const sFecIni       : string =  this.range.get('start').value ;
+    const sFecFin       : string =  this.range.get('end').value   ;
+
+    this.SpinnerService.show();
+    this.dataListadoMemorandumsExportar = [];
+
+    this.serviceMemorandum.getExportarInformacionMemorandumDetalle(sFecIni, sFecFin).subscribe({
+      next: (response: any)=> {
+        if(response.success){
+          if (response.totalElements > 0){
+            this.dataListadoMemorandumsExportar = response.elements;
+
+            //Exportar a Excel
+            this.CreateExcel(this.dataListadoMemorandumsExportar);
+
+            //console.log('data de exportar', this.dataListadoMemorandumsExportar);
+            //this.SpinnerService.hide();
+          }
+          else{
+            this.dataListadoMemorandumsExportar = [];
+            this.dataSource.data = [];            
+            this.SpinnerService.hide();
+          };
+        }else{
+          this.dataListadoMemorandumsExportar = [];
+          this.dataSource.data = [];
+        }
+      },  
+      error: (error) => {
+        this.SpinnerService.hide();
+        console.log(error.error.message, 'Cerrar', {
+        timeOut: 2500,
+         });
+      }          
+    });    
+    
+  }
+
+
+  CreateExcel(dataListadoMemorandumsExportar: any){
+    //this.SpinnerService.show();
+
+    this.dataForExcel = [];
+    this.dataSourceExcel = [];
+
+    if (this.dataListadoMemorandumsExportar.length > 0) {
+
+        this.dataListadoMemorandumsExportar.forEach((item: any) => {
+
+
+          let fechaEmisor = this.formatearFechaValida(item.fecha_Emisor);
+          let fechaRecepcion = this.formatearFechaValida(item.fch_Recepcion);
+          let fechaListo = this.formatearFechaValida(item.fch_Listo);
+          let fechaGarita1 = this.formatearFechaValida(item.fch_Confirma_Garita1);
+          let fechaGarita2 = this.formatearFechaValida(item.fch_Confirma_Garita2);
+          //let fechaProduccion = _moment(item.fecha_Produccion.valueOf()).format('DD/MM/YYYY');
+
+          let datos = {
+            ['# Memo']: item.num_Memo,
+            ['Fch Emisor']: fechaEmisor,
+            ['Emisor']: item.emisor,
+            ['Planta Origen']: item.planta_Origen,
+            ['Receptor']: item.receptor,
+            ['Planta Destino']: item.planta_Destino,
+            ['Tipo']: item.descripcion_Tipo_Memorandum,
+            ['Motivo']: item.descripcion_Motivo_Memorandum,
+            ['Fch Recepción']: fechaRecepcion,
+            ['Estado']: item.descripcion_Estado_Memo,
+            ['Material']: item.glosa,
+            ['Cantidad']: item.cantidad,
+            ['Fch Listo']: fechaListo,
+            ['Fch Garita 1']: fechaGarita1,
+            ['Fch Garita 2']: fechaGarita2,
+            ['Revertido']: item.revertir,
+          };
+          this.dataForExcel.push(datos);
+      });
+
+
+      if (this.dataForExcel.length > 0) {
+        this.dataForExcel.forEach((row: any) => {
+          this.dataSourceExcel.push(Object.values(row))
+        })
+
+        let reportData = {
+          title: 'REPORTE DETALLADO DE MEMORANDUM(S)',
+          data: this.dataSourceExcel,
+          headers: Object.keys(this.dataForExcel[0])
+        }
+
+        this.exceljsService.exportExcelMemorandumDetallado(reportData);
+        
+      } else {
+        this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+        this.SpinnerService.hide();
+      }      
+
+
+
+    } else {
+      this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+      this.SpinnerService.hide();
+    } 
+
+    this.SpinnerService.hide();    
+  }
+
+  formatearFechaValida(fecha: string): string {
+    if (!fecha || fecha.startsWith('1900-01-01T00:00:00')) {
+      return '';
+    }
+
+    const f = new Date(fecha);
+
+    const dia = f.getDate().toString().padStart(2, '0');
+    const mes = (f.getMonth() + 1).toString().padStart(2, '0'); // Mes empieza en 0
+    const anio = f.getFullYear();
+
+    const horas = f.getHours().toString().padStart(2, '0');
+    const minutos = f.getMinutes().toString().padStart(2, '0');
+
+    return `${dia}/${mes}/${anio} ${horas}:${minutos}`;
+  }    
+
+  onTime(data: any){
+    let dialogRef = this.dialog.open(DialogMemorandumLineaTiempoComponent, {
+      width: '600px',
+      disableClose: false,
+      panelClass: 'my-class',
+      data: {
+        Title  : "::. Linea de Tiempo .::",
+        Datos  : data
+      }      
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      //this.onGetMemorandums();
+    });    
+  }
+
+  onPrint(data: any){
+    this.SpinnerService.show();
+    this.serviceMemorandum.getDescargarMemo(data.num_Memo, 1).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = this.fileName + data.num_Memo;   // nombre sugerido
+        a.click();
+        window.URL.revokeObjectURL(url);
+        this.SpinnerService.hide();
+      },
+      error: (err) => {
+        this.SpinnerService.hide();
+        console.error('Error al descargar', err);
+      }    
+    });
+  }
+
+  onPrint2(numMemo: string){
+    this.SpinnerService.show();
+    this.serviceMemorandum.getDescargarMemo(numMemo, 1).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = this.fileName + numMemo;   // nombre sugerido
+        a.click();
+        window.URL.revokeObjectURL(url);
+        this.SpinnerService.hide();
+      },
+      error: (err) => {
+        this.SpinnerService.hide();
+        console.error('Error al descargar', err);
+      }    
+    });
   }
 
   // getObtenerPermisosMemorandum(sCodUsuario, sNumMemo, sCodEstado){

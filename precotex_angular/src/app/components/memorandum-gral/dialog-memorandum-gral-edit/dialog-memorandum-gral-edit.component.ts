@@ -68,6 +68,9 @@ export class DialogMemorandumGralEditComponent implements OnInit {
       ctrol_tip_mot: [''],
       ctrol_estado: [''],
       ctrol_tip_memo: [''],
+
+      ctrol_nombre_externo: [''],
+      ctrol_direccion_externo: ['']
   });  
 
   dataUsuarios  : Array<any> = [];
@@ -81,6 +84,8 @@ export class DialogMemorandumGralEditComponent implements OnInit {
   //Permisos de Controles por Usuario / Habilitados
   bEdita : boolean = true;
   sRolMemo: string;
+
+  tipoMovimientoSelec: string;
 
   constructor(
     private formBuilder       : FormBuilder                     ,
@@ -128,18 +133,24 @@ export class DialogMemorandumGralEditComponent implements OnInit {
   seleccionados: any[] = [];
 
   setValoresFormulario(data: any){
-    console.log('data', data);
+
     this.wait(1000);
+    this.tipoMovimientoSelec = data.Datos.cod_Tipo_Movimiento;
                         
     this.formulario.get('ctrol_tip_memo')?.setValue(data.Datos.cod_Tipo_Memo);
     this.formulario.get('ctrol_tip_mot')?.setValue(data.Datos.cod_Motivo_Memo);
 
     this.formulario.get('ctrol_user_ori')?.setValue(data.Datos.cod_Usuario_Emisor);
-    this.formulario.get('ctrol_user_des')?.setValue(data.Datos.cod_Usuario_Receptor);    
-
-    this.formulario.get('ctrol_planta_ori')?.setValue(data.Datos.num_Planta_Origen);    
-    this.formulario.get('ctrol_planta_des')?.setValue(data.Datos.num_Planta_Destino);    
-
+    this.formulario.get('ctrol_planta_ori')?.setValue(data.Datos.num_Planta_Origen);  
+    
+    if (this.tipoMovimientoSelec == 'I'){  
+      this.formulario.get('ctrol_user_des')?.setValue(data.Datos.cod_Usuario_Receptor);   
+      this.formulario.get('ctrol_planta_des')?.setValue(data.Datos.num_Planta_Destino);    
+    }else{
+      this.formulario.get('ctrol_nombre_externo')?.setValue(data.Datos.datos_Externo);    
+      this.formulario.get('ctrol_direccion_externo')?.setValue(data.Datos.direccion_Externo);        
+    }
+    
     //CARGAR LOS DETALLES
     const sNumMemo: string = data.Datos.num_Memo;
     this.getObtieneDetalleMemo(sNumMemo);
@@ -172,6 +183,8 @@ export class DialogMemorandumGralEditComponent implements OnInit {
             this.bEdita = false;
           }else{
             this.bEdita = true;
+            this.formulario.get('ctrol_nombre_externo')?.disable();
+            this.formulario.get('ctrol_direccion_externo')?.disable();
           }
           
         }
@@ -273,6 +286,10 @@ export class DialogMemorandumGralEditComponent implements OnInit {
       const sCodMotivo    = this.formulario.get('ctrol_tip_mot')?.value;
       const sTipMemo      = this.formulario.get('ctrol_tip_memo')?.value;
 
+      const sTipMovimiento = this.tipoMovimientoSelec;
+      const sDatosExt = this.formulario.get('ctrol_nombre_externo')?.value || '';
+      const sDirecExt = this.formulario.get('ctrol_direccion_externo')?.value || '';           
+
       /********************/
       //Memorandum Detalle
       /********************/
@@ -287,7 +304,10 @@ export class DialogMemorandumGralEditComponent implements OnInit {
         "cod_Tipo_Memo": sTipMemo,
         "cod_Motivo_Memo": sCodMotivo,
         "accion": "U",
-        "detalle": this.dataDetalles
+        "detalle": this.dataDetalles,
+        "cod_Tipo_Movimiento": sTipMovimiento,
+        "Datos_Externo": sDatosExt,
+        "Direccion_Externo": sDirecExt,        
       };
       
       //console.log('data', data);

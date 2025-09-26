@@ -185,6 +185,8 @@ export class RegistrarPermisosComponent implements OnInit {
     else{
       Cod_Empresa = GlobalVariable.empresa;
     }
+    console.log('vcodtra', GlobalVariable.vcodtra);
+    console.log('vtiptra', GlobalVariable.vtiptra);
     this.registroPermisosService.Rh_Muestra_Trabajadores_Jefe_Web(
      'C',
      GlobalVariable.vcodtra,

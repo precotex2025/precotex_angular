@@ -182,3 +182,24 @@ tr:hover {
 tr:active {
   background: #efefef;
 }
+
+
+.label-radio-row {
+  display: flex;
+  justify-content: center; /* Centrado horizontal */
+  align-items: center;     /* Centrado vertical */
+}
+
+/* Ajustamos los radio buttons dentro del grupo */
+.mat-radio-group {
+  display: flex;
+  justify-content: center; /* Centrado horizontal */
+  align-items: center;     /* Centrado vertical */
+  gap: 15px;               /* Espacio entre los botones de radio */
+}
+
+/* Ajustamos los radio buttons dentro del grupo */
+.mat-radio-button {
+  text-align: center; /* Centramos el texto dentro de los radio buttons */
+  font-size: 0.9rem;   
+}

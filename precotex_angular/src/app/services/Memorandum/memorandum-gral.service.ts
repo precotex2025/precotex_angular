@@ -133,5 +133,55 @@ export class MemorandumGralService {
 
     return this.http.get(this.baseUrlTinto + 'TxProcesoMemorandum/getObtenerInfoUsuarioMemorandum', { headers, params });
   }      
+
+  getExportarInformacionMemorandumDetalle(FecIni, FecFin){
+
+
+    if (!_moment(FecIni).isValid()) {
+      FecIni = '';
+    } else {
+      FecIni = _moment(FecIni.valueOf()).format('MM/DD/YYYY');
+    }
+
+    if (!_moment(FecFin).isValid()) {
+      FecFin = '';
+    } else {
+      FecFin = _moment(FecFin.valueOf()).format('MM/DD/YYYY');
+    }
+
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('FecIni', FecIni);
+    params = params.append('FecFin', FecFin);
+
+    return this.http.get(this.baseUrlTinto + 'TxProcesoMemorandum/getExportarInformacionMemorandumDetalle', { headers, params });
+  }  
   
+  getObtieneLineaTempoMemorandum(sNumMemo){
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('sNumMemo', sNumMemo);
+
+    return this.http.get(this.baseUrlTinto + 'TxProcesoMemorandum/getObtieneLineaTempoMemorandum', { headers, params });
+  }
+
+  // getImprimirMemo(sNumMemo, iCantidad){
+  //   const headers = this.Header;
+  //   let params = new HttpParams();
+  //   params = params.append('sNumMemo', sNumMemo);
+  //   params = params.append('iCantidad', iCantidad);
+
+  //   return this.http.get(this.baseUrlTinto + 'TxProcesoMemorandum/getImprimirMemo', { headers, params });
+  // }  
+
+    getDescargarMemo(sNumMemo, iCantidad): Observable<Blob> {
+      let params = new HttpParams();
+      params = params.append('sNumMemo', sNumMemo);
+      params = params.append('iCantidad', iCantidad);
+      return this.http.get(this.baseUrlTinto + 'TxProcesoMemorandum/getDescargarMemo', {
+        responseType: 'blob',
+        params  // 👈 importante
+      });
+    }  
+
 }

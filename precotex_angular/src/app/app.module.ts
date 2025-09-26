@@ -569,6 +569,7 @@ import { DialogColorComponent } from './components/auditoria-corte/libera-op-col
 import { ModalInformeComponent } from './components/quejas-reclamos/modal-informe/modal-informe.component';
 import { ModalInformeCierreComponent } from './components/quejas-reclamos/modal-informe-cierre/modal-informe-cierre.component';
 import { DialogEvidenciaEmpaqueCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-evidencia-empaque-caja/dialog-evidencia-empaque-caja.component';
+import { DialogMemorandumLineaTiempoComponent } from './components/memorandum-gral/dialog-memorandum-linea-tiempo/dialog-memorandum-linea-tiempo.component';
 
 @NgModule({
   declarations: [
@@ -1053,6 +1054,7 @@ import { DialogEvidenciaEmpaqueCajaComponent } from './components/auditoria-cali
     DialogMemorandumGralAddDetalleComponent,
     DialogMemorandumSeguimientoComponent,
     DialogMemorandumPlantaComponent,
+    DialogMemorandumLineaTiempoComponent,
     //Quejas y reclamos V2
     ModalSeleccionPartidaQrComponent,
     ModalInformeComponent,

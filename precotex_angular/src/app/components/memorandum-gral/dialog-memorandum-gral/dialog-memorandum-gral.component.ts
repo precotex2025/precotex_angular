@@ -93,9 +93,12 @@ export class DialogMemorandumGralComponent implements OnInit {
       ctrol_planta_des: [''],      
       ctrol_cantidad: [''],
       ctrol_material: [''],
-      ctrol_tip_memo: [''],
+      ctrol_tip_memo: ['01'], //POR DEFECTO SIN RETORNO
       ctrol_motivo: [''],
-      ctrol_glosa: ['']
+      ctrol_glosa: [''],
+      ctrol_tip_movimiento: ['I'],//POR DEFECTO INTERNO
+      ctrol_nombre_externo: [''],
+      ctrol_direccion_externo: [''],
   });  
 
   dataUsuarios  : Array<any> = [];
@@ -110,6 +113,13 @@ export class DialogMemorandumGralComponent implements OnInit {
   filtroUsuarioCtrl = new FormControl('');
   usuariosFiltrados: any[] = [];  
 
+
+  // Lista de tipos de movimiento (Interno y Externo)
+  dataTipoMovimiento = [
+    { cod_Tipo_Mov: 'I', descripcion: 'INTERNO' },
+    { cod_Tipo_Mov: 'E', descripcion: 'EXTERNO' }
+  ];  
+  tipoMovimientoSelec: string;
 
   constructor(
     private formBuilder       : FormBuilder,
@@ -126,6 +136,9 @@ export class DialogMemorandumGralComponent implements OnInit {
   ngOnInit(): void {
       const sFecActual       : string =  this.range.get('end').value;
       const fechaFormateada = this.datePipe.transform(sFecActual, 'dd/MM/yyyy');
+
+      //Activamos por defecto Tipo Movimiento Interno
+      this.tipoMovimientoSelec = 'I';
 
       //Deshabilita Controles
       this.formulario.get('ctrol_user_ori')?.disable();
@@ -269,6 +282,10 @@ filtrarUsuarios(valor: string) {
         const sTipMemo      = this.formulario.get('ctrol_tip_memo')?.value;
         const sCodMotivo   = this.formulario.get('ctrol_motivo')?.value;
 
+        const sTipMovimiento = this.formulario.get('ctrol_tip_movimiento')?.value;
+        const sDatosExt = this.formulario.get('ctrol_nombre_externo')?.value || '';
+        const sDirecExt = this.formulario.get('ctrol_direccion_externo')?.value || '';        
+
         /********************/
         //Memorandum Detalle
         /********************/
@@ -301,7 +318,10 @@ filtrarUsuarios(valor: string) {
           "cod_Tipo_Memo": sTipMemo,
           "cod_Motivo_Memo": sCodMotivo,
           "accion": "I",
-          "detalle": this.dataDetalles
+          "detalle": this.dataDetalles,
+          "cod_Tipo_Movimiento": sTipMovimiento,
+          "Datos_Externo": sDatosExt,
+          "Direccion_Externo": sDirecExt,
         };
 
         //console.log('onSave-data', data);
@@ -352,13 +372,37 @@ filtrarUsuarios(valor: string) {
     const sCantMaterial = this.formulario.get('ctrol_cantidad')?.value || 0;
     const sCodMotivo    = this.formulario.get('ctrol_motivo')?.value || '';
 
-    if (!sPlantaDes || sPlantaDes.trim() === '') {
-      this.matSnackBar.open("¡Importante seleccionar al Usuario Destino Correcto!", 'Cerrar', {
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-        duration: 1500,
-      });
-      return;
+    if (this.tipoMovimientoSelec == 'I')
+    {  
+      if (!sPlantaDes || sPlantaDes.trim() === '') {
+        this.matSnackBar.open("¡Importante seleccionar al Usuario Destino Correcto!", 'Cerrar', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 1500,
+        });
+        return;
+      }
+    }else{
+      let sDatosExt = this.formulario.get('ctrol_nombre_externo')?.value || '';
+      let sDirecExt = this.formulario.get('ctrol_direccion_externo')?.value || '';
+
+      if (!sDatosExt || sDatosExt.trim() === '') {
+        this.matSnackBar.open("¡Importante registrar datos personales de externo!", 'Cerrar', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 1500,
+        });
+        return;
+      }   
+      
+      if (!sDirecExt || sDirecExt.trim() === '') {
+        this.matSnackBar.open("¡Importante registrar datos de dirección de externo!", 'Cerrar', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 1500,
+        });
+        return;
+      }       
     }
 
     if (!sCodMotivo || sCodMotivo.trim() === '') {
@@ -485,6 +529,20 @@ filtrarUsuarios(valor: string) {
       }));   
     }     
   }
+
+  // Método para manejar el cambio en el tipo de movimiento
+  onTipoMovimientoChange(value: string) {
+    this.tipoMovimientoSelec = value;
+    if(value == 'E'){
+      this.formulario.get('ctrol_nombre_externo')?.setValue('');
+      this.formulario.get('ctrol_direccion_externo')?.setValue('');      
+    }else{
+      this.usuariosFiltrados = null;
+      //this.formulario.get('filtroUsuarioCtrl')?.setValue('');
+      this.formulario.get('ctrol_user_des')?.setValue('');
+      this.formulario.get('ctrol_planta_des')?.setValue('');            
+    }
+  }  
 
   // onMaterialSeleccionado(event: MatSelectChange){
   //   const id = event.value;

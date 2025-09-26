@@ -42,29 +42,52 @@
                 </mat-form-field> 
 
                 <mat-form-field appearance="outline" style="flex: 1;" > 
-                    <mat-label>Usuario Recepciona :</mat-label> 
-                    <mat-select formControlName="ctrol_user_des" (selectionChange)="onUsuarioSeleccionado($event)" [disabled]="bEdita"> 
-                        <mat-option *ngFor="let usuario of dataUsuarios" [value]="usuario.Cod_Usuario">{{ usuario.Nom_usuario }}</mat-option> 
-                    </mat-select> 
-                </mat-form-field>                 
-            </div>
-
-            <div class="row">
-                <mat-form-field appearance="outline" style="flex: 1;" > 
                         <mat-label>Planta Origen :</mat-label> 
                         <mat-select formControlName="ctrol_planta_ori" [disabled]="bEdita"> 
                             <mat-option *ngFor="let planta of dataPlantas" [value]="planta.num_Planta">{{ planta.des_Planta }}</mat-option> 
                         </mat-select> 
-                </mat-form-field> 
-
-                <mat-form-field appearance="outline" style="flex: 1;" > 
-                    <mat-label>Planta Destino :</mat-label> 
-                        <mat-select formControlName="ctrol_planta_des" [disabled]="bEdita"> 
-                            <mat-option *ngFor="let planta of dataPlantas" [value]="planta.num_Planta">{{ planta.des_Planta }}</mat-option> 
-                        </mat-select> 
-                </mat-form-field>    
+                </mat-form-field>                              
             </div>
 
+            <!--SE MUESTRA SOLO CUANDO ES INTERNO-->
+            <div *ngIf="tipoMovimientoSelec === 'I'">
+                <div class="row">
+                    <mat-form-field appearance="outline" style="flex: 1;" > 
+                        <mat-label>Usuario Recepciona :</mat-label> 
+                        <mat-select formControlName="ctrol_user_des" (selectionChange)="onUsuarioSeleccionado($event)" [disabled]="bEdita"> 
+                            <mat-option *ngFor="let usuario of dataUsuarios" [value]="usuario.Cod_Usuario">{{ usuario.Nom_usuario }}</mat-option> 
+                        </mat-select> 
+                    </mat-form-field>                    
+
+                    <mat-form-field appearance="outline" style="flex: 1;" > 
+                        <mat-label>Planta Destino :</mat-label> 
+                            <mat-select formControlName="ctrol_planta_des" [disabled]="bEdita"> 
+                                <mat-option *ngFor="let planta of dataPlantas" [value]="planta.num_Planta">{{ planta.des_Planta }}</mat-option> 
+                            </mat-select> 
+                    </mat-form-field>    
+                </div>
+            </div>
+
+            <!--SE MUESTRA SOLO CUANDO ES EXTERNO-->
+            <div *ngIf="tipoMovimientoSelec === 'E'">
+
+                <!-- Nombre para Externo -->
+                <div class="row" >
+                    <mat-form-field appearance="outline" style="flex: 1;">
+                        <mat-label>Datos personal externo :</mat-label>
+                        <input matInput formControlName="ctrol_nombre_externo" placeholder="Nombres y apellidos" >
+                    </mat-form-field>
+                </div>
+
+                <!-- Dirección para Externo -->
+                <div class="row">
+                    <mat-form-field appearance="outline" style="flex: 1;">
+                        <mat-label>Dirección externa:</mat-label>
+                        <textarea matInput rows="3" formControlName="ctrol_direccion_externo" placeholder="Registre una dirección externa" ></textarea>
+                    </mat-form-field>
+                </div>                                       
+
+            </div>            
 
         </mat-card-content>
         <!-- <mat-card-actions>

@@ -1,0 +1,52 @@
+    <div class="dialog-scroll">
+    <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+        <mat-card class="example-card" appearance="outlined">
+            <mat-card-header>
+                <div mat-card-avatar class="example-header-image"></div>
+                <mat-card-title>Memo N°: {{data.Datos.num_Memo}} </mat-card-title>
+                <mat-card-subtitle>Fecha Emisión: {{ data.Datos.fecha_Emisor | date: 'dd/MM/yyyy HH:mm' }}</mat-card-subtitle>
+            </mat-card-header>   
+            <br>    
+            <mat-card-content>
+
+                <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource">
+
+                    <ng-container matColumnDef="nombre_Estado">
+                        <th mat-header-cell *matHeaderCellDef> Estado </th>
+                        <td mat-cell *matCellDef="let data_det"> {{data_det.nombre_Estado}}</td>
+                    </ng-container>                         
+
+                    <ng-container matColumnDef="estado_Flujo">
+                    <th mat-header-cell *matHeaderCellDef> Linea </th>
+                    <td mat-cell *matCellDef="let data_det">
+                         <!-- {{ data_det.estado_Flujo }}  -->
+                        <mat-icon [style.color]="'green'" *ngIf="data_det.estado_Flujo == 'S'">
+                        check_box
+                        </mat-icon>
+                        <mat-icon color="gray" *ngIf="data_det.estado_Flujo == 'N'">
+                        check_box_outline_blank
+                        </mat-icon>
+                    </td>
+                    </ng-container>                    
+
+                    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>                        
+                </table>
+
+            </mat-card-content>     
+        </mat-card>
+    </form>
+    </div>
+
+<div class="button-row"> 
+
+    <button mat-flat-button color="warn" mat-dialog-close class="form-button">
+        <mat-icon>close</mat-icon> Salir
+    </button>
+    
+</div>
+
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>

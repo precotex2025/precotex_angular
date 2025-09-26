@@ -129,6 +129,17 @@
     color: #ffffff;       
   }
 
+  .fila1-BtnExportar{
+    grid-area: col4;
+    width: 100%;
+    height: 40px;
+    max-width: 180px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #FFAB00;
+    color: #ffffff;
+  }  
+
     .fila1-BtnDevolver{
     grid-area: col7;
     width: 100%;
@@ -205,4 +216,27 @@ tr:active {
   max-height: 300px;   /* ajusta el alto visible */
   overflow-y: auto;    /* activa scroll vertical */
   overflow-x: hidden;  /* evita scroll horizontal */
+}
+
+.filtro-exportar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.filtro-texto {
+  flex: 1;
+}
+
+.fila1-BtnExportar {
+  white-space: nowrap;
+}
+
+
+::ng-deep .mat-header-cell {
+  background-color: #b3e5fc; /* celeste pastel */
+  color: #333;              /* texto oscuro para contraste */
+  font-weight: bold;
 }

@@ -6,6 +6,24 @@
     <div class="container">
         <form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
 
+                <!-- En el archivo .html -->
+                <div class="row" style="margin-top: 10px; margin-bottom: -5px !important;">
+                    <div class="label-radio-row">
+                        <mat-radio-group
+                            aria-label="Seleccionar tipo de movimiento"
+                            formControlName="ctrol_tip_movimiento"
+                            class="radio-container"
+                            (change)="onTipoMovimientoChange($event.value)">
+                            <mat-radio-button
+                                *ngFor="let tipoMovimiento of dataTipoMovimiento"
+                                [value]="tipoMovimiento.cod_Tipo_Mov">
+                                {{ tipoMovimiento.descripcion }}
+                            </mat-radio-button>
+
+                        </mat-radio-group>
+                    </div>
+                </div>            
+
                 <div class="row"> 
                     <!-- Memo --> 
                     <mat-form-field class="col col-6"> 
@@ -42,57 +60,99 @@
                     </div> -->
                 </div>
 
-                <div class="row">
-                    <!-- Para --> 
-                    <mat-form-field style="width: 100%;"> 
-                        <mat-label>Para :</mat-label> 
-                        <mat-select formControlName="ctrol_user_des" (selectionChange)="onUsuarioSeleccionado($event)" #select> 
+                <!--SE MUESTRA SOLO CUANDO ES INTERNO-->
+                <div *ngIf="tipoMovimientoSelec === 'I'">
+                    <div class="row">
+                        <!-- Para --> 
+                        <mat-form-field style="width: 100%;"> 
+                            <mat-label>Para :</mat-label> 
+                            <mat-select formControlName="ctrol_user_des" (selectionChange)="onUsuarioSeleccionado($event)" #select> 
 
-                           <!-- Input para filtrar -->
-                            <mat-option>
-                                <mat-form-field appearance="standard" style="width: 100%; margin: 0;">
-                                <input
-                                    matInput
-                                    placeholder="Buscar usuario..."
-                                    [formControl]="filtroUsuarioCtrl"
-                                    (click)="$event.stopPropagation()"
-                                    autocomplete="off">
-                                </mat-form-field>
-                            </mat-option>
+                            <!-- Input para filtrar -->
+                                <mat-option>
+                                    <mat-form-field appearance="standard" style="width: 100%; margin: 0;">
+                                    <input
+                                        matInput
+                                        placeholder="Buscar usuario..."
+                                        [formControl]="filtroUsuarioCtrl"
+                                        (click)="$event.stopPropagation()"
+                                        autocomplete="off">
+                                    </mat-form-field>
+                                </mat-option>
 
-                            <!-- Opciones filtradas -->
-                            <mat-option 
-                                *ngFor="let usuario of usuariosFiltrados" 
-                                [value]="usuario.Cod_Usuario">
-                                {{ usuario.Nom_usuario }}
-                            </mat-option>
+                                <!-- Opciones filtradas -->
+                                <mat-option 
+                                    *ngFor="let usuario of usuariosFiltrados" 
+                                    [value]="usuario.Cod_Usuario">
+                                    {{ usuario.Nom_usuario }}
+                                </mat-option>
 
 
-                            <!-- <mat-option *ngFor="let usuario of dataUsuarios" [value]="usuario.Cod_Usuario">{{ usuario.Nom_usuario }}</mat-option>  -->
-                        </mat-select> 
-                    </mat-form-field> 
-                </div>                   
+                                <!-- <mat-option *ngFor="let usuario of dataUsuarios" [value]="usuario.Cod_Usuario">{{ usuario.Nom_usuario }}</mat-option>  -->
+                            </mat-select> 
+                        </mat-form-field> 
+                    </div>                   
 
-                <div class="row">
-                    <!-- Planta Destino --> 
-                    <mat-form-field style="width: 100%;"> 
-                        <mat-label>Planta Destino :</mat-label> 
-                        <mat-select formControlName="ctrol_planta_des"> 
-                            <mat-option *ngFor="let planta of dataPlantas" [value]="planta.num_Planta">{{ planta.des_Planta }}</mat-option> 
-                        </mat-select> 
-                    </mat-form-field> 
-                </div>      
+                    <div class="row" style="margin-bottom: 3px !important;">
+                        <!-- Planta Destino --> 
+                        <mat-form-field style="width: 100%;"> 
+                            <mat-label>Planta Destino :</mat-label> 
+                            <mat-select formControlName="ctrol_planta_des"> 
+                                <mat-option *ngFor="let planta of dataPlantas" [value]="planta.num_Planta">{{ planta.des_Planta }}</mat-option> 
+                            </mat-select> 
+                        </mat-form-field> 
+                    </div>      
+                </div>
 
-                <div class="row">
-                    <!-- Tipo --> 
+                <!--SE MUESTRA SOLO CUANDO ES EXTERNO-->
+                <div *ngIf="tipoMovimientoSelec === 'E'">
+
+                    <!-- Nombre para Externo -->
+                    <div class="row">
+                        <mat-form-field style="width: 100%;">
+                            <mat-label>Datos personal externo :</mat-label>
+                            <input matInput formControlName="ctrol_nombre_externo" placeholder="Nombres y apellidos">
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Dirección para Externo -->
+                    <div class="row">
+                        <mat-form-field appearance="outline" style="flex: 1;">
+                            <mat-label>Dirección externa:</mat-label>
+                            <textarea matInput rows="3" formControlName="ctrol_direccion_externo" placeholder="Registre una dirección externa"></textarea>
+                        </mat-form-field>
+                    </div>                                       
+
+                </div>
+
+                <!-- Tipo --> 
+                <!-- <div class="row">
                     <mat-form-field style="width: 100%;"> 
                         <mat-label>Tipo :</mat-label> 
                         <mat-select formControlName="ctrol_tip_memo"> 
                             <mat-option *ngFor="let tipomemo of dataTipoMemo" [value]="tipomemo.cod_Tipo_Memo">{{ tipomemo.descripcion }}</mat-option> 
                         </mat-select> 
                     </mat-form-field>                     
+                </div> -->
+
+                <!-- style="margin-top: 10px !important; margin-bottom: 2px !important" -->
+                <div class="row" style="margin-top: 10px; margin-bottom: -5px !important;">
+                    <div class="label-radio-row">
+                        <mat-radio-group
+                        aria-label="Seleccionar tipo de memorándum"
+                        formControlName="ctrol_tip_memo"
+                        class="radio-container">
+                        
+                        <mat-radio-button
+                            *ngFor="let tipomemo of dataTipoMemo"
+                            [value]="tipomemo.cod_Tipo_Memo">
+                            {{ tipomemo.descripcion }}
+                        </mat-radio-button>
+
+                        </mat-radio-group>
+                    </div>
                 </div>
-                
+
                 <div class="row">
                     <!-- Motivo --> 
                     <mat-form-field style="width: 100%;"> 
