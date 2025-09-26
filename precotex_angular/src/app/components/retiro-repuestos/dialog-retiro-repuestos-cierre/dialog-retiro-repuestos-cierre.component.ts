@@ -10,6 +10,8 @@ import { MatSelectChange } from '@angular/material/select';
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { ExceljsService } from 'src/app/services/exceljs.service';
+import * as _moment from 'moment';
 
 interface data {
   Title: string,
@@ -40,6 +42,8 @@ export class DialogRetiroRepuestosCierreComponent implements OnInit {
           private datePipe          : DatePipe,
           private SpinnerService    : NgxSpinnerService,
           private toastr            : ToastrService,
+          private serviceRetiroRepuestos: RetiroRepuestosService,
+          private exceljsService: ExceljsService,
           @Inject(MAT_DIALOG_DATA) public data: data,
           public dialogRef: MatDialogRef<DialogRetiroRepuestosCierreComponent>
           ) { }
@@ -77,9 +81,11 @@ export class DialogRetiroRepuestosCierreComponent implements OnInit {
               next: (response: any) => {
                 if(response.success){
                   if(response.codeResult == 200){
+                    
                     this.toastr.success(response.message, '', {
                       timeOut: 2500,
                     });
+                    this.onEnviarCorreo();
                     this.dialogRef.close();
                   }else if(response.codeResult == 201){
                     this.toastr.info(response.message, '', {
@@ -106,5 +112,90 @@ export class DialogRetiroRepuestosCierreComponent implements OnInit {
       })
       }
     }
+
+    dataForExcel = [];
+    dataSourceExcel = [];
+    dataReporteRetiros = [];
+
+  onEnviarCorreo(){
+        this.dataForExcel = [];
+        this.dataSourceExcel = [];
+        this.dataReporteRetiros = [];
+     
+          this.SpinnerService.show();
+          this.serviceRetiroRepuestos.getListaRetiroRepuestosDetallePorNumRequerimiento(this.data.num_requerimiento).subscribe({
+            next: (response: any)=> {
+              if(response.success){
+                if (response.totalElements > 0){
+    
+                  this.dataReporteRetiros = response.elements;
+    
+                  
+                  this.dataReporteRetiros.forEach((item: any) => {
+    
+                    let datos = {
+                      
+                      ['Fec. Aprobacion']: _moment(item.fec_Aprobacion.valueOf()).format('DD/MM/YYYY'),
+                      ['Hora Aprobacion']: item.hora_Aprobacion ,
+                      ['Nom. Seguridad']: item.nom_Seguridad,
+                      ['Fec. Requerimiento']: _moment(item.fec_Creacion.valueOf()).format('DD/MM/YYYY')   ,
+                      ['Nom. Mantenimiento']: item.nom_Mantenimiento,
+                      ['# Precinto Apertura']: item.nro_Precinto_Apertura,
+                      ['# Precinto Cierre']: item.nro_Precinto_Cierre,
+                      ['# Requerimiento']: item.num_Requerimiento,
+                      ['Secuencia']: item.nro_Secuencia       ,
+                      ['Cod. Item']: item.cod_Item ,
+                      ['Descripcion']: item.des_Item       ,
+                      ['Can. Requerida']: item.can_Requerida           ,
+                      ['UM']: item.cod_UniMed,
+                      ['Repuesto de Cambio']: item.rpt_Cambio ,
+                      ['Foto']: item.itm_Foto   
+                    };
+                    this.dataForExcel.push(datos);              
+                  });        
+                  
+                  if (this.dataForExcel.length > 0) {
+    
+                    this.dataForExcel.forEach((row: any) => {
+                      this.dataSourceExcel.push(Object.values(row))
+                    })              
+    
+                    let num = this.dataReporteRetiros[0].num_Requerimiento;
+    
+                    let reportData = {
+                      title: 'REPORTE',
+                      data: this.dataSourceExcel,
+                      headers: Object.keys(this.dataForExcel[0]),
+                      Num_Requerimiento: num
+                    }
+    
+                    //GUARDA ARCHIVO
+                    this.exceljsService.exportExcel4(reportData);
+                    
+                    // this.toastr.success('Correo Enviado', '', {
+                    // timeOut: 5500,
+                    // });
+    
+                  } else {
+                    this.SpinnerService.hide();
+                  }
+                  this.SpinnerService.hide();
+                }
+                else{
+                  this.SpinnerService.hide();
+                };
+              }
+            },
+            error: (error) => {
+              this.SpinnerService.hide();
+              console.log(error.error.message, 'Cerrar', {
+              timeOut: 2500,
+              });
+            }
+          });
+          
+          this.SpinnerService.hide();
+        
+      }
 
 }
