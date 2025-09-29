@@ -4,18 +4,32 @@ export const GlobalVariable = {
   vusu: '',
   vCod_Rol: 0,
 
-  baseUrl: "/ws_android", //PRODUCCION
-  //baseUrl: "http://192.168.1.36/ws_android", //LOCAL
+   
+  //----------------------------------------------LOCAL-----------------------------------------------
+  baseUrl: "http://192.168.1.36/ws_android", //LOCAL <- FRONT
+
+  // baseUrlProcesoTenido: "https://localhost:7093/api/", //LOCAL <- BACK
+
+
+
+  //--------------------------------------------PRODUCCION--------------------------------------------
+  //baseUrl: "/ws_android", //PRODUCCION <- FRONT 
+  
+  baseUrlProcesoTenido: "https://gestion.precotex.com:444/ubicaciones/api/", // PRODUCCION EIQ <- BACK
+  
+  
+
+
+
+  //COMPLEMENTARIOS
   //baseUrl: "http://192.168.1.36/ws_android_dev", //LOCAL
   baseUrlLocal: "/ws_local",
   //baseUrlVb: "http://192.168.5.105/publicaWs/",
   baseUrlVb: "http://192.168.1.36/publicaWs/",
   baseUrlVbTinto: "http://192.168.1.36/publicaWs2/",
-
   //Base URL BackEnd - ic.backend.precotex.web - HM
-  //baseUrlProcesoTenido: "https://localhost:7093/api/", //LOCAL
   //baseUrlProcesoTenido: "http://192.168.1.36:8062/api/",
-  baseUrlProcesoTenido: "https://gestion.precotex.com:444/ubicaciones/api/", // PRODUCCION EIQ
+
 
 
 
@@ -75,4 +89,3 @@ export const GlobalVariable = {
 
   Global_menu: {}
 }
-
