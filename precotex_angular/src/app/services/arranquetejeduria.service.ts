@@ -20,9 +20,26 @@ export class ArranquetejeduriaService {
 
   constructor(private http: HttpClient) {}
 
-  MostrarPendientes() {
+  MostrarPendientes( Num_Ot: string, Fec_Inicio, Fec_Fin) {
+
+    console.log('num_ot',Num_Ot);
+    console.log('fec_ini', Fec_Inicio);
+    console.log('fec_fin', Fec_Fin);
+
+    if (!_moment(Fec_Inicio).isValid()) {
+      Fec_Inicio = '';
+    } else {
+      Fec_Inicio = _moment(Fec_Inicio.valueOf()).format('DD/MM/YYYY');
+    }
+
+    if (!_moment(Fec_Fin).isValid()) {
+      Fec_Fin = '';
+    } else {
+      Fec_Fin = _moment(Fec_Fin.valueOf()).format('DD/MM/YYYY');
+    }
+
     return this.http.get(
-      `${this.baseUrl}/App_Muestra_Cola_Arranque_Tj.php?Cod_Usuario=${this.sCod_Usuario}`
+      `${this.baseUrl}/App_Muestra_Cola_Arranque_Tj.php?Cod_Usuario=${this.sCod_Usuario}&Num_Ot=${Num_Ot}&Fec_Inicio=${Fec_Inicio}&Fec_Fin=${Fec_Fin}`
     );
   }
 
