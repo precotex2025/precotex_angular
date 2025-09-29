@@ -289,6 +289,7 @@ export class RegistroParaMaqTinto implements OnInit {
           
           this.formulario.get('nPrBar')?.setValue(Number(result[0].Pr_Bar));
           this.formulario.get('nPrTobera')?.setValue(Number(result[0].Pr_Tobera));
+          
           this.formulario.get('nPrAcumulador')?.setValue(Number(result[0].Pr_Acumulador));
           this.formulario.get('nPrBomba')?.setValue(Number(result[0].Pr_Bomba));
           this.formulario.get('nPrVelocidad')?.setValue(Number(result[0].Pr_Velocidad));

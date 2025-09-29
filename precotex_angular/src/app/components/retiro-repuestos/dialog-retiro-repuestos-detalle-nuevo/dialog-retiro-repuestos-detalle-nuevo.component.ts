@@ -393,7 +393,7 @@ export class DialogRetiroRepuestosDetalleNuevoComponent implements OnInit {
           next: (response: any)=> {
             if(response.success){
               if (response.codeResult == 200){
-                this.onEnviarCorreo();
+                // this.onEnviarCorreo();
                 this.toastr.success(response.message, '', {
                   timeOut: 2500,
                 });
