@@ -12,6 +12,8 @@ import * as _moment from 'moment';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgxSpinnerService }  from "ngx-spinner";
 
+import { jsPDF } from 'jspdf'; 
+import html2canvas from 'html2canvas';
 import { ExceljsService } from 'src/app/services/exceljs.service';
 
 import { GlobalVariable } from 'src/app/VarGlobals';
@@ -30,8 +32,11 @@ interface data_det {
   Fec_Fin_Auditoria?: string;
   Num_Vez?: number;
   Cod_Supervisor?: string;
+  Cod_PurOrd?: string;
+  Cod_EstCli?: string;
   Flg_Estado?: string;
   Num_Packing?: number;
+  Num_SecPacking?: number;
   Peso_Caja?: number;
   Evidencia?: string;
   Cod_Modulo?: string;
@@ -40,7 +45,8 @@ interface data_det {
   Des_Cliente?: string;
   Des_Destino?: string;
   Cod_Usuario?: string;
-  Evidencia_64?: string;
+  Evidencia64?: string;
+  Detalle?: any[];
 }
 
 @Component({
@@ -59,7 +65,7 @@ export class EvidenciaEmpaqueCajaComponent implements OnInit {
   formulario = this.formBuilder.group({
     CodAuditor: [''],
     NomAuditor: [''],
-    NumPacking: [''],
+    CodPurOrd: [''],
     NumCaja: [''],
     numSemana: ['']
   });
@@ -71,6 +77,8 @@ export class EvidenciaEmpaqueCajaComponent implements OnInit {
 
   ld_fecha = new Date()
   verPdf: boolean = false;
+
+  dataEvidencia: data_det[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -94,10 +102,10 @@ export class EvidenciaEmpaqueCajaComponent implements OnInit {
   }
 
   onListarAuditoriaEmpaqueCajas(){
-    let numPacking = this.formulario.get('NumPacking').value ? this.formulario.get('NumPacking').value : 0;
+    let CodPurOrd = this.formulario.get('CodPurOrd').value ? this.formulario.get('CodPurOrd').value : '0';
 
     this.spinnerService.show();
-    this.auditoriaAcabadosService.Evidencia_AuditoriaEmpaqueCajas('L', 0, 0, numPacking, '', this.range.get('start')?.value, this.range.get('end').value, 0, '', 'S')
+    this.auditoriaAcabadosService.Evidencia_AuditoriaEmpaqueCajas('L', 0, 0, CodPurOrd, '', this.range.get('start')?.value, this.range.get('end').value, 0, '', 'S')
       .subscribe((result: any) => {
         if (result.length > 0) {     
           this.dataSource = new MatTableDataSource(result);
@@ -156,7 +164,116 @@ export class EvidenciaEmpaqueCajaComponent implements OnInit {
 
   }  
 
-  onGeneraEvidencia(){}
+  onGeneraEvidencia(){
+    let codPO = this.formulario.get('CodPurOrd').value ? this.formulario.get('CodPurOrd').value : '0';
+
+    if(codPO != '0'){
+      if(this.selection.selected.length > 0){
+        this.dataEvidencia = this.selection.selected;
+        console.log(this.dataEvidencia)
+        this.spinnerService.show();
+        this.verPdf = true;
+
+        setTimeout(() => {
+          this.generarPDF('contentToConvert');
+        }, 100);
+      }
+    } else {
+      this.matSnackBar.open("Especifique el código de P.O.!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+    }
+  }
+
+  generarPDF(seccion: string){
+    
+    //setTimeout(() => {
+      //document.getElementById('img2').setAttribute('src', this.dataReporteAuditoria[0].Path_Firma_Web_1);
+      //document.getElementById('img2').innerHTML.replace('img1', this.dataReporteAuditoria[0].Path_Firma_Web_1)
+    //}, 100);
+
+    
+    setTimeout(() => {
+      var data = document.getElementById(seccion);
+      let fecha = new Date()
+      console.log()
+      
+      let filePO = this.formulario.get('CodPurOrd').value.concat(fecha.toISOString().replace(/:/g,"-").substring(0,19)).concat('.pdf');
+
+      html2canvas(data).then(canvas => {
+        var imgWidth = 200; // 320; //200;
+        var pageHeight = 295; // 300; //590; //295;
+        var imgHeight = canvas.height * imgWidth / canvas.width;
+        
+        var contentDataURL = canvas.toDataURL('image/png',1.0)
+
+        let pdf = new jsPDF({
+          //orientation: 'L',
+          unit: 'mm',
+          format: 'a4',
+        });
+        var position = 15;
+        //var position1 = -282 //-297;
+        var position1 = -282;
+
+        var totalPages = Math.ceil(imgHeight / pageHeight - 1)
+        
+        pdf.addImage(contentDataURL, 'PNG', 5, position, imgWidth, imgHeight)
+        for (var i = 1; i <= totalPages; i++) { 
+          pdf.addPage();
+          pdf.addImage(contentDataURL, 'PNG', 5, position1, imgWidth, imgHeight);
+        }        
+
+        pdf.save(filePO); // Generated PDF
+
+        //this.verPdf = false;
+        this.spinnerService.hide();
+      });
+    }, 100);
+  }
+
+
+  generarPDF2(seccion: string){
+    const cadPDF = new Promise(resolve => {
+          let docHtml: any;
+          let lc_pdf: any;
+      
+          docHtml = document.getElementById(seccion);
+          const doc = new jsPDF('p', 'pt', 'a4', true);
+      
+          doc.html(docHtml, {
+            // Adjust your margins here (left, top, right ,bottom)
+            margin: [10, 60, 40, 60],
+            callback: function (pdf){
+              /*
+              pdf.output('save', 'filename.pdf'); //Try to save PDF as a file (not works on ie before 10, and some mobile devices)
+              pdf.output('datauristring');        //returns the data uri string
+              pdf.output('datauri');              //opens the data uri in current window
+              pdf.output('dataurlnewwindow');     //opens the data uri in new window
+              */
+              
+              //Abre PDF en nueva ventana
+              //pdf.output('dataurlnewwindow');
+    
+              //Graba en disco PDF
+              pdf.save('new-file.pdf');  
+    
+              //Genera cadena binaria. Incluye encabezado del tipo de archivo. Para PDF: "data:application/pdf;filename=generated.pdf;base64,"
+              //lc_pdf = pdf.output('datauristring');
+    
+              //Genera objeto contenedor blob.
+              //lc_pdf = pdf.output('blob');
+    
+              //Genera cadena binaria SIN encabezado del tipo de archivo.
+              //lc_pdf = btoa(pdf.output());
+              //resolve(lc_pdf);          
+            },
+          });
+    
+        });
+  }
+
+
+
+
 
   clearDate(event) {
     event.stopPropagation();
