@@ -1,0 +1,82 @@
+<mat-card class="form-container">
+  <form>
+    <!-- Hora -->
+    <mat-form-field appearance="fill">
+      <mat-label>Hora</mat-label>
+      <input matInput type="time" [(ngModel)]="formData.hora" name="hora">
+    </mat-form-field>
+
+    <!-- Sede -->
+    <label class="section-label">Sede</label>
+    <div class="button-group">
+      <button *ngFor="let sede of sedes"
+              mat-button
+              [color]="formData.sede === sede ? 'primary' : ''"
+              (click)="select('sede', sede)">
+        {{ sede }}
+      </button>
+    </div>
+
+    <!-- Área -->
+    <mat-form-field appearance="fill">
+      <mat-label>Área</mat-label>
+      <mat-select [(ngModel)]="formData.area" name="area">
+        <mat-option *ngFor="let area of areas" [value]="area">{{ area }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Especificación del lugar -->
+    <mat-form-field appearance="fill">
+      <mat-label>Especificación del lugar</mat-label>
+      <input matInput [(ngModel)]="formData.lugar" name="lugar">
+    </mat-form-field>
+
+    <!-- Clasificación de la NC -->
+    <label class="section-label">Clasificación de la NC</label>
+    <div class="button-group">
+      <button *ngFor="let clas of clasificaciones"
+              mat-button
+              [color]="formData.clasificacion === clas ? 'accent' : ''"
+              (click)="select('clasificacion', clas)">
+        {{ clas }}
+      </button>
+    </div>
+
+    <!-- Descripción de la NC -->
+    <mat-form-field appearance="fill">
+      <mat-label>Descripción de la NC</mat-label>
+      <textarea matInput rows="3" [(ngModel)]="formData.descripcion" name="descripcion"></textarea>
+    </mat-form-field>
+
+    <!-- Nivel de riesgo -->
+    <label class="section-label">Nivel de riesgo</label>
+    <div class="button-group">
+      <button *ngFor="let nivel of niveles"
+              mat-button
+              [color]="formData.riesgo === nivel ? 'warn' : ''"
+              (click)="select('riesgo', nivel)">
+        {{ nivel }}
+      </button>
+    </div>
+
+    <!-- Acción Correctiva -->
+    <mat-form-field appearance="fill">
+      <mat-label>Acción Correctiva</mat-label>
+      <input matInput [(ngModel)]="formData.accion" name="accion">
+    </mat-form-field>
+
+    <!-- Responsable -->
+    <mat-form-field appearance="fill">
+      <mat-label>Responsable de la subsanación</mat-label>
+      <mat-select [(ngModel)]="formData.responsable" name="responsable">
+        <mat-option *ngFor="let persona of responsables" [value]="persona">{{ persona }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Botones -->
+    <div class="action-buttons">
+      <button mat-raised-button color="primary">Guardar</button>
+      <button mat-button color="warn">Cancelar</button>
+    </div>
+  </form>
+</mat-card>

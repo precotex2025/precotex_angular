@@ -257,8 +257,8 @@ export class RetiroRepuestosComponent implements OnInit {
 
                 let datos = {
                   
-                  ['Fec. Aprobacion']: _moment(item.fec_Aprobacion.valueOf()).format('DD/MM/YYYY'),
-                  ['Hora Aprobacion']: item.hora_Aprobacion ,
+                  ['Fec. Apertura']: _moment(item.fec_Aprobacion.valueOf()).format('DD/MM/YYYY'),
+                  ['Hora Apertura']: item.hora_Aprobacion ,
                   ['Nom. Seguridad']: item.nom_Seguridad,
                   ['Fec. Requerimiento']: _moment(item.fec_Creacion.valueOf()).format('DD/MM/YYYY')   ,
                   ['Nom. Mantenimiento']: item.nom_Mantenimiento,

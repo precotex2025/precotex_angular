@@ -579,6 +579,9 @@ import { DialogRetiroRepuestosDetalleComponent } from './components/retiro-repue
 import { DialogRetiroRepuestosDetalleNuevoComponent } from './components/retiro-repuestos/dialog-retiro-repuestos-detalle-nuevo/dialog-retiro-repuestos-detalle-nuevo.component';
 import { DialogCapturarFotoCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-capturar-foto-caja/dialog-capturar-foto-caja.component';
 
+//REPORTE NC - SSOMA
+import { ReporteNCComponent } from './components/reporte-nc/reporte-nc.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -1081,7 +1084,10 @@ import { DialogCapturarFotoCajaComponent } from './components/auditoria-calidad/
     DialogRetiroRepuestosDetalleComponent,
     DialogRetiroRepuestosDetalleNuevoComponent,
   
-    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent 
+    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent ,
+
+    //REGISTRO DE NC
+    ReporteNCComponent
   ],
   entryComponents: [DialogJabaComponent],
   imports: [

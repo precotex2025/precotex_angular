@@ -307,6 +307,7 @@ import { LiberaOpColorComponent } from './components/auditoria-corte/libera-op-c
 import { SalidaTiendaComponent } from './components/seguridad/salida-tienda/salida-tienda.component';
 import { RetiroRepuestosComponent } from './components/retiro-repuestos/retiro-repuestos.component';
 import { DialogRetiroRepuestosComponent } from './components/retiro-repuestos/dialog-retiro-repuestos/dialog-retiro-repuestos/dialog-retiro-repuestos.component';
+import { ReporteNCComponent } from './components/reporte-nc/reporte-nc.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -665,6 +666,11 @@ const routes: Routes = [
 
   //LIBERAR OP TENDIDO
   { path: 'liberacionOP', component: LiberarOpComponent },
+
+  //REPORTE-NC SSOMA
+  {path: 'ReporteNC', component: ReporteNCComponent},
+
+
   { path:"checkListIngresoCostura", component: CheckListIngresoCosturaComponent },
   { path: "", redirectTo: "/", pathMatch: "full" },// Cuando es la raíz
   //{ path: "**", component: AuditoriaLineaCosturaComponent }

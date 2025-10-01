@@ -22,12 +22,12 @@ import { Console } from 'console';
 
 
 interface data {
-   Title: string,
-   Accion: string,
-   num_requerimiento: number,
-   nro_secuencia: number,
-   cod_Item: string,
-   des_Item: string
+  Title: string,
+  Accion: string,
+  num_requerimiento: number,
+  nro_secuencia: number,
+  cod_Item: string,
+  des_Item: string
 }
 
 @Component({
@@ -168,7 +168,7 @@ export class DialogRetiroRepuestosDetalleNuevoComponent implements OnInit {
   usarProducto(codigoProducto: string) {
 
     this.ProductosFiltrados = this.dataProductos.filter(item =>
-       item.cod_Item.includes('MA000454')
+      item.cod_Item.includes('MA000454')
       
     );
 

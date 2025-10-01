@@ -1,0 +1,81 @@
+$form-padding: 1.5rem;
+$card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+$border-radius: 12px;
+$primary-color: #1976d2;
+$accent-color: #e91e63;
+$warn-color: #f44336;
+$background-color: #f9f9f9;
+$font-family: 'Roboto', sans-serif;
+
+.form-container {
+  background-color: $background-color;
+  box-shadow: $card-shadow;
+  border-radius: $border-radius;
+  padding: $form-padding;
+  font-family: $font-family;
+  max-width: 900px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @media (max-width: 600px) {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  .section-label {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    button {
+      min-width: 120px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.03);
+      }
+
+      &.mat-primary {
+        background-color: $primary-color;
+        color: white;
+      }
+
+      &.mat-accent {
+        background-color: $accent-color;
+        color: white;
+      }
+
+      &.mat-warn {
+        background-color: $warn-color;
+        color: white;
+      }
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+
+    button {
+      min-width: 120px;
+      border-radius: 8px;
+    }
+  }
+}
