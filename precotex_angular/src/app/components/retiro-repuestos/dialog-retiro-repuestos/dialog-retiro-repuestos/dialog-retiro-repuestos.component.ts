@@ -2,19 +2,22 @@ import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GlobalVariable } from 'src/app/VarGlobals';
-import { RetiroRepuestosService } from 'src/app/services/RetiroRepuestos/retiro-repuestos.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSelectChange } from '@angular/material/select';
-import Swal from 'sweetalert2';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
-import { DialogRetiroRepuestosDetalleComponent } from '../../dialog-retiro-repuestos-detalle/dialog-retiro-repuestos-detalle.component';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import Swal from 'sweetalert2';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+
+
+import { RetiroRepuestosService } from 'src/app/services/RetiroRepuestos/retiro-repuestos.service';
+import { DialogRetiroRepuestosDetalleComponent } from '../../dialog-retiro-repuestos-detalle/dialog-retiro-repuestos-detalle.component';
+
 
 interface data{
   Title: string,

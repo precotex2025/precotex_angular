@@ -1,0 +1,70 @@
+    <div class="listado-container">
+    <!-- Encabezado -->
+    <div class="listado-header">
+        <button mat-raised-button color="primary" class="nuevo-btn" (click)="RegistrarNC()">Nuevo</button>
+        <!-- <span class="titulo">Listado de Reportes NC</span> -->
+        <button mat-button class="dashboard-btn">Dashboard</button>
+    </div>
+
+    <!-- Tabla de reportes -->
+    <div class="tabla-responsive">
+        <table mat-table [dataSource]="reportes" class="mat-elevation-z1">
+
+        <!-- Identificación -->
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> Identificación </th>
+            <td mat-cell *matCellDef="let reporte"> {{ reporte.id }} </td>
+        </ng-container>
+
+        <!-- Reportado Por -->
+        <ng-container matColumnDef="reportadoPor">
+            <th mat-header-cell *matHeaderCellDef> Reportado Por </th>
+            <td mat-cell *matCellDef="let reporte"> {{ reporte.reportadoPor }} </td>
+        </ng-container>
+
+        <!-- Fecha Observación -->
+        <ng-container matColumnDef="fechaObservacion">
+            <th mat-header-cell *matHeaderCellDef> Fecha Observación </th>
+            <td mat-cell *matCellDef="let reporte"> {{ reporte.fechaObservacion }} </td>
+        </ng-container>
+
+        <!-- Responsable -->
+        <ng-container matColumnDef="responsable">
+            <th mat-header-cell *matHeaderCellDef> Responsable </th>
+            <td mat-cell *matCellDef="let reporte"> {{ reporte.responsable }} </td>
+        </ng-container>
+
+        <!-- Estado -->
+        <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef> Estado </th>
+            <td mat-cell *matCellDef="let reporte"> {{ reporte.estado }} </td>
+        </ng-container>
+
+        <!-- Fecha Subsanación -->
+        <ng-container matColumnDef="fechaSubsanacion">
+            <th mat-header-cell *matHeaderCellDef> Fecha Subsanación </th>
+            <td mat-cell *matCellDef="let reporte"> {{ reporte.fechaSubsanacion }} </td>
+        </ng-container>
+
+        <!-- Acción -->
+        <ng-container matColumnDef="accion">
+            <th mat-header-cell *matHeaderCellDef> Acción </th>
+            <td mat-cell *matCellDef="let reporte">
+            <button mat-icon-button color="primary" (click)="ver(reporte)">
+                <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button color="accent" (click)="editar(reporte)">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="eliminar(reporte)">
+                <mat-icon>delete</mat-icon>
+            </button>
+            </td>
+        </ng-container>
+
+        <!-- Renderizado de columnas -->
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+        </table>
+    </div>
+    </div>

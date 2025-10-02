@@ -581,6 +581,8 @@ import { DialogCapturarFotoCajaComponent } from './components/auditoria-calidad/
 
 //REPORTE NC - SSOMA
 import { ReporteNCComponent } from './components/reporte-nc/reporte-nc.component';
+import { ReporteNcResolvedorComponent } from './components/reporte-nc/reporte-nc-resolvedor/reporte-nc-resolvedor.component';
+import { ReporteNcLstComponent } from './components/reporte-nc/reporte-nc-lst/reporte-nc-lst.component';
 
 @NgModule({
   declarations: [
@@ -1087,7 +1089,9 @@ import { ReporteNCComponent } from './components/reporte-nc/reporte-nc.component
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent ,
 
     //REGISTRO DE NC
-    ReporteNCComponent
+    ReporteNCComponent,
+    ReporteNcResolvedorComponent,
+    ReporteNcLstComponent
   ],
   entryComponents: [DialogJabaComponent],
   imports: [

@@ -308,6 +308,8 @@ import { SalidaTiendaComponent } from './components/seguridad/salida-tienda/sali
 import { RetiroRepuestosComponent } from './components/retiro-repuestos/retiro-repuestos.component';
 import { DialogRetiroRepuestosComponent } from './components/retiro-repuestos/dialog-retiro-repuestos/dialog-retiro-repuestos/dialog-retiro-repuestos.component';
 import { ReporteNCComponent } from './components/reporte-nc/reporte-nc.component';
+import { ReporteNcResolvedorComponent } from './components/reporte-nc/reporte-nc-resolvedor/reporte-nc-resolvedor.component';
+import { ReporteNcLstComponent } from './components/reporte-nc/reporte-nc-lst/reporte-nc-lst.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -669,6 +671,8 @@ const routes: Routes = [
 
   //REPORTE-NC SSOMA
   {path: 'ReporteNC', component: ReporteNCComponent},
+  {path: 'ReporteNCResolvedor', component: ReporteNcResolvedorComponent},
+  {path: 'ReporteNCListado', component: ReporteNcLstComponent},
 
 
   { path:"checkListIngresoCostura", component: CheckListIngresoCosturaComponent },
