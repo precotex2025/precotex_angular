@@ -18,6 +18,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ModalInformeCierreComponent } from './modal-informe-cierre/modal-informe-cierre.component';
 import { _ } from 'ag-grid-community';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ExceljsService } from 'src/app/services/exceljs.service';
 
 @Component({
   selector: 'app-quejas-reclamos',
@@ -34,11 +35,13 @@ export class QuejasReclamosComponent implements OnInit {
   //estados: Estados[] = [];
   estados: EstadosOficial[] = [];
   tipoRegistro: Estados[] = [];
+  tipoRegistroCopia: any[] = [];
   unidadNegocio: UnidadNegocio[] = [];
   responsable: UsuarioResponsable[] = [];
   filtro: any[] = [];
   motivoReclamo: MotivoReclamo[] = [];
   unidadNegocio2: UnidadNegocio2[] = [];
+  unidadNegocioFiltro: UnidadNegocio2[] = [];
 
   ActivarFormulario: boolean = true;
   esNuvoReclamo: boolean = true; // o false, según lo que necesites
@@ -62,7 +65,11 @@ export class QuejasReclamosComponent implements OnInit {
   idReclamo: number = 0;
   codArea: string = ""; //01 - Comercial; 02 - Calidad
 
-  dataExportar: any[] = [];
+  dataExportar    : any[] = [];
+
+  dataListadoReclamosExportar: Array<any> = []; 
+  dataForExcel    : any = [];
+  dataSourceExcel : any = [];   
 
   constructor(
       private registroQuejasReclamosService: RegistroQuejasReclamosService,
@@ -70,29 +77,31 @@ export class QuejasReclamosComponent implements OnInit {
       private dialog            : MatDialog ,
       private toastr            : ToastrService          ,
       private SpinnerService    : NgxSpinnerService                ,
+      private exceljsService    : ExceljsService
     ) { }
 
   ngOnInit(): void {
-    this.onObtieneUsuarioArea(this.sCodTrabajador);
-    this.buscar();
 
     const fechaHoy = new Date();
-
     const primerDiaMes = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth(), 1);
-    this.nuevoReclamo.fechaInicio = this.formatearFecha(primerDiaMes);
-
     const lastDay = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth() + 1, 0); // último día del mes actual
+    
+    this.nuevoReclamo.fechaInicio = this.formatearFecha(primerDiaMes);
     this.nuevoReclamo = {
       ...this.nuevoReclamo,
       fechaFin: lastDay.toISOString().substring(0, 10) // formato YYYY-MM-DD
     };
 
+    this.buscar();
+    this.onObtieneUsuarioArea(this.sCodTrabajador);
+
     /*REEMPLAZADO POR NUEVOS ESTADO*/ 
-    
     this.registroQuejasReclamosService.obtenerEstados().subscribe({
       next: (response) => {
+        console.log('registroQuejasReclamosService', response.elements);
         //this.estados = response.elements.filter((estado: any) => estado.acronimo === 'EQ');
         this.tipoRegistro = response.elements.filter((tipo: any) => tipo.acronimo === 'US');
+        this.tipoRegistroCopia = [...this.tipoRegistro]; // copia para mostrar
       },
       error: (err) => {
         console.error('Error al obtener Estados', err);
@@ -118,8 +127,6 @@ export class QuejasReclamosComponent implements OnInit {
       }
     });  
 
-
-
     this.registroQuejasReclamosService.obtenerUsuarioResponsable().subscribe({
       next: (response) => {
         this.responsable = response.elements;
@@ -129,6 +136,17 @@ export class QuejasReclamosComponent implements OnInit {
         console.error('Error al obtenerUsuarioResponsable', err);
       }
     });
+
+    this.registroQuejasReclamosService.ListaUnidadNegocio().subscribe({
+      next: (response) => {
+        this.unidadNegocioFiltro = response.elements;
+        this.nuevoReclamo.cod_Unidad_Negocio = null;
+      },
+      error: (err) => {
+        console.error('Error al obtener Unidad Negocio', err);
+      }
+    });    
+
   }
 
   archivoAdjuntoSeleccionado: File | null = null;
@@ -169,16 +187,14 @@ export class QuejasReclamosComponent implements OnInit {
   }
 
   agregarReclamo() {
-    console.log("agregarReclamo inicio" + this.nuevoReclamo.motivoRegistro);
-    console.log(this.clientesFiltrados);
-
-
 
     if(!this.nuevoReclamo.cadenaCodOrdtra){
        this.mostrarAdvertencia('⚠ Atención: Ingrese datos de Partidas.');
        return;
     }
 
+    console.log('this.tipoRegistroCopia', this.tipoRegistroCopia);
+    console.log('this.nuevoReclamo.tipoRegistro', this.nuevoReclamo.tipoRegistro);
 
     //Recorrer los Articulos Seleccionados
     if (1==1) {
@@ -186,22 +202,33 @@ export class QuejasReclamosComponent implements OnInit {
       console.log('this.arrayArticulos-element', element);
       //debugger;
 
-      let codTela = String(element.cod_Tela);
-      let desTela = String(element.des_Tela);
-      let codColor = String(element.cod_Color);
-      let desColor = String(element.des_Color);
+      let codTela      = String(element.cod_Tela) ;
+      let desTela      = String(element.des_Tela) ;
+      let codColor     = String(element.cod_Color);
+      let desColor     = String(element.des_Color);
       let numSecuencia = Number(element.num_Secuencia);
+
+      //Area
+      const area  = this.responsable.filter((item: any) => item.idArea === String(this.nuevoReclamo.responsable));
+      const sDesArea = area ? area[0].nombreArea : '';
+
+      //Responsable
+      const userAsignado = this.tipoRegistroCopia.filter((item: any) => item.idEstado === String(this.nuevoReclamo.tipoRegistro))
+      const sDesUserAsignado = userAsignado ? userAsignado[0].estado: '';
 
       const reclamoReg: ReclamoCliente = {
         id: 0,
         cliente: this.nuevoReclamo.cliente,
-        tipoRegistro: this.nuevoReclamo.tipoRegistro,
-        responsable: this.nuevoReclamo.responsable,
-        estadoSolicitud: this.nuevoReclamo.estadoSolicitud || 'Abierto',
-        observacion: this.nuevoReclamo.observacion || '',
-        unidadNegocio: this.nuevoReclamo.unidadNegocio,
-        motivoRegistro: this.nuevoReclamo.motivoRegistro,
-        usuarioRegistro: this.sCod_Usuario,
+
+        
+        tipoRegistro: sDesUserAsignado,//this.nuevoReclamo.tipoRegistro, //tmr este weon  crea variables atorrantes --> Tipo de Area no es?
+        responsable: sDesArea,//this.nuevoReclamo.responsable,
+        
+        estadoSolicitud : this.nuevoReclamo.estadoSolicitud || 'Abierto',
+        observacion     : this.nuevoReclamo.observacion || '',
+        unidadNegocio   : this.nuevoReclamo.unidadNegocio,
+        motivoRegistro  : this.nuevoReclamo.motivoRegistro,
+        usuarioRegistro : this.sCod_Usuario,
 
         //Campos Nuevos
         cadenaCodOrdtra : '',
@@ -215,6 +242,8 @@ export class QuejasReclamosComponent implements OnInit {
         des_Unidad_Negocio  : this.nuevoReclamo.des_Unidad_Negocio,//cuando tegresoses mostrar la descripcion da la unidad de negocio.
         cod_Cliente_Tex     : this.nuevoReclamo.cod_Cliente_Tex,
         cod_Motivo          : this.nuevoReclamo.cod_Motivo,
+        idArea              : Number(this.nuevoReclamo.responsable),
+        idResponsable       : Number(this.nuevoReclamo.tipoRegistro)
       };
       this.reclamos.push(reclamoReg);
       this.esNuvoReclamo = true;
@@ -302,6 +331,8 @@ export class QuejasReclamosComponent implements OnInit {
 
     const formData = new FormData();
     console.log('guardar this.reclamos',this.reclamos);
+    console.log('guardar this.nuevoReclamo',this.nuevoReclamo);
+
     this.reclamos.forEach((reclamo, index) => {
 
       //CAMBIAMOS VALORES  
@@ -310,6 +341,9 @@ export class QuejasReclamosComponent implements OnInit {
       let sUsuarioResponsable : string;
       let sObservacion        : string;
       let sCodUnidadNegocio   : string;
+       
+      let iIdArea         : number;
+      let iIdResponsable  : number;
 
       //sirve solo cuando esta en MODO de EDICIÓN
       if (!this.esNuvoReclamo) {
@@ -318,33 +352,35 @@ export class QuejasReclamosComponent implements OnInit {
           ? this.nuevoReclamo.cod_Motivo
           : reclamo.cod_Motivo;
 
-        //2. Area Responsable
-        sUsuarioResponsable = (this.nuevoReclamo.tipoRegistro !== reclamo.tipoRegistro)
-          ? this.nuevoReclamo.tipoRegistro
-          : reclamo.tipoRegistro
-
-        //3. Usuario Responsable
-        sAreaResponsable = (this.nuevoReclamo.responsable !== reclamo.responsable)
+        //2. Codigo Area Responsable
+        iIdArea = (this.nuevoReclamo.responsable !== reclamo.idArea)
           ? this.nuevoReclamo.responsable
-          : reclamo.responsable          
+          : reclamo.idArea;
+        
+        //3. Codigo Usuario Responsable
+        iIdResponsable = (this.nuevoReclamo.tipoRegistro !== reclamo.idResponsable)
+          ? this.nuevoReclamo.tipoRegistro
+          : reclamo.idResponsable;        
 
         //4. Observación
         sObservacion = (this.nuevoReclamo.observacion !== reclamo.observacion)
           ? this.nuevoReclamo.observacion
-          : reclamo.observacion     
+          : reclamo.observacion;    
         
         //5. Cod Unidad Negocios
         sCodUnidadNegocio = String(this.nuevoReclamo.cod_Unidad_Negocio);
 
+        console.log('guardar idArea', iIdArea);
+        console.log('guardar idResponsable', iIdResponsable);
+
 
       } else {
         sCodMotivoFinal = reclamo.cod_Motivo;
-        sAreaResponsable = reclamo.responsable;
-        sUsuarioResponsable = reclamo.tipoRegistro;
+        iIdArea = reclamo.idArea;
+        iIdResponsable = reclamo.idResponsable;
         sObservacion = reclamo.observacion;
         sCodUnidadNegocio = reclamo.cod_Unidad_Negocio;
-      }      
-      console.log('sAreaResponsable', sAreaResponsable);
+      }    
 
       formData.append(`reclamos[${index}][id]`, reclamo.id);
       formData.append(`reclamos[${index}][nroCaso]`, reclamo.nroCaso);
@@ -373,6 +409,12 @@ export class QuejasReclamosComponent implements OnInit {
       //formData.append(`reclamos[${index}][cod_Unidad_Negocio]`, this.nuevoReclamo.cod_Unidad_Negocio);
       formData.append(`reclamos[${index}][cod_Motivo]`        , sCodMotivoFinal);
       //formData.append(`reclamos[${index}][cod_Motivo]`        , reclamo.cod_Motivo);
+
+      formData.append(`reclamos[${index}][idArea]`        , String(iIdArea));
+      formData.append(`reclamos[${index}][idResponsable]`        , String(iIdResponsable));
+      //Falta Pasar el Area y responsable asignarle el valor.
+
+
     });
     this.registroQuejasReclamosService.enviarReclamo(formData).subscribe({
       next: () => {
@@ -398,20 +440,34 @@ export class QuejasReclamosComponent implements OnInit {
 
     console.log('buscar-obtenerReclamos', this.nuevoReclamo);
 
+    this.SpinnerService.show();
     this.registroQuejasReclamosService.obtenerReclamos(this.nuevoReclamo).subscribe({
       next: (resp) => {
         if (resp.success) {
-          this.filtro = resp.elements;
-          console.log('obtenerReclamos:', this.filtro);
+          if (resp.totalElements > 0){
+            this.filtro = resp.elements;
+            console.log('obtenerReclamos:', this.filtro);
+            this.SpinnerService.hide();
+          }
+          else{
+            this.filtro = [];
+            console.warn('No se encontraron datos.');
+            this.SpinnerService.hide();
+          };
+
+
         } else {
+          this.filtro = [];
           console.warn('No se encontraron datos.');
+          this.SpinnerService.hide();
         }
       },
       error: (err) => {
+        this.filtro = [];
         console.error('Error al buscar reclamos:', err);
+        this.SpinnerService.hide();
       }
     });
-
   }
 
   nuevo(){
@@ -513,8 +569,9 @@ export class QuejasReclamosComponent implements OnInit {
 
     this.registroQuejasReclamosService.obtenerMotivoReclamo().subscribe({
       next: (response) => {
-        this.motivoReclamo = response.elements;
-        console.log('motivoReclamo:', this.motivoReclamo);
+        this.motivoReclamo    = response.elements;
+        this.motivoFiltrados  = this.motivoReclamo;
+        //console.log('motivoReclamo:', this.motivoReclamo);
       },
       error: (err) => {
         console.error('Error al obtener motivoReclamo', err);
@@ -534,13 +591,7 @@ export class QuejasReclamosComponent implements OnInit {
 
   editar(item: any) {
 
-    console.log('item editar', item);
-
     this.nuevoReclamo = { ...item }; // Copia los datos del reclamo seleccionado
-
-    console.log('nuevo rewclamo - editar', this.nuevoReclamo);
-
-
 
     forkJoin({
       cliente: this.registroQuejasReclamosService.obtenerClientes(),
@@ -553,20 +604,28 @@ export class QuejasReclamosComponent implements OnInit {
         this.clientes        = cliente.elements;
         this.unidadNegocio2  = unidadNegocio.elements;
         this.motivoReclamo   = motivo.elements;
+        this.motivoFiltrados  = this.motivoReclamo;
         this.reclamos        = reclamos.elements;
 
-        console.log('');
-        console.log('reclamos', reclamos);
         this.clientes.filter(item => item.cod_Cliente_Tex == String(reclamos.elements[0].cod_Cliente_Tex));
 
         //Mostrar los datos a mostrar
         this.nuevoReclamo.cod_Ordtra          = String(reclamos.elements[0].cod_Ordtra);  
-        this.nuevoReclamo.cod_Cliente_Tex             = String(reclamos.elements[0].cod_Cliente_Tex);
+        this.nuevoReclamo.cod_Cliente_Tex     = String(reclamos.elements[0].cod_Cliente_Tex);
         this.nuevoReclamo.cod_Unidad_Negocio  = String(reclamos.elements[0].id_Unidad_NegocioKey);
         this.nuevoReclamo.cod_Motivo          = String(reclamos.elements[0].cod_Motivo);
-        this.nuevoReclamo.responsable         = String(reclamos.elements[0].responsable);
         this.nuevoReclamo.observacion         = String(reclamos.elements[0].observacion);
-        this.nuevoReclamo.tipoRegistro        = String(reclamos.elements[0].tipoRegistro);
+
+        //console.log('this.responsable', this.responsable);
+        this.nuevoReclamo.responsable         = String(reclamos.elements[0].idArea);  
+        
+        //Carga Usuarios responsables
+        const _idArea = Number(reclamos.elements[0].idArea);
+        this.tipoRegistroCopia = this.tipoRegistro.filter((tipo: any) =>
+           tipo.acronimo === 'US' && tipo.idArea === _idArea
+         );        
+        this.tipoRegistroCopia = this.tipoRegistroCopia;
+        this.nuevoReclamo.tipoRegistro =  reclamos.elements[0].idResponsable;
 
         // Suponiendo que solo es un reclamo para editar: 
         /*
@@ -578,8 +637,6 @@ export class QuejasReclamosComponent implements OnInit {
           this.nuevoReclamo.unidadNegocio = reclamo.unidadNegocio;
         }
         */
-
-        console.log('Unidad seleccionada:', this.nuevoReclamo.cod_Unidad_Negocio);
       },
       error: (err) => {
         console.error('Error al obtener datos:', err);
@@ -624,8 +681,6 @@ export class QuejasReclamosComponent implements OnInit {
     this.registroQuejasReclamosService.obtenerUsuarioResponsable().subscribe({
       next: (response) => {
         this.responsable = response.elements;
-
-        console.log('obtenerUsuarioResponsable:', this.responsable);
       },
       error: (err) => {
         console.error('Error al obtener clientes', err);
@@ -638,10 +693,6 @@ export class QuejasReclamosComponent implements OnInit {
       this.avanzaEstadoReclamo(item.id);
       this.nuevoReclamo.cod_Estado = '02'; //Cambia el estado a 02 porque el area de calidad ingreso y lo toma como recepcionado
     }
-    console.log('cod_area', this.codArea);
-
-  
-    
 
     this.ActivarFormulario = false;   // Asegura que el formulario esté visible
     this.esNuvoReclamo = false;
@@ -659,7 +710,6 @@ export class QuejasReclamosComponent implements OnInit {
   }
 
   informe(item: any){
-    console.log('modal informe', item);
     const dialogRef = this.dialog.open(ModalInformeComponent, {
       width: '550px',
       data: {
@@ -673,7 +723,6 @@ export class QuejasReclamosComponent implements OnInit {
   }
 
   cerrarCaso(item: any){
-    console.log('modal informe', item);
     const dialogRef = this.dialog.open(ModalInformeCierreComponent, {
       width: '450px',
       data: {
@@ -784,28 +833,21 @@ export class QuejasReclamosComponent implements OnInit {
     );
   }
 
-  actualizarClienteDesdeInput() {
-    const coincidencia = this.clientes.find(c =>
-      c.nom_Cliente.toLowerCase().includes(this.clienteInput.toLowerCase())
-    );
+  filtrarMotivos() {
+    const texto = this.motivoInput.toLowerCase();
 
-    if (coincidencia) {
-      this.nuevoReclamo.cliente = coincidencia.nom_Cliente;
-    } else {
-      this.nuevoReclamo.cliente = ''; // o mantener el último válido
-    }
+    this.motivoFiltrados = this.motivoReclamo.filter(c =>
+      c.descripcion.toLowerCase().includes(texto) ||
+      c.cod_Motivo.toLowerCase().includes(texto)
+    );
   }
 
-  actualizarMotivoDesdeInput() {
-    const coincidencia = this.motivoReclamo.find(c =>
-      c.descripcion.toLowerCase().includes(this.motivoInput.toLowerCase())
-    );
+  actualizarDescripcionMotivo(codMotivo: string) {
 
-    if (coincidencia) {
-      this.nuevoReclamo.motivoRegistro = coincidencia.descripcion;
-    } else {
-      this.nuevoReclamo.motivoRegistro = ''; // o mantener el último válido
-    }
+      const motivo = this.motivoReclamo.find(c => c.cod_Motivo === codMotivo);
+      if (motivo) {
+        this.nuevoReclamo.motivoRegistro = motivo.descripcion;
+      }
   }
 
   /* NUEVOS METODOS */
@@ -826,7 +868,7 @@ export class QuejasReclamosComponent implements OnInit {
           dialogRef.afterClosed().subscribe(result => {
 
             if (result){
-              console.log('result', result);
+
               //Agregamos la lista obtenida a nuestro array
               this.arrayArticulos.push(...result);
 
@@ -846,9 +888,6 @@ export class QuejasReclamosComponent implements OnInit {
               console.log('cliente', result[0].cod_Cliente_Tex);
               this.nuevoReclamo.cod_Cliente_Tex = result[0].cod_Cliente_Tex;
               //Falta Obtenerla Unidad de Medida
-
-              
-              console.log('this.arrayArticulos', this.arrayArticulos);
 
             }
       
@@ -920,7 +959,6 @@ export class QuejasReclamosComponent implements OnInit {
 // }  
 
 avanzaEstadoReclamo(id: Number){
-  console.log('obtuve el ID', id);
       this.SpinnerService.show();
       this.registroQuejasReclamosService.AvanzaEstadoReclamo(Number(id)).subscribe({
         next: (response: any) => {
@@ -953,11 +991,11 @@ avanzaEstadoReclamo(id: Number){
       }); 
 }
 
-actualizarDescripcionMotivo(codigo: string): void {
-  const motivo = this.motivoReclamo.find(m => m.cod_Motivo === codigo);
-  this.nuevoReclamo.cod_Motivo = codigo;
-  this.nuevoReclamo.motivoRegistro = motivo ? motivo.descripcion : '';
-}  
+// actualizarDescripcionMotivo(codigo: string): void {
+//   const motivo = this.motivoReclamo.find(m => m.cod_Motivo === codigo);
+//   this.nuevoReclamo.cod_Motivo = codigo;
+//   this.nuevoReclamo.motivoRegistro = motivo ? motivo.descripcion : '';
+// }  
 
 mostrarAdvertencia(mensaje: string) {
   this.matSnackBar.open(mensaje, 'Cerrar', {
@@ -1035,55 +1073,126 @@ mostrarBotonEliminar(item: any): boolean {
 getExportarExcel(){
 
   this.SpinnerService.show();
-  this.registroQuejasReclamosService.ExportarReclamo(this.nuevoReclamo).subscribe(
-    (result: any) => {
-      if (result.totalElements > 0) {
-        this.dataExportar = result.elements;
+  this.dataExportar = [];
 
-        console.log('getExportarExcel', result.elements);
+  this.registroQuejasReclamosService.ExportarReclamo(this.nuevoReclamo).subscribe({
 
-        /**************EXPORTAR EXCEL ***************/
-        
-        const dataExport = this.dataExportar.map(item => ({
+      next: (response: any)=> {
+        if(response.success){
+          if (response.totalElements > 0){
+            this.dataExportar = response.elements;
 
-                    'NRO. CASO':item.nroCaso,					
-                      'FCH. REG.':item.fechaRegistro,			
-                      'UNIDAD DE NEGOCIO ':item.nombreUnidadNegocio,		
-                      'PARTIDA':item.cod_Ordtra,				
-                      'CLIENTE':item.cliente,					
-                      'TELA':item.cod_Tela,				
-                      'DESCRIPCION TELA ':item.des_Tela,			
-                      'COLOR ':item.cod_Color,				
-                      'DESCRIPCION COLOR ':item.des_Color,				
-                      'KGR ASIGNADOS':item.kgr_Asignados,			
-                      'N° ROLLOS DESPACHADOS':item.nro_Rollos_Despachados,	
-                      'OCOMPRA':item.orden_Compra,			
-                      'ÁREA RESPONSABLE':item.area_Responsable,		
-                      'USUARIO RESPONSABLE':item.usuario_Responsable,		
-                      'MOTIVO DEL RECLAMO':item.motivoReclamo,			
-                      'OBSERVACION':item.observacion,				
-                      'ESTADO SOLICITUD':item.estado,					
-                      'CONSECUENCIA PRINCIPAL':item.consecuencia_Principal,	
-                      'SUBTIPO DE DEVOLUCION':item.tipo_Devolucion,			
-                      'NOTA DE CREDITO':item.nota_Credito			
-        }));
-        
-        const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataExport);
-        const workbook: XLSX.WorkBook = { Sheets: { 'Reclamos': worksheet }, SheetNames: ['Reclamos'] };
-        const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+            //Exportar a Excel
+            this.CreateExcel(this.dataExportar);
 
-        const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-        FileSaver.saveAs(data, 'reclamos.xlsx');        
+            //console.log('data de exportar', this.dataListadoMemorandumsExportar);
+            //this.SpinnerService.hide();
+          }
+          else{
+            this.dataExportar = [];         
+            this.SpinnerService.hide();
+          };
+        }else{
+          this.dataExportar = [];
+        }
+      },  
+      error: (error) => {
         this.SpinnerService.hide();
-      }
-      else {
+        console.log(error.error.message, 'Cerrar', {
+        timeOut: 2500,
+         });
+      }       
+  });
+}
+
+
+CreateExcel(dataListadoReclamosExportar: any){
+
+    this.dataForExcel = [];
+    this.dataSourceExcel = [];    
+
+    if (dataListadoReclamosExportar.length > 0) {
+      dataListadoReclamosExportar.forEach((item: any) => {
+
+        let fechaRegistro = this.formatearFechaValida(item.fechaRegistro);
+
+        let datos = {
+          ['# Caso']: item.nroCaso,
+          ['Fch Reg']: fechaRegistro,
+          ['Unidad Negocio']: item.nombreUnidadNegocio,
+          ['Partida']: item.cod_Ordtra,
+          ['Cliente']: item.cliente,
+          ['Cod Tela']: item.cod_Tela,
+          ['Tela']: item.des_Tela,
+          ['Cod Color']: item.cod_Color,
+          ['Color']: item.cod_Color,        
+          ['Krg. Asig.']: item.kgr_Asignados,    
+          ['# Rollos']: item.nro_Rollos_Despachados,    
+          ['O. Compra']: item.orden_Compra,  
+          ['Area Responsable']: item.area_Responsable,  
+          ['Usuario Responsable']: item.usuario_Responsable,  
+          ['Motivo Reclamo']: item.motivoReclamo,
+          ['Observación']: item.observacion,  
+          ['Estado Reclamo']: item.estado,  
+          ['Consecuencia']: item.consecuencia_Principal,  
+          ['SubTipo']: item.tipo_Devolucion,  
+          ['Nota de Credito']: item.nota_Credito,  
+        };        
+        this.dataForExcel.push(datos);
+      });
+
+      if (this.dataForExcel.length > 0) {
+        this.dataForExcel.forEach((row: any) => {
+          this.dataSourceExcel.push(Object.values(row))
+        })
+
+        let reportData = {
+          title: 'REPORTE GENERAL DE QUEJAS Y RECLAMOS',
+          data: this.dataSourceExcel,
+          headers: Object.keys(this.dataForExcel[0])
+        }
+        this.exceljsService.exportExcelQuejasReclamosGral(reportData);
+        
+      } else {
         this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
         this.SpinnerService.hide();
-      }
-    },
-    (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
-      duration: 1500,
-    }))
-    this.SpinnerService.hide();       
+      }     
+
+    } else {
+      this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+      this.SpinnerService.hide();
+    }       
+      
+
+      this.SpinnerService.hide();    
+
+    }    
+
+  formatearFechaValida(fecha: string): string {
+    if (!fecha || fecha.startsWith('1900-01-01T00:00:00')) {
+      return '';
+    }
+
+    const f = new Date(fecha);
+
+    const dia = f.getDate().toString().padStart(2, '0');
+    const mes = (f.getMonth() + 1).toString().padStart(2, '0'); // Mes empieza en 0
+    const anio = f.getFullYear();
+
+    const horas = f.getHours().toString().padStart(2, '0');
+    const minutos = f.getMinutes().toString().padStart(2, '0');
+
+    return `${dia}/${mes}/${anio} ${horas}:${minutos}`;
   }
+  
+  onSelectArea (){
+    if (this.nuevoReclamo.responsable) {
+
+      const _idArea = Number(this.nuevoReclamo.responsable);
+      this.tipoRegistroCopia = this.tipoRegistro.filter((tipo: any) =>
+        tipo.acronimo === 'US' && tipo.idArea === _idArea
+      );
+    }
+  }  
+
 }

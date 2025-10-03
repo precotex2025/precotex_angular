@@ -31,6 +31,15 @@
       </div>
 
       <div>
+        
+     
+        <label for="clienteSelect">Seleccione Unidad Negocio</label>
+        <select id="clienteSelect" [(ngModel)]="nuevoReclamo.cod_Unidad_Negocio">
+          <option *ngFor="let c of unidadNegocioFiltro" [value]="c.cod_Unidad_Negocio"> {{ c.des_Unidad_Negocio }}</option>
+        </select>  
+      </div>
+
+      <div>
         <!-- <label for="clienteSelect">Seleccione Estado Solicitud</label>
         <select id="clienteSelect" [(ngModel)]="nuevoReclamo.estadoSolicitud" (change)="reiniciarEstado()">
           <option *ngFor="let c of estados" [value]="c.cod_Estado"> {{ c.nombre_Estado }}</option>
@@ -78,8 +87,9 @@
     <tbody>
       <tr *ngFor="let item of filtro | paginate: { itemsPerPage: itemsPorPagina, currentPage: currentPage }">
         <td>{{ item.nroCaso }}</td>
-        <td>{{ item.fechaRegistro | date: 'yyyy-MM-dd' }}</td>
-        <td>{{ item.cliente?.toLowerCase() }}</td>
+        <td>{{ item.fechaRegistro | date: 'dd/MM/yyyy' }}</td>
+        <!-- <td>{{ item.cliente?.toLowerCase() }}</td> -->
+        <td>{{ item.cliente }}</td>
         <td>{{ item.tipoRegistro }}</td>
         <td>{{ item.usuarioRegistro }}</td>
         <td>{{ item.estadoSolicitud }}</td>
@@ -172,9 +182,9 @@
     
     <div>
       <label for="clienteSelect">Area responsable</label>
-      <select id="clienteSelect" [(ngModel)]="nuevoReclamo.responsable">
+      <select id="clienteSelect" [(ngModel)]="nuevoReclamo.responsable" (change)="onSelectArea()">
         <!--<option value="" disabled selected>Seleccione responsable</option>   Opción por defecto -->
-        <option *ngFor="let c of responsable" [value]="c.nombreArea">{{ c.nombreArea }}</option>
+        <option *ngFor="let c of responsable" [value]="c.idArea">{{ c.nombreArea }}</option>
       </select>
     </div>      
 
@@ -182,7 +192,7 @@
       <label for="clienteSelect">Usuario responsable</label>
       <select id="clienteSelect" [(ngModel)]="nuevoReclamo.tipoRegistro">
         <!--<option value="" disabled selected>Seleccione tipo Registro</option>   Opción por defecto -->
-        <option *ngFor="let c of tipoRegistro" [value]="c.estado">{{ c.estado }}</option>
+        <option *ngFor="let c of tipoRegistroCopia" [value]="c.idEstado">{{ c.estado }}</option>
       </select>
     </div>
 
@@ -195,28 +205,21 @@
     </div> -->
 
 
-          <div>
+      <div>
         <label for="clienteInput">Seleccione Motivo</label>
         <input
           id="motivoInput"
           type="text"
           [(ngModel)]="motivoInput"
-          (input)="actualizarMotivoDesdeInput()"
+          (input)="filtrarMotivos()"
           placeholder="Buscar motivo..."
         />
 
-        <!-- <select [(ngModel)]="nuevoReclamo.motivoRegistro">
-          <option *ngFor="let c of motivoReclamo" [value]="c.descripcion">
-            {{ c.cod_Unidad_Negocio }} - {{ c.descripcion }}
-          </option>
-        </select> -->
-
         <select [(ngModel)]="nuevoReclamo.cod_Motivo" (ngModelChange)="actualizarDescripcionMotivo($event)">
-          <option *ngFor="let c of motivoReclamo" [value]="c.cod_Motivo">
-            {{ c.descripcion }}
+          <option *ngFor="let c of motivoFiltrados" [value]="c.cod_Motivo">
+            {{ c.cod_Motivo }} - {{ c.descripcion }}
           </option>
         </select>        
-        
       </div>
  
 
@@ -269,7 +272,7 @@
         <!-- <td>{{ reclamo.unidadNegocio }}</td> -->
         <td>{{ reclamo.usuarioRegistro }}</td>
         <td>{{ reclamo.responsable }}</td>
-        <td>{{ reclamo.motivoRegistro }}</td>
+        <td>{{ reclamo.cod_Motivo + ' - ' + reclamo.motivoRegistro }}</td>
         <td>{{ reclamo.estadoSolicitud }}</td>
         <td>{{ reclamo.observacion }}</td>
 

@@ -16,17 +16,21 @@ export interface ReclamoCliente {
   cadenaCodOrdtra: string;
     
   //Nuevos Campos
-  cod_Ordtra: string;
-  cod_Tela: string;
-  des_Tela: string;
-  cod_Color: string;
-  des_Color: string;
-  num_Secuencia: number;
+  cod_Ordtra    : string;
+  cod_Tela      : string;
+  des_Tela      : string;
+  cod_Color     : string;
+  des_Color     : string;
+  num_Secuencia : number;
   cod_Unidad_Negocio: string;
   des_Unidad_Negocio: string;
-  cod_Cliente_Tex : string;
-  cod_Motivo: string;
-  cod_Estado?: string;
+  cod_Cliente_Tex   : string;
+  cod_Motivo  : string;
+  cod_Estado? : string;
+
+  //Nuevos Campos
+  idArea?       : number,
+  idResponsable?: number
 }
 
 export interface Cliente {
