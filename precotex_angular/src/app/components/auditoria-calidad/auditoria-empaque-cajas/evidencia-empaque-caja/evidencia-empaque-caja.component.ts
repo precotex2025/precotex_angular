@@ -175,105 +175,41 @@ export class EvidenciaEmpaqueCajaComponent implements OnInit {
         this.verPdf = true;
 
         setTimeout(() => {
-          this.generarPDF('contentToConvert');
+          this.generatePDF();
         }, 100);
+      } else {
+        this.matSnackBar.open("Seleccione las cajas a exportar!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
       }
     } else {
       this.matSnackBar.open("Especifique el código de P.O.!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
     }
   }
 
-  generarPDF(seccion: string){
-    
-    //setTimeout(() => {
-      //document.getElementById('img2').setAttribute('src', this.dataReporteAuditoria[0].Path_Firma_Web_1);
-      //document.getElementById('img2').innerHTML.replace('img1', this.dataReporteAuditoria[0].Path_Firma_Web_1)
-    //}, 100);
+  async generatePDF() {
+    let fecha = new Date()     
+    let filePO = this.formulario.get('CodPurOrd').value.concat(fecha.toISOString().replace(/:/g,"-").substring(0,19)).concat('.pdf');
 
-    
-    setTimeout(() => {
-      var data = document.getElementById(seccion);
-      let fecha = new Date()
-      console.log()
-      
-      let filePO = this.formulario.get('CodPurOrd').value.concat(fecha.toISOString().replace(/:/g,"-").substring(0,19)).concat('.pdf');
+    const pdf = new jsPDF('p', 'mm', 'a4'); // Formato A4 en orientación vertical
+    const content = document.getElementById('content') as HTMLElement;
+    const pages = document.querySelectorAll<HTMLElement>('.page');
 
-      html2canvas(data).then(canvas => {
-        var imgWidth = 200; // 320; //200;
-        var pageHeight = 295; // 300; //590; //295;
-        var imgHeight = canvas.height * imgWidth / canvas.width;
-        
-        var contentDataURL = canvas.toDataURL('image/png',1.0)
+    for (let i = 0; i < pages.length; i++) {
+      const canvas = await html2canvas(pages[i], { scale: 2 }); // Escala para mayor calidad
+      const imgData = canvas.toDataURL('image/png');
+      const imgWidth = 210; // Ancho de A4 en mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-        let pdf = new jsPDF({
-          //orientation: 'L',
-          unit: 'mm',
-          format: 'a4',
-        });
-        var position = 15;
-        //var position1 = -282 //-297;
-        var position1 = -282;
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
 
-        var totalPages = Math.ceil(imgHeight / pageHeight - 1)
-        
-        pdf.addImage(contentDataURL, 'PNG', 5, position, imgWidth, imgHeight)
-        for (var i = 1; i <= totalPages; i++) { 
-          pdf.addPage();
-          pdf.addImage(contentDataURL, 'PNG', 5, position1, imgWidth, imgHeight);
-        }        
+      if (i < pages.length - 1) {
+        pdf.addPage(); // Agregar una nueva página excepto en la última
+      }
+    }
 
-        pdf.save(filePO); // Generated PDF
-
-        //this.verPdf = false;
-        this.spinnerService.hide();
-      });
-    }, 100);
+    pdf.save(filePO); // Descargar el PDF
+    this.verPdf = false;
+    this.spinnerService.hide();
   }
-
-
-  generarPDF2(seccion: string){
-    const cadPDF = new Promise(resolve => {
-          let docHtml: any;
-          let lc_pdf: any;
-      
-          docHtml = document.getElementById(seccion);
-          const doc = new jsPDF('p', 'pt', 'a4', true);
-      
-          doc.html(docHtml, {
-            // Adjust your margins here (left, top, right ,bottom)
-            margin: [10, 60, 40, 60],
-            callback: function (pdf){
-              /*
-              pdf.output('save', 'filename.pdf'); //Try to save PDF as a file (not works on ie before 10, and some mobile devices)
-              pdf.output('datauristring');        //returns the data uri string
-              pdf.output('datauri');              //opens the data uri in current window
-              pdf.output('dataurlnewwindow');     //opens the data uri in new window
-              */
-              
-              //Abre PDF en nueva ventana
-              //pdf.output('dataurlnewwindow');
-    
-              //Graba en disco PDF
-              pdf.save('new-file.pdf');  
-    
-              //Genera cadena binaria. Incluye encabezado del tipo de archivo. Para PDF: "data:application/pdf;filename=generated.pdf;base64,"
-              //lc_pdf = pdf.output('datauristring');
-    
-              //Genera objeto contenedor blob.
-              //lc_pdf = pdf.output('blob');
-    
-              //Genera cadena binaria SIN encabezado del tipo de archivo.
-              //lc_pdf = btoa(pdf.output());
-              //resolve(lc_pdf);          
-            },
-          });
-    
-        });
-  }
-
-
-
-
 
   clearDate(event) {
     event.stopPropagation();

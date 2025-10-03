@@ -34,7 +34,7 @@
                 </button>
 
                 <button type="button" class="boton-captura" mat-flat-button (click)="onGeneraEvidencia()" *ngIf="selection">
-                    <mat-icon aria-label="person">picture_as_pdf</mat-icon>Evidencia
+                    <mat-icon aria-label="person">picture_as_pdf</mat-icon>Generar PDF
                 </button>
             </div>
 
@@ -142,59 +142,45 @@
     <p style="color: white; text-align: center; " >Cargando... </p>  
 </ngx-spinner> 
 
-<div id="contentToConvert" *ngIf="verPdf">
-    <!--<table class="tabla_cab">
-        <tr>
-            <th witdh="30%"></th>
-            <th witdh="60%"></th>
-            <th witdh="20%"></th>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <img src="assets/logo.jpg" alt="" srcset="">
-            </td>
-            <td></td>
-            <td><h1>PO: {{ dataEvidencia[0].Cod_PurOrd }}</h1></td>
-        </tr>
-    </table>-->
+<div id="content" *ngIf="verPdf">
     <table class="tabla_cab">
         <tr *ngFor="let item of dataEvidencia">
             <td colspan="1" class="td_inf">
-                <table style="width: 80%;">
-                    <tr>
-                        <th witdh="20%"></th>
-                        <th witdh="80%"></th>
-                    </tr>
-                    <tr>
-                        <td colspan="1">
-                            <img src="assets/logo.jpg" alt="" srcset="">
-                        </td>
-                        <td style="text-align: right;"><h1>PO: {{ item.Cod_PurOrd }}</h1></td>
-                    </tr>
-                </table>
-                <br>
-                <!--<img [src]="item.Evidencia64" height="900px" alt="" srcset="">-->
-                <img [src]="item.Evidencia64" width="85%" alt="" srcset="">
-                <br>
-                <br>
-                <table>
-                    <tr>
-                        <th class="th_inf">N° Caja</th>
-                        <th class="th_inf">Estilo Cliente</th>
-                        <th class="th_inf">Color</th>
-                        <th class="th_inf">Talla</th>
-                        <th class="th_inf">Cantidad</th>
-                    </tr>
-                    <tr *ngFor="let detalle of item.Detalle let indice=index">
-                        <td class="td_inf" *ngIf="indice==0" rowspan="10"><b>{{ item.Num_SecPacking }}</b></td>
-                        <td class="td_inf" *ngIf="indice==0" rowspan="10">{{ item.Cod_EstCli }}</td>
-                        <td class="td_inf">{{ detalle?.Cod_ColCli }}</td>
-                        <td class="td_inf">{{ detalle?.Cod_Talla }}</td>
-                        <td class="td_inf">{{ detalle?.Num_Prendas }}</td>
-                    </tr>
-                </table>
-                <br>
-                <br>
+                <div class="page">
+                    <table style="width: 80%;">
+                        <tr>
+                            <th witdh="20%"></th>
+                            <th witdh="80%"></th>
+                        </tr>
+                        <tr>
+                            <td colspan="1">
+                                <img src="assets/logo.jpg" alt="" srcset="">
+                            </td>
+                            <td style="text-align: right;"><h1>PO: {{ item.Cod_PurOrd }}</h1></td>
+                        </tr>
+                    </table>
+                    <br>
+                    <img [src]="item.Evidencia64" width="65%" alt="" srcset="">
+                    <br>
+                    <br>
+                    <table style="margin: auto;">
+                        <tr>
+                            <th class="th_inf">N° Caja</th>
+                            <th class="th_inf">Estilo Cliente</th>
+                            <th class="th_inf">Color</th>
+                            <th class="th_inf">Talla</th>
+                            <th class="th_inf">Cantidad</th>
+                        </tr>
+                        <tr *ngFor="let detalle of item.Detalle let indice=index">
+                            <td class="td_inf" *ngIf="indice==0" rowspan="10"><b>{{ item.Num_SecPacking }}</b></td>
+                            <td class="td_inf" *ngIf="indice==0" rowspan="10">{{ item.Cod_EstCli }}</td>
+                            <td class="td_inf">{{ detalle?.Cod_ColCli }}</td>
+                            <td class="td_inf">{{ detalle?.Cod_Talla }}</td>
+                            <td class="td_inf">{{ detalle?.Num_Prendas }}</td>
+                        </tr>
+                    </table>
+                    <br>
+                </div>                
             </td>
             <br>
         </tr>
