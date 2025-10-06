@@ -36,6 +36,10 @@
                 <button type="button" class="boton-captura" mat-flat-button (click)="onGeneraEvidencia()" *ngIf="selection">
                     <mat-icon aria-label="person">picture_as_pdf</mat-icon>Generar PDF
                 </button>
+
+                <button type="button" class="boton-excel" mat-flat-button (click)="onExportarListado()">
+                    <mat-icon>file_download</mat-icon>Descargar
+                </button>
             </div>
 
             <div class="container-cuerpo-fila2">

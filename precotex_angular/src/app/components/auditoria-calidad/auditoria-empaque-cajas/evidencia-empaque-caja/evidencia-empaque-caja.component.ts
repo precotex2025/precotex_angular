@@ -6,8 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { DatePipe } from "@angular/common";
 import * as _moment from 'moment';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgxSpinnerService }  from "ngx-spinner";
@@ -18,8 +17,6 @@ import { ExceljsService } from 'src/app/services/exceljs.service';
 
 import { GlobalVariable } from 'src/app/VarGlobals';
 import { AuditoriaAcabadosService } from 'src/app/services/auditoria-acabados.service';
-import { AuditoriaInspeccionCosturaService } from 'src/app/services/auditoria-inspeccion-costura.service';
-import { SeguridadControlVehiculoService } from 'src/app/services/seguridad-control-vehiculo.service';
 
 import { DialogEvidenciaEmpaqueCajaComponent } from './../dialog-evidencia-empaque-caja/dialog-evidencia-empaque-caja.component';
 
@@ -56,7 +53,8 @@ interface data_det {
 })
 export class EvidenciaEmpaqueCajaComponent implements OnInit {
 
-  displayedColumns: string[] = ['select','Num_Auditoria','Fec_Ini_Auditoria','Cod_PurOrd','Num_Packing','Num_SecPacking','Num_Caja','Des_Cliente','Des_Modulo','Num_Vez','Nom_Auditor','Flg_Estado','Acciones']
+  //displayedColumns: string[] = ['select','Num_Auditoria','Fec_Ini_Auditoria','Cod_PurOrd','Num_Packing','Num_SecPacking','Num_Caja','Des_Cliente','Des_Modulo','Num_Vez','Nom_Auditor','Flg_Estado','Acciones']
+  displayedColumns: string[] = ['select','Num_Auditoria','Fec_Ini_Auditoria','Cod_PurOrd','Num_Packing','Num_SecPacking','Num_Caja','Des_Cliente','Des_Modulo','Flg_Estado','Acciones']
   dataSource!: MatTableDataSource<data_det>;
   selection = new SelectionModel<data_det>(true, []);
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
@@ -77,17 +75,15 @@ export class EvidenciaEmpaqueCajaComponent implements OnInit {
 
   ld_fecha = new Date()
   verPdf: boolean = false;
-
+  dataForExcel = [];
   dataEvidencia: data_det[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
     private matSnackBar: MatSnackBar,
     private auditoriaAcabadosService: AuditoriaAcabadosService,
-    private auditoriaInspeccionCosturaService: AuditoriaInspeccionCosturaService,
-    private seguridadControlVehiculoService: SeguridadControlVehiculoService,
     public dialog: MatDialog,
-    //private exceljsAviosService: ExceljsAviosService,
+    public datePipe: DatePipe,
     private exceljsService: ExceljsService,
     private spinnerService: NgxSpinnerService
   ) {
@@ -163,6 +159,42 @@ export class EvidenciaEmpaqueCajaComponent implements OnInit {
     );    
 
   }  
+
+  onExportarListado(){
+    this.dataForExcel = [];
+    if(this.dataSource.filteredData.length > 0){
+      let dataReporte: any[] = [];
+
+      this.dataSource.filteredData.forEach((row: any) => {
+        let data: any = {};
+
+        data.FechaAuditoria = this.datePipe.transform(row.Fec_Ini_Auditoria, 'yyyy-MM-dd HH:mm') //row.Fec_Ini_Auditoria;
+        data.CodigoPO = row.Cod_PurOrd;
+        data.Secuecia = row.Num_SecPacking;
+        data.Cliente = row.Des_Cliente;
+        data.EstiloCliente = row.Cod_EstCli;
+        data.NumeroPacking = row.Num_Packing;
+        data.NumeroCaja = row.Num_Caja;
+        
+        dataReporte.push(data);
+      });      
+
+      dataReporte.forEach((row: any) => {
+        this.dataForExcel.push(Object.values(row))
+      })
+
+      let reportData = {
+        title: 'AUDITORIA EMPAQUE CAJAS',
+        data: this.dataForExcel,
+        headers: Object.keys(dataReporte[0])
+      }
+
+      this.exceljsService.exportExcel(reportData);
+
+    } else{
+      this.matSnackBar.open("No existen registros...!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+    }        
+  }
 
   onGeneraEvidencia(){
     let codPO = this.formulario.get('CodPurOrd').value ? this.formulario.get('CodPurOrd').value : '0';
