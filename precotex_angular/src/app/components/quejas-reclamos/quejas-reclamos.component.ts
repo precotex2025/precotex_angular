@@ -82,16 +82,6 @@ export class QuejasReclamosComponent implements OnInit {
 
   ngOnInit(): void {
 
-    const fechaHoy = new Date();
-    const primerDiaMes = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth(), 1);
-    const lastDay = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth() + 1, 0); // último día del mes actual
-    
-    this.nuevoReclamo.fechaInicio = this.formatearFecha(primerDiaMes);
-    this.nuevoReclamo = {
-      ...this.nuevoReclamo,
-      fechaFin: lastDay.toISOString().substring(0, 10) // formato YYYY-MM-DD
-    };
-
     this.buscar();
     this.onObtieneUsuarioArea(this.sCodTrabajador);
 
@@ -438,7 +428,15 @@ export class QuejasReclamosComponent implements OnInit {
 
   buscar() {
 
-    console.log('buscar-obtenerReclamos', this.nuevoReclamo);
+    const fechaHoy = new Date();
+    const primerDiaMes = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth(), 1);
+    const lastDay = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth() + 1, 0); // último día del mes actual
+    
+    this.nuevoReclamo.fechaInicio = this.formatearFecha(primerDiaMes);
+    this.nuevoReclamo = {
+      ...this.nuevoReclamo,
+      fechaFin: lastDay.toISOString().substring(0, 10) // formato YYYY-MM-DD
+    };    
 
     this.SpinnerService.show();
     this.registroQuejasReclamosService.obtenerReclamos(this.nuevoReclamo).subscribe({
@@ -571,6 +569,7 @@ export class QuejasReclamosComponent implements OnInit {
       next: (response) => {
         this.motivoReclamo    = response.elements;
         this.motivoFiltrados  = this.motivoReclamo;
+        this.nuevoReclamo.cod_Motivo = '';
         //console.log('motivoReclamo:', this.motivoReclamo);
       },
       error: (err) => {
@@ -755,15 +754,8 @@ export class QuejasReclamosComponent implements OnInit {
     this.nuevoReclamo.cliente = '';
     this.nuevoReclamo.responsable = '';
     this.nuevoReclamo.cod_Ordtra = '';
-    const fechaHoy = new Date();
-    const primerDiaMes = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth(), 1);
-    this.nuevoReclamo.fechaInicio = this.formatearFecha(primerDiaMes);
-
-    const lastDay = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth() + 1, 0); // último día del mes actual
-    this.nuevoReclamo = {
-      ...this.nuevoReclamo,
-      fechaFin: lastDay.toISOString().substring(0, 10) // formato YYYY-MM-DD
-    };
+    this.nuevoReclamo.cod_Unidad_Negocio = '';
+    this.buscar();
   }
 
   reiniciarEstado() {
