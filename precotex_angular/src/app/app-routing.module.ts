@@ -266,6 +266,7 @@ import { ProgramaEmpastadoComponent } from './components/estampado-digital/progr
 import { AuditoriaSalidaAcabadoComponent } from './components/auditoria-calidad/auditoria-salida-acabado/auditoria-salida-acabado.component';
 import { AuditoriaEmpaqueAcabadoComponent } from './components/auditoria-calidad/auditoria-empaque-acabado/auditoria-empaque-acabado.component';
 import { AuditoriaEmpaqueCajasComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/auditoria-empaque-cajas.component';
+import { EvidenciaEmpaqueCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/evidencia-empaque-caja/evidencia-empaque-caja.component';
 
 import { AuditoriaHojaMoldeComponent } from './components/auditoria-calidad/auditoria-hoja-molde/auditoria-hoja-molde.component';
 import { AuditoriaHojaMoldeFinalComponent } from './components/auditoria-calidad/auditoria-hoja-molde-final/auditoria-hoja-molde-final.component';
@@ -323,6 +324,7 @@ const routes: Routes = [
   { path: "AuditoriaSalidaAcabados", component: AuditoriaSalidaAcabadoComponent },
   { path: "AuditoriaEmpaqueAcabados", component: AuditoriaEmpaqueAcabadoComponent },
   { path: "AuditoriaEmpaqueCajas", component: AuditoriaEmpaqueCajasComponent },
+  { path: "EvidenciaEmpaqueCajas", component: EvidenciaEmpaqueCajaComponent},
 
   { path: "SeguridadControlGuia", component: SeguridadControlGuiaComponent },
   { path: "SeguridadControlGuiaAccion", component: SeguridadControlGuiaAccionComponent },

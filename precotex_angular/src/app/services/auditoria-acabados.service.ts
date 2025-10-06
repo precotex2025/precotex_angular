@@ -307,6 +307,23 @@ export class AuditoriaAcabadosService {
     return this.http.post<any[]>(`${this.baseUrl}/app_Man_CC_Evidencia_Empaque_Cajas.php`, data);
   }
 
+  Evidencia_AuditoriaEmpaqueCajas(Cod_Accion: string, Num_Auditoria: number, Num_Caja: number, Num_Packing: number, Cod_Auditor: string, Fec_Ini_Auditoria: string, Fec_Fin_Auditoria: string, Num_Vez: number, Cod_Supervisor: string, Flg_Estado: string) {
+    //let fecha = new Date();
+    console.log(Fec_Ini_Auditoria)
+
+    if (!_moment(Fec_Ini_Auditoria).isValid()) {
+      Fec_Ini_Auditoria = '01/01/1900';
+    }
+    if (!_moment(Fec_Fin_Auditoria).isValid()) {
+      Fec_Fin_Auditoria = '01/01/2100';
+    }
+
+    Fec_Ini_Auditoria = _moment(Fec_Ini_Auditoria.valueOf()).format();
+    Fec_Fin_Auditoria = _moment(Fec_Fin_Auditoria.valueOf()).format();
+
+    return this.http.get(`${this.baseUrl}/app_Cc_Man_Auditoria_Empaque_Cajas_Evidencia.php?Accion=${Cod_Accion}&Num_Auditoria=${Num_Auditoria}&Num_Caja=${Num_Caja}&Num_Packing=${Num_Packing}&Cod_Auditor=${Cod_Auditor}&Fec_Ini_Auditoria=${Fec_Ini_Auditoria}&Fec_Fin_Auditoria=${Fec_Fin_Auditoria}&Num_Vez=${Num_Vez}&Cod_Supervisor=${Cod_Supervisor}&Flg_Estado=${Flg_Estado}&Cod_Usuario=${this.sCod_Usuario}`);
+  }
+
   //- PROGRAMACION AUDITORIAS
 
   MantenimientoProgramacionAuditoria(data) {
