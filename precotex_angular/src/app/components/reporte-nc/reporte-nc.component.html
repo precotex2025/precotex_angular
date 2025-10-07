@@ -15,16 +15,15 @@
         </mat-form-field>
       </div>
     </div>
-
     <!-- Sede -->
     <div class="form-section">
       <div class="section-title">Sede</div>
       <div class="button-group">
         <button *ngFor="let sede of sedes"
                 mat-button
-                [ngClass]="{'selected': formData.cod_Planta_Tg === sede}"
-                (click)="select('cod_Planta_Tg', sede)">
-          {{ sede }}
+                [ngClass]="{ 'selected': sede.num_Planta === sedeSeleccionada }"
+                (click)="selectSede(sede)">
+          {{ sede.des_Planta }}
         </button>
       </div>
     </div>
@@ -51,9 +50,9 @@
       <div class="button-group">
         <button *ngFor="let clas of clasificaciones"
                 mat-button
-                [ngClass]="{'selected': formData.rep_Clas === clas}"
-                (click)="select('rep_Clas', clas)">
-          {{ clas }}
+                [ngClass]="{ 'selected': clas.cla_Id === clasificacionSeleccionada }"
+                (click)="selectClasificacion(clas)">
+          {{ clas.cla_Des }}
         </button>
       </div>
     </div>
@@ -73,9 +72,9 @@
       <div class="button-group">
         <button *ngFor="let nivel of niveles"
                 mat-button
-                [ngClass]="{'selected': formData.rep_NivRgo === nivel}"
-                (click)="select('rep_NivRgo', nivel)">
-          {{ nivel }}
+                [ngClass]="{'selected': formData.rep_NivRgo === nivel.id}"
+                (click)="selectNivel(nivel)">
+          {{ nivel.nombre }}
         </button>
       </div>
     </div>
@@ -99,7 +98,7 @@
     <!-- Botones -->
     <div class="action-buttons">
       <button mat-flat-button color="primary" (click)="onProcesar()">Guardar</button>
-      <button mat-button color="warn">Cancelar</button>
+      <button mat-button color="warn" (click)="onCancelar()">Cancelar</button>
     </div>
 
   </form>

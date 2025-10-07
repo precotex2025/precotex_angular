@@ -584,6 +584,9 @@ import { ReporteNCComponent } from './components/reporte-nc/reporte-nc.component
 import { ReporteNcResolvedorComponent } from './components/reporte-nc/reporte-nc-resolvedor/reporte-nc-resolvedor.component';
 import { ReporteNcLstComponent } from './components/reporte-nc/reporte-nc-lst/reporte-nc-lst.component';
 
+//REGISTRO PARIHUELA V2
+import { RegistroPartidaParihuelaV2Component } from './components/registro-partida-parihuela-v2/registro-partida-parihuela-v2.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -1091,7 +1094,10 @@ import { ReporteNcLstComponent } from './components/reporte-nc/reporte-nc-lst/re
     //REGISTRO DE NC
     ReporteNCComponent,
     ReporteNcResolvedorComponent,
-    ReporteNcLstComponent
+    ReporteNcLstComponent,
+
+    //REGISTRO PARIHUELA
+    RegistroPartidaParihuelaV2Component
   ],
   entryComponents: [DialogJabaComponent],
   imports: [

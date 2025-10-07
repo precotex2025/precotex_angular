@@ -310,6 +310,7 @@ import { DialogRetiroRepuestosComponent } from './components/retiro-repuestos/di
 import { ReporteNCComponent } from './components/reporte-nc/reporte-nc.component';
 import { ReporteNcResolvedorComponent } from './components/reporte-nc/reporte-nc-resolvedor/reporte-nc-resolvedor.component';
 import { ReporteNcLstComponent } from './components/reporte-nc/reporte-nc-lst/reporte-nc-lst.component';
+import { RegistroPartidaParihuelaV2Component } from './components/registro-partida-parihuela-v2/registro-partida-parihuela-v2.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -674,8 +675,17 @@ const routes: Routes = [
   {path: 'ReporteNCResolvedor', component: ReporteNcResolvedorComponent},
   {path: 'ReporteNCListado', component: ReporteNcLstComponent},
 
+  //PARIHUELA V2
+  {path: 'RegistroParihuelaV2', component: RegistroPartidaParihuelaV2Component},
 
+
+
+  
   { path:"checkListIngresoCostura", component: CheckListIngresoCosturaComponent },
+
+
+
+  //COPIAR RUTAS ANTES DE ESTO
   { path: "", redirectTo: "/", pathMatch: "full" },// Cuando es la raíz
   //{ path: "**", component: AuditoriaLineaCosturaComponent }
   { path: "**", redirectTo: "/principal" }

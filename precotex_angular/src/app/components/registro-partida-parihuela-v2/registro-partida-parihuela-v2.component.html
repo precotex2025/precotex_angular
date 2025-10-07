@@ -1,0 +1,64 @@
+<mat-card class="partida-header">
+  <!-- <mat-card-title>Registro de Partida</mat-card-title> -->
+
+  <form [formGroup]="busquedaForm" class="busqueda-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Código de Partida</mat-label>
+      <input matInput formControlName="codigo" placeholder="Ej. M4593">
+    </mat-form-field>
+
+    <button mat-raised-button color="accent" (click)="buscarPartida()">
+      <mat-icon>search</mat-icon> Buscar
+    </button>
+  </form>
+</mat-card>
+
+<div class="cartas-container">
+  <mat-card *ngFor="let grupo of parihuelaGrupos" class="carta" [formGroup]="grupo">
+    <mat-card-header>
+      <mat-card-title>{{ grupo.get('codigo')?.value }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Peso Parihuela</mat-label>
+        <input matInput type="number" formControlName="pesoParihuela">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Peso Tela</mat-label>
+        <input matInput type="number" formControlName="pesoTela">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Cod. Tela</mat-label>
+        <input matInput type="text" formControlName="codTela" readonly>
+      </mat-form-field>
+
+      <div formArrayName="complementos">
+        <div *ngFor="let comp of grupo.get('complementos')['controls']; let j = index" [formGroupName]="j">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Peso Complemento {{ j + 1 }}</mat-label>
+            <input matInput type="number" formControlName="peso">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="tipo">
+              <mat-option *ngFor="let tipo of tiposComplemento" [value]="tipo">{{ tipo }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <button mat-icon-button color="primary" (click)="agregarComplemento(grupo)">
+        <mat-icon>add_circle</mat-icon>
+      </button>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="acciones">
+  <button mat-raised-button color="primary" (click)="guardarPartida()">Grabar</button>
+  <button mat-raised-button color="accent" (click)="enviarDespacho()">Enviar despacho</button>
+</div>

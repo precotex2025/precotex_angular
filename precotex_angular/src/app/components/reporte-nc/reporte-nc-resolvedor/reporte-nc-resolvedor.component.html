@@ -3,96 +3,68 @@
 
         <!-- Fecha y Hora -->
         <div class="form-section">
-        <!-- <div class="section-title">Fecha y Hora de Registro</div> -->
         <div class="fecha-hora-row">
             <mat-form-field appearance="fill">
             <mat-label>Fecha de Observación</mat-label>
             <input matInput [(ngModel)]="formData.fechaObservacion" name="fechaObservacion" readonly>
             </mat-form-field>
-<!-- 
-            <mat-form-field appearance="fill">
-            <mat-label>Hora</mat-label>
-            <input matInput [value]="formData.hora" readonly>
-            </mat-form-field> -->
         </div>
         </div>
 
         <!-- Descripción -->
         <div class="form-section">
-        <!-- <div class="section-title">Descripción</div> -->
         <mat-form-field appearance="fill">
             <mat-label>Descripción</mat-label>
-            <textarea matInput rows="3" [(ngModel)]="formData.descripcion" name="descripcion"></textarea>
+            <textarea matInput rows="3" [(ngModel)]="formData.descripcion" name="descripcion" readonly></textarea>
         </mat-form-field>
         </div>
 
-        <!-- Fecha de Observación -->
-        <!-- <div class="form-section">
-        
-        <mat-form-field appearance="fill">
-            <mat-label>Fecha de Observación</mat-label>
-            <input matInput type="date" [(ngModel)]="formData.fechaObservacion" name="fechaObservacion">
-        </mat-form-field>
-        </div> -->
-
         <!-- Estado y Calificación de Riesgo -->
         <div class="form-section">
-        <!-- <div class="section-title">Estado y Riesgo</div> -->
         <mat-form-field appearance="fill">
             <mat-label>Estado</mat-label>
-            <mat-select [(ngModel)]="formData.estado" name="estado">
-            <mat-option *ngFor="let estado of estados" [value]="estado.value">{{ estado.label }}</mat-option>
-            </mat-select>
+            <input matInput [(ngModel)]="formData.estado" name="estado" readonly>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
-            <mat-label>Calificación de Riesgo</mat-label>
-            <mat-select [(ngModel)]="formData.riesgo" name="riesgo">
-            <mat-option *ngFor="let nivel of niveles" [value]="nivel">{{ nivel }}</mat-option>
-            </mat-select>
+            <mat-label>Nivel de Riesgo</mat-label>
+            <input matInput [(ngModel)]="formData.riesgo" name="riesgo" readonly>
         </mat-form-field>
         </div>
 
         <!-- Acción Correctiva -->
         <div class="form-section">
-        <!-- <div class="section-title">Acción Correctiva</div> -->
         <mat-form-field appearance="fill">
             <mat-label>Acción Correctiva</mat-label>
-            <input matInput [(ngModel)]="formData.accionCorrectiva" name="accionCorrectiva">
+            <input matInput [(ngModel)]="formData.accionCorrectiva" name="accionCorrectiva" readonly>
         </mat-form-field>
         </div>
 
         <!-- Ubicación, Reportado Por, Responsable, Área -->
         <div class="form-section">
-        <!-- <div class="section-title">Ubicación y Responsable</div> -->
         <mat-form-field appearance="fill">
             <mat-label>Ubicación</mat-label>
-            <input matInput [(ngModel)]="formData.ubicacion" name="ubicacion">
+            <input matInput [(ngModel)]="formData.ubicacion" name="ubicacion" readonly>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
             <mat-label>Reportado Por</mat-label>
-            <input matInput [(ngModel)]="formData.reportadoPor" name="reportadoPor">
+            <input matInput [(ngModel)]="formData.reportadoPor" name="reportadoPor" readonly>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
             <mat-label>Responsable</mat-label>
-            <mat-select [(ngModel)]="formData.responsable" name="responsable">
-            <mat-option *ngFor="let persona of responsables" [value]="persona.value">{{ persona.label }}</mat-option>
-            </mat-select>
+            <input matInput [(ngModel)]="formData.responsable" name="responsable" readonly>
         </mat-form-field>
-
+        
         <mat-form-field appearance="fill">
             <mat-label>Área</mat-label>
-            <mat-select [(ngModel)]="formData.area" name="area">
-            <mat-option *ngFor="let area of areas" [value]="area">{{ area }}</mat-option>
-            </mat-select>
+            <input matInput [(ngModel)]="formData.area" name="area" readonly>
         </mat-form-field>
         </div>
 
         <!-- Imágenes -->
         <div class="form-section">
-        <!-- <div class="section-title">Imágenes</div> -->
         <div class="image-gallery">
             <ng-container *ngFor="let img of imagenes; let i = index">
             <img [src]="img" alt="Imagen {{ i + 1 }}" class="preview-image" />
@@ -106,22 +78,24 @@
         <!-- Aceptar -->
         <div class="form-section">
         <div class="section-title">Aceptar</div>
-        <mat-radio-group [(ngModel)]="formData.aceptar" name="aceptar">
-            <mat-radio-button value="sí" style="margin-right: 15px;">Sí</mat-radio-button>
-            <mat-radio-button value="no">No</mat-radio-button>
+        <mat-radio-group [(ngModel)]="formData.aceptar" name="aceptar" (change)="onAceptarChange($event)">
+            <mat-radio-button value="1" style="margin-right: 15px;">Sí</mat-radio-button>
+            <mat-radio-button value="0">No</mat-radio-button>
         </mat-radio-group>
         </div>
 
+        <!-- Responsable -->
         <mat-form-field appearance="fill">
             <mat-label>Responsable</mat-label>
-            <mat-select [(ngModel)]="formData.responsable" name="responsable">
+            <mat-select [(ngModel)]="formData.responsableLevantamiento" 
+                        name="responsableLevantamiento"
+                        [disabled]="formData.aceptar !== '1'">
             <mat-option *ngFor="let responsable of responsables" [value]="responsable.value">{{ responsable.label }}</mat-option>
             </mat-select>
         </mat-form-field>
 
         <!-- Acción Correctiva Tomada y Fecha de Levantamiento -->
         <div class="form-section">
-        <!-- <div class="section-title">Seguimiento</div> -->
         <mat-form-field appearance="fill">
             <mat-label>Acción Correctiva Tomada</mat-label>
             <input matInput [(ngModel)]="formData.accionTomada" name="accionTomada">
@@ -138,10 +112,6 @@
             <input matInput [value]="formData.hora" readonly>
             </mat-form-field>
         </div>
-        <!-- <mat-form-field appearance="fill">
-            <mat-label>Fecha de Levantamiento</mat-label>
-            <input matInput type="date" [(ngModel)]="formData.fechaLevantamiento" name="fechaLevantamiento">
-        </mat-form-field> -->
         </div>
 
         <!-- Cierre de NC -->
@@ -150,26 +120,27 @@
         <div class="status-buttons">
             <button mat-button
                     *ngFor="let cierre of cierres"
-                    [ngClass]="{'selected': formData.cierre === cierre.value}"
-                    (click)="select('cierre', cierre.value)">
-            {{ cierre.label }}
+                    [ngClass]="{ 'selected': cierre.est_Id === cierreSeleccionado }"
+                    (click)="selectCierre(cierre)">
+            {{ cierre.est_Des }}
             </button>
         </div>
         </div>
 
         <!-- Detallar Observación -->
         <div class="form-section">
-        <!-- <div class="section-title">Detallar Observación</div> -->
         <mat-form-field appearance="fill">
             <mat-label>Detallar Observación</mat-label>
-            <textarea matInput rows="3" [(ngModel)]="formData.observacion" name="observacion"></textarea>
+            <textarea matInput rows="3" [(ngModel)]="formData.observacion" 
+                    name="observacion"
+                    [disabled]="formData.est_Id != '3'"></textarea>
         </mat-form-field>
         </div>
 
         <!-- Botones finales -->
         <div class="action-buttons">
-        <button mat-raised-button color="primary">Guardar</button>
-        <button mat-button color="warn">Cancelar</button>
+        <button mat-raised-button color="primary" (click)="onGuardar()">Guardar</button>
+        <button mat-button color="warn" (click)="onCancelar()">Cancelar</button>
         </div>
 
     </form>
