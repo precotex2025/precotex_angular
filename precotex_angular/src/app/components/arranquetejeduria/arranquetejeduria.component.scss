@@ -79,31 +79,32 @@ mat-form-field {
 
 //fila 1 
 .container-cuerpo-fila1 {
-    display: grid;
-
-    grid-template:
-        "col1 col1 col1 col2" auto;
-        
+  display: grid;
+  grid-template-areas: "col1 col2 col3 col4";
+  grid-template-columns: 30% 20% 20% 30%; /* Ajusta los porcentajes según lo que necesites */
 }
 
 
 .fila1-Filtro {
     grid-area: col1;
 }
-
-.fila1-Actualizar {
+.fila1-txtOt {
     grid-area: col2;
+}
+
+.fila1-range {
+    grid-area: col3;
 }
 
 .button-Actualizar {
     width: 100%;
-    grid-area: col2;
+    grid-area: col4;
     height: 40px;
-    max-width: 180px;
+    max-width: 200px;
     margin: auto;
     margin-top: 3px;
-    background-color: #0e740e;
-    color: #ffffff;
+    background-color: #1976d2; /* tu color primario personalizado */
+    color: white;
   }
 
 

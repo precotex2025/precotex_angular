@@ -89,4 +89,3 @@ export const GlobalVariable = {
 
   Global_menu: {}
 }
-

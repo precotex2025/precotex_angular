@@ -35,6 +35,11 @@ interface data_det {
 })
 export class ArranquetejeduriaComponent implements OnInit {
 
+  range = new FormGroup({
+      start: new FormControl(new Date(new Date().getFullYear(), new Date().getMonth(), 1)),
+      end: new FormControl(new Date),
+  });      
+
   Estado: '';
   NumeroVersion: number = 0;
 
@@ -55,6 +60,12 @@ export class ArranquetejeduriaComponent implements OnInit {
 
   formulario = this.formBuilder.group({
     Filtro:  [''],
+    NroOT: ['',
+      [
+        Validators.pattern(/^\d{5}$/)  // Solo 5 dígitos        
+      ]
+    ],
+
   });
 
   dataSource: MatTableDataSource<data_det>;
@@ -85,8 +96,10 @@ export class ArranquetejeduriaComponent implements OnInit {
 
   MostrarCabeceraFabricC() {
 
+    const sNroOt      : string =  this.formulario.get('NroOT')?.value || "";  
+
     this.SpinnerService.show();
-    this.arranquetejeduria.MostrarPendientes().subscribe(
+    this.arranquetejeduria.MostrarPendientes(sNroOt, this.range.get('start').value, this.range.get('end').value).subscribe(
       (result: any) => {
         if (result.length > 0) {
 
@@ -289,6 +302,21 @@ export class ArranquetejeduriaComponent implements OnInit {
         });
       }
     });      
+  }
+  
+  clearDate(event) {
+    event.stopPropagation();
+    this.range.controls['start'].setValue('')
+    this.range.controls['end'].setValue('')
   }  
+  
+soloNumeros(event: KeyboardEvent): void {
+  const charCode = event.which ? event.which : event.keyCode;
+
+  // Permitir solo números (0-9)
+  if (charCode < 48 || charCode > 57) {
+    event.preventDefault();
+  }
+}  
 
 }
