@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GlobalVariable } from '../VarGlobals';
+import { Observable } from 'rxjs';
 
 import * as _moment from 'moment';
 
@@ -260,5 +261,10 @@ export class SeguridadControlVehiculoService {
 
   mantenimientoUsuarioService(Usuario: string) {
     return this.http.get(`${this.baseUrl}/app_mantenimiento_muestra_usuario.php?Usuario=${Usuario}`);
+  }
+
+  // VEHICULOS INMOVILIZADOS
+  listarVehiculoInmovilizado(Num_Planta: number, Fec_Inicio: string, Fec_Fin: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/app_SG_Vehiculo_Inmovilizado.php?Num_Planta=${Num_Planta}&Fec_Inicio=${Fec_Inicio}&Fec_Fin=${Fec_Fin}`);
   }
 }

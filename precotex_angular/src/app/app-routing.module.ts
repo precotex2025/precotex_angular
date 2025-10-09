@@ -306,6 +306,7 @@ import { ComiteEmergenciaComponent } from './components/actas/comite-emergencia/
 import { ValidaCorteDespachoComponent } from './components/auditoria-corte/valida-corte-despacho/valida-corte-despacho.component';
 import { LiberaOpColorComponent } from './components/auditoria-corte/libera-op-color/libera-op-color.component';
 import { SalidaTiendaComponent } from './components/seguridad/salida-tienda/salida-tienda.component';
+import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/reporte-vehiculo-inmovilizado/reporte-vehiculo-inmovilizado.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -538,6 +539,7 @@ const routes: Routes = [
   {path:'consultaVisita', component:ConsultaVisitaComponent},
   {path:'reporteKardexJabas', component:ReporteKardexJabasComponent},
   {path:'SalidaTienda', component:SalidaTiendaComponent},
+  {path:'VehiculoInmovilizado', component:ReporteVehiculoInmovilizadoComponent},
 
   //COMEDOR
   { path: 'MantenimientoCorreos', component: MantenimientosCorreosComponent},

@@ -570,6 +570,7 @@ import { DialogEvidenciaEmpaqueCajaComponent } from './components/auditoria-cali
 import { DialogEvidenciaPackingCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-evidencia-packing-caja/dialog-evidencia-packing-caja.component';
 import { DialogCapturarFotoCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-capturar-foto-caja/dialog-capturar-foto-caja.component';
 import { EvidenciaEmpaqueCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/evidencia-empaque-caja/evidencia-empaque-caja.component';
+import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/reporte-vehiculo-inmovilizado/reporte-vehiculo-inmovilizado.component';
 
 @NgModule({
   declarations: [
@@ -1061,7 +1062,7 @@ import { EvidenciaEmpaqueCajaComponent } from './components/auditoria-calidad/au
     DialogPendienteEmpaqueCajasComponent, 
     EncogimientoPrendaComponent, 
     DialogEncogimientoPrendaRegistroComponent, 
-    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent, DialogCapturarFotoCajaComponent, EvidenciaEmpaqueCajaComponent 
+    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent, DialogCapturarFotoCajaComponent, EvidenciaEmpaqueCajaComponent, ReporteVehiculoInmovilizadoComponent 
   ],
   entryComponents: [DialogJabaComponent],
   imports: [
