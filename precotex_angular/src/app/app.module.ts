@@ -1090,6 +1090,8 @@ import { EvidenciaEmpaqueCajaComponent } from './components/auditoria-calidad/au
     DialogRetiroRepuestosDetalleNuevoComponent,
   
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent ,
+    EvidenciaEmpaqueCajaComponent,
+    DialogCapturarFotoCajaComponent,
 
     //REGISTRO DE NC
     ReporteNCComponent,

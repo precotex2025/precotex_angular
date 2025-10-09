@@ -148,7 +148,7 @@ export class RetiroRepuestosService {
   // }
 
   patchActualizarRequerimientoDetalle(data: any){
-    return this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/patchActualizarRequerimientoDetalle', data);
+    return this.http.patch(this.baseUrlTinto + 'TxRetiroRepuestos/patchActualizarRequerimientoDetalle', data);
   }
 
   EnviarCorreo(){
