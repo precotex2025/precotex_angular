@@ -312,6 +312,7 @@ import { ReporteNCComponent } from './components/reporte-nc/reporte-nc.component
 import { ReporteNcResolvedorComponent } from './components/reporte-nc/reporte-nc-resolvedor/reporte-nc-resolvedor.component';
 import { ReporteNcLstComponent } from './components/reporte-nc/reporte-nc-lst/reporte-nc-lst.component';
 import { RegistroPartidaParihuelaV2Component } from './components/registro-partida-parihuela-v2/registro-partida-parihuela-v2.component';
+import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/reporte-vehiculo-inmovilizado/reporte-vehiculo-inmovilizado.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -544,6 +545,7 @@ const routes: Routes = [
   {path:'consultaVisita', component:ConsultaVisitaComponent},
   {path:'reporteKardexJabas', component:ReporteKardexJabasComponent},
   {path:'SalidaTienda', component:SalidaTiendaComponent},
+  {path:'VehiculoInmovilizado', component:ReporteVehiculoInmovilizadoComponent},
 
   //COMEDOR
   { path: 'MantenimientoCorreos', component: MantenimientosCorreosComponent},

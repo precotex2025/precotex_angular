@@ -240,6 +240,7 @@ export class EvidenciaEmpaqueCajaComponent implements OnInit {
 
     pdf.save(filePO); // Descargar el PDF
     this.verPdf = false;
+    this.selection.clear();
     this.spinnerService.hide();
   }
 
