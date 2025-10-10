@@ -540,6 +540,7 @@ const routes: Routes = [
   {path:'consultaVisita', component:ConsultaVisitaComponent},
   {path:'reporteKardexJabas', component:ReporteKardexJabasComponent},
   {path:'SalidaTienda', component:SalidaTiendaComponent},
+  {path:'VehiculoInmovilizado', component:ReporteVehiculoInmovilizadoComponent},
 
   //COMEDOR
   { path: 'MantenimientoCorreos', component: MantenimientosCorreosComponent},

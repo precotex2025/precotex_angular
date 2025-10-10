@@ -579,6 +579,7 @@ import { DialogRetiroRepuestosDetalleComponent } from './components/retiro-repue
 import { DialogRetiroRepuestosDetalleNuevoComponent } from './components/retiro-repuestos/dialog-retiro-repuestos-detalle-nuevo/dialog-retiro-repuestos-detalle-nuevo.component';
 import { DialogCapturarFotoCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-capturar-foto-caja/dialog-capturar-foto-caja.component';
 import { EvidenciaEmpaqueCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/evidencia-empaque-caja/evidencia-empaque-caja.component';
+import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/reporte-vehiculo-inmovilizado/reporte-vehiculo-inmovilizado.component';
 
 @NgModule({
   declarations: [
