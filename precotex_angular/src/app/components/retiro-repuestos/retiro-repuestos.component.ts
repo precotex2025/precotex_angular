@@ -229,92 +229,156 @@ export class RetiroRepuestosComponent implements OnInit {
     });
   }
 
-  onExportarExcel(){
+  // onExportarExcel(){
     
-    this.dataForExcel = [];
-    this.dataSourceExcel = [];
-    this.dataReporteRetiros = [];
+  //   this.dataForExcel = [];
+  //   this.dataSourceExcel = [];
+  //   this.dataReporteRetiros = [];
 
-    const sFecIni: string = this.range.get('start').value;
-    const sFecFin: string = this.range.get('end').value;
+  //   const sFecIni: string = this.range.get('start').value;
+  //   const sFecFin: string = this.range.get('end').value;
 
-    if(sFecIni == '' || sFecIni == null || sFecFin == '' || sFecFin == null){
-      this.matSnackBar.open("Ingrese Rango de Fechas", "Cerrar",
-        {horizontalPosition:'center', verticalPosition:'top', duration: 1500}
-      );
-      return;
-    }else{
-      this.SpinnerService.show();
-      this.serviceRetiroRepuestos.getDatosReporte(sFecIni, sFecFin).subscribe({
-        next: (response: any)=> {
-          if(response.success){
-            if (response.totalElements > 0){
+  //   if(sFecIni == '' || sFecIni == null || sFecFin == '' || sFecFin == null){
+  //     this.matSnackBar.open("Ingrese Rango de Fechas", "Cerrar",
+  //       {horizontalPosition:'center', verticalPosition:'top', duration: 1500}
+  //     );
+  //     return;
+  //   }else{
+  //     this.SpinnerService.show();
+  //     this.serviceRetiroRepuestos.getDatosReporte(sFecIni, sFecFin).subscribe({
+  //       next: (response: any)=> {
+  //         if(response.success){
+  //           if (response.totalElements > 0){
 
-              this.dataReporteRetiros = response.elements;
+  //             this.dataReporteRetiros = response.elements;
 
-              //QUE COMIENCE EL JUEGO DE LA EXPORTACION
-              this.dataReporteRetiros.forEach((item: any) => {
+  //             this.dataReporteRetiros.forEach((item: any) => {
 
-                let datos = {
+  //               let datos = {
                   
-                  ['Fec. Apertura']: _moment(item.fec_Aprobacion.valueOf()).format('DD/MM/YYYY'),
-                  ['Hora Apertura']: item.hora_Aprobacion ,
-                  ['Nom. Seguridad']: item.nom_Seguridad,
-                  ['Fec. Requerimiento']: _moment(item.fec_Creacion.valueOf()).format('DD/MM/YYYY')   ,
-                  ['Nom. Mantenimiento']: item.nom_Mantenimiento,
-                  ['# Precinto Apertura']: item.nro_Precinto_Apertura,
-                  ['# Precinto Cierre']: item.nro_Precinto_Cierre,
-                  ['# Requerimiento']: item.num_Requerimiento,
-                  ['Secuencia']: item.nro_Secuencia       ,
-                  ['Cod. Item']: item.cod_Item ,
-                  ['Descripcion']: item.des_Item       ,
-                  ['Can. Requerida']: item.can_Requerida           ,
-                  ['UM']: item.cod_UniMed,
-                  ['Repuesto de Cambio']: item.rpt_Cambio ,
-                  ['Foto']: item.itm_Foto   
-                };
-                this.dataForExcel.push(datos);              
-              });        
+  //                 ['Fec. Apertura']: _moment(item.fec_Aprobacion.valueOf()).format('DD/MM/YYYY'),
+  //                 ['Hora Apertura']: item.hora_Aprobacion ,
+  //                 ['Nom. Seguridad']: item.nom_Seguridad,
+  //                 ['Fec. Requerimiento']: _moment(item.fec_Creacion.valueOf()).format('DD/MM/YYYY')   ,
+  //                 ['Nom. Mantenimiento']: item.nom_Mantenimiento,
+  //                 ['# Precinto Apertura']: item.nro_Precinto_Apertura,
+  //                 ['# Precinto Cierre']: item.nro_Precinto_Cierre,
+  //                 ['# Requerimiento']: item.num_Requerimiento,
+  //                 ['Secuencia']: item.nro_Secuencia       ,
+  //                 ['Cod. Item']: item.cod_Item ,
+  //                 ['Descripcion']: item.des_Item       ,
+  //                 ['Can. Requerida']: item.can_Requerida           ,
+  //                 ['UM']: item.cod_UniMed,
+  //                 ['Repuesto de Cambio']: item.rpt_Cambio ,
+  //                 ['Foto']: item.itm_Foto   
+  //               };
+  //               this.dataForExcel.push(datos);              
+  //             });        
               
-              if (this.dataForExcel.length > 0) {
+  //             if (this.dataForExcel.length > 0) {
 
-                this.dataForExcel.forEach((row: any) => {
-                  this.dataSourceExcel.push(Object.values(row))
-                })              
+  //               this.dataForExcel.forEach((row: any) => {
+  //                 this.dataSourceExcel.push(Object.values(row))
+  //               })              
 
-                let num = 0;
+  //               let num = 0;
                 
-                let reportData = {
-                  title: 'REPORTE',
-                  data: this.dataSourceExcel,
-                  headers: Object.keys(this.dataForExcel[0]),
-                  Num_Requerimiento: num
-                }
+  //               let reportData = {
+  //                 title: 'REPORTE',
+  //                 data: this.dataSourceExcel,
+  //                 headers: Object.keys(this.dataForExcel[0]),
+  //                 Num_Requerimiento: num
+  //               }
 
-                //GUARDA ARCHIVO EXCEL
-                this.exceljsService.exportExcel4(reportData);
+  //               //GUARDA ARCHIVO EXCEL
+  //               this.exceljsService.exportExcel4(reportData);
 
-              } else {
-                // this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
-                this.SpinnerService.hide();
-              }
-              this.SpinnerService.hide();
-            }
-            else{
-              this.SpinnerService.hide();
-            };
-          }
-        },
-        error: (error) => {
-          this.SpinnerService.hide();
-          console.log(error.error.message, 'Cerrar', {
-          timeOut: 2500,
-          });
-        }
-      });
-      this.SpinnerService.hide();
-    }
+  //             } else {
+  //               this.SpinnerService.hide();
+  //             }
+  //             this.SpinnerService.hide();
+  //           }
+  //           else{
+  //             this.SpinnerService.hide();
+  //           };
+  //         }
+  //       },
+  //       error: (error) => {
+  //         this.SpinnerService.hide();
+  //         console.log(error.error.message, 'Cerrar', {
+  //         timeOut: 2500,
+  //         });
+  //       }
+  //     });
+  //     this.SpinnerService.hide();
+  //   }
+  // }
+  onExportarExcel() {
+  this.dataForExcel = [];
+  this.dataReporteRetiros = [];
+
+  const sFecIni: string = this.range.get('start').value;
+  const sFecFin: string = this.range.get('end').value;
+
+  if (!sFecIni || !sFecFin) {
+    this.matSnackBar.open("Ingrese Rango de Fechas", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+    });
+    return;
   }
+
+  this.SpinnerService.show();
+
+  this.serviceRetiroRepuestos.getDatosReporte(sFecIni, sFecFin).subscribe({
+    next: (response: any) => {
+      if (response.success && response.totalElements > 0) {
+        this.dataReporteRetiros = response.elements;
+
+        this.dataForExcel = this.dataReporteRetiros.map((item: any) => ({
+          ['Fec. Apertura']: _moment(item.fec_Aprobacion.valueOf()).format('DD/MM/YYYY'),
+          ['Hora Apertura']: item.hora_Aprobacion,
+          ['Nom. Seguridad']: item.nom_Seguridad,
+          ['Fec. Requerimiento']: _moment(item.fec_Creacion.valueOf()).format('DD/MM/YYYY'),
+          ['Nom. Mantenimiento']: item.nom_Mantenimiento,
+          ['# Precinto Apertura']: item.nro_Precinto_Apertura,
+          ['# Precinto Cierre']: item.nro_Precinto_Cierre,
+          ['# Requerimiento']: item.num_Requerimiento,
+          ['Secuencia']: item.nro_Secuencia,
+          ['Cod. Item']: item.cod_Item,
+          ['Descripcion']: item.des_Item,
+          ['Can. Requerida']: item.can_Requerida,
+          ['UM']: item.cod_UniMed,
+          ['Repuesto de Cambio']: item.rpt_Cambio,
+          ['Foto']: item.itm_Foto
+        }));
+
+        const reportData = {
+          title: 'REPORTE',
+          data: this.dataForExcel,
+          headers: Object.keys(this.dataForExcel[0]),
+          Num_Requerimiento: 0
+        };
+
+        this.exceljsService.exportExcel4(reportData);
+      } else {
+        this.matSnackBar.open("No se encontraron datos", "Cerrar", {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 1500
+        });
+      }
+
+      this.SpinnerService.hide();
+    },
+    error: (error) => {
+      this.SpinnerService.hide();
+      console.error('Error al obtener datos:', error.error.message);
+    }
+  });
+}
+
 
   // onEnviarCorreo(){
   //   this.dataForExcel = [];

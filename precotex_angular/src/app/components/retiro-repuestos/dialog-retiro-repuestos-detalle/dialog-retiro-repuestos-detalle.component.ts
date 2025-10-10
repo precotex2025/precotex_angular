@@ -49,7 +49,7 @@ export class DialogRetiroRepuestosDetalleComponent implements OnInit {
             private dialog: MatDialog,
             private formBuilder       : FormBuilder,
             private matSnackBar       : MatSnackBar,
-            private serviceRetiro     : RetiroRepuestosService,
+            public serviceRetiro     : RetiroRepuestosService,
             private datePipe          : DatePipe,
             private SpinnerService    : NgxSpinnerService,
             private toastr            : ToastrService,
@@ -158,5 +158,11 @@ export class DialogRetiroRepuestosDetalleComponent implements OnInit {
       this.onGetDetalleRequerimiento(this.data.num_requerimiento)
     });
   }
+
+  // private baseUrl = 'https://gestion.precotex.com/api/getImagenDesdeBackEnd';
+
+  // getImagenUrl(imageId: string): string {
+  //   return `${this.baseUrl}?imageId=${encodeURIComponent(imageId)}`;
+  // }
 
 }

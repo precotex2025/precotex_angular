@@ -55,8 +55,10 @@
                 <th mat-header-cell *matHeaderCellDef>Foto</th>
                 <td mat-cell align="center" *matCellDef="let data_req">
                   <!-- <img *ngIf="data_req.itm_Foto != ''" src='../assets/imgRetiro/{{data_req.itm_Foto}}' alt='Foto' width="40" height="40" /> -->
-                  <img *ngIf="data_req.itm_Foto != ''" src='{{data_req.itm_Foto}}' alt='Foto' width="40" height="40" />
-                  <!-- <img *ngIf="data_req.itm_Foto != ''" src='http://192.168.1.36/imagenes/{{data_req}}' alt='Foto' width="40" height="40" /> -->
+                  <img [src]="serviceRetiro.getImagenUrl(data_req.itm_Foto)" 
+                  alt='Foto' width="40" height="40" />
+                  <!-- *ngIf="data_req.itm_Foto != ''" src='{{data_req.itm_Foto}}' -->
+                  <!-- <img *ngIf="data_req.itm_Foto != ''" src='http://1925.168.1.36/imagenes/{{data_req}}' alt='Foto' width="40" height="40" /> -->
                   <a *ngIf = "data_req.itm_Foto == '' "></a>
                   <!-- {{data_req.itm_Foto}} -->
                 </td> 

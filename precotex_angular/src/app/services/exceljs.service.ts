@@ -998,207 +998,362 @@ export class ExceljsService {
 
 
 
-async exportExcel4(excelData){
+// async exportExcel4(excelData){
 
-    //Title, Header & Data
-    const title = excelData.title;
-    const header = excelData.headers
-    const data = excelData.data;
-    const Num_Requerimiento = excelData.Num_Requerimiento;
+//     //Title, Header & Data
+//     const title = excelData.title;
+//     const header = excelData.headers
+//     const data = excelData.data;
+//     const Num_Requerimiento = excelData.Num_Requerimiento;
 
-    var abc = 64
-    var abcIni = ''
-    var abcFin = ''
-    for (let i = 0; i < header.length; i++) {
-      abc = abc + 1
-      if (i == 0) {
-        abcIni = String.fromCharCode(Number(abc))
-      }
-    }
-    abcFin = String.fromCharCode(Number(abc))
+//     var abc = 64
+//     var abcIni = ''
+//     var abcFin = ''
+//     for (let i = 0; i < header.length; i++) {
+//       abc = abc + 1
+//       if (i == 0) {
+//         abcIni = String.fromCharCode(Number(abc))
+//       }
+//     }
+//     abcFin = String.fromCharCode(Number(abc))
 
-    var abcIni2 = ''
-    var abcFin2 = ''
-    for (let i = 0; i < header.length; i++) {
-      abc = abc + 1
-      if (i == 0) {
-        abcIni2 = String.fromCharCode(Number(abc))
-      }
-    }
-    abcFin2 = String.fromCharCode(Number(abc))    
+//     var abcIni2 = ''
+//     var abcFin2 = ''
+//     for (let i = 0; i < header.length; i++) {
+//       abc = abc + 1
+//       if (i == 0) {
+//         abcIni2 = String.fromCharCode(Number(abc))
+//       }
+//     }
+//     abcFin2 = String.fromCharCode(Number(abc))    
 
-    //Create a workbook with a worksheet
-    let workbook = new Workbook();
-    let worksheet = workbook.addWorksheet(title);    
+//     //Create a workbook with a worksheet
+//     let workbook = new Workbook();
+//     let worksheet = workbook.addWorksheet(title);    
 
-    //Add Row and formatting
-    worksheet.mergeCells('C1', 'G4');
-    let titleRow = worksheet.getCell('C1');
-    titleRow.value = title
-    titleRow.font = {
-      name: 'Calibri',
-      size: 16,
-      underline: 'single',
-      bold: true,
-      color: { argb: '000000' }
-    }
-    titleRow.alignment = { vertical: 'middle', horizontal: 'center' }
+//     //Add Row and formatting
+//     worksheet.mergeCells('C1', 'G4');
+//     let titleRow = worksheet.getCell('C1');
+//     titleRow.value = title
+//     titleRow.font = {
+//       name: 'Calibri',
+//       size: 16,
+//       underline: 'single',
+//       bold: true,
+//       color: { argb: '000000' }
+//     }
+//     titleRow.alignment = { vertical: 'middle', horizontal: 'center' }
 
-    // Date
-    worksheet.mergeCells('H1:L4');
-    let d = new Date();
-    let date = d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear();
-    let dateCell = worksheet.getCell('H1');
-    dateCell.value = date;
-    dateCell.font = {
-      name: 'Calibri',
-      size: 12,
-      bold: true
-    }
-    dateCell.alignment = { vertical: 'middle', horizontal: 'center' }
+//     // Date
+//     worksheet.mergeCells('H1:L4');
+//     let d = new Date();
+//     let date = d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear();
+//     let dateCell = worksheet.getCell('H1');
+//     dateCell.value = date;
+//     dateCell.font = {
+//       name: 'Calibri',
+//       size: 12,
+//       bold: true
+//     }
+//     dateCell.alignment = { vertical: 'middle', horizontal: 'center' }
 
-    //Add Image
-    worksheet.mergeCells('A1:B4');
-    let myLogoImage = workbook.addImage({
-      base64: logo.imgBase64,
-      extension: 'jpeg',
-    });
-    worksheet.addImage(myLogoImage, 'A1:B3');
+//     //Add Image
+//     worksheet.mergeCells('A1:B4');
+//     let myLogoImage = workbook.addImage({
+//       base64: logo.imgBase64,
+//       extension: 'jpeg',
+//     });
+//     worksheet.addImage(myLogoImage, 'A1:B3');
 
-    //agregar filtros
-    worksheet.autoFilter = abcIni + '5:' + abcFin + '5';
+//     //agregar filtros
+//     worksheet.autoFilter = abcIni + '5:' + abcFin + '5';
 
-    //Adding Header Row
-    let headerRow = worksheet.addRow(header);
-    headerRow.eachCell((cell, number) => {
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: '4167B8' },
-        bgColor: { argb: '' }
-      }
-      cell.font = {
-        bold: true,
-        color: { argb: 'FFFFFF' },
-        size: 12
-      }
+//     //Adding Header Row
+//     let headerRow = worksheet.addRow(header);
+//     headerRow.eachCell((cell, number) => {
+//       cell.fill = {
+//         type: 'pattern',
+//         pattern: 'solid',
+//         fgColor: { argb: '4167B8' },
+//         bgColor: { argb: '' }
+//       }
+//       cell.font = {
+//         bold: true,
+//         color: { argb: 'FFFFFF' },
+//         size: 12
+//       }
 
-    })
+//     })
 
       
     
-    //Recorre la data y pinta 
-    for (const d of data) {
-      let row = worksheet.addRow(d);
+//     //Recorre la data y pinta 
+//     for (const d of data) {
+//       let row = worksheet.addRow(d);
 
       
       
-      //String(d[9]).replace(' ','%20')
-      if (!(d[9] == '')) {
-        // console.log('Columna', (d[9]));
-        const URL_BASE = String(d[14]);
-        // const URL_BASE = String(d[14]).replace(/ /g, '%20');
-        // console.log(URL_BASE);
-        row.height = 200;
-        const response = await firstValueFrom(this.serviceRetiroRepuestos.getGetImageBase64FromUrlAsync(URL_BASE));      
-        this.imageBase64 = `data:image/jpeg;base64,${response.base64Image}`;
+//       //String(d[9]).replace(' ','%20')
+//       if (!(d[9] == '')) {
+//         // console.log('Columna', (d[9]));
+//         const URL_BASE = String(d[14]);
+//         // const URL_BASE = String(d[14]).replace(/ /g, '%20');
+//         // console.log(URL_BASE);
+//         row.height = 200;
+//         const response = await firstValueFrom(this.serviceRetiroRepuestos.getGetImageBase64FromUrlAsync(URL_BASE));      
+//         this.imageBase64 = `data:image/jpeg;base64,${response.base64Image}`;
 
-        row.getCell(15).value = null;
-        let myLogoImage900 = workbook.addImage({
-          base64: this.imageBase64,
-          extension: 'jpeg',
-        });
-        //asignar columna
-        worksheet.addImage(myLogoImage900, {
-          tl: { col: 14, row: row.number - 1 }, // Columna 3 (2 base 0) y fila actual
-          ext: { width: 200, height: 200 }, // Tamaño de la imagen
+//         row.getCell(15).value = null;
+//         let myLogoImage900 = workbook.addImage({
+//           base64: this.imageBase64,
+//           extension: 'jpeg',
+//         });
+//         //asignar columna
+//         worksheet.addImage(myLogoImage900, {
+//           tl: { col: 14, row: row.number - 1 }, // Columna 3 (2 base 0) y fila actual
+//           ext: { width: 200, height: 200 }, // Tamaño de la imagen
           
-        });   
-      }
-      // Limpia el valor textual de la celda
-      // row.getCell(10).value = null;
-      // worksheet.getRow(row.number).height = 28;
+//         });   
+//       }
+//       // Limpia el valor textual de la celda
+//       // row.getCell(10).value = null;
+//       // worksheet.getRow(row.number).height = 28;
 
-    }
+//     }
     
-    let ultReg = data.length + 5;
-    const ultrows = worksheet.getRow(ultReg);
-    ultrows.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'EEEEEE' },
-        bgColor: { argb: '' }
-    }
-    ultrows.font = {
-      bold: true
-    }
+//     let ultReg = data.length + 5;
+//     const ultrows = worksheet.getRow(ultReg);
+//     ultrows.fill = {
+//         type: 'pattern',
+//         pattern: 'solid',
+//         fgColor: { argb: 'EEEEEE' },
+//         bgColor: { argb: '' }
+//     }
+//     ultrows.font = {
+//       bold: true
+//     }
 
-    worksheet.getColumn(1).width = 40;
-    worksheet.getColumn(2).width = 40;
-    worksheet.getColumn(3).width = 40;
-    worksheet.getColumn(4).width = 40;
-    worksheet.getColumn(5).width = 40;
-    worksheet.getColumn(6).width = 40;
-    worksheet.getColumn(7).width = 40;
-    worksheet.getColumn(8).width = 40;
-    worksheet.getColumn(9).width = 40;
-    worksheet.getColumn(10).width = 40;
-    worksheet.getColumn(11).width = 40;
-    worksheet.getColumn(12).width = 40;    
-    worksheet.getColumn(13).width = 40;    
-    worksheet.getColumn(14).width = 40;    
-    worksheet.getColumn(15).width = 40;
+//     worksheet.getColumn(1).width = 40;
+//     worksheet.getColumn(2).width = 40;
+//     worksheet.getColumn(3).width = 40;
+//     worksheet.getColumn(4).width = 40;
+//     worksheet.getColumn(5).width = 40;
+//     worksheet.getColumn(6).width = 40;
+//     worksheet.getColumn(7).width = 40;
+//     worksheet.getColumn(8).width = 40;
+//     worksheet.getColumn(9).width = 40;
+//     worksheet.getColumn(10).width = 40;
+//     worksheet.getColumn(11).width = 40;
+//     worksheet.getColumn(12).width = 40;    
+//     worksheet.getColumn(13).width = 40;    
+//     worksheet.getColumn(14).width = 40;    
+//     worksheet.getColumn(15).width = 40;
 
     
-    //Footer Row
-    let footerRow = worksheet.addRow(['']);
+//     //Footer Row
+//     let footerRow = worksheet.addRow(['']);
 
-    //Merge Cells
-    worksheet.mergeCells(`` + abcIni + `${footerRow.number}:` + abcFin + `${footerRow.number}`);
-    //Generate & Save Excel File
-    workbook.xlsx.writeBuffer().then((data) => {
+//     //Merge Cells
+//     worksheet.mergeCells(`` + abcIni + `${footerRow.number}:` + abcFin + `${footerRow.number}`);
+//     //Generate & Save Excel File
+//     workbook.xlsx.writeBuffer().then((data) => {
       
       
-      let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      if(Num_Requerimiento === 0){
-        FileSaver.saveAs(blob, title + '.xlsx');
+//       let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+//       if(Num_Requerimiento === 0){
+//         FileSaver.saveAs(blob, title + '.xlsx');
         
-        // this.http.get('https://gestion.precotex.com:444/getImagen/' + '54dfd366-bd41-4e2b-9a41-4f5259e00479_TUBO ESTRUCTURAL REDONDO INOX.jpg', { responseType: 'blob' })
-        // .subscribe(blob => {
-        // const url = URL.createObjectURL(blob);
-        // this.imagenUrl = url;
-        // });
-      }else{
+//         // this.http.get('https://gestion.precotex.com:444/getImagen/' + '54dfd366-bd41-4e2b-9a41-4f5259e00479_TUBO ESTRUCTURAL REDONDO INOX.jpg', { responseType: 'blob' })
+//         // .subscribe(blob => {
+//         // const url = URL.createObjectURL(blob);
+//         // this.imagenUrl = url;
+//         // });
+//       }else{
 
-        let params = new HttpParams();
-        params = params.append('Num_Requerimiento', Num_Requerimiento)
+//         let params = new HttpParams();
+//         params = params.append('Num_Requerimiento', Num_Requerimiento)
 
-        this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/guardar-excel', blob, {
-        headers: { 'Content-Type': 'application/octet-stream' },
-        params
-        }).subscribe(() => {
-          console.log('Archivo guardado en el servidor');
-          this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo2', Num_Requerimiento,
-            {headers: { 'Content-Type': 'application/json' }}
-          ).subscribe(() => {
-            console.log('Correo Enviado');
-          });
-        });
+//         this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/guardar-excel', blob, {
+//         headers: { 'Content-Type': 'application/octet-stream' },
+//         params
+//         }).subscribe(() => {
+//           console.log('Archivo guardado en el servidor');
+//           this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo2', Num_Requerimiento,
+//             {headers: { 'Content-Type': 'application/json' }}
+//           ).subscribe(() => {
+//             console.log('Correo Enviado');
+//           });
+//         });
         
-        // // const headers = this.Header;
-        // this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo', '"1"',
-        //   {headers: { 'Content-Type': 'application/json' }}
-        // ).subscribe(() => {
-        //   console.log('Se envio el correo');
-        // });      
+//         // // const headers = this.Header;
+//         // this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo', '"1"',
+//         //   {headers: { 'Content-Type': 'application/json' }}
+//         // ).subscribe(() => {
+//         //   console.log('Se envio el correo');
+//         // });      
 
-      }
-    })
+//       }
+//     })
 
 
-        // const headers = this.Header;
+//         // const headers = this.Header;
        
+//   }
+async exportExcel4(excelData) {
+  const title = excelData.title;
+  const header = excelData.headers;
+  const data = excelData.data;
+  const Num_Requerimiento = excelData.Num_Requerimiento;
+
+  const workbook = new Workbook();
+  const worksheet = workbook.addWorksheet(title);
+
+  // Título
+  worksheet.mergeCells('C1', 'G4');
+  const titleRow = worksheet.getCell('C1');
+  titleRow.value = title;
+  titleRow.font = {
+    name: 'Calibri',
+    size: 16,
+    underline: 'single',
+    bold: true,
+    color: { argb: '000000' }
+  };
+  titleRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+  // Fecha
+  worksheet.mergeCells('H1:L4');
+  const d = new Date();
+  const date = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`;
+  const dateCell = worksheet.getCell('H1');
+  dateCell.value = date;
+  dateCell.font = { name: 'Calibri', size: 12, bold: true };
+  dateCell.alignment = { vertical: 'middle', horizontal: 'center' };
+
+  // Logo
+  worksheet.mergeCells('A1:B4');
+  const logoImage = workbook.addImage({
+    base64: logo.imgBase64,
+    extension: 'jpeg',
+  });
+  worksheet.addImage(logoImage, 'A1:B3');
+
+  // Filtros
+  const abcIni = 'A';
+  const abcFin = String.fromCharCode(65 + header.length - 1);
+  worksheet.autoFilter = `${abcIni}5:${abcFin}5`;
+
+  // Encabezado
+  const headerRow = worksheet.addRow(header);
+  headerRow.eachCell((cell) => {
+    cell.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: '4167B8' }
+    };
+    cell.font = {
+      bold: true,
+      color: { argb: 'FFFFFF' },
+      size: 12
+    };
+  });
+
+  // Datos + Imágenes
+  for (const row of data) {
+    const rowValues = header.map((key) => key === 'Foto' ? null : row[key] ?? '');
+    const excelRow = worksheet.addRow(rowValues);
+
+    const nombreImagen = row['Foto'];
+    if (nombreImagen && nombreImagen.trim() !== '' && !nombreImagen.includes('sin_foto')) {
+      try {
+        const response = await firstValueFrom(this.serviceRetiroRepuestos.getImagen(nombreImagen));
+        const blob = new Blob([response], { type: 'image/jpeg' });
+
+        const base64 = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const result = reader.result as string;
+            resolve(result.split(',')[1]);
+          };
+          reader.onerror = () => reject('Error al leer imagen');
+          reader.readAsDataURL(blob);
+        });
+
+        const imageId = workbook.addImage({
+          base64,
+          extension: 'jpeg'
+        });
+
+        worksheet.addImage(imageId, {
+          tl: { col: header.indexOf('Foto'), row: excelRow.number - 1 },
+          ext: { width: 100, height: 100 }
+        });
+
+        excelRow.height = 80;
+      } catch (err) {
+        console.warn(`No se pudo cargar la imagen ${nombreImagen}`, err);
+      }
+    }
   }
+
+  // Estilos finales
+  const ultReg = data.length + 5;
+  const ultrows = worksheet.getRow(ultReg);
+  ultrows.fill = {
+    type: 'pattern',
+    pattern: 'solid',
+    fgColor: { argb: 'EEEEEE' }
+  };
+  ultrows.font = { bold: true };
+
+  for (let i = 1; i <= header.length; i++) {
+    worksheet.getColumn(i).width = 40;
+  }
+
+  const footerRow = worksheet.addRow(['']);
+  worksheet.mergeCells(`${abcIni}${footerRow.number}:${abcFin}${footerRow.number}`);
+
+  // Guardar archivo
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+  if (Num_Requerimiento === 0) {
+    FileSaver.saveAs(blob, title + '.xlsx');
+  } else {
+    // const params = new HttpParams().append('Num_Requerimiento', Num_Requerimiento);
+    // this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/guardar-excel', blob, {
+    //   headers: { 'Content-Type': 'application/octet-stream' },
+    //   params
+    // }).subscribe(() => {
+    //   console.log('Archivo guardado en el servidor');
+    //   this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo2', Num_Requerimiento, {
+    //     headers: { 'Content-Type': 'application/json' }
+    //   }).subscribe(() => {
+    //     console.log('Correo Enviado');
+    //   });
+    // });
+    const params = new HttpParams().append('Num_Requerimiento', Num_Requerimiento);
+
+    this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/guardar-excel', blob, {
+      headers: { 'Content-Type': 'application/octet-stream' },
+      params
+    }).subscribe(() => {
+      console.log('Archivo guardado en el servidor');
+
+      this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo2', Num_Requerimiento, {
+        headers: { 'Content-Type': 'application/json' }
+      }).subscribe(() => {
+        console.log('Correo Enviado');
+      });
+    });
+
+  }
+}
+
+
+
+
+
 
   /* 
   Genera Reporte excel - Memorandum Detallados

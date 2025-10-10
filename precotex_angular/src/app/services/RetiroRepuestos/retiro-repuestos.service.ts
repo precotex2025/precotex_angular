@@ -165,11 +165,17 @@ export class RetiroRepuestosService {
     return this.http.post(this.baseUrlTinto + 'TxRetiroRepuestos/postEnviarCorreo2', Num_Requerimiento, {headers});
   }
 
-  getimagen(imageId: string):Observable<Blob>{
-
-    const url = `${this.baseUrlTinto}/${imageId}`;
-    return this.http.get(url, { responseType: 'blob' });
-
+  private bas = 'https://gestion.precotex.com:444/ubicaciones/api/TxRetiroRepuestos/getImagenDesdeBackEnd';
+  
+  getImagenUrl(imageId: string): string {
+    console.log('el nombre de la imagen es: ', imageId);
+    return `${this.bas}?imageId=${encodeURIComponent(imageId)}`;
   }
 
+  getImagen(nombre: string): Observable<Blob> {
+  const nombreCodificado = encodeURIComponent(nombre);
+  return this.http.get(`${this.bas}?imageId=${nombreCodificado}`, {
+    responseType: 'blob'
+  });
+  }
 }
