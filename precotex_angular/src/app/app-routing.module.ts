@@ -308,6 +308,7 @@ import { LiberaOpColorComponent } from './components/auditoria-corte/libera-op-c
 import { SalidaTiendaComponent } from './components/seguridad/salida-tienda/salida-tienda.component';
 import { RetiroRepuestosComponent } from './components/retiro-repuestos/retiro-repuestos.component';
 import { DialogRetiroRepuestosComponent } from './components/retiro-repuestos/dialog-retiro-repuestos/dialog-retiro-repuestos/dialog-retiro-repuestos.component';
+import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/reporte-vehiculo-inmovilizado/reporte-vehiculo-inmovilizado.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
