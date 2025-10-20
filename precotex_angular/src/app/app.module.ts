@@ -13,6 +13,8 @@ import { MenuComponent } from './components/menu/menu.component';
 import { AuditoriaLineaCosturaComponent } from './components/auditoria-calidad/auditoria-linea-costura/auditoria-linea-costura.component';
 import { PrincipalComponent } from './components/principal/principal.component'
 import { FilterByValuePipe } from './pipes/filter-by-value.pipe';
+import { getCustomPaginatorIntl } from './paginacion-custom';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { MY_DATE_FORMATS } from '../app/my-date-formats';
@@ -583,11 +585,16 @@ import { DialogCapturarFotoCajaComponent } from './components/auditoria-calidad/
 import { ReporteNCComponent } from './components/reporte-nc/reporte-nc.component';
 import { ReporteNcResolvedorComponent } from './components/reporte-nc/reporte-nc-resolvedor/reporte-nc-resolvedor.component';
 import { ReporteNcLstComponent } from './components/reporte-nc/reporte-nc-lst/reporte-nc-lst.component';
+import { MantenimientoSedeXAreaComponent } from './components/reporte-nc/mantenimiento-sede-x-area/mantenimiento-sede-x-area.component';
+
 
 //REGISTRO PARIHUELA V2
 import { RegistroPartidaParihuelaV2Component } from './components/registro-partida-parihuela-v2/registro-partida-parihuela-v2.component';
 import { EvidenciaEmpaqueCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/evidencia-empaque-caja/evidencia-empaque-caja.component';
 import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/reporte-vehiculo-inmovilizado/reporte-vehiculo-inmovilizado.component';
+import { DialogAreaNuevoComponent } from './components/reporte-nc/mantenimiento-sede-x-area/dialog-area-nuevo/dialog-area-nuevo.component';
+import { MantenimientoResponsablesComponent } from './components/reporte-nc/mantenimiento-responsables/mantenimiento-responsables.component';
+import { DialogResponsablesNuevoComponent } from './components/reporte-nc/mantenimiento-responsables/dialog-responsables-nuevo/dialog-responsables-nuevo.component';
 
 @NgModule({
   declarations: [
@@ -1098,7 +1105,10 @@ import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/rep
     ReporteNCComponent,
     ReporteNcResolvedorComponent,
     ReporteNcLstComponent,
-
+    MantenimientoSedeXAreaComponent,
+    DialogAreaNuevoComponent,
+    MantenimientoResponsablesComponent,
+    DialogResponsablesNuevoComponent,
     //REGISTRO PARIHUELA
     RegistroPartidaParihuelaV2Component,
     
@@ -1133,6 +1143,7 @@ import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/rep
     MatIconModule,
     DragDropModule,
     NgxPaginationModule,
+    MatPaginatorModule,
     ToastrModule.forRoot({
       timeOut: 10000,
       positionClass: 'toast-bottom-right',
@@ -1146,6 +1157,7 @@ import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/rep
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
     { provide: LocationStrategy, useClass: HashLocationStrategy},
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true},
+    { provide: MatPaginatorIntl, useValue: getCustomPaginatorIntl() },
     DatePipe
   ],
 

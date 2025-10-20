@@ -313,6 +313,10 @@ import { ReporteNcResolvedorComponent } from './components/reporte-nc/reporte-nc
 import { ReporteNcLstComponent } from './components/reporte-nc/reporte-nc-lst/reporte-nc-lst.component';
 import { RegistroPartidaParihuelaV2Component } from './components/registro-partida-parihuela-v2/registro-partida-parihuela-v2.component';
 import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/reporte-vehiculo-inmovilizado/reporte-vehiculo-inmovilizado.component';
+import { MantenimientoSedeXAreaComponent } from './components/reporte-nc/mantenimiento-sede-x-area/mantenimiento-sede-x-area.component';
+import { DialogAreaNuevoComponent } from './components/reporte-nc/mantenimiento-sede-x-area/dialog-area-nuevo/dialog-area-nuevo.component';
+import { DialogResponsablesNuevoComponent } from './components/reporte-nc/mantenimiento-responsables/dialog-responsables-nuevo/dialog-responsables-nuevo.component';
+import { MantenimientoResponsablesComponent } from './components/reporte-nc/mantenimiento-responsables/mantenimiento-responsables.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -678,6 +682,10 @@ const routes: Routes = [
   {path: 'ReporteNC', component: ReporteNCComponent},
   {path: 'ReporteNCResolvedor', component: ReporteNcResolvedorComponent},
   {path: 'ReporteNCListado', component: ReporteNcLstComponent},
+  {path: 'MantenimientoAreaXSede', component: MantenimientoSedeXAreaComponent},
+  {path: 'DialogAreaNuevo', component: DialogAreaNuevoComponent},
+  {path: 'MantenimientoResponsables', component: MantenimientoResponsablesComponent},
+  {path: 'DialogResponsablesNuevo', component: DialogResponsablesNuevoComponent},
 
   //PARIHUELA V2
   {path: 'RegistroParihuelaV2', component: RegistroPartidaParihuelaV2Component},

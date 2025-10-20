@@ -46,6 +46,30 @@ export class ReporteNCService {
     return this.http.get(this.baseUrlTinto + 'TxReporteNC/getListarEstados', {headers});
   }
 
+  getObtenerImagenes(Rep_Id: number, Img_Fam: number){
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append("Rep_Id", Rep_Id);
+    params = params.append("Img_Fam", Img_Fam);
+    return this.http.get(this.baseUrlTinto + 'TxReporteNC/getObtenerImagenes', {headers, params});
+  }
+
+  getBuscarRegistros(Num_Planta: number, Are_Id: number, Resp_Id: number, Rep_Niv_Rgo: number, Rep_Est: number){
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('Num_Planta', Num_Planta);
+    params = params.append('Are_Id', Are_Id);
+    params = params.append('Resp_Id', Resp_Id);
+    params = params.append('Rep_Niv_Rgo', Rep_Niv_Rgo);
+    params = params.append('Rep_Est', Rep_Est);
+    return this.http.get(this.baseUrlTinto + 'TxReporteNC/getBuscarRegistros', { headers, params })
+  }
+
+  getListarRiesgos(){
+    const headers = this.Header;
+    return this.http.get(this.baseUrlTinto + 'TxReporteNC/getListarRiesgos', { headers });
+  }
+
   postRegistrarReporteNC(data: any){
     const headers = this.Header;
     return this.http.post(this.baseUrlTinto + 'TxReporteNC/postRegistrarReporteNC', data, {headers});
@@ -63,9 +87,82 @@ export class ReporteNCService {
 
   patchActualizarReporteNCOriginal(data: any){
     const headers = this.Header;
-    return this.http.patch(this.baseUrlTinto + 'TxReporteNC/patchActualizarReporteNC', data, {headers});
+    return this.http.patch(this.baseUrlTinto + 'TxReporteNC/patchActualizarReporteNCOriginal', data, {headers});
   }
 
+  deleteEliminarImagenes(Img_Id: number){
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('Img_Id', Img_Id);
+    return this.http.delete(this.baseUrlTinto + 'TxReporteNC/deleteEliminarImagenes', {headers, params})
+  }
+
+  private bas = 'https://gestion.precotex.com:444/ubicaciones/api/TxRetiroRepuestos/getImagenDesdeBackEnd';
+  
+  getImagenUrl(imageId: string): string {
+    // console.log('el nombre de la imagen es: ', imageId);
+    return `${this.bas}?imageId=${encodeURIComponent(imageId)}`;
+  }
+
+  /*AREAS*/
+
+  getObtenerAreas(Are_Id: number){
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('Are_Id', Are_Id);
+    return this.http.get(this.baseUrlTinto + 'TxReporteNC/getObtenerAreas', {headers, params});
+  }
+
+  postRegistrarArea(data: any){
+    const headers = this.Header;
+    return this.http.post(this.baseUrlTinto + 'TxReporteNC/postRegistrarArea', data, {headers});
+  }
+
+  patchActualizarArea(data: any){
+    const headers = this.Header;
+    return this.http.patch(this.baseUrlTinto + 'TxReporteNC/patchActualizarArea', data, {headers});
+  }
+
+  deleteEliminarArea(Are_Id: number){
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('Are_Id', Are_Id);
+    return this.http.delete(this.baseUrlTinto + 'TxReporteNC/deleteEliminarArea', {headers, params});
+  }
+
+  getObtenerAreaXSede(Num_Planta: number, Are_Id: number){
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('Num_Planta', Num_Planta);
+    params = params.append('Are_Id', Are_Id);
+    return this.http.get(this.baseUrlTinto + 'TxReporteNC/getObtenerAreaXSede', {headers, params});
+  }
+
+  /*RESPONSABLES*/
+
+  getObtenerResponsables(Resp_Id: number){
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('Resp_Id', Resp_Id);
+    return this.http.get(this.baseUrlTinto + 'TxReporteNC/getObtenerResponsables', {headers, params});
+  }
+
+  postRegistrarResponsable(data: any){
+    const headers = this.Header;
+    return this.http.post(this.baseUrlTinto + 'TxReporteNC/postRegistrarResponsable', data, {headers});
+  }
+
+  patchActualizarResponsable(data: any){
+    const headers = this.Header;
+    return this.http.patch(this.baseUrlTinto + 'TxReporteNC/patchActualizarResponsable', data, {headers});
+  }
+
+  deleteEliminarResponsable(Resp_Id: number){
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('Resp_Id', Resp_Id);
+    return this.http.delete(this.baseUrlTinto + 'TxReporteNC/deleteEliminarResponsable', {headers, params});
+  }
 
 
 }

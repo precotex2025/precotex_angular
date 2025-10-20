@@ -1,5 +1,5 @@
     <mat-card class="form-container">
-    <form>
+    <form #formResolvedor="ngForm" >
 
         <!-- Fecha y Hora -->
         <div class="form-section">
@@ -63,22 +63,18 @@
         </mat-form-field>
         </div>
 
-        <!-- Imágenes -->
-        <div class="form-section">
-        <div class="image-gallery">
-            <ng-container *ngFor="let img of imagenes; let i = index">
-            <img [src]="img" alt="Imagen {{ i + 1 }}" class="preview-image" />
-            </ng-container>
-            <ng-container *ngIf="imagenes.length === 0">
-            <div class="placeholder">No hay imágenes disponibles</div>
-            </ng-container>
+        
+        <div class="mini-gallery">
+        <img *ngFor="let img of imagenesAdjuntasPreCargadas" 
+            [src]="img.base64ParaVistaPreCargada" 
+            [alt]="img.nombrePreCargada" 
+            class="mini-image" />
         </div>
-        </div>
-
+        
         <!-- Aceptar -->
         <div class="form-section">
         <div class="section-title">Aceptar</div>
-        <mat-radio-group [(ngModel)]="formData.aceptar" name="aceptar" (change)="onAceptarChange($event)">
+        <mat-radio-group [(ngModel)]="formDataPatch.rep_Aceptado" name="aceptar" (change)="onAceptarChange($event)">
             <mat-radio-button value="1" style="margin-right: 15px;">Sí</mat-radio-button>
             <mat-radio-button value="0">No</mat-radio-button>
         </mat-radio-group>
@@ -87,10 +83,10 @@
         <!-- Responsable -->
         <mat-form-field appearance="fill">
             <mat-label>Responsable</mat-label>
-            <mat-select [(ngModel)]="formData.responsableLevantamiento" 
+            <mat-select [(ngModel)]="formDataPatch.rep_Resp_Levantamiento" 
                         name="responsableLevantamiento"
-                        [disabled]="formData.aceptar !== '1'">
-            <mat-option *ngFor="let responsable of responsables" [value]="responsable.value">{{ responsable.label }}</mat-option>
+                        [disabled]="formDataPatch.rep_Aceptado !== '0'">
+            <mat-option *ngFor="let responsable of responsables" [value]="responsable.resp_Id.toString()">{{ responsable.resp_Nom }}</mat-option>
             </mat-select>
         </mat-form-field>
 
@@ -98,29 +94,30 @@
         <div class="form-section">
         <mat-form-field appearance="fill">
             <mat-label>Acción Correctiva Tomada</mat-label>
-            <input matInput [(ngModel)]="formData.accionTomada" name="accionTomada">
+            <input matInput [(ngModel)]="formDataPatch.rep_AccCor_Tom" name="accionTomada">
         </mat-form-field>
 
         <div class="fecha-hora-row">
             <mat-form-field appearance="fill">
             <mat-label>Fecha de levantamiento</mat-label>
-            <input matInput [value]="formData.fecha" readonly>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill">
-            <mat-label>Hora de levantamiento</mat-label>
-            <input matInput [value]="formData.hora" readonly>
+            <input matInput
+                    [matDatepicker]="picker"
+                    (click)="picker.open()"
+                    [(ngModel)]="formDataPatch.rep_FecSub"
+                    name="fechaLevantamiento" readonly>
+            <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
         </div>
         </div>
+        
 
         <!-- Cierre de NC -->
         <div class="form-section">
         <div class="section-title">Cierre de NC</div>
         <div class="status-buttons">
-            <button mat-button
+            <button mat-button 
                     *ngFor="let cierre of cierres"
-                    [ngClass]="{ 'selected': cierre.est_Id === cierreSeleccionado }"
+                    [ngClass]="{ 'selected': cierre.est_Id.toString() === cierreSeleccionado }"
                     (click)="selectCierre(cierre)">
             {{ cierre.est_Des }}
             </button>
@@ -130,16 +127,49 @@
         <!-- Detallar Observación -->
         <div class="form-section">
         <mat-form-field appearance="fill">
-            <mat-label>Detallar Observación</mat-label>
-            <textarea matInput rows="3" [(ngModel)]="formData.observacion" 
+            <mat-label></mat-label>
+            <mat-label *ngIf="formData.est_Id == '1'">Detallar Razón de Pendiente</mat-label>
+            <mat-label *ngIf="formData.est_Id == '3'">Detallar Observación</mat-label>
+            <textarea matInput rows="3" [(ngModel)]="formDataPatch.rep_DetObs" 
                     name="observacion"
-                    [disabled]="formData.est_Id != '3'"></textarea>
+                    [disabled]="formData.est_Id == '2'"></textarea>
         </mat-form-field>
         </div>
 
+
+        <!-- Botón para agregar imágenes -->
+        <div class="image-upload">
+        <button mat-stroked-button color="accent" (click)="fileInput.click()">
+            <mat-icon>add_photo_alternate</mat-icon>
+            Agregar imágenes (máx. 2)
+        </button>
+        <input #fileInput type="file"
+            accept="image/*"
+            multiple
+            hidden
+            (change)="onImagenesSeleccionadas($event)">
+        </div>
+
+        <!-- Galería de imágenes -->
+        <div class="form-section">
+            <div class="image-gallery">
+            <div class="image-item" *ngFor="let img of imagenesAdjuntas; let i = index">
+                <img [src]="img.base64ParaVista" alt="{{ img.nombre }}" class="preview-image" />
+                <div class="image-name">{{ img.nombre.substring(img.nombre.indexOf('_') + 1) }}</div>
+                <button mat-icon-button color="warn" (click)="eliminarImagen(i, img.img_Id)">
+                <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+            <div *ngIf="imagenesAdjuntas.length === 0" class="placeholder">
+                No hay imágenes seleccionadas
+            </div>
+            </div>
+        </div>
+
+
         <!-- Botones finales -->
         <div class="action-buttons">
-        <button mat-raised-button color="primary" (click)="onGuardar()">Guardar</button>
+        <button mat-raised-button color="primary" (click)="onGuardar()" [disabled]="formResolvedor.invalid">Guardar</button>
         <button mat-button color="warn" (click)="onCancelar()">Cancelar</button>
         </div>
 

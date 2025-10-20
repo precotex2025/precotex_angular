@@ -2,13 +2,72 @@
     <!-- Encabezado -->
     <div class="listado-header">
         <button mat-raised-button color="primary" class="nuevo-btn" (click)="RegistrarNC()">Nuevo</button>
+        <button mat-raised-button color="secondary" class="nuevo-btn" (click)="onRedireccionarAreasXSede()">Área x Sede</button>
+        <button mat-raised-button color="secondary" class="nuevo-btn" (click)="onRedireccionarResponsable()">Responsables</button>
         <!-- <span class="titulo">Listado de Reportes NC</span> -->
-        <button mat-button class="dashboard-btn">Dashboard</button>
+        <!-- <button mat-button class="dashboard-btn">Dashboard</button> -->
     </div>
+
+
+    <!-- Filtros -->
+    <div class="filtro-panel">
+    <div class="filtro-panel-div-separar">
+    <mat-form-field appearance="fill">
+        <mat-label>Sede</mat-label>
+        <mat-select [(ngModel)]="formDataBuscar.num_Planta" (selectionChange)="onSedeSeleccionada($event.value)">
+        <mat-option value="0">Todas</mat-option>
+        <mat-option *ngFor="let s of sedes" [value]="s.num_Planta">{{ s.des_Planta }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    </div>
+    <div class="filtro-panel-div-separar">
+    <mat-form-field appearance="fill">
+        <mat-label>Área</mat-label>
+        <mat-select [(ngModel)]="formDataBuscar.are_Id">
+        <mat-option value="0">Todas</mat-option>
+        <mat-option *ngFor="let a of areas" [value]="a.are_Id">{{ a.are_Des }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    </div>
+    <div class="filtro-panel-div-separar">
+    <mat-form-field appearance="fill">
+        <mat-label>Responsable</mat-label>
+        <mat-select [(ngModel)]="formDataBuscar.resp_Id">
+        <mat-option value="0">Todos</mat-option>
+        <mat-option *ngFor="let r of responsables" [value]="r.resp_Id">{{ r.resp_Nom }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    </div>
+    <div class="filtro-panel-div-separar">
+    <mat-form-field appearance="fill">
+        <mat-label>Criticidad</mat-label>
+        <mat-select [(ngModel)]="formDataBuscar.niv_Rgo_Id">
+        <mat-option value="0">Todas</mat-option>
+        <mat-option *ngFor="let c of criticidades" [value]="c.niv_Rgo_Id">{{c.niv_Rgo_Des}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    </div>
+    <div class="filtro-panel-div-separar">
+    <mat-form-field appearance="fill">
+        <mat-label>Estado</mat-label>
+        <mat-select [(ngModel)]="formDataBuscar.est_Id">
+        <mat-option value="0">Todos</mat-option>
+        <mat-option *ngFor="let e of estados" [value]="e.est_Id">{{ e.est_Des }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    </div>
+    </div>
+
+    <div>
+    <div class="listado-header">
+        <button mat-raised-button color="secondary" class="nuevo-btn" (click)="onBuscar()">Buscar</button>
+    </div>
+    </div>
+
 
     <!-- Tabla de reportes -->
     <div class="tabla-responsive">
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z1">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z1" matSort>
 
         <!-- Identificación -->
         <ng-container matColumnDef="rep_Id">
@@ -25,25 +84,25 @@
         <!-- Fecha Observación -->
         <ng-container matColumnDef="rep_FecObs">
             <th mat-header-cell *matHeaderCellDef> Fecha Observación </th>
-            <td mat-cell *matCellDef="let reporte"> {{ reporte.rep_FecObs }} </td>
+            <td mat-cell *matCellDef="let reporte"> {{ reporte.rep_FecObs | date:'dd/MM/yyyy' }} </td>
         </ng-container>
 
         <!-- Responsable -->
         <ng-container matColumnDef="resp_Id">
             <th mat-header-cell *matHeaderCellDef> Responsable </th>
-            <td mat-cell *matCellDef="let reporte"> {{ reporte.resp_Id }} </td>
+            <td mat-cell *matCellDef="let reporte"> {{ reporte.resp_Nom }} </td>
         </ng-container>
 
         <!-- Estado -->
         <ng-container matColumnDef="rep_Est">
             <th mat-header-cell *matHeaderCellDef> Estado </th>
-            <td mat-cell *matCellDef="let reporte"> {{ reporte.rep_Est }} </td>
+            <td mat-cell *matCellDef="let reporte"> {{ reporte.est_Des }} </td>
         </ng-container>
 
         <!-- Fecha Subsanación -->
         <ng-container matColumnDef="rep_FecSub">
             <th mat-header-cell *matHeaderCellDef> Fecha Subsanación </th>
-            <td mat-cell *matCellDef="let reporte"> {{ reporte.rep_FecSub }} </td>
+            <td mat-cell *matCellDef="let reporte"> {{ reporte.rep_FecSub | date:'dd/MM/yyyy' }} </td>
         </ng-container>
 
         <!-- Acción -->
@@ -66,5 +125,10 @@
         <tr mat-header-row *matHeaderRowDef="columnas"></tr>
         <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
         </table>
+        <mat-paginator
+            [pageSize]="10"
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons>
+        </mat-paginator>
     </div>
     </div>

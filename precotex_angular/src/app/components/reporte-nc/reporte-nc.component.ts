@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalVariable } from 'src/app/VarGlobals';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -15,7 +15,14 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 //*********************************************************************************** */
 import { ReporteNCService } from 'src/app/services/ReporteNC/reporte-nc.service';
+import { parse } from 'path';
 
+interface ImagenAdjunta {
+  img_Id?: number,
+  nombre: string;
+  base64: string;
+  base64ParaVista: string;
+}
 
 // interface dataReporte{
 //   rep_Id: string;
@@ -40,7 +47,7 @@ interface FormData {
   rep_FecObs: string;
   rep_HorObs: string;
   cod_Planta_Tg: string;
-  are_Id: number;
+  are_Id: number; 
   rep_Esp: string;
   rep_Clas: string;
   rep_DesNC: string;
@@ -50,6 +57,10 @@ interface FormData {
   rep_RepPor: string;
   rep_Est: string;
   Rep_FecSub: string;
+  imagenes?: string;
+  imgnombre?: string;
+  img_Fam: number;
+  // num_Planta: string;
   // codigo: number,
   // sMsj: string
 }
@@ -70,28 +81,58 @@ interface Clasificacion{
   templateUrl: './reporte-nc.component.html',
   styleUrls: ['./reporte-nc.component.scss']
 })
-export class ReporteNCComponent implements OnInit {
+export class ReporteNCComponent implements OnInit, AfterViewInit {
+  imagenesAdjuntas: ImagenAdjunta[] = []; 
   sedeSeleccionada: string = '';
   clasificacionSeleccionada: string = '';
+  sedes = [];
+  clasificaciones = [];
+  imagenesCargadas = [];
   sCod_Usuario = GlobalVariable.vusu;
   accionR = '';
   rep_IdR = 0;
+  Num_Planta: number = 0;
+  Are_Id: number = 0;
+
   private timer: any;
   @ViewChild(MatSort) sort!: MatSort;  
+  // @ViewChild('botonSede') botonSede!: ElementRef<HTMLButtonElement>;
+  @ViewChildren('botonSede') botonesSede!: QueryList<ElementRef<HTMLButtonElement>>;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private SpinnerService: NgxSpinnerService,
     private toastr: ToastrService,
-    private serviceReporteNC: ReporteNCService  
+    private serviceReporteNC: ReporteNCService,
+    private matSnackBar: MatSnackBar  
   ) { }
 
   
   ngOnInit(): void {
-    this.ngOnGetParams();
+    
     this.onGetSedes();
     this.onGetClasificaciones();
+    this.onGetRiesgos();
+    this.onGetResponsables(1);
+    this.ngOnGetParams();
     
+  }
+
+  ngAfterViewInit(): void {
+    // setTimeout(() => {
+    //   const targetNumPlanta = this.formData.cod_Planta_Tg;
+    //   console.log(targetNumPlanta);
+    //   const boton = this.botonesSede.find((btn, index) => {
+    //     const sede = this.sedes[index];
+    //     return sede.num_Planta === targetNumPlanta;
+    //   });
+    //   console.log('CERCA A ENTRAR AL FORZADO');
+    //   if (boton) {
+    //     console.log('ENTRA AL FORZADO');
+    //     boton.nativeElement.click();
+    //     console.log('Click forzado en sede:', targetNumPlanta);
+    //   }
+    // }, 100);
   }
 
   formData: FormData= {
@@ -108,7 +149,11 @@ export class ReporteNCComponent implements OnInit {
     resp_Id: 0,
     rep_RepPor: this.sCod_Usuario,
     rep_Est: '',
-    Rep_FecSub: ''
+    Rep_FecSub: '',
+    imagenes: '',
+    imgnombre: '',
+    img_Fam: 0
+    // num_Planta: ''
     // codigo: 0,
     // sMsj: ''
   };
@@ -123,33 +168,20 @@ export class ReporteNCComponent implements OnInit {
       this.accionR = params['accionR'] || 'H';
       this.rep_IdR = Number(params['rep_IdR']) || 0;
     })
-    console.log(this.accionR);
-    console.log(this.rep_IdR);
     if(this.rep_IdR == 0 ){
       this.updateFechaHora();
       this.timer = setInterval(() => this.updateFechaHora(), 1000);
     }else{
-      this.onCargarDatos(this.rep_IdR)
+      this.onGetImagenes(this.rep_IdR, 1);
+      this.onCargarDatos(this.rep_IdR); 
     }
   }
 
   onRedireccionarListado(modo: number){
     if(modo === 0){
       this.router.navigate(['ReporteNCListado'])
-      // , 
-      // { queryParams: {
-      //     estado: 1,
-      //     sexo: 'si'
-      // }}
-    // )
     }else{
       this.router.navigate(['ReporteNCListado'])
-    //     , 
-    //   { queryParams: {
-    //       estado: 1,
-    //       sexo: 'si'
-    //   }}
-    // )
     }
   }
 
@@ -166,28 +198,13 @@ export class ReporteNCComponent implements OnInit {
   this.formData.rep_FecObs = `${dia}/${mes}/${año}`;
 }
 
-  sedes = [];
+  
 
-  areas = [
-  { id: 1, nombre: 'Producción' },
-  { id: 2, nombre: 'Mantenimiento' },
-  { id: 3, nombre: 'Calidad' },
-  { id: 4, nombre: 'Seguridad' }
-  ];
+  areas = [];
 
-  clasificaciones = [];
+  niveles = [];
 
-  niveles = [
-  { id: 1, nombre: 'BAJO' },
-  { id: 2, nombre: 'MEDIO' },
-  { id: 3, nombre: 'ALTO' }
-];
-
-  responsables = [
-  { id: 1, nombre: 'Juan Pérez' },
-  { id: 2, nombre: 'Ana Torres' },
-  { id: 3, nombre: 'Carlos Díaz' }
-  ];
+  responsables = [];
 
   // select(field: keyof typeof this.formData, value: string) {
   //   this.formData[field] = value;
@@ -197,9 +214,7 @@ export class ReporteNCComponent implements OnInit {
   }
 
   onProcesar(){
-    console.log('La Accion es: ', this.accionR);
     if(this.accionR === 'I'){
-      console.log('Acabas de entrar a la insercion');
       this.onGuardar();
     }else{
       this.onEditar();
@@ -207,13 +222,82 @@ export class ReporteNCComponent implements OnInit {
   }
 
   onGuardar(): void{
+    const base64Concatenado = this.imagenesAdjuntas.map(img => img.base64).join('|');
+    const nombres = this.imagenesAdjuntas.map(img => img.nombre).join(',');
     const EnviarData: FormData = {
       ...this.formData,
-          // imagenes: this.imagenes
+      imagenes: base64Concatenado,
+      imgnombre: nombres,
+      img_Fam: 1
     };
-    console.log('Los datos que se van a enviar son: ', EnviarData);
+
+    if(EnviarData.cod_Planta_Tg === ""){
+      this.matSnackBar.open("Seleccione una sede", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }else if (EnviarData.are_Id === 0){
+      this.matSnackBar.open("Seleccione el área", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }else if (EnviarData.imagenes === ""){
+      this.matSnackBar.open("Ingrese por lo menos una imagen", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }else if (EnviarData.rep_AccCor === ""){
+      this.matSnackBar.open("Ingrese la acción correctiva sugerida", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }else if (EnviarData.rep_Clas === ""){
+      this.matSnackBar.open("Seleccione la clasificación", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }else if (EnviarData.rep_DesNC === ""){
+      this.matSnackBar.open("Ingrese descripción", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }else if (EnviarData.rep_Esp === ""){
+      this.matSnackBar.open("Ingrese especificación del lugar", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }else if (EnviarData.rep_NivRgo === 0){
+      this.matSnackBar.open("Seleccione el nivel de riesgo", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }else if (EnviarData.resp_Id === 0){
+      this.matSnackBar.open("Seleccione responsable", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }    
+
     Swal.fire({
-      title: "¿Desea Registrar el Retiro?",
+      title: "¿Registrar Incidencia?",
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor:'#3085d6',
@@ -258,13 +342,76 @@ export class ReporteNCComponent implements OnInit {
   }
 
   onEditar(): void{
+    const base64Concatenado = this.imagenesAdjuntas.map(img => img.base64).join('|');
+    const nombres = this.imagenesAdjuntas.map(img => img.nombre).join(',');
     const EnviarData: FormData = {
       ...this.formData,
-          // imagenes: this.imagenes
+      imagenes: base64Concatenado,
+      imgnombre: nombres,
+      img_Fam: 1
     };
-    console.log('Los datos que se van a enviar son: ', EnviarData);
+
+    if(EnviarData.cod_Planta_Tg === ""){
+      this.matSnackBar.open("Seleccione una sede", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }else if (EnviarData.are_Id === 0){
+      this.matSnackBar.open("Seleccione el área", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }else if (EnviarData.rep_AccCor === ""){
+      this.matSnackBar.open("Ingrese la acción correctiva sugerida", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }else if (EnviarData.rep_Clas === ""){
+      this.matSnackBar.open("Seleccione la clasificación", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }else if (EnviarData.rep_DesNC === ""){
+      this.matSnackBar.open("Ingrese descripción", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }else if (EnviarData.rep_Esp === ""){
+      this.matSnackBar.open("Ingrese especificación del lugar", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }else if (EnviarData.rep_NivRgo === 0){
+      this.matSnackBar.open("Seleccione el nivel de riesgo", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }else if (EnviarData.resp_Id === 0){
+      this.matSnackBar.open("Seleccione responsable", "Cerrar", {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500
+      });
+      return;
+    }
+
+
     Swal.fire({
-      title: "¿Desea Registrar el Retiro?",
+      title: "¿Editar Incidencia?",
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor:'#3085d6',
@@ -311,10 +458,10 @@ export class ReporteNCComponent implements OnInit {
   onCancelar(): void{
     this.router.navigate(['ReporteNCListado']);
   }
-
-  selectNivel(nivel: { id: number; nombre: string }): void {
-  this.formData.rep_NivRgo = nivel.id;
-  console.log('Nivel seleccionado:', nivel.id);
+  nivelSeleccionado = 0;
+  selectNivel(nivel: any): void {
+  this.formData.rep_NivRgo = nivel.niv_Rgo_Id;
+  this.nivelSeleccionado = nivel.niv_Rgo_Id;
   }
 
   dataSource: MatTableDataSource<FormData> = new MatTableDataSource();
@@ -326,15 +473,19 @@ export class ReporteNCComponent implements OnInit {
       next: (response: any) => {
         if(response.success){
           if(response.totalElements > 0){
-            console.log('Reparto', response.elements);
             this.datita = response.elements;
-            const datos = this.datita[0]; // suponiendo que solo quieres cargar el primero
+            const datos = this.datita[0];
+            //damos formato a la feha
+            const fecha = new Date(datos.rep_FecObs);
+            const dia = String(fecha.getDate()).padStart(2, '0');
+            const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+            const anio = fecha.getFullYear();
 
             this.formData = {
               rep_Id: datos.rep_Id,
-              rep_FecObs: datos.rep_FecObs,
+              rep_FecObs: `${dia}/${mes}/${anio}`,
               rep_HorObs: datos.rep_HorObs,
-              cod_Planta_Tg: datos.cod_Planta_Tg,
+              cod_Planta_Tg: datos.cod_Planta_Tg.toString(),
               are_Id: datos.are_Id,
               rep_Esp: datos.rep_Esp,
               rep_Clas: datos.rep_Clas,
@@ -344,8 +495,15 @@ export class ReporteNCComponent implements OnInit {
               resp_Id: datos.resp_Id,
               rep_RepPor: datos.rep_RepPor,
               rep_Est: datos.rep_Est,
-              Rep_FecSub: datos.Rep_FecSub
+              Rep_FecSub: datos.Rep_FecSub,
+              img_Fam: datos.img_Fam
             }
+
+            this.sedeSeleccionada = datos.cod_Planta_Tg.toString();
+            this.clasificacionSeleccionada = datos.rep_Clas;
+            this.nivelSeleccionado = datos.rep_NivRgo;
+            this.onGetAreaXSede(parseInt(this.sedeSeleccionada), datos.are_Id);
+            this.onGetResponsables(parseInt(datos.resp_Id));
             this.SpinnerService.hide();
           }else{
             this.datita = [];
@@ -363,7 +521,7 @@ export class ReporteNCComponent implements OnInit {
           timeout: 2500
         })
       }
-    })
+    })  
   }
 
   onGetSedes(): void{
@@ -399,7 +557,6 @@ export class ReporteNCComponent implements OnInit {
       next: (response: any) => {
         if(response.success){
           if(response.totalElements > 0){
-            console.log('Las clasificaciones son: ', response.elements);
             this.clasificaciones = response.elements;
             // this.clasificaciones = response.elements.map((c: any) => ({
             //   cla_Id: c.Cla_Id,
@@ -423,18 +580,230 @@ export class ReporteNCComponent implements OnInit {
     })
   }
   
-  selectSede(sede: { num_Planta: string; des_Planta: string }): void {
-  this.formData.cod_Planta_Tg = sede.num_Planta;
-  this.sedeSeleccionada = sede.num_Planta;
-  console.log(this.sedeSeleccionada);
+    selectSede(sede: { num_Planta: string; des_Planta: string }): void {
+    this.formData.cod_Planta_Tg = sede.num_Planta;
+    this.sedeSeleccionada = sede.num_Planta;
+    this.onGetAreaXSede(parseInt(this.sedeSeleccionada), 0);
+    }
+
+    selectClasificacion(clasificacion: { cla_Id: string; cla_Des: string }): void {
+    this.formData.rep_Clas = clasificacion.cla_Id;
+    this.clasificacionSeleccionada = clasificacion.cla_Id;
+    }
+
+    onGetAreaXSede(Num_Planta: number, Are_Id: number):void {
+      this.SpinnerService.show();
+      this.areas = [];
+      this.serviceReporteNC.getObtenerAreaXSede(Num_Planta, Are_Id).subscribe({
+        next: (response: any) => {
+          if(response.success){
+            if(response.totalElements > 0){
+              this.areas = response.elements;
+              this.SpinnerService.hide();
+            }else{
+              this.areas = [];
+              this.SpinnerService.hide();
+            }
+          }else{
+            this.clasificaciones = [];
+          }
+        },
+        error: (error) => {
+          this.SpinnerService.hide();
+          console.log(error.error.message, 'Cerrar', {
+            timeout: 2500
+          })
+        }
+      })
+    }
+
+    onGetResponsables(Resp_Id: number):void {
+      this.SpinnerService.show();
+      this.responsables = [];
+      this.serviceReporteNC.getObtenerResponsables(Resp_Id).subscribe({
+        next: (response: any) => {
+          if(response.success){
+            if(response.totalElements > 0){
+              this.responsables = response.elements;
+              this.SpinnerService.hide();
+            }else{
+              this.responsables = [];
+              this.SpinnerService.hide();
+            }
+          }else{
+            this.clasificaciones = [];
+          }
+        },
+        error: (error) => {
+          this.SpinnerService.hide();
+          console.log(error.error.message, 'Cerrar', {
+            timeout: 2500
+          })
+        }
+      })
+    }
+
+    imagenes: string[] = [];
+    
+    onImagenesSeleccionadas(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files) return;
+
+    const archivos = Array.from(input.files);
+    const maxImagenes = 2;
+
+    if (this.imagenesAdjuntas.length + archivos.length > maxImagenes) {
+      this.toastr.warning(`Solo puedes agregar hasta ${maxImagenes} imágenes.`, '', { timeOut: 2500 });
+      return;
+    }
+
+    for (const archivo of archivos) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64Completo = reader.result as string;
+        const base64Solo = base64Completo.split(',')[1]; // para backend
+        this.imagenesAdjuntas.push({
+          nombre: archivo.name,
+          base64: base64Solo,
+          base64ParaVista: base64Completo // para mostrar en <img>
+        });
+      };
+      reader.readAsDataURL(archivo);
+    }
+
+
+    input.value = '';
+  }       
+
+  eliminarImagen(index: number, img_Id: number): void {
+    if(this.accionR == 'I' ){
+      const nombre = this.imagenesAdjuntas[index].nombre;
+      this.imagenesAdjuntas.splice(index, 1);
+    }else{
+        Swal.fire({
+        title: "¿Eliminar Imagen?",
+        text: "Esta borrará de forma permanente",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor:'#3085d6',
+        cancelButtonColor:'#d33',
+        confirmButtonText:'Si',
+        cancelButtonText: 'No'
+      }).then((result) =>{
+        if(result.isConfirmed){    
+          this.SpinnerService.show();
+          // if()
+          this.serviceReporteNC.deleteEliminarImagenes(img_Id).subscribe({
+            next: (response: any) => {
+              if(response.success){
+                if(response.codeResult == 200){
+                  this.onGetImagenes(this.rep_IdR, 1)
+                  this.toastr.success(response.message, '', {
+                    timeOut: 2500,
+                  });
+                }else if(response.codeResult == 201){
+                  this.toastr.info(response.message, '', {
+                    timeOut: 2500,
+                  });
+                }
+                this.SpinnerService.hide();
+              }else{
+                this.toastr.error(response.message, 'Cerrar', {
+                  timeOut:2500
+                });
+                this.SpinnerService.hide();
+              }
+            },
+            error:(error) => {
+              this. SpinnerService.hide();
+              this.toastr.error(error.message, 'Cerrar', {
+                timeOut: 2500
+              });
+            }
+          })
+        }
+      })
+    }
   }
 
-  selectClasificacion(clasificacion: { cla_Id: string; cla_Des: string }): void {
-  this.formData.rep_Clas = clasificacion.cla_Id;
-  this.clasificacionSeleccionada = clasificacion.cla_Id;
-  console.log(clasificacion.cla_Id);
+  onGetImagenes(Rep_Id: number, Img_Fam: number): void{
+    this.SpinnerService.show();
+    this.imagenesCargadas = [];
+    this.serviceReporteNC.getObtenerImagenes(Rep_Id, Img_Fam).subscribe({
+      next: (response: any) => {
+        if(response.success){
+          if(response.totalElements > 0){
+            this.imagenesCargadas = response.elements;
+
+            this.imagenesAdjuntas = response.elements.map((img: any) => ({
+              img_Id: img.img_Id,
+              nombre: img.img_Des,
+              base64ParaVista: this.serviceReporteNC.getImagenUrl(img.img_Des)
+            }));
+
+            this.SpinnerService.hide();
+          }else{
+            this.imagenesCargadas = [];
+            this.SpinnerService.hide();
+          }
+        }else{
+          this.imagenesCargadas = [];
+        }
+      },
+      error: (error) => {
+        this.SpinnerService.hide();
+        console.log(error.error.message, 'Cerrar', {
+          timeout: 2500
+        })
+      }
+    })
   }
 
+  onGetRiesgos(): void{
+    this.SpinnerService.show();
+    this.niveles = [];
+    this.serviceReporteNC.getListarRiesgos().subscribe({
+      next: (response: any) => {
+        if(response.success){
+          if(response.totalElements > 0){
+            this.niveles = response.elements;
+            this.SpinnerService.hide();
+          }else{
+            this.niveles = [];
+            this.SpinnerService.hide();
+          }
+        }else{
+          this.niveles = [];
+        }
+      },
+      error: (error) => {
+        this.SpinnerService.hide();
+        console.log(error.error.message, 'Cerrar', {
+          timeout: 2500
+        })
+      }
+    })
+  }
 
-  
+  cambiarEstilo(nivel: any): { [key: string]: string } {
+  const isSelected = nivel.niv_Rgo_Id === this.nivelSeleccionado;
+
+  if (!isSelected) {
+    switch (nivel.niv_Rgo_Id) {
+      case 1: return { 'background-color': '#4caf50', 'color': 'white' };
+      case 2: return { 'background-color': '#ffeb3b', 'color': 'black' };
+      case 3: return { 'background-color': '#f44336', 'color': 'white' };
+      default: return {};
+    }
+  }
+
+  switch (nivel.niv_Rgo_Id) {
+    case 1: return { 'background-color': '#4b66ffff', 'color': 'white', 'box-shadow': '0 0 5px rgba(0,0,0,0.3)' };
+    case 2: return { 'background-color': '#4b66ffff', 'color': 'white', 'box-shadow': '0 0 5px rgba(0,0,0,0.3)' };
+    case 3: return { 'background-color': '#4b66ffff', 'color': 'white', 'box-shadow': '0 0 5px rgba(0,0,0,0.3)' };
+    default: return {};
+  }
+}
+
+
 }

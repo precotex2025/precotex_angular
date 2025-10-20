@@ -1,0 +1,63 @@
+<div class="responsable-list-container">
+<div class="header-row">
+    <h2>Listado de Responsables</h2>
+    <div class="button-group">
+    <button mat-raised-button color="primary" (click)="crearResponsable()">Nuevo</button>
+    <button mat-raised-button color="accent" (click)="cerrar()">Cerrar</button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table mat-table [dataSource]="responsables" class="mat-elevation-z2" matSort>
+
+    <!-- Código -->
+    <ng-container matColumnDef="codigo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Cod. Responsable</th>
+        <td mat-cell *matCellDef="let r">{{ r.resp_Id }}</td>
+    </ng-container>
+
+    <!-- Nombre -->
+    <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+        <td mat-cell *matCellDef="let r">{{ r.resp_Nom }}</td>
+    </ng-container>
+
+    <!-- Apellido Paterno -->
+    <ng-container matColumnDef="apePaterno">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Ape. Paterno</th>
+        <td mat-cell *matCellDef="let r">{{ r.resp_Ape_Pat }}</td>
+    </ng-container>
+
+    <!-- Apellido Materno -->
+    <ng-container matColumnDef="apeMaterno">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Ape. Materno</th>
+        <td mat-cell *matCellDef="let r">{{ r.resp_Ape_Mat }}</td>
+    </ng-container>
+
+    <!-- Acción -->
+    <ng-container matColumnDef="accion">
+        <th mat-header-cell *matHeaderCellDef>Acción</th>
+        <td mat-cell *matCellDef="let r">
+        <button mat-icon-button color="accent" (click)="editarResponsable(r)">
+            <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="eliminarResponsable(r.resp_Id)">
+            <mat-icon>delete</mat-icon>
+        </button>
+        </td>
+    </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+    </table>
+    
+    <div *ngIf="responsables.length === 0" class="no-data">
+    No hay responsables registrados.
+    </div>
+    <mat-paginator
+        [pageSize]="10"
+        [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons>
+    </mat-paginator>
+</div>
+</div>

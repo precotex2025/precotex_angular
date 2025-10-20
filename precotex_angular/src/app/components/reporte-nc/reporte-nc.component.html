@@ -15,13 +15,15 @@
         </mat-form-field>
       </div>
     </div>
+
     <!-- Sede -->
     <div class="form-section">
       <div class="section-title">Sede</div>
       <div class="button-group">
-        <button *ngFor="let sede of sedes"
+        <button 
+                *ngFor="let sede of sedes"
                 mat-button
-                [ngClass]="{ 'selected': sede.num_Planta === sedeSeleccionada }"
+                [ngClass]="{ 'selected': sede.num_Planta.toString() === sedeSeleccionada }"
                 (click)="selectSede(sede)">
           {{ sede.des_Planta }}
         </button>
@@ -34,7 +36,7 @@
       <mat-form-field appearance="fill">
         <mat-label>Área</mat-label>
         <mat-select [(ngModel)]="formData.are_Id" name="areaId">
-        <mat-option *ngFor="let a of areas" [value]="a.id">{{ a.nombre }}</mat-option>
+        <mat-option *ngFor="let a of areas" [value]="a.are_Id">{{ a.are_Des }}</mat-option>
         </mat-select>
       </mat-form-field>
 
@@ -50,7 +52,7 @@
       <div class="button-group">
         <button *ngFor="let clas of clasificaciones"
                 mat-button
-                [ngClass]="{ 'selected': clas.cla_Id === clasificacionSeleccionada }"
+                [ngClass]="{ 'selected': clas.cla_Id === clasificacionSeleccionada}"
                 (click)="selectClasificacion(clas)">
           {{ clas.cla_Des }}
         </button>
@@ -72,9 +74,10 @@
       <div class="button-group">
         <button *ngFor="let nivel of niveles"
                 mat-button
-                [ngClass]="{'selected': formData.rep_NivRgo === nivel.id}"
+                [ngStyle]="cambiarEstilo(nivel)"
+                
                 (click)="selectNivel(nivel)">
-          {{ nivel.nombre }}
+          {{ nivel.niv_Rgo_Des }}
         </button>
       </div>
     </div>
@@ -83,14 +86,45 @@
     <div class="form-section">
       <!-- <div class="section-title">Acción Correctiva</div> -->
       <mat-form-field appearance="fill">
-        <mat-label>Acción Correctiva</mat-label>
+        <mat-label>Acción Correctiva Propuesta Por Usuario</mat-label>
         <input matInput [(ngModel)]="formData.rep_AccCor" name="accion">
       </mat-form-field>
+
+      <!-- Botón para agregar imágenes -->
+      <div class="image-upload">
+        <button mat-stroked-button color="accent" (click)="fileInput.click()">
+          <mat-icon>add_photo_alternate</mat-icon>
+          Agregar imágenes (máx. 2)
+        </button>
+        <input #fileInput type="file"
+              accept="image/*"
+              multiple
+              hidden
+              (change)="onImagenesSeleccionadas($event)">
+      </div>
+
+      <!-- Galería de imágenes -->
+      <div class="form-section">
+        <div class="image-gallery">
+          <div class="image-item" *ngFor="let img of imagenesAdjuntas; let i = index">
+            <img [src]="img.base64ParaVista" alt="{{ img.nombre }}" class="preview-image" />
+            <div class="image-name">{{ img.nombre.substring(img.nombre.indexOf('_') + 1) }}</div>
+            <button mat-icon-button color="warn" (click)="eliminarImagen(i, img.img_Id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+          <div *ngIf="imagenesAdjuntas.length === 0" class="placeholder">
+            No hay imágenes seleccionadas
+          </div>
+        </div>
+      </div>
+
+
 
       <mat-form-field appearance="fill">
         <mat-label>Responsable de la subsanación</mat-label>
         <mat-select [(ngModel)]="formData.resp_Id" name="responsableId">
-        <mat-option *ngFor="let r of responsables" [value]="r.id">{{ r.nombre }}</mat-option>
+        <mat-option *ngFor="let r of responsables" [value]="r.resp_Id">{{ r.resp_Nom }}</mat-option>
       </mat-select>
       </mat-form-field>
     </div>

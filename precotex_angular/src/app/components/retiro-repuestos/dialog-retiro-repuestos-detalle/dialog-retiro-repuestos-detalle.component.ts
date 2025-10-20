@@ -55,7 +55,6 @@ export class DialogRetiroRepuestosDetalleComponent implements OnInit {
             private toastr            : ToastrService,
             @Inject(MAT_DIALOG_DATA) public data: data,
             public dialogRef: MatDialogRef<DialogRetiroRepuestosComponent>
-             
   ) { }
 
   ngOnInit(): void {

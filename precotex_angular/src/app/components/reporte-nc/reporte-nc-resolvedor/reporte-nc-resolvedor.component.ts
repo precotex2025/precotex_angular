@@ -5,10 +5,28 @@ import { ReporteNCService } from 'src/app/services/ReporteNC/reporte-nc.service'
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MatRadioChange } from '@angular/material/radio';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
+import * as _moment from 'moment';
+
+
+interface ImagenAdjunta {
+  img_Id?: number,
+  nombre: string;
+  base64: string;
+  base64ParaVista: string;
+}
+
+interface ImagenAdjuntaPrecargada {
+  nombrePreCargada: string;
+  base64PreCargada: string;
+  base64ParaVistaPreCargada: string;
+}
+
 interface FormData {
     fecha?: string,
     hora?: string,
+    rep_Id: string,
     fechaObservacion: string,
     descripcion: string,
     estado: string,
@@ -18,13 +36,22 @@ interface FormData {
     reportadoPor: string,
     responsable: string,
     area: string,
-    aceptar?: string,
-    responsableLevantamiento?: string,
-    accionTomada?: string,
-    fechaLevantamiento?: string,
-    cierre?: string,
-    observacion?: string
-    est_Id?: string
+    imagenes?: string,
+    imgnombre?: string,
+    est_Id: string,
+}
+
+interface FormDataPatch {
+    rep_Id: string,
+    rep_Aceptado: string,
+    rep_Resp_Levantamiento: string,
+    rep_AccCor_Tom: string,
+    rep_FecSub: Date | null,
+    rep_Est?: string,
+    rep_DetObs: string,
+    imagenes?: string,
+    imgnombre?: string,
+    img_Fam?: number
 }
 
 @Component({
@@ -36,16 +63,21 @@ export class ReporteNcResolvedorComponent implements OnInit, OnDestroy {
   isReadOnlyResponsable: boolean = true;
   isReadOnlyObservacion: boolean = true;
   cierreSeleccionado: string = '';
+
+  imagenesAdjuntas: ImagenAdjunta[] = []; 
+  imagenesAdjuntasPreCargadas: ImagenAdjuntaPrecargada[] = [];
   constructor(
     private SpinnerService: NgxSpinnerService,
     private serviceReporteNC: ReporteNCService,
     private router: Router,
     private toastr: ToastrService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private matSnackBar: MatSnackBar
   ){}
   formData: FormData = {
     fecha: '',
     hora: '',
+    rep_Id: '0',
     fechaObservacion: '',
     descripcion: '',
     estado: '',
@@ -55,42 +87,34 @@ export class ReporteNcResolvedorComponent implements OnInit, OnDestroy {
     reportadoPor: '',
     responsable: '',
     area: '',
-    aceptar: '',
-    responsableLevantamiento: '',
-    accionTomada: '',
-    fechaLevantamiento: '',
-    cierre: '',
-    observacion: '',
+    imagenes: '',
+    imgnombre: '',
     est_Id: ''
   };
 
-  // estados = [
-  //   { label: 'Pendiente', value: 'pendiente' },
-  //   { label: 'Cerrado', value: 'cerrado' },
-  //   { label: 'Con Observación', value: 'observacion' }
-  // ];
+  formDataPatch: FormDataPatch = {
+    rep_Id: '',
+    rep_Aceptado: '0',
+    rep_Resp_Levantamiento: '',
+    rep_AccCor_Tom: '',
+    rep_FecSub: new Date(),
+    rep_Est: '',
+    rep_DetObs: '',
+    imagenes: '',
+    imgnombre: '',
+    img_Fam: 0
+  }
 
-  // cierres = [
-  //   { label: 'Pendiente', value: 'pendiente' },
-  //   { label: 'Cerrado', value: 'cerrado' },
-  //   { label: 'Con Observación', value: 'observacion' }
-  // ];
-
-  niveles = ['Alto', 'Medio', 'Bajo'];
-  responsables = [{label: 'Juan Pérez', value: 1}, {label: 'Ana Torres', value: 2}, {label: 'Carlos Díaz', value: 2}];
-  areas = ['Producción', 'Mantenimiento', 'Seguridad', 'Calidad'];
-
-  imagenes: string[] = [
-    'assets/img1.jpg',
-    'assets/img2.jpg'
-  ];
+  responsables = [];
 
   private timer: any;
 
   ngOnInit(): void {
     this.updateFechaHora();
     this.timer = setInterval(() => this.updateFechaHora(), 1000);
-    this.ngOnGetParams()
+    this.onGetResponsables(1);
+    this.ngOnGetParams();
+    
   }
 
   rep_IdR = 0;
@@ -98,8 +122,10 @@ export class ReporteNcResolvedorComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe(params => {
       this.rep_IdR = Number(params['rep_IdR']) || 0;
     })
-      this.onGetDatosReporte(this.rep_IdR)
       this.cargarEstados();
+      this.onGetDatosReporte(this.rep_IdR);
+      this.onGetImagenes(this.rep_IdR, 1);
+      this.onGetImagenes(this.rep_IdR, 2);
   }
 
   ngOnDestroy(): void {
@@ -133,10 +159,16 @@ export class ReporteNcResolvedorComponent implements OnInit, OnDestroy {
           if(response.totalElements > 0){
             
             this.datita = response.elements;
-            const datos = this.datita[0]; // suponiendo que solo quieres cargar el primero
-            console.log('Los datos en el arreglo son:', datos);
+            const datos = this.datita[0]; 
+            const fecha = new Date(datos.rep_FecObs);
+
+            const dia = String(fecha.getDate()).padStart(2, '0');
+            const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+            const anio = fecha.getFullYear();
+
             this.formData = {
-              fechaObservacion: datos.rep_FecObs,
+              rep_Id: datos.rep_Id,
+              fechaObservacion: `${dia}/${mes}/${anio}`,
               descripcion: datos.rep_DesNC,              
               estado: datos.est_Des,
               riesgo: datos.niv_Rgo_Des,
@@ -144,8 +176,35 @@ export class ReporteNcResolvedorComponent implements OnInit, OnDestroy {
               ubicacion: datos.rep_Esp,
               reportadoPor: datos.rep_RepPor,
               responsable: datos.responsable,
-              area: datos.are_Des
+              area: datos.are_Des,
+              // aceptar: datos.aceptar,
+              // responsableLevantamiento: datos.responsableLevantamiento,
+              // accionTomada: datos.accionTomada,
+              // fechaLevantamiento: datos.fechaLevantamiento,
+              // cierre: datos.cierre,
+              // observacion: datos.observacion,
+              est_Id: datos.rep_Est,
             }
+
+            this.formDataPatch = {
+              rep_Id: datos.rep_Id,
+              rep_Aceptado: datos.rep_Aceptado,
+              rep_Resp_Levantamiento: datos.rep_Resp_Levantamiento,
+              rep_AccCor_Tom: datos.rep_AccCor_Tom,
+              // rep_FecSub: _moment(datos.rep_FecSub, 'MM/DD/YYYY HH:mm:ss').toDate(),
+              rep_FecSub: _moment(datos.rep_FecSub, 'MM/DD/YYYY HH:mm:ss').toDate(),
+              // rep_Est: datos.rep_Est,
+              rep_DetObs: datos.rep_DetObs,
+            }
+            if(datos.rep_Est != null){
+              this.cierreSeleccionado = datos.rep_Est.toString();
+            }
+            
+            if(this.formDataPatch.rep_Aceptado != '1'){
+              
+              this.formDataPatch.rep_Resp_Levantamiento = datos.rep_Resp_Levantamiento;
+            }
+
             this.SpinnerService.hide();
           }else{
             this.datita = [];
@@ -171,16 +230,65 @@ export class ReporteNcResolvedorComponent implements OnInit, OnDestroy {
   onAceptarChange(event: MatRadioChange): void {
     let valor = event.value;
     if(valor === 1){
-      // this.isReadOnlyResponsable = false;
+      this.formDataPatch.rep_Resp_Levantamiento = null;
     }
   console.log('Valor seleccionado en Aceptar:', event.value);
   }
 
   onGuardar(): void{
-      const EnviarData: FormData = {
-        ...this.formData,
+      const base64Concatenado = this.imagenesAdjuntas.map(img => img.base64).join('|');
+      const nombres = this.imagenesAdjuntas.map(img => img.nombre).join(',');
+      let valor: string = ''
+      if (this.formDataPatch.rep_Aceptado === '1'){
+        valor = '';
+      }else{
+        valor = this.formDataPatch.rep_Resp_Levantamiento.toString() ?? '';
       }
-      console.log('Los datos que se van a enviar son: ', EnviarData);
+      const EnviarData: FormDataPatch = {
+        ...this.formDataPatch,
+        rep_Id: this.formData.rep_Id,
+        rep_Aceptado: this.formDataPatch.rep_Aceptado,
+        rep_Est: this.cierreSeleccionado,
+        rep_FecSub: this.formDataPatch.rep_FecSub
+        // ? _moment(this.formDataPatch.rep_FecSub).format('DD/MM/YYYY HH:mm:ss')
+        ? _moment(this.formDataPatch.rep_FecSub, 'DD/MM/YYYY').toDate()
+        : null,
+        rep_Resp_Levantamiento: valor,
+        imagenes: base64Concatenado,
+        imgnombre: nombres,
+        img_Fam: 2
+        };
+
+        if(EnviarData.rep_Aceptado === "0"){
+          this.matSnackBar.open("Indique si acepta o no la incidencia", "Cerrar", {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 1500
+          });
+          return;
+        }else if(EnviarData.rep_Aceptado === "0" && EnviarData.rep_Resp_Levantamiento === ""){
+          this.matSnackBar.open("Seleccione responsable de levantamiento", "Cerrar", {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 1500
+          });
+          return;
+        }else if(EnviarData.rep_AccCor_Tom === ""){
+          this.matSnackBar.open("Indique la acción correctiva tomada", "Cerrar", {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 1500
+          });
+          return;
+        }else if(EnviarData.imgnombre === ""){
+          this.matSnackBar.open("Ingrese por lo menos una imagen", "Cerrar", {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 1500
+          });
+          return;
+        }
+
       Swal.fire({
         title: "¿Desea Actualizar el Registro?",
         icon: 'question',
@@ -191,7 +299,6 @@ export class ReporteNcResolvedorComponent implements OnInit, OnDestroy {
         cancelButtonText: 'No'
       }).then((result) =>{
         if(result.isConfirmed){    
-  
           this.SpinnerService.show();
           this.serviceReporteNC.patchActualizarReporteNC(EnviarData).subscribe({
             next: (response: any) => {
@@ -234,10 +341,8 @@ export class ReporteNcResolvedorComponent implements OnInit, OnDestroy {
       next: (response: any) => {
         if(response.success){
           this.cierres = response.elements;
-          console.log('Los estados son: ', this.cierres);
           if(response.elements > 0){
             this.cierres = response.elements;
-            console.log('Los estados son dentro de elements > 0: ', this.cierres);
           }
         }
       }
@@ -245,11 +350,157 @@ export class ReporteNcResolvedorComponent implements OnInit, OnDestroy {
   }
 
   selectCierre(estado: { est_Id: string; est_Des: string }): void {
-  this.formData.est_Id = estado.est_Id;
-  this.cierreSeleccionado = estado.est_Id;
-  console.log(this.cierreSeleccionado);
+  this.formData.est_Id = estado.est_Id.toString();
+  this.cierreSeleccionado = estado.est_Id.toString();
   }
 
+  onImagenesSeleccionadas(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files) return;
+
+    const archivos = Array.from(input.files);
+    const maxImagenes = 2;
+
+    if (this.imagenesAdjuntas.length + archivos.length > maxImagenes) {
+      this.toastr.warning(`Solo puedes agregar hasta ${maxImagenes} imágenes.`, '', { timeOut: 2500 });
+      return;
+    }
+
+    for (const archivo of archivos) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64Completo = reader.result as string;
+        const base64Solo = base64Completo.split(',')[1];
+        this.imagenesAdjuntas.push({
+          nombre: archivo.name,
+          base64: base64Solo,
+          base64ParaVista: base64Completo 
+        });
+      };
+      reader.readAsDataURL(archivo);
+    }
+
+
+    input.value = '';
+  }
+  
+  // imagenesExtraidas = [];
+  onGetImagenes(Rep_Id: number, Img_Fam: number): void{
+    this.SpinnerService.show();
+    // this.imagenesExtraidas = [];
+    this.serviceReporteNC.getObtenerImagenes(Rep_Id, Img_Fam).subscribe({
+      next: (response: any) => {
+        if(response.success){
+          if(response.totalElements > 0){
+            // this.imagenesExtraidas = response.elements;
+            if(Img_Fam === 1){
+              this.imagenesAdjuntasPreCargadas = response.elements.map((img: any) => ({
+              nombrePreCargada: img.img_Des,
+              base64ParaVistaPreCargada: this.serviceReporteNC.getImagenUrl(img.img_Des)
+              }));
+            }else{
+              this.imagenesAdjuntas = response.elements.map((img: any) => ({
+              img_Id: img.img_Id,
+              nombre: img.img_Des,
+              base64ParaVista: this.serviceReporteNC.getImagenUrl(img.img_Des)
+              }));
+            }
+
+            this.SpinnerService.hide();
+          }else{
+            this.imagenesAdjuntas = [];
+            this.imagenesAdjuntasPreCargadas = [];
+            this.SpinnerService.hide();
+          }
+        }else{
+          this.imagenesAdjuntasPreCargadas = [];
+          this.imagenesAdjuntas = [];
+        }
+      },
+      error: (error) => {
+        this.SpinnerService.hide();
+        console.log(error.error.message, 'Cerrar', {
+          timeout: 2500
+        })
+      }
+    })
+  }
+
+  eliminarImagen(index: number, img_Id: number): void {
+    if(img_Id === null || img_Id === undefined){
+      const nombre = this.imagenesAdjuntas[index].nombre;
+      this.imagenesAdjuntas.splice(index, 1);
+    }else{
+      Swal.fire({
+      title: "¿Eliminar Imagen?",
+      text: "Esta borrará de forma permanente",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor:'#3085d6',
+      cancelButtonColor:'#d33',
+      confirmButtonText:'Si',
+      cancelButtonText: 'No'
+      }).then((result) =>{
+        if(result.isConfirmed){    
+          this.SpinnerService.show();
+          this.serviceReporteNC.deleteEliminarImagenes(img_Id).subscribe({
+            next: (response: any) => {
+              if(response.success){
+                if(response.codeResult == 200){
+                  this.onGetImagenes(this.rep_IdR, 1)
+                  this.toastr.success(response.message, '', {
+                    timeOut: 2500,
+                  });
+                }else if(response.codeResult == 201){
+                  this.toastr.info(response.message, '', {
+                    timeOut: 2500,
+                  });
+                }
+                this.SpinnerService.hide();
+              }else{
+                this.toastr.error(response.message, 'Cerrar', {
+                  timeOut:2500
+                });
+                this.SpinnerService.hide();
+              }
+            },
+            error:(error) => {
+              this. SpinnerService.hide();
+              this.toastr.error(error.message, 'Cerrar', {
+                timeOut: 2500
+              });
+            }
+          })
+            }
+          })
+    }    
+}
+
+  onGetResponsables(Resp_Id: number):void {
+      this.SpinnerService.show();
+      this.responsables = [];
+      this.serviceReporteNC.getObtenerResponsables(Resp_Id).subscribe({
+        next: (response: any) => {
+          if(response.success){
+            if(response.totalElements > 0){
+              this.responsables = response.elements;
+              this.SpinnerService.hide();
+            }else{
+              this.responsables = [];
+              this.SpinnerService.hide();
+            }
+          }else{
+            this.responsables = [];
+          }
+        },
+        error: (error) => {
+          this.SpinnerService.hide();
+          console.log(error.error.message, 'Cerrar', {
+            timeout: 2500
+          })
+        }
+      })
+    }
 
 
 }

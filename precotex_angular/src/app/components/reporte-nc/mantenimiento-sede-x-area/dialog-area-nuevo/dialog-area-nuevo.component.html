@@ -1,0 +1,33 @@
+<div class="registro-sede-container">
+<h2>Registro de Área</h2>
+
+<form #formSede="ngForm" (ngSubmit)="Procesar()" class="form-stack">
+
+    <!-- Selector de sede -->
+    <mat-form-field appearance="fill">
+    <mat-label>Seleccionar Sede</mat-label>
+    <mat-select [(ngModel)]="formData.num_Planta" name="num_Planta" required>
+        <!-- <mat-option value="">--Seleccione--</mat-option> -->
+        <mat-option *ngFor="let planta of listaPlantas" [value]="planta.num_Planta">
+        {{ planta.des_Planta }}
+        </mat-option>
+    </mat-select>
+    </mat-form-field>
+
+    <!-- Nombre del área -->
+    <mat-form-field appearance="fill">
+    <mat-label>Nombre Área</mat-label>
+    <input matInput [(ngModel)]="formData.are_Des" name="are_Des" required />
+    </mat-form-field>
+
+    <!-- Botones -->
+    <div class="botonera">
+    <button mat-raised-button color="primary" type="submit" [disabled]="formSede.invalid">
+        <mat-icon>save</mat-icon> Guardar
+    </button>
+    <button mat-stroked-button type="button" (click)="cancelarRegistro()">
+        Cancelar
+    </button>
+    </div>
+</form>
+</div>

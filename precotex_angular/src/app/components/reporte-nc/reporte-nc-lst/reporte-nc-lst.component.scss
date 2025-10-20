@@ -89,3 +89,25 @@
     }
     }
 
+.filtro-panel {
+display: flex;
+flex-wrap: wrap;
+// gap: 1rem;
+margin: 1rem 0;
+
+mat-form-field {
+    flex: 1 1 200px;
+    min-width: 180px;
+}
+
+@media (max-width: 600px) {
+    flex-direction: column;
+
+    mat-form-field {
+    width: 100%;
+    }
+}
+}
+.filtro-panel-div-separar{
+    margin-bottom: 15px;
+}
