@@ -21,11 +21,15 @@ interface Listar_Guia {
   num_bulto: number;
   num_cantidad: number;
   num_peso: number;
+  num_coche: number;
+  peso_coche: number;
   cod_despachado: string;
   nom_despachado: string;
   glosa: string;
   Peso: string;
   Bultos: string;
+  PesoCoche: string;
+  BultoCoche: string;
   GRE_ESTADO_SUNAT: string;
   Fec_Traslado_Guia_Rem: string;
   Num_Placa: string;
@@ -90,6 +94,8 @@ export class SeguridadControlGuiaSalidaComponent implements OnInit {
     num_bulto: [0],
     num_cantidad: [0],
     num_peso: [0],
+    num_coche: [0],
+    peso_coche: [0],
     cod_despachado: [''],
     nom_despachado: [''],
     glosa: [''],
@@ -206,6 +212,8 @@ export class SeguridadControlGuiaSalidaComponent implements OnInit {
             this.formulario.patchValue({ num_planta_destino: guia_select[0]?.num_planta_destino })
             this.formulario.patchValue({ destino: guia_select[0]?.destino })
             this.formulario.patchValue({ num_bulto: guia_select[0]?.Bultos })
+            this.formulario.patchValue({ num_coche: guia_select[0]?.BultoCoche })
+            this.formulario.patchValue({ peso_coche: guia_select[0]?.PesoCoche })
             this.formulario.patchValue({ num_cantidad: guia_select[0]?.num_cantidad })
             this.formulario.patchValue({ num_peso: guia_select[0]?.Peso })
             this.formulario.patchValue({ cod_despachado: guia_select[0]?.cod_despachado })
@@ -242,6 +250,8 @@ export class SeguridadControlGuiaSalidaComponent implements OnInit {
               num_bulto: '',
               num_cantidad: '',
               num_peso: '',
+              num_coche: '',
+              peso_coche: '',
               cod_despachado: '',
               nom_despachado: '',
               glosa: '',
@@ -276,6 +286,8 @@ export class SeguridadControlGuiaSalidaComponent implements OnInit {
             num_bulto: '',
             num_cantidad: '',
             num_peso: '',
+            num_coche: '',
+            peso_coche: '',
             cod_despachado: '',
             nom_despachado: '',
             glosa: '',
@@ -306,6 +318,8 @@ export class SeguridadControlGuiaSalidaComponent implements OnInit {
           num_bulto: '',
           num_cantidad: '',
           num_peso: '',
+          num_coche: '',
+          peso_coche: '',
           cod_despachado: '',
           nom_despachado: '',
           glosa: '',
@@ -565,6 +579,8 @@ export class SeguridadControlGuiaSalidaComponent implements OnInit {
         this.formulario.get('num_bulto')?.value,
         this.formulario.get('num_cantidad')?.value,
         this.formulario.get('num_peso')?.value,
+        this.formulario.get('num_coche')?.value,
+        this.formulario.get('peso_coche')?.value,
         this.formulario.get('cod_despachado')?.value,
         this.formulario.get('glosa')?.value,
         this.formulario.get('Cod_Vehiculo')?.value,
@@ -616,6 +632,8 @@ export class SeguridadControlGuiaSalidaComponent implements OnInit {
       num_bulto: 0,
       num_cantidad: 0,
       num_peso: 0,
+      num_coche: '',
+      peso_coche: '',
       cod_despachado: '',
       nom_despachado: '',
       glosa: '',

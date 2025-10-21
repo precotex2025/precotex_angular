@@ -140,7 +140,7 @@ export class EntregaEventosComponent implements OnInit {
         this.eventosService.entregasEventoColaborador(formData)
           .subscribe((result: any) => {
             if(result[0].Id_Registro != 0){
-              Swal.fire(result[0].Respuesta, '', 'success')
+              Swal.fire(result[0].Respuesta, '', 'success');
               this.spinnerService.hide();
               this.onLimpiarEntrega();
             }else{
@@ -234,6 +234,13 @@ export class EntregaEventosComponent implements OnInit {
                   this.formulario.controls['Num_Items'].setValue(this.dataSource1.data.length);
                   this.ll_nuevo = this.dataSource1.data.length == 0 ? true : false;
                   this.ll_total = this.dataSource1.data.length == 0 ? true : false;
+
+                  //Swal.fire(result[0].Respuesta, '', 'success')
+                  if(this.ll_total)
+                    Swal.fire('Colaborador No tiene entregas pendientes', '', 'warning')
+
+                  if(!this.ll_firma)
+                    Swal.fire('Colaborador No tiene firma registrada', '', 'warning')
                 } else {
                   this.ll_nuevo = true;
                   //this.onLimpiarEntrega();

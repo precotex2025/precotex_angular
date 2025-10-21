@@ -96,7 +96,7 @@ export class SeguridadControlGuiaService {
   }
 
   GuardarService(sCod_Accion: string, nNum_Planta: number, sNum_Guia: string, sCod_Proveedor: string, nNum_Planta_Destino: number, nNum_Planta_Origen: number,
-    sDni_Entregado: string, nNum_Bulto: number, nNum_Cantidad: number, nNum_Peso: number, sDni_Despachado: string, sGlosa: string, Cod_Vehiculo:string, Fecha_Inicio:string, Fecha_Fin:string, GRE_ESTADO_SUNAT?:string, Fec_Traslado_Guia_Rem?:string) {
+    sDni_Entregado: string, nNum_Bulto: number, nNum_Cantidad: number, nNum_Peso: number, nNum_Coche: number, nPeso_Coche: number, sDni_Despachado: string, sGlosa: string, Cod_Vehiculo:string, Fecha_Inicio:string, Fecha_Fin:string, GRE_ESTADO_SUNAT?:string, Fec_Traslado_Guia_Rem?:string) {
   
     // sAccion : String = 'I'
     // this.nNum_Planta
@@ -116,7 +116,7 @@ export class SeguridadControlGuiaService {
     sGlosa = sGlosa.replace(/\s+/g, " ").trim();
     sGlosa = sGlosa.replace("ñ", "n").trim();
 
-    return this.http.get(`${this.baseUrl}/app_man_registro_control_guia.php?Accion=${'I'}&Num_Planta=${nNum_Planta}&Cod_Accion=${sCod_Accion}&Num_Guia=${sNum_Guia}&Cod_Proveedor=${sCod_Proveedor}&Num_Planta_Destino=${nNum_Planta_Destino}&Num_Planta_Origen=${nNum_Planta_Origen}&Dni_Entregado=${sDni_Entregado}&Num_Bulto=${nNum_Bulto}&Num_Cantidad=${nNum_Cantidad}&Num_Peso=${nNum_Peso}&Dni_Despachado=${sDni_Despachado}&Glosa=${sGlosa}&Cod_Usuario=${this.sCod_Usuario}&Cod_Vehiculo=${Cod_Vehiculo}&Fecha_Inicio=${Fecha_Inicio}&Fecha_Fin=${Fecha_Fin}&GRE_ESTADO_SUNAT=${GRE_ESTADO_SUNAT}&Fec_Traslado_Guia_Rem=${Fec_Traslado_Guia_Rem}`);
+    return this.http.get(`${this.baseUrl}/app_man_registro_control_guia.php?Accion=${'I'}&Num_Planta=${nNum_Planta}&Cod_Accion=${sCod_Accion}&Num_Guia=${sNum_Guia}&Cod_Proveedor=${sCod_Proveedor}&Num_Planta_Destino=${nNum_Planta_Destino}&Num_Planta_Origen=${nNum_Planta_Origen}&Dni_Entregado=${sDni_Entregado}&Num_Bulto=${nNum_Bulto}&Num_Cantidad=${nNum_Cantidad}&Num_Peso=${nNum_Peso}&Num_Coche=${nNum_Coche}&Peso_Coche=${nPeso_Coche}&Dni_Despachado=${sDni_Despachado}&Glosa=${sGlosa}&Cod_Usuario=${this.sCod_Usuario}&Cod_Vehiculo=${Cod_Vehiculo}&Fecha_Inicio=${Fecha_Inicio}&Fecha_Fin=${Fecha_Fin}&GRE_ESTADO_SUNAT=${GRE_ESTADO_SUNAT}&Fec_Traslado_Guia_Rem=${Fec_Traslado_Guia_Rem}`);
 
   }
 
