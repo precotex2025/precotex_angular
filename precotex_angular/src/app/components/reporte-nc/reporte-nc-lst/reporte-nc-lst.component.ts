@@ -7,6 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ToastrService } from 'ngx-toastr';
 import { MatPaginator } from '@angular/material/paginator';
+import { GlobalVariable } from 'src/app/VarGlobals';
 import Swal from 'sweetalert2';
 
 interface dataReporte{
@@ -41,7 +42,8 @@ interface FormDataBuscar {
   styleUrls: ['./reporte-nc-lst.component.scss']
 })
 export class ReporteNcLstComponent implements OnInit {
-  
+  sCod_Usuario: string = GlobalVariable.vusu;
+  funcionUsuario: number = 0;
   @ViewChild(MatSort) sort!: MatSort;  
   @ViewChild(MatPaginator) paginator!: MatPaginator;  
   constructor(
@@ -53,11 +55,16 @@ export class ReporteNcLstComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
-    this.onGetSedes();
-    this.onGetEstados();
-    this.onGetResponsables(1);
-    this.onGetCriticidades();
-    this.onCargarGrid(0);
+    this.onGetFuncionUsuario(this.sCod_Usuario, (funcion) => {
+      this.funcionUsuario = funcion;
+      if(this.funcionUsuario !== 0){
+        this.onGetSedes();
+        this.onGetEstados();
+        this.onGetResponsables(1);
+        this.onGetCriticidades();
+        this.onCargarGrid(0);
+      }
+    });
   }
 
   ngAfterViewInit(){
@@ -420,4 +427,27 @@ onGetSedes(): void{
         }
       })
   }
+
+  funciones = [];
+  onGetFuncionUsuario(sCod_Usuario: string, callback: (funcion: number) => void): void {
+  this.SpinnerService.show();
+
+  this.serviceReporteNC.getObtenerUsuarios(sCod_Usuario).subscribe({
+    next: (response: any) => {
+      this.SpinnerService.hide();
+      if (response.success && response.totalElements > 0) {
+        const funcion = response.elements[0].usr_Fun;
+        console.log('La función del usuario es:', funcion);
+        callback(funcion);
+      } else {
+        callback(0);
+      }
+    },
+    error: (error) => {
+      this.SpinnerService.hide();
+      console.log(error.error.message, 'Cerrar', { timeout: 2500 });
+      callback(0); 
+    }
+  });
+}
 }

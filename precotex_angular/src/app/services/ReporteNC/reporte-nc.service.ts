@@ -164,5 +164,13 @@ export class ReporteNCService {
     return this.http.delete(this.baseUrlTinto + 'TxReporteNC/deleteEliminarResponsable', {headers, params});
   }
 
+  /*USUARIOS*/
+  getObtenerUsuarios(Usr_Cod: string){
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('Usr_Cod', Usr_Cod);
+    return this.http.get(this.baseUrlTinto + 'TxReporteNC/getObtenerUsuarios', { headers, params })
+  }
+
 
 }
