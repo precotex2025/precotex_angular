@@ -221,7 +221,7 @@ export class EvidenciaEmpaqueCajaComponent implements OnInit {
     let fecha = new Date()     
     let filePO = this.formulario.get('CodPurOrd').value.concat(fecha.toISOString().replace(/:/g,"-").substring(0,19)).concat('.pdf');
 
-    const pdf = new jsPDF('p', 'mm', 'a4'); // Formato A4 en orientación vertical
+    const pdf = new jsPDF('p', 'mm', 'a4', true); // Formato A4 en orientación vertical comprimido
     const content = document.getElementById('content') as HTMLElement;
     const pages = document.querySelectorAll<HTMLElement>('.page');
 
