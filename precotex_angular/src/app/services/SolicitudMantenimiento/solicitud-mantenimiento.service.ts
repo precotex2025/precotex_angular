@@ -47,6 +47,11 @@ export class SolicitudMantenimientoService {
     return this.http.get(this.baseUrlTinto + 'TMSolicitudMantenimiento/getObtieneInformacionMaquinas', { headers, params });
   }    
 
+  getObtieneInformacionSolicitudesVisor(){
+    const headers = this.Header;
+    return this.http.get(this.baseUrlTinto + 'TMSolicitudMantenimiento/getObtieneInformacionSolicitudesVisor', { headers });
+  }
+
   postProcesoMntoSolicitudMantenimiento(data: any){
     const headers = this.Header;
     return this.http.post(this.baseUrlTinto + 'TMSolicitudMantenimiento/postProcesoMntoSolicitudMantenimiento', data, { headers })
@@ -56,5 +61,13 @@ export class SolicitudMantenimientoService {
     const headers = this.Header;
     return this.http.post(this.baseUrlTinto + 'TMSolicitudMantenimiento/postAvanzaEstadoSolicitudMantenimiento', data, { headers })
   }  
+
+  //IMAGENES
+  private bas = 'https://gestion.precotex.com:444/ubicaciones/api/TxRetiroRepuestos/getImagenDesdeBackEnd';
+  
+  getImagenUrl(imageId: string): string {
+    console.log('el nombre de la imagen es: ', imageId);
+    return `${this.bas}?imageId=${encodeURIComponent(imageId)}`;
+  }
 
 }
