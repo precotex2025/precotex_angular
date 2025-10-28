@@ -51,6 +51,14 @@ export class SolicitudMantenimientoService {
   const headers = this.Header;
   return this.http.get(this.baseUrlTinto + 'TMSolicitudMantenimiento/getObtieneInformacionSolicitudesVisor', { headers });
   }
+  //EN ESTA RUTA GUARDO MIS IMAGENES, SI DESAS PUEDES CAMBIARLA EN CASO TE FUNCIONE OTRA URL
+  
+  private bas = 'https://gestion.precotex.com:444/ubicaciones/api/TxRetiroRepuestos/getImagenDesdeBackEnd';
+  
+  getImagenUrl(imageId: string): string {
+    console.log('el nombre de la imagen es: ', imageId);
+    return `${this.bas}?imageId=${encodeURIComponent(imageId)}`;
+  }
 
   postProcesoMntoSolicitudMantenimiento(data: any){
     const headers = this.Header;

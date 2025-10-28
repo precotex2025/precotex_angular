@@ -4,13 +4,15 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { SolicitudMantenimientoService } from 'src/app/services/SolicitudMantenimiento/solicitud-mantenimiento.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ExceljsService } from 'src/app/services/exceljs.service';
+
 
 interface data_visor{
   cod_Solicitud: number,
   cod_Area: string,
   cod_Maquina: string,
   observacion: string,
-  paro_Maquina: boolean,
+  paro_Maquina: string,
   prioridad: string,
   fec_Registro: string,
   hora_Reporte: string,
@@ -35,8 +37,9 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
   //RUTA -> SolicitudMantenimientoMaquinaVisor
   @ViewChild(MatSort) sort!: MatSort;  
   constructor(
-    private solicitudService: SolicitudMantenimientoService,
-    private SpinnerService: NgxSpinnerService
+    public solicitudService: SolicitudMantenimientoService,
+    private SpinnerService: NgxSpinnerService,
+    private exceljsService: ExceljsService,
   ) { }
 
   ngOnInit(): void {
@@ -65,7 +68,7 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
 
 
   exportarExcel() {
-    console.log('Exportar a Excel');
+    this.onExportarExcel();
   }
 
   solicitudesLst = [];
@@ -76,16 +79,15 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
         console.log('ENTRA AL RESPONSE');
         if(response.success){
           console.log('ENTRA AL SUCCESS')
-          if(response.elements > 0){
-            console.log('los valores del response any son: ', response.elements);
-            this.solicitudesLst = response.elements;
-            this.dataSource.data = this.solicitudesLst;
-            this.dataSource.sort = this.sort;
-          }else{
-            this.solicitudesLst = [];
-            this.dataSource.data = [];
-            this.SpinnerService.hide();
-          }
+          console.log('los valores del response any son: ', response.elements);
+          this.solicitudesLst = response.elements.map((item: any) => ({
+            ...item,
+            paro_Maquina: item.paro_Maquina ? 'Sí' : 'No'
+          }));
+          this.dataSource.data = this.solicitudesLst;
+          this.dataSource.sort = this.sort;
+          this.SpinnerService.hide();
+
         }else{
           this.solicitudesLst = [];
           this.dataSource.data = [];
@@ -97,6 +99,54 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
         console.log(error.error.message, 'Cerrar', {
           timeout: 2500
         })
+      }
+    });
+  }
+
+  dataForExcel = [];
+  solicitudesLstExcel = [];
+  onExportarExcel() {
+    this.dataForExcel = [];
+    this.solicitudesLstExcel = [];
+    this.SpinnerService.show();
+  
+    this.solicitudService.getObtieneInformacionSolicitudesVisor().subscribe({
+      next: (response: any) => {
+        
+          this.solicitudesLstExcel = response.elements;
+          
+          this.dataForExcel = this.solicitudesLstExcel.map((item: any) => ({
+            ['Id']: item.cod_Solicitud,
+            ['Area']: item.cod_Area,
+            ['Maquina']: item.cod_Maquina,
+            ['Observacion']: item.observacion,
+            ['Paro Maquina']: item.paro_Maquina ? 'Sí' : 'No',
+            ['Prioridad']: item.prioridad,
+            ['Fecha Registro']: item.fec_Registro,
+            ['Hora Reporte']: item.hora_Reporte,
+            ['Hora Inicio']: item.hora_Inicio,
+            ['Tiempo T1 (Requerimiento)']: item.t1_Tiempo_Espera_Min,
+            ['Tiempo T2 (Intervencion)']: item.t2_Tiempo_Interv_Min,
+            ['Nombre Solicitante']: item.usu_Registro,
+            ['Nombre Tecnico']: item.cod_Usuario_Tecnico,
+            ['Foto']: item.ruta_Fotografia,
+            ['Estado']: item.nombre_Estado
+          }));
+
+          const reportData = {
+            title: 'REPORTE',
+            data: this.dataForExcel,
+            headers: Object.keys(this.dataForExcel[0]),
+            Num_Requerimiento: 0
+          };
+  
+          this.exceljsService.exportExcel4(reportData);
+  
+        this.SpinnerService.hide();
+      },
+      error: (error) => {
+        this.SpinnerService.hide();
+        console.error('Error al obtener datos:', error.error.message);
       }
     });
   }
