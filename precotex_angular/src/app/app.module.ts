@@ -596,6 +596,11 @@ import { DialogAreaNuevoComponent } from './components/reporte-nc/mantenimiento-
 import { MantenimientoResponsablesComponent } from './components/reporte-nc/mantenimiento-responsables/mantenimiento-responsables.component';
 import { DialogResponsablesNuevoComponent } from './components/reporte-nc/mantenimiento-responsables/dialog-responsables-nuevo/dialog-responsables-nuevo.component';
 
+//SOLICITUD DE MANTENIMIENTO DE MAQUINA
+import { SolicitudMantenimientoMaquinaComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina.component';
+import { DialogSolicitudMntoCreateComponent } from './components/solicitud-mantenimiento-maquina/dialog-solicitud-mnto-create/dialog-solicitud-mnto-create.component';
+import { DialogSolicitudMntoInformeComponent } from './components/solicitud-mantenimiento-maquina/dialog-solicitud-mnto-informe/dialog-solicitud-mnto-informe.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -1111,6 +1116,11 @@ import { DialogResponsablesNuevoComponent } from './components/reporte-nc/manten
     DialogResponsablesNuevoComponent,
     //REGISTRO PARIHUELA
     RegistroPartidaParihuelaV2Component,
+
+    //SOLICITUD DE MANTENIMIENTO DE MAQUINA
+    SolicitudMantenimientoMaquinaComponent,
+    DialogSolicitudMntoCreateComponent,
+    DialogSolicitudMntoInformeComponent,
     
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent, DialogCapturarFotoCajaComponent, EvidenciaEmpaqueCajaComponent, ReporteVehiculoInmovilizadoComponent 
   ],
