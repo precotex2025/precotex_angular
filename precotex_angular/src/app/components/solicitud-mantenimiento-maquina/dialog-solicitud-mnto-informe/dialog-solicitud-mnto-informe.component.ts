@@ -119,8 +119,10 @@ export class DialogSolicitudMntoInformeComponent implements OnInit {
   //Variables de Flag
   Flg_ValidaMaquina = "1";
   Flg_ShowBotonIniciar: boolean = false;
+  Flg_ShowCtrolQR: Boolean = true;
+  
   CodEstadoMant = ""; 
-
+  CodNroSolicitud = ""; 
 
   selectedTipoFalla: any;
   filtro: string = '';
@@ -153,11 +155,10 @@ export class DialogSolicitudMntoInformeComponent implements OnInit {
   Num_Planta    = "";  
   /*FIN - CAMPOS A GUARDAR*/
 
+  sUsuario        = GlobalVariable.vusu;
 
 
 ngOnInit(): void {
-
-    setTimeout(() => this.inputQR?.nativeElement.focus(), 300);
 
     var actual = new Date();
     var hora = _moment(actual.valueOf()).format('HH:mm');
@@ -173,6 +174,7 @@ ngOnInit(): void {
     //Setear Valores
     this.formulario.get('ctrolHoraInicio').setValue(weight[0]+':'+weight[1]);
     this.CodEstadoMant = this.data.Datos.cod_Estado_Mant;
+    this.CodNroSolicitud = this.data.Datos.cod_Solicitud;
 
     //Controles Bloqueados
     this.formulario.get('ctrolFechaInicio').disable() ;
@@ -187,7 +189,18 @@ ngOnInit(): void {
       this.formulario.disable();
 
       // 🔓 Luego habilita solo el control "ctrolQR"
-      this.formulario.get('ctrolQR')?.enable();      
+      this.formulario.get('ctrolQR')?.enable();     
+      setTimeout(() => this.inputQR?.nativeElement.focus(), 300); 
+    }
+    //When estado EN ATENCION
+    if (this.data.Datos.cod_Estado_Mant === '02'){    
+      this.Flg_ShowCtrolQR = false;
+    }
+    //When estado PENDIENTE VB
+    if (this.data.Datos.cod_Estado_Mant === '03' || this.data.Datos.cod_Estado_Mant === '04'){   
+      // 🔒 Deshabilita todos los controles 
+      this.formulario.disable();
+      this.Flg_ShowCtrolQR = false;
     }
 
     //cargar Metodos por defecto
@@ -453,7 +466,7 @@ ngOnInit(): void {
   }
 
   onIniciar():void{
-
+    
     Swal.fire({
       title: '¿Desea Dar Inicio a la Atencion de la Solicitud ?, Confirme',
       icon: 'question',
@@ -464,31 +477,30 @@ ngOnInit(): void {
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.isConfirmed) {
+        
+        this.onAvanzar(this.CodNroSolicitud, '');
     
         /********************/
-        //Solicitud de Mantenimiento
+        //Input's Para Avanzar Solicitud
         /********************/
-        let data: any = {
-          "accion"            : "I" ,          
-          "cod_Solicitud"     : ""  ,
-          "usu_Registro"      : this.data.sCod_Usuario
-        };
-
-        console.log('onSave-data', data);
-
+        // const data: any = {
+        //   cod_Usuario        : this.sUsuario,
+        //   Cod_Solicitud      : this.CodNroSolicitud,
+        //   Observaciones : ''
+        // };
+        // console.log('onSave-data', data);
 
         //GUARDAR
         // this.SpinnerService.show();
-        // this.serviceSolicitudMnto.postProcesoMntoSolicitudMantenimiento(data).subscribe({
+        // this.serviceSolicitudMnto.postAvanzaEstadoSolicitudMantenimiento(data).subscribe({
         //     next: (response: any)=> {
         //       if(response.success){
         //         if (response.codeResult == 200){
         //           this.toastr.success(response.message, '', {
         //             timeOut: 2500,
         //           });
-        //           this.dialogRef.close();
-
-        //         }else if(response.codeResult == 201){
+        //           this.dialogRef.close();                          
+        //         }else {
         //           this.toastr.info(response.message, '', {
         //             timeOut: 2500,
         //           });
@@ -507,12 +519,9 @@ ngOnInit(): void {
         //       timeOut: 2500,
         //       });
         //     }
-        //   });        
-
-
+        //   });         
       }
     })  
-
   }
 
   onCerrarOT():void{
@@ -608,7 +617,7 @@ ngOnInit(): void {
     this.Fec_Registro = this.formulario.get('ctrolFechaInicio')?.value,
     this.Cod_Maquina  = this.formulario.get('ctrolMaquina')?.value,
     this.Cod_Tarea    = this.formulario.get('ctrolTarea')?.value,
-    this.Cod_OrdTra   = this.formulario.get('sOt')?.value,
+    this.Cod_OrdTra   = '',
     this.Fec_Inicio   = _moment(this.formulario.get('ctrolFechaInicio')?.value).format('DD/MM/YYYY'),
     this.hini         = this.formulario.get('ctrolHoraInicio')?.value,
     this.Fec_Fin      = this.formulario.get('ctrolFechaFin')?.value,
@@ -635,7 +644,7 @@ ngOnInit(): void {
 
     //Cuestiona al Grabar
     Swal.fire({
-      title: '¿Desea Registrar Informe Tecnico Para La Solicitud?, Confirme',
+      title: '¿Desea Registrar / Cerra la OT, Para La Solicitud?, Confirme',
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -647,7 +656,7 @@ ngOnInit(): void {
 
 
         console.log('Cod_Accion', this.Cod_Accion)    ;
-        console.log('Fec_Registro', this.Fec_Registro)  ;
+        console.log('Fec_Registro', this.Fec_Registro)   ;
         console.log('Cod_Maquina', this.Cod_Maquina)   ;
         console.log('cod_tarea', this.cod_tarea)     ;
         console.log('hini', this.hini)          ;
@@ -669,8 +678,13 @@ ngOnInit(): void {
         console.log('Cod_TipFall', this.Cod_TipFall)   ;
         console.log('Observacion2', this.Observacion2)  ;
         console.log('Flg_Atribuido', this.Flg_Atribuido) ;
-        console.log('Num_Planta', this.Num_Planta)    ;      
+        console.log('Num_Planta', this.Num_Planta)    ;     
+
+        //Avanzamos 
+        this.onAvanzar(this.CodNroSolicitud, '');
         
+        //return;
+        /*
         this.registromantemaquinastej.guardarEditarEliminarMantenimientoSede
         (
           this.Cod_Accion,
@@ -700,10 +714,9 @@ ngOnInit(): void {
             //this.dialog.closeAll();
             if (result[0]) {
               if (result[0].Respuesta == 'OK') {
-                this.matSnackBar.open('Se guardo Correctamente!!', 'Cerrar', {
-                  duration: 3000,
-                })
-                this.dialog.closeAll();
+
+                //Avanzamos 
+                this.onAvanzar(this.CodNroSolicitud, '');
 
               } else {
                 this.matSnackBar.open(result[0].Respuesta, 'Cerrar', {
@@ -718,7 +731,7 @@ ngOnInit(): void {
 
           },
           (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
-            
+        */            
 
 
       }
@@ -729,6 +742,83 @@ ngOnInit(): void {
     this.dialogRef.close();
   }
 
+  onAvanzar(CodSolicitud:string, Observacion: string){
 
+    /********************/
+    //Input's Para Avanzar Solicitud
+    /********************/
+    const data: any = {
+      cod_Usuario     : this.sUsuario,
+      Cod_Solicitud   : CodSolicitud,
+      Observaciones   : Observacion
+    };
+
+    //GUARDAR
+    this.SpinnerService.show();
+    this.serviceSolicitudMnto.postAvanzaEstadoSolicitudMantenimiento(data).subscribe({
+        next: (response: any)=> {
+          if(response.success){
+            if (response.codeResult == 200){
+              this.toastr.success(response.message, '', {
+                timeOut: 2500,
+              });
+              this.dialogRef.close();                          
+            }else {
+              this.toastr.info(response.message, '', {
+                timeOut: 2500,
+              });
+            }
+            this.SpinnerService.hide();
+          }else{
+            this.toastr.error(response.message, 'Cerrar', {
+              timeOut: 2500,
+            });
+            this.SpinnerService.hide();
+          }
+        },
+        error: (error) => {
+          this.SpinnerService.hide();
+          this.toastr.error(error.message, 'Cerrar', {
+          timeOut: 2500,
+          });
+        }
+      });    
+  }
+
+  onAprobarVB() {
+    //Cuestiona al Grabar, 
+    Swal.fire({
+      title             : '¿Desea Aprobar La Solicitud?, Confirme',
+      icon              : 'question'  ,
+      showCancelButton  : true        ,
+      confirmButtonColor: '#3085d6' ,
+      cancelButtonColor : '#d33'    ,
+      confirmButtonText : 'Sí'        ,
+      cancelButtonText  : 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        //Avanzamos 
+        this.onAvanzar(this.CodNroSolicitud, '');
+      }
+    })  
+  }
+
+  onRechazarVB() {
+    //Cuestiona al Grabar
+    Swal.fire({
+      title: '¿Desea Rechazar La Solicitud?, Confirme',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        //Avanzamos 
+        this.onAvanzar(this.CodNroSolicitud, 'E');
+      }
+    })      
+  }
 
 }

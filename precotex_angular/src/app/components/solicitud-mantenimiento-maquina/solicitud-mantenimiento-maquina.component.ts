@@ -187,12 +187,12 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
       }))        
   }  
 
-  onEditar(element: SolicitudMantenimiento) {
-    this.dialog.open(DialogSolicitudMntoCreateComponent, {
-      width: '450px',
-      data: element
-    });
-  }  
+  // onEditar(element: SolicitudMantenimiento) {
+  //   this.dialog.open(DialogSolicitudMntoCreateComponent, {
+  //     width: '450px',
+  //     data: element
+  //   });
+  // }  
 
   onInforme(element: SolicitudMantenimiento){
     let dialogRef = this.dialog.open(DialogSolicitudMntoInformeComponent,{

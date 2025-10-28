@@ -52,4 +52,9 @@ export class SolicitudMantenimientoService {
     return this.http.post(this.baseUrlTinto + 'TMSolicitudMantenimiento/postProcesoMntoSolicitudMantenimiento', data, { headers })
   }  
 
+  postAvanzaEstadoSolicitudMantenimiento(data: any){
+    const headers = this.Header;
+    return this.http.post(this.baseUrlTinto + 'TMSolicitudMantenimiento/postAvanzaEstadoSolicitudMantenimiento', data, { headers })
+  }  
+
 }

@@ -96,7 +96,7 @@
                                 <ng-container matColumnDef="fecha">
                                 <th mat-header-cell *matHeaderCellDef>Fecha Hora</th>
                                 <!-- <td mat-cell *matCellDef="let row">{{ row.fec_Registro }}</td> -->
-                                <td mat-cell *matCellDef="let row"> {{row.fec_Registro | date: 'dd/MM/yyyy' }} {{ row.hora }}</td>
+                                <td mat-cell *matCellDef="let row"> {{row.fec_Registro | date: 'dd/MM/yyyy HH:mm' }} </td>
                                 </ng-container>
 
                                 <!-- Hora -->
@@ -108,7 +108,7 @@
                                 <!-- Tiempo Transcurrido -->
                                 <ng-container matColumnDef="tiempoTranscurrido">
                                 <th mat-header-cell *matHeaderCellDef>Tiempo</th>
-                                <td mat-cell *matCellDef="let row">{{ row.t1_Tiempo_Espera_Min }}</td>
+                                <td mat-cell *matCellDef="let row">{{ row.t1_Tiempo_Espera_Min_Des }}</td>
                                 </ng-container>
 
                                 <!-- Supervisor -->
@@ -127,15 +127,15 @@
                                 <ng-container matColumnDef="acciones">
                                 <th mat-header-cell *matHeaderCellDef>Acciones</th>
                                 <td mat-cell *matCellDef="let row">
-                                    <button mat-icon-button color="primary" (click)="onEditar(row)">
+                                    <!-- <button mat-icon-button color="primary" (click)="onEditar(row)">
                                         <mat-icon>edit</mat-icon>
-                                    </button>
+                                    </button> -->
                                     <button mat-icon-button color="primary" (click)="onInforme(row)">
                                         <mat-icon>handyman</mat-icon>
                                     </button>                                    
-                                    <button mat-icon-button color="accent" (click)="onVer(row)">
+                                    <!-- <button mat-icon-button color="accent" (click)="onVer(row)">
                                         <mat-icon>visibility</mat-icon>
-                                    </button>
+                                    </button> -->
                                 </td>
                                 </ng-container>
 
