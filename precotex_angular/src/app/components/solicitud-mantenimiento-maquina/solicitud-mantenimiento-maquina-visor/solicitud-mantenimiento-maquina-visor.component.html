@@ -1,0 +1,83 @@
+<div class="admin-container mat-elevation-z2">
+<h2 class="title">MÓDULO ADMINISTRADOR DE SOLICITUDES</h2>
+
+<div class="table-wrapper">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z1" matSort>
+
+    <!-- Columnas -->
+    <ng-container matColumnDef="cod_Solicitud">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+        <td mat-cell *matCellDef="let visor">{{ visor.cod_Solicitud }}</td>
+</ng-container>
+    <ng-container matColumnDef="cod_Area">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Área</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.cod_Area }}</td>
+    </ng-container>
+    <ng-container matColumnDef="cod_Maquina">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Máquina</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.cod_Maquina }}</td>
+    </ng-container>
+    <ng-container matColumnDef="observacion">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción Falla</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.observacion }}</td>
+    </ng-container>
+    <ng-container matColumnDef="paro_Maquina">
+      <th mat-header-cell *matHeaderCellDef>Para Mda</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.paro_Maquina }}</td>
+    </ng-container>
+    <ng-container matColumnDef="prioridad">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Prioridad</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.prioridad }}</td>
+    </ng-container>
+    <ng-container matColumnDef="fec_Registro">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Reporte</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.fec_Registro | date:'dd/MM/yyyy' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="hora_Reporte">
+      <th mat-header-cell *matHeaderCellDef>Hora Reporte</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.hora_Reporte }}</td>
+    </ng-container>
+    <ng-container matColumnDef="hora_Inicio">
+      <th mat-header-cell *matHeaderCellDef>Tiempo 1</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.hora_Inicio }}</td>
+    </ng-container>
+    <ng-container matColumnDef="t1_Tiempo_Espera_Min">
+      <th mat-header-cell *matHeaderCellDef>Tiempo 2</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.t1_Tiempo_Espera_Min || '-' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="t2_Tiempo_Interv_Min">
+      <th mat-header-cell *matHeaderCellDef>Solicitante</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.t2_Tiempo_Interv_Min }}</td>
+    </ng-container>
+    <ng-container matColumnDef="usu_Registro">
+      <th mat-header-cell *matHeaderCellDef>Técnico</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.usu_Registro }}</td>
+    </ng-container>
+    <ng-container matColumnDef="cod_Usuario_Tecnico">
+      <th mat-header-cell *matHeaderCellDef>Foto</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.cod_Usuario_Tecnico }}</td>
+    </ng-container>
+    <ng-container matColumnDef="ruta_Fotografia">
+      <th mat-header-cell *matHeaderCellDef>Estado</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.ruta_Fotografia }}</td>
+    </ng-container>
+    <ng-container matColumnDef="nombre_Estado">
+      <th mat-header-cell *matHeaderCellDef>Estado</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.nombre_Estado }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="atender">
+      <th mat-header-cell *matHeaderCellDef>Atender</th>
+      <td mat-cell *matCellDef="let visor">Atender</td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+</div>
+
+<div class="export-button">
+    <button mat-raised-button color="accent" (click)="exportarExcel()">EXPORTAR EXCEL</button>
+</div>
+</div>
