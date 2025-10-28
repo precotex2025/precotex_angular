@@ -313,6 +313,7 @@ import { ReporteNcResolvedorComponent } from './components/reporte-nc/reporte-nc
 import { ReporteNcLstComponent } from './components/reporte-nc/reporte-nc-lst/reporte-nc-lst.component';
 import { RegistroPartidaParihuelaV2Component } from './components/registro-partida-parihuela-v2/registro-partida-parihuela-v2.component';
 import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/reporte-vehiculo-inmovilizado/reporte-vehiculo-inmovilizado.component';
+import { SolicitudMantenimientoMaquinaComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -682,7 +683,8 @@ const routes: Routes = [
   //PARIHUELA V2
   {path: 'RegistroParihuelaV2', component: RegistroPartidaParihuelaV2Component},
 
-
+  //SOLICITUD DE MANTENIMIENTO DE MAQUINA
+  {path: 'SolicitudMantenientoMaquina', component: SolicitudMantenimientoMaquinaComponent },
 
   
   { path:"checkListIngresoCostura", component: CheckListIngresoCosturaComponent },

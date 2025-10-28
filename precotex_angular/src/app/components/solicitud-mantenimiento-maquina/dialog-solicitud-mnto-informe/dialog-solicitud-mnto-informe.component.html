@@ -1,0 +1,165 @@
+
+<h2 mat-dialog-title class="dialog-title">Finalizar Formato de Hora (00:00 a 24 horas)</h2>
+
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="formulario" class="form-grid">
+
+    <!-- Escanear Codigo QR -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Scanear QR</mat-label>
+      <input matInput #inputQR formControlName="ctrolQR" placeholder="Scanea tu Código" (keyup.enter)="onScanQR(inputQR.value, $event)">
+    </mat-form-field>     
+
+    <!-- Primera fila -->
+    <mat-form-field appearance="outline">
+      <mat-label>Solicitud</mat-label>
+      <input matInput formControlName="ctrolNroSolicitud" readonly>
+    </mat-form-field>
+
+    <!-- <mat-form-field appearance="outline">
+      <mat-label>Especialidad</mat-label>
+      <input matInput formControlName="ctrolEspecialidad" readonly>
+    </mat-form-field> -->
+
+    <mat-form-field appearance="outline">
+        <mat-label>Especialidad</mat-label>
+        <mat-select  formControlName="ctrolEspecialidad" name="ctrolEspecialidad">
+            <mat-option *ngFor="let listar_origen of listaEspecialidades" [value]="listar_origen.Cod_Espe">
+                {{listar_origen.Nomb_Espec}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>    
+
+    <!-- Segunda fila -->
+    <mat-form-field appearance="outline">
+      <mat-label>DNI</mat-label>
+      <input matInput formControlName="ctrolDni" readonly>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Técnico</mat-label>
+      <input matInput formControlName="ctrolNombreTecnico" readonly>
+    </mat-form-field>
+
+    <!-- Área / Máquina -->
+    <mat-form-field appearance="outline">
+      <mat-label>Área</mat-label>
+      <mat-select formControlName="ctrolArea">
+        <mat-option *ngFor="let a of listaAreas" [value]="a.Cod_Area_Tej_Mante_Maq" (click)="CargarValoresMaquiTarea()">{{ a.Nomb_Area_Tej_Mante_Maq }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Máquina</mat-label>
+      <mat-select formControlName="ctrolMaquina">
+        <mat-option *ngFor="let m of listaMaquinas" [value]="m.Codigo">{{ m.Descripcion }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Tarea  -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tarea</mat-label>
+      <mat-select formControlName="ctrolTarea">
+        <mat-option *ngFor="let t of listaTareas" [value]="t.Cod_Tarea" (click)="CargarTipoFalla(t.Cod_Tarea, t.Flg_ValidaMaquina)">{{ t.Nombre_Tarea }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Articulo / Tipo Falla -->
+    <mat-form-field appearance="outline">
+      <mat-label>Articulo</mat-label>
+      <mat-select formControlName="ctrolArticulo">
+        <mat-option *ngFor="let m of listarArticulo" [value]="m.Cod_Articulo">{{ m.Desc_Articulo }}</mat-option>
+      </mat-select>
+    </mat-form-field>  
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo Falla</mat-label>
+      <mat-select formControlName="ctrolTipoFalla">
+
+        <!-- Campo de búsqueda dentro del mat-select -->
+        <mat-option>
+            <input matInput placeholder="Buscar..." formControlName="filtro" (ngModelChange)="filtrarTiposFalla()" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" autocomplete="off">
+        </mat-option>   
+
+        <mat-option *ngFor="let f of listaFallas" [value]="f.Cod_TipFall">{{ f.Desc_TipFall }}</mat-option>
+      </mat-select>
+    </mat-form-field>  
+
+    <!-- Paro / Condición -->
+    <mat-form-field appearance="outline">
+      <mat-label>Paro Máquina</mat-label>
+      <mat-select formControlName="ctrolParoMaquina">
+        <mat-option [value]="1">Sí</mat-option>
+        <mat-option [value]="0">No</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Condición</mat-label>
+      <mat-select formControlName="ctrolCondicion">
+        <mat-option *ngFor="let c of listaCondiciones" [value]="c.Cod_Tej_Cond">{{ c.Desc_Tej_Cond }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Fechas y horas -->
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha Inicio</mat-label>
+      <input matInput [matDatepicker]="pickerIni" formControlName="ctrolFechaInicio">
+      <mat-datepicker-toggle matSuffix [for]="pickerIni"></mat-datepicker-toggle>
+      <mat-datepicker #pickerIni></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hora Inicio (00:00 a 24:00)</mat-label>
+      <input matInput type="time" formControlName="ctrolHoraInicio">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha Fin</mat-label>
+      <input matInput [matDatepicker]="pickerFin" formControlName="ctrolFechaFin">
+      <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+      <mat-datepicker #pickerFin></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hora Fin (00:00 a 24:00)</mat-label>
+      <input matInput type="time" formControlName="ctrolHoraFin">
+    </mat-form-field>
+
+    <!-- Atribuido -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Atribuido</mat-label>
+      <mat-select formControlName="ctrolAtribuido">
+        <mat-option *ngFor="let a of listaAtribuidos" [value]="a.Cod_TipAtr">{{ a.Desc_TipAtr }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Descripción del evento -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descripción del Evento</mat-label>
+      <textarea matInput formControlName="ctrolDescripcionEvento" rows="2"></textarea>
+    </mat-form-field>
+
+    <!-- Procedimiento Solución -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Procedimiento Solución</mat-label>
+      <textarea matInput formControlName="ctrolProcedimientoSolucion" rows="2"></textarea>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="center">
+  <button *ngIf="CodEstadoMant === '01' && Flg_ShowBotonIniciar" type="button" class="button-iniciar" id="btnIniciar"  (click)="onIniciar()" mat-flat-button color="primary">
+    <mat-icon aria-label="person" >access_time
+    </mat-icon>  Iniciar
+  </button>     
+  
+  <button *ngIf="CodEstadoMant !== '01'" type="button" class="button-cerrar" id="btnIniciar"  (click)="onCerrarOT()" mat-flat-button color="primary">
+    <mat-icon aria-label="person" >lock
+    </mat-icon>  Cerrar OT
+  </button>  
+<!-- 
+  <button mat-raised-button color="primary" (click)="onAceptar()">Aceptar</button> -->
+  <button mat-raised-button color="warn" (click)="onCancelar()">Salir</button>
+</mat-dialog-actions>

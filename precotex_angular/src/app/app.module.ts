@@ -589,6 +589,11 @@ import { RegistroPartidaParihuelaV2Component } from './components/registro-parti
 import { EvidenciaEmpaqueCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/evidencia-empaque-caja/evidencia-empaque-caja.component';
 import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/reporte-vehiculo-inmovilizado/reporte-vehiculo-inmovilizado.component';
 
+//SOLICITUD DE MANTENIMIENTO DE MAQUINA
+import { SolicitudMantenimientoMaquinaComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina.component';
+import { DialogSolicitudMntoCreateComponent } from './components/solicitud-mantenimiento-maquina/dialog-solicitud-mnto-create/dialog-solicitud-mnto-create.component';
+import { DialogSolicitudMntoInformeComponent } from './components/solicitud-mantenimiento-maquina/dialog-solicitud-mnto-informe/dialog-solicitud-mnto-informe.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -1101,6 +1106,11 @@ import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/rep
 
     //REGISTRO PARIHUELA
     RegistroPartidaParihuelaV2Component,
+
+    //SOLICITUD DE MANTENIMIENTO DE MAQUINA
+    SolicitudMantenimientoMaquinaComponent,
+    DialogSolicitudMntoCreateComponent,
+    DialogSolicitudMntoInformeComponent,
     
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent, DialogCapturarFotoCajaComponent, EvidenciaEmpaqueCajaComponent, ReporteVehiculoInmovilizadoComponent 
   ],
