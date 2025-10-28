@@ -600,6 +600,7 @@ import { DialogResponsablesNuevoComponent } from './components/reporte-nc/manten
 import { SolicitudMantenimientoMaquinaComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina.component';
 import { DialogSolicitudMntoCreateComponent } from './components/solicitud-mantenimiento-maquina/dialog-solicitud-mnto-create/dialog-solicitud-mnto-create.component';
 import { DialogSolicitudMntoInformeComponent } from './components/solicitud-mantenimiento-maquina/dialog-solicitud-mnto-informe/dialog-solicitud-mnto-informe.component';
+import { SolicitudMantenimientoMaquinaVisorComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina-visor/solicitud-mantenimiento-maquina-visor.component';
 
 @NgModule({
   declarations: [
@@ -1121,7 +1122,7 @@ import { DialogSolicitudMntoInformeComponent } from './components/solicitud-mant
     SolicitudMantenimientoMaquinaComponent,
     DialogSolicitudMntoCreateComponent,
     DialogSolicitudMntoInformeComponent,
-    
+    SolicitudMantenimientoMaquinaVisorComponent,
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent, DialogCapturarFotoCajaComponent, EvidenciaEmpaqueCajaComponent, ReporteVehiculoInmovilizadoComponent 
   ],
   entryComponents: [DialogJabaComponent],

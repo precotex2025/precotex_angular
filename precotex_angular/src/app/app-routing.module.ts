@@ -318,6 +318,7 @@ import { DialogAreaNuevoComponent } from './components/reporte-nc/mantenimiento-
 import { DialogResponsablesNuevoComponent } from './components/reporte-nc/mantenimiento-responsables/dialog-responsables-nuevo/dialog-responsables-nuevo.component';
 import { MantenimientoResponsablesComponent } from './components/reporte-nc/mantenimiento-responsables/mantenimiento-responsables.component';
 import { SolicitudMantenimientoMaquinaComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina.component';
+import { SolicitudMantenimientoMaquinaVisorComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina-visor/solicitud-mantenimiento-maquina-visor.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -693,7 +694,7 @@ const routes: Routes = [
 
   //SOLICITUD DE MANTENIMIENTO DE MAQUINA
   {path: 'SolicitudMantenientoMaquina', component: SolicitudMantenimientoMaquinaComponent },
-
+  {path: 'SolicitudMantenimientoMaquinaVisor', component: SolicitudMantenimientoMaquinaVisorComponent},
   
   { path:"checkListIngresoCostura", component: CheckListIngresoCosturaComponent },
 
