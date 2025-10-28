@@ -60,6 +60,7 @@ h4{
         "fila2" 55px
         "fila3" 55px
         "fila4" 55px
+        "fila4a" 55px
         "fila41" 55px
         "fila5" 55px
         "fila6" 66px
@@ -93,6 +94,9 @@ h4{
     grid-area: fila4;
 }
 
+.container-cuerpo-fila4a {
+    grid-area: fila4a;
+}
 .container-cuerpo-fila41 {
     grid-area: fila41;
 }
@@ -213,6 +217,51 @@ mat-form-field {
 .fila4-num-peso mat-form-field {
     text-align: center;
 }
+
+//fila 4
+.container-cuerpo-fila4a {
+    display: grid;
+    grid-template:
+        "col1 col2 col3 col4" auto /
+        24.9% 24.9% 24.9% 24.9%;
+}
+
+
+.fila4a-num-bulto {
+    grid-area: col1;
+    padding-right: 10px;
+    display: flex;
+}
+
+.fila4a-num-peso {
+    grid-area: col2;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.fila4a-vehiculo {
+    grid-area: col3;
+    padding-left: 10px;
+}
+
+
+.fila4a-num-bulto mat-form-field {
+    text-align: center;
+}
+.fila4a-num-cantidad mat-form-field {
+    text-align: center;
+}
+.fila4a-num-peso mat-form-field {
+    text-align: center;
+}
+
+
+
+
+
+
+
+
 
 //fila41
 .container-cuerpo-fila41 {

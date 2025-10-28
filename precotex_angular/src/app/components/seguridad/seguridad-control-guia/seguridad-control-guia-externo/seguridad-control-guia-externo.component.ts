@@ -455,6 +455,8 @@ export class SeguridadControlGuiaExternoComponent implements OnInit {
       this.formulario.get('num_bulto')?.value,
       this.formulario.get('num_cantidad')?.value,
       this.formulario.get('num_peso')?.value,
+      0,
+      0,
       this.formulario.get('cod_despachado')?.value,
       this.formulario.get('glosa')?.value,
       this.formulario.get('Cod_Vehiculo')?.value,
