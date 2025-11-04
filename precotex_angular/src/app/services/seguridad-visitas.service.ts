@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GlobalVariable } from '../VarGlobals';
+import { Observable } from 'rxjs';
 import * as _moment from 'moment';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -38,6 +40,11 @@ export class SeguridadVisitasService {
   ){    
     return this.http.get(`${this.baseUrl}/app_SEG_CREAR_VISITA_PLANTA.php?Opcion=${Opcion}&Id=${Id}&Cod_Empresa=${Cod_Empresa}&Num_Planta=${Num_Planta}&Tipo_Documento=${Tipo_Documento}&Nro_DNI=${Nro_DNI}&Nombres_Visita=${Nombres_Visita}&Empresa=${Empresa}&Hora_Ingreso=${Hora_Ingreso}&Hora_Salida=${Hora_Salida}&Horas_Planta=${Horas_Planta}&RH_Cod_Area=${RH_Cod_Area}&Area_Visitada=${Area_Visitada}&Motivo_Visita=${Motivo_Visita}&Persona_Visitada=${Persona_Visitada}&Observaciones=${Observaciones}&Fec_Registro=${Fec_Registro}&Cod_Usuario=${Cod_Usuario}`);
   }
+
+  SEG_CREAR_VISITA_PLANTA2(data: any): Observable<any[]> {
+    console.log("auiq grabo")
+    return this.http.post<any[]>(`${this.baseUrl}/app_SEG_CREAR_VISITA_PLANTA2.php`, data);
+  }  
 
 
   consultaDNI(DNI: any){    
