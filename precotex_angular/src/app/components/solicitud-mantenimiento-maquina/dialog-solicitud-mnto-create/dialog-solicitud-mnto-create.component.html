@@ -18,7 +18,7 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Scanear QR</mat-label>
-      <input matInput #inputQR formControlName="ctrolQR" placeholder="Scanea tu Código" (keyup.enter)="onScanQR(inputQR.value, $event)">
+      <input matInput #inputQR formControlName="ctrolQR" placeholder="Scanea tu Código" (keydown.enter)="onScanQR(inputQR.value, $event)">
     </mat-form-field>
 
     <!-- <mat-form-field appearance="outline">
@@ -60,19 +60,19 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
+    <!-- <mat-form-field appearance="outline" class="full-width">
       <mat-label>Fotografía (URL / archivo)</mat-label>
       <input matInput formControlName="ctrolFotografia" placeholder="Ruta o archivo">
-    </mat-form-field>
+    </mat-form-field> -->
 
-    <!-- <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field appearance="outline" class="full-width">
     <mat-label>Archivo</mat-label>
     <input matInput [value]="fileName" readonly formControlName="ctrolFotografia"   />
-    <button mat-icon-button matSuffix (click)="fileInput.click()">
+    <button mat-icon-button matSuffix (click)="isInfoCargada ? fileInput.click() : null">
         <mat-icon>attach_file</mat-icon>
     </button>
     </mat-form-field>
-    <input type="file" hidden #fileInput (change)="onFileSelected($event)" />  -->
+    <input type="file" hidden #fileInput (change)="onFileSelected($event)" /> 
 
 
     <mat-form-field appearance="outline">

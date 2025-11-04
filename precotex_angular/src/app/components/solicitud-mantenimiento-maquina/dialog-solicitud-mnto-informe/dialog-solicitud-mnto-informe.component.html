@@ -141,6 +141,12 @@
       </mat-select>
     </mat-form-field>
 
+    <!-- Jefe de Grupo -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Jefe de Grupo</mat-label>
+      <input matInput formControlName="ctrolJefeGrupo" readonly>
+    </mat-form-field>        
+
     <!-- Descripción del evento -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Descripción del Evento</mat-label>
@@ -153,6 +159,12 @@
       <textarea matInput formControlName="ctrolProcedimientoSolucion" rows="2"></textarea>
     </mat-form-field>
 
+    <!-- Observacion de Aprobacion o Rechazo -->
+    <mat-form-field *ngIf="CodEstadoMant === '03' && Flg_ShowObservacionOT" appearance="outline" class="full-width">
+      <mat-label>Observacion (Aprueba/Rechazo)</mat-label>
+      <textarea matInput formControlName="ctrolObservacion" rows="2"></textarea>
+    </mat-form-field>
+
   </form>
 </mat-dialog-content>
 
@@ -162,17 +174,17 @@
     </mat-icon>  Iniciar
   </button>     
   
-  <button *ngIf="CodEstadoMant === '02'" type="button" class="button-cerrar" id="btnIniciar"  (click)="onCerrarOT()" mat-flat-button color="primary">
+  <button *ngIf="CodEstadoMant === '02' && Flg_ShowBotonCerrarOT" type="button" class="button-cerrar" id="btnIniciar"  (click)="onCerrarOT()" mat-flat-button color="primary">
     <mat-icon aria-label="person" >lock
     </mat-icon>  Cerrar OT
   </button>  
 
-  <button *ngIf="CodEstadoMant === '03'" type="button" class="btn-verde" id="btnAprobar"  (click)="onAprobarVB()" mat-flat-button>
+  <button *ngIf="CodEstadoMant === '03' && Flg_ShowBotonAprobarOT" type="button" class="btn-verde" id="btnAprobar"  (click)="onAprobarVB()" mat-flat-button>
     <mat-icon aria-label="person" >done
     </mat-icon>  Aprobar
   </button>    
 
-    <button *ngIf="CodEstadoMant === '03'" type="button" class="button-cerrar" id="btnRechazar"  (click)="onRechazarVB()" mat-flat-button color="warn">
+    <button *ngIf="CodEstadoMant === '03' && Flg_ShowBotonRechazarOT" type="button" class="button-cerrar" id="btnRechazar"  (click)="onRechazarVB()" mat-flat-button color="warn">
     <mat-icon aria-label="person" >cancel
     </mat-icon>  Rechazar
   </button>  

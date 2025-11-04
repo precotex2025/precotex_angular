@@ -27,7 +27,7 @@
                                 <mat-icon>search</mat-icon>Buscar
                                 </button>
 
-                                <button type="button" mat-flat-button (click)="onCreate()">
+                                <button *ngIf="Flg_ShowBotonNuevo" type="button" mat-flat-button (click)="onCreate()">
                                 <mat-icon>note_add</mat-icon>Nuevo
                                 </button>
 
@@ -53,7 +53,7 @@
                                 <!-- Codigo -->
                                 <ng-container matColumnDef="codigo">
                                 <th mat-header-cell *matHeaderCellDef>Código</th>
-                                <td mat-cell *matCellDef="let row">{{ row.cod_Solicitud }}</td>
+                                <td mat-cell *matCellDef="let row" class="memo-cell">{{ row.cod_Solicitud }}</td>
                                 </ng-container>
 
                                 <!-- Área -->
@@ -78,7 +78,9 @@
                                 <ng-container matColumnDef="paroMaquina">
                                 <th mat-header-cell *matHeaderCellDef>Paro MQ</th>
                                 <td mat-cell *matCellDef="let row">
-                                    {{ row.paro_Maquina ? 'Sí' : 'No' }}
+                                    <button mat-flat-button color="warn"
+                                    [ngClass]="row.paro_Maquina == 1 ? 'btn-rojo' : 'btn-blue'"
+                                    >{{ row.paro_Maquina ? 'Sí' : 'No' }}</button>
                                 </td>
                                 </ng-container>
 

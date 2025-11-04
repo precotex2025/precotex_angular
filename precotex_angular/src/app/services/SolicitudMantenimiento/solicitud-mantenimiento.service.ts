@@ -53,8 +53,7 @@ export class SolicitudMantenimientoService {
   }
 
   postProcesoMntoSolicitudMantenimiento(data: any){
-    const headers = this.Header;
-    return this.http.post(this.baseUrlTinto + 'TMSolicitudMantenimiento/postProcesoMntoSolicitudMantenimiento', data, { headers })
+    return this.http.post(this.baseUrlTinto + 'TMSolicitudMantenimiento/postProcesoMntoSolicitudMantenimiento', data)
   }  
 
   postAvanzaEstadoSolicitudMantenimiento(data: any){
@@ -69,5 +68,10 @@ export class SolicitudMantenimientoService {
     console.log('el nombre de la imagen es: ', imageId);
     return `${this.bas}?imageId=${encodeURIComponent(imageId)}`;
   }
+
+  postProcesoMntoTiempoManMquina(data: any){
+    const headers = this.Header;
+    return this.http.post(this.baseUrlTinto + 'TMSolicitudMantenimiento/postProcesoMntoTiempoManMquina', data, { headers })
+  }   
 
 }

@@ -10,6 +10,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SolicitudMantenimientoService } from 'src/app/services/SolicitudMantenimiento/solicitud-mantenimiento.service';
 import { DialogSolicitudMntoInformeComponent } from './dialog-solicitud-mnto-informe/dialog-solicitud-mnto-informe.component';
+import { RegistroManteMaquinasTejService } from 'src/app/services/registro-mante-maquinas-tej.service';
+import { ToastrService } from 'ngx-toastr';
 
 interface data_det {
   cod_Solicitud   : string,
@@ -72,6 +74,8 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
     private serviceSolicitudMnto: SolicitudMantenimientoService, 
     private matSnackBar       : MatSnackBar           ,
     private SpinnerService    : NgxSpinnerService     ,
+    private registromantemaquinastej: RegistroManteMaquinasTejService   ,
+    private toastr      : ToastrService ,
   ) { }
 
   sCod_Trabajador = GlobalVariable.vcodtra;
@@ -81,6 +85,7 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
   sCod_Usuario = "";
   sNom_Usuario = "";
   sCod_Planta  = "";
+  sCod_Espe    = "";
 
   range = new FormGroup({
       //start: new FormControl(new Date),
@@ -90,6 +95,8 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
 
   ngOnInit(): void {
     this.getInfoUsuarios();
+    this.mostrarTejedor();
+    this.ObtieneSedeByUser();
   }
 
 
@@ -98,6 +105,7 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
     Num_Requerimiento: ['']
   });  
 
+  Flg_ShowBotonNuevo   : boolean = true;
 
   //METODOS O FUNCIONES
   onGetSolicitudes(){
@@ -176,7 +184,7 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
         if (result.totalElements > 0) {
           this.sCod_Usuario = result.elements[0].cod_Usuario;
           this.sNom_Usuario = result.elements[0].nom_Usuario;
-          this.sCod_Planta  = result.elements[0].cod_Planta;
+          //this.sCod_Planta  = result.elements[0].cod_Planta;
         }
         else {
           this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
@@ -209,6 +217,7 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
         sCod_Usuario : this.sCod_Usuario,
         sNom_Usuario : this.sNom_Usuario,
         sCod_Planta  : this.sCod_Planta,
+        sCod_Espe    : this.sCod_Espe,
         Datos  : element
       }
     });
@@ -220,5 +229,66 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
   onVer(element: SolicitudMantenimiento){
 
   }
+
+  mostrarTejedor() {
+
+    //let dni_tejedor=this.formulario.get('dnitejedor')?.value;
+    let Cod_Trabajador=GlobalVariable.vcodtra;
+    let Tip_Trabajador=GlobalVariable.vtiptra;
+    //if (dni_tejedor.length===8) {
+      console.log(Cod_Trabajador.length);
+      this.registromantemaquinastej.traerTejedorTra(Cod_Trabajador, Tip_Trabajador).subscribe(
+        (result: any) => {
+          console.log(result);
+           if (result[0].Respuesta == 'OK') {
+            this.CargarEspecialidad(String(result[0].Nro_DocIde));
+           }
+         },
+         (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
+    //}
+  }  
+
+  CargarEspecialidad(dni: string) 
+  {
+
+    this.registromantemaquinastej.ListarEspecialidad(dni).subscribe(
+      (result: any) => {
+        this.sCod_Espe = result[0].Cod_Espe;
+
+        //Alos tecnicos no se les muestra el boton nuevo
+        if(this.sCod_Espe == '15' || this.sCod_Espe == '17'){
+          this.Flg_ShowBotonNuevo = false;
+        }
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
+  }  
+
+  ObtieneSedeByUser(){
+
+    this.SpinnerService.show();
+    this.registromantemaquinastej.getListaUsuarioSedeByUser().subscribe({
+      next: (response: any)=> {
+        if(response.success){
+          if (response.totalElements > 0){
+            this.sCod_Planta = response.elements[0].num_Planta;
+            this.SpinnerService.hide();
+          }
+          else{
+            //Deshabilita los botones
+            this.toastr.warning("Usuario sin configuración de SEDE.", 'Cerrar', {
+            timeOut: 2500,
+             });            
+             this.SpinnerService.hide();
+          }
+        }        
+      },
+      error: (error) => {
+        this.SpinnerService.hide();
+        this.toastr.error(error.error.message, 'Cerrar', {
+        timeOut: 2500,
+         });
+      }
+    });
+  }    
 
 }

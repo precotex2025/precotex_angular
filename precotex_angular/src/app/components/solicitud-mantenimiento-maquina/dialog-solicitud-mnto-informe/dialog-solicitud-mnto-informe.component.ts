@@ -60,6 +60,7 @@ interface data {
   sCod_Usuario: string;
   sNom_Usuario: string;
   sCod_Planta : string;
+  sCod_Espe   : string;
   Datos       : any   ;
 }
 
@@ -100,10 +101,12 @@ export class DialogSolicitudMntoInformeComponent implements OnInit {
     ctrolFechaFin   : [new Date()],
     ctrolHoraFin    : ['00:00'],
     ctrolAtribuido  : [''],
+    ctrolJefeGrupo  : [''],
     ctrolDescripcionEvento    : [''],
     ctrolProcedimientoSolucion: [''],
     filtro  :[''],
-    ctrolQR :['']
+    ctrolQR :[''],
+    ctrolObservacion: [''],
   });  
   mostrarCtrolOtrasSedes: boolean = false; // Esta variable controlará la visibilidad
 
@@ -120,6 +123,10 @@ export class DialogSolicitudMntoInformeComponent implements OnInit {
   Flg_ValidaMaquina = "1";
   Flg_ShowBotonIniciar: boolean = false;
   Flg_ShowCtrolQR: Boolean = true;
+  Flg_ShowBotonCerrarOT   : boolean = true;
+  Flg_ShowBotonAprobarOT  : boolean = true;
+  Flg_ShowBotonRechazarOT : boolean = true;
+  Flg_ShowObservacionOT   : boolean = true;
   
   CodEstadoMant = ""; 
   CodNroSolicitud = ""; 
@@ -159,13 +166,16 @@ export class DialogSolicitudMntoInformeComponent implements OnInit {
 
 
 ngOnInit(): void {
-
+    console.log('this.data.Datos', this.data);
     var actual = new Date();
     var hora = _moment(actual.valueOf()).format('HH:mm');
-    var weight = hora.split(':')    
+    var weight = hora.split(':')   
 
+    //Mostrar Datos de personal
+    this.mostrarTejedor();    
+    
     //ACtivamos los controles si no es planta 4
-    if (Number(this.data.Datos.num_Planta) !== 4){
+    if (Number(this.data.sCod_Planta) !== 4){
       //Aqui ocultamos los controles de
       this.mostrarCtrolOtrasSedes = true;
       this.formulario.get('ctrolArticulo')?.disable();
@@ -182,29 +192,69 @@ ngOnInit(): void {
     this.formulario.get('ctrolFechaFin').disable()    ;
     this.formulario.get('ctrolHoraFin').disable()     ;
 
-
+    //this.Cod_Espe = this.listaEspecialidades[0].Cod_Espe;
+    console.log('especialidad', this.data.sCod_Espe);
+    console.log('sCod_Planta', this.data.sCod_Planta);
+    
     //When estado REPORTADO
     if (this.data.Datos.cod_Estado_Mant === '01'){
-      // 🔒 Deshabilita todos los controles
-      this.formulario.disable();
 
-      // 🔓 Luego habilita solo el control "ctrolQR"
-      this.formulario.get('ctrolQR')?.enable();     
-      setTimeout(() => this.inputQR?.nativeElement.focus(), 300); 
+        // 🔒 Deshabilita todos los controles
+        this.formulario.disable();
+
+        if (this.data.sCod_Espe !== '23'){
+          // 🔓 Habilita solo el campo QR
+          this.formulario.get('ctrolQR')?.enable();
+
+          // 🎯 Da foco al control QR
+          setTimeout(() => this.inputQR?.nativeElement.focus(), 300);
+        }else {
+          //Para las especialidades 15 Y 17 
+          this.Flg_ShowCtrolQR = false;
+        }
     }
+    
     //When estado EN ATENCION
     if (this.data.Datos.cod_Estado_Mant === '02'){    
-      this.Flg_ShowCtrolQR = false;
+      if (this.data.sCod_Espe !== '23'){
+        this.Flg_ShowCtrolQR = false;
+      }else{
+        this.formulario.disable();
+        this.Flg_ShowCtrolQR = false;
+        this.Flg_ShowBotonCerrarOT = false;
+      }
     }
+
     //When estado PENDIENTE VB
-    if (this.data.Datos.cod_Estado_Mant === '03' || this.data.Datos.cod_Estado_Mant === '04'){   
+    if (this.data.Datos.cod_Estado_Mant === '03' ){   
       // 🔒 Deshabilita todos los controles 
       this.formulario.disable();
       this.Flg_ShowCtrolQR = false;
+      this.Flg_ShowObservacionOT = true;
+
+      if (this.data.sCod_Espe !== '23'){      
+        this.Flg_ShowObservacionOT = false;
+        this.Flg_ShowBotonAprobarOT = false;
+        this.Flg_ShowBotonRechazarOT = false;    
+            
+      }else{
+        this.Flg_ShowObservacionOT = true;
+        this.Flg_ShowBotonAprobarOT = true;
+        this.Flg_ShowBotonRechazarOT = true;    
+        // 🔓 Habilita solo el campo QR
+        this.formulario.get('ctrolObservacion')?.enable();                     
+      }
     }
 
+    //When estado CERRRADO
+    if (this.data.Datos.cod_Estado_Mant === '04'){   
+      // 🔒 Deshabilita todos los controles 
+      this.formulario.disable();
+      this.Flg_ShowCtrolQR = false;
+    }    
+
+
     //cargar Metodos por defecto
-    this.mostrarTejedor()     ;
     this.CargarArea()         ;
     this.CargarTipoAtribuido();
     this.CargarCondicion()    ;
@@ -218,6 +268,7 @@ ngOnInit(): void {
     this.formulario.get('ctrolNroSolicitud')?.setValue(data.Datos.cod_Solicitud);
     //this.formulario.get('ctrolNombreTecnico')?.setValue(data.sNom_Usuario);
     this.formulario.get('ctrolParoMaquina')?.setValue(Number(data.Datos.paro_Maquina)); 
+    console.log('Cargo todos los datods correctamente',data.Datos);
   }
 
   CargarEspecialidad(dni: string) 
@@ -226,24 +277,30 @@ ngOnInit(): void {
     this.registromantemaquinastej.ListarEspecialidad(dni).subscribe(
       (result: any) => {
         this.listaEspecialidades = result
-
+        console.log('Lista de Expecialidades', this.listaEspecialidades);
         //Agregado por HMEDINA - 11/03/2025
+        //this.Cod_Espe = this.listaEspecialidades[0].Cod_Espe;
         this.formulario.get('ctrolEspecialidad')?.setValue(this.listaEspecialidades[0].Cod_Espe);
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
   }
 
   CargarArea() {
+    console.log('CargarArea planta', this.data.sCod_Planta);
+    console.log('planta convertido', String(Number(this.data.Datos.num_Planta)))
+    let iCodPlanta = Number(this.data.sCod_Planta);
+    console.log('iCodPlanta', iCodPlanta);
     this.listaAreas = [];
-    this.registromantemaquinastej.ListarAreaBySede(String(this.data.Datos.num_Planta)).subscribe({
-
+    //this.registromantemaquinastej.ListarAreaBySede(String(Number(this.data.Datos.num_Planta))).subscribe({
+    this.registromantemaquinastej.ListarAreaBySede(String(iCodPlanta)).subscribe({
       next: (result:any) => {
         if (result.length !== 0){
           this.listaAreas = result;
-
+          console.log('Cargo listaAreas', this.listaAreas);
           this.formulario.get('ctrolArea')?.setValue( String(this.data.Datos.cod_Area));
           this.CargarMaquinas( String(this.data.Datos.cod_Area));
           this.CargarTareasSedes(String(this.data.Datos.cod_Area));
+          
         }else{
           this.listaAreas = [];
           this.toastr.warning("No se configuro Areas para la Sede.", 'Cerrar', {
@@ -382,13 +439,14 @@ ngOnInit(): void {
       { Cod_TipAtr: 'M', Desc_TipAtr: 'MANTENIMIENTO' },
       { Cod_TipAtr: 'S', Desc_TipAtr: 'SISTEMAS' }
     ];
+    console.log('Cargo Atribuidos');
   }  
 
   CargarCondicion() {
     this.registromantemaquinastej.ListarCondicion().subscribe(
       (result: any) => {
         this.listaCondiciones = result
-        //console.log(this.listar_area);
+        console.log('Lista condiciones', this.listaCondiciones);
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
   }
@@ -399,10 +457,9 @@ ngOnInit(): void {
     let Cod_Trabajador=GlobalVariable.vcodtra;
     let Tip_Trabajador=GlobalVariable.vtiptra;
     //if (dni_tejedor.length===8) {
-      console.log(Cod_Trabajador.length);
       this.registromantemaquinastej.traerTejedorTra(Cod_Trabajador, Tip_Trabajador).subscribe(
         (result: any) => {
-          console.log(result);
+          console.log('marca01', result);
            if (result[0].Respuesta == 'OK') {
             this.formulario.get('ctrolDni')?.setValue(result[0].Nro_DocIde); 
             this.formulario.get('ctrolNombreTecnico')?.setValue(result[0].Nombres);
@@ -478,7 +535,7 @@ ngOnInit(): void {
     }).then((result) => {
       if (result.isConfirmed) {
         
-        this.onAvanzar(this.CodNroSolicitud, '');
+        this.onAvanzar(this.CodNroSolicitud, '', '');
     
         /********************/
         //Input's Para Avanzar Solicitud
@@ -528,8 +585,15 @@ ngOnInit(): void {
     const codArea: string =  this.formulario.get('ctrolArea')?.value || null;
     const codTarea: string = this.formulario.get('ctrolTarea')?.value || null;
     const codMaq: string = this.formulario.get('ctrolMaquina')?.value || null;
-    const paroMaq: string = this.formulario.get('ctrolParoMaquina')?.value || null;
+    const paroMaq: string = this.formulario.get('ctrolParoMaquina')?.value;
+    const sJefeGrupo: string = this.formulario.get('ctrolJefeGrupo')?.value || '';
+    
     //const condicion: string = this.formulario.get('ct_Condicion')?.value || null;   
+
+    console.log('paroMaq', paroMaq);
+    console.log('codArea', codArea);
+    console.log('codTarea', codTarea);
+    console.log('codMaq', codMaq);
 
     if (codArea == null){
       this.matSnackBar.open("¡Importante seleccionar el area!", 'Cerrar', {
@@ -614,15 +678,15 @@ ngOnInit(): void {
 
     //Continua con el Registro de Informacion 
     this.Cod_Accion   = 'I'    
-    this.Fec_Registro = this.formulario.get('ctrolFechaInicio')?.value,
-    this.Cod_Maquina  = this.formulario.get('ctrolMaquina')?.value,
-    this.Cod_Tarea    = this.formulario.get('ctrolTarea')?.value,
-    this.Cod_OrdTra   = '',
-    this.Fec_Inicio   = _moment(this.formulario.get('ctrolFechaInicio')?.value).format('DD/MM/YYYY'),
-    this.hini         = this.formulario.get('ctrolHoraInicio')?.value,
-    this.Fec_Fin      = this.formulario.get('ctrolFechaFin')?.value,
-    this.hfin         = this.formulario.get('ctrolHoraFin')?.value,
-    this.Observacion  = this.formulario.get('ctrolDescripcionEvento')?.value
+    this.Fec_Registro = this.formulario.get('ctrolFechaInicio')?.value;
+    this.Cod_Maquina  = this.formulario.get('ctrolMaquina')?.value;
+    this.Cod_Tarea    = this.formulario.get('ctrolTarea')?.value;
+    this.Cod_OrdTra   = ' ';
+    this.Fec_Inicio   = _moment(this.formulario.get('ctrolFechaInicio')?.value).format('DD/MM/YYYY');
+    this.hini         = this.formulario.get('ctrolHoraInicio')?.value;
+    this.Fec_Fin      = this.formulario.get('ctrolFechaFin')?.value;
+    this.hfin         = this.formulario.get('ctrolHoraFin')?.value;
+    this.Observacion  = this.formulario.get('ctrolDescripcionEvento')?.value;
     this.dni_tejedor  = this.formulario.get('ctrolDni')?.value;    
 
     //Nuevos Campos Requeridos 
@@ -631,15 +695,15 @@ ngOnInit(): void {
     this.Cod_Area_Tej_Mante_Maq = this.formulario.get('ctrolArea')?.value;
     this.Cod_Tej_Cond           = this.formulario.get('ctrolCondicion')?.value;
     this.Cod_ParMaq_Tej         = this.formulario.get('ctrolParoMaquina')?.value;
-    this.Cod_TipFall            = this.formulario.get('ctrolTipoFalla')?.value;
+    this.Cod_TipFall            = this.formulario.get('ctrolTipoFalla')?.value || ' ';
     this.Flg_Atribuido          = this.formulario.get('ctrolAtribuido')?.value; //Obligatorio para todos   
-    this.Num_Planta    = String(this.data.Datos.num_Planta);    
+    this.Num_Planta             = String(this.data.Datos.num_Planta);    
     
     //Se envia info cuando la planta no es nro 4
     if (Number(this.data.Datos.num_Planta) !== 4){
       this.Observacion2  = this.formulario.get('ctrolProcedimientoSolucion')?.value; 
     }else{
-      this.Observacion2  = '';
+      this.Observacion2  = ' ';
     }
 
     //Cuestiona al Grabar
@@ -654,85 +718,68 @@ ngOnInit(): void {
     }).then((result) => {
       if (result.isConfirmed) {
 
+        /*********************************************/
+        //Registro de Tiempo Mantenimiento de Maquina
+        /*********************************************/        
+        let data: any = {
 
-        console.log('Cod_Accion', this.Cod_Accion)    ;
-        console.log('Fec_Registro', this.Fec_Registro)   ;
-        console.log('Cod_Maquina', this.Cod_Maquina)   ;
-        console.log('cod_tarea', this.cod_tarea)     ;
-        console.log('hini', this.hini)          ;
-        console.log('hfin', this.hfin)          ;
-        console.log('Observacion', this.Observacion)   ;
-        console.log('Titulo', this.Titulo)        ;
-        console.log('Fec_Fin', this.Fec_Fin)       ;
-        console.log('Fec_Inicio', this.Fec_Inicio)    ;
-        console.log('dni_tejedor', this.dni_tejedor)   ;
-        console.log('Cod_OrdTra', this.Cod_OrdTra)    ;
-        console.log('Cod_TipOrdTra', this.Cod_TipOrdTra) ;
-        console.log('xNum_Mante', this.xNum_Mante)    ;
-        console.log('Cod_Tarea', this.Cod_Tarea)     ;
-        console.log('Cod_Espe', this.Cod_Espe)      ;
-        console.log('Cod_Articulo', this.Cod_Articulo)  ;
-        console.log('Cod_Area_Tej_Mante_Maq', this.Cod_Area_Tej_Mante_Maq);
-        console.log('Cod_Tej_Cond', this.Cod_Tej_Cond)  ;
-        console.log('Cod_ParMaq_Tej', this.Cod_ParMaq_Tej);
-        console.log('Cod_TipFall', this.Cod_TipFall)   ;
-        console.log('Observacion2', this.Observacion2)  ;
-        console.log('Flg_Atribuido', this.Flg_Atribuido) ;
-        console.log('Num_Planta', this.Num_Planta)    ;     
+          "accion"      : "I",
+          "num_Mante"   : 0,
+          "cod_Maquina" : this.Cod_Maquina,
+          "nro_DocIde"  : this.dni_tejedor,
+          "cod_Tarea"   : this.Cod_Tarea  ,
+          "cod_Ordtra"  : " ",
+          "fec_Hora_Inicio" : this.hini,
+          "fec_Hora_Fin"    : this.hfin,
+          "obserMante"      : this.Observacion,
+          "cod_Usuario"     : this.sUsuario,
+          "cod_Espe"        : this.Cod_Espe,
+          "cod_Articulo"    : this.Cod_Articulo,
+          "cod_Area_Tej_Mante_Maq": this.Cod_Area_Tej_Mante_Maq,
+          "cod_Tej_Cond"    : this.Cod_Tej_Cond,
+          "cod_ParMaq_Tej"  : String(this.Cod_ParMaq_Tej),
+          "cod_TipFall"     : this.Cod_TipFall,
+          "obserMante2"     : this.Observacion2,
+          "flg_Atribuido"   : this.Flg_Atribuido,
+          "num_Planta"      : this.Num_Planta,
+          "cod_Solicitud"   : this.data.Datos.cod_Solicitud,
+          "datos_Lider"     : sJefeGrupo
 
-        //Avanzamos 
-        this.onAvanzar(this.CodNroSolicitud, '');
-        
+        };    
+
+        console.log('onSave-data', data);
         //return;
-        /*
-        this.registromantemaquinastej.guardarEditarEliminarMantenimientoSede
-        (
-          this.Cod_Accion,
-          this.xNum_Mante,
-          this.Fec_Registro,
-          this.Cod_Maquina,
-          this.Cod_Tarea,
-          this.Cod_OrdTra,
-          this.Fec_Inicio,
-          this.hini,
-          this.Fec_Fin,
-          this.hfin,
-          this.Observacion,
-          this.dni_tejedor, 
-          this.Cod_Espe,
-          this.Cod_Articulo,
-          this.Cod_Area_Tej_Mante_Maq,
-          this.Cod_Tej_Cond ,
-          this.Cod_ParMaq_Tej,
-          this.Cod_TipFall,
-          //Campos Nuevos
-          this.Observacion2,
-          this.Flg_Atribuido,
-          this.Num_Planta
-        ).subscribe(
-          (result: any) => {
-            //this.dialog.closeAll();
-            if (result[0]) {
-              if (result[0].Respuesta == 'OK') {
+        //GUARDAR
+        this.SpinnerService.show();
+        this.serviceSolicitudMnto.postProcesoMntoTiempoManMquina(data).subscribe({
+            next: (response: any)=> {
+              if(response.success){
+                if (response.codeResult == 200){
+                  this.toastr.success(response.message, '', {
+                    timeOut: 2500,
+                  });
+                  this.dialogRef.close();
 
-                //Avanzamos 
-                this.onAvanzar(this.CodNroSolicitud, '');
-
-              } else {
-                this.matSnackBar.open(result[0].Respuesta, 'Cerrar', {
-                  duration: 3000,
-                })
+                }else if(response.codeResult == 201){
+                  this.toastr.info(response.message, '', {
+                    timeOut: 2500,
+                  });
+                }
+                this.SpinnerService.hide();
+              }else{
+                this.toastr.error(response.message, 'Cerrar', {
+                  timeOut: 2500,
+                });
+                this.SpinnerService.hide();
               }
-            } else {
-              this.matSnackBar.open('Error, No Se Pudo guardar!!', 'Cerrar', {
-                duration: 3000,
-              })
+            },
+            error: (error) => {
+              this.SpinnerService.hide();
+              this.toastr.error(error.message, 'Cerrar', {
+              timeOut: 2500,
+              });
             }
-
-          },
-          (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
-        */            
-
+          });            
 
       }
     })  
@@ -742,7 +789,7 @@ ngOnInit(): void {
     this.dialogRef.close();
   }
 
-  onAvanzar(CodSolicitud:string, Observacion: string){
+  onAvanzar(CodSolicitud:string, Observacion: string, sDatosLider: string){
 
     /********************/
     //Input's Para Avanzar Solicitud
@@ -750,7 +797,8 @@ ngOnInit(): void {
     const data: any = {
       cod_Usuario     : this.sUsuario,
       Cod_Solicitud   : CodSolicitud,
-      Observaciones   : Observacion
+      Observaciones   : Observacion,
+      sDatosLider     : sDatosLider
     };
 
     //GUARDAR
@@ -786,6 +834,8 @@ ngOnInit(): void {
   }
 
   onAprobarVB() {
+    let sObservacion = this.formulario.get('ctrolObservacion')?.value || '';
+
     //Cuestiona al Grabar, 
     Swal.fire({
       title             : '¿Desea Aprobar La Solicitud?, Confirme',
@@ -798,12 +848,14 @@ ngOnInit(): void {
     }).then((result) => {
       if (result.isConfirmed) {
         //Avanzamos 
-        this.onAvanzar(this.CodNroSolicitud, '');
+        this.onAvanzar(this.CodNroSolicitud, sObservacion, '');
       }
     })  
   }
 
   onRechazarVB() {
+    let sObservacion = this.formulario.get('ctrolObservacion')?.value || '';
+
     //Cuestiona al Grabar
     Swal.fire({
       title: '¿Desea Rechazar La Solicitud?, Confirme',
@@ -816,7 +868,7 @@ ngOnInit(): void {
     }).then((result) => {
       if (result.isConfirmed) {
         //Avanzamos 
-        this.onAvanzar(this.CodNroSolicitud, 'E');
+        this.onAvanzar(this.CodNroSolicitud, sObservacion, '');
       }
     })      
   }

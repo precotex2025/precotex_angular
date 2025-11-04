@@ -39,6 +39,7 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
   //Variables
   sCodArea: string = '';
   sCodMaquina: string = '';
+  isInfoCargada = false;
 
   constructor(
     private formBuilder : FormBuilder ,
@@ -103,6 +104,7 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
     const paroMaquina = this.formulario.get('ctrolParoMaquina')?.value;
     const hora_inicio = this.formulario.get('ctrolHoraInicio')?.value || '';
     const hora_fin = this.formulario.get('ctrolHoraFin')?.value || ''; 
+    const nombreFile = (this.formulario.get('ctrolFotografia')?.value);
 
     if (!qrValue || qrValue.trim() === '') {
       this.matSnackBar.open('Debes escanear el código QR de la máquina antes de continuar con el proceso.', 'Cerrar', { duration: 3000 });
@@ -148,9 +150,25 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
         const cod_Area = this.sCodArea;
         const cod_Maquina = this.sCodMaquina;
 
+        const formData = new FormData();
+        formData.append("sOpcion", "I");
+        formData.append("sCod_Solicitud", " ");
+        formData.append("sCod_Area", cod_Area);
+        formData.append("sCod_Maquina", cod_Maquina);
+        formData.append("sObservacion", observacion);
+        formData.append("sPrioridad", prioridad);
+        formData.append("sParo_Maquina", String(paroMaquina) );
+        formData.append("sHora_Inicio", hora_inicio);
+        formData.append("sUsu_Registro", this.data.sCod_Usuario);
+        formData.append("sRuta_Fotografia", this.selectedFile.name);
+        formData.append("itm_Foto", this.selectedFile);
+
+ 
+
         /********************/
         //Solicitud de Mantenimiento
         /********************/
+        /*
         let data: any = {
           "accion"            : "I" ,          
           "cod_Solicitud"     : ""  ,
@@ -164,13 +182,13 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
           "hora_Fin"          : hora_fin    ,
           "usu_Registro"      : this.data.sCod_Usuario
         };
-
-        console.log('onSave-data', data);
+        */
+        console.log('onSave-data', formData);
         //return;
 
         //GUARDAR
         this.SpinnerService.show();
-        this.serviceSolicitudMnto.postProcesoMntoSolicitudMantenimiento(data).subscribe({
+        this.serviceSolicitudMnto.postProcesoMntoSolicitudMantenimiento(formData).subscribe({
             next: (response: any)=> {
               if(response.success){
                 if (response.codeResult == 200){
@@ -208,8 +226,9 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
 
   onScanQR(codigo: string, event: any){
 
-    event.preventDefault();   // ❌ evita que el Enter avance al siguiente control
-    event.stopPropagation();  // ❌ evita propagación al siguiente campo
+    //event.preventDefault();   // ❌ evita que el Enter avance al siguiente control
+    //event.stopPropagation();  // ❌ evita propagación al siguiente campo
+    
     console.log('log.');
     if (!codigo) return;
 
@@ -217,8 +236,9 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
     this.serviceSolicitudMnto.getObtieneInformacionMaquinas(codigo).subscribe(
       (result: any) => {
         if (result.totalElements > 0) {
-          console.log('resultado');
-          console.log(result);
+
+          //Activa Input file
+          this.isInfoCargada = true;
 
           this.formulario.get('ctrolArea')?.setValue(result.elements[0].nomb_Area_Tej_Mante_Maq);
           this.formulario.get('ctrolMaquina')?.setValue(result.elements[0].des_Maquina_Tejeduria);
@@ -230,7 +250,9 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
         }
         else {
           this.SpinnerService.hide();
+          this.isInfoCargada = false;
           this.matSnackBar.open("No existe código scaneado..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          this.inputQR.nativeElement.focus();
         }
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {

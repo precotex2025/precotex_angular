@@ -5,6 +5,14 @@ import { MatSort } from '@angular/material/sort';
 import { SolicitudMantenimientoService } from 'src/app/services/SolicitudMantenimiento/solicitud-mantenimiento.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ExceljsService } from 'src/app/services/exceljs.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogSolicitudMntoInformeComponent } from '../dialog-solicitud-mnto-informe/dialog-solicitud-mnto-informe.component';
+import { GlobalVariable } from 'src/app/VarGlobals';
+import { MemorandumGralService } from 'src/app/services/Memorandum/memorandum-gral.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpErrorResponse } from '@angular/common/http';
+import { RegistroManteMaquinasTejService } from 'src/app/services/registro-mante-maquinas-tej.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 interface data_visor{
@@ -19,11 +27,25 @@ interface data_visor{
   hora_Inicio: string,
   t1_Tiempo_Espera_Min: string,
   t2_Tiempo_Interv_Min: string,
+
   usu_Registro: string,
   cod_Usuario_Tecnico: string,
   ruta_Fotografia: string,
   cod_Estado_Mant: string,
   nombre_Estado: string,
+}
+
+export interface SolicitudMantenimiento {
+  area: string;
+  maquina: string;
+  observacion: string;
+  paroMaquina: boolean;
+  prioridad: string;
+  fecha: string;
+  hora: string;
+  tiempoTranscurrido: string;
+  supervisor: string;
+  estado: string;
 }
 
 @Component({
@@ -37,39 +59,77 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
   //RUTA -> SolicitudMantenimientoMaquinaVisor
   @ViewChild(MatSort) sort!: MatSort;  
   constructor(
-    public solicitudService: SolicitudMantenimientoService,
-    private SpinnerService: NgxSpinnerService,
-    private exceljsService: ExceljsService,
+    public solicitudService   : SolicitudMantenimientoService,
+    private serviceMemorandum : MemorandumGralService,
+    private SpinnerService : NgxSpinnerService,
+    private exceljsService : ExceljsService   ,
+    private dialog         : MatDialog        ,
+    private matSnackBar    : MatSnackBar      ,
+    private registromantemaquinastej: RegistroManteMaquinasTejService   ,
+    private toastr      : ToastrService ,
   ) { }
 
+  sCod_Trabajador = GlobalVariable.vcodtra;
+  sTip_Trabajador = GlobalVariable.vtiptra;
+
+  sCod_Usuario = "";
+  sNom_Usuario = "";
+  sCod_Planta  = "";
+  sCod_Espe    = "";
+
   ngOnInit(): void {
+    
+    this.getInfoUsuarios();
+    this.mostrarTejedor();
+    this.ObtieneSedeByUser();
     this.ObtenerDatosVisor();
+
   }
   
   dataSource: MatTableDataSource<data_visor> = new MatTableDataSource();
   displayedColumns: string[] = [
-    'cod_Solicitud', 
-    'cod_Area', 
-    'cod_Maquina', 
-    'observacion', 
-    'paro_Maquina', 
-    'prioridad',
-    'fec_Registro', 
-    'hora_Reporte', 
-    'hora_Inicio', 
-    't1_Tiempo_Espera_Min', 
-    't2_Tiempo_Interv_Min',
-    'usu_Registro', 
-    'cod_Usuario_Tecnico', 
-    'ruta_Fotografia', 
-    'nombre_Estado',
+    'cod_Solicitud' , 
+    'cod_Area'      , 
+    'cod_Maquina'   , 
+    'tipo_tarea',     //Nuevo
+    'tipo_falla',     //Nuevo
+    //'observacion'   , 
+    'paro_Maquina'  , 
+    'prioridad'     ,
+    'fec_Registro'  , 
+    // 'hora_Reporte'  , 
+    'hora_Inicio'   , 
+    't1_Tiempo_Espera_Min_Des', 
+    't2_Tiempo_Interv_Min_Des',
+    't3_Tiempo_VB_Min_Des'    ,
+    // 'usu_Registro', 
+    //'cod_Usuario_Tecnico', 
+    'des_Usuario_Tecnico' ,
+    'ruta_Fotografia'     , 
+    'nombre_Estado'       ,
     'atender'
   ];
-
 
   exportarExcel() {
     this.onExportarExcel();
   }
+
+  getInfoUsuarios(){
+    this.serviceMemorandum.getUsuario(this.sCod_Trabajador, this.sTip_Trabajador).subscribe(
+      (result: any) => {
+        if (result.totalElements > 0) {
+          this.sCod_Usuario = result.elements[0].cod_Usuario;
+          this.sNom_Usuario = result.elements[0].nom_Usuario;
+          //this.sCod_Planta  = result.elements[0].cod_Planta;
+        }
+        else {
+          this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+        }
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+        duration: 1500,
+      }))        
+  }   
 
   solicitudesLst = [];
   ObtenerDatosVisor(): void{
@@ -82,7 +142,7 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
           console.log('los valores del response any son: ', response.elements);
           this.solicitudesLst = response.elements.map((item: any) => ({
             ...item,
-            paro_Maquina: item.paro_Maquina ? 'Sí' : 'No'
+            paro_Maquina: item.paro_Maquina ? 'SI' : 'NO'
           }));
           this.dataSource.data = this.solicitudesLst;
           this.dataSource.sort = this.sort;
@@ -150,6 +210,88 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
       }
     });
   }
+
+  onInforme(element: SolicitudMantenimiento){
+
+    let dialogRef = this.dialog.open(DialogSolicitudMntoInformeComponent,{
+      //width:'500px',
+      width: '90vw',     // 90% del ancho del viewport
+      height: '90vh',    // 90% del alto del viewport
+      maxWidth: '95vw',  // evita que se corte en pantallas pequeñas
+
+      disableClose: true,
+      panelClass: 'my-class',
+      data: {
+        Title  : "Nuevo",
+        Accion : "I"    ,
+        sCod_Usuario : this.sCod_Usuario,
+        sNom_Usuario : this.sNom_Usuario,
+        sCod_Planta  : this.sCod_Planta ,
+        sCod_Espe    : this.sCod_Espe   ,
+        Datos        : element
+      }
+    });
+    dialogRef.afterClosed().subscribe(result =>{
+      this.ObtenerDatosVisor();
+    });    
+
+  }
+
+  mostrarTejedor() {
+
+    //let dni_tejedor=this.formulario.get('dnitejedor')?.value;
+    let Cod_Trabajador=GlobalVariable.vcodtra;
+    let Tip_Trabajador=GlobalVariable.vtiptra;
+    //if (dni_tejedor.length===8) {
+      console.log(Cod_Trabajador.length);
+      this.registromantemaquinastej.traerTejedorTra(Cod_Trabajador, Tip_Trabajador).subscribe(
+        (result: any) => {
+          console.log(result);
+           if (result[0].Respuesta == 'OK') {
+            this.CargarEspecialidad(String(result[0].Nro_DocIde));
+           }
+         },
+         (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
+    //}
+  }  
+
+  CargarEspecialidad(dni: string) 
+  {
+
+    this.registromantemaquinastej.ListarEspecialidad(dni).subscribe(
+      (result: any) => {
+        this.sCod_Espe = result[0].Cod_Espe;
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
+  }    
+
+  ObtieneSedeByUser(){
+
+    this.SpinnerService.show();
+    this.registromantemaquinastej.getListaUsuarioSedeByUser().subscribe({
+      next: (response: any)=> {
+        if(response.success){
+          if (response.totalElements > 0){
+            this.sCod_Planta = response.elements[0].num_Planta;
+            this.SpinnerService.hide();
+          }
+          else{
+            //Deshabilita los botones
+            this.toastr.warning("Usuario sin configuración de SEDE.", 'Cerrar', {
+            timeOut: 2500,
+             });            
+             this.SpinnerService.hide();
+          }
+        }        
+      },
+      error: (error) => {
+        this.SpinnerService.hide();
+        this.toastr.error(error.error.message, 'Cerrar', {
+        timeOut: 2500,
+         });
+      }
+    });
+  }  
 
 
 }

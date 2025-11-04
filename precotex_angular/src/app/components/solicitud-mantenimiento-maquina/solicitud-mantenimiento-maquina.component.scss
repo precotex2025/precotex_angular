@@ -94,7 +94,36 @@ strong {
 
 
   /******************************************/
-  
 
+}
 
+//columna numero de memo
+.memo-cell {
+  color: blue;
+  font-weight: bold;
+}
+
+table.mat-table {
+  font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 13.5px; /* Tamaño de texto */
+  color: #333; /* Color del texto */
+}
+
+th.mat-header-cell {
+  font-weight: 600; /* Encabezados más destacados */
+  text-transform: uppercase; /* Opcional: mayúsculas */
+  background-color: #f5f5f5; /* Color del encabezado */
+  color: #222; /* Color de texto de cabecera */
+}
+
+.btn-rojo{
+background: #f44336;
+color: #ffff;
+font-weight: bold;
+}
+
+.btn-blue{
+  background: #1568d6;
+  color: #ffff;
+  font-weight: bold;
 }
