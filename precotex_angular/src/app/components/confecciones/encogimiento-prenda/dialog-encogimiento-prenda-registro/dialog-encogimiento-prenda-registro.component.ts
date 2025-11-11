@@ -54,6 +54,7 @@ interface data_det {
   Valor?: string
   Val_Medida?: number;
   Flg_Estado?: string;
+  Tip_Medida?: string;
 }
 
 interface data_esp {
@@ -407,6 +408,7 @@ export class DialogEncogimientoPrendaRegistroComponent implements OnInit {
             this.data.Flg_Estado = result.estado;
             data_det.Valor = result.data;
             data_det.Val_Medida = result.valor;
+            data_det.Tip_Medida = result.tipo;
 
             this.calcularPromedio(data_det, params)
           }
@@ -445,7 +447,6 @@ export class DialogEncogimientoPrendaRegistroComponent implements OnInit {
   }
 
   calcularPromedio(data_det: data_det, params){
-
     let ln_Index = this.dataMedidas.indexOf(this.dataMedidas.find(x => x.Sec_Medida == data_det.Sec_Medida && x.Tip_Proceso == data_det.Tip_Proceso && x.Num_Medida == data_det.Num_Medida));
     if(ln_Index < 0)
       this.dataMedidas.push(data_det);
@@ -466,8 +467,12 @@ export class DialogEncogimientoPrendaRegistroComponent implements OnInit {
     //console.log(s/i)
     if(s != 0){
       let num = s/i;
-      let fraccion = this.devuelveFraccion(Math.abs(num), 0.000001, 20);
-      prom = (num > 0 ? '+' : '-') + fraccion;
+      if (data_det.Tip_Medida == "F"){
+        let fraccion = this.devuelveFraccion(Math.abs(num), 0.000001, 20);
+        prom = (num > 0 ? '+' : '-') + fraccion;
+      } else {
+        prom = (num > 0 ? '+' : '-') + num.toPrecision(2).toString();
+      }
     } else 
       prom = 'cero'
     

@@ -11,7 +11,7 @@
                     <ng-container matColumnDef="Tallas">
                         <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Medida</th>
                         <td mat-cell  *matCellDef="let data_det;">
-                            <button type="button" class="button-agregar" (click)="selectMedida(data_det.Des_Medida, data_det.Val_Medida)"  mat-flat-button >{{data_det.Des_Medida}}</button>
+                            <button type="button" class="button-agregar" (click)="selectMedida(data_det.Des_Medida, data_det.Val_Medida, data_det.Tip_Medida)"  mat-flat-button >{{data_det.Des_Medida}}</button>
                         </td>
                     </ng-container>
  
