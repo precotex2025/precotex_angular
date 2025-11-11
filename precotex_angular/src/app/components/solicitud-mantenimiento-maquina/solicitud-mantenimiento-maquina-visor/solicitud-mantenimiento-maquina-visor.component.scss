@@ -99,3 +99,25 @@ overflow-x: auto;
 // ::ng-deep .mat-row.prioridad-media td {
 //   color: #0a0303 !important;
 // }
+
+
+.header-container {
+  display: flex;
+  justify-content: space-between; /* Título a la izquierda, botón a la derecha */
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.title {
+  margin: 0;
+  font-weight: 600;
+  color: #2b2b2b;
+}
+
+.admin-container {
+  padding: 1.5rem;
+}
+
+.export-button {
+  margin-left: auto;
+}

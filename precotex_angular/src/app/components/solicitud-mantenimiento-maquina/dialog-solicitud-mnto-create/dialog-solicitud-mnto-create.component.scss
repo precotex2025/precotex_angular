@@ -95,5 +95,10 @@ h2[mat-dialog-title] {
   gap: 0.5rem;
 }
 
+::ng-deep .mat-icon.qr {
+  color: #1976d2; /* Azul Material */
+  font-size: 24px;
+}
+
 
 

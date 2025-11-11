@@ -14,7 +14,7 @@
     <!-- Escanear Codigo QR -->
     <mat-form-field appearance="outline" class="full-width" *ngIf="Flg_ShowCtrolQR"> 
       <mat-label>Scanear QR</mat-label>
-      <input matInput #inputQR formControlName="ctrolQR" placeholder="Scanea tu Código" (keyup.enter)="onScanQR(inputQR.value, $event)">
+      <input matInput #inputQR formControlName="ctrolQR" placeholder="Scanea tu Código" (change)="onScanQR(inputQR.value, $event)">
     </mat-form-field>     
 
     <!-- Primera fila -->
@@ -144,7 +144,7 @@
     <!-- Jefe de Grupo -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Jefe de Grupo</mat-label>
-      <input matInput formControlName="ctrolJefeGrupo" readonly>
+      <input matInput formControlName="ctrolJefeGrupo">
     </mat-form-field>        
 
     <!-- Descripción del evento -->

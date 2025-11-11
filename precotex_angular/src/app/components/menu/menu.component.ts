@@ -5,6 +5,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { GlobalVariable } from '../../VarGlobals';
 import { Router} from '@angular/router';
 import { Observable } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogSolicitudMntoCreateComponent } from '../solicitud-mantenimiento-maquina/dialog-solicitud-mnto-create/dialog-solicitud-mnto-create.component';
+import { MemorandumGralService } from 'src/app/services/Memorandum/memorandum-gral.service';
+import { RegistroManteMaquinasTejService } from 'src/app/services/registro-mante-maquinas-tej.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 interface Menu {
@@ -37,15 +42,28 @@ export class MenuComponent implements OnInit {
   sCod_Usuario = GlobalVariable.vusu
   Cod_Rol  = GlobalVariable.vCod_Rol
   Cod_Empresa = '07'
+
+  //Nuevo
+  sCod_Trabajador = GlobalVariable.vcodtra;
+  sTip_Trabajador = GlobalVariable.vtiptra;  
+  sNom_Usuario = "";
+  sCod_Planta  = "";
+  sCod_Espe    = "";
   
-   menuList: Observable<IMenu[]>;
-   objectKeys = Object.keys;
+  menuList: Observable<IMenu[]>;
+  objectKeys = Object.keys;
 
   Menu = []
 
   constructor(private matSnackBar: MatSnackBar,
     private loginService: LoginService,
-    public router: Router) {
+    public router: Router,
+    private dialog            : MatDialog            ,
+    private serviceMemorandum : MemorandumGralService ,
+    private registromantemaquinastej: RegistroManteMaquinasTejService   ,
+    private toastr            : ToastrService ,
+
+  ) {
   } 
 
 
@@ -66,13 +84,15 @@ export class MenuComponent implements OnInit {
       });
     }
 
-    this.MuestraMenu()    
+    this.MuestraMenu()  
+    
+    //Nuevo
+    this.getInfoUsuarios();
+    this.mostrarTejedor();
+    this.ObtieneSedeByUser();    
+
   }
 
-
-
-
- 
 MuestraMenu(){
   this.Cod_Rol
   this.Cod_Empresa  
@@ -95,5 +115,95 @@ CerrarSession(){
   /*GlobalVariable.vusu = ''
   this.router.navigate(['./']);*/
 }
+
+openDialogGenerateSolicitudMnto() {
+    let dialogRef = this.dialog.open(DialogSolicitudMntoCreateComponent,{
+      width:'500px',
+      disableClose: true,
+      panelClass: 'my-class',
+      data: {
+        Title  : "Nuevo",
+        Accion : "I",
+        sCod_Usuario : this.sCod_Usuario,
+        sNom_Usuario : this.sNom_Usuario,
+        sCod_Planta  : this.sCod_Planta,
+        Datos  : null
+      }
+    });
+    dialogRef.afterClosed().subscribe(result =>{
+      //this.onGetSolicitudes()
+    });  
+}
+
+getInfoUsuarios(){
+  this.serviceMemorandum.getUsuario(this.sCod_Trabajador, this.sTip_Trabajador).subscribe(
+    (result: any) => {
+      if (result.totalElements > 0) {
+        this.sCod_Usuario = result.elements[0].cod_Usuario;
+        this.sNom_Usuario = result.elements[0].nom_Usuario;
+        //this.sCod_Planta  = result.elements[0].cod_Planta;
+      }
+      else {
+        this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+      }
+    },
+    (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+      duration: 1500,
+    }))        
+}  
+
+  mostrarTejedor() {
+
+    //let dni_tejedor=this.formulario.get('dnitejedor')?.value;
+    let Cod_Trabajador=GlobalVariable.vcodtra;
+    let Tip_Trabajador=GlobalVariable.vtiptra;
+    //if (dni_tejedor.length===8) {
+      console.log(Cod_Trabajador.length);
+      this.registromantemaquinastej.traerTejedorTra(Cod_Trabajador, Tip_Trabajador).subscribe(
+        (result: any) => {
+          console.log(result);
+           if (result[0].Respuesta == 'OK') {
+            this.CargarEspecialidad(String(result[0].Nro_DocIde));
+           }
+         },
+         (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
+    //}
+  }  
+
+  CargarEspecialidad(dni: string) 
+  {
+
+    this.registromantemaquinastej.ListarEspecialidad(dni).subscribe(
+      (result: any) => {
+        this.sCod_Espe = result[0].Cod_Espe;
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
+  }  
+
+  ObtieneSedeByUser(){
+    this.registromantemaquinastej.getListaUsuarioSedeByUser().subscribe({
+      next: (response: any)=> {
+        if(response.success){
+          if (response.totalElements > 0){
+            this.sCod_Planta = response.elements[0].num_Planta;
+          }
+          else{
+            //Deshabilita los botones
+            /*
+            this.toastr.warning("Usuario sin configuración de SEDE.", 'Cerrar', {
+            timeOut: 2500,
+             });       
+            */     
+          }
+        }        
+      },
+      error: (error) => {
+        //this.SpinnerService.hide();
+        this.toastr.error(error.error.message, 'Cerrar', {
+        timeOut: 2500,
+         });
+      }
+    });
+  }    
 
 }

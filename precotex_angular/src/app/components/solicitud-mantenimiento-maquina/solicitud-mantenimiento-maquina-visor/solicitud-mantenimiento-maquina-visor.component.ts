@@ -77,12 +77,20 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
   sCod_Planta  = "";
   sCod_Espe    = "";
 
+  intervalId: any;
+
   ngOnInit(): void {
     
-    this.getInfoUsuarios();
-    this.mostrarTejedor();
+    this.getInfoUsuarios()  ;
+    this.mostrarTejedor()   ;
     this.ObtieneSedeByUser();
     this.ObtenerDatosVisor();
+
+    // 🔁 Refrescar cada 30 segundos (30000 ms)
+    this.intervalId = setInterval(() => {
+      console.log('🔄 Refrescando bandeja...');
+      this.ObtenerDatosVisor();
+    }, 30000);    
 
   }
   
@@ -136,10 +144,7 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
     this.SpinnerService.show();
     this.solicitudService.getObtieneInformacionSolicitudesVisor().subscribe({
       next: (response: any) => {
-        console.log('ENTRA AL RESPONSE');
         if(response.success){
-          console.log('ENTRA AL SUCCESS')
-          console.log('los valores del response any son: ', response.elements);
           this.solicitudesLst = response.elements.map((item: any) => ({
             ...item,
             paro_Maquina: item.paro_Maquina ? 'SI' : 'NO'
@@ -147,6 +152,11 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
           this.dataSource.data = this.solicitudesLst;
           this.dataSource.sort = this.sort;
           this.SpinnerService.hide();
+
+          // Ocultar la columna 'atender' si el perfil es 23
+          if (this.sCod_Espe === "23") {
+            this.displayedColumns = this.displayedColumns.filter(c => c !== 'atender');
+          }            
 
         }else{
           this.solicitudesLst = [];
@@ -176,25 +186,26 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
           this.solicitudesLstExcel = response.elements;
           
           this.dataForExcel = this.solicitudesLstExcel.map((item: any) => ({
-            ['Id']: item.cod_Solicitud,
-            ['Area']: item.cod_Area,
-            ['Maquina']: item.cod_Maquina,
-            ['Observacion']: item.observacion,
-            ['Paro Maquina']: item.paro_Maquina ? 'Sí' : 'No',
-            ['Prioridad']: item.prioridad,
+            ['Id']          : item.cod_Solicitud,
+            ['Area']        : item.area,
+            ['Maquina']     : item.cod_Maquina,
+            ['Observacion'] : item.observacion,
+            ['Paro Maquina']: item.paro_Maquina?'SI':'NO',
+            ['Prioridad']   : item.prioridad_Des ,
             ['Fecha Registro']: item.fec_Registro,
             ['Hora Reporte']: item.hora_Reporte,
-            ['Hora Inicio']: item.hora_Inicio,
-            ['Tiempo T1 (Requerimiento)']: item.t1_Tiempo_Espera_Min,
-            ['Tiempo T2 (Intervencion)']: item.t2_Tiempo_Interv_Min,
-            ['Nombre Solicitante']: item.usu_Registro,
-            ['Nombre Tecnico']: item.cod_Usuario_Tecnico,
+            ['Hora Inicio'] : item.hora_Inicio,
+            ['Tiempo T1 (Requerimiento)'] : item.t1_Tiempo_Espera_Min_Des,
+            ['Tiempo T2 (Intervencion)']  : item.t2_Tiempo_Interv_Min_Des,
+            ['Tiempo T3 (Validación)']    : item.t3_Tiempo_VB_Min_Des,
+            ['Nombre Solicitante']  : item.supervisor,
+            ['Nombre Tecnico']      : item.des_Usuario_Tecnico,
             ['Foto']: item.ruta_Fotografia,
             ['Estado']: item.nombre_Estado
           }));
 
           const reportData = {
-            title: 'REPORTE',
+            title: 'REPORTE SOLICITUD DE MANTENIMIENTO MAQUINAS',
             data: this.dataForExcel,
             headers: Object.keys(this.dataForExcel[0]),
             Num_Requerimiento: 0

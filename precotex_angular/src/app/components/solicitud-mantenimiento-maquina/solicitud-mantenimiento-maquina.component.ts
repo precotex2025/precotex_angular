@@ -12,6 +12,7 @@ import { SolicitudMantenimientoService } from 'src/app/services/SolicitudManteni
 import { DialogSolicitudMntoInformeComponent } from './dialog-solicitud-mnto-informe/dialog-solicitud-mnto-informe.component';
 import { RegistroManteMaquinasTejService } from 'src/app/services/registro-mante-maquinas-tej.service';
 import { ToastrService } from 'ngx-toastr';
+import { ExceljsService } from 'src/app/services/exceljs.service';
 
 interface data_det {
   cod_Solicitud   : string,
@@ -67,6 +68,10 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
   dataSource: MatTableDataSource<data_det> = new MatTableDataSource();
   dataListadoSolicitudMatenimiento: Array<any> = []; 
 
+  dataListadoExportar: Array<any> = []; 
+  dataForExcel: any = [];
+  dataSourceExcel: any = [];     
+
   constructor(
     private dialog            : MatDialog             ,
     private formBuilder       : FormBuilder           ,
@@ -75,7 +80,8 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
     private matSnackBar       : MatSnackBar           ,
     private SpinnerService    : NgxSpinnerService     ,
     private registromantemaquinastej: RegistroManteMaquinasTejService   ,
-    private toastr      : ToastrService ,
+    private toastr            : ToastrService ,
+    private exceljsService    : ExceljsService
   ) { }
 
   sCod_Trabajador = GlobalVariable.vcodtra;
@@ -128,13 +134,21 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
     
     this.serviceSolicitudMnto.getObtieneInformacionSolicitudMantenimiento(sFecIni, sFecFin, sCod_Usuario).subscribe({
       next: (response: any)=> {
+
+        console.log(sFecIni);
+        console.log(sFecFin);
+        console.log(sCod_Usuario);
+        
         if(response.success){
           if (response.totalElements > 0){
-
+              console.log('Data Source Solicitud Mnto', response.elements);
               this.dataListadoSolicitudMatenimiento = response.elements;
               this.dataSource.data = this.dataListadoSolicitudMatenimiento;
 
-            this.SpinnerService.hide();
+              //Adicionalmente llenamos DataSource para el exportar .
+              this.dataListadoExportar = response.elements;
+
+              this.SpinnerService.hide();
           }
           else{
             this.dataListadoSolicitudMatenimiento = [];
@@ -176,6 +190,62 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
   }
 
   onExportar(){
+    this.CreateExcel();
+  }
+
+  CreateExcel(){
+    //this.SpinnerService.show();
+
+    this.dataForExcel = [];
+    this.dataSourceExcel = [];
+
+    if (this.dataListadoExportar.length > 0) {
+
+        this.dataListadoExportar.forEach((item: any) => {
+
+          let fechaCreacion = this.formatearFechaValida(item.fec_Registro);
+          let datos = {
+            ['Solicitud']     : item.cod_Solicitud,
+            ['Area']          : item.area         ,
+            ['Maquina']       : item.maquina      ,
+            ['Observación']   : item.observacion  ,
+            ['Paro Maquina']  : item.paro_Maquina_Descripcion,
+            ['Prioridad']     : item.prioridad     ,
+            ['Fecha Hora']    : fechaCreacion      ,
+            ['Tiempo']        : item.t1_Tiempo_Espera_Min_Des,
+            ['Supervisor']    : item.supervisor    ,
+            ['Estado']        : item.estado        ,
+          };
+          this.dataForExcel.push(datos);
+      });
+
+
+      if (this.dataForExcel.length > 0) {
+        this.dataForExcel.forEach((row: any) => {
+          this.dataSourceExcel.push(Object.values(row))
+        })
+
+        let reportData = {
+          title: 'REPORTE DE SOLICITUD DE MANTENIMIENTO DE MAQUINA',
+          data: this.dataSourceExcel,
+          headers: Object.keys(this.dataForExcel[0])
+        }
+
+        this.exceljsService.exportExcelReporteMntoSolicitudes(reportData);
+        
+      } else {
+        this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+        this.SpinnerService.hide();
+      }      
+
+
+
+    } else {
+      this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+      this.SpinnerService.hide();
+    } 
+
+    this.SpinnerService.hide();    
   }
 
   getInfoUsuarios(){
@@ -289,6 +359,24 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
          });
       }
     });
-  }    
+  }   
+  
+  //Adicionales
+  formatearFechaValida(fecha: string): string {
+    if (!fecha || fecha.startsWith('1900-01-01T00:00:00')) {
+      return '';
+    }
+
+    const f = new Date(fecha);
+
+    const dia = f.getDate().toString().padStart(2, '0');
+    const mes = (f.getMonth() + 1).toString().padStart(2, '0'); // Mes empieza en 0
+    const anio = f.getFullYear();
+
+    const horas = f.getHours().toString().padStart(2, '0');
+    const minutos = f.getMinutes().toString().padStart(2, '0');
+
+    return `${dia}/${mes}/${anio} ${horas}:${minutos}`;
+  }     
 
 }

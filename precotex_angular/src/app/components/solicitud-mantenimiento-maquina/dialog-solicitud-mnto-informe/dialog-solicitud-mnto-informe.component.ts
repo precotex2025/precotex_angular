@@ -472,50 +472,96 @@ ngOnInit(): void {
 
   onScanQR(codigo: string, event: any){
 
-    event.preventDefault();   // ❌ evita que el Enter avance al siguiente control
-    event.stopPropagation();  // ❌ evita propagación al siguiente campo
-    console.log('log.');
+    //event.preventDefault();   // ❌ evita que el Enter avance al siguiente control
+    //event.stopPropagation();  // ❌ evita propagación al siguiente campo
+    //console.log('log.');
+
     if (!codigo) return;
+
+    //Obtiene el codigo QR
+    const resultQR = codigo;
+    const parts = resultQR
+      .split(/\\+/)           // separa por '\' (regex) 
+      .map(s => s.trim())     // quita espacios al inicio/fin
+      .filter(s => s.length); // elimina elementos vacíos   
+
+    //OBTENEMOS EL PRIMER ARRAY CON TODOS SUS VALORES
+    const parte0 = parts[0]; // Por ejemplo: "?3Q1?&&&0000102&&&BDMP10_HCP2&&&"         
+
+    if (parte0 && parte0.startsWith('?3Q1?')) {
+      if (parte0 && parte0.length >= 14) {
+
+        // Obtener desde el carácter 8 (índice 7), y tomar 7 caracteres EL CODIGOO DE MAQUINA
+        const codigoExtraido = parte0.substring(8, 7 + 8);  
+        this.formulario.get('ctrolQR')?.setValue(''); 
+
+        //Obtenemos la descripción de la maquina
+        this.SpinnerService.show();
+        this.serviceSolicitudMnto.getObtieneInformacionMaquinas(codigoExtraido).subscribe(
+          (result: any) => {
+            if (result.totalElements > 0) {
+
+              const sCodMaquinaResult = String(result.elements[0].cod_Maquina_Tejeduria).trim();
+              const sCodMaquinaOrigen = String(this.data.Datos.cod_Maquina).trim();
+
+              if (sCodMaquinaResult !== sCodMaquinaOrigen){
+                //Ocultamos el boton de inciar
+                this.Flg_ShowBotonIniciar = false;  
+                this.formulario.get('ctrolQR')?.setValue(''); 
+
+                this.matSnackBar.open("¡Scanee maquina correcta!", 'Cerrar', {
+                  horizontalPosition: 'center',
+                  verticalPosition: 'top',
+                  duration: 1500,
+                });
+                return;            
+              } else {
+                //Mostramos el boton de inciar
+                this.Flg_ShowBotonIniciar = true;
+              }
+            }
+            else {
+              //Ocultamos el boton de inciar
+              this.Flg_ShowBotonIniciar = false;    
+              this.formulario.get('ctrolQR')?.setValue(''); 
+
+              this.SpinnerService.hide();
+              this.matSnackBar.open("No existe código scaneado..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+            }
+          },
+          (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+            duration: 1500,
+          }))            
+
+      } else {
+        const sMessage = 'No contiene Codigo de Maquina';
+
+        this.inputQR.nativeElement.focus();
+        this.formulario.get('ctrolQR')?.reset();        
+
+        this.matSnackBar.open(sMessage, 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['mi-snackbar-advertencia']
+        });         
+      }
+    }else{
+      const sMessage = 'Escanee un codigo Valido!';
+
+      this.inputQR.nativeElement.focus();
+      this.formulario.get('ctrolQR')?.reset();
+      
+
+      this.matSnackBar.open(sMessage, 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['mi-snackbar-advertencia']
+      });        
+
+    }  
     
-    this.SpinnerService.show();
-    this.serviceSolicitudMnto.getObtieneInformacionMaquinas(codigo).subscribe(
-      (result: any) => {
-        if (result.totalElements > 0) {
-
-          const sCodMaquinaResult = String(result.elements[0].cod_Maquina_Tejeduria).trim();
-          const sCodMaquinaOrigen = String(this.data.Datos.cod_Maquina).trim();
-
-          if (sCodMaquinaResult !== sCodMaquinaOrigen){
-            //Ocultamos el boton de inciar
-            this.Flg_ShowBotonIniciar = false;  
-            this.formulario.get('ctrolQR')?.setValue(''); 
-
-            this.matSnackBar.open("¡Scanee maquina correcta!", 'Cerrar', {
-              horizontalPosition: 'center',
-              verticalPosition: 'top',
-              duration: 1500,
-            });
-            return;            
-          } else {
-            //Mostramos el boton de inciar
-            this.Flg_ShowBotonIniciar = true;
-          }
-        }
-        else {
-          //Ocultamos el boton de inciar
-          this.Flg_ShowBotonIniciar = false;    
-          this.formulario.get('ctrolQR')?.setValue(''); 
-
-          this.SpinnerService.hide();
-          this.matSnackBar.open("No existe código scaneado..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
-        }
-      },
-      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
-        duration: 1500,
-      }))       
-
-      this.SpinnerService.hide();    
-
   }  
 
   limpiaFiltro(){
