@@ -7,11 +7,11 @@
                 <mat-card>
                     <mat-card-content>
                         <div>
-                            <select (change)="onDeviceSelect($event)">
+                            <!--<select (change)="onDeviceSelect($event)">
                                 <option *ngFor="let device of videoDevices" [value]="device.deviceId">
                                     {{ device.label || 'Cámara ' + device.deviceId }}
                                 </option>
-                            </select>
+                            </select>-->
 
                             <video #video autoplay></video>
                             <canvas id="canvasId" #canvas style="display: none;"></canvas>
