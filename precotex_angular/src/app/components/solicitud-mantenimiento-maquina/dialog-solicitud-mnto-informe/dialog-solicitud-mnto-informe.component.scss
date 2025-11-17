@@ -53,3 +53,8 @@
 .btn-cerrar-modal:hover {
   color: #d32f2f; /* rojo suave al pasar el mouse */
 }
+
+::ng-deep .mat-icon.qr {
+  color: #1976d2; /* Azul Material */
+  font-size: 24px;
+}

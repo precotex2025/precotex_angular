@@ -8,6 +8,9 @@ import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { BrowserCodeReader } from '@zxing/browser';
+import { BrowserMultiFormatReader } from '@zxing/browser';
+
 
 interface data {
   Title       : string;
@@ -40,6 +43,9 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
   sCodArea: string = '';
   sCodMaquina: string = '';
   isInfoCargada = false;
+
+  //Camara
+  camaraActiva: boolean = false;
 
   constructor(
     private formBuilder : FormBuilder ,
@@ -112,7 +118,7 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
       return;
     } 
 
-    if ((!areaValue || areaValue.trim() === '') || (!maquinaValue || maquinaValue.trim() === '')) {
+    if ((!areaValue || areaValue.trim() === '') /*|| (!maquinaValue || maquinaValue.trim() === '')*/) {
       this.matSnackBar.open('Debes escanear un código QR valido, área y máquina vacios.', 'Cerrar', { duration: 3000 });
       return;
     }
@@ -266,8 +272,14 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
               this.isInfoCargada = true;
               this.formulario.get('ctrolQR')?.setValue(codigoExtraido); 
 
-              this.formulario.get('ctrolArea')?.setValue(result.elements[0].nomb_Area_Tej_Mante_Maq);
-              this.formulario.get('ctrolMaquina')?.setValue(result.elements[0].des_Maquina_Tejeduria);
+              //this.formulario.get('ctrolArea')?.setValue(result.elements[0].nomb_Area_Tej_Mante_Maq);
+              //this.formulario.get('ctrolMaquina')?.setValue(result.elements[0].des_Maquina_Tejeduria);
+
+              const area = result.elements[0].nomb_Area_Tej_Mante_Maq;
+              const maquina = result.elements[0].des_Maquina_Tejeduria;
+              this.formulario.get('ctrolArea')?.setValue(`${area} / ${maquina}`);
+              
+
               this.sCodArea = result.elements[0].cod_Area_Tej_Mante_Maq;
               this.sCodMaquina = result.elements[0].cod_Maquina_Tejeduria;
 
@@ -332,8 +344,45 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
       this.fileName = file.name;
       this.selectedFile = file;
     }
-  }  
-
+  }
   
+
+  ActiveCameraScanQR(event: any): void {
+    this.camaraActiva = true;
+    BrowserCodeReader
+      .listVideoInputDevices()
+      .then(videoInputDevices => {
+        // Buscar cámara trasera (usualmente contiene "back" o "environment")
+        const backCamera = videoInputDevices.find(device =>
+          device.label.toLowerCase().includes('back') ||
+          device.label.toLowerCase().includes('environment')
+        ) || videoInputDevices[0]; // fallback a la primera si no se encuentra
+
+        if (!backCamera) {
+          console.error('No se encontró cámara trasera');
+          return;
+        }
+
+        const codeReader = new BrowserMultiFormatReader();
+        const videoElement = document.querySelector('video');
+        codeReader.decodeFromVideoDevice(backCamera.deviceId, videoElement, (result, error, controls) => {
+          if (result) {
+            //this.onScanQR(result.getText(), event); // tu función personalizada
+            //console.log('Codigo QR', result.getText());
+            const sCodigoScan = result.getText();
+            this.onScanQR(sCodigoScan, null);
+
+            controls.stop(); // detener escaneo después de leer
+            this.camaraActiva = false;
+          }
+          if (error) {
+            console.error(error);
+          }          
+        });
+      })
+      .catch(err => {
+        console.error('Error al acceder a la cámara:', err);
+    });
+  }
 
 }

@@ -53,6 +53,7 @@ export interface SolicitudMantenimiento {
 export class SolicitudMantenimientoMaquinaComponent implements OnInit {
 
   displayedColumns: string[] = [
+    'acciones'    ,
     'codigo'      ,
     'area'        , 
     'maquina'     , 
@@ -63,7 +64,6 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
     'tiempoTranscurrido', 
     'supervisor', 
     'estado'    , 
-    'acciones'
   ];
   dataSource: MatTableDataSource<data_det> = new MatTableDataSource();
   dataListadoSolicitudMatenimiento: Array<any> = []; 
@@ -377,6 +377,23 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
     const minutos = f.getMinutes().toString().padStart(2, '0');
 
     return `${dia}/${mes}/${anio} ${horas}:${minutos}`;
-  }     
+  }  
+  
+  getEstadoClass(estado: string): string {
+  switch (estado.trim().toLowerCase()) {
+    case 'Reportado':
+      return 'estado-reportado';
+    case 'en atención':
+      return 'estado-atencion';
+    case 'pendiente vb':
+      return 'estado-pendiente';
+    case 'cerrado vb':
+      return 'estado-cerrado';
+    case 'rechazado vb':
+      return 'estado-rechazado';
+    default:
+      return '';
+  }
+}
 
 }

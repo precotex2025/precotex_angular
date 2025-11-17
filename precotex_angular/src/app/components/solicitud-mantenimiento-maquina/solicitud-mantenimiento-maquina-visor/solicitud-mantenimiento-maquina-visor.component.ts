@@ -96,6 +96,7 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
   
   dataSource: MatTableDataSource<data_visor> = new MatTableDataSource();
   displayedColumns: string[] = [
+    'atender'       ,
     'cod_Solicitud' , 
     'cod_Area'      , 
     'cod_Maquina'   , 
@@ -115,7 +116,6 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
     'des_Usuario_Tecnico' ,
     'ruta_Fotografia'     , 
     'nombre_Estado'       ,
-    'atender'
   ];
 
   exportarExcel() {

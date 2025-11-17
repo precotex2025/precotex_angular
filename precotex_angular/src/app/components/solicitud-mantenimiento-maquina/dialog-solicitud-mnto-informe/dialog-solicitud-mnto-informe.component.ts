@@ -11,6 +11,8 @@ import { GlobalVariable } from '../../../VarGlobals'; //<==== this one
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SolicitudMantenimientoService } from 'src/app/services/SolicitudMantenimiento/solicitud-mantenimiento.service';
+import { BrowserCodeReader } from '@zxing/browser';
+import { BrowserMultiFormatReader } from '@zxing/browser';
 
 interface especialidad {
   Cod_Espe: string,
@@ -164,6 +166,8 @@ export class DialogSolicitudMntoInformeComponent implements OnInit {
 
   sUsuario        = GlobalVariable.vusu;
 
+  //Camara
+  camaraActiva: boolean = false;  
 
 ngOnInit(): void {
     console.log('this.data.Datos', this.data);
@@ -918,5 +922,43 @@ ngOnInit(): void {
       }
     })      
   }
+
+  ActiveCameraScanQR(event: any): void {
+    this.camaraActiva = true;
+    BrowserCodeReader
+      .listVideoInputDevices()
+      .then(videoInputDevices => {
+        // Buscar cámara trasera (usualmente contiene "back" o "environment")
+        const backCamera = videoInputDevices.find(device =>
+          device.label.toLowerCase().includes('back') ||
+          device.label.toLowerCase().includes('environment')
+        ) || videoInputDevices[0]; // fallback a la primera si no se encuentra
+
+        if (!backCamera) {
+          console.error('No se encontró cámara trasera');
+          return;
+        }
+
+        const codeReader = new BrowserMultiFormatReader();
+        const videoElement = document.querySelector('video');
+        codeReader.decodeFromVideoDevice(backCamera.deviceId, videoElement, (result, error, controls) => {
+          if (result) {
+            //this.onScanQR(result.getText(), event); // tu función personalizada
+            //console.log('Codigo QR', result.getText());
+            const sCodigoScan = result.getText();
+            this.onScanQR(sCodigoScan, null);
+
+            controls.stop(); // detener escaneo después de leer
+            this.camaraActiva = false;
+          }
+          if (error) {
+            console.error(error);
+          }          
+        });
+      })
+      .catch(err => {
+        console.error('Error al acceder a la cámara:', err);
+    });
+  }  
 
 }

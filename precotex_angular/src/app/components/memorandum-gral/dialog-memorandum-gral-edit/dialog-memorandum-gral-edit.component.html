@@ -171,7 +171,7 @@
                             (click)="$event.stopPropagation()"
                             (change)="toggleRow(row)"
                             [checked]="selection.isSelected(row)"
-                            [disabled]="data.Datos.cod_Estado_Memo !== '04' || sRolMemo !== 'RECEPTOR_FINAL' || row.flg_Estatus === '1'">
+                            [disabled]="data.Datos.cod_Estado_Memo !== '05' || sRolMemo !== 'RECEPTOR_FINAL' || row.flg_Estatus === '1'">
                             </mat-checkbox>
                         </td>
                     </ng-container>                    
@@ -242,7 +242,7 @@
         </button>
 
         <!--&& rol='RECEPTOR_FINAL'-->
-        <button type="button" mat-raised-button color="warn" (click)="onRecepcionar()" mat-flat-button *ngIf="data.Datos.cod_Estado_Memo === '04' && sRolMemo == 'RECEPTOR_FINAL'">
+        <button type="button" mat-raised-button color="warn" (click)="onRecepcionar()" mat-flat-button *ngIf="data.Datos.cod_Estado_Memo === '05' && sRolMemo == 'RECEPTOR_FINAL'">
             <mat-icon aria-label="create_new_folder">get_app
             </mat-icon> Recepciónar
         </button>    
