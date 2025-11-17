@@ -1,12 +1,12 @@
 <div class="container">
 
-    <h2 mat-dialog-title>🛠️ Solicitud de Mantenimiento</h2>
+    <!-- <h2 mat-dialog-title>🛠️ Solicitud de Mantenimiento</h2> -->
 
 <mat-dialog-content class="dialog-content">
 
   <form [formGroup]="formulario" class="form-grid">
-
-    <mat-form-field  appearance="outline"> 
+    
+    <!-- <mat-form-field  appearance="outline"> 
         <mat-label>Fecha</mat-label> 
         <input matInput formControlName="ctrolFecha"> 
     </mat-form-field>    
@@ -14,11 +14,21 @@
     <mat-form-field appearance="outline">
       <mat-label>Nombre Supervisor</mat-label>
       <input matInput formControlName="ctrolSupervisor" placeholder="Supervisor">
-    </mat-form-field>    
+    </mat-form-field>     -->
+
+    <div appearance="outline">
+        <video #videoElement width="300" height="200" *ngIf="camaraActiva"></video>
+        <!-- <p *ngIf="qrInvalido">Resultado: {{ qrResult }}</p> -->
+    </div>
+
 
     <mat-form-field appearance="outline">
       <mat-label>Scanear QR</mat-label>
-      <input matInput #inputQR formControlName="ctrolQR" placeholder="Scanea tu Código" (keyup.enter)="onScanQR(inputQR.value, $event)">
+      <input matInput #inputQR formControlName="ctrolQR" placeholder="Scanea tu Código" (change)="onScanQR(inputQR.value, $event)">
+      <!-- Icono QR al lado derecho disabled -->
+      <button mat-icon-button matSuffix (click)="ActiveCameraScanQR($event)">
+        <mat-icon matPrefix class="qr">qr_code_scanner</mat-icon>
+      </button>      
     </mat-form-field>
 
     <!-- <mat-form-field appearance="outline">
@@ -29,61 +39,122 @@
     </mat-form-field> -->
 
     <mat-form-field appearance="outline">
+      <mat-label>Área / Maquina</mat-label>
+      <input matInput formControlName="ctrolArea" placeholder="Área" readonly>
+    </mat-form-field>    
+
+    <!--
+    <mat-form-field appearance="outline">
       <mat-label>Área</mat-label>
-      <input matInput formControlName="ctrolArea" placeholder="Área">
+      <input matInput formControlName="ctrolArea" placeholder="Área" readonly>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Maquina</mat-label>
-      <input matInput formControlName="ctrolMaquina" placeholder="Máquina">
+      <input matInput formControlName="ctrolMaquina" placeholder="Máquina" readonly>
     </mat-form-field>    
+   -->
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Observación</mat-label>
       <textarea matInput #inputObservacion  formControlName="ctrolObservacion" rows="2"></textarea>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Prioridad</mat-label>
+    <!-- <mat-form-field appearance="outline"> -->
+      <!-- <mat-label>Prioridad</mat-label>
       <mat-select formControlName="ctrolPrioridad">
         <mat-option value="A">Alta</mat-option>
         <mat-option value="M">Media</mat-option>
         <mat-option value="B">Baja</mat-option>
-      </mat-select>
-    </mat-form-field>
+      </mat-select> -->   
+    <!-- </mat-form-field> -->
 
-    <mat-form-field appearance="outline">
+<div class="prioridad-container">
+  <mat-label>Prioridad</mat-label>
+  <div class="prioridad-cards">
+    <mat-card
+      class="prioridad-card"
+      [class.selected]="formulario.get('ctrolPrioridad')?.value === 'A'"
+      (click)="formulario.get('ctrolPrioridad')?.setValue('A')"
+    >
+      Alta
+    </mat-card>
+
+    <mat-card
+      class="prioridad-card"
+      [class.selected]="formulario.get('ctrolPrioridad')?.value === 'M'"
+      (click)="formulario.get('ctrolPrioridad')?.setValue('M')"
+    >
+      Media
+    </mat-card>
+
+    <mat-card
+      class="prioridad-card"
+      [class.selected]="formulario.get('ctrolPrioridad')?.value === 'B'"
+      (click)="formulario.get('ctrolPrioridad')?.setValue('B')"
+    >
+      Baja
+    </mat-card>
+  </div>
+</div>
+  
+  <br>
+
+    <!-- <mat-form-field appearance="outline">
       <mat-label>Paro Máquina</mat-label>
       <mat-select formControlName="ctrolParoMaquina">
             <mat-option [value]="1">Sí</mat-option>
             <mat-option [value]="0">No</mat-option>
       </mat-select>
-    </mat-form-field>
+    </mat-form-field> -->
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Fotografía (URL / archivo)</mat-label>
-      <input matInput formControlName="ctrolFotografia" placeholder="Ruta o archivo">
-    </mat-form-field>
+  <div class="paro-container">
+    <mat-label>Paro Máquina</mat-label>
+    <div class="paro-cards">
+      <mat-card
+        class="paro-card"
+        [class.selected]="formulario.get('ctrolParoMaquina')?.value === 1"
+        (click)="formulario.get('ctrolParoMaquina')?.setValue(1)"
+      >
+        Sí
+      </mat-card>
+
+      <mat-card
+        class="paro-card"
+        [class.selected]="formulario.get('ctrolParoMaquina')?.value === 0"
+        (click)="formulario.get('ctrolParoMaquina')?.setValue(0)"
+      >
+        No
+      </mat-card>
+    </div>
+  </div>
+
+<br>
 
     <!-- <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Fotografía (URL / archivo)</mat-label>
+      <input matInput formControlName="ctrolFotografia" placeholder="Ruta o archivo">
+    </mat-form-field> -->
+
+    <mat-form-field appearance="outline" class="full-width">
     <mat-label>Archivo</mat-label>
     <input matInput [value]="fileName" readonly formControlName="ctrolFotografia"   />
-    <button mat-icon-button matSuffix (click)="fileInput.click()">
-        <mat-icon>attach_file</mat-icon>
+    <button mat-icon-button matSuffix (click)="isInfoCargada ? fileInput.click() : null">
+        <mat-icon class="camera">photo_camera</mat-icon>
     </button>
     </mat-form-field>
-    <input type="file" hidden #fileInput (change)="onFileSelected($event)" />  -->
+    <input type="file" hidden #fileInput (change)="onFileSelected($event)" /> 
 
 
-    <mat-form-field appearance="outline">
+    <!-- <mat-form-field appearance="outline">
       <mat-label>Hora Inicio</mat-label>
-      <input matInput type="time" formControlName="ctrolHoraInicio">
-    </mat-form-field>
+      <input matInput type="time" formControlName="ctrolHoraInicio" readonly>
+    </mat-form-field> -->
 
-    <mat-form-field appearance="outline">
+    <!-- <mat-form-field appearance="outline">
       <mat-label>Hora Fin</mat-label>
-      <input matInput type="time" formControlName="ctrolHoraFin">
-    </mat-form-field>
+      <input matInput type="time" formControlName="ctrolHoraFin" readonly>
+    </mat-form-field> -->
 
   </form>
 
@@ -97,6 +168,6 @@
 
 </div>
 
-<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
-    <p style="color: white; text-align: center; ">Cargando... </p>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default">
+    <div class="loader"></div>
 </ngx-spinner>

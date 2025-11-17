@@ -22,7 +22,7 @@ export class DialogCapturarFotoCajaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getVideoDevices();
+    this.checkPermission();
   }
 
   submit() :void{
@@ -55,6 +55,8 @@ export class DialogCapturarFotoCajaComponent implements OnInit {
       });
   }
 
+
+
   async getVideoDevices() {
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
@@ -66,6 +68,16 @@ export class DialogCapturarFotoCajaComponent implements OnInit {
     } catch (error) {
       console.error('Error al obtener dispositivos:', error);
     }
+  }
+
+  async checkPermission(){
+    navigator.mediaDevices.getUserMedia({video:{width:500,height:500}})
+      .then((response) => {
+        console.log(response)
+        this.getVideoDevices();
+      }).catch(err => {
+        console.log("Error al acceder a la cámara")
+      })
   }
 
   async startVideoStream(deviceId: string | null) {

@@ -11,6 +11,8 @@ import { GlobalVariable } from '../../../VarGlobals'; //<==== this one
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SolicitudMantenimientoService } from 'src/app/services/SolicitudMantenimiento/solicitud-mantenimiento.service';
+import { BrowserCodeReader } from '@zxing/browser';
+import { BrowserMultiFormatReader } from '@zxing/browser';
 
 interface especialidad {
   Cod_Espe: string,
@@ -60,6 +62,7 @@ interface data {
   sCod_Usuario: string;
   sNom_Usuario: string;
   sCod_Planta : string;
+  sCod_Espe   : string;
   Datos       : any   ;
 }
 
@@ -100,10 +103,12 @@ export class DialogSolicitudMntoInformeComponent implements OnInit {
     ctrolFechaFin   : [new Date()],
     ctrolHoraFin    : ['00:00'],
     ctrolAtribuido  : [''],
+    ctrolJefeGrupo  : [''],
     ctrolDescripcionEvento    : [''],
     ctrolProcedimientoSolucion: [''],
     filtro  :[''],
-    ctrolQR :['']
+    ctrolQR :[''],
+    ctrolObservacion: [''],
   });  
   mostrarCtrolOtrasSedes: boolean = false; // Esta variable controlará la visibilidad
 
@@ -119,8 +124,14 @@ export class DialogSolicitudMntoInformeComponent implements OnInit {
   //Variables de Flag
   Flg_ValidaMaquina = "1";
   Flg_ShowBotonIniciar: boolean = false;
+  Flg_ShowCtrolQR: Boolean = true;
+  Flg_ShowBotonCerrarOT   : boolean = true;
+  Flg_ShowBotonAprobarOT  : boolean = true;
+  Flg_ShowBotonRechazarOT : boolean = true;
+  Flg_ShowObservacionOT   : boolean = true;
+  
   CodEstadoMant = ""; 
-
+  CodNroSolicitud = ""; 
 
   selectedTipoFalla: any;
   filtro: string = '';
@@ -153,18 +164,22 @@ export class DialogSolicitudMntoInformeComponent implements OnInit {
   Num_Planta    = "";  
   /*FIN - CAMPOS A GUARDAR*/
 
+  sUsuario        = GlobalVariable.vusu;
 
+  //Camara
+  camaraActiva: boolean = false;  
 
 ngOnInit(): void {
-
-    setTimeout(() => this.inputQR?.nativeElement.focus(), 300);
-
+    console.log('this.data.Datos', this.data);
     var actual = new Date();
     var hora = _moment(actual.valueOf()).format('HH:mm');
-    var weight = hora.split(':')    
+    var weight = hora.split(':')   
 
+    //Mostrar Datos de personal
+    this.mostrarTejedor();    
+    
     //ACtivamos los controles si no es planta 4
-    if (Number(this.data.Datos.num_Planta) !== 4){
+    if (Number(this.data.sCod_Planta) !== 4){
       //Aqui ocultamos los controles de
       this.mostrarCtrolOtrasSedes = true;
       this.formulario.get('ctrolArticulo')?.disable();
@@ -173,6 +188,7 @@ ngOnInit(): void {
     //Setear Valores
     this.formulario.get('ctrolHoraInicio').setValue(weight[0]+':'+weight[1]);
     this.CodEstadoMant = this.data.Datos.cod_Estado_Mant;
+    this.CodNroSolicitud = this.data.Datos.cod_Solicitud;
 
     //Controles Bloqueados
     this.formulario.get('ctrolFechaInicio').disable() ;
@@ -180,18 +196,69 @@ ngOnInit(): void {
     this.formulario.get('ctrolFechaFin').disable()    ;
     this.formulario.get('ctrolHoraFin').disable()     ;
 
-
+    //this.Cod_Espe = this.listaEspecialidades[0].Cod_Espe;
+    console.log('especialidad', this.data.sCod_Espe);
+    console.log('sCod_Planta', this.data.sCod_Planta);
+    
     //When estado REPORTADO
     if (this.data.Datos.cod_Estado_Mant === '01'){
-      // 🔒 Deshabilita todos los controles
-      this.formulario.disable();
 
-      // 🔓 Luego habilita solo el control "ctrolQR"
-      this.formulario.get('ctrolQR')?.enable();      
+        // 🔒 Deshabilita todos los controles
+        this.formulario.disable();
+
+        if (this.data.sCod_Espe !== '23'){
+          // 🔓 Habilita solo el campo QR
+          this.formulario.get('ctrolQR')?.enable();
+
+          // 🎯 Da foco al control QR
+          setTimeout(() => this.inputQR?.nativeElement.focus(), 300);
+        }else {
+          //Para las especialidades 15 Y 17 
+          this.Flg_ShowCtrolQR = false;
+        }
+    }
+    
+    //When estado EN ATENCION
+    if (this.data.Datos.cod_Estado_Mant === '02'){    
+      if (this.data.sCod_Espe !== '23'){
+        this.Flg_ShowCtrolQR = false;
+      }else{
+        this.formulario.disable();
+        this.Flg_ShowCtrolQR = false;
+        this.Flg_ShowBotonCerrarOT = false;
+      }
     }
 
+    //When estado PENDIENTE VB
+    if (this.data.Datos.cod_Estado_Mant === '03' ){   
+      // 🔒 Deshabilita todos los controles 
+      this.formulario.disable();
+      this.Flg_ShowCtrolQR = false;
+      this.Flg_ShowObservacionOT = true;
+
+      if (this.data.sCod_Espe !== '23'){      
+        this.Flg_ShowObservacionOT = false;
+        this.Flg_ShowBotonAprobarOT = false;
+        this.Flg_ShowBotonRechazarOT = false;    
+            
+      }else{
+        this.Flg_ShowObservacionOT = true;
+        this.Flg_ShowBotonAprobarOT = true;
+        this.Flg_ShowBotonRechazarOT = true;    
+        // 🔓 Habilita solo el campo QR
+        this.formulario.get('ctrolObservacion')?.enable();                     
+      }
+    }
+
+    //When estado CERRRADO
+    if (this.data.Datos.cod_Estado_Mant === '04'){   
+      // 🔒 Deshabilita todos los controles 
+      this.formulario.disable();
+      this.Flg_ShowCtrolQR = false;
+    }    
+
+
     //cargar Metodos por defecto
-    this.mostrarTejedor()     ;
     this.CargarArea()         ;
     this.CargarTipoAtribuido();
     this.CargarCondicion()    ;
@@ -205,6 +272,7 @@ ngOnInit(): void {
     this.formulario.get('ctrolNroSolicitud')?.setValue(data.Datos.cod_Solicitud);
     //this.formulario.get('ctrolNombreTecnico')?.setValue(data.sNom_Usuario);
     this.formulario.get('ctrolParoMaquina')?.setValue(Number(data.Datos.paro_Maquina)); 
+    console.log('Cargo todos los datods correctamente',data.Datos);
   }
 
   CargarEspecialidad(dni: string) 
@@ -213,24 +281,30 @@ ngOnInit(): void {
     this.registromantemaquinastej.ListarEspecialidad(dni).subscribe(
       (result: any) => {
         this.listaEspecialidades = result
-
+        console.log('Lista de Expecialidades', this.listaEspecialidades);
         //Agregado por HMEDINA - 11/03/2025
+        //this.Cod_Espe = this.listaEspecialidades[0].Cod_Espe;
         this.formulario.get('ctrolEspecialidad')?.setValue(this.listaEspecialidades[0].Cod_Espe);
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
   }
 
   CargarArea() {
+    console.log('CargarArea planta', this.data.sCod_Planta);
+    console.log('planta convertido', String(Number(this.data.Datos.num_Planta)))
+    let iCodPlanta = Number(this.data.sCod_Planta);
+    console.log('iCodPlanta', iCodPlanta);
     this.listaAreas = [];
-    this.registromantemaquinastej.ListarAreaBySede(String(this.data.Datos.num_Planta)).subscribe({
-
+    //this.registromantemaquinastej.ListarAreaBySede(String(Number(this.data.Datos.num_Planta))).subscribe({
+    this.registromantemaquinastej.ListarAreaBySede(String(iCodPlanta)).subscribe({
       next: (result:any) => {
         if (result.length !== 0){
           this.listaAreas = result;
-
+          console.log('Cargo listaAreas', this.listaAreas);
           this.formulario.get('ctrolArea')?.setValue( String(this.data.Datos.cod_Area));
           this.CargarMaquinas( String(this.data.Datos.cod_Area));
           this.CargarTareasSedes(String(this.data.Datos.cod_Area));
+          
         }else{
           this.listaAreas = [];
           this.toastr.warning("No se configuro Areas para la Sede.", 'Cerrar', {
@@ -369,13 +443,14 @@ ngOnInit(): void {
       { Cod_TipAtr: 'M', Desc_TipAtr: 'MANTENIMIENTO' },
       { Cod_TipAtr: 'S', Desc_TipAtr: 'SISTEMAS' }
     ];
+    console.log('Cargo Atribuidos');
   }  
 
   CargarCondicion() {
     this.registromantemaquinastej.ListarCondicion().subscribe(
       (result: any) => {
         this.listaCondiciones = result
-        //console.log(this.listar_area);
+        console.log('Lista condiciones', this.listaCondiciones);
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
   }
@@ -386,10 +461,9 @@ ngOnInit(): void {
     let Cod_Trabajador=GlobalVariable.vcodtra;
     let Tip_Trabajador=GlobalVariable.vtiptra;
     //if (dni_tejedor.length===8) {
-      console.log(Cod_Trabajador.length);
       this.registromantemaquinastej.traerTejedorTra(Cod_Trabajador, Tip_Trabajador).subscribe(
         (result: any) => {
-          console.log(result);
+          console.log('marca01', result);
            if (result[0].Respuesta == 'OK') {
             this.formulario.get('ctrolDni')?.setValue(result[0].Nro_DocIde); 
             this.formulario.get('ctrolNombreTecnico')?.setValue(result[0].Nombres);
@@ -402,50 +476,96 @@ ngOnInit(): void {
 
   onScanQR(codigo: string, event: any){
 
-    event.preventDefault();   // ❌ evita que el Enter avance al siguiente control
-    event.stopPropagation();  // ❌ evita propagación al siguiente campo
-    console.log('log.');
+    //event.preventDefault();   // ❌ evita que el Enter avance al siguiente control
+    //event.stopPropagation();  // ❌ evita propagación al siguiente campo
+    //console.log('log.');
+
     if (!codigo) return;
+
+    //Obtiene el codigo QR
+    const resultQR = codigo;
+    const parts = resultQR
+      .split(/\\+/)           // separa por '\' (regex) 
+      .map(s => s.trim())     // quita espacios al inicio/fin
+      .filter(s => s.length); // elimina elementos vacíos   
+
+    //OBTENEMOS EL PRIMER ARRAY CON TODOS SUS VALORES
+    const parte0 = parts[0]; // Por ejemplo: "?3Q1?&&&0000102&&&BDMP10_HCP2&&&"         
+
+    if (parte0 && parte0.startsWith('?3Q1?')) {
+      if (parte0 && parte0.length >= 14) {
+
+        // Obtener desde el carácter 8 (índice 7), y tomar 7 caracteres EL CODIGOO DE MAQUINA
+        const codigoExtraido = parte0.substring(8, 7 + 8);  
+        this.formulario.get('ctrolQR')?.setValue(''); 
+
+        //Obtenemos la descripción de la maquina
+        this.SpinnerService.show();
+        this.serviceSolicitudMnto.getObtieneInformacionMaquinas(codigoExtraido).subscribe(
+          (result: any) => {
+            if (result.totalElements > 0) {
+
+              const sCodMaquinaResult = String(result.elements[0].cod_Maquina_Tejeduria).trim();
+              const sCodMaquinaOrigen = String(this.data.Datos.cod_Maquina).trim();
+
+              if (sCodMaquinaResult !== sCodMaquinaOrigen){
+                //Ocultamos el boton de inciar
+                this.Flg_ShowBotonIniciar = false;  
+                this.formulario.get('ctrolQR')?.setValue(''); 
+
+                this.matSnackBar.open("¡Scanee maquina correcta!", 'Cerrar', {
+                  horizontalPosition: 'center',
+                  verticalPosition: 'top',
+                  duration: 1500,
+                });
+                return;            
+              } else {
+                //Mostramos el boton de inciar
+                this.Flg_ShowBotonIniciar = true;
+              }
+            }
+            else {
+              //Ocultamos el boton de inciar
+              this.Flg_ShowBotonIniciar = false;    
+              this.formulario.get('ctrolQR')?.setValue(''); 
+
+              this.SpinnerService.hide();
+              this.matSnackBar.open("No existe código scaneado..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+            }
+          },
+          (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+            duration: 1500,
+          }))            
+
+      } else {
+        const sMessage = 'No contiene Codigo de Maquina';
+
+        this.inputQR.nativeElement.focus();
+        this.formulario.get('ctrolQR')?.reset();        
+
+        this.matSnackBar.open(sMessage, 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['mi-snackbar-advertencia']
+        });         
+      }
+    }else{
+      const sMessage = 'Escanee un codigo Valido!';
+
+      this.inputQR.nativeElement.focus();
+      this.formulario.get('ctrolQR')?.reset();
+      
+
+      this.matSnackBar.open(sMessage, 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['mi-snackbar-advertencia']
+      });        
+
+    }  
     
-    this.SpinnerService.show();
-    this.serviceSolicitudMnto.getObtieneInformacionMaquinas(codigo).subscribe(
-      (result: any) => {
-        if (result.totalElements > 0) {
-
-          const sCodMaquinaResult = String(result.elements[0].cod_Maquina_Tejeduria).trim();
-          const sCodMaquinaOrigen = String(this.data.Datos.cod_Maquina).trim();
-
-          if (sCodMaquinaResult !== sCodMaquinaOrigen){
-            //Ocultamos el boton de inciar
-            this.Flg_ShowBotonIniciar = false;  
-            this.formulario.get('ctrolQR')?.setValue(''); 
-
-            this.matSnackBar.open("¡Scanee maquina correcta!", 'Cerrar', {
-              horizontalPosition: 'center',
-              verticalPosition: 'top',
-              duration: 1500,
-            });
-            return;            
-          } else {
-            //Mostramos el boton de inciar
-            this.Flg_ShowBotonIniciar = true;
-          }
-        }
-        else {
-          //Ocultamos el boton de inciar
-          this.Flg_ShowBotonIniciar = false;    
-          this.formulario.get('ctrolQR')?.setValue(''); 
-
-          this.SpinnerService.hide();
-          this.matSnackBar.open("No existe código scaneado..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
-        }
-      },
-      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
-        duration: 1500,
-      }))       
-
-      this.SpinnerService.hide();    
-
   }  
 
   limpiaFiltro(){
@@ -453,7 +573,7 @@ ngOnInit(): void {
   }
 
   onIniciar():void{
-
+    
     Swal.fire({
       title: '¿Desea Dar Inicio a la Atencion de la Solicitud ?, Confirme',
       icon: 'question',
@@ -464,31 +584,30 @@ ngOnInit(): void {
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.isConfirmed) {
+        
+        this.onAvanzar(this.CodNroSolicitud, '', '');
     
         /********************/
-        //Solicitud de Mantenimiento
+        //Input's Para Avanzar Solicitud
         /********************/
-        let data: any = {
-          "accion"            : "I" ,          
-          "cod_Solicitud"     : ""  ,
-          "usu_Registro"      : this.data.sCod_Usuario
-        };
-
-        console.log('onSave-data', data);
-
+        // const data: any = {
+        //   cod_Usuario        : this.sUsuario,
+        //   Cod_Solicitud      : this.CodNroSolicitud,
+        //   Observaciones : ''
+        // };
+        // console.log('onSave-data', data);
 
         //GUARDAR
         // this.SpinnerService.show();
-        // this.serviceSolicitudMnto.postProcesoMntoSolicitudMantenimiento(data).subscribe({
+        // this.serviceSolicitudMnto.postAvanzaEstadoSolicitudMantenimiento(data).subscribe({
         //     next: (response: any)=> {
         //       if(response.success){
         //         if (response.codeResult == 200){
         //           this.toastr.success(response.message, '', {
         //             timeOut: 2500,
         //           });
-        //           this.dialogRef.close();
-
-        //         }else if(response.codeResult == 201){
+        //           this.dialogRef.close();                          
+        //         }else {
         //           this.toastr.info(response.message, '', {
         //             timeOut: 2500,
         //           });
@@ -507,20 +626,24 @@ ngOnInit(): void {
         //       timeOut: 2500,
         //       });
         //     }
-        //   });        
-
-
+        //   });         
       }
     })  
-
   }
 
   onCerrarOT():void{
     const codArea: string =  this.formulario.get('ctrolArea')?.value || null;
     const codTarea: string = this.formulario.get('ctrolTarea')?.value || null;
     const codMaq: string = this.formulario.get('ctrolMaquina')?.value || null;
-    const paroMaq: string = this.formulario.get('ctrolParoMaquina')?.value || null;
+    const paroMaq: string = this.formulario.get('ctrolParoMaquina')?.value;
+    const sJefeGrupo: string = this.formulario.get('ctrolJefeGrupo')?.value || '';
+    
     //const condicion: string = this.formulario.get('ct_Condicion')?.value || null;   
+
+    console.log('paroMaq', paroMaq);
+    console.log('codArea', codArea);
+    console.log('codTarea', codTarea);
+    console.log('codMaq', codMaq);
 
     if (codArea == null){
       this.matSnackBar.open("¡Importante seleccionar el area!", 'Cerrar', {
@@ -605,15 +728,15 @@ ngOnInit(): void {
 
     //Continua con el Registro de Informacion 
     this.Cod_Accion   = 'I'    
-    this.Fec_Registro = this.formulario.get('ctrolFechaInicio')?.value,
-    this.Cod_Maquina  = this.formulario.get('ctrolMaquina')?.value,
-    this.Cod_Tarea    = this.formulario.get('ctrolTarea')?.value,
-    this.Cod_OrdTra   = this.formulario.get('sOt')?.value,
-    this.Fec_Inicio   = _moment(this.formulario.get('ctrolFechaInicio')?.value).format('DD/MM/YYYY'),
-    this.hini         = this.formulario.get('ctrolHoraInicio')?.value,
-    this.Fec_Fin      = this.formulario.get('ctrolFechaFin')?.value,
-    this.hfin         = this.formulario.get('ctrolHoraFin')?.value,
-    this.Observacion  = this.formulario.get('ctrolDescripcionEvento')?.value
+    this.Fec_Registro = this.formulario.get('ctrolFechaInicio')?.value;
+    this.Cod_Maquina  = this.formulario.get('ctrolMaquina')?.value;
+    this.Cod_Tarea    = this.formulario.get('ctrolTarea')?.value;
+    this.Cod_OrdTra   = ' ';
+    this.Fec_Inicio   = _moment(this.formulario.get('ctrolFechaInicio')?.value).format('DD/MM/YYYY');
+    this.hini         = this.formulario.get('ctrolHoraInicio')?.value;
+    this.Fec_Fin      = this.formulario.get('ctrolFechaFin')?.value;
+    this.hfin         = this.formulario.get('ctrolHoraFin')?.value;
+    this.Observacion  = this.formulario.get('ctrolDescripcionEvento')?.value;
     this.dni_tejedor  = this.formulario.get('ctrolDni')?.value;    
 
     //Nuevos Campos Requeridos 
@@ -622,20 +745,20 @@ ngOnInit(): void {
     this.Cod_Area_Tej_Mante_Maq = this.formulario.get('ctrolArea')?.value;
     this.Cod_Tej_Cond           = this.formulario.get('ctrolCondicion')?.value;
     this.Cod_ParMaq_Tej         = this.formulario.get('ctrolParoMaquina')?.value;
-    this.Cod_TipFall            = this.formulario.get('ctrolTipoFalla')?.value;
+    this.Cod_TipFall            = this.formulario.get('ctrolTipoFalla')?.value || ' ';
     this.Flg_Atribuido          = this.formulario.get('ctrolAtribuido')?.value; //Obligatorio para todos   
-    this.Num_Planta    = String(this.data.Datos.num_Planta);    
+    this.Num_Planta             = String(this.data.Datos.num_Planta);    
     
     //Se envia info cuando la planta no es nro 4
     if (Number(this.data.Datos.num_Planta) !== 4){
       this.Observacion2  = this.formulario.get('ctrolProcedimientoSolucion')?.value; 
     }else{
-      this.Observacion2  = '';
+      this.Observacion2  = ' ';
     }
 
     //Cuestiona al Grabar
     Swal.fire({
-      title: '¿Desea Registrar Informe Tecnico Para La Solicitud?, Confirme',
+      title: '¿Desea Registrar / Cerra la OT, Para La Solicitud?, Confirme',
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -645,81 +768,68 @@ ngOnInit(): void {
     }).then((result) => {
       if (result.isConfirmed) {
 
+        /*********************************************/
+        //Registro de Tiempo Mantenimiento de Maquina
+        /*********************************************/        
+        let data: any = {
 
-        console.log('Cod_Accion', this.Cod_Accion)    ;
-        console.log('Fec_Registro', this.Fec_Registro)  ;
-        console.log('Cod_Maquina', this.Cod_Maquina)   ;
-        console.log('cod_tarea', this.cod_tarea)     ;
-        console.log('hini', this.hini)          ;
-        console.log('hfin', this.hfin)          ;
-        console.log('Observacion', this.Observacion)   ;
-        console.log('Titulo', this.Titulo)        ;
-        console.log('Fec_Fin', this.Fec_Fin)       ;
-        console.log('Fec_Inicio', this.Fec_Inicio)    ;
-        console.log('dni_tejedor', this.dni_tejedor)   ;
-        console.log('Cod_OrdTra', this.Cod_OrdTra)    ;
-        console.log('Cod_TipOrdTra', this.Cod_TipOrdTra) ;
-        console.log('xNum_Mante', this.xNum_Mante)    ;
-        console.log('Cod_Tarea', this.Cod_Tarea)     ;
-        console.log('Cod_Espe', this.Cod_Espe)      ;
-        console.log('Cod_Articulo', this.Cod_Articulo)  ;
-        console.log('Cod_Area_Tej_Mante_Maq', this.Cod_Area_Tej_Mante_Maq);
-        console.log('Cod_Tej_Cond', this.Cod_Tej_Cond)  ;
-        console.log('Cod_ParMaq_Tej', this.Cod_ParMaq_Tej);
-        console.log('Cod_TipFall', this.Cod_TipFall)   ;
-        console.log('Observacion2', this.Observacion2)  ;
-        console.log('Flg_Atribuido', this.Flg_Atribuido) ;
-        console.log('Num_Planta', this.Num_Planta)    ;      
-        
-        this.registromantemaquinastej.guardarEditarEliminarMantenimientoSede
-        (
-          this.Cod_Accion,
-          this.xNum_Mante,
-          this.Fec_Registro,
-          this.Cod_Maquina,
-          this.Cod_Tarea,
-          this.Cod_OrdTra,
-          this.Fec_Inicio,
-          this.hini,
-          this.Fec_Fin,
-          this.hfin,
-          this.Observacion,
-          this.dni_tejedor, 
-          this.Cod_Espe,
-          this.Cod_Articulo,
-          this.Cod_Area_Tej_Mante_Maq,
-          this.Cod_Tej_Cond ,
-          this.Cod_ParMaq_Tej,
-          this.Cod_TipFall,
-          //Campos Nuevos
-          this.Observacion2,
-          this.Flg_Atribuido,
-          this.Num_Planta
-        ).subscribe(
-          (result: any) => {
-            //this.dialog.closeAll();
-            if (result[0]) {
-              if (result[0].Respuesta == 'OK') {
-                this.matSnackBar.open('Se guardo Correctamente!!', 'Cerrar', {
-                  duration: 3000,
-                })
-                this.dialog.closeAll();
+          "accion"      : "I",
+          "num_Mante"   : 0,
+          "cod_Maquina" : this.Cod_Maquina,
+          "nro_DocIde"  : this.dni_tejedor,
+          "cod_Tarea"   : this.Cod_Tarea  ,
+          "cod_Ordtra"  : " ",
+          "fec_Hora_Inicio" : this.hini,
+          "fec_Hora_Fin"    : this.hfin,
+          "obserMante"      : this.Observacion,
+          "cod_Usuario"     : this.sUsuario,
+          "cod_Espe"        : this.Cod_Espe,
+          "cod_Articulo"    : this.Cod_Articulo,
+          "cod_Area_Tej_Mante_Maq": this.Cod_Area_Tej_Mante_Maq,
+          "cod_Tej_Cond"    : this.Cod_Tej_Cond,
+          "cod_ParMaq_Tej"  : String(this.Cod_ParMaq_Tej),
+          "cod_TipFall"     : this.Cod_TipFall,
+          "obserMante2"     : this.Observacion2,
+          "flg_Atribuido"   : this.Flg_Atribuido,
+          "num_Planta"      : this.Num_Planta,
+          "cod_Solicitud"   : this.data.Datos.cod_Solicitud,
+          "datos_Lider"     : sJefeGrupo
 
-              } else {
-                this.matSnackBar.open(result[0].Respuesta, 'Cerrar', {
-                  duration: 3000,
-                })
+        };    
+
+        console.log('onSave-data', data);
+        //return;
+        //GUARDAR
+        this.SpinnerService.show();
+        this.serviceSolicitudMnto.postProcesoMntoTiempoManMquina(data).subscribe({
+            next: (response: any)=> {
+              if(response.success){
+                if (response.codeResult == 200){
+                  this.toastr.success(response.message, '', {
+                    timeOut: 2500,
+                  });
+                  this.dialogRef.close();
+
+                }else if(response.codeResult == 201){
+                  this.toastr.info(response.message, '', {
+                    timeOut: 2500,
+                  });
+                }
+                this.SpinnerService.hide();
+              }else{
+                this.toastr.error(response.message, 'Cerrar', {
+                  timeOut: 2500,
+                });
+                this.SpinnerService.hide();
               }
-            } else {
-              this.matSnackBar.open('Error, No Se Pudo guardar!!', 'Cerrar', {
-                duration: 3000,
-              })
+            },
+            error: (error) => {
+              this.SpinnerService.hide();
+              this.toastr.error(error.message, 'Cerrar', {
+              timeOut: 2500,
+              });
             }
-
-          },
-          (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
-            
-
+          });            
 
       }
     })  
@@ -729,6 +839,126 @@ ngOnInit(): void {
     this.dialogRef.close();
   }
 
+  onAvanzar(CodSolicitud:string, Observacion: string, sDatosLider: string){
 
+    /********************/
+    //Input's Para Avanzar Solicitud
+    /********************/
+    const data: any = {
+      cod_Usuario     : this.sUsuario,
+      Cod_Solicitud   : CodSolicitud,
+      Observaciones   : Observacion,
+      sDatosLider     : sDatosLider
+    };
+
+    //GUARDAR
+    this.SpinnerService.show();
+    this.serviceSolicitudMnto.postAvanzaEstadoSolicitudMantenimiento(data).subscribe({
+        next: (response: any)=> {
+          if(response.success){
+            if (response.codeResult == 200){
+              this.toastr.success(response.message, '', {
+                timeOut: 2500,
+              });
+              this.dialogRef.close();                          
+            }else {
+              this.toastr.info(response.message, '', {
+                timeOut: 2500,
+              });
+            }
+            this.SpinnerService.hide();
+          }else{
+            this.toastr.error(response.message, 'Cerrar', {
+              timeOut: 2500,
+            });
+            this.SpinnerService.hide();
+          }
+        },
+        error: (error) => {
+          this.SpinnerService.hide();
+          this.toastr.error(error.message, 'Cerrar', {
+          timeOut: 2500,
+          });
+        }
+      });    
+  }
+
+  onAprobarVB() {
+    let sObservacion = this.formulario.get('ctrolObservacion')?.value || '';
+
+    //Cuestiona al Grabar, 
+    Swal.fire({
+      title             : '¿Desea Aprobar La Solicitud?, Confirme',
+      icon              : 'question'  ,
+      showCancelButton  : true        ,
+      confirmButtonColor: '#3085d6' ,
+      cancelButtonColor : '#d33'    ,
+      confirmButtonText : 'Sí'        ,
+      cancelButtonText  : 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        //Avanzamos 
+        this.onAvanzar(this.CodNroSolicitud, sObservacion, '');
+      }
+    })  
+  }
+
+  onRechazarVB() {
+    let sObservacion = this.formulario.get('ctrolObservacion')?.value || '';
+
+    //Cuestiona al Grabar
+    Swal.fire({
+      title: '¿Desea Rechazar La Solicitud?, Confirme',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        //Avanzamos 
+        this.onAvanzar(this.CodNroSolicitud, sObservacion, '');
+      }
+    })      
+  }
+
+  ActiveCameraScanQR(event: any): void {
+    this.camaraActiva = true;
+    BrowserCodeReader
+      .listVideoInputDevices()
+      .then(videoInputDevices => {
+        // Buscar cámara trasera (usualmente contiene "back" o "environment")
+        const backCamera = videoInputDevices.find(device =>
+          device.label.toLowerCase().includes('back') ||
+          device.label.toLowerCase().includes('environment')
+        ) || videoInputDevices[0]; // fallback a la primera si no se encuentra
+
+        if (!backCamera) {
+          console.error('No se encontró cámara trasera');
+          return;
+        }
+
+        const codeReader = new BrowserMultiFormatReader();
+        const videoElement = document.querySelector('video');
+        codeReader.decodeFromVideoDevice(backCamera.deviceId, videoElement, (result, error, controls) => {
+          if (result) {
+            //this.onScanQR(result.getText(), event); // tu función personalizada
+            //console.log('Codigo QR', result.getText());
+            const sCodigoScan = result.getText();
+            this.onScanQR(sCodigoScan, null);
+
+            controls.stop(); // detener escaneo después de leer
+            this.camaraActiva = false;
+          }
+          if (error) {
+            console.error(error);
+          }          
+        });
+      })
+      .catch(err => {
+        console.error('Error al acceder a la cámara:', err);
+    });
+  }  
 
 }

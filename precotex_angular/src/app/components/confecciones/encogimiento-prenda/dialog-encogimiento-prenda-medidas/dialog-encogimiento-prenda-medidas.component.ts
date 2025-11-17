@@ -24,6 +24,7 @@ interface data_det {
   Cod_Medida: number;
   Des_Medida: string;
   Val_Medida: string;
+  Tip_Medida: string;
 }
 
 @Component({
@@ -50,7 +51,7 @@ export class DialogEncogimientoPrendaMedidasComponent implements OnInit {
     this.dataSource.data = GlobalVariable.Arr_Medidas
   }
 
-  selectMedida(medida: string, valor: number){
+  selectMedida(medida: string, valor: number, tipo: string){
     if(medida == 'Eliminar'){
       medida = ''
     }
@@ -91,7 +92,7 @@ export class DialogEncogimientoPrendaMedidasComponent implements OnInit {
         this.matSnackBar.open("Talla vacia..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
       }
 
-      this.dialogRef.close({data:medida, valor:valor, estado:"P"});
+      this.dialogRef.close({data:medida, valor:valor, tipo:tipo, estado:"P"});
       this.Menos = '';
     }
   }

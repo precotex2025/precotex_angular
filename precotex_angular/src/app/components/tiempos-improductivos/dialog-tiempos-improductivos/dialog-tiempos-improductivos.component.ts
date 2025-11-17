@@ -93,7 +93,7 @@ export class DialogTiemposImproductivosComponent implements OnInit {
     this.CargarMotivos();
     this.obtenerDni();
     //this.CompletarDatosModificarRegistro();
-    this.formulario.get('Fec_Inicio').disable();
+    //this.formulario.get('Fec_Inicio').disable();
     this.formulario.get('nomtejedor').disable();
     this.formulario.get('Fec_Registro')?.setValue(this.data.sFec_Registro)
     this.formulario.get('Cod_Maquina')?.setValue(this.data.cod_maquina)
@@ -121,7 +121,7 @@ export class DialogTiemposImproductivosComponent implements OnInit {
   pasarfecha() {
     this.Fec_Registro=this.formulario.get('Fec_Registro')?.value;
     this.formulario.get('Fec_Inicio').setValue(this.Fec_Registro);
-    this.formulario.get('Fec_Inicio').disable();
+    //this.formulario.get('Fec_Inicio').disable();
     //this.formulario.get('Fec_Fin').setValue(this.Fec_Registro);
   }
 

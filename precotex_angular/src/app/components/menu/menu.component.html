@@ -8,9 +8,16 @@
         <!--<h1 class="example-app-name">MEDIAPP</h1>-->
         <span class="example-spacer1"></span>
 
-        <img class="logo" src="assets/logo.jpg" >
+        <img class="logo" src="assets/logo.jpg">
 
 
+        <span class="example-spacer2"></span>
+
+        <button mat-icon-button color="warn" title="Registrar incidente" (click)="openDialogGenerateSolicitudMnto()">
+            <!-- <mat-icon>warning qr_code_scanner notification_important</mat-icon> -->
+            <mat-icon matPrefix style="font-size: 45px;">notifications_active</mat-icon>
+        </button>
+        
         <span class="example-spacer2"></span>
 
         <button mat-icon-button [matMenuTriggerFor]="menu">

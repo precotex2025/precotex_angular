@@ -53,10 +53,13 @@ export class SolicitudMantenimientoService {
   }
 
   postProcesoMntoSolicitudMantenimiento(data: any){
-    const headers = this.Header;
-    return this.http.post(this.baseUrlTinto + 'TMSolicitudMantenimiento/postProcesoMntoSolicitudMantenimiento', data, { headers })
+    return this.http.post(this.baseUrlTinto + 'TMSolicitudMantenimiento/postProcesoMntoSolicitudMantenimiento', data)
   }  
 
+  postAvanzaEstadoSolicitudMantenimiento(data: any){
+    const headers = this.Header;
+    return this.http.post(this.baseUrlTinto + 'TMSolicitudMantenimiento/postAvanzaEstadoSolicitudMantenimiento', data, { headers })
+  }  
 
   //IMAGENES
   private bas = 'https://gestion.precotex.com:444/ubicaciones/api/TxRetiroRepuestos/getImagenDesdeBackEnd';
@@ -65,5 +68,10 @@ export class SolicitudMantenimientoService {
     console.log('el nombre de la imagen es: ', imageId);
     return `${this.bas}?imageId=${encodeURIComponent(imageId)}`;
   }
+
+  postProcesoMntoTiempoManMquina(data: any){
+    const headers = this.Header;
+    return this.http.post(this.baseUrlTinto + 'TMSolicitudMantenimiento/postProcesoMntoTiempoManMquina', data, { headers })
+  }   
 
 }

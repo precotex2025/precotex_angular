@@ -8,6 +8,9 @@ import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { BrowserCodeReader } from '@zxing/browser';
+import { BrowserMultiFormatReader } from '@zxing/browser';
+
 
 interface data {
   Title       : string;
@@ -39,6 +42,10 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
   //Variables
   sCodArea: string = '';
   sCodMaquina: string = '';
+  isInfoCargada = false;
+
+  //Camara
+  camaraActiva: boolean = false;
 
   constructor(
     private formBuilder : FormBuilder ,
@@ -67,10 +74,10 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
     //Deshabilitar Controles. 
     this.formulario.get('ctrolFecha')?.disable();
     this.formulario.get('ctrolSupervisor')?.disable();
-    this.formulario.get('ctrolArea')?.disable();
-    this.formulario.get('ctrolMaquina')?.disable();
-    this.formulario.get('ctrolHoraInicio')?.disable();
-    this.formulario.get('ctrolHoraFin')?.disable();
+    //this.formulario.get('ctrolArea')?.disable();
+    //this.formulario.get('ctrolMaquina')?.disable();
+    //this.formulario.get('ctrolHoraInicio')?.disable();
+    //this.formulario.get('ctrolHoraFin')?.disable();
 
     //Setea Valores
     this.formulario.get('ctrolFecha')?.setValue(fechaFormateada);
@@ -103,6 +110,7 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
     const paroMaquina = this.formulario.get('ctrolParoMaquina')?.value;
     const hora_inicio = this.formulario.get('ctrolHoraInicio')?.value || '';
     const hora_fin = this.formulario.get('ctrolHoraFin')?.value || ''; 
+    const nombreFile = (this.formulario.get('ctrolFotografia')?.value);
 
     if (!qrValue || qrValue.trim() === '') {
       this.matSnackBar.open('Debes escanear el código QR de la máquina antes de continuar con el proceso.', 'Cerrar', { duration: 3000 });
@@ -110,7 +118,7 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
       return;
     } 
 
-    if ((!areaValue || areaValue.trim() === '') || (!maquinaValue || maquinaValue.trim() === '')) {
+    if ((!areaValue || areaValue.trim() === '') /*|| (!maquinaValue || maquinaValue.trim() === '')*/) {
       this.matSnackBar.open('Debes escanear un código QR valido, área y máquina vacios.', 'Cerrar', { duration: 3000 });
       return;
     }
@@ -148,9 +156,32 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
         const cod_Area = this.sCodArea;
         const cod_Maquina = this.sCodMaquina;
 
+        const formData = new FormData();
+        formData.append("sOpcion", "I");
+        formData.append("sCod_Solicitud", " ");
+        formData.append("sCod_Area", cod_Area);
+        formData.append("sCod_Maquina", cod_Maquina);
+        formData.append("sObservacion", observacion);
+        formData.append("sPrioridad", prioridad);
+        formData.append("sParo_Maquina", String(paroMaquina) );
+        formData.append("sHora_Inicio", hora_inicio);
+        formData.append("sUsu_Registro", this.data.sCod_Usuario);
+        
+        if (!this.selectedFile){
+          formData.append("sRuta_Fotografia", "");
+          formData.append("itm_Foto", null);
+        }else {
+          formData.append("sRuta_Fotografia", this.selectedFile.name);
+          formData.append("itm_Foto", this.selectedFile);
+        }
+
+        console.log('onSave-data', formData);
+        //return;
+
         /********************/
         //Solicitud de Mantenimiento
         /********************/
+        /*
         let data: any = {
           "accion"            : "I" ,          
           "cod_Solicitud"     : ""  ,
@@ -164,13 +195,12 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
           "hora_Fin"          : hora_fin    ,
           "usu_Registro"      : this.data.sCod_Usuario
         };
-
-        console.log('onSave-data', data);
+        */
         //return;
 
         //GUARDAR
         this.SpinnerService.show();
-        this.serviceSolicitudMnto.postProcesoMntoSolicitudMantenimiento(data).subscribe({
+        this.serviceSolicitudMnto.postProcesoMntoSolicitudMantenimiento(formData).subscribe({
             next: (response: any)=> {
               if(response.success){
                 if (response.codeResult == 200){
@@ -208,36 +238,103 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
 
   onScanQR(codigo: string, event: any){
 
-    event.preventDefault();   // ❌ evita que el Enter avance al siguiente control
-    event.stopPropagation();  // ❌ evita propagación al siguiente campo
-    console.log('log.');
+    //event.preventDefault();   // ❌ evita que el Enter avance al siguiente control
+    //event.stopPropagation();  // ❌ evita propagación al siguiente campo
+    
+    
     if (!codigo) return;
 
-    this.SpinnerService.show();
-    this.serviceSolicitudMnto.getObtieneInformacionMaquinas(codigo).subscribe(
-      (result: any) => {
-        if (result.totalElements > 0) {
-          console.log('resultado');
-          console.log(result);
 
-          this.formulario.get('ctrolArea')?.setValue(result.elements[0].nomb_Area_Tej_Mante_Maq);
-          this.formulario.get('ctrolMaquina')?.setValue(result.elements[0].des_Maquina_Tejeduria);
-          this.sCodArea = result.elements[0].cod_Area_Tej_Mante_Maq;
-          this.sCodMaquina = result.elements[0].cod_Maquina_Tejeduria;
+    //Obtiene el codigo QR
+    const resultQR = codigo;
+    const parts = resultQR
+      .split(/\\+/)           // separa por '\' (regex) 
+      .map(s => s.trim())     // quita espacios al inicio/fin
+      .filter(s => s.length); // elimina elementos vacíos  
 
-          setTimeout(() => this.inputObservacion?.nativeElement.focus(), 300);
+    //OBTENEMOS EL PRIMER ARRAY CON TODOS SUS VALORES
+    const parte0 = parts[0]; // Por ejemplo: "?3Q1?&&&0000102&&&BDMP10_HCP2&&&"       
+    
+    if (parte0 && parte0.startsWith('?3Q1?')) {
+      if (parte0 && parte0.length >= 14) {
 
-        }
-        else {
-          this.SpinnerService.hide();
-          this.matSnackBar.open("No existe código scaneado..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
-        }
-      },
-      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
-        duration: 1500,
-      }))       
+        // Obtener desde el carácter 8 (índice 7), y tomar 7 caracteres EL CODIGOO DE MAQUINA
+        const codigoExtraido = parte0.substring(8, 7 + 8);  
+        this.formulario.get('ctrolQR')?.setValue(''); 
 
-      this.SpinnerService.hide();
+        //Obtenemos la descripción de la maquina
+        this.SpinnerService.show();
+        this.serviceSolicitudMnto.getObtieneInformacionMaquinas(codigoExtraido).subscribe(
+          (result: any) => {
+            if (result.totalElements > 0) {
+
+              //Activa Input file
+              this.isInfoCargada = true;
+              this.formulario.get('ctrolQR')?.setValue(codigoExtraido); 
+
+              //this.formulario.get('ctrolArea')?.setValue(result.elements[0].nomb_Area_Tej_Mante_Maq);
+              //this.formulario.get('ctrolMaquina')?.setValue(result.elements[0].des_Maquina_Tejeduria);
+
+              const area = result.elements[0].nomb_Area_Tej_Mante_Maq;
+              const maquina = result.elements[0].des_Maquina_Tejeduria;
+              this.formulario.get('ctrolArea')?.setValue(`${area} / ${maquina}`);
+              
+
+              this.sCodArea = result.elements[0].cod_Area_Tej_Mante_Maq;
+              this.sCodMaquina = result.elements[0].cod_Maquina_Tejeduria;
+
+              this.SpinnerService.hide();
+              setTimeout(() => this.inputObservacion?.nativeElement.focus(), 300);
+
+            }
+            else {
+
+              this.SpinnerService.hide();
+              this.isInfoCargada = false;
+              //this.formulario.get('ctrolQR')?.setValue('');
+              this.formulario.get('ctrolQR')?.reset();
+              this.inputQR.nativeElement.focus();
+
+              this.matSnackBar.open("No existe código scaneado..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+              this.inputQR.nativeElement.focus();
+            }
+          },
+          (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+            duration: 1500,
+          }))       
+      }else {
+        const sMessage = 'No contiene Codigo de Maquina';
+
+        this.isInfoCargada = false;
+        this.inputQR.nativeElement.focus();
+        this.formulario.get('ctrolQR')?.reset();        
+
+        this.matSnackBar.open(sMessage, 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['mi-snackbar-advertencia']
+        });    
+        
+   
+
+      }
+    }else{
+      const sMessage = 'Escanee un codigo Valido!';
+
+      this.isInfoCargada = false;
+      this.inputQR.nativeElement.focus();
+      this.formulario.get('ctrolQR')?.reset();
+      
+
+      this.matSnackBar.open(sMessage, 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['mi-snackbar-advertencia']
+      });        
+
+    }    
   }
 
   onFileSelected(event: Event) {
@@ -247,8 +344,45 @@ export class DialogSolicitudMntoCreateComponent implements OnInit {
       this.fileName = file.name;
       this.selectedFile = file;
     }
-  }  
-
+  }
   
+
+  ActiveCameraScanQR(event: any): void {
+    this.camaraActiva = true;
+    BrowserCodeReader
+      .listVideoInputDevices()
+      .then(videoInputDevices => {
+        // Buscar cámara trasera (usualmente contiene "back" o "environment")
+        const backCamera = videoInputDevices.find(device =>
+          device.label.toLowerCase().includes('back') ||
+          device.label.toLowerCase().includes('environment')
+        ) || videoInputDevices[0]; // fallback a la primera si no se encuentra
+
+        if (!backCamera) {
+          console.error('No se encontró cámara trasera');
+          return;
+        }
+
+        const codeReader = new BrowserMultiFormatReader();
+        const videoElement = document.querySelector('video');
+        codeReader.decodeFromVideoDevice(backCamera.deviceId, videoElement, (result, error, controls) => {
+          if (result) {
+            //this.onScanQR(result.getText(), event); // tu función personalizada
+            //console.log('Codigo QR', result.getText());
+            const sCodigoScan = result.getText();
+            this.onScanQR(sCodigoScan, null);
+
+            controls.stop(); // detener escaneo después de leer
+            this.camaraActiva = false;
+          }
+          if (error) {
+            console.error(error);
+          }          
+        });
+      })
+      .catch(err => {
+        console.error('Error al acceder a la cámara:', err);
+    });
+  }
 
 }

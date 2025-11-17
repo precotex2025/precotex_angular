@@ -1,13 +1,29 @@
 
-<h2 mat-dialog-title class="dialog-title">Finalizar Formato de Hora (00:00 a 24 horas)</h2>
+<h2 mat-dialog-title class="dialog-title">Finalizar Formato de Hora (00:00 a 24 horas)
+
+    <!-- 🔹 Botón flotante de cerrar -->
+  <button mat-icon-button class="btn-cerrar-modal" (click)="onCancelar()" aria-label="Cerrar">
+    <mat-icon>close</mat-icon>
+  </button>
+
+</h2>
 
 <mat-dialog-content class="dialog-content">
   <form [formGroup]="formulario" class="form-grid">
 
+    <div appearance="outline">
+        <video #videoElement width="300" height="200" *ngIf="camaraActiva"></video>
+        <!-- <p *ngIf="qrInvalido">Resultado: {{ qrResult }}</p> -->
+    </div>    
+
     <!-- Escanear Codigo QR -->
-    <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field appearance="outline" class="full-width" *ngIf="Flg_ShowCtrolQR"> 
       <mat-label>Scanear QR</mat-label>
-      <input matInput #inputQR formControlName="ctrolQR" placeholder="Scanea tu Código" (keyup.enter)="onScanQR(inputQR.value, $event)">
+      <input matInput #inputQR formControlName="ctrolQR" placeholder="Scanea tu Código" (change)="onScanQR(inputQR.value, $event)">
+      <!-- Icono QR al lado derecho disabled -->
+      <button mat-icon-button matSuffix (click)="ActiveCameraScanQR($event)">
+        <mat-icon matPrefix class="qr">qr_code_scanner</mat-icon>
+      </button>       
     </mat-form-field>     
 
     <!-- Primera fila -->
@@ -134,6 +150,12 @@
       </mat-select>
     </mat-form-field>
 
+    <!-- Jefe de Grupo -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Jefe de Grupo</mat-label>
+      <input matInput formControlName="ctrolJefeGrupo">
+    </mat-form-field>        
+
     <!-- Descripción del evento -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Descripción del Evento</mat-label>
@@ -146,20 +168,36 @@
       <textarea matInput formControlName="ctrolProcedimientoSolucion" rows="2"></textarea>
     </mat-form-field>
 
+    <!-- Observacion de Aprobacion o Rechazo -->
+    <mat-form-field *ngIf="CodEstadoMant === '03' && Flg_ShowObservacionOT" appearance="outline" class="full-width">
+      <mat-label>Observacion (Aprueba/Rechazo)</mat-label>
+      <textarea matInput formControlName="ctrolObservacion" rows="2"></textarea>
+    </mat-form-field>
+
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="center">
   <button *ngIf="CodEstadoMant === '01' && Flg_ShowBotonIniciar" type="button" class="button-iniciar" id="btnIniciar"  (click)="onIniciar()" mat-flat-button color="primary">
-    <mat-icon aria-label="person" >access_time
+    <mat-icon aria-label="person">access_time
     </mat-icon>  Iniciar
   </button>     
   
-  <button *ngIf="CodEstadoMant !== '01'" type="button" class="button-cerrar" id="btnIniciar"  (click)="onCerrarOT()" mat-flat-button color="primary">
+  <button *ngIf="CodEstadoMant === '02' && Flg_ShowBotonCerrarOT" type="button" class="button-cerrar" id="btnIniciar"  (click)="onCerrarOT()" mat-flat-button color="primary">
     <mat-icon aria-label="person" >lock
     </mat-icon>  Cerrar OT
   </button>  
-<!-- 
-  <button mat-raised-button color="primary" (click)="onAceptar()">Aceptar</button> -->
-  <button mat-raised-button color="warn" (click)="onCancelar()">Salir</button>
+
+  <button *ngIf="CodEstadoMant === '03' && Flg_ShowBotonAprobarOT" type="button" class="btn-verde" id="btnAprobar"  (click)="onAprobarVB()" mat-flat-button>
+    <mat-icon aria-label="person" >done
+    </mat-icon>  Aprobar
+  </button>    
+
+    <button *ngIf="CodEstadoMant === '03' && Flg_ShowBotonRechazarOT" type="button" class="button-cerrar" id="btnRechazar"  (click)="onRechazarVB()" mat-flat-button color="warn">
+    <mat-icon aria-label="person" >cancel
+    </mat-icon>  Rechazar
+  </button>  
+ 
+  <!-- <button mat-raised-button color="primary" (click)="onAceptar()">Aceptar</button> -->
+  <!-- <button mat-raised-button color="warn" (click)="onCancelar()">Salir</button> -->
 </mat-dialog-actions>

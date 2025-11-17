@@ -194,7 +194,6 @@ export class MemorandumGralComponent implements OnInit {
       next: (response: any)=> {
         if(response.success){
           if (response.totalElements > 0){
-              console.log('onGetMemorandums',response.elements);
               this.dataListadoMemorandums = response.elements;
               this.dataSource.data = this.dataListadoMemorandums;
               this.dataSource.sort = this.sort;
@@ -599,9 +598,9 @@ export class MemorandumGralComponent implements OnInit {
       this.selection.toggle(row);
 
       //El boton de Devolver solo se debe reflejar 
-      //When Estado es igual '05' - Recepcion Final
+      //When Estado es igual '06' - Recepcion Final
       //When Tipo de Memo '02'    - Con Retorno 
-      if (sCodEstadoMemo === '05' && sCod_Tipo_Memo === '02' && scod_Usuario_Receptor.trim().toLowerCase() === this.sUsuario.trim().toLowerCase()){
+      if (sCodEstadoMemo === '06' && sCod_Tipo_Memo === '02' && scod_Usuario_Receptor.trim().toLowerCase() === this.sUsuario.trim().toLowerCase()){
         this.bBotonProcesoDevolver = true;
       }else{
         this.bBotonProcesoDevolver = false;

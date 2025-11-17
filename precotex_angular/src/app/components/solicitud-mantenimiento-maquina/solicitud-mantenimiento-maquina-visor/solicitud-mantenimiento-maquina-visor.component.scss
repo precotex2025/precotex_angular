@@ -57,3 +57,67 @@ overflow-x: auto;
     justify-content: center;
 }
 }
+
+//columna numero de memo
+.memo-cell {
+  color: blue;
+  font-weight: bold;
+}
+
+.btn-rojo{
+    background  : #f44336;
+    color       : #ffff;
+    font-weight : bold;
+}
+
+.btn-blue{
+    background  : #1568d6;
+    color       : #ffff;
+    font-weight : bold;
+}
+
+
+// .prioridad-alta {
+//   background-color: #ea4441    !important;  /* rojo fuerte */
+//   border-left: 4px solid #ffb300;
+// }
+
+// .prioridad-media {
+//   background-color: #fedc00 !important;
+//   border-left: 4px solid #ff9800;
+// }
+
+// .prioridad-baja {
+//   background-color: #e8f5e9;
+//   border-left: 4px solid #4caf50;
+// }
+
+// ::ng-deep .mat-row.prioridad-alta td {
+//   color: #ffffff !important;
+// }
+
+// ::ng-deep .mat-row.prioridad-media td {
+//   color: #0a0303 !important;
+// }
+
+
+.header-container {
+  display: flex;
+  justify-content: space-between; /* Título a la izquierda, botón a la derecha */
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.title {
+  margin: 0;
+  font-weight: 600;
+  color: #2b2b2b;
+}
+
+.admin-container {
+  padding: 1.5rem;
+}
+
+.export-button {
+  margin-left: auto;
+}
