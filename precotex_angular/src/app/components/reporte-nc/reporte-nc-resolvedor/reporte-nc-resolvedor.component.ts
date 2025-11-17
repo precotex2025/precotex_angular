@@ -288,7 +288,7 @@ export class ReporteNcResolvedorComponent implements OnInit, OnDestroy {
           });
           return;
         }
-
+      console.log('LOS DATOS A ENVIAR SON: ', EnviarData);
       Swal.fire({
         title: "¿Desea Actualizar el Registro?",
         icon: 'question',

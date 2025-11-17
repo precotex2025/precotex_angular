@@ -38,8 +38,8 @@ interface data_req{
   styleUrls: ['./retiro-repuestos.component.scss']
 })
 export class RetiroRepuestosComponent implements OnInit {
- FormData: FormGroup;
- @ViewChild(MatSort) sort!: MatSort;   
+  FormData: FormGroup;
+  @ViewChild(MatSort) sort!: MatSort;   
   constructor(
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
