@@ -91,12 +91,21 @@
                                 </ng-container>
 
                                 <!-- Paro Máquina -->
-                                <ng-container matColumnDef="paroMaquina">
+                                <!-- <ng-container matColumnDef="paroMaquina">
                                 <th mat-header-cell *matHeaderCellDef>Paro MQ</th>
                                 <td mat-cell *matCellDef="let row">
                                     <button mat-flat-button color="warn"
                                     [ngClass]="row.paro_Maquina == 1 ? 'btn-rojo' : 'btn-blue'"
                                     >{{ row.paro_Maquina ? 'Sí' : 'No' }}</button>
+                                </td>
+                                </ng-container> -->
+
+                                <ng-container matColumnDef="paroMaquina">
+                                <th mat-header-cell *matHeaderCellDef>Paro MQ</th>
+                                <td mat-cell *matCellDef="let row">
+                                    <span [ngClass]="row.paro_Maquina == 1 ? 'paro-activo' : 'paro-inactivo'">
+                                    {{ row.paro_Maquina ? 'Sí' : 'No' }}
+                                    </span>
                                 </td>
                                 </ng-container>
 
@@ -104,7 +113,10 @@
                                 <ng-container matColumnDef="prioridad">
                                 <th mat-header-cell *matHeaderCellDef>Prioridad</th>
                                 <td mat-cell *matCellDef="let row">
-                                    <span [ngClass]="row.prioridad.toLowerCase()">{{ row.prioridad }}</span>
+                                    <!-- <span [ngClass]="row.prioridad.toLowerCase()">{{ row.prioridad }}</span> -->
+                                    <span [ngClass]="getPrioridadClass(row.prioridad)">
+                                    {{ row.prioridad }}
+                                    </span>       
                                 </td>
                                 </ng-container>
 
@@ -139,7 +151,7 @@
                                 <ng-container matColumnDef="estado">
                                 <th mat-header-cell *matHeaderCellDef>Estado</th>
                                 <td mat-cell *matCellDef="let row">
-                                    <span [ngClass]="getEstadoClass(row.estado)">
+                                    <span [ngClass]="getEstadoClass(row.cod_Estado_Mant)">
                                     {{ row.estado }}
                                     </span>                                    
                                 </td>

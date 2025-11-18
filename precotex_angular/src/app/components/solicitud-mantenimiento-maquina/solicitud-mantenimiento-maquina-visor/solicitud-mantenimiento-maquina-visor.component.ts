@@ -86,11 +86,11 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
     this.ObtieneSedeByUser();
     this.ObtenerDatosVisor();
 
-    // 🔁 Refrescar cada 30 segundos (30000 ms)
+    //Refrescar cada 60 segundos
     this.intervalId = setInterval(() => {
       console.log('🔄 Refrescando bandeja...');
       this.ObtenerDatosVisor();
-    }, 30000);    
+    }, 60000);    
 
   }
   
@@ -99,7 +99,7 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
     'atender'       ,
     'cod_Solicitud' , 
     'cod_Area'      , 
-    'cod_Maquina'   , 
+    'cod_Maquina'   ,
     'tipo_tarea',     //Nuevo
     'tipo_falla',     //Nuevo
     //'observacion'   , 
@@ -114,8 +114,8 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
     // 'usu_Registro', 
     //'cod_Usuario_Tecnico', 
     'des_Usuario_Tecnico' ,
+    'nombre_Estado'       ,    
     'ruta_Fotografia'     , 
-    'nombre_Estado'       ,
   ];
 
   exportarExcel() {
@@ -302,7 +302,40 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
          });
       }
     });
+  }
+
+  getEstadoClass(estado: string): string {
+  switch (estado.trim().toLowerCase()) {
+    case '01':
+      return 'estado-reportado';
+    case '02':
+      return 'estado-atencion';
+    case '03':
+      return 'estado-pendiente';
+    case '04':
+      return 'estado-cerrado';
+    case '05':
+      return 'estado-rechazado';
+    default:
+      return '';
+    }
+  }
+
+  getPrioridadClass(prioridad: string): string {
+    switch (prioridad?.trim()) {
+      case 'Alta':
+        return 'prioridad-alta';
+      case 'Media':
+        return 'prioridad-media';
+      case 'Baja':
+        return 'prioridad-baja';
+      default:
+        return '';
+    }
   }  
 
-
+  getParoMaquinaClass(valor: number): string {
+    return valor === 1 ? 'paro-activo' : 'paro-inactivo';
+  }  
+  
 }

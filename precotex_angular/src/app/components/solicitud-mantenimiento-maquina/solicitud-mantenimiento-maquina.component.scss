@@ -207,3 +207,45 @@ font-weight: bold;
   padding: 4px 8px;
   border-radius: 4px;
 }
+
+//Prioridad
+.prioridad-alta {
+  background-color: #ef9a9a;
+  color: #b71c1c;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.prioridad-media {
+  background-color: #fff59d;
+  color: #f57f17;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.prioridad-baja {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+//Paro Maquina
+.paro-activo {
+  background-color: #ef5350; /* rojo alerta */
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.paro-inactivo {
+  background-color: #42a5f5; /* azul informativo */
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
