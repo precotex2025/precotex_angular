@@ -323,9 +323,8 @@ ngOnInit(): void {
 
     this.despachoTelaCrudaService.cargarMaquinas(Cod_Tarea).subscribe(
       (result: any) => {
-
         this.listaMaquinas = result;
-        this.formulario.get('ctrolMaquina')?.setValue( String(this.data.Datos.cod_Maquina));
+        this.formulario.get('ctrolMaquina')?.setValue( String(this.data.Datos.cod_Maquina).trim());
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
   }  
