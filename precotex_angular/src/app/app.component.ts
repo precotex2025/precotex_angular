@@ -34,6 +34,7 @@ export class AppComponent implements OnInit {
 
 
   ngOnInit(): void {
+    
     this.login_activo = true;
     this.usuario = GlobalVariable.vusu;
     

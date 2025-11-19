@@ -32,6 +32,8 @@ export class RegistroPartidaParihuelaService {
     })
 
     obtenerDetPartida(Cod_Partida: string, Opcion: string) {
+      console.log("Servicio Cod_Partida:", Cod_Partida);
+      console.log("Servicio Opcion:", Opcion);
       const headers = this.Header;
       let params = new HttpParams();
       return this.http.get(this.urlRegistro + '/getObtenerDetPartida?pCod_Partida=' + Cod_Partida + "&pOpcion="+ Opcion,{ headers, params });
