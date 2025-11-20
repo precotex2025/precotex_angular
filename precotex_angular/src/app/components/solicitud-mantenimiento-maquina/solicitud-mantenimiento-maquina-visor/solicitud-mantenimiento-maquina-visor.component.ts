@@ -1,5 +1,5 @@
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { SolicitudMantenimientoService } from 'src/app/services/SolicitudMantenimiento/solicitud-mantenimiento.service';
@@ -58,12 +58,14 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
 
   //RUTA -> SolicitudMantenimientoMaquinaVisor
   @ViewChild(MatSort) sort!: MatSort;  
+  @ViewChild('visorFoto') visorFoto!: TemplateRef<any>;
+
   constructor(
     public solicitudService   : SolicitudMantenimientoService,
     private serviceMemorandum : MemorandumGralService,
     private SpinnerService : NgxSpinnerService,
     private exceljsService : ExceljsService   ,
-    private dialog         : MatDialog        ,
+    public dialog         : MatDialog        ,
     private matSnackBar    : MatSnackBar      ,
     private registromantemaquinastej: RegistroManteMaquinasTejService   ,
     private toastr      : ToastrService ,
@@ -98,14 +100,16 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
   displayedColumns: string[] = [
     'atender'       ,
     'cod_Solicitud' , 
+    'fec_Registro'  , 
     'cod_Area'      , 
     'cod_Maquina'   ,
-    'tipo_tarea',     //Nuevo
-    'tipo_falla',     //Nuevo
-    //'observacion'   , 
+    'tipo_tarea'    ,     //Nuevo
+    'tipo_falla'    ,     //Nuevo
+    'supervisor'    ,     //Nuevo
+    'observacion'   , 
     'paro_Maquina'  , 
     'prioridad'     ,
-    'fec_Registro'  , 
+    
     // 'hora_Reporte'  , 
     'hora_Inicio'   , 
     't1_Tiempo_Espera_Min_Des', 
@@ -336,6 +340,18 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
 
   getParoMaquinaClass(valor: number): string {
     return valor === 1 ? 'paro-activo' : 'paro-inactivo';
-  }  
+  }
+  
+  verFoto(url: string) {
+    this.dialog.open(this.visorFoto, {
+      data: url,
+    panelClass: 'visor-dialog',
+    width: '100vw',
+    height: '100vh',
+    maxWidth: '100vw',
+    autoFocus: false,
+    restoreFocus: false
+    });
+  }
   
 }

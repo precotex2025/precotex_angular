@@ -28,6 +28,11 @@
         <td mat-cell *matCellDef="let visor" class="memo-cell">{{ visor.cod_Solicitud }}</td>
     </ng-container>
 
+    <ng-container matColumnDef="fec_Registro">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>FECHA REPORTE</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.fec_Registro | date:'dd/MM/yyyy' }}</td>
+    </ng-container>    
+
     <ng-container matColumnDef="cod_Area">
       <th mat-header-cell *matHeaderCellDef class="area-header" mat-sort-header>AREA</th>
       <td mat-cell *matCellDef="let visor">{{ visor.area }}</td>
@@ -42,15 +47,22 @@
       <td mat-cell *matCellDef="let visor">{{ visor.nombre_Tarea }}</td>
     </ng-container>
 
+
+
     <ng-container matColumnDef="tipo_falla">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>TIPO FALLA</th>
       <td mat-cell *matCellDef="let visor">{{ visor.desc_TipFall }}</td>
     </ng-container>    
 
-    <!-- <ng-container matColumnDef="observacion">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción Falla</th>
+    <ng-container matColumnDef="supervisor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>SUPERVISOR</th>
+      <td mat-cell *matCellDef="let visor">{{ visor.supervisor }}</td>
+    </ng-container>        
+
+    <ng-container matColumnDef="observacion">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>OBS. SUPERVISOR</th>
       <td mat-cell *matCellDef="let visor">{{ visor.observacion }}</td>
-    </ng-container> -->
+    </ng-container> 
 
     <!-- <ng-container matColumnDef="paro_Maquina">
       <th mat-header-cell *matHeaderCellDef>Paro Maquina</th>
@@ -86,10 +98,6 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="fec_Registro">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>FECHA REPORTE</th>
-      <td mat-cell *matCellDef="let visor">{{ visor.fec_Registro | date:'dd/MM/yyyy' }}</td>
-    </ng-container>
     <!-- <ng-container matColumnDef="hora_Reporte">
       <th mat-header-cell *matHeaderCellDef>Hora Reporte</th>
       <td mat-cell *matCellDef="let visor">{{ visor.hora_Reporte }}</td>
@@ -142,7 +150,9 @@
       <th mat-header-cell *matHeaderCellDef>FOTO</th>
       <td mat-cell *matCellDef="let data_visor">
       <img [src]="solicitudService.getImagenUrl(data_visor.ruta_Fotografia)" 
-                  alt='Foto' width="40" height="40" />
+                  alt='Foto' width="40" height="40" 
+                  (click)="verFoto(solicitudService.getImagenUrl(data_visor.ruta_Fotografia))"
+                  />
                   <a *ngIf = "data_visor.ruta_Fotografia == '' "></a>
       </td>
     </ng-container>    
@@ -158,6 +168,15 @@
 </div> -->
 </div>
 
-<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
-    <p style="color: white; text-align: center; ">Cargando... </p>
+<ng-template #visorFoto let-data>
+  <div class="visor-wrapper">
+    <button mat-icon-button class="cerrar-btn" (click)="dialog.closeAll()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <img [src]="data" alt="Foto ampliada" class="foto-responsiva" />
+  </div>
+</ng-template>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default">
+    <div class="loader"></div>
 </ngx-spinner>
