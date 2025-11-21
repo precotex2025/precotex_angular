@@ -149,18 +149,27 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
     this.solicitudService.getObtieneInformacionSolicitudesVisor().subscribe({
       next: (response: any) => {
         if(response.success){
-          this.solicitudesLst = response.elements.map((item: any) => ({
-            ...item,
-            paro_Maquina: item.paro_Maquina ? 'SI' : 'NO'
-          }));
-          this.dataSource.data = this.solicitudesLst;
-          this.dataSource.sort = this.sort;
-          this.SpinnerService.hide();
 
-          // Ocultar la columna 'atender' si el perfil es 23
-          if (this.sCod_Espe === "23") {
-            this.displayedColumns = this.displayedColumns.filter(c => c !== 'atender');
-          }            
+          if (response.totalElements > 0){
+
+            this.solicitudesLst = response.elements.map((item: any) => ({
+              ...item,
+              paro_Maquina: item.paro_Maquina ? 'SI' : 'NO'
+            }));
+            this.dataSource.data = this.solicitudesLst;
+            this.dataSource.sort = this.sort;
+            this.SpinnerService.hide();
+
+            // Ocultar la columna 'atender' si el perfil es 23
+            if (this.sCod_Espe === "23") {
+              this.displayedColumns = this.displayedColumns.filter(c => c !== 'atender');
+            }   
+            
+          }else{
+            this.solicitudesLst = [];
+            this.dataSource.data = [];            
+            this.SpinnerService.hide();            
+          }
 
         }else{
           this.solicitudesLst = [];
@@ -169,6 +178,8 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
         }
       },
       error: (error) => {
+        this.solicitudesLst = [];
+        this.dataSource.data = [];        
         this.SpinnerService.hide();
         console.log(error.error.message, 'Cerrar', {
           timeout: 2500
