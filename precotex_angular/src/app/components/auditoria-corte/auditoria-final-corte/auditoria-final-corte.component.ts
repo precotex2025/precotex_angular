@@ -57,6 +57,8 @@ interface data_det {
   Des_Motivo?: string;
   Cantidad?: number;
   Tipo?: string;
+  Ver_ate?: boolean;
+  Solo_ver?: boolean;
 }
 
 @Component({
@@ -98,6 +100,7 @@ export class AuditoriaFinalCorteComponent implements OnInit {
   
   ll_Registro: boolean = false;
   ll_soloVer: boolean = false;
+  ll_verAte: boolean = false;
   columnsToDisplay: string[] = this.displayedColumns_cab.slice();
 
   constructor(private formBuilder: FormBuilder,
@@ -143,13 +146,15 @@ export class AuditoriaFinalCorteComponent implements OnInit {
   }
 
   onAgregarRegistro(){
+    let data_det: data_det = {Ver_ate: this.ll_verAte, Solo_ver: !this.ll_soloVer}
+
     let dialogRef = this.dialog.open(DialogAuditoriaFinalCorteRegistroComponent, {
       disableClose: true,
       maxWidth: "1150px", //-'60vw',
       maxHeight: "690px", //-'70vh',
       height: '100%',
       width: '100%',
-      data: {}
+      data: data_det  // {}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -158,6 +163,9 @@ export class AuditoriaFinalCorteComponent implements OnInit {
   }
 
   onEditarRegistro(data_det: data_det){
+    data_det.Ver_ate = this.ll_verAte;
+    data_det.Solo_ver = !this.ll_soloVer;
+
     let dialogRef = this.dialog.open(DialogAuditoriaFinalCorteRegistroComponent, {
         disableClose: true,
         maxWidth: "1150px", //-'60vw',
@@ -313,6 +321,7 @@ export class AuditoriaFinalCorteComponent implements OnInit {
         if(crud.length > 0){
           this.ll_Registro = crud[0].Flg_Insertar == 1 ? true : false;
           this.ll_soloVer = crud[0].Flg_Consultar == 1 ? true : false;
+          this.ll_verAte = crud[0].Flg_Verificar == 1 ? true : false;
         } else {
           this.formulario.patchValue({
             CodAuditor: GlobalVariable.vtiptra.trim().concat("-").concat(GlobalVariable.vcodtra.trim())

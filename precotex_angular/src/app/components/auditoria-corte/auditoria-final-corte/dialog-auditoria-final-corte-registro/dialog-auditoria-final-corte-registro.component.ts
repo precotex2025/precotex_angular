@@ -45,6 +45,8 @@ interface data {
   Flg_Estado: string;
   Fecha_Registro: string;
   Flg_Estado_Name: string;
+  Ver_ate?: boolean;
+  Solo_ver?: boolean;
 }
 
 interface Auditor {
@@ -97,6 +99,8 @@ export class DialogAuditoriaFinalCorteRegistroComponent implements OnInit {
   Num_Rechazos: number = 0;
   isButtonDisabled: boolean = true;
   isDefectoDisabled: boolean = false;
+  ll_verAte: boolean = false;
+  ll_soloVer: boolean = false;
 
   step = 0;
   Titulo = '';
@@ -199,6 +203,8 @@ export class DialogAuditoriaFinalCorteRegistroComponent implements OnInit {
   obtenerInformacion(){
     this.definirTitulo();
     this.CargarOperacionAuditor();
+    this.ll_verAte = this.data.Ver_ate;
+    this.ll_soloVer = this.data.Solo_ver;
   }
 
   definirTitulo(){

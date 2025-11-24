@@ -50,6 +50,8 @@ interface data {
   Flg_Estado: string;
   Fecha_Registro: string;
   Flg_Estado_Name: string;
+  Ver_ate?: boolean;
+  Solo_ver?: boolean;
 }
 
 interface Auditor {
@@ -85,6 +87,8 @@ export class DialogAuditoriaProcesoCorteRegistroComponent implements OnInit {
   Flg_Estado = '0';
   Flg_Estado_Corte = '1'
   isButtonDisabled: boolean = true;
+  ll_verAte: boolean = false;
+  ll_soloVer: boolean = false;
 
   step = 0;
   Titulo = '';
@@ -165,7 +169,7 @@ export class DialogAuditoriaProcesoCorteRegistroComponent implements OnInit {
     sCodMotivo: [''],
     sDesMotivo: [{value: '', disabled: true}],
     sCantidad: [0],
-    sTipo: ['']
+    sTipo: [''],
   });
 
   constructor(
@@ -190,6 +194,8 @@ export class DialogAuditoriaProcesoCorteRegistroComponent implements OnInit {
   obtenerInformacion(){
     this.definirTitulo()
     this.CargarOperacionAuditor()
+    this.ll_verAte = this.data.Ver_ate;
+    this.ll_soloVer = this.data.Solo_ver;
   }
 
   definirTitulo(){
