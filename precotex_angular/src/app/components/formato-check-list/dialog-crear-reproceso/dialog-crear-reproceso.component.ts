@@ -338,6 +338,7 @@ export class DialogCrearReprocesoComponent implements OnInit {
       formData.append('Linea', '');
       formData.append('chk_go', "0");
       formData.append('chk_jc', "0");
+      formData.append('Cod_Present', '');
 
       this.spinnerService.show();
       this.checkListService.Cf_Mantenimiento_CheckList(formData)

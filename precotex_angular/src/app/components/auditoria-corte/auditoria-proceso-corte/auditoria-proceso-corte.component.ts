@@ -61,6 +61,8 @@ interface data_det {
   Des_Motivo?: string;
   Cantidad?: number;
   Tipo?: string;
+  Ver_ate?: boolean;
+  Solo_ver?: boolean;
 }
 
 @Component({
@@ -73,8 +75,10 @@ export class AuditoriaProcesoCorteComponent implements OnInit {
   //Cod_Accion = ''
   Cod_OrdPro=''
   dataForExcel:Array<any> = [];
+  ll_Registro: boolean = false;
   ll_soloVer: boolean = false;
-
+  ll_verAte: boolean = false;
+  
   range = new FormGroup({
     start: new FormControl(),
     end: new FormControl(),
@@ -148,13 +152,15 @@ export class AuditoriaProcesoCorteComponent implements OnInit {
   }
 
   onAgregarRegistro(){
+    let data_det: data_det = {Ver_ate: this.ll_verAte, Solo_ver: !this.ll_soloVer}
+
     let dialogRef = this.dialog.open(DialogAuditoriaProcesoCorteRegistroComponent, {
       disableClose: true,
       maxWidth: "1150px", //-'60vw',
       maxHeight: "690px", //-'70vh',
       height: '100%',
       width: '100%',
-      data: {}
+      data: data_det  // {}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -163,6 +169,9 @@ export class AuditoriaProcesoCorteComponent implements OnInit {
   }
 
   onEditarRegistro(data_det: data_det){
+    data_det.Ver_ate = this.ll_verAte;
+    data_det.Solo_ver = !this.ll_soloVer;
+
     let dialogRef = this.dialog.open(DialogAuditoriaProcesoCorteRegistroComponent, {
         disableClose: true,
         maxWidth: "1150px", //-'60vw',
@@ -344,7 +353,9 @@ export class AuditoriaProcesoCorteComponent implements OnInit {
         crud = res;
 
         if(crud.length > 0){
+          this.ll_Registro = crud[0].Flg_Insertar == 1 ? true : false;
           this.ll_soloVer = crud[0].Flg_Consultar == 1 ? true : false;
+          this.ll_verAte = crud[0].Flg_Verificar == 1 ? true : false;
         }
 
         //this.onListarAuditoriaCorte();  

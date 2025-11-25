@@ -65,6 +65,6 @@ export class SeguimientoToberaService {
   }
 
   saveParamReceta(Data){    
-     return this.http.post(this.baseUrlSaveParamReceta + this.sCod_Usuario,Data);
+     return this.http.post(this.baseUrlSaveParamReceta + this.sCod_Usuario, Data);
    }
 }

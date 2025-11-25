@@ -336,7 +336,7 @@ export class DialogCrearCheckComponent implements OnInit {
   ListarTallas(option) {
     this.Cod_ColCli = this.formulario.get('sColor')?.value
     console.log(option.Cod_Present);
-
+    this.Cod_Present = option.Cod_Present;
     
     this.checkListService.CF_ObtenerCantidad_OP(
       this.Op,
@@ -789,7 +789,8 @@ export class DialogCrearCheckComponent implements OnInit {
       formData.append('Linea', this.formulario.get('Linea').value);
       formData.append('chk_go', "0");
       formData.append('chk_jc', "0");
-
+      formData.append('Cod_Present', this.Cod_Present);
+      
       /* Se reemplaza metodo de solicitud de GET a POST.  2024Dic27, Ahmed*/
       this.checkListService.Cf_Mantenimiento_CheckList(formData)
         .subscribe(res => {
@@ -1092,6 +1093,7 @@ export class DialogCrearCheckComponent implements OnInit {
     formData.append('Linea', this.formulario.get('Linea').value);
     formData.append('chk_go', "0");
     formData.append('chk_jc', "0");
+    formData.append('Cod_Present', this.Cod_Present);
     
     this.checkListService.Cf_Mantenimiento_CheckList(formData)
       .subscribe(res => {

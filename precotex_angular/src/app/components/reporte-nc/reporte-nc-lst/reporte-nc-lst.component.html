@@ -93,16 +93,20 @@
             <td mat-cell *matCellDef="let reporte"> {{ reporte.resp_Nom }} </td>
         </ng-container>
 
-        <!-- Estado -->
-        <ng-container matColumnDef="rep_Est">
-            <th mat-header-cell *matHeaderCellDef> Estado </th>
-            <td mat-cell *matCellDef="let reporte"> {{ reporte.est_Des }} </td>
-        </ng-container>
-
         <!-- Fecha Subsanación -->
         <ng-container matColumnDef="rep_FecSub">
             <th mat-header-cell *matHeaderCellDef> Fecha Subsanación </th>
             <td mat-cell *matCellDef="let reporte"> {{ reporte.rep_FecSub | date:'dd/MM/yyyy' }} </td>
+        </ng-container>
+
+        <!-- Estado -->
+        <ng-container matColumnDef="rep_Est">
+            <th mat-header-cell *matHeaderCellDef> Estado </th>
+            <td mat-cell *matCellDef="let reporte">
+                <!-- *ngIf="reporte.nro_Precinto_Cierre == ''" 
+                (click)="onUpdatePrecintoCierre()"-->
+            <a mat-button class="Boton" (click)="onRedireccionarRegistroCierre(reporte.rep_Id)"> {{ reporte.est_Des }} </a>
+            </td>
         </ng-container>
 
         <!-- Acción -->

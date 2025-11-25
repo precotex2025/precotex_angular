@@ -159,3 +159,34 @@
       transform: none;
     }
   }
+
+  @media screen and (max-device-width: 1024px) and (orientation: landscape) {
+  body {
+    font-size: 13px;
+  }
+
+  .laboratorio-container,
+  .contenido-principal {
+    font-size: 13px;
+    padding: 0.5rem;
+  }
+
+  .formulacion-cell,
+  .mat-cell,
+  .mat-header-cell {
+    font-size: 0.85rem;
+    padding: 0.4rem;
+  }
+
+  .tabla-colorantes th,
+  .tabla-colorantes td {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+
+  .botones-acciones button {
+    min-width: 120px;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+  }
+}

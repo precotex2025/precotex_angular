@@ -49,6 +49,8 @@ interface Temporada {
 interface Color {
   Cod_ColCli: string;
   Nom_ColCli: string;
+  Cod_Present: string;
+  Des_Present: string;
 }
 
 @Component({
@@ -151,6 +153,7 @@ export class DialogEditarCheckComponent implements OnInit {
     Linea: [{value:'', disabled: true}],
   	chk_go: ['',],
 	  chk_jc: ['',],
+    Cod_Present: ['']
   });
 
   Indicaciones:any = '';
@@ -224,6 +227,7 @@ export class DialogEditarCheckComponent implements OnInit {
       Linea: this.data.Linea,
       chk_go: this.data.chk_go,
       chk_jc: this.data.chk_jc,
+      Cod_Present: this.data.Cod_Present
     });
 
     //this.DeshabilitarDetalle()
@@ -265,8 +269,9 @@ export class DialogEditarCheckComponent implements OnInit {
   /******************************LISTAR LAS TALLAS Y AGREGAR ESAS TALALS A LA COLUMNAS DEL TABLE******************** */
   ListarTallas(option) {
     console.log(option);
-    this.Cod_ColCli = option.Cod_ColCli;
-
+    //this.Cod_ColCli = option.Cod_ColCli;
+    this.Cod_ColCli = option.Des_Present;
+    this.formulario.controls['Cod_Present'].setValue(option.Cod_Present);
   }
 
   changeTicket(event){
@@ -357,6 +362,7 @@ export class DialogEditarCheckComponent implements OnInit {
       let datos = {
         Cod_OrdPro: this.formulario.get('sOP').value,
         Des_Present: this.formulario.get('sColor').value,
+        Cod_Present: this.formulario.get('Cod_Present').value,
         Cod_Talla: this.dataTicket.COD_TALLA,
         Cantidad: this.dataTicket.Cantidad,
         Cantidad_Auditoria: this.dataTicket.Cantidad_Auditoria,
@@ -436,6 +442,7 @@ export class DialogEditarCheckComponent implements OnInit {
     this.formulario.controls['sCliente'].setValue('')
     this.formulario.controls['sEstilo'].setValue('')
     this.formulario.controls['sColor'].setValue('')
+    this.formulario.controls['Cod_Present'].setValue('')
     this.formulario.controls['sTemporada'].setValue('')
     this.formulario.controls['cant'].setValue('')
     this.formulario.controls['sOP'].setValue('')
@@ -848,6 +855,7 @@ export class DialogEditarCheckComponent implements OnInit {
       formData.append('Linea', this.formulario.get('Linea').value);
       formData.append('chk_go', this.formulario.get('chk_go').value ? "1" : "0");
       formData.append('chk_jc', this.formulario.get('chk_jc').value ? "1" : "0");
+      formData.append('Cod_Present', this.formulario.get('Cod_Present').value);
       console.log(formData)
       this.checkListService.Cf_Mantenimiento_CheckList(formData)
         .subscribe(res => {
@@ -1078,13 +1086,26 @@ export class DialogEditarCheckComponent implements OnInit {
   }
 
   /*************************************CARGAR SELECT COLOR*********************************************** */
-  CargarOperacionColor(Nom_TemCli: string) {
+  CargarOperacionColor_old(Nom_TemCli: string) {
 
     this.Nom_TemCli = Nom_TemCli
     this.Cod_ColCli = this.formulario.get('sColor')?.value
     this.Cod_EstCli = this.formulario.get('sEstilo')?.value
     this.Cod_TemCli = this.formulario.get('sTemporada')?.value
     this.defectosAlmacenDerivadosService.Cf_Buscar_Derivado_Estilo_Color(this.Cod_Cliente, this.Cod_TemCli, this.Cod_EstCli).subscribe(
+      (result: any) => {
+        this.listar_operacionColor = result
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
+  }
+
+  CargarOperacionColor(Nom_TemCli: string) {
+
+    this.Nom_TemCli = Nom_TemCli
+    this.Cod_ColCli = this.formulario.get('sColor')?.value
+    this.Cod_EstCli = this.formulario.get('sEstilo')?.value
+    this.Cod_TemCli = this.formulario.get('sTemporada')?.value
+    this.defectosAlmacenDerivadosService.SM_Presentaciones_OrdPro(this.Op).subscribe(
       (result: any) => {
         this.listar_operacionColor = result
       },

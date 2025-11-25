@@ -1,0 +1,67 @@
+<div class="form-wrapper">
+  <mat-card class="form-container">
+    <form #formResolvedor="ngForm">
+
+      <!-- Cierre de NC -->
+      <div class="form-section">
+        <div class="section-title">Cierre de NC</div>
+        <div class="status-buttons">
+          <button mat-button 
+                  *ngFor="let cierre of cierres"
+                  [ngClass]="{ 'selected': cierre.est_Id.toString() === cierreSeleccionado }"
+                  (click)="selectCierre(cierre)">
+            {{ cierre.est_Des }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Detallar Observación -->
+      <div class="form-section">
+        <mat-form-field appearance="fill">
+          <mat-label></mat-label>
+          <mat-label *ngIf="formData.est_Id == '1'">Detallar Razón de Pendiente</mat-label>
+          <mat-label *ngIf="formData.est_Id == '3'">Detallar Observación</mat-label>
+          <textarea matInput rows="3" [(ngModel)]="formDataPatch.rep_DetObs" 
+                    name="observacion"
+                    [disabled]="formData.est_Id == '2'"></textarea>
+        </mat-form-field>
+      </div>
+
+      <!-- Botón para agregar imágenes -->
+      <div class="image-upload">
+        <button mat-stroked-button color="accent" (click)="fileInput.click()">
+          <mat-icon>add_photo_alternate</mat-icon>
+          Agregar imágenes (máx. 2)
+        </button>
+        <input #fileInput type="file"
+               accept="image/*"
+               multiple
+               hidden
+               (change)="onImagenesSeleccionadas($event)">
+      </div>
+
+      <!-- Galería de imágenes -->
+      <div class="form-section">
+        <div class="image-gallery">
+          <div class="image-item" *ngFor="let img of imagenesAdjuntas; let i = index">
+            <img [src]="img.base64ParaVista" alt="{{ img.nombre }}" class="preview-image" />
+            <div class="image-name">{{ img.nombre.substring(img.nombre.indexOf('_') + 1) }}</div>
+            <button mat-icon-button color="warn" (click)="eliminarImagen(i, img.img_Id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+          <div *ngIf="imagenesAdjuntas.length === 0" class="placeholder">
+            No hay imágenes seleccionadas
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones finales -->
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" (click)="onGuardar()" [disabled]="formResolvedor.invalid">Guardar</button>
+        <button mat-button color="warn" (click)="onCancelar()">Cancelar</button>
+      </div>
+
+    </form>
+  </mat-card>
+</div>

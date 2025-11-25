@@ -49,6 +49,7 @@ interface data_det {
   Id_Reauditoria: number;
 	chk_go: number;
 	chk_jc: number;
+  Cod_Present: string;
 }
 
 @Component({
@@ -324,6 +325,7 @@ export class FormatoCheckListComponent implements OnInit {
       formData.append('Linea', data_det.Linea);
       formData.append('chk_go', "0");
       formData.append('chk_jc', "0");
+      formData.append('Cod_Present', data_det.Cod_Present);
 
       this.checkListService.Cf_Mantenimiento_CheckList(formData)
         .subscribe(res => {
@@ -374,6 +376,7 @@ export class FormatoCheckListComponent implements OnInit {
       formData.append('Linea', '');
       formData.append('chk_go', "0");
       formData.append('chk_jc', "0");
+      formData.append('Cod_Present', "");
 
       this.spinnerService.show();
       

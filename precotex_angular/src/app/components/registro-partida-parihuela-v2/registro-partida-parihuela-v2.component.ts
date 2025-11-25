@@ -44,8 +44,6 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
   buscarPartida() {
     let cod_Parihuela = this.busquedaForm.get('codigo')?.value;
     this.cargarCategorias(cod_Parihuela);
-    
-    
   }
 
   agregarComplemento(grupo: FormGroup) {
@@ -71,6 +69,7 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
         if(response.success){
           if(response.totalElements > 0){
             this.parihuelas = response.elements;
+            console.log("Detalle de parihuelas:", this.parihuelas);
             this.crearFormularioDesdeData(this.parihuelas);
             this.SpinnerService.hide();
           }else{
@@ -99,9 +98,9 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
     if (!agrupado.has(key)) {
       agrupado.set(key, {
         codigoParihuela: key,
-        pesoParihuela: item.pesoParihuela > 0 ? item.pesoParihuela : 0,
+        pesoParihuela: item.pesoParihuela >= 0 ? item.pesoParihuela : 0,
         pesoBruto: item.pesoBruto != null && item.pesoBruto > 0 ? item.pesoBruto : 0,
-        pesoTela: item.pesoTela > 0 ? item.pesoTela : (item.pesoBruto ?? 0),
+        pesoTela: item.pesoTela >= 0 ? item.pesoTela : (item.pesoBruto ?? 0),
         complementos: []
       });
     } else {
@@ -191,8 +190,9 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
 
   const usuario = GlobalVariable.vusu;
   const estadoParihuela = 'CONFORME';
+  const Reposicion = this.codigoTelita.toString();
 
-  this.serviceRegistroParihuela.updateDetPartida(detalle, usuario, estadoParihuela).subscribe({
+  this.serviceRegistroParihuela.updateDetPartida(detalle, usuario, estadoParihuela, Reposicion).subscribe({
     next: (res) => {
       console.log('Guardado exitosamente:', res);
     },

@@ -601,6 +601,7 @@ import { SolicitudMantenimientoMaquinaComponent } from './components/solicitud-m
 import { DialogSolicitudMntoCreateComponent } from './components/solicitud-mantenimiento-maquina/dialog-solicitud-mnto-create/dialog-solicitud-mnto-create.component';
 import { DialogSolicitudMntoInformeComponent } from './components/solicitud-mantenimiento-maquina/dialog-solicitud-mnto-informe/dialog-solicitud-mnto-informe.component';
 import { SolicitudMantenimientoMaquinaVisorComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina-visor/solicitud-mantenimiento-maquina-visor.component';
+import { ReporteNcCierreComponent } from './components/reporte-nc/reporte-nc-cierre/reporte-nc-cierre.component';
 
 //TIEMPOS IMPORDUCTIVOS V3
 import { TiemposImproductivosv3Component } from './tiempos-improductivosv3/tiempos-improductivosv3.component';
@@ -1118,6 +1119,8 @@ import { TiemposImproductivosv3Component } from './tiempos-improductivosv3/tiemp
     DialogAreaNuevoComponent,
     MantenimientoResponsablesComponent,
     DialogResponsablesNuevoComponent,
+    ReporteNcCierreComponent,
+
     //REGISTRO PARIHUELA
     RegistroPartidaParihuelaV2Component,
 

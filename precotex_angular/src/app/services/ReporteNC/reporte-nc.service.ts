@@ -85,6 +85,11 @@ export class ReporteNCService {
     return this.http.patch(this.baseUrlTinto + 'TxReporteNC/patchActualizarReporteNC', data, {headers});
   }
 
+  patchActualizarReporteNCCierre(data: any){
+    const headers = this.Header;
+    return this.http.patch(this.baseUrlTinto + 'TxReporteNC/patchActualizarReporteNCCierre', data, {headers});
+  }
+
   patchActualizarReporteNCOriginal(data: any){
     const headers = this.Header;
     return this.http.patch(this.baseUrlTinto + 'TxReporteNC/patchActualizarReporteNCOriginal', data, {headers});
