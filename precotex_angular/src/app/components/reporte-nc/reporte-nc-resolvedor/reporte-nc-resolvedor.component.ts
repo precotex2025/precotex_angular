@@ -280,14 +280,15 @@ export class ReporteNcResolvedorComponent implements OnInit, OnDestroy {
           duration: 1500
           });
           return;
-        }else if(EnviarData.imgnombre === ""){
-          this.matSnackBar.open("Ingrese por lo menos una imagen", "Cerrar", {
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          duration: 1500
-          });
-          return;
         }
+        // else if(EnviarData.imgnombre === ""){
+        //   this.matSnackBar.open("Ingrese por lo menos una imagen", "Cerrar", {
+        //   horizontalPosition: 'center',
+        //   verticalPosition: 'top',
+        //   duration: 1500
+        //   });
+        //   return;
+        // }
       console.log('LOS DATOS A ENVIAR SON: ', EnviarData);
       Swal.fire({
         title: "¿Desea Actualizar el Registro?",

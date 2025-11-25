@@ -39,8 +39,8 @@ export class RegistroPartidaParihuelaService {
       return this.http.get(this.urlRegistro + '/getObtenerDetPartida?pCod_Partida=' + Cod_Partida + "&pOpcion="+ Opcion,{ headers, params });
     }
 
-    updateDetPartida(pData: any[], pCod_Usuario: String, pEstadoParihuela: string): Observable<any> {
-      const body = { pData, pCod_Usuario, pEstadoParihuela };  // Se envía un objeto con ambas propiedades
+    updateDetPartida(pData: any[], pCod_Usuario: String, pEstadoParihuela: string, pReposicion: string): Observable<any> {
+      const body = { pData, pCod_Usuario, pEstadoParihuela, pReposicion };  // Se envía un objeto con ambas propiedades
       return this.http.post(this.urlRegistro + '/postUpdateDetPartida', body);
     }
 

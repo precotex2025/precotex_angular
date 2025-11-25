@@ -319,7 +319,7 @@ import { DialogResponsablesNuevoComponent } from './components/reporte-nc/manten
 import { MantenimientoResponsablesComponent } from './components/reporte-nc/mantenimiento-responsables/mantenimiento-responsables.component';
 import { SolicitudMantenimientoMaquinaComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina.component';
 import { SolicitudMantenimientoMaquinaVisorComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina-visor/solicitud-mantenimiento-maquina-visor.component';
-
+import { ReporteNcCierreComponent } from './components/reporte-nc/reporte-nc-cierre/reporte-nc-cierre.component';
 const routes: Routes = [
   { path: "root", component: AppComponent },
   { path: "principal", component: PrincipalComponent },
@@ -688,7 +688,7 @@ const routes: Routes = [
   {path: 'DialogAreaNuevo', component: DialogAreaNuevoComponent},
   {path: 'MantenimientoResponsables', component: MantenimientoResponsablesComponent},
   {path: 'DialogResponsablesNuevo', component: DialogResponsablesNuevoComponent},
-
+  {path: 'ReporteNCCierre', component: ReporteNcCierreComponent},
   //PARIHUELA V2
   {path: 'RegistroParihuelaV2', component: RegistroPartidaParihuelaV2Component},
 

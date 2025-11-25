@@ -266,8 +266,8 @@ export class RegistroPartidaParihuelaComponent implements OnInit {
       console.log("Datos procesados:", datos);
 
       console.log("datos.detalles válido, enviando datos...", datos.detalles);
-
-      this.RegistroPartidaParihuela.updateDetPartida(datos.detalles,this.sCod_Usuario, this.estadoParihuela).subscribe({
+      const pReposicion = ''
+      this.RegistroPartidaParihuela.updateDetPartida(datos.detalles,this.sCod_Usuario, this.estadoParihuela, pReposicion).subscribe({
         next: (respuesta) => {
           this.formularioDet = this.fb.group({
             detalles: this.fb.array([]) // Array dinámico de inputs

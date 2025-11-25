@@ -98,8 +98,8 @@ export class ReporteNcLstComponent implements OnInit {
     'rep_RepPor',
     'rep_FecObs',
     'resp_Id',
-    'rep_Est',  
-    'rep_FecSub'    
+    'rep_FecSub',
+    'rep_Est'
   ];
 
 
@@ -159,6 +159,14 @@ export class ReporteNcLstComponent implements OnInit {
 
   onRedireccionarRegistroResolvedor(rep_Id: string){
     this.router.navigate(['ReporteNCResolvedor'], 
+      { queryParams: {
+          rep_IdR: rep_Id
+      }}
+    )
+  }
+
+  onRedireccionarRegistroCierre(rep_Id: string){
+    this.router.navigate(['ReporteNCCierre'], 
       { queryParams: {
           rep_IdR: rep_Id
       }}

@@ -190,8 +190,9 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
 
   const usuario = GlobalVariable.vusu;
   const estadoParihuela = 'CONFORME';
+  const Reposicion = this.codigoTelita.toString();
 
-  this.serviceRegistroParihuela.updateDetPartida(detalle, usuario, estadoParihuela).subscribe({
+  this.serviceRegistroParihuela.updateDetPartida(detalle, usuario, estadoParihuela, Reposicion).subscribe({
     next: (res) => {
       console.log('Guardado exitosamente:', res);
     },
