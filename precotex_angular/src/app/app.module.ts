@@ -602,6 +602,9 @@ import { DialogSolicitudMntoCreateComponent } from './components/solicitud-mante
 import { DialogSolicitudMntoInformeComponent } from './components/solicitud-mantenimiento-maquina/dialog-solicitud-mnto-informe/dialog-solicitud-mnto-informe.component';
 import { SolicitudMantenimientoMaquinaVisorComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina-visor/solicitud-mantenimiento-maquina-visor.component';
 
+//TIEMPOS IMPORDUCTIVOS V3
+import { TiemposImproductivosv3Component } from './tiempos-improductivosv3/tiempos-improductivosv3.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -1124,6 +1127,10 @@ import { SolicitudMantenimientoMaquinaVisorComponent } from './components/solici
     DialogSolicitudMntoInformeComponent,
     SolicitudMantenimientoMaquinaVisorComponent,
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent, DialogCapturarFotoCajaComponent, EvidenciaEmpaqueCajaComponent, ReporteVehiculoInmovilizadoComponent 
+    
+    //TIEMPOS IMPRODUCTIVOS V3
+    ,TiemposImproductivosv3Component
+  
   ],
   entryComponents: [DialogJabaComponent],
   imports: [

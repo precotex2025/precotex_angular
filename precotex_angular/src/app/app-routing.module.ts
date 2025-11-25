@@ -319,6 +319,7 @@ import { DialogResponsablesNuevoComponent } from './components/reporte-nc/manten
 import { MantenimientoResponsablesComponent } from './components/reporte-nc/mantenimiento-responsables/mantenimiento-responsables.component';
 import { SolicitudMantenimientoMaquinaComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina.component';
 import { SolicitudMantenimientoMaquinaVisorComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina-visor/solicitud-mantenimiento-maquina-visor.component';
+import { TiemposImproductivosv3Component } from './tiempos-improductivosv3/tiempos-improductivosv3.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -698,7 +699,8 @@ const routes: Routes = [
   
   { path:"checkListIngresoCostura", component: CheckListIngresoCosturaComponent },
 
-
+  //TIEMPOS IMPRODUCTIVOS V3
+  { path: "TiemposImproductivosv3", component: TiemposImproductivosv3Component},
 
   //COPIAR RUTAS ANTES DE ESTO
   { path: "", redirectTo: "/", pathMatch: "full" },// Cuando es la raíz
