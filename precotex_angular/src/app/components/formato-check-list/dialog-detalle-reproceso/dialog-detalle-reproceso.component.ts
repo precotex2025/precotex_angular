@@ -44,7 +44,7 @@ export class DialogDetalleReprocesoComponent implements OnInit {
   //CHECLIST
   Cod_OrdPro:any = '';
   Tipo_Prenda:any = '';
-  Cod_Present:any = '';
+  Des_Present:any = '';
   Lote_Tela:any = '';
   Lote:any = '';
   Tamano_Muestra:any = '';
@@ -63,7 +63,7 @@ export class DialogDetalleReprocesoComponent implements OnInit {
   Cod_EstCli:any = '';
   Cantidad_Cabecera:any = '';
   Cod_TemCli:any = '';
-
+  Cod_Present:any = '';
 
   FlgAprobado:any = '';
   constructor(private spinnerService: NgxSpinnerService, private defectosAlmacenDerivadosService:DefectosAlmacenDerivadosService, private checkListService:CheckListService, private matSnackBar: MatSnackBar, @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -81,7 +81,7 @@ export class DialogDetalleReprocesoComponent implements OnInit {
       this.idCabecera = this.data.datos.Id_CheckList;
       this.Cod_OrdPro = this.data.datos.Cod_OrdPro;
       this.Tipo_Prenda = this.data.datos.Tipo_Prenda;
-      this.Cod_Present = this.data.datos.Color;
+      this.Des_Present = this.data.datos.Color;
       this.Lote_Tela = this.data.datos.Lote_Tela;
       this.Lote = this.data.datos.Lote;
       this.Tamano_Muestra = this.data.datos.Tamano_Muestra;
@@ -102,6 +102,7 @@ export class DialogDetalleReprocesoComponent implements OnInit {
       this.Cod_EstCli = this.data.datos.Cod_EstCli;
       this.Cantidad_Cabecera = this.data.datos.Cantidad_Cabecera;
       this.Cod_TemCli = this.data.datos.Cod_TemCli;
+      this.Cod_Present = this.data.datos.Cod_Present;
       console.log(this.data.datos);
       console.log(this.data.datos.Flg_Aprobado);
       this.FlgAprobado = this.data.datos.Flg_Aprobado;
@@ -178,7 +179,7 @@ export class DialogDetalleReprocesoComponent implements OnInit {
           this.idCabecera = result[0].Id_CheckList;
           this.Cod_OrdPro = result[0].Cod_OrdPro;
           this.Tipo_Prenda = result[0].Tipo_Prenda;
-          this.Cod_Present = result[0].Color;
+          this.Des_Present = result[0].Color;
           this.Lote_Tela = result[0].Lote_Tela;
           this.Lote = result[0].Lote;
           this.Tamano_Muestra = result[0].Tamano_Muestra;
@@ -197,6 +198,7 @@ export class DialogDetalleReprocesoComponent implements OnInit {
           this.Cod_EstCli = result[0].Cod_EstCli;
           this.Cantidad_Cabecera = result[0].Cantidad_Cabecera;
           this.Cod_TemCli = result[0].Cod_TemCli;
+          this.Cod_Present = result[0].Cod_Present;
         },
         (err: HttpErrorResponse) => {
           this.spinnerService.hide();
@@ -216,7 +218,7 @@ export class DialogDetalleReprocesoComponent implements OnInit {
     formData.append('Cod_Cliente', this.Cod_Cliente);
     formData.append('Cod_EstCli', this.Cod_EstCli);
     formData.append('Tipo_Prenda', this.Tipo_Prenda);
-    formData.append('Des_Present', this.Cod_Present);
+    formData.append('Des_Present', this.Des_Present);
     formData.append('Cantidad', this.Cantidad);
     formData.append('Cod_TemCli', this.Cod_TemCli);
     formData.append('Lote_Tela', this.Lote_Tela);
@@ -235,6 +237,7 @@ export class DialogDetalleReprocesoComponent implements OnInit {
     formData.append('Linea', this.Linea);
     formData.append('chk_go', "0");
     formData.append('chk_jc', "0");
+    formData.append('Cod_Present', this.Cod_Present);
       
     this.spinnerService.show();
     this.checkListService.Cf_Mantenimiento_CheckList(formData)

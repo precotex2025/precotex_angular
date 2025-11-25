@@ -236,6 +236,9 @@ ngOnInit(): void {
       this.Flg_ShowCtrolQR = false;
       this.Flg_ShowObservacionOT = true;
 
+      //const codigosPermitidos = ['23', '08', '14', '20'];
+      //if (!codigosPermitidos.includes(this.data.sCod_Espe)) {     
+       
       if (this.data.sCod_Espe !== '23'){      
         this.Flg_ShowObservacionOT = false;
         this.Flg_ShowBotonAprobarOT = false;
@@ -323,9 +326,8 @@ ngOnInit(): void {
 
     this.despachoTelaCrudaService.cargarMaquinas(Cod_Tarea).subscribe(
       (result: any) => {
-
         this.listaMaquinas = result;
-        this.formulario.get('ctrolMaquina')?.setValue( String(this.data.Datos.cod_Maquina));
+        this.formulario.get('ctrolMaquina')?.setValue( String(this.data.Datos.cod_Maquina).trim());
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
   }  
@@ -367,17 +369,19 @@ ngOnInit(): void {
     this.Flg_ValidaMaquina = Flg_ValidaMaquina;
     
     //SI NO VALIDA MAQUINA DEBE DE LIMPIAR Y BLOQUEAR 
-    if (this.Flg_ValidaMaquina == "0") {
-      this.formulario.get('ctrolMaquina')?.setValue(''); 
-      this.formulario.get('ctrolParoMaquina')?.setValue(''); 
 
-      this.formulario.get('ctrolMaquina').disable();
-      this.formulario.get('ctrolParoMaquina').disable();
-    } else {
-      this.formulario.get('ctrolMaquina').enable();
-      this.formulario.get('ctrolParoMaquina').enable();
-    }
+    //comentado no aplica porque estos datos ya trae desde que se registro la solicitud de maquina
+    // if (this.Flg_ValidaMaquina == "0") {
+    //   this.formulario.get('ctrolMaquina')?.setValue(''); 
+    //   this.formulario.get('ctrolParoMaquina')?.setValue(''); 
 
+    //   this.formulario.get('ctrolMaquina').disable();
+    //   this.formulario.get('ctrolParoMaquina').disable();
+    // } else {
+    //   this.formulario.get('ctrolMaquina').enable();
+    //   this.formulario.get('ctrolParoMaquina').enable();
+    // }
+    
 
     //Limpia articulo y (Min Max) - HMEDINA - 11/03/2025
     this.listarArticulo = [];

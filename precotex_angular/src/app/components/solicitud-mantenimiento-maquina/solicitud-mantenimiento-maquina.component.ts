@@ -134,10 +134,6 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
     
     this.serviceSolicitudMnto.getObtieneInformacionSolicitudMantenimiento(sFecIni, sFecFin, sCod_Usuario).subscribe({
       next: (response: any)=> {
-
-        console.log(sFecIni);
-        console.log(sFecFin);
-        console.log(sCod_Usuario);
         
         if(response.success){
           if (response.totalElements > 0){
@@ -381,19 +377,36 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
   
   getEstadoClass(estado: string): string {
   switch (estado.trim().toLowerCase()) {
-    case 'Reportado':
+    case '01':
       return 'estado-reportado';
-    case 'en atención':
+    case '02':
       return 'estado-atencion';
-    case 'pendiente vb':
+    case '03':
       return 'estado-pendiente';
-    case 'cerrado vb':
+    case '04':
       return 'estado-cerrado';
-    case 'rechazado vb':
+    case '05':
       return 'estado-rechazado';
     default:
       return '';
+    }
   }
-}
+
+  getPrioridadClass(prioridad: string): string {
+    switch (prioridad?.trim()) {
+      case 'Alta':
+        return 'prioridad-alta';
+      case 'Media':
+        return 'prioridad-media';
+      case 'Baja':
+        return 'prioridad-baja';
+      default:
+        return '';
+    }
+  }  
+
+  getParoMaquinaClass(valor: number): string {
+    return valor === 1 ? 'paro-activo' : 'paro-inactivo';
+  }
 
 }

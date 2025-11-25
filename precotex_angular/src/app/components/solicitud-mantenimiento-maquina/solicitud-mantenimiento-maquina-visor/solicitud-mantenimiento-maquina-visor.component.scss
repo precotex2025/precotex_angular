@@ -6,11 +6,15 @@ max-width: 100%;
 overflow-x: auto;
 
 .title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    text-align: center;
-    color: #333;
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #01579b;
+  padding-bottom: 10px;
 }
 
 .table-wrapper {
@@ -60,8 +64,14 @@ overflow-x: auto;
 
 //columna numero de memo
 .memo-cell {
-  color: blue;
+  color: blue !important;
   font-weight: bold;
+}
+
+table.mat-table {
+  font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 13.5px; /* Tamaño de texto */
+  color: #333; /* Color del texto */
 }
 
 .btn-rojo{
@@ -121,3 +131,210 @@ overflow-x: auto;
 .export-button {
   margin-left: auto;
 }
+
+//Estados de colores.
+.estado-reportado {
+  background-color: #ffe082; /* amarillo suave */
+  color: #5d4037;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.estado-atencion {
+  background-color: #81d4fa; /* azul claro */
+  color: #01579b;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.estado-pendiente {
+  background-color: #fff59d; /* amarillo */
+  color: #f57f17;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.estado-cerrado {
+  background-color: #c8e6c9; /* verde claro */
+  color: #2e7d32;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.estado-rechazado {
+  background-color: #ef9a9a; /* rojo claro */
+  color: #b71c1c;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+//Prioridad
+.prioridad-alta {
+  background-color: #ef9a9a;
+  color: #b71c1c;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.prioridad-media {
+  background-color: #fff59d;
+  color: #f57f17;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.prioridad-baja {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+//Paro Maquina
+.paro-activo {
+  background-color: #ef5350; /* rojo alerta */
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.paro-inactivo {
+  background-color: #42a5f5; /* azul informativo */
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.text-right {
+  text-align: center;
+  color:#01579b;
+  display: block; /* necesario si usas span */
+}
+
+.codigo-header {
+  width: 100px;
+}
+
+.titulo-modulo {
+  font-size: 28px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #e91e63;
+  padding-bottom: 10px;
+}
+
+.mat-cell.mat-column-cod_Area,
+.mat-cell.mat-column-cod_Maquina,
+.mat-cell.mat-column-tipo_tarea,
+.mat-cell.mat-column-tipo_falla,
+.mat-cell.mat-column-des_Usuario_Tecnico
+ {
+  font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #37474f;
+  text-transform: capitalize;
+}
+
+.codigo-header {
+  width: 100px;
+}
+
+.area-header {
+  width: 100px !important;
+}
+
+.maquina-header {
+  width: 100px;
+}
+
+//visor de foto
+.miniatura {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.visor-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.foto-responsiva {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  object-fit: contain;
+}
+
+.cerrar-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 10;
+}
+
+.loader {
+  width: 60px;
+  height: 40px;
+  position: relative;
+  display: inline-block;
+  --base-color: #263238; /*use your base color*/
+}
+.loader::before {
+  content: '';  
+  left: 0;
+  top: 0;
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #FFF;
+  background-image: radial-gradient(circle 8px at 18px 18px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 18px 0px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 0px 18px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 36px 18px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 18px 36px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 30px 5px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 30px 5px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 30px 30px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 5px 30px, var(--base-color) 100%, transparent 0), radial-gradient(circle 4px at 5px 5px, var(--base-color) 100%, transparent 0);
+  background-repeat: no-repeat;
+  box-sizing: border-box;
+  animation: rotationBack 3s linear infinite;
+}
+.loader::after {
+  content: '';  
+  left: 35px;
+  top: 15px;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #FFF;
+  background-image: radial-gradient(circle 5px at 12px 12px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 12px 0px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 0px 12px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 24px 12px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 12px 24px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 20px 3px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 20px 3px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 20px 20px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 3px 20px, var(--base-color) 100%, transparent 0), radial-gradient(circle 2.5px at 3px 3px, var(--base-color) 100%, transparent 0);
+  background-repeat: no-repeat;
+  box-sizing: border-box;
+  animation: rotationBack 4s linear infinite reverse;
+}
+@keyframes rotationBack {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}  
