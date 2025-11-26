@@ -57,7 +57,7 @@ import { SeguridadControlMovimientosJabasComponent} from './components/seguridad
 import { SeguridadControlMovimientosJabasAccionComponent} from './components/seguridad/seguridad-control-movimientos-jabas/seguridad-control-movimientos-jabas-accion/seguridad-control-movimientos-jabas-accion.component'
 
 import { DespachoOpIncompletaComponent} from './components/despacho-op-incompleta/despacho-op-incompleta.component'
-
+import { GenerarQrComponent } from './components/control-activos-fijo/generar-qr/generar-qr.component';
 import { ControlActivoFijoComponent} from './components/control-activo-fijo/control-activo-fijo.component'
 
 import { InspeccionPrendaComponent} from './components/inspeccion/inspeccion-prenda/inspeccion-prenda.component'
@@ -376,7 +376,7 @@ const routes: Routes = [
 
   { path: "GiradoPartidaIncompleta", component: DespachoOpIncompletaComponent},
   { path: "ControlActivoFijo", component: ControlActivoFijoComponent},
-
+  { path: "qrActivoFijo", component: GenerarQrComponent},
   { path: "ComiteEmergencia", component: ComiteEmergenciaComponent},
 
   {path: "InspeccionPrenda", component: InspeccionPrendaComponent},

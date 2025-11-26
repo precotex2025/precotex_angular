@@ -132,6 +132,9 @@ export class DialogCrearCheckComponent implements OnInit {
   Ruta_Prenda:any = '';
   Linea:any = '';
 
+  CodAlmacen: string = "";
+  StockOP: number = 0
+
   Nom_TemCli = ''
   Tipo_Registro = ''
   Clasificacion = ''
@@ -335,6 +338,7 @@ export class DialogCrearCheckComponent implements OnInit {
   /******************************LISTAR LAS TALLAS Y AGREGAR ESAS TALALS A LA COLUMNAS DEL TABLE******************** */
   ListarTallas(option) {
     this.Cod_ColCli = this.formulario.get('sColor')?.value
+    console.log(option);
     console.log(option.Cod_Present);
     this.Cod_Present = option.Cod_Present;
     
@@ -346,6 +350,7 @@ export class DialogCrearCheckComponent implements OnInit {
       this.spinnerService.hide();
       if(res.length > 0)  {
         this.formulario.patchValue({
+          Lote: option.STOCK,
           Cantidad: res[0].Cantidad
         })
       }
@@ -790,6 +795,8 @@ export class DialogCrearCheckComponent implements OnInit {
       formData.append('chk_go', "0");
       formData.append('chk_jc', "0");
       formData.append('Cod_Present', this.Cod_Present);
+      formData.append('Almacen', this.CodAlmacen);
+      formData.append('Stock', this.StockOP.toString());
       
       /* Se reemplaza metodo de solicitud de GET a POST.  2024Dic27, Ahmed*/
       this.checkListService.Cf_Mantenimiento_CheckList(formData)
@@ -1094,6 +1101,8 @@ export class DialogCrearCheckComponent implements OnInit {
     formData.append('chk_go', "0");
     formData.append('chk_jc', "0");
     formData.append('Cod_Present', this.Cod_Present);
+    formData.append('Almacen', this.CodAlmacen);
+    formData.append('Stock', this.StockOP.toString());
     
     this.checkListService.Cf_Mantenimiento_CheckList(formData)
       .subscribe(res => {
@@ -1138,7 +1147,7 @@ export class DialogCrearCheckComponent implements OnInit {
     this.Cod_ColCli = this.formulario.get('sColor')?.value
     this.Cod_EstCli = this.formulario.get('sEstilo')?.value
     this.Cod_TemCli = this.formulario.get('sTemporada')?.value
-    this.defectosAlmacenDerivadosService.SM_Presentaciones_OrdPro(this.Op).subscribe(
+    this.defectosAlmacenDerivadosService.UP_Presentaciones_CheckList(this.Op,this.CodAlmacen).subscribe(
       (result: any) => {
         this.listar_operacionColor = result
       },
@@ -1158,19 +1167,25 @@ export class DialogCrearCheckComponent implements OnInit {
 
         console.log(result.length + 'PruebaOP')
         if (result.length > 0) {
-          this.flg_reset_estilo = true
-          this.formulario.controls['sCliente'].setValue(result[0].NOM_CLIENTE);
-          this.Cod_Cliente = result[0].COD_CLIENTE
+          if (result[0].COD_CLIENTE != '0'){
+            this.flg_reset_estilo = true
+            this.formulario.controls['sCliente'].setValue(result[0].NOM_CLIENTE);
+            this.Cod_Cliente = result[0].COD_CLIENTE;
+            this.CodAlmacen = result[0].ALMACEN;
+            this.StockOP = result[0].STOCK;
+            this.formulario.controls['sEstilo'].setValue(result[0].COD_ESTCLI);
+            this.formulario.controls['Lote'].setValue(result[0].STOCK);
+            this.CargarOperacionTemporada()
+            this.formulario.controls['Tipo_Prenda'].setValue(result[0].TIPO_PRENDA);
+            this.formulario.controls['sTemporada'].setValue(result[0].COD_TEMCLI);
+            this.Cod_TemCli = this.formulario.get('sTemporada')?.value
+            this.CargarOperacionColor('')
+            this.getLineaOP();
+            this.matSnackBar.open('Se encontraron registros...!!!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          } else {
+            this.matSnackBar.open(result[0].NOM_CLIENTE, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          }
 
-          this.formulario.controls['sEstilo'].setValue(result[0].COD_ESTCLI);
-
-          this.CargarOperacionTemporada()
-          this.formulario.controls['Tipo_Prenda'].setValue(result[0].TIPO_PRENDA);
-          this.formulario.controls['sTemporada'].setValue(result[0].COD_TEMCLI);
-          this.Cod_TemCli = this.formulario.get('sTemporada')?.value
-          this.CargarOperacionColor('')
-          this.getLineaOP();
-          this.matSnackBar.open('Se encontraron registros...!!!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
         } else {
           this.matSnackBar.open('La OP no existe...!!!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
           //this.mostrarAlertaCaidasMayora1()

@@ -119,6 +119,8 @@ export class DialogEditarCheckComponent implements OnInit {
   Caidas_requerido_Global2 = 0
 
   ll_Reauditoria: boolean = false;
+  CodAlmacen: string = "";
+  StockOP: number = 0
 
   Tipo_Defecto = ''
   Nom_TemCli = ''
@@ -856,6 +858,8 @@ export class DialogEditarCheckComponent implements OnInit {
       formData.append('chk_go', this.formulario.get('chk_go').value ? "1" : "0");
       formData.append('chk_jc', this.formulario.get('chk_jc').value ? "1" : "0");
       formData.append('Cod_Present', this.formulario.get('Cod_Present').value);
+      formData.append('Almacen', this.CodAlmacen);
+      formData.append('Stock', this.StockOP.toString());
       console.log(formData)
       this.checkListService.Cf_Mantenimiento_CheckList(formData)
         .subscribe(res => {
@@ -1105,7 +1109,7 @@ export class DialogEditarCheckComponent implements OnInit {
     this.Cod_ColCli = this.formulario.get('sColor')?.value
     this.Cod_EstCli = this.formulario.get('sEstilo')?.value
     this.Cod_TemCli = this.formulario.get('sTemporada')?.value
-    this.defectosAlmacenDerivadosService.SM_Presentaciones_OrdPro(this.Op).subscribe(
+    this.defectosAlmacenDerivadosService.UP_Presentaciones_CheckList(this.Op,this.CodAlmacen).subscribe(
       (result: any) => {
         this.listar_operacionColor = result
       },
@@ -1120,17 +1124,22 @@ export class DialogEditarCheckComponent implements OnInit {
     this.defectosAlmacenDerivadosService.Cf_Busca_OP_Cliente_Estilo_Temporada(this.Op).subscribe(
       (result: any) => {
         if (result.length > 0) {
-          this.flg_reset_estilo = true
-          this.formulario.controls['sCliente'].setValue(result[0].NOM_CLIENTE);
-          this.Cod_Cliente = result[0].COD_CLIENTE
+          if (result[0].COD_CLIENTE != '0'){
+            this.flg_reset_estilo = true
+            this.formulario.controls['sCliente'].setValue(result[0].NOM_CLIENTE);
+            this.Cod_Cliente = result[0].COD_CLIENTE
+            this.CodAlmacen = result[0].ALMACEN;
+            this.StockOP = result[0].STOCK;
+            this.formulario.controls['sEstilo'].setValue(result[0].COD_ESTCLI);
 
-          this.formulario.controls['sEstilo'].setValue(result[0].COD_ESTCLI);
-
-          this.CargarOperacionTemporada()
-          this.formulario.controls['Tipo_Prenda'].setValue(result[0].TIPO_PRENDA);
-          this.formulario.controls['sTemporada'].setValue(result[0].COD_TEMCLI);
-          this.Cod_TemCli = this.formulario.get('sTemporada')?.value
-          this.CargarOperacionColor('')
+            this.CargarOperacionTemporada()
+            this.formulario.controls['Tipo_Prenda'].setValue(result[0].TIPO_PRENDA);
+            this.formulario.controls['sTemporada'].setValue(result[0].COD_TEMCLI);
+            this.Cod_TemCli = this.formulario.get('sTemporada')?.value
+            this.CargarOperacionColor('')
+          } else {
+            this.matSnackBar.open(result[0].NOM_CLIENTE, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          }
         } else {
           this.matSnackBar.open('La OP no existe...!!!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
           //this.mostrarAlertaCaidasMayora1()

@@ -284,7 +284,7 @@ import { DialogConfirmacionEstampadoComponent } from './components/dialogs/dialo
 //import { ZXingScannerModule } from '@zxing/ngx-scanner'; //EIQ-2025-06-25
 // import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
 //import { NgxScannerQrcodeModule, LOAD_WASM } from 'ngx-scanner-qrcode';
-
+import { QRCodeModule } from 'angularx-qrcode';
 // LOAD_WASM().subscribe((res: any) => console.log('LOAD_WASM', res));
 
 import { DialogAprobRechOpComponent } from './components/formato-check-list/dialog-aprob-rech-op/dialog-aprob-rech-op.component';
@@ -571,6 +571,7 @@ import { DialogEvidenciaPackingCajaComponent } from './components/auditoria-cali
 import { DialogCapturarFotoCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-capturar-foto-caja/dialog-capturar-foto-caja.component';
 import { EvidenciaEmpaqueCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/evidencia-empaque-caja/evidencia-empaque-caja.component';
 import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/reporte-vehiculo-inmovilizado/reporte-vehiculo-inmovilizado.component';
+import { GenerarQrComponent } from './components/control-activos-fijo/generar-qr/generar-qr.component';
 
 @NgModule({
   declarations: [
@@ -1062,7 +1063,7 @@ import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/rep
     DialogPendienteEmpaqueCajasComponent, 
     EncogimientoPrendaComponent, 
     DialogEncogimientoPrendaRegistroComponent, 
-    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent, DialogCapturarFotoCajaComponent, EvidenciaEmpaqueCajaComponent, ReporteVehiculoInmovilizadoComponent 
+    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent, DialogCapturarFotoCajaComponent, EvidenciaEmpaqueCajaComponent, ReporteVehiculoInmovilizadoComponent, GenerarQrComponent 
   ],
   entryComponents: [DialogJabaComponent],
   imports: [
@@ -1082,6 +1083,7 @@ import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/rep
     NgxChartsModule,
     MatSlideToggleModule,
     NgxImageZoomModule, // <-- Add this line
+    QRCodeModule,
     //EditorModule,
     AngularEditorModule,
     ImageCropperModule,
