@@ -285,7 +285,7 @@ import { DialogConfirmacionEstampadoComponent } from './components/dialogs/dialo
 //import { ZXingScannerModule } from '@zxing/ngx-scanner'; //EIQ-2025-06-25
 // import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
 //import { NgxScannerQrcodeModule, LOAD_WASM } from 'ngx-scanner-qrcode';
-
+import { QRCodeModule } from 'angularx-qrcode';
 // LOAD_WASM().subscribe((res: any) => console.log('LOAD_WASM', res));
 
 import { DialogAprobRechOpComponent } from './components/formato-check-list/dialog-aprob-rech-op/dialog-aprob-rech-op.component';
@@ -602,6 +602,11 @@ import { DialogSolicitudMntoCreateComponent } from './components/solicitud-mante
 import { DialogSolicitudMntoInformeComponent } from './components/solicitud-mantenimiento-maquina/dialog-solicitud-mnto-informe/dialog-solicitud-mnto-informe.component';
 import { SolicitudMantenimientoMaquinaVisorComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina-visor/solicitud-mantenimiento-maquina-visor.component';
 import { ReporteNcCierreComponent } from './components/reporte-nc/reporte-nc-cierre/reporte-nc-cierre.component';
+
+//TIEMPOS IMPORDUCTIVOS V3
+import { TiemposImproductivosv3Component } from './tiempos-improductivosv3/tiempos-improductivosv3.component';
+
+import { GenerarQrComponent } from './components/control-activos-fijo/generar-qr/generar-qr.component';
 
 @NgModule({
   declarations: [
@@ -1078,7 +1083,8 @@ import { ReporteNcCierreComponent } from './components/reporte-nc/reporte-nc-cie
     TiemposImproductivosv2Component,
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent,
     CalificacionRollosFinalComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ModalEditarDesgloseComponent, ConfirmDialogComponent,
-
+    GenerarQrComponent,
+    
     //Memorandum en GRAL
     MemorandumGralComponent,
     DialogMemorandumGralComponent,
@@ -1127,6 +1133,10 @@ import { ReporteNcCierreComponent } from './components/reporte-nc/reporte-nc-cie
     DialogSolicitudMntoInformeComponent,
     SolicitudMantenimientoMaquinaVisorComponent,
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent, DialogCapturarFotoCajaComponent, EvidenciaEmpaqueCajaComponent, ReporteVehiculoInmovilizadoComponent 
+    
+    //TIEMPOS IMPRODUCTIVOS V3
+    ,TiemposImproductivosv3Component
+  
   ],
   entryComponents: [DialogJabaComponent],
   imports: [
@@ -1146,6 +1156,7 @@ import { ReporteNcCierreComponent } from './components/reporte-nc/reporte-nc-cie
     NgxChartsModule,
     MatSlideToggleModule,
     NgxImageZoomModule, // <-- Add this line
+    QRCodeModule,
     //EditorModule,
     AngularEditorModule,
     ImageCropperModule,

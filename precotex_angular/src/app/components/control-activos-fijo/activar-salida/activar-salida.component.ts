@@ -61,7 +61,7 @@ export class ActivarSalidaComponent implements OnInit {
   }
 
   listarTipoActivos(){
-    this.controlActivoFijoService.getTipoActivos()
+    this.controlActivoFijoService.getTipoActivos('3')
       .subscribe((response) => {
         this.dataTipoActivos = response;
 

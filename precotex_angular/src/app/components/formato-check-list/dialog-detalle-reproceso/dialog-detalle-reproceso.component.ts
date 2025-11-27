@@ -39,7 +39,8 @@ export class DialogDetalleReprocesoComponent implements OnInit {
   Abr:any = '';
   Cod_Accion:any = '';
   dataDefectos:any = [];
-
+  CodAlmacen: string = "";
+  StockOP: number = 0
 
   //CHECLIST
   Cod_OrdPro:any = '';
@@ -238,6 +239,8 @@ export class DialogDetalleReprocesoComponent implements OnInit {
     formData.append('chk_go', "0");
     formData.append('chk_jc', "0");
     formData.append('Cod_Present', this.Cod_Present);
+    formData.append('Almacen', this.CodAlmacen);
+    formData.append('Stock', this.StockOP.toString());
       
     this.spinnerService.show();
     this.checkListService.Cf_Mantenimiento_CheckList(formData)

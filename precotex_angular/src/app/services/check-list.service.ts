@@ -67,7 +67,7 @@ export class CheckListService {
       Fecha2 = _moment(Fecha2.valueOf()).format('DD/MM/YYYY');
     }
     
-    return this.http.get(`${this.baseUrl}/app_CF_LISTAR_CHECKLIST.php?Fecha=${Fecha}&Fecha2=${Fecha2}&OP=${OP}&Cod_EstCli=${Cod_EstCli}&Flg_Aprobado=${Flg_Aprobado}&Hoja_Rechazo=${Hoja_Rechazo}`);
+    return this.http.get(`${this.baseUrl}/app_CF_LISTAR_CHECKLIST.php?Fecha=${Fecha}&Fecha2=${Fecha2}&OP=${OP}&Cod_EstCli=${Cod_EstCli}&Flg_Aprobado=${Flg_Aprobado}&Hoja_Rechazo=${Hoja_Rechazo}&Cod_Usuario=${this.sCod_Usuario}`);
   }
 
   CF_REPORTE_CHECKLIST(
