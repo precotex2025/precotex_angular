@@ -268,6 +268,8 @@ export class SeguridadControlVehiculoSalidaComponent implements OnInit {
     formData.append('Foto1', this.file);
     formData.append('Foto2', this.file2);
     formData.append('Descripcion', this.des_vehiculo);
+    formData.append('Fin_Jornada', '0');
+
     this.seguridadControlVehiculoService.GuardarServiceCopia(
       formData).subscribe(
 
@@ -323,6 +325,7 @@ CompletarInfo(){
     0,
     this.formulario.get('glosa')?.value,
     this.formulario.get('ope')?.value,
+    0,
     this.Fecha_Registro).subscribe(
       (result: any) => {
        console.log(result)

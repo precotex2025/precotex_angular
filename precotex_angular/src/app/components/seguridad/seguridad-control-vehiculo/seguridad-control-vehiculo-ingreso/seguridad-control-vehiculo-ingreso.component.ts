@@ -20,7 +20,7 @@ interface Listar_Origen {
   Descripcion: String;
   Planta: number;
   des_vehiculo: String,
-
+  fin_jornada: number
 }
 
 
@@ -77,8 +77,8 @@ export class SeguridadControlVehiculoIngresoComponent implements OnInit {
     kilometraje: [''],
     glosa: [''],
     ope: [''],
-    nombre: ['']
-
+    nombre: [''],
+    fin_jornada: [0]
 
   })
 
@@ -326,8 +326,7 @@ export class SeguridadControlVehiculoIngresoComponent implements OnInit {
       formData.append('Foto1', this.file);
       formData.append('Foto2', this.file2);
       formData.append('Descripcion', this.des_vehiculo);
-
-
+      formData.append('Fin_Jornada', this.formulario.get('fin_jornada')?.value ? '1' : '0');
 
       this.seguridadControlVehiculoService.GuardarServiceCopia(
         formData).subscribe(
@@ -385,6 +384,7 @@ export class SeguridadControlVehiculoIngresoComponent implements OnInit {
         0,
         this.formulario.get('glosa')?.value,
         this.formulario.get('ope')?.value,
+        this.formulario.get('fin_jornada')?.value,
         this.Fecha_Registro).subscribe(
           (result: any) => {
 

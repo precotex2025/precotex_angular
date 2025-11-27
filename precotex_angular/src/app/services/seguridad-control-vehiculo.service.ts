@@ -60,7 +60,7 @@ export class SeguridadControlVehiculoService {
 
 
   GuardarService(Accion: string, sCod_Accion: string, nNum_Planta: number, sCod_barras: string, sDni_conductor: string, nNum_Planta_Ref: number, nNum_kilometraje: number,
-    sGlosa: string, sOperacion: string, Fecha_Registro: string) {
+    sGlosa: string, sOperacion: string, sFin_Jornada: number, Fecha_Registro: string) {
 
     if (Fecha_Registro != '') {
       sGlosa = sGlosa.replace(/\s+/g, " ").trim();
@@ -68,7 +68,7 @@ export class SeguridadControlVehiculoService {
     }
 
     //return this.http.get(`${this.baseUrl}/app_man_registro_control_guia.php?Accion=${'I'}&Num_Planta=${nNum_Planta}&Cod_Accion=${sCod_Accion}&Num_Guia=${sNum_Guia}&Cod_Proveedor=${sCod_Proveedor}&Num_Planta_Destino=${nNum_Planta_Destino}&Num_Planta_Origen=${nNum_Planta_Origen}&Dni_Entregado=${sDni_Entregado}&Num_Bulto=${nNum_Bulto}&Num_Cantidad=${nNum_Cantidad}&Num_Peso=${nNum_Peso}&Dni_Despachado=${sDni_Despachado}&Glosa=${sGlosa}&Cod_Usuario=${this.sCod_Usuario}`);
-    return this.http.get(`${this.baseUrl}/app_man_registro_vehiculo.php?Accion=${Accion}&Num_Planta=${nNum_Planta}&Cod_Accion=${sCod_Accion}&Cod_Barras=${sCod_barras}&Dni_Conductor=${sDni_conductor}&Num_Planta_Referencia=${nNum_Planta_Ref}&Num_Kilometraje=${nNum_kilometraje}&Observacion=${sGlosa}&Cod_Usuario=${this.sCod_Usuario}&Operacion=${sOperacion}&Fecha_Registro=${Fecha_Registro}`);
+    return this.http.get(`${this.baseUrl}/app_man_registro_vehiculo.php?Accion=${Accion}&Num_Planta=${nNum_Planta}&Cod_Accion=${sCod_Accion}&Cod_Barras=${sCod_barras}&Dni_Conductor=${sDni_conductor}&Num_Planta_Referencia=${nNum_Planta_Ref}&Num_Kilometraje=${nNum_kilometraje}&Observacion=${sGlosa}&Cod_Usuario=${this.sCod_Usuario}&Operacion=${sOperacion}&Fin_Jornada=${sFin_Jornada}&Fecha_Registro=${Fecha_Registro}`);
 
   }
 

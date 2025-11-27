@@ -117,8 +117,8 @@ MantenimientoActivoFijoService(
     return this.http.get<any[]>(`${this.baseUrl}/app_Man_SG_ActivosFijo.php?Cod_Activo_Fijo=${Cod_Activo_Fijo}&Flg_Salida=${Flg_Salida}`);  
   }
 
-  getTipoActivos(): Observable<any[]>{
-    return this.http.get<any[]>(`${this.baseUrl}/app_Man_SG_TipoActivos.php`);  
+  getTipoActivos(Cod_Categoria: string): Observable<any[]>{
+    return this.http.get<any[]>(`${this.baseUrl}/app_Man_SG_TipoActivos.php?Cod_Categoria=${Cod_Categoria}`);  
   }
 
   manRegistroSalidas(data: any): Observable<any[]> {

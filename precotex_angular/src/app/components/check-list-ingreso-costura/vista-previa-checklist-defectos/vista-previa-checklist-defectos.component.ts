@@ -67,11 +67,13 @@ export class VistaPreviaChecklistDefectosComponent implements OnInit {
     this.defectosAlmacenDerivadosService.Cf_Busca_OP_Cliente_Estilo_Temporada(this.Op).subscribe(
       (result: any) => {
         if (result.length > 0) {
-          this.Cod_Cliente = result[0].COD_CLIENTE
-          this.sEstilo = (result[0].COD_ESTCLI);
-          this.Tipo_Prenda = result[0].TIPO_PRENDA;
-          this.sTemporada = (result[0].COD_TEMCLI);
-          this.CargarOperacionTemporada()
+          if (result[0].COD_CLIENTE != '0'){
+            this.Cod_Cliente = result[0].COD_CLIENTE
+            this.sEstilo = (result[0].COD_ESTCLI);
+            this.Tipo_Prenda = result[0].TIPO_PRENDA;
+            this.sTemporada = (result[0].COD_TEMCLI);
+            this.CargarOperacionTemporada();            
+          }
         } else {
         }
       },

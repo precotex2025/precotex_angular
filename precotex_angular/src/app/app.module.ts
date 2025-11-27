@@ -285,7 +285,7 @@ import { DialogConfirmacionEstampadoComponent } from './components/dialogs/dialo
 //import { ZXingScannerModule } from '@zxing/ngx-scanner'; //EIQ-2025-06-25
 // import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
 //import { NgxScannerQrcodeModule, LOAD_WASM } from 'ngx-scanner-qrcode';
-
+import { QRCodeModule } from 'angularx-qrcode';
 // LOAD_WASM().subscribe((res: any) => console.log('LOAD_WASM', res));
 
 import { DialogAprobRechOpComponent } from './components/formato-check-list/dialog-aprob-rech-op/dialog-aprob-rech-op.component';
@@ -1153,6 +1153,7 @@ import { TiemposImproductivosv3Component } from './tiempos-improductivosv3/tiemp
     NgxChartsModule,
     MatSlideToggleModule,
     NgxImageZoomModule, // <-- Add this line
+    QRCodeModule,
     //EditorModule,
     AngularEditorModule,
     ImageCropperModule,

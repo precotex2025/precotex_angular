@@ -15,6 +15,7 @@ import { CheckListService } from 'src/app/services/check-list.service';
 import { DialogCheckRechazoComponent } from '../dialog-check-rechazo/dialog-check-rechazo.component';
 import { DialogCheckInspeccionAudiComponent } from '../dialog-check-inspeccion-audi/dialog-check-inspeccion-audi.component';
 import { DialogAprobRechOpComponent } from '../dialog-aprob-rech-op/dialog-aprob-rech-op.component';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 declare var $: any;
 
@@ -131,6 +132,9 @@ export class DialogCrearCheckComponent implements OnInit {
   Cod_Usuario:any = '';
   Ruta_Prenda:any = '';
   Linea:any = '';
+
+  CodAlmacen: string = "";
+  StockOP: number = 0
 
   Nom_TemCli = ''
   Tipo_Registro = ''
@@ -254,8 +258,8 @@ export class DialogCrearCheckComponent implements OnInit {
   }
 
   changeIndicaciones(event,data_det){
-    console.log(event);
-    console.log(data_det);
+    //console.log(event);
+    //console.log(data_det);
 
     var valor = event.target.value;
 
@@ -335,7 +339,8 @@ export class DialogCrearCheckComponent implements OnInit {
   /******************************LISTAR LAS TALLAS Y AGREGAR ESAS TALALS A LA COLUMNAS DEL TABLE******************** */
   ListarTallas(option) {
     this.Cod_ColCli = this.formulario.get('sColor')?.value
-    console.log(option.Cod_Present);
+    //console.log(option);
+    //console.log(option.Cod_Present);
     this.Cod_Present = option.Cod_Present;
     
     this.checkListService.CF_ObtenerCantidad_OP(
@@ -346,6 +351,9 @@ export class DialogCrearCheckComponent implements OnInit {
       this.spinnerService.hide();
       if(res.length > 0)  {
         this.formulario.patchValue({
+          Lote: option.STOCK,
+          Tamano_Muestra: option.Muestra,
+          Tamano_Muestra_Porc: parseFloat(option.Porcentaje).toFixed(2),
           Cantidad: res[0].Cantidad
         })
       }
@@ -373,18 +381,23 @@ export class DialogCrearCheckComponent implements OnInit {
   /********************************* LISTAR EL DETALLE ********************************************* */
 
   limpiar() {
-    this.DeshabilitarDetalle()
-    this.HabilitarCabcera()
-    this.flg_reset_estilo = false
-    this.formulario.controls['sCliente'].setValue('')
-    this.formulario.controls['sEstilo'].setValue('')
-    this.formulario.controls['sColor'].setValue('')
-    this.formulario.controls['sTemporada'].setValue('')
-    this.formulario.controls['cant'].setValue('')
-    this.formulario.controls['sOP'].setValue('')
-    this.dataSource.data = []
-    this.tallas = []
-    this.Num_Auditoria = 0
+    this.DeshabilitarDetalle();
+    this.HabilitarCabcera();
+    this.flg_reset_estilo = false;
+    this.formulario.controls['sCliente'].setValue('');
+    this.formulario.controls['sEstilo'].setValue('');
+    this.formulario.controls['sColor'].setValue('');
+    this.formulario.controls['sTemporada'].setValue('');
+    this.formulario.controls['Cantidad'].setValue('');
+    this.formulario.controls['sOP'].setValue('');
+    this.formulario.controls['Lote'].setValue(0);
+    this.formulario.controls['Tamano_Muestra'].setValue(0);
+    this.formulario.controls['Tamano_Muestra_Porc'].setValue(0);
+    this.listar_operacionColor = [];
+    this.listar_operacionTemporada = [];
+    this.dataSource.data = [];
+    this.tallas = [];
+    this.Num_Auditoria = 0;
     this.columnsToDisplay = this.displayedColumns.slice();
 
   }
@@ -449,9 +462,9 @@ export class DialogCrearCheckComponent implements OnInit {
   /************************FILTAR EL MOTIVO SEGUN SU CODIGO**************************** */
 
   BuscarMotivo(event) {
-    console.log(event);
+    //console.log(event);
     this.Abr_Motivo = event.target.value;
-    console.log(this.Abr_Motivo);
+    //console.log(this.Abr_Motivo);
     if (this.Abr_Motivo == null) {
       this.Abr_Motivo = ''
     }
@@ -488,7 +501,7 @@ export class DialogCrearCheckComponent implements OnInit {
 
 
   changeCheck(event){
-    console.log(event);
+    //console.log(event);
     this.check = event.checked;
 
     
@@ -496,7 +509,7 @@ export class DialogCrearCheckComponent implements OnInit {
   }
 
   saveDefecto(event){
-    console.log(event);
+    //console.log(event);
 
     if(event != undefined){
       this.Defecto = (event.Descripcion)
@@ -505,9 +518,9 @@ export class DialogCrearCheckComponent implements OnInit {
   }
 
   BuscarDefecto(event) {
-    console.log(event);
+    //console.log(event);
     var defecto = event.value;
-    console.log(this.Abr_Motivo);
+    //console.log(this.Abr_Motivo);
 
     if (defecto == '' ||  defecto == undefined) {
       this.Abr_Motivo = '';
@@ -617,7 +630,8 @@ export class DialogCrearCheckComponent implements OnInit {
 
             this.matSnackBar.open('Se Realizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
           } else {
-            this.matSnackBar.open('Ha ocurrido un error al realizar el registro.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+            //this.matSnackBar.open('Ha ocurrido un error al realizar el registro.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+            Swal.fire('Ha ocurrido un error al realizar el registro.', '', 'warning');
           }
         }, (err: HttpErrorResponse) => {
           this.spinnerService.hide();
@@ -626,10 +640,12 @@ export class DialogCrearCheckComponent implements OnInit {
           })
         });
       }else{
-        this.matSnackBar.open('Debes ingresar El Código, Defecto y Cantidad.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+        //this.matSnackBar.open('Debes ingresar El Código, Defecto y Cantidad.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+        Swal.fire('Debes ingresar El Código, Defecto y Cantidad.', '', 'warning');
       }  
     } else {
-      this.matSnackBar.open('El total de defectos no debe superar el tamaño de la muestra.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+      //this.matSnackBar.open('El total de defectos no debe superar el tamaño de la muestra.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+      Swal.fire('El total de defectos no debe superar el tamaño de la muestra.', '', 'warning');
     }
 
   }
@@ -672,7 +688,8 @@ export class DialogCrearCheckComponent implements OnInit {
           
           this.matSnackBar.open('Se Realizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
         } else {
-          this.matSnackBar.open('Ha ocurrido un error al realizar el registro.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          //this.matSnackBar.open('Ha ocurrido un error al realizar el registro.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          Swal.fire('Ha ocurrido un error al realizar el registro.', '', 'warning');
         }
       }, (err: HttpErrorResponse) => {
         this.spinnerService.hide();
@@ -681,7 +698,8 @@ export class DialogCrearCheckComponent implements OnInit {
         })
       });
     }else{
-      this.matSnackBar.open('Debes ingresar la Indicacion/Recomendacion.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+      //this.matSnackBar.open('Debes ingresar la Indicacion/Recomendacion.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+      Swal.fire('Debes ingresar la Indicacion/Recomendacion.', '', 'warning');
     }
   }
   /******************************INSERTAR DETALLE **************************************** */
@@ -759,7 +777,7 @@ export class DialogCrearCheckComponent implements OnInit {
 
   /******************************REGISTRAR CABCERA **************************************** */
   RegistrarCabecera() {
-    console.log(this.formulario.get('Cantidad').value);
+    //console.log(this.formulario.get('Cantidad').value);
 
     if (this.formulario.valid) {
       const formData = new FormData();
@@ -790,6 +808,8 @@ export class DialogCrearCheckComponent implements OnInit {
       formData.append('chk_go', "0");
       formData.append('chk_jc', "0");
       formData.append('Cod_Present', this.Cod_Present);
+      formData.append('Almacen', this.CodAlmacen);
+      formData.append('Stock', this.StockOP.toString());
       
       /* Se reemplaza metodo de solicitud de GET a POST.  2024Dic27, Ahmed*/
       this.checkListService.Cf_Mantenimiento_CheckList(formData)
@@ -1054,7 +1074,7 @@ export class DialogCrearCheckComponent implements OnInit {
   CambiarValorCliente(Cod_Cliente: string, Abr: string) {
     this.Cod_Cliente = Cod_Cliente
 
-    console.log(this.Cod_Cliente)
+    //console.log(this.Cod_Cliente)
 
     this.Cod_Cliente = Cod_Cliente
     this.formulario.controls['sEstilo'].enable()
@@ -1066,7 +1086,7 @@ export class DialogCrearCheckComponent implements OnInit {
   /*************************************CARGAR SELECT TEMPORADA*********************************************** */
 
   changeAprobado(event){
-    console.log(event)
+    //console.log(event)
     const formData = new FormData();
     formData.append('Opcion', 'I');
     formData.append('Id_CheckList', this.idCabecera);
@@ -1094,6 +1114,8 @@ export class DialogCrearCheckComponent implements OnInit {
     formData.append('chk_go', "0");
     formData.append('chk_jc', "0");
     formData.append('Cod_Present', this.Cod_Present);
+    formData.append('Almacen', this.CodAlmacen);
+    formData.append('Stock', this.StockOP.toString());
     
     this.checkListService.Cf_Mantenimiento_CheckList(formData)
       .subscribe(res => {
@@ -1121,7 +1143,7 @@ export class DialogCrearCheckComponent implements OnInit {
 
   CargarOperacionTemporada() {
 
-    console.log(this.formulario.get('sEstilo')?.value)
+    //console.log(this.formulario.get('sEstilo')?.value)
     this.Cod_TemCli = ''
     this.Cod_EstCli = this.formulario.get('sEstilo')?.value
     this.defectosAlmacenDerivadosService.Cf_Busca_TemporadaCliente(this.Cod_Cliente, this.Cod_EstCli).subscribe(
@@ -1138,7 +1160,7 @@ export class DialogCrearCheckComponent implements OnInit {
     this.Cod_ColCli = this.formulario.get('sColor')?.value
     this.Cod_EstCli = this.formulario.get('sEstilo')?.value
     this.Cod_TemCli = this.formulario.get('sTemporada')?.value
-    this.defectosAlmacenDerivadosService.SM_Presentaciones_OrdPro(this.Op).subscribe(
+    this.defectosAlmacenDerivadosService.UP_Presentaciones_CheckList(this.Op,this.CodAlmacen).subscribe(
       (result: any) => {
         this.listar_operacionColor = result
       },
@@ -1150,29 +1172,38 @@ export class DialogCrearCheckComponent implements OnInit {
   /**********************COMPLETAR CLIENTE Y ESTILO POR OP********************************* */
   BuscarPorOP() {
     this.Op = this.formulario.get('sOP')?.value
-    console.log(this.formulario.get('sOP')?.value);
+    //console.log(this.formulario.get('sOP')?.value);
     this.spinnerService.show();
     this.defectosAlmacenDerivadosService.Cf_Busca_OP_Cliente_Estilo_Temporada(this.Op).subscribe(
       (result: any) => {
         this.spinnerService.hide();
 
-        console.log(result.length + 'PruebaOP')
+        //console.log(result.length + 'PruebaOP')
         if (result.length > 0) {
-          this.flg_reset_estilo = true
-          this.formulario.controls['sCliente'].setValue(result[0].NOM_CLIENTE);
-          this.Cod_Cliente = result[0].COD_CLIENTE
+          if (result[0].COD_CLIENTE != '0'){
+            this.flg_reset_estilo = true
+            this.formulario.controls['sCliente'].setValue(result[0].NOM_CLIENTE);
+            this.Cod_Cliente = result[0].COD_CLIENTE;
+            this.CodAlmacen = result[0].ALMACEN;
+            this.StockOP = result[0].STOCK;
+            this.formulario.controls['sEstilo'].setValue(result[0].COD_ESTCLI);
+            this.formulario.controls['Lote'].setValue(result[0].STOCK);
+            this.CargarOperacionTemporada()
+            this.formulario.controls['Tipo_Prenda'].setValue(result[0].TIPO_PRENDA);
+            this.formulario.controls['sTemporada'].setValue(result[0].COD_TEMCLI);
+            this.Cod_TemCli = this.formulario.get('sTemporada')?.value
+            this.CargarOperacionColor('')
+            this.getLineaOP();
+            this.matSnackBar.open('Se encontraron registros...!!!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          } else {
+            //this.matSnackBar.open(result[0].NOM_CLIENTE, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+            Swal.fire(result[0].NOM_CLIENTE, '', 'warning');
+            this.limpiar();
+          }
 
-          this.formulario.controls['sEstilo'].setValue(result[0].COD_ESTCLI);
-
-          this.CargarOperacionTemporada()
-          this.formulario.controls['Tipo_Prenda'].setValue(result[0].TIPO_PRENDA);
-          this.formulario.controls['sTemporada'].setValue(result[0].COD_TEMCLI);
-          this.Cod_TemCli = this.formulario.get('sTemporada')?.value
-          this.CargarOperacionColor('')
-          this.getLineaOP();
-          this.matSnackBar.open('Se encontraron registros...!!!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
         } else {
-          this.matSnackBar.open('La OP no existe...!!!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          //this.matSnackBar.open('La OP no existe...!!!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          Swal.fire('La OP no existe...!!!', '', 'warning');
           //this.mostrarAlertaCaidasMayora1()
         }
 
