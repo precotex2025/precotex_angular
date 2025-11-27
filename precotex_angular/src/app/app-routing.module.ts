@@ -57,7 +57,7 @@ import { SeguridadControlMovimientosJabasComponent} from './components/seguridad
 import { SeguridadControlMovimientosJabasAccionComponent} from './components/seguridad/seguridad-control-movimientos-jabas/seguridad-control-movimientos-jabas-accion/seguridad-control-movimientos-jabas-accion.component'
 
 import { DespachoOpIncompletaComponent} from './components/despacho-op-incompleta/despacho-op-incompleta.component'
-
+import { GenerarQrComponent } from './components/control-activos-fijo/generar-qr/generar-qr.component';
 import { ControlActivoFijoComponent} from './components/control-activo-fijo/control-activo-fijo.component'
 
 import { InspeccionPrendaComponent} from './components/inspeccion/inspeccion-prenda/inspeccion-prenda.component'
@@ -319,7 +319,9 @@ import { DialogResponsablesNuevoComponent } from './components/reporte-nc/manten
 import { MantenimientoResponsablesComponent } from './components/reporte-nc/mantenimiento-responsables/mantenimiento-responsables.component';
 import { SolicitudMantenimientoMaquinaComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina.component';
 import { SolicitudMantenimientoMaquinaVisorComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina-visor/solicitud-mantenimiento-maquina-visor.component';
+import { TiemposImproductivosv3Component } from './tiempos-improductivosv3/tiempos-improductivosv3.component';
 import { ReporteNcCierreComponent } from './components/reporte-nc/reporte-nc-cierre/reporte-nc-cierre.component';
+
 const routes: Routes = [
   { path: "root", component: AppComponent },
   { path: "principal", component: PrincipalComponent },
@@ -388,7 +390,7 @@ const routes: Routes = [
 
   { path: "GiradoPartidaIncompleta", component: DespachoOpIncompletaComponent},
   { path: "ControlActivoFijo", component: ControlActivoFijoComponent},
-
+  { path: "qrActivoFijo", component: GenerarQrComponent},
   { path: "ComiteEmergencia", component: ComiteEmergenciaComponent},
 
   {path: "InspeccionPrenda", component: InspeccionPrendaComponent},
@@ -698,7 +700,8 @@ const routes: Routes = [
   
   { path:"checkListIngresoCostura", component: CheckListIngresoCosturaComponent },
 
-
+  //TIEMPOS IMPRODUCTIVOS V3
+  { path: "TiemposImproductivosv3", component: TiemposImproductivosv3Component},
 
   //COPIAR RUTAS ANTES DE ESTO
   { path: "", redirectTo: "/", pathMatch: "full" },// Cuando es la raíz
