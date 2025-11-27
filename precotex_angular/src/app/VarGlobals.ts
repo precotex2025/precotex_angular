@@ -6,7 +6,7 @@ export const GlobalVariable = {
 
    
   //----------------------------------------------LOCAL-----------------------------------------------
-  baseUrl: "http://192.168.1.36/ws_android", //LOCAL <- FRONT
+  //baseUrl: "http://192.168.1.36/ws_android", //LOCAL <- FRONT
 
   // baseUrlProcesoTenido: "https://localhost:7093/api/", //LOCAL <- BACK
 
@@ -22,7 +22,7 @@ export const GlobalVariable = {
 
 
   //COMPLEMENTARIOS
-  //baseUrl: "http://192.168.1.36/ws_android_dev", //LOCAL
+  baseUrl: "http://192.168.1.36/ws_android_dev", //LOCAL
   baseUrlLocal: "/ws_local",
   //baseUrlVb: "http://192.168.5.105/publicaWs/",
   baseUrlVb: "http://192.168.1.36/publicaWs/",

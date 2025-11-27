@@ -82,6 +82,59 @@
     </div>
 </div>
 
+<div id="content" *ngIf="verPdf">
+    <table class="tabla_cab">
+        <tr *ngFor="let item of dataActivosPDF">
+            <td colspan="1" class="td_inf">
+                <div class="page">
+                    <table class="table-qr">
+                        <tr>
+                            <th witdh="200px"></th>
+                            <th witdh="50px"></th>
+                            <th witdh="50px"></th>
+                            <th witdh="50px"></th>
+                            <th witdh="50px"></th>
+                            <th witdh="50px"></th>
+                            <th witdh="50px"></th>
+                        </tr>
+                        <tr>
+                            <td rowspan="7">
+                                <qrcode [qrdata]="'*' + item.Nom_Marca + '|' + item.Nom_Modelo + '|' + item.Num_Serie_Equipo + '*'" [width]="128" [errorCorrectionLevel]="'M'"></qrcode>
+                            </td>
+                            <td>Sede:</td>
+                            <td>{{ item.Des_Planta }}</td>
+                            <td>Area:</td>
+                            <td colspan="3">{{ item.Nom_Area }}</td>
+                        </tr>
+                        <tr>
+                            <td>Codigo:</td>
+                            <td>{{ item.Cod_Activo }}</td>
+                            <td>Tipo:</td>
+                            <td colspan="3">{{ item.Descripcion }}</td>
+                        </tr>
+                        <tr>
+                            <td>Marca</td>
+                            <td>{{ item.Nom_Marca }}</td>
+                            <td>Modelo:</td>
+                            <td>{{ item.Nom_Modelo }}</td>
+                            <td>N° Serie:</td>
+                            <td>{{ item.Num_Serie_Equipo }}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <br>
+                    <br>
+                </div>                
+            </td>
+            <br>
+        </tr>
+    </table>
+</div>
+
+<div>
+    <qrcode [qrdata]="'Your data string'" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+</div>
+
 <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
     <p style="color: white; text-align: center; " >Cargando... </p>  
 </ngx-spinner> 
