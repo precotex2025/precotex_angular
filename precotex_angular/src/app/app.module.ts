@@ -606,6 +606,8 @@ import { ReporteNcCierreComponent } from './components/reporte-nc/reporte-nc-cie
 //TIEMPOS IMPORDUCTIVOS V3
 import { TiemposImproductivosv3Component } from './tiempos-improductivosv3/tiempos-improductivosv3.component';
 
+import { GenerarQrComponent } from './components/control-activos-fijo/generar-qr/generar-qr.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -1081,7 +1083,8 @@ import { TiemposImproductivosv3Component } from './tiempos-improductivosv3/tiemp
     TiemposImproductivosv2Component,
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent,
     CalificacionRollosFinalComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ModalEditarDesgloseComponent, ConfirmDialogComponent,
-
+    GenerarQrComponent,
+    
     //Memorandum en GRAL
     MemorandumGralComponent,
     DialogMemorandumGralComponent,
