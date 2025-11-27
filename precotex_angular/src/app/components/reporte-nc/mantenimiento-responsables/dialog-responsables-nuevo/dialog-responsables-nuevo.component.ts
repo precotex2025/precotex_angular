@@ -25,6 +25,7 @@ export class DialogResponsablesNuevoComponent implements OnInit {
   resp_NomR: string = '';
   resp_Ape_PatR: string = '';
   resp_Ape_MatR: string = '';
+  resp_CorreoR: string = '';
   
   constructor(
     private router: Router,
@@ -52,13 +53,20 @@ export class DialogResponsablesNuevoComponent implements OnInit {
         this.resp_NomR = params['resp_NomR'] || '';
         this.resp_Ape_PatR = params['resp_Ape_PatR'] || '';
         this.resp_Ape_MatR = params['resp_Ape_MatR'] || '';
+        this.resp_CorreoR = params['resp_Correo'] || '';
       })
-      
+      console.log(this.accionR);
+      console.log(this.resp_IdR);
+      console.log(this.resp_NomR);
+      console.log(this.resp_Ape_PatR);
+      console.log(this.resp_Ape_MatR);
+      console.log(this.resp_CorreoR);
       if(this.accionR === 'U'){
         this.formData.resp_Id = this.resp_IdR
         this.formData.resp_Nom = this.resp_NomR
         this.formData.resp_Ape_Pat = this.resp_Ape_PatR
         this.formData.resp_Ape_Mat = this.resp_Ape_MatR
+        this.formData.resp_Correo = this.resp_CorreoR
       }
     }
   

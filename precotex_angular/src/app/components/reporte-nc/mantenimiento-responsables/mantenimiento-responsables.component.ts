@@ -13,6 +13,7 @@ interface dataResponsables{
   resp_Nom: string;
   resp_Ape_Pat: string;
   resp_Ape_Mat: string;
+  resp_Correo: string;
 }
 
 @Component({
@@ -40,7 +41,7 @@ export class MantenimientoResponsablesComponent implements OnInit, AfterViewInit
   ngAfterViewInit(){
     this.dataSource.paginator = this.paginator;
   }
-columnas: string[] = ['accion', 'codigo', 'nombre', 'apePaterno', 'apeMaterno'];
+columnas: string[] = ['accion', 'codigo', 'nombre', 'apePaterno', 'apeMaterno', 'correo'];
 
 responsables = [];
 
@@ -53,10 +54,12 @@ crearResponsable() {
 }
 
 editarResponsable(responsable: any) {
+  console.log(responsable);
   let resp_Id = responsable.resp_Id;
   let resp_Nom = responsable.resp_Nom;
   let resp_Ape_Pat = responsable.resp_Ape_Pat;
   let resp_Ape_Mat = responsable.resp_Ape_Mat;
+  let resp_Correo = responsable.resp_Correo;
   
   this.router.navigate(['DialogResponsablesNuevo'],
       { queryParams: {
@@ -64,7 +67,8 @@ editarResponsable(responsable: any) {
           resp_IdR: resp_Id,
           resp_NomR: resp_Nom,
           resp_Ape_PatR: resp_Ape_Pat,
-          resp_Ape_MatR: resp_Ape_Mat    
+          resp_Ape_MatR: resp_Ape_Mat,
+          resp_CorreoR: resp_Correo    
       }}
     );
 }
