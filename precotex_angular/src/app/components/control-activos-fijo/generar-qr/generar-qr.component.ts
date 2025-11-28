@@ -11,6 +11,7 @@ import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 
 import { ControlActivoFijoService } from 'src/app/services/control-activo-fijo.service';
+import { EventosService } from 'src/app/services/eventos.service';
 
 @Component({
   selector: 'app-generar-qr',
@@ -20,9 +21,11 @@ import { ControlActivoFijoService } from 'src/app/services/control-activo-fijo.s
 export class GenerarQrComponent implements OnInit {
 
   idDescripcion: number = 226;  //Laptop
+  numPlanta: number = 1
   dataTipoActivos: any[];
   dataActivoFijos: any[];
   dataActivosPDF: any[];
+  dataPlanta: any[];
   
   dataForExcel = [];
   displayedColumns: string[] = ['select','Des_Planta','Cod_Activo', 'Descripcion', 'Nom_Marca', 'Nom_Modelo', 'Num_Serie_Equipo', 'Nom_Area', 'Nom_Responsable']
@@ -36,18 +39,20 @@ export class GenerarQrComponent implements OnInit {
   constructor(
     private matSnackBar: MatSnackBar,
     private spinnerService: NgxSpinnerService,
-    private controlActivoFijoService: ControlActivoFijoService
+    private controlActivoFijoService: ControlActivoFijoService,
+    private eventosService: EventosService
   ) {
     this.dataSource = new MatTableDataSource();
   }
 
   ngOnInit(): void {
+    this.listarPlantas();
     this.listarTipoActivos();
   }
 
   listarActivos(){
     this.spinnerService.show();
-    this.controlActivoFijoService.getActivosFijo('8',this.idDescripcion.toString())
+    this.controlActivoFijoService.getActivosFijo('8',this.idDescripcion.toString(),this.numPlanta)
       .subscribe((result: any) => {
         if (result.length > 0) {
           this.dataActivoFijos = result;
@@ -74,7 +79,14 @@ export class GenerarQrComponent implements OnInit {
 
         this.listarActivos();
       });
-  }  
+  }
+
+  listarPlantas(){
+    this.eventosService.listaPlantaEventos()
+      .subscribe((response) => {
+        this.dataPlanta = response;
+      });
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -84,7 +96,7 @@ export class GenerarQrComponent implements OnInit {
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
+    const numRows = this.dataSource.filteredData.length;
     return numSelected === numRows;
   }
 
@@ -95,7 +107,7 @@ export class GenerarQrComponent implements OnInit {
       return;
     }
 
-    this.selection.select(...this.dataSource.data);
+    this.selection.select(...this.dataSource.filteredData);
   }
 
   /** The label for the checkbox on the passed row */
@@ -103,13 +115,13 @@ export class GenerarQrComponent implements OnInit {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.Num_Auditoria! + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.Cod_Activo_Fijo! + 1}`;
   }  
 
   onExportarRegistro(){
     if(this.selection.selected.length > 0){
-      this.dataActivosPDF = this.selection.selected;
       this.spinnerService.show();
+      this.dataActivosPDF = this.selection.selected;
       this.verPdf = true;
       
       setTimeout(() => {

@@ -90,7 +90,7 @@ MuestraMenu(){
 
 CerrarSession(){
    //
-   window.location.href = '/Precotex1/#/'; 
+   window.location.href = '/Precotex/#/'; 
    window.location.reload();
   /*GlobalVariable.vusu = ''
   this.router.navigate(['./']);*/

@@ -10,6 +10,15 @@
 
                 <mat-card-content>
                     <div>
+                        <mat-form-field class="example-width-15" appearance="outline">
+                            <mat-label>Destino</mat-label>
+                            <mat-select [(ngModel)]="numPlanta">
+                                <mat-option *ngFor="let item of dataPlanta" [value]="item.Id_Planta">
+                                    {{ item.des_planta }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
                         <mat-form-field class="example-width-35" appearance="outline">
                             <mat-label>Clasificación</mat-label>
                             <mat-select [(ngModel)]="idDescripcion">
