@@ -243,7 +243,8 @@ export class DialogCrearCheckComponent implements OnInit {
             this.Op ='';
             this.dataTicket = '';
 
-            this.matSnackBar.open('No se encontraron registros para este ticket.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+            //this.matSnackBar.open('No se encontraron registros para este ticket.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+            Swal.fire('No se encontraron registros para este ticket.', '', 'warning');
           }
   
         },
@@ -298,14 +299,18 @@ export class DialogCrearCheckComponent implements OnInit {
   }
 
   changeCantidad(event){
-    this.checkListService.CF_ValidarTamano_Muestra(event.target.value).subscribe(
+    this.calculaMuestra(event.target.value);
+  }
+
+  calculaMuestra(cantidad: number){
+    this.checkListService.CF_ValidarTamano_Muestra(cantidad).subscribe(
       (result: any) => {
 
         if (result.length > 0) {
           console.log(result);
           this.formulario.patchValue({
             Tamano_Muestra: result[0].Tamanio_Muestra,
-            Tamano_Muestra_Porc: ((Number(result[0].Tamanio_Muestra) * 100) / Number(event.target.value)).toFixed(2)
+            Tamano_Muestra_Porc: ((Number(result[0].Tamanio_Muestra) * 100) / Number(cantidad)).toFixed(2)
           })
 
           this.nRechazos = result[0].Re;
@@ -356,6 +361,8 @@ export class DialogCrearCheckComponent implements OnInit {
           Tamano_Muestra_Porc: parseFloat(option.Porcentaje).toFixed(2),
           Cantidad: res[0].Cantidad
         })
+
+        this.calculaMuestra(option.STOCK);
       }
     
     }, (err: HttpErrorResponse) => {
@@ -399,7 +406,7 @@ export class DialogCrearCheckComponent implements OnInit {
     this.tallas = [];
     this.Num_Auditoria = 0;
     this.columnsToDisplay = this.displayedColumns.slice();
-
+    this.nRechazos = 0
   }
 
   /************************FILTAR EL CLIENTE SEGUN SU ABR**************************** */
@@ -628,7 +635,8 @@ export class DialogCrearCheckComponent implements OnInit {
             this.formulario.controls['Num_Defectos'].setValue(total / muestra * 100 );
             this.validarEstado(this.nRechazos);
 
-            this.matSnackBar.open('Se Realizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+            //this.matSnackBar.open('Se Realizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+            Swal.fire('Se Realizo el registro correctamente.', '', 'success');
           } else {
             //this.matSnackBar.open('Ha ocurrido un error al realizar el registro.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
             Swal.fire('Ha ocurrido un error al realizar el registro.', '', 'warning');
@@ -686,7 +694,8 @@ export class DialogCrearCheckComponent implements OnInit {
 
           this.Indicaciones = '';
           
-          this.matSnackBar.open('Se Realizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          //this.matSnackBar.open('Se Realizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          Swal.fire('Se Realizo el registro correctamente.', '', 'success');
         } else {
           //this.matSnackBar.open('Ha ocurrido un error al realizar el registro.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
           Swal.fire('Ha ocurrido un error al realizar el registro.', '', 'warning');
@@ -722,7 +731,8 @@ export class DialogCrearCheckComponent implements OnInit {
           this.dataSource2.data = this.dataIndicaciones;
 
           
-          this.matSnackBar.open('Se elimino el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          //this.matSnackBar.open('Se elimino el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          Swal.fire('Se elimino el registro correctamente.', '', 'warning');
         } else {
           this.matSnackBar.open('Ha ocurrido un error al eliminar el registro.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
         }
@@ -760,7 +770,9 @@ export class DialogCrearCheckComponent implements OnInit {
           this.formulario.controls['Numero_Defectos'].setValue(total);
           this.formulario.controls['Num_Defectos'].setValue(total / muestra * 100 );
           this.validarEstado(this.nRechazos);
-          this.matSnackBar.open('Se elimino el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+
+          //this.matSnackBar.open('Se elimino el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          Swal.fire('Se elimino el registro correctamente.', '', 'warning');
         } else {
           this.matSnackBar.open('Ha ocurrido un error al eliminar el registro.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
         }
@@ -1195,6 +1207,8 @@ export class DialogCrearCheckComponent implements OnInit {
             this.CargarOperacionColor('')
             this.getLineaOP();
             this.matSnackBar.open('Se encontraron registros...!!!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+
+            this.calculaMuestra(result[0].STOCK);
           } else {
             //this.matSnackBar.open(result[0].NOM_CLIENTE, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
             Swal.fire(result[0].NOM_CLIENTE, '', 'warning');
