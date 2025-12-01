@@ -110,6 +110,7 @@ export class FormatoCheckListComponent implements OnInit {
 
   dataSource: MatTableDataSource<data_det>;
   displayedColumns_cab: string[] = [
+    'Almacen',
     'Cod_Cliente',
     'Cod_EstCli',
     'Cod_OrdPro',

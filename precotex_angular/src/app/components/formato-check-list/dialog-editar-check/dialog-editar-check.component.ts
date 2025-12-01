@@ -15,6 +15,8 @@ import { CheckListService } from 'src/app/services/check-list.service';
 import { DialogCheckRechazoComponent } from '../dialog-check-rechazo/dialog-check-rechazo.component';
 import { DialogCheckInspeccionAudiComponent } from '../dialog-check-inspeccion-audi/dialog-check-inspeccion-audi.component';
 import { DialogAprobRechOpComponent } from '../dialog-aprob-rech-op/dialog-aprob-rech-op.component';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+
 declare var $: any;
 
 interface Derivados {
@@ -577,7 +579,8 @@ export class DialogEditarCheckComponent implements OnInit {
         this.spinnerService.hide();
         if (res[0].Respuesta == 'OK') {
 
-          this.matSnackBar.open('Se actualizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          //this.matSnackBar.open('Se actualizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          Swal.fire('Se actualizo el registro correctamente.', '', 'success');
         } else {
           this.matSnackBar.open('Ha ocurrido un error al actualizar el registro.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
         }
@@ -677,7 +680,8 @@ export class DialogEditarCheckComponent implements OnInit {
             this.formulario.controls['Num_Defectos'].setValue(total / muestra * 100 );
             this.validarEstado(this.nRechazos);
 
-            this.matSnackBar.open('Se Realizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+            //this.matSnackBar.open('Se Realizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+            Swal.fire('Se Realizo el registro correctamente.', '', 'success');
           } else {
             this.matSnackBar.open('Ha ocurrido un error al realizar el registro.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
           }
@@ -734,7 +738,8 @@ export class DialogEditarCheckComponent implements OnInit {
 
           this.Indicaciones = '';
           
-          this.matSnackBar.open('Se Realizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          //this.matSnackBar.open('Se Realizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          Swal.fire('Se Realizo el registro correctamente.', '', 'success');
         } else {
           this.matSnackBar.open('Ha ocurrido un error al realizar el registro.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
         }
@@ -769,7 +774,8 @@ export class DialogEditarCheckComponent implements OnInit {
           this.dataSource2.data = this.dataIndicaciones;
 
           
-          this.matSnackBar.open('Se elimino el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          //this.matSnackBar.open('Se elimino el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          Swal.fire('Se elimino el registro correctamente.', '', 'success');
         } else {
           this.matSnackBar.open('Ha ocurrido un error al eliminar el registro.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
         }
@@ -811,7 +817,8 @@ export class DialogEditarCheckComponent implements OnInit {
           this.formulario.controls['Num_Defectos'].setValue(total / muestra * 100 );
           this.validarEstado(this.nRechazos);
 
-          this.matSnackBar.open('Se elimino el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          //this.matSnackBar.open('Se elimino el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          Swal.fire('Se elimino el registro correctamente.', '', 'success');
         } else {
           this.matSnackBar.open('Ha ocurrido un error al eliminar el registro.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
         }
@@ -868,12 +875,14 @@ export class DialogEditarCheckComponent implements OnInit {
         if (res[0].Respuesta == 'OK') {
           this.idCabecera = res[0].Id;
 
-          this.matSnackBar.open('Se actualizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          //this.matSnackBar.open('Se actualizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          Swal.fire('Se actualizo el registro correctamente.', '', 'success');
           this.DeshabilitarCabcera();
           this.HabilitarDetalle();
 
         } else {
-          this.matSnackBar.open(res[0].Respuesta, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          //this.matSnackBar.open(res[0].Respuesta, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          Swal.fire(res[0].Respuesta, '', 'warning');
         }
       }, (err: HttpErrorResponse) => {
         this.spinnerService.hide();
@@ -1138,7 +1147,8 @@ export class DialogEditarCheckComponent implements OnInit {
             this.Cod_TemCli = this.formulario.get('sTemporada')?.value
             this.CargarOperacionColor('')
           } else {
-            this.matSnackBar.open(result[0].NOM_CLIENTE, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+            //this.matSnackBar.open(result[0].NOM_CLIENTE, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+            Swal.fire(result[0].NOM_CLIENTE, '', 'warning');
           }
         } else {
           this.matSnackBar.open('La OP no existe...!!!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
