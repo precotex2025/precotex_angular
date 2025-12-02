@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { SelectionModel } from '@angular/cdk/collections';
 import { MatSort } from '@angular/material/sort';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgxSpinnerService }  from "ngx-spinner";
@@ -10,6 +11,7 @@ import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 
 import { ControlActivoFijoService } from 'src/app/services/control-activo-fijo.service';
+import { EventosService } from 'src/app/services/eventos.service';
 
 @Component({
   selector: 'app-generar-qr',
@@ -19,13 +21,16 @@ import { ControlActivoFijoService } from 'src/app/services/control-activo-fijo.s
 export class GenerarQrComponent implements OnInit {
 
   idDescripcion: number = 226;  //Laptop
+  numPlanta: number = 1
   dataTipoActivos: any[];
   dataActivoFijos: any[];
   dataActivosPDF: any[];
+  dataPlanta: any[];
   
   dataForExcel = [];
-  displayedColumns: string[] = ['Des_Planta','Cod_Activo', 'Descripcion', 'Nom_Marca', 'Nom_Modelo', 'Num_Serie_Equipo', 'Nom_Area', 'Nom_Responsable']
+  displayedColumns: string[] = ['select','Des_Planta','Cod_Activo', 'Descripcion', 'Nom_Marca', 'Nom_Modelo', 'Num_Serie_Equipo', 'Nom_Area', 'Nom_Responsable']
   dataSource: MatTableDataSource<any>;
+  selection = new SelectionModel<any>(true, []);
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -34,18 +39,20 @@ export class GenerarQrComponent implements OnInit {
   constructor(
     private matSnackBar: MatSnackBar,
     private spinnerService: NgxSpinnerService,
-    private controlActivoFijoService: ControlActivoFijoService
+    private controlActivoFijoService: ControlActivoFijoService,
+    private eventosService: EventosService
   ) {
     this.dataSource = new MatTableDataSource();
   }
 
   ngOnInit(): void {
+    this.listarPlantas();
     this.listarTipoActivos();
   }
 
   listarActivos(){
     this.spinnerService.show();
-    this.controlActivoFijoService.getActivosFijo('8',this.idDescripcion.toString())
+    this.controlActivoFijoService.getActivosFijo('8',this.idDescripcion.toString(),this.numPlanta)
       .subscribe((result: any) => {
         if (result.length > 0) {
           this.dataActivoFijos = result;
@@ -72,88 +79,90 @@ export class GenerarQrComponent implements OnInit {
 
         this.listarActivos();
       });
-  }  
+  }
+
+  listarPlantas(){
+    this.eventosService.listaPlantaEventos()
+      .subscribe((response) => {
+        this.dataPlanta = response;
+      });
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }  
 
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.filteredData.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      return;
+    }
+
+    this.selection.select(...this.dataSource.filteredData);
+  }
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: any): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.Cod_Activo_Fijo! + 1}`;
+  }  
+
   onExportarRegistro(){
-    this.verPdf = true;
-    this.dataActivosPDF = this.dataSource.filteredData;
-    console.log(this.dataActivosPDF)
-    setTimeout(() => {
-      this.generatePDF();
-      //this.generarPDF();
-    }, 100)
+    if(this.selection.selected.length > 0){
+      this.spinnerService.show();
+      this.dataActivosPDF = this.selection.selected;
+      this.verPdf = true;
+      
+      setTimeout(() => {
+        this.generatePDF();
+      }, 100)
+    }        
   }
 
   async generatePDF() {
     let fecha = new Date()     
     let filePO = 'Activos'.concat(fecha.toISOString().replace(/:/g,"-").substring(0,19)).concat('.pdf');
+    let j = 0;
 
     const pdf = new jsPDF('p', 'mm', 'a4', true); // Formato A4 en orientación vertical comprimido
-    const content = document.getElementById('content') as HTMLElement;
+    //const content = document.getElementById('content') as HTMLCanvasElement;
+    //const content = <HTMLCanvasElement> document.getElementById('content');
     const pages = document.querySelectorAll<HTMLElement>('.page');
 
     for (let i = 0; i < pages.length; i++) {
       const canvas = await html2canvas(pages[i], { scale: 2 }); // Escala para mayor calidad
+      //const ctx = canvas.getContext("2d", {willReadFrequently: true});
       const imgData = canvas.toDataURL('image/png');
       const imgWidth = 210; // Ancho de A4 en mm
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
 
-      if (i < pages.length - 1 && i % 5 == 0) {
+      pdf.addImage(imgData, 'PNG', 0, imgHeight * j, imgWidth, imgHeight);
+
+      if(i%6 == 0)
+        j = 1;
+      else
+        j++;
+
+      if (i < pages.length - 1 && j == 6) {
+        j = 0;
         pdf.addPage(); // Agregar una nueva página excepto en la última
       }
     }
 
     pdf.save(filePO); // Descargar el PDF
     this.verPdf = false;
-    //this.selection.clear();
+    this.selection.clear();
     this.spinnerService.hide();
   }
-
-generarPDF(){
-    
-    
-    setTimeout(() => {
-      var data = document.getElementById('content');  
-
-      html2canvas(data).then(canvas => {
-        var imgWidth = 300; //200;
-        var pageHeight = 300; //590; //295;
-        var imgHeight = canvas.height * imgWidth / canvas.width;
-        
-        //canvas.innerHTML.replace('img1', this.dataReporteAuditoria[0].Path_Firma_Web_1)
-        var contentDataURL = canvas.toDataURL('image/png',1.0)
-
-        let pdf = new jsPDF({
-          //orientation: 'L',
-          unit: 'mm',
-          format: 'a4',
-        });
-        var position = 15;
-        var position1 = -282 //-297;
-
-        var totalPages = Math.ceil(imgHeight / pageHeight - 1)
-        
-        //console.log(totalPages)
-        //console.log(imgHeight);
-        
-        pdf.addImage(contentDataURL, 'PNG', 5, position, imgWidth, imgHeight)
-        for (var i = 1; i <= totalPages; i++) { 
-          pdf.addPage();
-          pdf.addImage(contentDataURL, 'PNG', 5, position1, imgWidth, imgHeight);
-        }
-        
-        pdf.save('FORMATO AUDITORIA FINAL.pdf'); // Generated PDF
-
-        this.verPdf = false;
-        //this.SpinnerService.hide();
-      });
-    }, 100);
-  }  
 }

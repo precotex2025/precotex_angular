@@ -78,6 +78,7 @@ export class AuditoriaProcesoCorteComponent implements OnInit {
   ll_Registro: boolean = false;
   ll_soloVer: boolean = false;
   ll_verAte: boolean = false;
+  ld_fecha = new Date();
   
   range = new FormGroup({
     start: new FormControl(),
@@ -119,6 +120,8 @@ export class AuditoriaProcesoCorteComponent implements OnInit {
     private exceljsService:ExceljsProdProArtesService)
     {
       this.dataSource = new MatTableDataSource();
+      this.range.controls['start'].setValue(new Date(this.ld_fecha.getFullYear(), this.ld_fecha.getMonth() - 1, this.ld_fecha.getDate()));
+      this.range.controls['end'].setValue(new Date(this.ld_fecha.getFullYear(), this.ld_fecha.getMonth(), this.ld_fecha.getDate()));
     }
 
   ngOnInit(): void {
