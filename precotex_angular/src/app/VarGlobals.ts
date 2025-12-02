@@ -6,16 +6,16 @@ export const GlobalVariable = {
 
 
   //----------------------------------------------LOCAL-----------------------------------------------
-  baseUrl: "http://192.168.1.36/ws_android", //LOCAL <- FRONT
+  // baseUrl: "http://192.168.1.36/ws_android", //LOCAL <- FRONT
 
-  baseUrlProcesoTenido: "https://localhost:7093/api/", //LOCAL <- BACK
+  // baseUrlProcesoTenido: "https://localhost:7093/api/", //LOCAL <- BACK
 
 
 
   //--------------------------------------------PRODUCCION--------------------------------------------
-  //  baseUrl: "/ws_android", //PRODUCCION <- FRONT 
+  baseUrl: "/ws_android", //PRODUCCION <- FRONT 
   
-  //  baseUrlProcesoTenido: "https://gestion.precotex.com:444/ubicaciones/api/", // PRODUCCION EIQ <- BACK
+  baseUrlProcesoTenido: "https://gestion.precotex.com:444/ubicaciones/api/", // PRODUCCION EIQ <- BACK
   
   
 
