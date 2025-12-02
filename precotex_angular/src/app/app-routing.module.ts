@@ -321,6 +321,7 @@ import { SolicitudMantenimientoMaquinaComponent } from './components/solicitud-m
 import { SolicitudMantenimientoMaquinaVisorComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina-visor/solicitud-mantenimiento-maquina-visor.component';
 import { TiemposImproductivosv3Component } from './tiempos-improductivosv3/tiempos-improductivosv3.component';
 import { ReporteNcCierreComponent } from './components/reporte-nc/reporte-nc-cierre/reporte-nc-cierre.component';
+import { AprobacionDesarrolloTelasComponent } from './components/aprobacion-desarrollo-telas/aprobacion-desarrollo-telas.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -701,7 +702,10 @@ const routes: Routes = [
   { path:"checkListIngresoCostura", component: CheckListIngresoCosturaComponent },
 
   //TIEMPOS IMPRODUCTIVOS V3
-  { path: "TiemposImproductivosv3", component: TiemposImproductivosv3Component},
+  { path: "TiemposImproductivosv3", component: TiemposImproductivosv3Component },
+
+  //APROBACION DE DESARROLLO DE TELAS
+  { path: "AprobacionDesarrolloTelas", component: AprobacionDesarrolloTelasComponent },
 
   //COPIAR RUTAS ANTES DE ESTO
   { path: "", redirectTo: "/", pathMatch: "full" },// Cuando es la raíz

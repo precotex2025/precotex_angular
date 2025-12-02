@@ -605,6 +605,7 @@ import { ReporteNcCierreComponent } from './components/reporte-nc/reporte-nc-cie
 
 //TIEMPOS IMPORDUCTIVOS V3
 import { TiemposImproductivosv3Component } from './tiempos-improductivosv3/tiempos-improductivosv3.component';
+import { AprobacionDesarrolloTelasComponent } from './components/aprobacion-desarrollo-telas/aprobacion-desarrollo-telas.component';
 
 @NgModule({
   declarations: [
@@ -1133,6 +1134,9 @@ import { TiemposImproductivosv3Component } from './tiempos-improductivosv3/tiemp
     
     //TIEMPOS IMPRODUCTIVOS V3
     ,TiemposImproductivosv3Component
+
+    //APROBACION DESARROLLO TELAS
+    ,AprobacionDesarrolloTelasComponent
   
   ],
   entryComponents: [DialogJabaComponent],

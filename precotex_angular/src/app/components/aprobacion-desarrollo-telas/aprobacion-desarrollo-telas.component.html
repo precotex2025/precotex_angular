@@ -1,0 +1,137 @@
+
+<div class="container">
+    <div class="grid-container">
+        <div>
+            <strong>Listado aprobaciones de telas pendientes</strong>
+        </div>
+
+        <div>
+            <form [formGroup]="formulario" #formDirective="ngForm">
+                <!-- <mat-card>
+                    <mat-card-content> -->
+                        <div class="responsive-table">
+                            <table mat-table class="mat-elevation-z8" #table [dataSource]="dataSource" matSort>
+
+                                <!-- Acciones -->
+                                <ng-container matColumnDef="acciones">
+                                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                                <td mat-cell *matCellDef="let row">
+
+                                    <div style="display: flex; gap: 0;">
+
+                                        <button mat-icon-button color="primary" matTooltip="Aprobar" (click)="onAprobar(row)">
+                                            <mat-icon class="icon-aprobar">check</mat-icon>
+                                        </button>
+
+                                        <button mat-icon-button color="warn" matTooltip="Rechazar" (click)="onRechazar(row)">
+                                            <mat-icon>close</mat-icon>
+                                        </button>     
+                                        
+                                        <button mat-icon-button color="warn" matTooltip="Rechazar" (click)="onVerPdf(row)">
+                                            <mat-icon>picture_as_pdf</mat-icon>
+                                        </button>                                          
+
+                                        <!-- <button type="button" class="btn-verde" (click)="onAprobar(row)" mat-flat-button>
+                                            <mat-icon aria-label="person" >done
+                                            </mat-icon>  
+                                        </button>    
+
+                                            <button  type="button" class="button-cerrar"  (click)="onRechazar(row)" mat-flat-button color="warn">
+                                            <mat-icon aria-label="person" >cancel
+                                            </mat-icon>  
+                                        </button>    -->
+
+                                    </div>                                 
+
+                                </td>
+                                </ng-container>   
+
+                                <!-- Codigo Tela -->
+                                <ng-container matColumnDef="cod_Tela">
+                                <th mat-header-cell *matHeaderCellDef>Código Tela</th>
+                                <td mat-cell *matCellDef="let row" class="memo-cell">{{ row.cod_Tela }}</td>
+                                </ng-container>
+
+                                <!-- Descripción Tela -->
+                                <ng-container matColumnDef="des_Tela">
+                                <th mat-header-cell *matHeaderCellDef>Tela</th>
+                                <td mat-cell *matCellDef="let row">{{ row.des_Tela }}</td>
+                                </ng-container>
+
+                                <!-- Motivo -->
+                                <ng-container matColumnDef="des_Motivo_Solicitud">
+                                <th mat-header-cell *matHeaderCellDef>Motivo</th>
+                                <td mat-cell *matCellDef="let row">{{ row.des_Motivo_Solicitud }}</td>
+                                </ng-container>        
+                                
+                                <!-- Comentario -->
+                                <ng-container matColumnDef="comentario_Solicitud">
+                                <th mat-header-cell *matHeaderCellDef>Comentario Solicitud</th>
+                                <td mat-cell *matCellDef="let row">{{ row.comentario_Solicitud }}</td>
+                                </ng-container>    
+                                
+                                <!-- Version -->
+                                <ng-container matColumnDef="nom_Version">
+                                <th mat-header-cell *matHeaderCellDef>Versión</th>
+                                <td mat-cell *matCellDef="let row">{{ row.nom_Version }}</td>
+                                </ng-container>    
+                                
+                                <!-- Comentario 2-->
+                                <ng-container matColumnDef="comentario">
+                                <th mat-header-cell *matHeaderCellDef>Comentario 2</th>
+                                <td mat-cell *matCellDef="let row">{{ row.comentario }}</td>
+                                </ng-container>                                    
+                                
+                                <!-- Ruta-->
+                                <!-- <ng-container matColumnDef="ruta_Archivo">
+                                <th mat-header-cell *matHeaderCellDef>Ruta</th>
+                                <td mat-cell *matCellDef="let row">
+                                    <!-- {{ row.ruta_Archivo }} -->
+                                    <!-- <button mat-button color="primary" (click)="onVerPdf(row.ruta_Archivo)">
+                                        Ver PDF
+                                    </button>
+                                </td>
+                                </ng-container>      -->
+                                
+                                <!-- Fecha Hora -->
+                                <ng-container matColumnDef="fec_Registro_Solicitud">
+                                <th mat-header-cell *matHeaderCellDef>Fecha Crea</th>
+                                <!-- <td mat-cell *matCellDef="let row">{{ row.fec_Registro }}</td> -->
+                                <td mat-cell *matCellDef="let row"> {{row.fec_Registro_Solicitud | date: 'dd/MM/yyyy HH:mm' }} </td>
+                                </ng-container>   
+                                
+                                <!-- Usuario Registra -->
+                                <ng-container matColumnDef="cod_Usuario_Solicitud">
+                                <th mat-header-cell *matHeaderCellDef>Usuario Crea</th>
+                                <td mat-cell *matCellDef="let row">{{ row.cod_Usuario_Solicitud }}</td>
+                                </ng-container>                                          
+                                
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>                                      
+
+                            </table>
+                        </div>
+                    <!-- </mat-card-content>
+                </mat-card> -->
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<ng-template #pdfDialog>
+  <div class="dialog-header">
+    <h2 class="title">Vista previa del PDF</h2>
+    <button mat-icon-button (click)="Cerrar()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="pdf-content">
+    <iframe [src]="pdfUrl" class="pdf-frame"></iframe>
+  </mat-dialog-content>
+</ng-template>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default">
+    <div class="loader"></div>
+</ngx-spinner>
