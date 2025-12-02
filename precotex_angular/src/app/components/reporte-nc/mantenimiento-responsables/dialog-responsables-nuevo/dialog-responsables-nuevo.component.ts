@@ -9,7 +9,8 @@ interface FormData {
   resp_Id: number,
   resp_Nom: string,
   resp_Ape_Pat: string,
-  resp_Ape_Mat: string
+  resp_Ape_Mat: string,
+  resp_Correo: string
 }
 
 
@@ -24,6 +25,7 @@ export class DialogResponsablesNuevoComponent implements OnInit {
   resp_NomR: string = '';
   resp_Ape_PatR: string = '';
   resp_Ape_MatR: string = '';
+  resp_CorreoR: string = '';
   
   constructor(
     private router: Router,
@@ -37,7 +39,8 @@ export class DialogResponsablesNuevoComponent implements OnInit {
     resp_Id: 0,
     resp_Nom: '',
     resp_Ape_Pat: '',
-    resp_Ape_Mat: ''
+    resp_Ape_Mat: '',
+    resp_Correo: ''
   }
 
   ngOnInit(): void {
@@ -50,23 +53,19 @@ export class DialogResponsablesNuevoComponent implements OnInit {
         this.resp_NomR = params['resp_NomR'] || '';
         this.resp_Ape_PatR = params['resp_Ape_PatR'] || '';
         this.resp_Ape_MatR = params['resp_Ape_MatR'] || '';
+        this.resp_CorreoR = params['resp_Correo'] || '';
       })
-      console.log(this.accionR);
-      console.log(this.resp_IdR);
-      console.log(this.resp_NomR);
-      console.log(this.resp_Ape_PatR);
-      console.log(this.resp_Ape_MatR);
-      
+
       if(this.accionR === 'U'){
         this.formData.resp_Id = this.resp_IdR
         this.formData.resp_Nom = this.resp_NomR
         this.formData.resp_Ape_Pat = this.resp_Ape_PatR
         this.formData.resp_Ape_Mat = this.resp_Ape_MatR
+        this.formData.resp_Correo = this.resp_CorreoR
       }
     }
   
   Procesar(): void {
-    console.log(this.accionR);
     if(this.accionR === 'I'){
       this.guardarResponsable();
     }else{
@@ -129,7 +128,7 @@ export class DialogResponsablesNuevoComponent implements OnInit {
       ...this.formData
     };
     Swal.fire({
-          title: "Editar Datos de Responsable?",
+          title: "¿Editar Datos de Responsable?",
           icon: 'question',
           showCancelButton: true,
           confirmButtonColor:'#3085d6',

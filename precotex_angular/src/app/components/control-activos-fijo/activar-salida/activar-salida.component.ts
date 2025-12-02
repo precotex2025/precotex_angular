@@ -40,7 +40,7 @@ export class ActivarSalidaComponent implements OnInit {
 
   listarActivos(){
     this.spinnerService.show();
-    this.controlActivoFijoService.getActivosFijo('3',this.idDescripcion.toString())
+    this.controlActivoFijoService.getActivosFijo('3',this.idDescripcion.toString(),0)
       .subscribe((result: any) => {
         if (result.length > 0) {
           this.dataActivoFijos = result;
@@ -61,7 +61,7 @@ export class ActivarSalidaComponent implements OnInit {
   }
 
   listarTipoActivos(){
-    this.controlActivoFijoService.getTipoActivos()
+    this.controlActivoFijoService.getTipoActivos('3')
       .subscribe((response) => {
         this.dataTipoActivos = response;
 

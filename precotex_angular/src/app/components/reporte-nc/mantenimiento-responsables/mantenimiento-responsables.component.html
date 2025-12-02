@@ -34,6 +34,11 @@
         <td mat-cell *matCellDef="let r">{{ r.resp_Ape_Mat }}</td>
     </ng-container>
 
+    <ng-container matColumnDef="correo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Correo</th>
+        <td mat-cell *matCellDef="let r">{{ r.resp_Correo }}</td>
+    </ng-container>
+
     <!-- Acción -->
     <ng-container matColumnDef="accion">
         <th mat-header-cell *matHeaderCellDef>Acción</th>

@@ -22,8 +22,8 @@
           <mat-label *ngIf="formData.est_Id == '1'">Detallar Razón de Pendiente</mat-label>
           <mat-label *ngIf="formData.est_Id == '3'">Detallar Observación</mat-label>
           <textarea matInput rows="3" [(ngModel)]="formDataPatch.rep_DetObs" 
-                    name="observacion"
-                    [disabled]="formData.est_Id == '2'"></textarea>
+                    name="observacion"></textarea>
+          <!-- [disabled]="formData.est_Id == '2'" -->
         </mat-form-field>
       </div>
 

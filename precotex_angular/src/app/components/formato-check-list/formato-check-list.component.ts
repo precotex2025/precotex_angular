@@ -110,6 +110,7 @@ export class FormatoCheckListComponent implements OnInit {
 
   dataSource: MatTableDataSource<data_det>;
   displayedColumns_cab: string[] = [
+    'Almacen',
     'Cod_Cliente',
     'Cod_EstCli',
     'Cod_OrdPro',
@@ -326,6 +327,8 @@ export class FormatoCheckListComponent implements OnInit {
       formData.append('chk_go', "0");
       formData.append('chk_jc', "0");
       formData.append('Cod_Present', data_det.Cod_Present);
+      formData.append('Almacen', '');
+      formData.append('Stock', '');
 
       this.checkListService.Cf_Mantenimiento_CheckList(formData)
         .subscribe(res => {
@@ -377,6 +380,8 @@ export class FormatoCheckListComponent implements OnInit {
       formData.append('chk_go', "0");
       formData.append('chk_jc', "0");
       formData.append('Cod_Present', "");
+      formData.append('Almacen', '');
+      formData.append('Stock', '');
 
       this.spinnerService.show();
       

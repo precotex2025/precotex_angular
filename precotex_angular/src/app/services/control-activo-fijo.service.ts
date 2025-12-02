@@ -105,8 +105,8 @@ MantenimientoActivoFijoService(
 
   //- Control salida activos
 
-  getActivosFijo(Cod_Categoria: string, Id_Descripcion: string): Observable<any[]>{
-    return this.http.get<any[]>(`${this.baseUrl}/app_Get_SG_ActivosFijo.php?Cod_Categoria=${Cod_Categoria}&Id_Descripcion=${Id_Descripcion}`);  
+  getActivosFijo(Cod_Categoria: string, Id_Descripcion: string, Num_Planta: number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.baseUrl}/app_Get_SG_ActivosFijo.php?Cod_Categoria=${Cod_Categoria}&Id_Descripcion=${Id_Descripcion}&Num_Planta=${Num_Planta}`);  
   }
 
   valActivosFijo(Cod_Activo: string): Observable<any[]>{
@@ -117,8 +117,8 @@ MantenimientoActivoFijoService(
     return this.http.get<any[]>(`${this.baseUrl}/app_Man_SG_ActivosFijo.php?Cod_Activo_Fijo=${Cod_Activo_Fijo}&Flg_Salida=${Flg_Salida}`);  
   }
 
-  getTipoActivos(): Observable<any[]>{
-    return this.http.get<any[]>(`${this.baseUrl}/app_Man_SG_TipoActivos.php`);  
+  getTipoActivos(Cod_Categoria: string): Observable<any[]>{
+    return this.http.get<any[]>(`${this.baseUrl}/app_Man_SG_TipoActivos.php?Cod_Categoria=${Cod_Categoria}`);  
   }
 
   manRegistroSalidas(data: any): Observable<any[]> {

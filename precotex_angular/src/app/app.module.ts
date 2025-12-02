@@ -285,7 +285,7 @@ import { DialogConfirmacionEstampadoComponent } from './components/dialogs/dialo
 //import { ZXingScannerModule } from '@zxing/ngx-scanner'; //EIQ-2025-06-25
 // import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
 //import { NgxScannerQrcodeModule, LOAD_WASM } from 'ngx-scanner-qrcode';
-
+import { QRCodeModule } from 'angularx-qrcode';
 // LOAD_WASM().subscribe((res: any) => console.log('LOAD_WASM', res));
 
 import { DialogAprobRechOpComponent } from './components/formato-check-list/dialog-aprob-rech-op/dialog-aprob-rech-op.component';
@@ -606,6 +606,8 @@ import { ReporteNcCierreComponent } from './components/reporte-nc/reporte-nc-cie
 //TIEMPOS IMPORDUCTIVOS V3
 import { TiemposImproductivosv3Component } from './tiempos-improductivosv3/tiempos-improductivosv3.component';
 import { AprobacionDesarrolloTelasComponent } from './components/aprobacion-desarrollo-telas/aprobacion-desarrollo-telas.component';
+
+import { GenerarQrComponent } from './components/control-activos-fijo/generar-qr/generar-qr.component';
 
 @NgModule({
   declarations: [
@@ -1082,7 +1084,8 @@ import { AprobacionDesarrolloTelasComponent } from './components/aprobacion-desa
     TiemposImproductivosv2Component,
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent,
     CalificacionRollosFinalComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ModalEditarDesgloseComponent, ConfirmDialogComponent,
-
+    GenerarQrComponent,
+    
     //Memorandum en GRAL
     MemorandumGralComponent,
     DialogMemorandumGralComponent,
@@ -1157,6 +1160,7 @@ import { AprobacionDesarrolloTelasComponent } from './components/aprobacion-desa
     NgxChartsModule,
     MatSlideToggleModule,
     NgxImageZoomModule, // <-- Add this line
+    QRCodeModule,
     //EditorModule,
     AngularEditorModule,
     ImageCropperModule,
