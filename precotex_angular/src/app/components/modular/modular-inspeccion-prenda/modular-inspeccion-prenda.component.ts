@@ -48,7 +48,8 @@ export class ModularInspeccionPrendaComponent implements OnInit {
     Color: [''],
     Talla: [''],
     Codigo: [''],
-    Cantidad: ['']
+    Cantidad: [''],
+    Stock: ['']
   })
 
   DisableSaveButton = true;
@@ -134,6 +135,7 @@ export class ModularInspeccionPrendaComponent implements OnInit {
           //this.formulario.controls['Talla'].setValue(result[0].COD_TALLA)
           this.ImagePath = result[0].ICONO_WEB;
           this.formulario.controls['Cantidad'].setValue(result[0].PRENDASPAQ);
+          this.formulario.controls['Stock'].setValue(result[0].Stock);
           this.formulario.controls['Codigo'].disable();
           this.Cod_Fabrica = result[0].COD_FABRICA;
           this.Num_Paquete = result[0].NUM_PAQUETE;
@@ -141,6 +143,7 @@ export class ModularInspeccionPrendaComponent implements OnInit {
           this.formulario.controls['Color'].disable();
           this.formulario.controls['Talla'].disable();
           this.formulario.controls['Cantidad'].disable();
+          this.formulario.controls['Stock'].disable();
           this.DisableSaveButton = false;
           this.Tipo_Ticket = result[0].Tipo_Ticket;
           this.inputCodigo.nativeElement.focus();
@@ -195,6 +198,7 @@ export class ModularInspeccionPrendaComponent implements OnInit {
               this.formulario.controls['Color'].disable()
               this.formulario.controls['Talla'].disable()
               this.formulario.controls['Cantidad'].disable()
+              this.formulario.controls['Stock'].disable()
               this.ActualizarCantidad()
               this.matSnackBar.open('Proceso Correcto...', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 3000 })
             } else {
@@ -299,6 +303,7 @@ export class ModularInspeccionPrendaComponent implements OnInit {
               this.formulario.controls['Color'].disable()
               this.formulario.controls['Talla'].disable()
               this.formulario.controls['Cantidad'].disable()
+              this.formulario.controls['Stock'].disable()
               this.ActualizarCantidad()
               this.matSnackBar.open('Proceso Correcto...', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 3000 })
               this.deshabilitar = false;
@@ -753,10 +758,12 @@ export class ModularInspeccionPrendaComponent implements OnInit {
     this.listar_operacionTalla = []
     this.formulario.controls['Talla'].setValue('')
     this.formulario.controls['Cantidad'].setValue('')
+    this.formulario.controls['Stock'].setValue('')
     this.formulario.controls['OP'].disable()
     this.formulario.controls['Color'].disable()
     this.formulario.controls['Talla'].disable()
     this.formulario.controls['Cantidad'].disable()
+    this.formulario.controls['Stock'].disable()
     //this.formulario.controls['OP'].enable()
     //this.formulario.controls['Color'].enable()
     //this.formulario.controls['Talla'].enable()

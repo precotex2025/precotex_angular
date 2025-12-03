@@ -1186,7 +1186,7 @@ export class DialogCrearCheckComponent implements OnInit {
     this.Op = this.formulario.get('sOP')?.value
     //console.log(this.formulario.get('sOP')?.value);
     this.spinnerService.show();
-    this.defectosAlmacenDerivadosService.Cf_Busca_OP_Cliente_Estilo_Temporada(this.Op).subscribe(
+    this.defectosAlmacenDerivadosService.Cf_Busca_OP_Cliente_Estilo_Temporada(this.Op, 'I').subscribe(
       (result: any) => {
         this.spinnerService.hide();
 

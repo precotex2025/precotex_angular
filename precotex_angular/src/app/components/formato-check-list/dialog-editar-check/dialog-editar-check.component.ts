@@ -1130,7 +1130,7 @@ export class DialogEditarCheckComponent implements OnInit {
   /**********************COMPLETAR CLIENTE Y ESTILO POR OP********************************* */
   BuscarPorOP() {
     this.Op = this.formulario.get('sOP')?.value
-    this.defectosAlmacenDerivadosService.Cf_Busca_OP_Cliente_Estilo_Temporada(this.Op).subscribe(
+    this.defectosAlmacenDerivadosService.Cf_Busca_OP_Cliente_Estilo_Temporada(this.Op, 'I').subscribe(
       (result: any) => {
         if (result.length > 0) {
           if (result[0].COD_CLIENTE != '0'){

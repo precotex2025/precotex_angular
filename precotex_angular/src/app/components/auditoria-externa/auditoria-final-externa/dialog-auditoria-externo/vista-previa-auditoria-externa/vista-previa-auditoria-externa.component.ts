@@ -54,7 +54,7 @@ export class VistaPreviaAuditoriaExternaComponent implements OnInit {
   BuscarPorOP() {
     this.Op = this.data.Cod_OrdPro;
     this.Num_Auditoria_Detalle = this.data.Num_Auditoria_Detalle;
-    this.defectosAlmacenDerivadosService.Cf_Busca_OP_Cliente_Estilo_Temporada(this.Op).subscribe(
+    this.defectosAlmacenDerivadosService.Cf_Busca_OP_Cliente_Estilo_Temporada(this.Op, '').subscribe(
       (result: any) => {
         if (result.length > 0) {
           if (result[0].COD_CLIENTE != '0'){
