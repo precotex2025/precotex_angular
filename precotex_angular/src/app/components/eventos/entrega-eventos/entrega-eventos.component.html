@@ -18,7 +18,7 @@
                                     <p>
                                         <mat-form-field class="example-width-30" appearance="outline">
                                             <mat-label>Evento</mat-label>
-                                            <mat-select formControlName="Id_Evento" (selectionChange)="selectEvento($event)">
+                                            <mat-select formControlName="Id_Evento" (selectionChange)="selectEvento($event, false)">
                                                 <mat-option *ngFor="let item of dataEventos" [value]="item.Id_Evento">
                                                     {{ item.Des_Evento }}
                                                 </mat-option>
@@ -78,6 +78,16 @@
                                             <ng-container matColumnDef="DesTrabajador">
                                                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Planilla </th>
                                                 <td mat-cell *matCellDef="let element"> {{ element.DesTrabajador }} </td>
+                                            </ng-container>
+                    
+                                            <ng-container matColumnDef="Sexo">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Sexo </th>
+                                                <td mat-cell *matCellDef="let element"> {{ element.Sexo }} </td>
+                                            </ng-container>
+                    
+                                            <ng-container matColumnDef="Edad">
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Edad </th>
+                                                <td mat-cell *matCellDef="let element"> {{ element.Edad }} </td>
                                             </ng-container>
                     
                                             <ng-container matColumnDef="NombreSede">
@@ -142,7 +152,7 @@
                                 <div [formGroup]="formulario">
                                     <mat-form-field class="example-width-30" appearance="outline">
                                         <mat-label>Evento</mat-label>
-                                        <mat-select formControlName="Id_Evento" (selectionChange)="selectEvento($event)">
+                                        <mat-select formControlName="Id_Evento" (selectionChange)="selectEvento($event, true)">
                                             <mat-option *ngFor="let item of dataEventos" [value]="item.Id_Evento">
                                                 {{ item.Des_Evento }}
                                             </mat-option>
@@ -152,7 +162,7 @@
                                     <mat-form-field class="example-width-15" appearance="outline">
                                         <mat-label>Entrega</mat-label>
                                         <mat-select formControlName="Id_DetalleEvento">
-                                            <mat-option *ngFor="let item of dataDetalle" [value]="item.Id_DetalleEvento">
+                                            <mat-option *ngFor="let item of dataDetalleR" [value]="item.Id_DetalleEvento">
                                                 {{ item.Des_Entrega }}
                                             </mat-option>
                                         </mat-select>

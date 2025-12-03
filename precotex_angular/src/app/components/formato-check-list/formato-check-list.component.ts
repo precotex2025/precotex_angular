@@ -226,7 +226,7 @@ export class FormatoCheckListComponent implements OnInit {
 
   editarCheckList(data_det: data_det) {
 
-    this.defectosAlmacenDerivadosService.Cf_Busca_OP_Cliente_Estilo_Temporada(data_det.Cod_OrdPro).subscribe(
+    this.defectosAlmacenDerivadosService.Cf_Busca_OP_Cliente_Estilo_Temporada(data_det.Cod_OrdPro, 'U').subscribe(
       (result: any) => {
         if (result.length > 0) {
           if (result[0].COD_CLIENTE != '0'){
@@ -247,8 +247,8 @@ export class FormatoCheckListComponent implements OnInit {
             });
 
           } else {
-            //Swal.fire(result[0].NOM_CLIENTE, '', 'warning');
-            Swal.fire('La OP ' + data_det.Cod_OrdPro + ' ya no se encuentra en Inspección!', '', 'warning');
+            Swal.fire(result[0].NOM_CLIENTE, '', 'warning');
+            //Swal.fire('La OP ' + data_det.Cod_OrdPro + ' ya no se encuentra en Inspección!', '', 'warning');
           }
         } else {
           this.matSnackBar.open('La OP no existe...!!!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })

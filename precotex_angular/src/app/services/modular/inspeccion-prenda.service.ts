@@ -14,7 +14,7 @@ export class InspeccionPrendaService {
 
 
   CF_MUESTRA_INSPECCION_LECTURA_TICKET(Ticket: string) {
-    return this.http.get(`${this.baseUrl}/modular/app_CF_MUESTRA_INSPECCION_LECTURA_TICKET_MODULAR.php?Ticket=${Ticket}`);
+    return this.http.get(`${this.baseUrl}/modular/app_CF_MUESTRA_INSPECCION_LECTURA_TICKET_MODULAR.php?Ticket=${Ticket}&Cod_Usuario=${this.sCod_Usuario}`);
   }
 
   CF_MUESTRA_MODULO() {
