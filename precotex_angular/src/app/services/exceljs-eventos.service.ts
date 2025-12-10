@@ -186,6 +186,9 @@ export class ExceljsEventosService {
     worksheet.getColumn(11).width = 15;
     worksheet.getColumn(12).width = 15;
     worksheet.getColumn(13).width = 15;
+    worksheet.getColumn(14).width = 35;
+    worksheet.getColumn(15).width = 6;
+    worksheet.getColumn(16).width = 6;
 
     // Adding Data with Conditional Formatting
     if(excelData.firma){
@@ -203,7 +206,10 @@ export class ExceljsEventosService {
           item[9],
           '',
           item[11],
-          item[12]
+          item[12],
+          item[13],
+          item[14],
+          item[15]
         ]);
 
         // Añadir firma

@@ -140,8 +140,8 @@ export class DefectosAlmacenDerivadosService {
     return this.http.get(`${this.baseUrl}/app_Cf_Busca_Derivado_OP_Cliente_Estilo_Temporada.php?COD_ORDPRO=${COD_ORDPRO}`);
   }
 
-  Cf_Busca_OP_Cliente_Estilo_Temporada(COD_ORDPRO: string){
-    return this.http.get(`${this.baseUrl}/app_Cf_Busca_OP_Cliente_Estilo_Temporada.php?Cod_OrdPro=${COD_ORDPRO}&Cod_Usuario=${this.sCod_Usuario}`);
+  Cf_Busca_OP_Cliente_Estilo_Temporada(COD_ORDPRO: string, ACCION: string){
+    return this.http.get(`${this.baseUrl}/app_Cf_Busca_OP_Cliente_Estilo_Temporada.php?Cod_OrdPro=${COD_ORDPRO}&Accion=${ACCION}&Cod_Usuario=${this.sCod_Usuario}`);
   }
 
   obtenerOpAprobacion(Opcion: string, Cod_EstCli: string, Des_Present: string, Id_CheckList: string, Cod_OrdPro: string, Temporada: string, Nom_TemCli: string, Cod_Destino: string, Des_Destino: string, Cod_EstPro: string, Cod_Present: string, Flg_Estado: string, Cod_Usuario: string){

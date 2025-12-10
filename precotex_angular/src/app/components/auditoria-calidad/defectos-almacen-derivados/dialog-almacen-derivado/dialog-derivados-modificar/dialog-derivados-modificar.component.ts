@@ -251,7 +251,10 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
       this.Clasificacion
     ).subscribe(
       (result: any) => {
+        //console.log("result1")
+        //console.log(result)
         if (result[0]['Alerta'] != undefined) {
+          //console.log(result[0]['Alerta'])
           /* console.log(result[0]['Total'])
            console.log(result[0]['Defectos'])
            console.log(result[0]['Caidas'])*/
@@ -265,8 +268,9 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
 
           this.Altertas_Caidas_Global2 = result[0]['Alerta']
 
-
           this.EnviarAlertaTelegramMayora1()
+        }else{
+          this.Altertas_Caidas_Global2 = '';
         }
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
@@ -314,8 +318,10 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
       this.Clasificacion
     ).subscribe(
       (result: any) => {
+        //console.log("result5")
+        //console.log(result)
         if (result[0]['Alerta'] != undefined) {
-
+          //console.log(result[0]['Alerta'])
           this.Total_solicitado_Global = result[0]['Total_solicitado']
           this.Total_requerido_Global = result[0]['Total_requerido']
           this.Defectos_Global = result[0]['Defectos']
@@ -324,6 +330,8 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
           this.Altertas_Caidas_Global = result[0]['Alerta']
 
           this.EnviarAlertaTelegramMayora5()
+        }else {
+          this.Altertas_Caidas_Global = '';
         }
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
@@ -332,6 +340,7 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
   }
 
   EnviarAlertaTelegramMayora1() {
+    /*
     console.log(this.formulario.controls['sCodCli'].value)
     console.log(this.formulario.controls['sEstilo'].value)
     console.log(this.formulario.controls['sCodTemp'].value)
@@ -343,7 +352,7 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
     console.log(this.Defectos_Global2)
     console.log(this.Caidas_solicitado_Global2)
     console.log(this.Caidas_requerido_Global2)
-
+    */
 
     this.defectosAlmacenDerivadosService.Cf_Enviar_Alerta_Audita_Defectos_Derivados_Telegram1(
       this.formulario.controls['sCodCli'].value,
@@ -433,7 +442,7 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
         this.Cod_EstCli = result[0].Cod_EstCli
         this.Cod_ColCli = result[0].Cod_ColCli
 
-        console.log(result)
+        //console.log(result)
         
         
         this.formulario.controls['sOP'].setValue(result[0].Cod_OrdPro)
@@ -446,10 +455,10 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
         this.formulario.controls['sCodCli'].setValue(result[0].Cod_Cliente)
         this.formulario.controls['sCodTemp'].setValue(result[0].Cod_TemCli)
 
-        console.log(this.Cod_Cliente)
-        console.log(this.Cod_TemCli)
-        console.log(this.Cod_EstCli)
-        console.log(this.Cod_ColCli)
+        //console.log(this.Cod_Cliente)
+        //console.log(this.Cod_TemCli)
+        //console.log(this.Cod_EstCli)
+        //console.log(this.Cod_ColCli)
         this.ListarTallas()
         //this.mostrarAlertaCaidasMayora1()
       },
@@ -562,9 +571,9 @@ export class DialogDerivadosModificarComponent implements OnInit, AfterViewInit 
     this.Op = ''
     this.Tipo_Registro = ''
     this.Clasificacion = ''
-    console.log(this.Cod_Talla)
-    console.log(this.Cod_Motivo)
-    console.log(this.Can_Defecto)
+    //console.log(this.Cod_Talla)
+    //console.log(this.Cod_Motivo)
+    //console.log(this.Can_Defecto)
     if (this.Cod_Talla != '' && this.Cod_Motivo != '' && this.Can_Defecto != 0 && this.Can_Defecto != null) {
       this.flg_btn_detalle = false;
       this.defectosAlmacenDerivadosService.Cf_Mantenimiento_Derivados(

@@ -6,7 +6,9 @@ import { MatDialog } from '@angular/material/dialog';
 import * as _moment from 'moment';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgxSpinnerService } from "ngx-spinner";
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
+import { DefectosAlmacenDerivadosService } from 'src/app/services/defectos-almacen-derivados.service';
 import { ExceljsService } from 'src/app/services/exceljs.service';
 import { DialogCrearCheckComponent } from './dialog-crear-check/dialog-crear-check.component';
 import { CheckListService } from 'src/app/services/check-list.service';
@@ -130,6 +132,7 @@ export class FormatoCheckListComponent implements OnInit {
     private matSnackBar: MatSnackBar,
     private checkListService: CheckListService,
     public dialog: MatDialog,
+    private defectosAlmacenDerivadosService: DefectosAlmacenDerivadosService,
     private SpinnerService: NgxSpinnerService,
     private exceljsService: ExceljsService, private spinnerService: NgxSpinnerService) { this.dataSource = new MatTableDataSource(); }
 
@@ -222,21 +225,37 @@ export class FormatoCheckListComponent implements OnInit {
 
 
   editarCheckList(data_det: data_det) {
-    console.log(data_det);
-    let dialogRef = this.dialog.open(DialogEditarCheckComponent, {
-      disableClose: true,
-      panelClass: 'my-class',
-      maxWidth: '98vw',
-      maxHeight: '98vh',
-      height: '100%',
-      width: '100%',
-      data: data_det
-    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.listarCabecera();
+    this.defectosAlmacenDerivadosService.Cf_Busca_OP_Cliente_Estilo_Temporada(data_det.Cod_OrdPro, 'U').subscribe(
+      (result: any) => {
+        if (result.length > 0) {
+          if (result[0].COD_CLIENTE != '0'){
 
-    })
+            console.log(data_det);
+            let dialogRef = this.dialog.open(DialogEditarCheckComponent, {
+              disableClose: true,
+              panelClass: 'my-class',
+              maxWidth: '98vw',
+              maxHeight: '98vh',
+              height: '100%',
+              width: '100%',
+              data: data_det
+            });
+
+            dialogRef.afterClosed().subscribe(result => {
+              this.listarCabecera();
+            });
+
+          } else {
+            Swal.fire(result[0].NOM_CLIENTE, '', 'warning');
+            //Swal.fire('La OP ' + data_det.Cod_OrdPro + ' ya no se encuentra en Inspección!', '', 'warning');
+          }
+        } else {
+          this.matSnackBar.open('La OP no existe...!!!', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+        }
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
+
   }
 
 
@@ -352,58 +371,79 @@ export class FormatoCheckListComponent implements OnInit {
   }
 
   eliminarCheckList(data_det: data_det) {
-    if (confirm('Esta seguro de eliminar este registro?')) {
-      const formData = new FormData();
-      formData.append('Opcion', 'D');
-      formData.append('Id_CheckList', data_det.Id_CheckList);
-      formData.append('Cod_OrdPro', '');
-      formData.append('Cod_Cliente', '');
-      formData.append('Cod_EstCli', '');
-      formData.append('Tipo_Prenda', '');
-      formData.append('Des_Present', '');
-      formData.append('Cantidad', '');
-      formData.append('Cod_TemCli', '');
-      formData.append('Lote_Tela', '');
-      formData.append('Lote', '');
-      formData.append('Tamano_Muestra', '');
-      formData.append('Numero_Defectos', '');
-      formData.append('Tamano_Muestra_Porc', '0');
-      formData.append('Num_Defectos', '0');
-      formData.append('Flg_Aprobado', '');
-      formData.append('Flg_FichaTecnica', '');
-      formData.append('Flg_ReporteCalidad', '');
-      formData.append('Flg_Estampado', '');
-      formData.append('Flg_Bordado', '');
-      formData.append('Cod_Usuario', '');
-      formData.append('Ruta_Prenda', '');
-      formData.append('Linea', '');
-      formData.append('chk_go', "0");
-      formData.append('chk_jc', "0");
-      formData.append('Cod_Present', "");
-      formData.append('Almacen', '');
-      formData.append('Stock', '');
+    Swal.fire({
+      title: "OP: " + data_det.Cod_OrdPro,
+      text: "Esta seguro de eliminar este registro?'",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si"
+    }).then((result) => {
+      if (result.isConfirmed) {
 
-      this.spinnerService.show();
-      
-      this.checkListService.Cf_Mantenimiento_CheckList(formData)
-        .subscribe(res => {
-        console.log(res);
-        this.spinnerService.hide();
-        if (res[0].Respuesta == 'OK') {
-          this.listarCabecera();
-          this.matSnackBar.open('Registro eliminado correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+        const formData = new FormData();
+        formData.append('Opcion', 'D');
+        formData.append('Id_CheckList', data_det.Id_CheckList);
+        formData.append('Cod_OrdPro', '');
+        formData.append('Cod_Cliente', '');
+        formData.append('Cod_EstCli', '');
+        formData.append('Tipo_Prenda', '');
+        formData.append('Des_Present', '');
+        formData.append('Cantidad', '');
+        formData.append('Cod_TemCli', '');
+        formData.append('Lote_Tela', '');
+        formData.append('Lote', '');
+        formData.append('Tamano_Muestra', '');
+        formData.append('Numero_Defectos', '');
+        formData.append('Tamano_Muestra_Porc', '0');
+        formData.append('Num_Defectos', '0');
+        formData.append('Flg_Aprobado', '');
+        formData.append('Flg_FichaTecnica', '');
+        formData.append('Flg_ReporteCalidad', '');
+        formData.append('Flg_Estampado', '');
+        formData.append('Flg_Bordado', '');
+        formData.append('Cod_Usuario', GlobalVariable.vusu);
+        formData.append('Ruta_Prenda', '');
+        formData.append('Linea', '');
+        formData.append('chk_go', "0");
+        formData.append('chk_jc', "0");
+        formData.append('Cod_Present', "");
+        formData.append('Almacen', '');
+        formData.append('Stock', '');
+
+        this.spinnerService.show();
+        
+        this.checkListService.Cf_Mantenimiento_CheckList(formData)
+          .subscribe(res => {
+          console.log(res);
+          this.spinnerService.hide();
+          if (res[0].Respuesta == 'OK') {
+            this.listarCabecera();
+//            this.matSnackBar.open('Registro eliminado correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+              Swal.fire({
+                title: "OP: " + data_det.Cod_OrdPro,
+                text: "Registro eliminado correctamente.",
+                icon: "success"
+              });
+          } else {
+            this.matSnackBar.open(res[0].Respuesta, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          }
+        }, (err: HttpErrorResponse) => {
+          this.spinnerService.hide();
+          this.matSnackBar.open(err.message, 'Cerrar', {
+            duration: 1500,
+          })
+        });
 
 
-        } else {
-          this.matSnackBar.open(res[0].Respuesta, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
-        }
-      }, (err: HttpErrorResponse) => {
-        this.spinnerService.hide();
-        this.matSnackBar.open(err.message, 'Cerrar', {
-          duration: 1500,
-        })
-      });
-    }
+        
+      }
+    });
+
+
+
+
   }
 
 }
