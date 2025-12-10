@@ -1,0 +1,110 @@
+
+
+<div class="dialog-header">
+  <h2 mat-dialog-title>Detalle de Ficha</h2>
+
+  <button mat-icon-button (click)="onCerrar()" class="close-btn">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="dialog-content">
+
+  <form class="container-cuerpo" [formGroup]="formulario" >
+
+      <!-- Fila 1 -->
+        <div class="grid-2cols">
+            <mat-form-field appearance="outline">
+            <mat-label>Código Tela</mat-label>
+            <input matInput formControlName="ctrol_codigo_tela" readonly />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+            <mat-label>Tela</mat-label>
+            <input matInput formControlName="ctrol_tela" readonly />
+            </mat-form-field>
+        </div>
+
+
+    <div class="grid-2cols">
+    
+        <mat-form-field appearance="outline">
+            <mat-label>Motivo</mat-label>
+            <input matInput formControlName="ctrol_motivo"  readonly>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Versión</mat-label>
+            <input matInput formControlName="ctrol_version" readonly>
+        </mat-form-field>        
+
+    </div>
+
+
+    <div class="grid-full">
+
+        <mat-form-field appearance="outline">
+        <mat-label>Comentario Solicitud</mat-label>
+        <!-- <input matInput formControlName="ctrol_comentario" readonly> -->
+        <textarea matInput formControlName="ctrol_comentario" rows="3" readonly></textarea>
+        </mat-form-field>        
+
+    </div>
+
+
+
+
+
+    <div class="grid-2cols">
+
+        <mat-form-field appearance="outline">
+        <mat-label>Fecha Crea</mat-label>
+        <input matInput formControlName="ctrol_fecha" readonly>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+        <mat-label>Usuario Crea</mat-label>
+        <input matInput formControlName="ctrol_usuario" readonly>
+        </mat-form-field>        
+
+    </div>
+
+    <!-- ÚNICO CAMPO EDITABLE AL FINAL -->
+    <div class="grid-full yellow-blue">
+        <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Comentario 2</mat-label>
+        <textarea matInput formControlName="ctrol_comentario2" rows="3"></textarea>
+        </mat-form-field>
+    </div>
+  </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <button mat-button color="warn" (click)="onVerPdf()" *ngIf="data?.Datos?.ruta_Archivo_Ant"> 
+    <mat-icon>picture_as_pdf</mat-icon> Version Ant.
+  </button>  
+
+  <button mat-button color="warn" (click)="onRechazar()">
+    <mat-icon>cancel</mat-icon> Rechazar
+  </button>
+
+  <button mat-button color="primary" (click)="onAprobar()">
+    <mat-icon>check_circle</mat-icon> Aprobar
+  </button>
+
+</mat-dialog-actions>
+
+<ng-template #pdfDialog>
+  <div class="dialog-header">
+    <h2 class="title">Vista previa del PDF</h2>
+    <button mat-icon-button (click)="Cerrar()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="pdf-content">
+    <iframe [src]="pdfUrl" class="pdf-frame"></iframe>
+  </mat-dialog-content>
+</ng-template>

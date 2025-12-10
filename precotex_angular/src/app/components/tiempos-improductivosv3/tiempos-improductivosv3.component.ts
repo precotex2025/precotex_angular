@@ -1,10 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { DialogTiemposImproductivosService } from '../services/dialog-tiempos-improductivos.service';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { DialogTiemposImproductivosService } from '../../services/dialog-tiempos-improductivos.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CalificacionRollosProcesoService } from '../services/calificacion-rollos-proceso.service';
-import { GlobalVariable } from '../VarGlobals';
+import { CalificacionRollosProcesoService } from '../../services/calificacion-rollos-proceso.service';
+import { GlobalVariable } from '../../VarGlobals';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { promise } from 'protractor';
 import { MatTableDataSource } from '@angular/material/table';
@@ -58,6 +58,7 @@ sFec_Fin       = '';
 sFec_Inicio    = '';
 sDni_tejedor   = '';
 
+bFlgTerminado = false;
 
 sData: any;
 
@@ -92,6 +93,7 @@ sData: any;
       this.formulario.get('codMotivo')?.disable();
       this.formulario.get('horaIni')?.setValue('00:00');
       this.formulario.get('horaFin')?.setValue('00:00');
+      //this.datefecreg = new FormControl(new Date());
       
       //Activa el Spinner 
       this.SpinnerService.show();
@@ -118,6 +120,9 @@ sData: any;
   
 
     formulario = this.formBuilder.group({
+      Fec_Registro:[''],
+      Fec_Terminado:[''],
+      datefecreg: [''],
       operador:   [''],
       dni:        ['', [Validators.required, Validators.maxLength(8)]],
       maquina:    ['', Validators.required],
@@ -227,10 +232,16 @@ ActualizarHora(sTipo: string) {
     // }, 1000); // Actualiza cada 1 segundo    
   }
   onTerminar(){
+    this.bFlgTerminado = true;
+    const sFecTerminado = String(new Date());
+    this.formulario.get('Fec_Terminado')?.setValue(sFecTerminado);
+    
   }
   onCancelar(){
   }
   onRegistrar(){
+
+    console.log('this.formulario.get(datefecreg)?.value', this.formulario.get('datefecreg')?.value);
 
     //Registrar Tiempo Improductivo
     Swal.fire({
@@ -244,21 +255,59 @@ ActualizarHora(sTipo: string) {
     }).then((result)=>{
       if (result.isConfirmed) {
 
-        this.sCod_Accion    = '';
-        this.sFec_Registro  = '';
-        this.sCod_Maquina   = '';
-        this.sCod_Motivo    = '';
-        this.sHini          = '';
-        this.sHfin          = '';
-        this.sObservaciones = '';
+        const sFechaActual = String(new Date());
+        const sCodMaquina = String(this.formulario.get('maquina')?.value);
+        const sCodMotivo = String(this.formulario.get('codMotivo')?.value);
+        const sHoraIni = String(this.formulario.get('horaIni')?.value); 
+        const sHoraFin = String(this.formulario.get('horaFin')?.value); 
+        const sObservaciones = String(this.formulario.get('observacion')?.value);
+        const sDni = String(this.formulario.get('dni')?.value)
+
+        this.sFec_Registro  = sFechaActual;
+        this.sCod_Maquina   = sCodMaquina;
+        this.sCod_Motivo    = sCodMotivo;
+        this.sHini          = sHoraIni;
+        this.sHfin          = sHoraFin;
+        this.sObservaciones = sObservaciones;
         this.sTitulo        = '';
-        this.sFec_Fin       = '';
-        this.sFec_Inicio    = '';
-        this.sDni_tejedor   = '';        
+        this.sFec_Fin       = this.bFlgTerminado === true?sFechaActual:"";
+        this.sFec_Inicio    = sFechaActual;
+        this.sDni_tejedor   = sDni;        
         
+
+        //return;
         //PENDIENTE DE AGREGAR LA FUNCION DE INSERTAR 
+        this.despachoTelaCrudaService.ingresaTiempóimproductivo(this.sFec_Registro,
+        this.sCod_Maquina,
+        this.sCod_Motivo,
+        this.sFec_Registro,
+        this.sHini,
+        this.sFec_Fin,
+        this.sHfin,
+        this.sObservaciones,
+        this.sDni_tejedor).subscribe(
+        (result: any) => {
+          console.log(result);
+          //this.dialog.closeAll();
+          if (result[0]) {
+            if (result[0].Respuesta == 'OK') {
+              this.matSnackBar.open('Registrado Correctamente!!', 'Cerrar', {
+                duration: 3000,
+              })
+              //this.dialog.closeAll();
+            } else {
+              this.matSnackBar.open(result[0].Respuesta, 'Cerrar', {
+                duration: 3000,
+              })
+            }
+          } else {
+            this.matSnackBar.open('Error, No Se Pudo Registrar!!', 'Cerrar', {
+              duration: 3000,
+            })
+          }
 
-
+        },
+        (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
 
       }
     });   

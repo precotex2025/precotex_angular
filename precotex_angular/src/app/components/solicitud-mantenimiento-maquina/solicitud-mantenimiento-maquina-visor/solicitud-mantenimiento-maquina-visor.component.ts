@@ -145,8 +145,10 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
 
   solicitudesLst = [];
   ObtenerDatosVisor(): void{
+    const sCod_Usuario  : string = GlobalVariable.vusu;   
+
     this.SpinnerService.show();
-    this.solicitudService.getObtieneInformacionSolicitudesVisor().subscribe({
+    this.solicitudService.getObtieneInformacionSolicitudesVisor(sCod_Usuario).subscribe({
       next: (response: any) => {
         if(response.success){
 
@@ -191,11 +193,13 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
   dataForExcel = [];
   solicitudesLstExcel = [];
   onExportarExcel() {
+    const sCod_Usuario  : string = GlobalVariable.vusu;   
+
     this.dataForExcel = [];
     this.solicitudesLstExcel = [];
     this.SpinnerService.show();
   
-    this.solicitudService.getObtieneInformacionSolicitudesVisor().subscribe({
+    this.solicitudService.getObtieneInformacionSolicitudesVisor(sCod_Usuario).subscribe({
       next: (response: any) => {
         
           this.solicitudesLstExcel = response.elements;

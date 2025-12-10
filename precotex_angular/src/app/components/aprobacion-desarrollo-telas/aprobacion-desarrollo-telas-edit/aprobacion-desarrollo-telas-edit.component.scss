@@ -1,0 +1,118 @@
+.dialog-content {
+  max-height: 100vh;
+  overflow: auto;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dialog-title {
+  font-size: 18px;
+  text-align: center;
+}
+
+
+/* ======= GRID PARA FORMULARIO ======= */
+.grid-2cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+.grid-full {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-top: 12px;
+}
+
+/* ======= MODO MOBILE ======= */
+@media (max-width: 600px) {
+  mat-dialog-container {
+    padding: 0 !important;
+    border-radius: 0 !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+  }
+
+  .form-container {
+    padding: 0 10px;
+  }
+
+  .dialog-actions {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* En móvil todo pasa a 1 columna */
+  .grid-2cols {
+    grid-template-columns: 1fr !important;
+    gap: 8px;
+  }
+
+  .dialog-header {
+    padding: 12px;
+  }
+
+  .dialog-header h2 {
+    font-size: 16px;
+  }  
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px 0 16px;
+}
+
+.dialog-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.close-btn {
+  margin: 0;
+}
+
+
+.yellow-blue textarea {
+    background-color: #FAF178 !important;
+    color: blue !important;
+}
+
+.yellow-blue .mat-mdc-text-field-wrapper {
+    background-color: #FAF178 !important;
+}
+
+.yellow-blue .mat-mdc-form-field-label {
+    color: blue !important;
+}
+
+.yellow-blue .mdc-notched-outline__leading,
+.yellow-blue .mdc-notched-outline__trailing,
+.yellow-blue .mdc-notched-outline__notch {
+    border-color: blue !important;
+}
+
+
+.dialog-header .title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.pdf-content {
+  padding: 10px 0;
+}
+
+.pdf-frame {
+  width: 100%;
+  height: 70vh;
+  border: none;
+  border-radius: 6px;
+}

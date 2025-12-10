@@ -2,7 +2,7 @@
 <div class="container">
     <div class="grid-container">
         <div>
-            <strong>Listado aprobaciones de telas pendientes</strong>
+            <strong>Listado de Fichas Pendientes de Aprobar</strong>
         </div>
 
         <div>
@@ -19,13 +19,17 @@
 
                                     <div style="display: flex; gap: 0;">
 
-                                        <button mat-icon-button color="primary" matTooltip="Aprobar" (click)="onAprobar(row)">
+                                        <!-- <button mat-icon-button color="primary" matTooltip="Aprobar" (click)="onAprobar(row)">
                                             <mat-icon class="icon-aprobar">check</mat-icon>
-                                        </button>
+                                        </button> -->
 
-                                        <button mat-icon-button color="warn" matTooltip="Rechazar" (click)="onRechazar(row)">
+                                        <!-- <button mat-icon-button color="warn" matTooltip="Rechazar" (click)="onRechazar(row)">
                                             <mat-icon>close</mat-icon>
-                                        </button>     
+                                        </button>     -->
+                                        
+                                        <button mat-icon-button color="primary" matTooltip="Editar" (click)="onEditar(row)">
+                                            <mat-icon>edit_square</mat-icon>
+                                        </button>                                          
                                         
                                         <button mat-icon-button color="warn" matTooltip="Rechazar" (click)="onVerPdf(row)">
                                             <mat-icon>picture_as_pdf</mat-icon>

@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { AprobacionDesarrolloTelasEditComponent } from './aprobacion-desarrollo-telas-edit/aprobacion-desarrollo-telas-edit.component';
 
 interface data_det {
   cod_Tela              : string,
@@ -19,6 +20,7 @@ interface data_det {
   nom_Version           : string,
   comentario            : string,
   ruta_Archivo          : string,
+  ruta_Archivo_Ant      : string,
   fec_Registro_Solicitud: string,
   cod_Usuario_Solicitud : string
 }
@@ -91,7 +93,7 @@ export class AprobacionDesarrolloTelasComponent implements OnInit {
 
     this.dataListadoDesarrolloTelas = [];
     this.SpinnerService.show();
-    this.ServiceDesarrolloTela.postListadoColgadoresBandeja(param).subscribe({
+    this.ServiceDesarrolloTela.postListadoDesarrolloTelas(param).subscribe({
       next: (response: any)=> {
 
         if(response.success){
@@ -204,7 +206,7 @@ export class AprobacionDesarrolloTelasComponent implements OnInit {
         //Input's Para Avanzar Solicitud
         /********************/
         const data: any = {
-            "accion"      : "A",
+            "accion"      : "R",
             "cod_Tela"    : sCodTela,
             "cod_Version" : sCodVersion,
             "nom_Version" : "",
@@ -251,6 +253,24 @@ export class AprobacionDesarrolloTelasComponent implements OnInit {
       }
     })       
 
+  }
+
+  onEditar(row: any){
+
+    let dialogRef = this.dialog.open(AprobacionDesarrolloTelasEditComponent, {
+      width: '700px',
+      disableClose: false,
+      panelClass: 'my-class',
+      data: {
+        Title  : "::. Ficha Tecnica .::",
+        Accion : "U",
+        Datos  : row
+      }
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.onGetListadoDesarrolloTelasPendientes();  
+    });    
+    
   }
 
   onVerPdf(row: any){

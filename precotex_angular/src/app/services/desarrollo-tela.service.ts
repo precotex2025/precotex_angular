@@ -15,9 +15,9 @@ export class DesarrolloTelaService {
 
   constructor(private http: HttpClient) { }
 
-  postListadoColgadoresBandeja(data: any){
+  postListadoDesarrolloTelas(data: any){
     const headers = this.Header;
-    return this.http.post(this.baseUrlTinto + 'TxDesarrolloTela/postListadoColgadoresBandeja', data, { headers })
+    return this.http.post(this.baseUrlTinto + 'TxDesarrolloTela/postListadoDesarrolloTelas', data, { headers })
   }  
 
   postProcesoDesarrolloTela(data: any){
