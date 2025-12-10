@@ -35,6 +35,7 @@ interface data_det {
   Des_Modulo?: string;
   Encogimiento?: string;
   ColorPartida?: string;
+  Cod_Present?: string;
 }
 
 @Component({
@@ -84,6 +85,7 @@ export class AuditoriaHojaMoldeComponent implements OnInit {
     formData.append('Id_Hoja_Medida', '0');
     formData.append('Cod_OrdPro', this.formulario.get('OP')?.value.trim());
     formData.append('Cod_ColCli', '');
+    formData.append('Cod_Present', '0');
     formData.append('Cod_Modulo', '');
     formData.append('Sec', '0');
     formData.append('Cod_Auditor', '');
@@ -195,6 +197,7 @@ export class AuditoriaHojaMoldeComponent implements OnInit {
         formData.append('Id_Hoja_Medida', Id_Hoja_Medida.toString());
         formData.append('Cod_OrdPro', '');
         formData.append('Cod_ColCli', '');
+        formData.append('Cod_Present', '0');
         formData.append('Cod_Modulo', '');
         formData.append('Sec', '0');
         formData.append('Cod_Auditor', '');

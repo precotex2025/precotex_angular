@@ -35,6 +35,7 @@ interface data {
   Nom_Auditor?: string;
   Encogimiento?: string;
   ColorPartida?: string;
+  Cod_Present?: string;
 }
 
 interface data_det {
@@ -58,6 +59,7 @@ interface Auditor {
 interface Color {
   Cod_ColCli: string;
   Nom_ColCli: string;
+  Cod_Present?: string;
 }
 
 interface Medida {
@@ -102,6 +104,7 @@ export class DialogAuditoriaHojaFinalRegistroComponent implements OnInit {
     CodAuditor: ['', Validators.required],
     NomAuditor: ['', Validators.required],
     CodColCli: ['', Validators.required],
+    CodPresent: ['', Validators.required],
     Sec: ['', Validators.required],
     Encogimiento: [{value: "", disabled: true}],
     ColorPartida: [{value: "", disabled: true}]
@@ -142,6 +145,7 @@ export class DialogAuditoriaHojaFinalRegistroComponent implements OnInit {
       CodAuditor: this.data.Cod_Auditor,
       NomAuditor: this.data.Nom_Auditor,
       CodColCli: this.data.Cod_ColCli,
+      CodPresent: this.data.Cod_Present,
       Sec: this.data.Sec,
       Encogimiento: this.data.Encogimiento,
       ColorPartida: this.data.ColorPartida
@@ -157,6 +161,7 @@ export class DialogAuditoriaHojaFinalRegistroComponent implements OnInit {
       this.formulario.controls['OP'].disable();
       this.formulario.controls['NomAuditor'].disable();
       this.formulario.controls['CodColCli'].disable();
+      this.formulario.controls['CodPresent'].disable();
       this.formulario.controls['Sec'].disable();
 
       this.flgEnable = this.data.Flg_Estado == '2' ? false : true;
@@ -174,6 +179,7 @@ export class DialogAuditoriaHojaFinalRegistroComponent implements OnInit {
     formData.append('Id_Hoja_Medida', this.data.Id_Hoja_Medida.toString());
     formData.append('Cod_OrdPro', this.formulario.get('OP')?.value);
     formData.append('Cod_ColCli', this.formulario.get('CodColCli')?.value);
+    formData.append('Cod_Present', this.formulario.get('CodPresent')?.value);
     formData.append('Sec', this.formulario.get('Sec')?.value);
     formData.append('Cod_Auditor', this.formulario.get('CodAuditor')?.value);
     formData.append('Flg_Estado', this.data.Flg_Estado);
@@ -215,6 +221,7 @@ export class DialogAuditoriaHojaFinalRegistroComponent implements OnInit {
         formData.append('Id_Hoja_Medida', this.data.Id_Hoja_Medida.toString());
         formData.append('Cod_OrdPro', '');
         formData.append('Cod_ColCli', '');
+        formData.append('Cod_Present', '0');
         formData.append('Sec', '0');
         formData.append('Cod_Auditor', '');
         formData.append('Flg_Estado', '2');
@@ -245,6 +252,7 @@ export class DialogAuditoriaHojaFinalRegistroComponent implements OnInit {
     formData.append('Id_Hoja_Medida', '0');
     formData.append('Cod_OrdPro', codOrdPro);
     formData.append('Cod_ColCli', '');
+    formData.append('Cod_Present', '0');
     formData.append('Sec', '0');
     formData.append('Cod_Auditor', '');
     formData.append('Flg_Estado', '');
@@ -394,6 +402,7 @@ export class DialogAuditoriaHojaFinalRegistroComponent implements OnInit {
     formData.append('Id_Hoja_Medida', '0');
     formData.append('Cod_OrdPro', codOrdPro);
     formData.append('Cod_ColCli', '');
+    formData.append('Cod_Present', '0');
     formData.append('Sec', '0');
     formData.append('Cod_Auditor', '');
     formData.append('Flg_Estado', '');
@@ -421,6 +430,7 @@ export class DialogAuditoriaHojaFinalRegistroComponent implements OnInit {
     formData.append('Id_Hoja_Medida', '0');
     formData.append('Cod_OrdPro', codOrdPro);
     formData.append('Cod_ColCli', '');
+    formData.append('Cod_Present', '0');
     formData.append('Sec', '0');
     formData.append('Cod_Auditor', '');
     formData.append('Flg_Estado', '');
@@ -470,6 +480,11 @@ export class DialogAuditoriaHojaFinalRegistroComponent implements OnInit {
 
   seleccionarAuditor(option: Auditor){
     this.formulario.controls['CodAuditor'].setValue(option.Tip_Trabajador.concat("-").concat(option.Cod_Auditor));
+  }
+
+  seleccionarColor(option: Color){
+    //this.formulario.controls['CodPresent'].setValue(option.Cod_Present);
+    this.formulario.controls['CodColCli'].setValue(option.Cod_ColCli);
   }
 
   seleccionarHojaMedida(option: Medida){

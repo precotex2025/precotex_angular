@@ -103,6 +103,7 @@ export class DialogAuditoriaHojaFinalMedidasComponent implements OnInit {
     formData.append('Id_Hoja_Medida', this.data.Id_Hoja_Medida.toString());
     formData.append('Cod_OrdPro', '');
     formData.append('Cod_ColCli', '');
+    formData.append('Cod_Present', '0');
     formData.append('Sec', '0');
     formData.append('Cod_Auditor', '');
     formData.append('Flg_Estado', '1');
