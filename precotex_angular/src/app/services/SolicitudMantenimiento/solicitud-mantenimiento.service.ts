@@ -47,9 +47,13 @@ export class SolicitudMantenimientoService {
     return this.http.get(this.baseUrlTinto + 'TMSolicitudMantenimiento/getObtieneInformacionMaquinas', { headers, params });
   }    
 
-  getObtieneInformacionSolicitudesVisor(){
+  getObtieneInformacionSolicitudesVisor(sCodUsuario){
+
     const headers = this.Header;
-    return this.http.get(this.baseUrlTinto + 'TMSolicitudMantenimiento/getObtieneInformacionSolicitudesVisor', { headers });
+    let params = new HttpParams();
+    params = params.append('sCodUsuario', sCodUsuario);
+
+    return this.http.get(this.baseUrlTinto + 'TMSolicitudMantenimiento/getObtieneInformacionSolicitudesVisor', { headers, params });
   }
 
   postProcesoMntoSolicitudMantenimiento(data: any){

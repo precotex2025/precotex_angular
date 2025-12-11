@@ -79,6 +79,7 @@ export class EntregaEventosComponent implements OnInit {
   evento: Evento[];
   dataEventos: Evento[];
   dataDetalle: Detalle[];
+  dataDetalleR: Detalle[];
   dataEntregas: Detalle[];
   dataPersonal: any[];
   dataForExcel = [];
@@ -89,7 +90,7 @@ export class EntregaEventosComponent implements OnInit {
     {flg_Estado: 'X', des_Estado: 'NO PARTICIPANTES'}
   ];
 
-  displayedColumns1: string[] = ['DocumentoIdentidad','NombreCompleto','DesTrabajador','NombreSede','NombreArea','NombrePuesto','Des_Entrega','Acciones']
+  displayedColumns1: string[] = ['DocumentoIdentidad','NombreCompleto','DesTrabajador','Sexo','Edad','NombreSede','NombreArea','NombrePuesto','Des_Entrega','Acciones']
   displayedColumns2: string[] = ['DocumentoIdentidad','NombreCompleto','DesTrabajador','NombreSede','NombreGerencia','NombreArea','NombrePuesto','Des_Entrega','Signatura64','Fec_Entrega','Usu_Registro']
   
   dataSource1!: MatTableDataSource<any>;
@@ -259,7 +260,7 @@ export class EntregaEventosComponent implements OnInit {
     }
   }
 
-  selectEvento(event: any){
+  selectEvento(event: any, todos: boolean){
     let data: Evento = {
       Accion: 'E',
       Id_Evento: event.value,
@@ -286,11 +287,12 @@ export class EntregaEventosComponent implements OnInit {
       .subscribe((result: any) => {
         if (result.length > 0) {
           let detalleEntrega: any[];
-          this.dataDetalle = [{Dependiente: 'NO', Des_Entrega: 'TODOS', Fec_Registro: new Date(), Flg_Activo: 1, Flg_Dependiente: 0, Id_DetalleEvento: 0, Id_Evento: 0, Num_Item: "1", Usu_registro:''}]
+          this.dataDetalleR = [{Dependiente: 'NO', Des_Entrega: 'TODOS', Fec_Registro: new Date(), Flg_Activo: 1, Flg_Dependiente: 0, Id_DetalleEvento: 0, Id_Evento: 0, Num_Item: "1", Usu_registro:''}]
 
           this.evento = result;
           detalleEntrega = result[0].Detalle;
-          this.dataDetalle = this.dataDetalle.concat(detalleEntrega);
+          this.dataDetalle = detalleEntrega;
+          this.dataDetalleR = this.dataDetalleR.concat(detalleEntrega);
           this.formulario.controls['Id_Evento'].setValue(result[0].Id_Evento);
           this.formulario.controls['Id_DetalleEvento'].setValue(result[0].Detalle[0].Id_DetalleEvento);
           this.formulario.controls['Fec_Evento'].setValue(this.datePipe.transform(result[0].Fec_Evento['date'], 'yyyy-MM-ddTHH:mm'));
@@ -376,6 +378,9 @@ export class EntregaEventosComponent implements OnInit {
         data.FirmaDigital = firmas ? row.Signatura64 : (row.Signatura64 != '' ? 'SI' : 'NO');
         data.FechaEntrega = this.datePipe.transform(row.Fec_Entrega, 'yyyy-MM-dd HH:mm');  //row.Fec_Entrega;
         data.Responsable = row.Usu_Registro;
+        data.NombreDependiente = row.NombreDependiente;
+        data.Sexo = row.SexoDependiente;
+        data.Edad = row.EdadDependiente;
 
         dataReporte.push(data);
       });      
@@ -385,7 +390,7 @@ export class EntregaEventosComponent implements OnInit {
       })
       console.log(dataReporte)
       let detalle: Detalle[]
-      detalle = this.dataDetalle.filter(d => d.Id_DetalleEvento == this.formulario.get('Id_DetalleEvento')?.value);
+      detalle = this.dataDetalleR.filter(d => d.Id_DetalleEvento == this.formulario.get('Id_DetalleEvento')?.value);
 
       let reportData = {
         title: 'REGISTRO DE ENTREGAS - ' + (this.formulario.get('Flg_Estado')?.value == 'T' ? 'GENERAL' : (this.formulario.get('Flg_Estado')?.value == 'P' ? 'PARTICIPANTES' : 'NO PARTICIPANTES')),

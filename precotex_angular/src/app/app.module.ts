@@ -604,13 +604,15 @@ import { SolicitudMantenimientoMaquinaVisorComponent } from './components/solici
 import { ReporteNcCierreComponent } from './components/reporte-nc/reporte-nc-cierre/reporte-nc-cierre.component';
 
 //TIEMPOS IMPORDUCTIVOS V3
-import { TiemposImproductivosv3Component } from './tiempos-improductivosv3/tiempos-improductivosv3.component';
+import { TiemposImproductivosv3Component } from './components/tiempos-improductivosv3/tiempos-improductivosv3.component';
+import { AprobacionDesarrolloTelasComponent } from './components/aprobacion-desarrollo-telas/aprobacion-desarrollo-telas.component';
 
 import { GenerarQrComponent } from './components/control-activos-fijo/generar-qr/generar-qr.component';
 
 //COTIZACIONES
 import { CotizacionesComponent } from './components/cotizaciones/cotizaciones.component';
 
+import { AprobacionDesarrolloTelasEditComponent } from './components/aprobacion-desarrollo-telas/aprobacion-desarrollo-telas-edit/aprobacion-desarrollo-telas-edit.component';
 
 @NgModule({
   declarations: [
@@ -1143,6 +1145,10 @@ import { CotizacionesComponent } from './components/cotizaciones/cotizaciones.co
 
     //COTIZACIONES
     CotizacionesComponent
+
+    //APROBACION DESARROLLO TELAS
+    ,AprobacionDesarrolloTelasComponent
+    ,AprobacionDesarrolloTelasEditComponent
   
   ],
   entryComponents: [DialogJabaComponent],

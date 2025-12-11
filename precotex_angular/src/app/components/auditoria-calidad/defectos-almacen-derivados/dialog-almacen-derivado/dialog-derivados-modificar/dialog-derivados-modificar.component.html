@@ -67,7 +67,8 @@
                             autocomplete="off" formControlName="sAuditor" >
                     </mat-form-field>
                     
-                    <p *ngIf="Altertas_Caidas_Global" class="fila1-alerta-dialog" style="color:red; font-size: 15px; margin:15px; font: bold sans-serif; font-weight: bold;">{{Altertas_Caidas_Global}}</p>
+                    <p *ngIf="Altertas_Caidas_Global && !Altertas_Caidas_Global2" class="fila1-alerta-dialog" style="color:red; font-size: 15px; margin:15px; font: bold sans-serif; font-weight: bold;">{{Altertas_Caidas_Global}}</p>
+                    <p *ngIf="!Altertas_Caidas_Global && Altertas_Caidas_Global2" class="fila1-alerta-dialog" style="color:red; font-size: 15px; margin:15px; font: bold sans-serif; font-weight: bold;">{{Altertas_Caidas_Global2}}</p>
             </div>    
             
           <div class="container-cuerpo-fila4-dialog"> 

@@ -32,8 +32,8 @@
 
                 <mat-form-field appearance="fill" class="fila1-Color">
                     <mat-label>Color</mat-label>
-                    <mat-select formControlName="CodColCli">
-                      <mat-option *ngFor="let option of dataColorOP" [value]="option.Cod_ColCli">
+                    <mat-select formControlName="CodPresent">
+                      <mat-option *ngFor="let option of dataColorOP" [value]="option.Cod_Present" (click)="seleccionarColor(option)">
                         {{option.Nom_ColCli}}
                       </mat-option>
                     </mat-select>
