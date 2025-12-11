@@ -54,10 +54,10 @@ export class RegistroPartidaParihuelaService {
       return this.http.get(this.urlRegistro + '/getValidarMermaPartida?pCod_Partida=' + Cod_Partida,{ headers, params });
     }
 
-    enviarDespacho(codPartida: string): Observable<any> {
+    enviarDespacho(codPartida: string, usuario: string): Observable<any> {
       return this.http.post(`${this.urlRegistro}/getEnviarDespacho`, {}, {
         headers: this.headers,
-        params: { pCod_Partida: codPartida }
+        params: { pCod_Partida: codPartida, pUsr: usuario }
       });
     }
 

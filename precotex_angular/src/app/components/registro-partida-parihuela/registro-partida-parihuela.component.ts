@@ -305,7 +305,7 @@ export class RegistroPartidaParihuelaComponent implements OnInit {
 
       const codPartida = this.formularioDet.get('detalles')?.value.map((item: any) => item.codigoParihuela.split('-')[0]) || [];
 
-      this.RegistroPartidaParihuela.enviarDespacho(codPartida[0]).subscribe({
+      this.RegistroPartidaParihuela.enviarDespacho(codPartida[0], this.sCod_Usuario).subscribe({
         next: (respuesta: any) => {
           console.log("estParihurela inicio", respuesta);
 

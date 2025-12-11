@@ -5,6 +5,10 @@ import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 import { RegistroPartidaParihuelaService } from 'src/app/services/registro-partida-parihuela.service';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { GlobalVariable } from 'src/app/VarGlobals';
+import { finalize } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
+
+
 @Component({
   selector: 'app-registro-partida-parihuela-v2',
   templateUrl: './registro-partida-parihuela-v2.component.html',
@@ -12,6 +16,7 @@ import { GlobalVariable } from 'src/app/VarGlobals';
 })
 export class RegistroPartidaParihuelaV2Component implements OnInit {
   //RegistroParihuelaV2 <- ruta
+  sCod_Usuario = GlobalVariable.vusu;
   busquedaForm: FormGroup;
   grupoForm: FormGroup;
   parihuelaFormArray: FormArray;
@@ -24,6 +29,7 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
     private fb: FormBuilder,
     private serviceRegistroParihuela: RegistroPartidaParihuelaService,
     private SpinnerService: NgxSpinnerService,
+    private toastr: ToastrService,
     private http: HttpClient
   ) {
     this.busquedaForm = this.fb.group({
@@ -55,7 +61,7 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
   }
 
   get parihuelaGrupos(): FormGroup[] {
-  return this.parihuelaFormArray.controls as FormGroup[];
+    return this.parihuelaFormArray.controls as FormGroup[];
   }
 
   parihuelas = [];
@@ -194,15 +200,24 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
 
   this.serviceRegistroParihuela.updateDetPartida(detalle, usuario, estadoParihuela, Reposicion).subscribe({
     next: (res) => {
-      console.log('Guardado exitosamente:', res);
+      this.toastr.success('Partida guardada correctamente.', 'Éxito', {
+        timeOut: 3000,
+        progressBar: true,
+        progressAnimation: 'increasing'
+      });
+      //console.log('Guardado exitosamente:', res);
     },
     error: (err) => {
-      console.error('Error al guardar:', err);
+      this.toastr.error('Error al guardar la partida.', 'Error', {
+        timeOut: 3000,
+        progressBar: true,
+        progressAnimation: 'increasing'
+      });
+      //console.error('Error al guardar:', err);
     }
     });
   }
-
-
+  
   cargarCategorias(codPartida: string ): void {
 
     this.serviceRegistroParihuela.getCategoriasById(codPartida.toUpperCase()).subscribe((result: any) => {
@@ -225,23 +240,21 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
 
   enviarDespacho(){
     let codPartida = this.busquedaForm.get('codigo')?.value.toUpperCase();
-    console.log('el codigo partida es: ', codPartida);
+    
+    this.SpinnerService.show();
 
-    this.http.post(this.baseUrlTinto + 'RegistroPartidaParihuela/postEnviarCabecera', JSON.stringify(codPartida),
-    {headers: { 'Content-Type': 'application/json' }}
-          ).subscribe(() => {
-            this.serviceRegistroParihuela.enviarDespacho(codPartida).subscribe({
+    this.serviceRegistroParihuela.enviarDespacho(codPartida, this.sCod_Usuario)
+    .pipe(
+      finalize(() => this.SpinnerService.hide())
+    )    
+    .subscribe({
             next: (res) => {
             console.log('Se envió el despacho', res);
             },
             error: (err) => {
             console.error('Error al enviar el despacho ', err);
             }
-          });
     })
-
-    
   }
   // postEnviarCabecera
-
 }

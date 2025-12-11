@@ -608,6 +608,10 @@ import { TiemposImproductivosv3Component } from './tiempos-improductivosv3/tiemp
 
 import { GenerarQrComponent } from './components/control-activos-fijo/generar-qr/generar-qr.component';
 
+//COTIZACIONES
+import { CotizacionesComponent } from './components/cotizaciones/cotizaciones.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -1135,7 +1139,10 @@ import { GenerarQrComponent } from './components/control-activos-fijo/generar-qr
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent, DialogCapturarFotoCajaComponent, EvidenciaEmpaqueCajaComponent, ReporteVehiculoInmovilizadoComponent 
     
     //TIEMPOS IMPRODUCTIVOS V3
-    ,TiemposImproductivosv3Component
+    ,TiemposImproductivosv3Component,
+
+    //COTIZACIONES
+    CotizacionesComponent
   
   ],
   entryComponents: [DialogJabaComponent],
