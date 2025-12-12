@@ -49,6 +49,14 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
 
   buscarPartida() {
     let cod_Parihuela = this.busquedaForm.get('codigo')?.value;
+    if(!cod_Parihuela){
+      this.toastr.warning('Ingrese número de partida.', 'Alerta', {
+        timeOut: 3000,
+        progressBar: true,
+        progressAnimation: 'increasing'
+      });
+      return;
+    }
     this.cargarCategorias(cod_Parihuela);
   }
 
@@ -238,23 +246,30 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
     });
   }
 
-  enviarDespacho(){
-    let codPartida = this.busquedaForm.get('codigo')?.value.toUpperCase();
-    
-    this.SpinnerService.show();
+  enviarDespacho() {
+  let codPartida = this.busquedaForm.get('codigo')?.value.toUpperCase();
 
-    this.serviceRegistroParihuela.enviarDespacho(codPartida, this.sCod_Usuario)
-    .pipe(
-      finalize(() => this.SpinnerService.hide())
-    )    
+  this.SpinnerService.show();
+
+  this.serviceRegistroParihuela.enviarDespacho(codPartida, this.sCod_Usuario)
     .subscribe({
-            next: (res) => {
-            console.log('Se envió el despacho', res);
-            },
-            error: (err) => {
-            console.error('Error al enviar el despacho ', err);
-            }
-    })
+      next: (res) => {
+        this.toastr.success('Despacho Exitoso', 'Éxito', {
+        timeOut: 3000,
+        progressBar: true,
+        progressAnimation: 'increasing'
+        });
+        this.SpinnerService.hide();
+      },
+      error: (err) => {
+        this.toastr.error('Error al realizar el despacho.', 'Error', {
+        timeOut: 3000,
+        progressBar: true,
+        progressAnimation: 'increasing'
+        });
+        this.SpinnerService.hide();
+      }
+    });
   }
   // postEnviarCabecera
 }
