@@ -579,8 +579,8 @@ export class DialogEditarCheckComponent implements OnInit {
         this.spinnerService.hide();
         if (res[0].Respuesta == 'OK') {
 
-          //this.matSnackBar.open('Se actualizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
-          Swal.fire('Se actualizo el registro correctamente.', '', 'success');
+          this.matSnackBar.open('Se actualizo el registro correctamente.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          //Swal.fire('Se actualizo el registro correctamente.', '', 'success');
         } else {
           this.matSnackBar.open('Ha ocurrido un error al actualizar el registro.', 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
         }
