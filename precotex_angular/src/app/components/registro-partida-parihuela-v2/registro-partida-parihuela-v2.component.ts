@@ -272,4 +272,38 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
     });
   }
   // postEnviarCabecera
+
+
+  getTiposDisponibles(grupo: FormGroup): string[] {
+  const complementos = grupo.get('complementos') as FormArray;
+  const seleccionados = complementos.controls.map(c => c.get('tipo')?.value).filter(v => !!v);
+
+  return this.tiposComplemento.filter(tipo => !seleccionados.includes(tipo));
+  }
+
+  validarSeleccion(valor: string, grupo: FormGroup) {
+    // Obtener todos los complementos seleccionados en este grupo
+    const complementos = grupo.get('complementos') as FormArray;
+    const seleccionados = complementos.controls
+      .map(c => c.get('tipo')?.value)
+      .filter(v => !!v);
+
+    // Contar cuántas veces aparece el valor
+    const repetidos = seleccionados.filter(v => v === valor);
+
+    if (repetidos.length > 1) {
+      // Mostrar alerta y resetear el último campo
+      this.toastr.warning(`El complemento "${valor}" ya fue seleccionado.`, 'Duplicado', {
+        timeOut: 3000,
+        progressBar: true,
+        progressAnimation: 'increasing'
+      });
+
+      // Resetear el último control que intentó asignar el duplicado
+      complementos.at(complementos.length - 1).get('tipo')?.reset();
+    }
+  }
+
+
+
 }

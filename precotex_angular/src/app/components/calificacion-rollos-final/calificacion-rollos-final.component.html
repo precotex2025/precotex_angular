@@ -26,6 +26,13 @@
         </select>
       </label>
 
+      <label for="reprocesoSelect">Reproceso:
+        <select id="reprocesoSelect" [(ngModel)]="PartidaCab.reproceso" name="reproceso" [disabled]="isHeadDisabled">
+          <option *ngFor="let c of reprocesoList; let i = index" [value]="c.rep_Id"
+                  [selected]="i === 0">{{ c.rep_Des }}</option>
+        </select>
+      </label>
+
       <div [hidden]="true">
 
 

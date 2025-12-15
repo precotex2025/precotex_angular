@@ -163,6 +163,7 @@ export interface PartidaCabecera {
   datosCliente: string;
   detPartida: any[];
   detDefecto: any[];
+  reproceso: string;
 
 }
 
@@ -213,6 +214,16 @@ export interface GuardarUnionRollos {
 
 export interface GuardarUnionRollosResponse {
   elements: GuardarUnionRollos[];
+}
+
+export interface Reproceso {
+  Rep_Id : string;
+  Rep_Des : string;
+  Flg_Est : string;
+}
+
+export interface ReprocesoResponse {
+  elements: ReprocesoResponse[];
 }
 
 

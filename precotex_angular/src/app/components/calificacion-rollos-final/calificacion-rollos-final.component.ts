@@ -114,6 +114,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
       detDefecto: [] as any[],
       detRectilineo: [] as any[],
       detRollosTotal: [] as any[], // 👈 lista de rollos totales
+      reproceso: ''
     };
 
     rollo2Bloqueado: boolean = true;
@@ -155,6 +156,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
     this.cargarCalificacion();
     this.cargarEstadoProceso();
     this.cargarProcesoAuditado();
+    this.cargarReproceso();
 
     //Deshabilita los controles Generales
     this.isHeadDisabled = true;
@@ -355,6 +357,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
               //Nuevas  
               this.PartidaCab.auditor = data.elements[result].inspector;              
               this.PartidaCab.supervisor =     data.elements[result].responsable;
+              this.PartidaCab.reproceso = data.elements[result].reproceso;
 
               //OBSERVACION
               const obs : string = "";
@@ -393,7 +396,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
 
               const sCodTela:string = String(this.PartidaCab.datosTela.substring(0,8)); 
               const sCodCali: string = ' ';//tring(data.elements[result].calidad);
-              
+              const Reproceso: number = 1; 
               
               this.CalificacionRollosFinalService.buscarRolloPorPartidaDetalle(codOrdTra, index, 
 
@@ -404,7 +407,8 @@ export class CalificacionRollosFinalComponent implements OnInit {
                 sResDig ,
                 sObsRec ,
                 sCodCali,
-                sCodTela
+                sCodTela,
+                Reproceso
 
               ).subscribe({
                 next: (response) => {
@@ -774,6 +778,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
         detDefecto: [],
         detRectilineo: [],
         detRollosTotal: [],
+        reproceso: ''
         // Agrega cualquier otro campo si corresponde
       };
 
@@ -803,7 +808,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
       this.cargarCalificacion();
       this.cargarEstadoProceso();
       this.cargarProcesoAuditado();
-
+      this.cargarReproceso();
       //Deshabilita los controles Generales
       this.isHeadDisabled = true;
 
@@ -1037,4 +1042,20 @@ export class CalificacionRollosFinalComponent implements OnInit {
         }
       });  
     }
+
+    reprocesoList = [];
+    cargarReproceso() {
+
+      this.CalificacionRollosFinalService.getObtenerReproceso().subscribe({
+        next: (response) => {
+          this.reprocesoList = response.elements;
+          console.log('this.ReprocesoList - cargarReproceso', this.ReprocesoList);
+        },
+        error: (err) => {
+          console.error('Error al supervisorList', err);
+        }
+      });
+    }
+
+
 }

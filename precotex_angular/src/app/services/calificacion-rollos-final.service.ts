@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, throwError,lastValueFrom  } from 'rxjs';
 import { GlobalVariable } from '../VarGlobals';
-import { AuditorResponse, CalificacionResponse, EstadoPartidaResponse, EstadoProceso, EstadoProcesoResponse, MaquinaResponse, ProcesoAuditadoResponse, SupervisorResponse, TurnoResponse,UnidadNegocioResponse } from '../components/calificacion-rollos-final/calificacion-rollos-final.model';
+import { AuditorResponse, CalificacionResponse, EstadoPartidaResponse, EstadoProceso, EstadoProcesoResponse, MaquinaResponse, ProcesoAuditadoResponse, SupervisorResponse, TurnoResponse,UnidadNegocioResponse, ReprocesoResponse } from '../components/calificacion-rollos-final/calificacion-rollos-final.model';
+import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 
 
 @Injectable({
@@ -82,7 +83,8 @@ export class CalificacionRollosFinalService {
           sResDig:string,
           sObsRec:string,
           sCodCal:string,
-          sCodTel:string
+          sCodTel:string,
+          iReproceso: number
     ): Observable<any> {
       const params = new HttpParams()
         .set('partida', partida)
@@ -95,7 +97,7 @@ export class CalificacionRollosFinalService {
         .set('sObsRec', sObsRec)
         .set('sCodCal', sCodCal)
         .set('sCodTel', sCodTel)
-
+        .set('Reproceso', iReproceso)
       return this.http.get<any>(`${this.url}/getBuscarRolloPorPartidaDetalle`, { params });
     }
 
@@ -152,4 +154,9 @@ export class CalificacionRollosFinalService {
       const headers = this.Header;
       return this.http.post(`${this.url}/postEliminarDefectoRollo`, data)
     }
+
+    getObtenerReproceso(): Observable<ReprocesoResponse> {
+      return this.http.get<ReprocesoResponse>(`${this.url}/getObtenerReproceso`);
+    }
+    
 }

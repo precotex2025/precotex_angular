@@ -44,8 +44,9 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Tipo</mat-label>
-            <mat-select formControlName="tipo">
+            <mat-select formControlName="tipo" (selectionChange)="validarSeleccion($event.value, grupo)">
               <mat-option *ngFor="let tipo of tiposComplemento" [value]="tipo">{{ tipo }}</mat-option>
+              <!-- <mat-option *ngFor="let tipo of getTiposDisponibles(grupo)" [value]="tipo">{{ tipo }}</mat-option> -->
             </mat-select>
           </mat-form-field>
         </div>
