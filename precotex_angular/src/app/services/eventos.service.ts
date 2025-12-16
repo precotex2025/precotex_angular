@@ -36,5 +36,8 @@ export class EventosService {
     return this.httpClient.get<any[]>(`${this.baseUrl}/app_Lg_Man_Planta_Web.php`);
   }
 
+  listaVale(numAno: number, numDni: string): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${this.baseUrl}/app_Get_RH_ConsultaVales.php?numAno=${numAno}&numDni=${numDni}`);
+  }
 
 }

@@ -1,0 +1,78 @@
+<div class="container-fluid">
+    <div class="grid-container">
+        <div class="title">Consulta Vales</div>
+
+        <div class="find">
+            <mat-card class="list-form">
+                <mat-card-header>
+                    <mat-card-subtitle>Colaborador</mat-card-subtitle>
+                </mat-card-header>
+                
+                <mat-card-content>
+                    <div>
+                        <mat-form-field class="example-form-field" appearance="fill">
+                        <mat-label>Año</mat-label>
+                        <input matInput type="text" maxlength="4" [(ngModel)]="ln_numAno" placeholder="Año" autocomplete="off">
+                        </mat-form-field>
+
+                        <mat-form-field class="example-form-field" appearance="fill">
+                        <mat-label>N° Documento</mat-label>
+                        <input matInput type="text" maxlength="9" (input)="onBuscarVale()"
+                            (change)="onBuscarVale()" [(ngModel)]="lc_numDoc" placeholder="Documento Identidad" autocomplete="off">
+                            <button matSuffix mat-icon-button aria-label="Clear" (click)="limpiarValor()">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <br>
+                    <mat-divider></mat-divider>
+                    <br>
+                    <div class="col-md-12 tabla">
+                        <table mat-table [dataSource]='dataSource' class="mat-elevation-z8">
+                            <ng-container matColumnDef="c_nume_dni">
+                                <th mat-header-cell *matHeaderCellDef> N° Documento </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.c_nume_dni }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="c_nomb_trab">
+                               <th mat-header-cell *matHeaderCellDef> Nombre Trabajador </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.c_nomb_trab }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="c_peri_plan">
+                                <th mat-header-cell *matHeaderCellDef> Periodo </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.c_peri_plan }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="c_nume_refe">
+                                <th mat-header-cell *matHeaderCellDef> Referencia </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.c_nume_refe }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="n_impo_plan">
+                                <th mat-header-cell *matHeaderCellDef> Importe </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.n_impo_plan }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="moc_numdocrf1">
+                                <th mat-header-cell *matHeaderCellDef> Documento Canje </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.moc_numdocrf1 }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="canje">
+                                <th mat-header-cell *matHeaderCellDef> Lugar </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.canje }} </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+
+                        <mat-paginator #paginatorData [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <br>
+        </div>
+    </div>
+</div>

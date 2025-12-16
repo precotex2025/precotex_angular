@@ -298,7 +298,7 @@ import { LecturaRergistroQreComponent } from './components/lectura-rergistro-qre
 import { RegistroFirmasComponent } from './components/eventos/registro-firmas/registro-firmas.component';
 import { RegistroEventosComponent } from './components/eventos/registro-eventos/registro-eventos.component';
 import { EntregaEventosComponent } from './components/eventos/entrega-eventos/entrega-eventos.component';
-
+import { ConsultaValesComponent } from './components/rrhh/consulta-vales/consulta-vales.component';
 import { RegistroRondasComponent } from './components/seguridad/registro-rondas/registro-rondas.component';
 import { MemorandumGralComponent } from './components/memorandum-gral/memorandum-gral.component';
 import { ComiteEmergenciaComponent } from './components/actas/comite-emergencia/comite-emergencia.component';
@@ -655,7 +655,7 @@ const routes: Routes = [
   { path:"RegistroFirmaEventos", component: RegistroFirmasComponent },
   { path:"RegistroEventos", component: RegistroEventosComponent },
   { path:"LecturaEntregaEventos", component: EntregaEventosComponent},
-
+  { path:"ConsultaVales", component: ConsultaValesComponent},
   //ESTATUS CONTROL TEÑIDO - 03122024 - HMEDINA
   { path: "EstatusControlTenido", component: EstatusControlTenidoComponent },
 
