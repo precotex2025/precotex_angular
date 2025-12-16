@@ -21,7 +21,7 @@
 
       <label for="maquinaSelect">Maquina:
         <select id="maquinaSelect" [(ngModel)]="PartidaCab.maquina" name="maquina" [disabled]="isHeadDisabled">
-          <option *ngFor="let c of maquinaList; let i = index" [value]="c.acronimo"
+          <option *ngFor="let c of maquinaList; let i = index" [value]="c.idMaquina"
                   [selected]="i === 0">{{ c.acronimo }}</option>
         </select>
       </label>
@@ -180,6 +180,7 @@
               <th>Ult. 5mts</th>
               <th>Densidad</th>-->
               <th>Archivo</th>
+              <th>Imagen</th>
               <th>Acción</th>
             </tr>
           </thead>
@@ -272,6 +273,10 @@
                   📎 Archivo
                 </button>
                 <span *ngIf="item.archivoNombre">📄 {{ item.archivoNombre }}</span>
+              </td>
+
+              <td>
+                <span></span>
               </td>
 
               <td>

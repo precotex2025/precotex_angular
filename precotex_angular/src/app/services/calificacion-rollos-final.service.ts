@@ -84,7 +84,8 @@ export class CalificacionRollosFinalService {
           sObsRec:string,
           sCodCal:string,
           sCodTel:string,
-          iReproceso: number
+          iReproceso: number,
+          iMaquina: string
     ): Observable<any> {
       const params = new HttpParams()
         .set('partida', partida)
@@ -98,6 +99,7 @@ export class CalificacionRollosFinalService {
         .set('sCodCal', sCodCal)
         .set('sCodTel', sCodTel)
         .set('Reproceso', iReproceso)
+        .set('Maquina', iMaquina)
       return this.http.get<any>(`${this.url}/getBuscarRolloPorPartidaDetalle`, { params });
     }
 
@@ -120,11 +122,13 @@ export class CalificacionRollosFinalService {
       return this.http.get<any>(`${this.url}/getUpdatePorPartida`, { params });
     }
 
-    subirArchivo(archivo: File): Observable<any> {
+    subirArchivo(archivo: File, Img_Cod_OrdTra: string, Img_Cod_Rollo: string, Img_Des: string): Observable<any> {
       const formData = new FormData();
       formData.append('archivo', archivo, archivo.name);
+      formData.append('Img_Cod_OrdTra', Img_Cod_OrdTra);
+      formData.append('Img_Cod_Rollo', Img_Cod_Rollo);
+      formData.append('Img_Des', Img_Des);
       return this.http.post(`${this.url}/subir-archivo`, formData);
-
     }
 
     obtenerDatosUnionRollos(filtros: any): Observable<any> {
