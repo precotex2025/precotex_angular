@@ -358,7 +358,8 @@ export class CalificacionRollosFinalComponent implements OnInit {
               this.PartidaCab.auditor = data.elements[result].inspector;              
               this.PartidaCab.supervisor =     data.elements[result].responsable;
               this.PartidaCab.reproceso = data.elements[result].reproceso;
-
+              this.PartidaCab.maquina = data.elements[result].maquina;
+              console.log('this.PartidaCab.maquina', this.PartidaCab.maquina);
               //OBSERVACION
               const obs : string = "";
               if (data && data.elements && data.elements[result] && data.elements[result].observacion) {
@@ -397,6 +398,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
               const sCodTela:string = String(this.PartidaCab.datosTela.substring(0,8)); 
               const sCodCali: string = ' ';//tring(data.elements[result].calidad);
               const Reproceso: number = 1; 
+              const Maquina: string = 'ME1';
               
               this.CalificacionRollosFinalService.buscarRolloPorPartidaDetalle(codOrdTra, index, 
 
@@ -408,7 +410,8 @@ export class CalificacionRollosFinalComponent implements OnInit {
                 sObsRec ,
                 sCodCali,
                 sCodTela,
-                Reproceso
+                Reproceso,
+                Maquina
 
               ).subscribe({
                 next: (response) => {
@@ -728,6 +731,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
       console.log('Fin - this.PartidaCab.detRollosTotal', this.PartidaCab.detRollosTotal);
 
       this.PartidaCab.usuario = this.sCod_Usuario;
+      console.log('this.PartidaCab antes de guardar', this.PartidaCab);
       this.CalificacionRollosFinalService.guardarPartida(this.PartidaCab).subscribe(
         (response) => {
           console.log('✅ Data saved successfully:', response);
@@ -876,10 +880,19 @@ export class CalificacionRollosFinalComponent implements OnInit {
         item.archivoNombre = file.name;
         item.archivo = file;
 
+        let codordtra: string = this.PartidaCab.datosPartida;
+        let rollo: string = item.rollo;
+        let nombreArchivo: string = file.name;
+
+        console.log(codordtra);
+        console.log(rollo);
+        console.log(nombreArchivo);
+
+
         this.PartidaCab.detPartida = this.PartidaCab.detPartida.filter(p => p.rollo !== item.rollo);
         //this.PartidaCab.detPartida.push({ ...item });
 
-        this.CalificacionRollosFinalService.subirArchivo(file).subscribe({
+        this.CalificacionRollosFinalService.subirArchivo(file, codordtra, rollo, nombreArchivo).subscribe({
           next: (res) => {
             console.log('✅ Archivo subido con éxito:', res);
           },
