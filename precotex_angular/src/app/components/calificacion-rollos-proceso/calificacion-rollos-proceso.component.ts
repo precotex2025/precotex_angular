@@ -106,6 +106,7 @@ export class CalificacionRollosProcesoComponent implements OnInit {
     this.cargarCalificacion();
     this.cargarEstadoProceso();
     this.cargarProcesoAuditado();
+    this.CargarComboConUsuarioLogeado(this.sCod_Usuario);
     //this.primerosDos = 'RE';//this.textoOriginal.substring(0, 2);
   }
 
@@ -340,9 +341,11 @@ export class CalificacionRollosProcesoComponent implements OnInit {
       }
     });
     let Cod_ordTra = this.PartidaCab.datosPartida;
+    let auditor = '';
     this.CalificacionRollosProcesoService.getObtenerDatosCabeceraEnProceso(Cod_ordTra).subscribe({
       next: (response: any ) => {
-        this.PartidaCab.auditor = response.elements[0].auditor;
+        this.PartidaCab.auditor = response.elements[0].auditor || '';
+        auditor = this.PartidaCab.auditor;
         this.PartidaCab.supervisor = response.elements[0].supervisor;
         this.PartidaCab.maquina = response.elements[0].maquina;
         this.PartidaCab.turno = response.elements[0].turno;
@@ -351,9 +354,13 @@ export class CalificacionRollosProcesoComponent implements OnInit {
         this.PartidaCab.procesoAuditado = response.elements[0].procesoAuditado;
         this.PartidaCab.estadoProceso = response.elements[0].estadoProceso;
         this.PartidaCab.calificacion = response.elements[0].calificacion;
-        this.PArtidaCab.observaciones = response.elements[0].observaciones;
+        this.PartidaCab.observaciones = response.elements[0].observaciones;
       }
     });
+
+    if(auditor === ''){
+      this.CargarComboConUsuarioLogeado(this.sCod_Usuario);
+    }
   }
 
   setPage(page: number): void {
@@ -674,6 +681,16 @@ export class CalificacionRollosProcesoComponent implements OnInit {
         }
       });
     }
+  }
+
+  CargarComboConUsuarioLogeado(Cod_Usuario: string): void{
+    this.CalificacionRollosProcesoService.getObtenerAuditor2(Cod_Usuario).subscribe({
+      next: ( response: any ) => {
+        console.log('EL AUDITOR ES: ', response.elements[0].acronimo);
+        this.PartidaCab.auditor = response.elements[0].acronimo;
+        
+      }
+    });
   }
 
 }

@@ -155,6 +155,11 @@ export class CalificacionRollosProcesoService {
       return this.http.get<any>(`${this.url}/getObtenerDatosCabeceraEnProceso`, { params });
     }
 
+    getObtenerAuditor2(Cod_Usuario: string): Observable<any>{
+      const params = new HttpParams().set('Cod_Usuario', Cod_Usuario);
+      return this.http.get<any>(`${this.url}/getObtenerAuditor2`, {params});
+    }
+
 
 
 
