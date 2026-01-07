@@ -332,9 +332,9 @@ abrirScanner() {
         type: 'LiveStream',
         target: document.querySelector('#scanner')!,
         constraints: {
-          facingMode: 'environment',
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
+          facingMode: 'environment'
+          // width: { ideal: 1280 },
+          // height: { ideal: 720 }
         }
       },
       decoder: {
