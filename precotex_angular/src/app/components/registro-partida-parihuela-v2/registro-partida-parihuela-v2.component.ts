@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Console } from 'console';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
@@ -7,7 +7,8 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { GlobalVariable } from 'src/app/VarGlobals';
 import { finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-
+// import { BarcodeFormat } from '@zxing/library';
+import Quagga from '@ericblade/quagga2';
 
 @Component({
   selector: 'app-registro-partida-parihuela-v2',
@@ -24,7 +25,8 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
   tiposComplemento = [];
   codigoTelita: string = '';
   baseUrlTinto = GlobalVariable.baseUrlProcesoTenido;
-
+  @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
   constructor(
     private fb: FormBuilder,
     private serviceRegistroParihuela: RegistroPartidaParihuelaService,
@@ -46,6 +48,12 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
   ngOnInit(): void {
     
   }
+
+  // formatsHabilitados: BarcodeFormat[] = [
+  //   BarcodeFormat.CODE_128, 
+  //   BarcodeFormat.EAN_13, 
+  //   BarcodeFormat.QR_CODE
+  // ];
 
   buscarPartida() {
     let cod_Parihuela = this.busquedaForm.get('codigo')?.value;
@@ -142,9 +150,10 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
   });
 
   const grupos = Array.from(agrupado.values());
-  this.parihuelaFormArray = new FormArray(
-    grupos.map(grupo =>
-      new FormGroup({
+  
+    this.parihuelaFormArray = new FormArray(
+    grupos.map(grupo => {
+      const formGroup = new FormGroup({
         codigo: new FormControl(grupo.codigoParihuela),
         pesoParihuela: new FormControl(grupo.pesoParihuela),
         pesoTela: new FormControl(grupo.pesoTela),
@@ -158,9 +167,14 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
             })
           )
         )
-      })
-    )
+      });
+
+      formGroup.disable();
+      return formGroup;
+    })
   );
+
+
 }
 
 
@@ -214,6 +228,7 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
         progressAnimation: 'increasing'
       });
       //console.log('Guardado exitosamente:', res);
+      this.parihuelaFormArray.controls.forEach((grupo: FormGroup) => grupo.disable());
     },
     error: (err) => {
       this.toastr.error('Error al guardar la partida.', 'Error', {
@@ -282,28 +297,80 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
   }
 
   validarSeleccion(valor: string, grupo: FormGroup) {
-    // Obtener todos los complementos seleccionados en este grupo
+    
     const complementos = grupo.get('complementos') as FormArray;
     const seleccionados = complementos.controls
       .map(c => c.get('tipo')?.value)
       .filter(v => !!v);
 
-    // Contar cuántas veces aparece el valor
+    
     const repetidos = seleccionados.filter(v => v === valor);
 
     if (repetidos.length > 1) {
-      // Mostrar alerta y resetear el último campo
+    
       this.toastr.warning(`El complemento "${valor}" ya fue seleccionado.`, 'Duplicado', {
         timeOut: 3000,
         progressBar: true,
         progressAnimation: 'increasing'
       });
 
-      // Resetear el último control que intentó asignar el duplicado
       complementos.at(complementos.length - 1).get('tipo')?.reset();
     }
   }
 
 
+/*FUNCIONALIDAD SCANNER*/
 
+scannerVisible = false;
+
+abrirScanner() {
+  this.scannerVisible = true;
+
+  setTimeout(() => {
+    Quagga.init({
+      inputStream: {
+        type: 'LiveStream',
+        target: document.querySelector('#scanner')!,
+        constraints: {
+          facingMode: 'environment',
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        }
+      },
+      decoder: {
+        readers: ['code_39_reader'],
+      },
+      locate: true
+    }, (err) => {
+      if (err) {
+        console.error('Error inicializando Quagga:', err);
+        this.cerrarScanner();
+        return;
+      }
+      Quagga.start();
+    });
+
+    Quagga.onDetected(result => {
+      const code = result.codeResult.code;
+      console.log('Código detectado:', code);
+      
+      this.parihuelaFormArray.controls.forEach((grupo: FormGroup) => grupo.disable()); 
+      
+      const grupo = this.parihuelaGrupos.find(g => g.get('codigo')?.value === code); 
+      if (grupo) { grupo.enable(); }
+
+      Quagga.stop();
+      this.cerrarScanner();
+    });
+  }, 100);
+}
+
+
+cerrarScanner() {
+  Quagga.stop();
+  this.scannerVisible = false;
+}
+
+
+/***************************************/
 }

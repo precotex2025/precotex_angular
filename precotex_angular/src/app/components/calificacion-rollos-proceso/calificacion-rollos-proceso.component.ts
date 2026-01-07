@@ -5,6 +5,7 @@ import { ModalSeleccionPartidaComponent } from './modal-seleccion-partida.compon
 import { MatDialog } from '@angular/material/dialog';
 import { GlobalVariable } from 'src/app/VarGlobals';
 import { ModalMetrosComponent } from './modal-metros.component';
+import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-calificacion-rollos-proceso',
@@ -338,7 +339,21 @@ export class CalificacionRollosProcesoComponent implements OnInit {
         console.error('Error al buscar partida:', err);
       }
     });
-
+    let Cod_ordTra = this.PartidaCab.datosPartida;
+    this.CalificacionRollosProcesoService.getObtenerDatosCabeceraEnProceso(Cod_ordTra).subscribe({
+      next: (response: any ) => {
+        this.PartidaCab.auditor = response.elements[0].auditor;
+        this.PartidaCab.supervisor = response.elements[0].supervisor;
+        this.PartidaCab.maquina = response.elements[0].maquina;
+        this.PartidaCab.turno = response.elements[0].turno;
+        this.PartidaCab.unidadNegocio = response.elements[0].unidadNegocio;
+        this.PartidaCab.estadoPartida = response.elements[0].estadoPartida;
+        this.PartidaCab.procesoAuditado = response.elements[0].procesoAuditado;
+        this.PartidaCab.estadoProceso = response.elements[0].estadoProceso;
+        this.PartidaCab.calificacion = response.elements[0].calificacion;
+        this.PArtidaCab.observaciones = response.elements[0].observaciones;
+      }
+    });
   }
 
   setPage(page: number): void {

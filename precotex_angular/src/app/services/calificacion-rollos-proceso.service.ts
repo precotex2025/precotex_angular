@@ -149,4 +149,13 @@ export class CalificacionRollosProcesoService {
     eliminarDesglose(id: number): Observable<any> {
       return this.http.delete(`${this.url}/DelteDesglose/${id}`);
     }
+
+    getObtenerDatosCabeceraEnProceso(Cod_ordTra: string): Observable<any> {
+      const params = new HttpParams().set('Cod_ordTra', Cod_ordTra);
+      return this.http.get<any>(`${this.url}/getObtenerDatosCabeceraEnProceso`, { params });
+    }
+
+
+
+
 }

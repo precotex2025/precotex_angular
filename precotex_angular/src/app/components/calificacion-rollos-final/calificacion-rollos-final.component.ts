@@ -139,7 +139,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
     codTelaGral: string = '';
 
 
-    constructor(private CalificacionRollosFinalService: CalificacionRollosFinalService, 
+    constructor(public CalificacionRollosFinalService: CalificacionRollosFinalService, 
                 private dialog            : MatDialog,
                 private SpinnerService    : NgxSpinnerService) {
 
@@ -423,6 +423,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
                   
                   //Agrega todos los rollos al detalle
                   this.PartidaCab.detRollosTotal = [];
+                  console.log('Medio - this.partidaItemList: ', this.partidaItemList)
                   this.partidaItemList.forEach(defecto => {
                     this.PartidaCab.detRollosTotal.push({"rollo" : defecto.rollo});
                   });
@@ -437,7 +438,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
                 }
               });
               
-              
+              this.mostrarCeros = false;
               this.cargarDefectos("");
             }
             else{
@@ -728,7 +729,9 @@ export class CalificacionRollosFinalComponent implements OnInit {
         this.PartidaCab.detDefecto.push(defecto);
       });
 
-      console.log('Fin - this.PartidaCab.detRollosTotal', this.PartidaCab.detRollosTotal);
+      console.log('Fin - this.PartidaCab.detRollosTotal', this.PartidaCab);
+
+      console.log('Fin - this.PartidaCab.detDefecto', this.PartidaCab.detDefecto);
 
       this.PartidaCab.usuario = this.sCod_Usuario;
       console.log('this.PartidaCab antes de guardar', this.PartidaCab);
@@ -828,7 +831,10 @@ export class CalificacionRollosFinalComponent implements OnInit {
 
       // Activar solo en el item actual
       item.isEditing = true;
-
+      if (item.mostrarCeros){
+        item.mtrs2_R = 0;
+        item.calidad = 0;
+      }
     }
 
     guardarEdicion(item: any) {
@@ -1069,6 +1075,30 @@ export class CalificacionRollosFinalComponent implements OnInit {
         }
       });
     }
+
+
+    imagenModalVisible: boolean = false;
+    imagenModalUrl: string = '';
+
+    abrirModalImagen(imageId: string): void {
+      this.imagenModalUrl = this.CalificacionRollosFinalService.getImagenUrl(imageId);
+      this.imagenModalVisible = true;
+    }
+
+    cerrarModalImagen(): void {
+      this.imagenModalVisible = false;
+      this.imagenModalUrl = '';
+    }
+
+   
+    mostrarCeros = false; 
+
+    onReprocesoChange(event: any) {
+      this.mostrarCeros = true;
+    }
+
+  
+
 
 
 }

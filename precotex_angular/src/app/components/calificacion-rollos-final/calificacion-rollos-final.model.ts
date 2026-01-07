@@ -227,3 +227,20 @@ export interface ReprocesoResponse {
 }
 
 
+export interface CabeceraEnProceso{
+  Auditor: string, 
+  Supervisor: string, 
+  Maquina: string, 
+  Turno: string, 
+  Uniad_Negocio: string, 
+  EstadoPartida: string, 
+  Calificacion: string, 
+  EstadoProceso: string, 
+  ProcesoAuditado: string, 
+  Observacion: string
+}
+
+export interface CabeceraEnProcesoResponse {
+  elements: CabeceraEnProceso[];
+}
+

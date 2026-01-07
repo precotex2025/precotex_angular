@@ -27,7 +27,8 @@
       </label>
 
       <label for="reprocesoSelect">Reproceso:
-        <select id="reprocesoSelect" [(ngModel)]="PartidaCab.reproceso" name="reproceso" [disabled]="isHeadDisabled">
+        <select id="reprocesoSelect" [(ngModel)]="PartidaCab.reproceso" name="reproceso" [disabled]="isHeadDisabled"
+                (ngModelChange)="onReprocesoChange($event)">
           <option *ngFor="let c of reprocesoList; let i = index" [value]="c.rep_Id"
                   [selected]="i === 0">{{ c.rep_Des }}</option>
         </select>
@@ -236,7 +237,7 @@
                   <ng-container *ngIf="item.isEditing; else showMtrsAuditados">
                     <input type="text" [(ngModel)]="item.mtrs2_R" style="width: 80px;" />
                   </ng-container>
-                  <ng-template #showMtrsAuditados>{{ item.mtrs2_R }}</ng-template>
+                  <ng-template #showMtrsAuditados>{{ mostrarCeros || item.isEditing ? 0 : item.mtrs2_R }}</ng-template>
            
 
                   <!-- <ng-container *ngIf="item.isEditing; else showMtrsAuditados">
@@ -250,7 +251,7 @@
                   <ng-container *ngIf="item.isEditing; else showCalidad">
                     <input type="number" [(ngModel)]="item.calidad" style="width: 100px;" />
                   </ng-container>
-                  <ng-template #showCalidad>{{ item.calidad }}</ng-template>                  
+                  <ng-template #showCalidad>{{ mostrarCeros || item.isEditing ? 0 : item.calidad }}</ng-template>                  
 
                   <!-- <ng-container *ngIf="item.isEditing; else showCalidad">
                     <input type="number" [(ngModel)]="item.calidadAuditada" style="width: 100px;" />
@@ -262,11 +263,11 @@
 
               <td>
                 <input type="file"
-                       accept="*/*"
-                       (change)="onFileSelected($event, item)"
-                       capture="environment"
-                       style="display: none;"
-                       #fileInput />
+                      accept="*/*"
+                      (change)="onFileSelected($event, item)"
+                      capture="environment"
+                      style="display: none;"
+                      #fileInput />
                 <button type="button"
                         (click)="fileInput.click()"
                         title="Cargar archivo o tomar foto">
@@ -275,8 +276,15 @@
                 <span *ngIf="item.archivoNombre">📄 {{ item.archivoNombre }}</span>
               </td>
 
-              <td>
-                <span></span>
+              <td style="width: 50px; height: 50px;">
+                <!-- *ngIf="item.itm_Foto" -->
+                <span >
+                  <img [src]="CalificacionRollosFinalService.getImagenUrl(item.img_Des)" 
+                      alt="Foto" width="40" height="40"
+                      style="object-fit: cover; cursor: pointer;"
+                      (click)="abrirModalImagen(item.img_Des)"/>
+                </span>
+                <!-- <span *ngIf="!item.itm_Foto">🖼️</span> -->
               </td>
 
               <td>
@@ -602,6 +610,15 @@
       <button (click)="cerrarModal2()" class="modal-btn-secondary">Cerrar</button>
     </div>
   </div>
+
+  
+</div>
+
+<div *ngIf="imagenModalVisible" class="modal-imagen" (click)="cerrarModalImagen()"> 
+  <div class="modal-contenido" (click)="$event.stopPropagation()"> 
+    <img [src]="imagenModalUrl" alt="Imagen ampliada" /> 
+    <button class="cerrar" (click)="cerrarModalImagen()">✖</button> 
+  </div> 
 </div>
 
 <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
