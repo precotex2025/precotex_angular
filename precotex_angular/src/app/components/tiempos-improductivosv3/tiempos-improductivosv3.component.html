@@ -57,12 +57,12 @@
                         Iniciar
                     </button>
 
-                    <button mat-raised-button color="primary" class="btn-action" [disabled]="flgBtnDetener">
+                    <button mat-raised-button color="primary" class="btn-action" (click)="onTerminar()" [disabled]="flgBtnDetener">
                         <mat-icon>stop</mat-icon>
                         Detener
                     </button>                
                 </div>
-
+                <br>
                 <!-- Quinta Fila -->
                 <div class="row two-columns">
                     <mat-form-field appearance="outline" class="horaIni-field">
@@ -87,23 +87,34 @@
                 <!-- Sexta Fila -->
                 <div class="row two-columns">
 
-                    <button mat-raised-button color="primary" class="btn-action">
+                    <!-- <button mat-raised-button color="primary" class="btn-action">
                         <mat-icon>add_box</mat-icon>
                         Nuevo
-                    </button>
+                    </button> -->
                     
-                    <button mat-raised-button color="primary" class="btn-action" (click)="onRegistrar()">
+                    <button mat-raised-button color="primary" class="btn-action"            (click)="onRegistrar()">
                         <mat-icon>save</mat-icon>
                         Registrar
                     </button>
                     
-                    <button mat-raised-button color="warn" class="btn-action">
+                    <button mat-raised-button color="primary" class="btn-action btn-green"  (click)="onHistorial()"> 
+                        <mat-icon>history</mat-icon> 
+                        Historial 
+                    </button>        
+                    
+                    <button mat-raised-button color="warn" class="btn-action"               (click)="onCancelar()">
                         <mat-icon>cancel</mat-icon>
                         Cancelar
-                    </button>                
-
+                    </button>                         
+                    
                 </div>
 
+                <!-- Septima Fila -->
+                <div class="row">
+                    <!-- <button mat-raised-button color="primary" class="btn-action btn-green"  (click)="onHistorial()"> 
+                        <mat-icon>history</mat-icon> Historial 
+                    </button>              -->
+                </div>
 
             </section>
 

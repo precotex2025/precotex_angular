@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { GlobalVariable } from '../VarGlobals';
 import * as _moment from 'moment';
 
@@ -21,6 +21,12 @@ export class DialogTiemposImproductivosService {
   baseUrl = GlobalVariable.baseUrl;
   baseUrlLocal = GlobalVariable.baseUrlLocal;
   sCod_Usuario = GlobalVariable.vusu;
+
+  //Llamado del BackendPreco
+  baseUrlTinto  = GlobalVariable.baseUrlProcesoTenido;
+  Header = new HttpHeaders({
+    'Content-type': 'application/json'
+  });  
 
   constructor(private http: HttpClient) { }
 
@@ -58,7 +64,7 @@ export class DialogTiemposImproductivosService {
 
     if (!_moment(ffin).isValid()) { sFec_Fin = '01/01/1900';  }
     sFec_Fin = _moment(ffin.valueOf()).format('DD/MM/YYYY');
-    console.log(sFec_Fin);
+    
     if(sFec_Fin=='Invalid date') {  dtfin='';  } else {
       dtfin=sFec_Fin + ' ' + hfin;
     }
@@ -81,7 +87,7 @@ export class DialogTiemposImproductivosService {
     let dtinicio="";
     let dtfin="";
 
-    /*if (!_moment(sFec_Registro).isValid()) { sFec_Despacho = '01/01/1900';  }
+    if (!_moment(sFec_Registro).isValid()) { sFec_Despacho = '01/01/1900';  }
     sFec_Despacho = _moment(sFec_Registro.valueOf()).format('DD/MM/YYYY');
 
     if (!_moment(finicio).isValid()) { sFec_Inicio = '01/01/1900';  }
@@ -90,10 +96,25 @@ export class DialogTiemposImproductivosService {
 
     if (!_moment(ffin).isValid()) { sFec_Fin = '01/01/1900';  }
     sFec_Fin = _moment(ffin.valueOf()).format('DD/MM/YYYY');
-    dtfin=sFec_Fin + ' ' + hfin;*/
-    sFec_Despacho = sFec_Registro;
-    dtinicio=finicio + ' ' + hinicio;
-    dtfin=ffin + ' ' + hfin;
+
+    // dtfin=sFec_Fin + ' ' + hfin;
+    // sFec_Despacho = sFec_Registro;
+    // dtinicio=finicio + ' ' + hinicio;
+    // dtfin=ffin + ' ' + hfin;
+
+    if (!_moment(ffin).isValid()) { sFec_Fin = '01/01/1900';  }
+    sFec_Fin = _moment(ffin.valueOf()).format('DD/MM/YYYY');
+    
+    if(sFec_Fin=='Invalid date') {  dtfin='';  } else {
+      dtfin=sFec_Fin + ' ' + hfin;
+    }
+
+    if(dtfin == 'Fecha inválida 00:00'){
+      dtfin='01/01/9999' + ' ' + '00:00';
+    }    
+
+    console.log('SERVICIO INICIO',dtinicio);
+    console.log('SERVICIO FIN',dtfin);
 
    //let FecCrea="";
 
@@ -126,6 +147,17 @@ export class DialogTiemposImproductivosService {
     return this.http.get(`${this.baseUrl}/app_Mantenimiento_Tiempo_Improductivo.php?Accion=D&Fec_Registro=${sFec_Registro}&Cod_Maquina=${cod_maquina}&Nro_DocIde=&Cod_Motivo=${cod_motivo}&Fec_Hora_Inicio=${finicio}&Fec_Hora_Fin=${ffin}&Observacion=&Cod_Usuario=${this.sCod_Usuario}`);
 
   }
+
+  //Metodos del BackendPreco
+  getObtieneTiempoImproductivoPendiente(sCodMaquina){
+
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('sCodMaquina', sCodMaquina);
+
+    return this.http.get(this.baseUrlTinto + 'TjTiempoImproductivo/getObtieneTiempoImproductivoPendiente', { headers, params });
+  }    
+
 
 
 }

@@ -96,7 +96,7 @@
                             <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Cod_Maquina</th>
                             <td mat-cell *matCellDef="let data_det"> {{data_det.Cod_Maquina}} </td>
                         </ng-container>
-                        <ng-container matColumnDef="Des_Maquina_Tejeduria">
+                        <!-- <ng-container matColumnDef="Des_Maquina_Tejeduria">
                             <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Des_Maquina_Tejeduria</th>
                             <td mat-cell *matCellDef="let data_det"> {{data_det.Des_Maquina_Tejeduria}} </td>
                         </ng-container>
@@ -111,7 +111,7 @@
                         <ng-container matColumnDef="nodoc">
                             <th mat-header-cell *matHeaderCellDef class="mat-header-cell">DNI</th>
                             <td mat-cell *matCellDef="let data_det"> {{data_det.nodoc}} </td>
-                        </ng-container>
+                        </ng-container> -->
                         <ng-container matColumnDef="Nombres">
                             <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Nombres</th>
                             <td mat-cell *matCellDef="let data_det"> {{data_det.Nombres}} </td>
@@ -135,10 +135,26 @@
                                     *ngIf="data_det.Fec_Hora_Fin!=='01/01/1900 00:00:00'"> {{data_det.Fec_Hora_Fin}}
                                 </span> </td>
                         </ng-container>
+
                         <ng-container matColumnDef="Observacion">
                             <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Observacion</th>
                             <td mat-cell *matCellDef="let data_det"> {{data_det.Observacion}} </td>
                         </ng-container>
+
+                        <ng-container matColumnDef="Diferencia_Minutos">
+                            <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Dif. Minutos</th>
+                            <td mat-cell *matCellDef="let data_det"> {{data_det.DiferenciaMinutos}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Estado">
+                        <th mat-header-cell *matHeaderCellDef>Estado</th>
+                        <td mat-cell *matCellDef="let data_det">
+                            <span [ngClass]="getEstadoClass(data_det.Estado)">
+                            {{ data_det.Estado }}
+                            </span>           
+                        </td>
+                        </ng-container>                        
+
                         <ng-container matColumnDef="Fec_Creacion">
                             <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Fec_Creacion</th>
                             <td mat-cell *matCellDef="let data_det"> {{data_det.Fec_Creacion}} </td>
@@ -155,10 +171,18 @@
                             <th mat-header-cell *matHeaderCellDef class="mat-header-cell">Acciones</th>
                             <td mat-cell *matCellDef="let data_det">
 
-                                <a mat-icon-button style="margin-right:5px;" *ngIf="data_det.Cod_Maquina!=''"
-                                    (click)="openDialogModificar(data_det.Fec_Registro,data_det.Cod_Maquina,data_det.Cod_Motivo,data_det.Fec_Hora_Inicio,data_det.Fec_Hora_Fin,data_det.Observacion,data_det.nodoc,data_det.Fec_Creacion )">
+                                <!-- (click)="openDialogModificar(data_det.Fec_Registro,data_det.Cod_Maquina,data_det.Cod_Motivo,data_det.Fec_Hora_Inicio,data_det.Fec_Hora_Fin,data_det.Observacion,data_det.nodoc,data_det.Fec_Creacion )" -->
+                                
+                                <!-- <a mat-icon-button style="margin-right:5px;" *ngIf="data_det.Cod_Maquina!=''"
+                                    (click)="onRedireccionarRegistro(data_det.Cod_Maquina)"
+                                    >
                                     <mat-icon color="success">create</mat-icon>
-                                </a>
+                                </a> -->
+
+                                <a mat-icon-button *ngIf="data_det.Cod_Maquina!=''"
+                                    (click)="EliminarRegistro(data_det.Fec_Registro,data_det.Cod_Maquina,data_det.Cod_Motivo,data_det.Fec_Hora_Inicio,data_det.Fec_Hora_Fin,data_det.nodoc,data_det.Fec_Creacion )">
+                                    <mat-icon color="warn">delete</mat-icon>
+                                </a>                                
 <!-- 
                                 <a mat-icon-button *ngIf="data_det.Cod_Maquina!=''"
                                     (click)="EliminarRegistro(data_det.Fec_Registro,data_det.Cod_Maquina,data_det.Cod_Motivo,data_det.Fec_Hora_Inicio,data_det.Fec_Hora_Fin,data_det.nodoc,data_det.Fec_Creacion )">
@@ -176,10 +200,10 @@
                                         <mat-icon color="success">create</mat-icon>
                                     </a> -->
     
-                                    <a mat-icon-button *ngIf="data_det.Cod_Maquina!=''"
+                                    <!-- <a mat-icon-button *ngIf="data_det.Cod_Maquina!=''"
                                         (click)="EliminarRegistro(data_det.Fec_Registro,data_det.Cod_Maquina,data_det.Cod_Motivo,data_det.Fec_Hora_Inicio,data_det.Fec_Hora_Fin,data_det.nodoc,data_det.Fec_Creacion )">
                                         <mat-icon color="warn">delete</mat-icon>
-                                    </a>
+                                    </a> -->
                                 </td>
                         </ng-container>
 
@@ -199,14 +223,14 @@
             </div>
 
             <div class="container-cuerpo-foot">
-                <button type="button" class="button-agregar" mat-flat-button (click)="openDialog();">
+                <!-- <button type="button" class="button-agregar" mat-flat-button (click)="openDialog();">
                     <mat-icon aria-label="person">add
                     </mat-icon> Agregar
-                </button>
-                <!--<button type="button" class="button-cancelar" [routerLink]="['/SeguridadControlVehiculoAccion']" mat-flat-button>
+                </button> -->
+                <button type="button" class="btn-regresar" [routerLink]="['../TiemposImproductivosv3']" mat-flat-button>
                     <mat-icon aria-label="person">highlight_off
                     </mat-icon>  Regresar
-                </button> -->
+                </button>
             </div>
 
 

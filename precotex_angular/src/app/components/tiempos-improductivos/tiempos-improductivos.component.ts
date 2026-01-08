@@ -12,23 +12,18 @@ import { MatDialog } from '@angular/material/dialog';
 import { HttpErrorResponse } from '@angular/common/http';
 //import { DialogTiemposImproductivosComponent } from '../tiempos-improductivos/dialog-tiempos-improductivos/dialog-tiempos-improductivos.component';
 import { startWith, map,Observable } from 'rxjs';
-
 import { TiemposImproductivosService } from '../../services/tiempos-improductivos.service';
 import { GlobalVariable } from '../../VarGlobals'; //<==== this one
 import { DialogTiemposImproductivosComponent } from './dialog-tiempos-improductivos/dialog-tiempos-improductivos.component';
 import { DialogModificaTiemposImproductivosComponent } from './dialog-modifica-tiempos-improductivos/dialog-modifica-tiempos-improductivos.component';
-
 import { ExcelService } from 'src/app/services/excel.service';
 import { ExceljsService } from 'src/app/services/exceljs.service';
-
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface maquinas {
   Codigo: string,
   Descripcion: string,
 }
-
-
-
 
 interface data_det {
   Accion: string,
@@ -44,8 +39,6 @@ interface data_det {
   Fec_Registro2: string,
 }
 
-
-
 @Component({
   selector: 'app-tiempos-improductivos',
   templateUrl: './tiempos-improductivos.component.html',
@@ -59,6 +52,7 @@ export class TiemposImproductivosComponent implements OnInit {
 
   Fec_Registro1="";
   Fec_Registro2="";
+  sCod_Maquina="";
 
   //* Declaramos formulario para obtener los controles */
   formulario = this.formBuilder.group({
@@ -93,7 +87,7 @@ export class TiemposImproductivosComponent implements OnInit {
   //dataSource: MatTableDataSource<data_det>;
   //columnsToDisplay: string[] = this.displayedColumns_cab.slice();
 
-  displayedColumns: string[] = ['Fec_Registro','Cod_Maquina','Des_Maquina_Tejeduria','Tip_Trabajador_Tejedor','Cod_Trabajador_Tejedor','nodoc','Nombres','Cod_Motivo',  'Des_Motivo','Fec_Hora_Inicio','Fec_Hora_Fin','Observacion','Fec_Creacion','Cod_Usuario','Acciones','Accion_Borrar']
+  displayedColumns: string[] = ['Fec_Registro','Cod_Maquina','Nombres','Cod_Motivo',  'Des_Motivo','Fec_Hora_Inicio','Fec_Hora_Fin','Observacion','Diferencia_Minutos','Estado', 'Acciones']
   dataSource: MatTableDataSource<data_det>;
   /*columnsToDisplay: string[] = this.displayedColumns.slice();
   clickedRows = new Set<data_det>();*/
@@ -107,7 +101,9 @@ export class TiemposImproductivosComponent implements OnInit {
     private SpinnerService: NgxSpinnerService,
     private excelService:ExcelService,
     private exceljsService:ExceljsService,
-    private despachoTelaCrudaService: TiemposImproductivosService
+    private despachoTelaCrudaService: TiemposImproductivosService,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.dataSource = new MatTableDataSource();
   }
@@ -120,8 +116,9 @@ export class TiemposImproductivosComponent implements OnInit {
     //   'Fec_Registro': new FormControl(''),
     //   'Cod_Maquina': new FormControl(''),
     //  });
-
+   //this.formulario.get('Cod_Maquina')?.disable();
     GlobalVariable.num_movdespacho = '';
+    //this.ngOnGetParams();
     this.CargarMaquinas();
     this.CargarLista();
 
@@ -134,6 +131,7 @@ export class TiemposImproductivosComponent implements OnInit {
   }
 
   CargarLista() {
+    this.dataSource.data = [];
     //this.SpinnerService.show();
     let fec_despacho1 = this.formulario.value['fec_registro1'];
     fec_despacho1 = moment(fec_despacho1).format('DD-MM-YYYY');
@@ -141,9 +139,10 @@ export class TiemposImproductivosComponent implements OnInit {
     let fec_despacho2 = this.formulario.value['fec_registro2'];
     fec_despacho2 = moment(fec_despacho2).format('DD-MM-YYYY');
 
-    console.log(fec_despacho1);
+    let cod_Maquina = this.formulario.get('Cod_Maquina')?.value;
 
-    this.despachoTelaCrudaService.ListarDespachoService(fec_despacho1, fec_despacho2, this.formulario.get('Cod_Maquina')?.value).subscribe(
+    //console.log(fec_despacho1);
+    this.despachoTelaCrudaService.ListarDespachoService(fec_despacho1, fec_despacho2, cod_Maquina).subscribe(
         (result: any) => {
           //this.data_det = result
           this.dataSource.data = result
@@ -214,8 +213,10 @@ export class TiemposImproductivosComponent implements OnInit {
   CargarMaquinas() {
     this.despachoTelaCrudaService.mantenimientoConductorService().subscribe(
       (result: any) => {
-        this.listar_operacionConductor = result
-        console.log(this.listar_operacionConductor);
+        this.listar_operacionConductor = result.map(item => ({ Codigo: item.Codigo.trim(), Descripcion: item.Descripcion }));
+        //this.listar_operacionConductor = result;
+        console.log('listar_operacionConductor', this.listar_operacionConductor);
+        //this.formulario.get('Cod_Maquina')?.setValue(this.sCod_Maquina);
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
   }
@@ -289,14 +290,33 @@ export class TiemposImproductivosComponent implements OnInit {
     }
   }
 
+
+  ngOnGetParams(){
+    this.route.queryParams.subscribe(params => {
+      this.sCod_Maquina = params['codMaquina'] || '';
+      console.log(this.sCod_Maquina);
+    })
+  }
+
+  getEstadoClass(estado: string): string {
+    console.log('estado', estado);
+  switch (estado.trim()) {
+    case 'Parado':
+      return 'estado-parada';
+    case 'Ok':
+      return 'estado-ok';
+    default:
+      return '';
+    }
+  }
   
-
-
-
-
-
-
-
-
+  onRedireccionarRegistro(codigoMaquina: string){
+    this.router.navigate(['../TiemposImproductivosv3'], 
+      { queryParams: {
+          accion: 'U',
+          codMaquina: this.sCod_Maquina.trim()
+      }}
+    )    
+  }  
 
 }
