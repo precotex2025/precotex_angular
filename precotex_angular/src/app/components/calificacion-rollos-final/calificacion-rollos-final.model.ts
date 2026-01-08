@@ -163,6 +163,7 @@ export interface PartidaCabecera {
   datosCliente: string;
   detPartida: any[];
   detDefecto: any[];
+  reproceso: string;
 
 }
 
@@ -215,4 +216,31 @@ export interface GuardarUnionRollosResponse {
   elements: GuardarUnionRollos[];
 }
 
+export interface Reproceso {
+  Rep_Id : string;
+  Rep_Des : string;
+  Flg_Est : string;
+}
+
+export interface ReprocesoResponse {
+  elements: ReprocesoResponse[];
+}
+
+
+export interface CabeceraEnProceso{
+  Auditor: string, 
+  Supervisor: string, 
+  Maquina: string, 
+  Turno: string, 
+  Uniad_Negocio: string, 
+  EstadoPartida: string, 
+  Calificacion: string, 
+  EstadoProceso: string, 
+  ProcesoAuditado: string, 
+  Observacion: string
+}
+
+export interface CabeceraEnProcesoResponse {
+  elements: CabeceraEnProceso[];
+}
 

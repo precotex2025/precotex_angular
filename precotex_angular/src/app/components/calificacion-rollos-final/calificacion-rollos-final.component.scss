@@ -556,3 +556,64 @@ td, th {
   background-color: #d1d5db;
 }
 
+
+
+
+
+
+.modal-imagen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+// .modal-contenido {
+//   background: #fff;
+//   padding: 10px;
+//   border-radius: 8px;
+//   max-width: 90%;
+//   max-height: 90%;
+// }
+
+.modal-contenido {
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 40vw;
+  max-height: 65vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+// .modal-contenido img {
+//   max-width: 100%;
+//   max-height: 80vh;
+// }
+
+.modal-contenido img {
+  width: 55vw; 
+  height: auto; 
+  max-height: 55vh;  
+  object-fit: contain;
+}
+
+
+
+.cerrar {
+  margin-top: 10px;
+  background: #d33;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+

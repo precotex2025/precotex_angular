@@ -572,6 +572,7 @@ import { ModalInformeCierreComponent } from './components/quejas-reclamos/modal-
 import { DialogEvidenciaEmpaqueCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-evidencia-empaque-caja/dialog-evidencia-empaque-caja.component';
 import { DialogMemorandumLineaTiempoComponent } from './components/memorandum-gral/dialog-memorandum-linea-tiempo/dialog-memorandum-linea-tiempo.component';
 import { DialogEvidenciaPackingCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-evidencia-packing-caja/dialog-evidencia-packing-caja.component';
+import { ConsultaValesComponent } from './components/rrhh/consulta-vales/consulta-vales.component';
 
 //RETIRO DE REPUESTOS
 import { RetiroRepuestosComponent } from './components/retiro-repuestos/retiro-repuestos.component';
@@ -586,7 +587,6 @@ import { ReporteNCComponent } from './components/reporte-nc/reporte-nc.component
 import { ReporteNcResolvedorComponent } from './components/reporte-nc/reporte-nc-resolvedor/reporte-nc-resolvedor.component';
 import { ReporteNcLstComponent } from './components/reporte-nc/reporte-nc-lst/reporte-nc-lst.component';
 import { MantenimientoSedeXAreaComponent } from './components/reporte-nc/mantenimiento-sede-x-area/mantenimiento-sede-x-area.component';
-
 
 //REGISTRO PARIHUELA V2
 import { RegistroPartidaParihuelaV2Component } from './components/registro-partida-parihuela-v2/registro-partida-parihuela-v2.component';
@@ -608,6 +608,10 @@ import { TiemposImproductivosv3Component } from './components/tiempos-improducti
 import { AprobacionDesarrolloTelasComponent } from './components/aprobacion-desarrollo-telas/aprobacion-desarrollo-telas.component';
 
 import { GenerarQrComponent } from './components/control-activos-fijo/generar-qr/generar-qr.component';
+
+//COTIZACIONES
+import { CotizacionesComponent } from './components/cotizaciones/cotizaciones.component';
+
 import { AprobacionDesarrolloTelasEditComponent } from './components/aprobacion-desarrollo-telas/aprobacion-desarrollo-telas-edit/aprobacion-desarrollo-telas-edit.component';
 
 @NgModule({
@@ -1085,7 +1089,7 @@ import { AprobacionDesarrolloTelasEditComponent } from './components/aprobacion-
     TiemposImproductivosv2Component,
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent,
     CalificacionRollosFinalComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ModalEditarDesgloseComponent, ConfirmDialogComponent,
-    GenerarQrComponent,
+    GenerarQrComponent,ConsultaValesComponent, 
     
     //Memorandum en GRAL
     MemorandumGralComponent,
@@ -1137,7 +1141,10 @@ import { AprobacionDesarrolloTelasEditComponent } from './components/aprobacion-
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent, DialogCapturarFotoCajaComponent, EvidenciaEmpaqueCajaComponent, ReporteVehiculoInmovilizadoComponent 
     
     //TIEMPOS IMPRODUCTIVOS V3
-    ,TiemposImproductivosv3Component
+    ,TiemposImproductivosv3Component,
+
+    //COTIZACIONES
+    CotizacionesComponent
 
     //APROBACION DESARROLLO TELAS
     ,AprobacionDesarrolloTelasComponent

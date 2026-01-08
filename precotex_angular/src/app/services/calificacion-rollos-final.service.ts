@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, throwError,lastValueFrom  } from 'rxjs';
 import { GlobalVariable } from '../VarGlobals';
-import { AuditorResponse, CalificacionResponse, EstadoPartidaResponse, EstadoProceso, EstadoProcesoResponse, MaquinaResponse, ProcesoAuditadoResponse, SupervisorResponse, TurnoResponse,UnidadNegocioResponse } from '../components/calificacion-rollos-final/calificacion-rollos-final.model';
+import { AuditorResponse, CalificacionResponse, EstadoPartidaResponse, EstadoProceso, EstadoProcesoResponse, MaquinaResponse, ProcesoAuditadoResponse, SupervisorResponse, TurnoResponse,UnidadNegocioResponse, ReprocesoResponse, CabeceraEnProcesoResponse } from '../components/calificacion-rollos-final/calificacion-rollos-final.model';
+import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 
 
 @Injectable({
@@ -82,7 +83,9 @@ export class CalificacionRollosFinalService {
           sResDig:string,
           sObsRec:string,
           sCodCal:string,
-          sCodTel:string
+          sCodTel:string,
+          iReproceso: number,
+          iMaquina: string
     ): Observable<any> {
       const params = new HttpParams()
         .set('partida', partida)
@@ -95,7 +98,8 @@ export class CalificacionRollosFinalService {
         .set('sObsRec', sObsRec)
         .set('sCodCal', sCodCal)
         .set('sCodTel', sCodTel)
-
+        .set('Reproceso', iReproceso)
+        .set('Maquina', iMaquina)
       return this.http.get<any>(`${this.url}/getBuscarRolloPorPartidaDetalle`, { params });
     }
 
@@ -118,11 +122,13 @@ export class CalificacionRollosFinalService {
       return this.http.get<any>(`${this.url}/getUpdatePorPartida`, { params });
     }
 
-    subirArchivo(archivo: File): Observable<any> {
+    subirArchivo(archivo: File, Img_Cod_OrdTra: string, Img_Cod_Rollo: string, Img_Des: string): Observable<any> {
       const formData = new FormData();
       formData.append('archivo', archivo, archivo.name);
+      formData.append('Img_Cod_OrdTra', Img_Cod_OrdTra);
+      formData.append('Img_Cod_Rollo', Img_Cod_Rollo);
+      formData.append('Img_Des', Img_Des);
       return this.http.post(`${this.url}/subir-archivo`, formData);
-
     }
 
     obtenerDatosUnionRollos(filtros: any): Observable<any> {
@@ -152,4 +158,57 @@ export class CalificacionRollosFinalService {
       const headers = this.Header;
       return this.http.post(`${this.url}/postEliminarDefectoRollo`, data)
     }
+
+    getObtenerReproceso(): Observable<ReprocesoResponse> {
+      return this.http.get<ReprocesoResponse>(`${this.url}/getObtenerReproceso`);
+    }
+    
+
+    // getObtenerImagenes(Img_Cod_OrdTra: string, Img_Cod_Rollo: string){
+    //   let params = new HttpParams();
+    //   params = params.append("Img_Cod_OrdTra", Img_Cod_OrdTra);
+    //   params = params.append("Img_Cod_Rollo", Img_Cod_Rollo);
+    //   return this.http.get(`${this.url}/getObtenerImagenes`, { params });
+    // }
+
+    private bas = 'https://gestion.precotex.com:444/ubicaciones/api/TxRetiroRepuestos/getImagenDesdeBackEnd';
+  
+    getImagenUrl(imageId: string): string {
+      
+      // let imageId: string = (this.getObtenerImagenes(Img_Cod_OrdTra, Img_Cod_Rollo)).tostring();
+      console.log('el nombre de la imagen es: ', imageId);
+      return `${this.bas}?imageId=${encodeURIComponent(imageId)}`;
+    }
+
+
+    // getObtenerImagenes(Img_Cod_OrdTra: string, Img_Cod_Rollo: string): Observable<string> {
+    //   let params = new HttpParams()
+    //     .set("Img_Cod_OrdTra", Img_Cod_OrdTra)
+    //     .set("Img_Cod_Rollo", Img_Cod_Rollo);
+
+    //   return this.http.get<string>(`${this.url}/getObtenerImagenes`, { params });
+    // }
+
+    // private bas = 'https://gestion.precotex.com:444/ubicaciones/api/TxRetiroRepuestos/getImagenDesdeBackEnd';
+
+    // getImagenUrl(Img_Cod_OrdTra: string, Img_Cod_Rollo: string): Observable<string> {
+    //   return this.getObtenerImagenes(Img_Cod_OrdTra, Img_Cod_Rollo).pipe(
+    //     map((response: any) => {
+    //       console.log('Respuesta completa:', response);
+
+    //       if (response.elements && response.elements.length > 0) {
+    //         const imageId = response.elements[0].img_Des;
+    //         console.log('el nombre de la imagen es: ', imageId);
+    //         return `${this.bas}?imageId=${encodeURIComponent(imageId.img_Des)}`;
+    //       }
+
+    //       console.warn('No se encontró ninguna imagen en elements');
+    //       return '';
+    //     })
+    //   );
+    // }
+
+    
+    
+    
 }

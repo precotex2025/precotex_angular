@@ -114,6 +114,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
       detDefecto: [] as any[],
       detRectilineo: [] as any[],
       detRollosTotal: [] as any[], // 👈 lista de rollos totales
+      reproceso: ''
     };
 
     rollo2Bloqueado: boolean = true;
@@ -138,7 +139,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
     codTelaGral: string = '';
 
 
-    constructor(private CalificacionRollosFinalService: CalificacionRollosFinalService, 
+    constructor(public CalificacionRollosFinalService: CalificacionRollosFinalService, 
                 private dialog            : MatDialog,
                 private SpinnerService    : NgxSpinnerService) {
 
@@ -155,6 +156,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
     this.cargarCalificacion();
     this.cargarEstadoProceso();
     this.cargarProcesoAuditado();
+    this.cargarReproceso();
 
     //Deshabilita los controles Generales
     this.isHeadDisabled = true;
@@ -355,7 +357,9 @@ export class CalificacionRollosFinalComponent implements OnInit {
               //Nuevas  
               this.PartidaCab.auditor = data.elements[result].inspector;              
               this.PartidaCab.supervisor =     data.elements[result].responsable;
-
+              this.PartidaCab.reproceso = data.elements[result].reproceso;
+              this.PartidaCab.maquina = data.elements[result].maquina;
+              console.log('this.PartidaCab.maquina', this.PartidaCab.maquina);
               //OBSERVACION
               const obs : string = "";
               if (data && data.elements && data.elements[result] && data.elements[result].observacion) {
@@ -393,7 +397,8 @@ export class CalificacionRollosFinalComponent implements OnInit {
 
               const sCodTela:string = String(this.PartidaCab.datosTela.substring(0,8)); 
               const sCodCali: string = ' ';//tring(data.elements[result].calidad);
-              
+              const Reproceso: number = 1; 
+              const Maquina: string = 'ME1';
               
               this.CalificacionRollosFinalService.buscarRolloPorPartidaDetalle(codOrdTra, index, 
 
@@ -404,7 +409,9 @@ export class CalificacionRollosFinalComponent implements OnInit {
                 sResDig ,
                 sObsRec ,
                 sCodCali,
-                sCodTela
+                sCodTela,
+                Reproceso,
+                Maquina
 
               ).subscribe({
                 next: (response) => {
@@ -416,6 +423,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
                   
                   //Agrega todos los rollos al detalle
                   this.PartidaCab.detRollosTotal = [];
+                  console.log('Medio - this.partidaItemList: ', this.partidaItemList)
                   this.partidaItemList.forEach(defecto => {
                     this.PartidaCab.detRollosTotal.push({"rollo" : defecto.rollo});
                   });
@@ -430,7 +438,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
                 }
               });
               
-              
+              this.mostrarCeros = false;
               this.cargarDefectos("");
             }
             else{
@@ -721,9 +729,12 @@ export class CalificacionRollosFinalComponent implements OnInit {
         this.PartidaCab.detDefecto.push(defecto);
       });
 
-      console.log('Fin - this.PartidaCab.detRollosTotal', this.PartidaCab.detRollosTotal);
+      console.log('Fin - this.PartidaCab.detRollosTotal', this.PartidaCab);
+
+      console.log('Fin - this.PartidaCab.detDefecto', this.PartidaCab.detDefecto);
 
       this.PartidaCab.usuario = this.sCod_Usuario;
+      console.log('this.PartidaCab antes de guardar', this.PartidaCab);
       this.CalificacionRollosFinalService.guardarPartida(this.PartidaCab).subscribe(
         (response) => {
           console.log('✅ Data saved successfully:', response);
@@ -774,6 +785,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
         detDefecto: [],
         detRectilineo: [],
         detRollosTotal: [],
+        reproceso: ''
         // Agrega cualquier otro campo si corresponde
       };
 
@@ -803,7 +815,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
       this.cargarCalificacion();
       this.cargarEstadoProceso();
       this.cargarProcesoAuditado();
-
+      this.cargarReproceso();
       //Deshabilita los controles Generales
       this.isHeadDisabled = true;
 
@@ -819,7 +831,10 @@ export class CalificacionRollosFinalComponent implements OnInit {
 
       // Activar solo en el item actual
       item.isEditing = true;
-
+      if (item.mostrarCeros){
+        item.mtrs2_R = 0;
+        item.calidad = 0;
+      }
     }
 
     guardarEdicion(item: any) {
@@ -871,10 +886,19 @@ export class CalificacionRollosFinalComponent implements OnInit {
         item.archivoNombre = file.name;
         item.archivo = file;
 
+        let codordtra: string = this.PartidaCab.datosPartida;
+        let rollo: string = item.rollo;
+        let nombreArchivo: string = file.name;
+
+        console.log(codordtra);
+        console.log(rollo);
+        console.log(nombreArchivo);
+
+
         this.PartidaCab.detPartida = this.PartidaCab.detPartida.filter(p => p.rollo !== item.rollo);
         //this.PartidaCab.detPartida.push({ ...item });
 
-        this.CalificacionRollosFinalService.subirArchivo(file).subscribe({
+        this.CalificacionRollosFinalService.subirArchivo(file, codordtra, rollo, nombreArchivo).subscribe({
           next: (res) => {
             console.log('✅ Archivo subido con éxito:', res);
           },
@@ -1037,4 +1061,44 @@ export class CalificacionRollosFinalComponent implements OnInit {
         }
       });  
     }
+
+    reprocesoList = [];
+    cargarReproceso() {
+
+      this.CalificacionRollosFinalService.getObtenerReproceso().subscribe({
+        next: (response) => {
+          this.reprocesoList = response.elements;
+          console.log('this.ReprocesoList - cargarReproceso', this.ReprocesoList);
+        },
+        error: (err) => {
+          console.error('Error al supervisorList', err);
+        }
+      });
+    }
+
+
+    imagenModalVisible: boolean = false;
+    imagenModalUrl: string = '';
+
+    abrirModalImagen(imageId: string): void {
+      this.imagenModalUrl = this.CalificacionRollosFinalService.getImagenUrl(imageId);
+      this.imagenModalVisible = true;
+    }
+
+    cerrarModalImagen(): void {
+      this.imagenModalVisible = false;
+      this.imagenModalUrl = '';
+    }
+
+   
+    mostrarCeros = false; 
+
+    onReprocesoChange(event: any) {
+      this.mostrarCeros = true;
+    }
+
+  
+
+
+
 }

@@ -298,7 +298,7 @@ import { LecturaRergistroQreComponent } from './components/lectura-rergistro-qre
 import { RegistroFirmasComponent } from './components/eventos/registro-firmas/registro-firmas.component';
 import { RegistroEventosComponent } from './components/eventos/registro-eventos/registro-eventos.component';
 import { EntregaEventosComponent } from './components/eventos/entrega-eventos/entrega-eventos.component';
-
+import { ConsultaValesComponent } from './components/rrhh/consulta-vales/consulta-vales.component';
 import { RegistroRondasComponent } from './components/seguridad/registro-rondas/registro-rondas.component';
 import { MemorandumGralComponent } from './components/memorandum-gral/memorandum-gral.component';
 import { ComiteEmergenciaComponent } from './components/actas/comite-emergencia/comite-emergencia.component';
@@ -321,6 +321,7 @@ import { SolicitudMantenimientoMaquinaComponent } from './components/solicitud-m
 import { SolicitudMantenimientoMaquinaVisorComponent } from './components/solicitud-mantenimiento-maquina/solicitud-mantenimiento-maquina-visor/solicitud-mantenimiento-maquina-visor.component';
 import { TiemposImproductivosv3Component } from './components/tiempos-improductivosv3/tiempos-improductivosv3.component';
 import { ReporteNcCierreComponent } from './components/reporte-nc/reporte-nc-cierre/reporte-nc-cierre.component';
+import { CotizacionesComponent } from './components/cotizaciones/cotizaciones.component';
 import { AprobacionDesarrolloTelasComponent } from './components/aprobacion-desarrollo-telas/aprobacion-desarrollo-telas.component';
 
 const routes: Routes = [
@@ -654,7 +655,7 @@ const routes: Routes = [
   { path:"RegistroFirmaEventos", component: RegistroFirmasComponent },
   { path:"RegistroEventos", component: RegistroEventosComponent },
   { path:"LecturaEntregaEventos", component: EntregaEventosComponent},
-
+  { path:"ConsultaVales", component: ConsultaValesComponent},
   //ESTATUS CONTROL TEÑIDO - 03122024 - HMEDINA
   { path: "EstatusControlTenido", component: EstatusControlTenidoComponent },
 
@@ -706,6 +707,9 @@ const routes: Routes = [
 
   //APROBACION DE DESARROLLO DE TELAS
   { path: "AprobacionDesarrolloTelas", component: AprobacionDesarrolloTelasComponent },
+
+  //COTIZACIONES
+  {path: "Cotizaciones", component:CotizacionesComponent},
 
   //COPIAR RUTAS ANTES DE ESTO
   { path: "", redirectTo: "/", pathMatch: "full" },// Cuando es la raíz

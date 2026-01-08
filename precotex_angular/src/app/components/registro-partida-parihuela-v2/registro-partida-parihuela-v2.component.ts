@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Console } from 'console';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 import { RegistroPartidaParihuelaService } from 'src/app/services/registro-partida-parihuela.service';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { GlobalVariable } from 'src/app/VarGlobals';
+import { finalize } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
+// import { BarcodeFormat } from '@zxing/library';
+import Quagga from '@ericblade/quagga2';
+
 @Component({
   selector: 'app-registro-partida-parihuela-v2',
   templateUrl: './registro-partida-parihuela-v2.component.html',
@@ -12,6 +17,7 @@ import { GlobalVariable } from 'src/app/VarGlobals';
 })
 export class RegistroPartidaParihuelaV2Component implements OnInit {
   //RegistroParihuelaV2 <- ruta
+  sCod_Usuario = GlobalVariable.vusu;
   busquedaForm: FormGroup;
   grupoForm: FormGroup;
   parihuelaFormArray: FormArray;
@@ -19,11 +25,13 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
   tiposComplemento = [];
   codigoTelita: string = '';
   baseUrlTinto = GlobalVariable.baseUrlProcesoTenido;
-
+  @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
   constructor(
     private fb: FormBuilder,
     private serviceRegistroParihuela: RegistroPartidaParihuelaService,
     private SpinnerService: NgxSpinnerService,
+    private toastr: ToastrService,
     private http: HttpClient
   ) {
     this.busquedaForm = this.fb.group({
@@ -41,8 +49,22 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
     
   }
 
+  // formatsHabilitados: BarcodeFormat[] = [
+  //   BarcodeFormat.CODE_128, 
+  //   BarcodeFormat.EAN_13, 
+  //   BarcodeFormat.QR_CODE
+  // ];
+
   buscarPartida() {
     let cod_Parihuela = this.busquedaForm.get('codigo')?.value;
+    if(!cod_Parihuela){
+      this.toastr.warning('Ingrese número de partida.', 'Alerta', {
+        timeOut: 3000,
+        progressBar: true,
+        progressAnimation: 'increasing'
+      });
+      return;
+    }
     this.cargarCategorias(cod_Parihuela);
   }
 
@@ -55,7 +77,7 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
   }
 
   get parihuelaGrupos(): FormGroup[] {
-  return this.parihuelaFormArray.controls as FormGroup[];
+    return this.parihuelaFormArray.controls as FormGroup[];
   }
 
   parihuelas = [];
@@ -128,9 +150,10 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
   });
 
   const grupos = Array.from(agrupado.values());
-  this.parihuelaFormArray = new FormArray(
-    grupos.map(grupo =>
-      new FormGroup({
+  
+    this.parihuelaFormArray = new FormArray(
+    grupos.map(grupo => {
+      const formGroup = new FormGroup({
         codigo: new FormControl(grupo.codigoParihuela),
         pesoParihuela: new FormControl(grupo.pesoParihuela),
         pesoTela: new FormControl(grupo.pesoTela),
@@ -144,9 +167,14 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
             })
           )
         )
-      })
-    )
+      });
+
+      formGroup.disable();
+      return formGroup;
+    })
   );
+
+
 }
 
 
@@ -194,15 +222,25 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
 
   this.serviceRegistroParihuela.updateDetPartida(detalle, usuario, estadoParihuela, Reposicion).subscribe({
     next: (res) => {
-      console.log('Guardado exitosamente:', res);
+      this.toastr.success('Partida guardada correctamente.', 'Éxito', {
+        timeOut: 3000,
+        progressBar: true,
+        progressAnimation: 'increasing'
+      });
+      //console.log('Guardado exitosamente:', res);
+      this.parihuelaFormArray.controls.forEach((grupo: FormGroup) => grupo.disable());
     },
     error: (err) => {
-      console.error('Error al guardar:', err);
+      this.toastr.error('Error al guardar la partida.', 'Error', {
+        timeOut: 3000,
+        progressBar: true,
+        progressAnimation: 'increasing'
+      });
+      //console.error('Error al guardar:', err);
     }
     });
   }
-
-
+  
   cargarCategorias(codPartida: string ): void {
 
     this.serviceRegistroParihuela.getCategoriasById(codPartida.toUpperCase()).subscribe((result: any) => {
@@ -223,25 +261,116 @@ export class RegistroPartidaParihuelaV2Component implements OnInit {
     });
   }
 
-  enviarDespacho(){
-    let codPartida = this.busquedaForm.get('codigo')?.value.toUpperCase();
-    console.log('el codigo partida es: ', codPartida);
+  enviarDespacho() {
+  let codPartida = this.busquedaForm.get('codigo')?.value.toUpperCase();
 
-    this.http.post(this.baseUrlTinto + 'RegistroPartidaParihuela/postEnviarCabecera', JSON.stringify(codPartida),
-    {headers: { 'Content-Type': 'application/json' }}
-          ).subscribe(() => {
-            this.serviceRegistroParihuela.enviarDespacho(codPartida).subscribe({
-            next: (res) => {
-            console.log('Se envió el despacho', res);
-            },
-            error: (err) => {
-            console.error('Error al enviar el despacho ', err);
-            }
-          });
-    })
+  this.SpinnerService.show();
 
-    
+  this.serviceRegistroParihuela.enviarDespacho(codPartida, this.sCod_Usuario)
+    .subscribe({
+      next: (res) => {
+        this.toastr.success('Despacho Exitoso', 'Éxito', {
+        timeOut: 3000,
+        progressBar: true,
+        progressAnimation: 'increasing'
+        });
+        this.SpinnerService.hide();
+      },
+      error: (err) => {
+        this.toastr.error('Error al realizar el despacho.', 'Error', {
+        timeOut: 3000,
+        progressBar: true,
+        progressAnimation: 'increasing'
+        });
+        this.SpinnerService.hide();
+      }
+    });
   }
   // postEnviarCabecera
 
+
+  getTiposDisponibles(grupo: FormGroup): string[] {
+  const complementos = grupo.get('complementos') as FormArray;
+  const seleccionados = complementos.controls.map(c => c.get('tipo')?.value).filter(v => !!v);
+
+  return this.tiposComplemento.filter(tipo => !seleccionados.includes(tipo));
+  }
+
+  validarSeleccion(valor: string, grupo: FormGroup) {
+    
+    const complementos = grupo.get('complementos') as FormArray;
+    const seleccionados = complementos.controls
+      .map(c => c.get('tipo')?.value)
+      .filter(v => !!v);
+
+    
+    const repetidos = seleccionados.filter(v => v === valor);
+
+    if (repetidos.length > 1) {
+    
+      this.toastr.warning(`El complemento "${valor}" ya fue seleccionado.`, 'Duplicado', {
+        timeOut: 3000,
+        progressBar: true,
+        progressAnimation: 'increasing'
+      });
+
+      complementos.at(complementos.length - 1).get('tipo')?.reset();
+    }
+  }
+
+
+/*FUNCIONALIDAD SCANNER*/
+
+scannerVisible = false;
+
+abrirScanner() {
+  this.scannerVisible = true;
+
+  setTimeout(() => {
+    Quagga.init({
+      inputStream: {
+        type: 'LiveStream',
+        target: document.querySelector('#scanner')!,
+        constraints: {
+          facingMode: 'environment'
+          // width: { ideal: 1280 },
+          // height: { ideal: 720 }
+        }
+      },
+      decoder: {
+        readers: ['code_39_reader'],
+      },
+      locate: true
+    }, (err) => {
+      if (err) {
+        console.error('Error inicializando Quagga:', err);
+        this.cerrarScanner();
+        return;
+      }
+      Quagga.start();
+    });
+
+    Quagga.onDetected(result => {
+      const code = result.codeResult.code;
+      console.log('Código detectado:', code);
+      
+      this.parihuelaFormArray.controls.forEach((grupo: FormGroup) => grupo.disable()); 
+      
+      const grupo = this.parihuelaGrupos.find(g => g.get('codigo')?.value === code); 
+      if (grupo) { grupo.enable(); }
+
+      Quagga.stop();
+      this.cerrarScanner();
+    });
+  }, 100);
+}
+
+
+cerrarScanner() {
+  Quagga.stop();
+  this.scannerVisible = false;
+}
+
+
+/***************************************/
 }
