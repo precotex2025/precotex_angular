@@ -136,6 +136,11 @@
                             <td mat-cell *matCellDef="let m"> {{ m.Descripcion }} </td>
                         </ng-container>
 
+                        <ng-container matColumnDef="area">
+                            <th mat-header-cell *matHeaderCellDef> Area </th>
+                            <td mat-cell *matCellDef="let m"> {{ m.Area }} </td>
+                        </ng-container>                        
+
                         <!-- <ng-container matColumnDef="area">
                             <th mat-header-cell *matHeaderCellDef> AREA </th>
                             <td mat-cell *matCellDef="let m"> {{ m.area }} </td>

@@ -87,7 +87,7 @@ export class TiemposImproductivosComponent implements OnInit {
   //dataSource: MatTableDataSource<data_det>;
   //columnsToDisplay: string[] = this.displayedColumns_cab.slice();
 
-  displayedColumns: string[] = ['Fec_Registro','Cod_Maquina','Nombres','Cod_Motivo',  'Des_Motivo','Fec_Hora_Inicio','Fec_Hora_Fin','Observacion','Diferencia_Minutos','Estado', 'Acciones']
+  displayedColumns: string[] = ['Fec_Registro','Cod_Maquina','Nombres','Cod_Motivo',  'Des_Motivo','Area','Fec_Hora_Inicio','Fec_Hora_Fin','Observacion','Diferencia_Minutos','Estado', 'Acciones']
   dataSource: MatTableDataSource<data_det>;
   /*columnsToDisplay: string[] = this.displayedColumns.slice();
   clickedRows = new Set<data_det>();*/
@@ -141,13 +141,10 @@ export class TiemposImproductivosComponent implements OnInit {
 
     let cod_Maquina = this.formulario.get('Cod_Maquina')?.value;
 
-    //console.log(fec_despacho1);
     this.despachoTelaCrudaService.ListarDespachoService(fec_despacho1, fec_despacho2, cod_Maquina).subscribe(
         (result: any) => {
           //this.data_det = result
           this.dataSource.data = result
-          //console.log(this.data_det);
-          console.log(this.dataSource.data);
         },
         (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
           duration: 1500,
@@ -168,8 +165,7 @@ export class TiemposImproductivosComponent implements OnInit {
 
     this.despachoTelaCrudaService.ExportarExcel(fec_despacho1, fec_despacho2,  this.formulario.get('Cod_Maquina')?.value).subscribe(
       (result: any) => {
-          console.log(result[0].Respuesta)
-  
+
           this.dataForExcel = [];
           result.forEach((row: any) => {
             this.dataForExcel.push(Object.values(row)) 
@@ -215,7 +211,6 @@ export class TiemposImproductivosComponent implements OnInit {
       (result: any) => {
         this.listar_operacionConductor = result.map(item => ({ Codigo: item.Codigo.trim(), Descripcion: item.Descripcion }));
         //this.listar_operacionConductor = result;
-        console.log('listar_operacionConductor', this.listar_operacionConductor);
         //this.formulario.get('Cod_Maquina')?.setValue(this.sCod_Maquina);
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
@@ -226,8 +221,6 @@ export class TiemposImproductivosComponent implements OnInit {
 
     let fec_despacho = this.formulario.value['Fec_Registro'];
     fec_despacho = moment(fec_despacho).format('YYYY-MM-DDTHH:mm:ss');
-
-    console.log(fec_despacho);
 
       let dialogRef = this.dialog.open(DialogTiemposImproductivosComponent, {
         disableClose: true,
@@ -263,7 +256,6 @@ export class TiemposImproductivosComponent implements OnInit {
 
   EliminarRegistro(sFec_Registro: string, cod_maquina: string, cod_motivo: string,finicio: string, ffin: string,dni: string, Fec_Creacion:  string) {
     if(confirm("Desea Eliminar este registro?")) {
-      console.log("Implement delete functionality here");
       this.despachoTelaCrudaService.eliminarTiempoimproductivo(
         sFec_Registro,
         cod_maquina,
@@ -299,7 +291,6 @@ export class TiemposImproductivosComponent implements OnInit {
   }
 
   getEstadoClass(estado: string): string {
-    console.log('estado', estado);
   switch (estado.trim()) {
     case 'Parado':
       return 'estado-parada';

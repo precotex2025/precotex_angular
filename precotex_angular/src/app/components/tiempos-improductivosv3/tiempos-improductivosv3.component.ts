@@ -89,9 +89,6 @@ sData: any;
         const accion  = params['accion'] || 'I';
         const data    = params['codMaquina'] || '';
 
-        console.log('Modo:', accion);
-        console.log('Modelo recibido:', data);
-
         //Recibe parametros
         this.sCod_Accion = accion;
         this.sData = data;
@@ -100,8 +97,6 @@ sData: any;
           //this.cargarModelo(data);
         }        
       });
-
-      console.log('this.sCod_Accion', this.sCod_Accion);
 
       //Alguno controles deshabilitados
       this.formulario.get('codMotivo')?.disable();
@@ -127,7 +122,8 @@ sData: any;
 
     displayedColumns: string[] = [
       'codigo' , 
-      'descripcion'     
+      'descripcion',
+      'area'     
     ];
     dataSource: MatTableDataSource<datadet> = new MatTableDataSource();
 
@@ -340,11 +336,7 @@ ActualizarHora(sTipo: string) {
       return;
     }
 
-    console.log('this.formulario.get(datefecreg)?.value', this.formulario.get('datefecreg')?.value);
-
     var sTituloVentana =  (this.sCod_Accion == 'I') ? "Registrar": "Actualizar"; 
-    console.log('Accion Registrar', this.sCod_Accion);
-
 
     //Registrar Tiempo Improductivo
     Swal.fire({
@@ -374,8 +366,7 @@ ActualizarHora(sTipo: string) {
         //return;
         //PENDIENTE DE AGREGAR LA FUNCION DE INSERTAR 
         if (this.sCod_Accion == 'I'){
-          console.log('sHini', this.sHini);
-          console.log('sHfin', this.sHfin);
+
           this.despachoTelaCrudaService.ingresaTiempóimproductivo(this.sFec_Registro,
           this.sCod_Maquina,
           this.sCod_Motivo,
@@ -386,7 +377,6 @@ ActualizarHora(sTipo: string) {
           this.sObservaciones,
           this.sDni_tejedor).subscribe(
           (result: any) => {
-            console.log(result);
             //this.dialog.closeAll();
             if (result[0]) {
               if (result[0].Respuesta == 'OK') {
