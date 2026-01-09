@@ -329,3 +329,27 @@ tr:active {
 
 
   }
+
+.estado-parada {
+  background-color: #ffe082; /* amarillo suave */
+  color: #5d4037;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.estado-ok {
+  background-color: #c8e6c9; /* verde claro */
+  color: #2e7d32;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.btn-regresar { 
+    background-color: #bbdefb; /* azul claro */ 
+    color: #0d47a1; /* azul intenso para el texto */ 
+    padding: 4px 12px; 
+    border-radius: 4px; 
+    border: none; 
+    cursor: pointer; 
+    font-weight: 500; 
+}

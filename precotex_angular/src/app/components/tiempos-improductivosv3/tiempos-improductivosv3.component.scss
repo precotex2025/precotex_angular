@@ -10,6 +10,7 @@
                 margin-bottom: 2rem;
                 color: #2c3e50;
             }
+            margin-bottom:2px;
     }
 
    .form-columns {
@@ -31,6 +32,7 @@
     .row {
         display: flex;
         width: 100%;
+margin-bottom:-5%;
     }
 
     .row .full-width {
@@ -41,11 +43,10 @@
         display: flex;
         gap: 12px;
         width: 100%;
+        margin-bottom:-5%;
     }
 
-.row mat-form-field {
-  margin-bottom: 2px;
-}
+
 
 
     .dni-field,
@@ -210,4 +211,6 @@ mat-row:hover {
   background-color: #f0f0f0;
   cursor: pointer;
 }
+
+.btn-green { background-color: #4CAF50; /* verde Material Design */ color: white; }
   
