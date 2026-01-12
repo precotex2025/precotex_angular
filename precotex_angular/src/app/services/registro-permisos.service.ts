@@ -105,7 +105,9 @@ export class RegistroPermisosService {
     return this.http.get(`${this.baseUrl}/app_CF_Insertar_Registro_Merma_Talla.php?Opcion=${Opcion}&IdMerma=${IdMerma}&Cod_Talla=${Cod_Talla}&MERCADO_LOCAL=${MERCADO_LOCAL}&RECUPERACION=${RECUPERACION}`);
   }
 
-  
+  registroMermaPrendasDetalle(Opcion, IdMerma, Cod_Defecto, Cod_Talla, Cantidad) {
+    return this.http.get(`${this.baseUrl}/app_CF_Insertar_Registro_Merma_Defecto.php?Opcion=${Opcion}&IdMerma=${IdMerma}&Cod_Defecto=${Cod_Defecto}&Cod_Talla=${Cod_Talla}&Cantidad=${Cantidad}&Cod_Usuario=${this.sCod_Usuario}`);
+  }
 
   verUsuariosBd(Empresa: string){    
     return this.http.get(`${this.baseUrl}/seg_obtener_usuarios_bd.php?Empresa=${Empresa}`);
