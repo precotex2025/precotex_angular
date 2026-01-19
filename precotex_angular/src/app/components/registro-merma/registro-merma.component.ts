@@ -241,7 +241,8 @@ export class RegistroMermaComponent implements OnInit {
           let reportData = {
             title: 'REPORTE REGISTRO DE MERMA',
             data: this.dataForExcel,
-            headers: Object.keys(this.dataSource.data[0])
+            //headers: Object.keys(this.dataSource.data[0])
+            headers: Object.keys(dataReport[0])
           }
 
           this.exceljsService.exportExcel(reportData);
