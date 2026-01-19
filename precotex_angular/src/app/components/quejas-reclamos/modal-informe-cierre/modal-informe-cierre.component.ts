@@ -30,11 +30,13 @@ export class ModalInformeCierreComponent implements OnInit {
     ctrol_consecuencia_principal  : [''],
     ctrol_subtipo_devolucion      : [''],
     ctrol_incluye_nota_credito    : [''],
+    ctrol_incluye_flete_aereo     : [''],
     ctrol_comentario_comercial    : ['']
   })  
 
   sUsuario  = GlobalVariable.vusu;
   isVisibleButtonCerrar: boolean = false;
+  isVisibleButtonReenviar: boolean = false;
 
   constructor(
     private formBuilder    : FormBuilder                         ,
@@ -56,6 +58,7 @@ export class ModalInformeCierreComponent implements OnInit {
       this.deshabilitarControles(true);
     }else if (this.data.Datos.cod_Estado.trim() ==  '03') {
       this.isVisibleButtonCerrar = true;
+      this.isVisibleButtonReenviar = true;
     }
   }
 
@@ -120,6 +123,7 @@ export class ModalInformeCierreComponent implements OnInit {
             const sCod_Tipo_Consecuencia       = this.formulario.get('ctrol_consecuencia_principal')?.value; 
             const sCod_SubTipo_Devolucion      = this.formulario.get('ctrol_subtipo_devolucion')?.value; 
             const sFlg_NotaCredito             = this.formulario.get('ctrol_incluye_nota_credito')?.value; 
+            const sFlg_FleteAereo              = this.formulario.get('ctrol_incluye_flete_aereo')?.value;//Nuevo
             const sObservacion_Comercial_Cierre = this.formulario.get('ctrol_comentario_comercial')?.value; 
             const sCod_Usuario = this.sUsuario ;          
 
@@ -128,6 +132,7 @@ export class ModalInformeCierreComponent implements OnInit {
               "Cod_Tipo_Consecuencia"   :     sCod_Tipo_Consecuencia ,
               "Cod_SubTipo_Devolucion"     :     sCod_SubTipo_Devolucion   ,
               "Flg_NotaCredito"  : sFlg_NotaCredito?"1":"0",
+              "Flg_FleteAereo"   : sFlg_FleteAereo?"1":"0",//Nuevo
               "Observacion_Comercial_Cierre": sObservacion_Comercial_Cierre ,
               "sCod_Usuario": sCod_Usuario,
             };   
@@ -177,8 +182,10 @@ export class ModalInformeCierreComponent implements OnInit {
         //ACTIVAMOS EL CHECK CASO SEA NOTA DE CREDITO
         if (selectedValue == '02'){
           this.formulario.get('ctrol_incluye_nota_credito')?.setValue(true);
+          //this.formulario.get('ctrol_incluye_flete_aereo')?.setValue(true);
         }else{
           this.formulario.get('ctrol_incluye_nota_credito')?.setValue(false);
+          //this.formulario.get('ctrol_incluye_flete_aereo')?.setValue(false);
           //this.formulario.get('ctrol_incluye_nota_credito')?.reset(); 
         }
 
@@ -196,6 +203,7 @@ export class ModalInformeCierreComponent implements OnInit {
           this.onListaSubTipoDevolucion(this.dataInforme[0].cod_Tipo_Consecuencia);
           this.formulario.get('ctrol_subtipo_devolucion')?.setValue(this.dataInforme[0].cod_SubTipo_Devolucion);
           this.formulario.get('ctrol_incluye_nota_credito')?.setValue(this.dataInforme[0].flg_NotaCredito=='0'?false:true);
+          this.formulario.get('ctrol_incluye_flete_aereo')?.setValue(this.dataInforme[0].flg_FleteAreo=='0'?false:true);//Nuevo
           this.formulario.get('ctrol_comentario_comercial')?.setValue(this.dataInforme[0].observacion_Comercial_Cierre);
           
         }
@@ -209,20 +217,44 @@ export class ModalInformeCierreComponent implements OnInit {
   }    
 
   deshabilitarControles(estado: boolean){
-    if (estado){
-        
-          this.formulario.get('ctrol_consecuencia_principal')?.disable();
-          this.formulario.get('ctrol_subtipo_devolucion')?.disable();  
-          this.formulario.get('ctrol_incluye_nota_credito')?.disable();    
-          this.formulario.get('ctrol_comentario_comercial')?.disable();      
+    if (estado){       
+        this.formulario.get('ctrol_consecuencia_principal')?.disable();
+        this.formulario.get('ctrol_subtipo_devolucion')?.disable();  
+        this.formulario.get('ctrol_incluye_nota_credito')?.disable();    
+        this.formulario.get('ctrol_incluye_flete_aereo')?.disable(); //Nuevo
+        this.formulario.get('ctrol_comentario_comercial')?.disable();      
     }else {
           this.formulario.get('ctrol_consecuencia_principal')?.enable();   
           this.formulario.get('ctrol_subtipo_devolucion')?.enable();   
           this.formulario.get('ctrol_incluye_nota_credito')?.enable();  
+          this.formulario.get('ctrol_incluye_flete_aereo')?.enable(); //Nuevo 
           this.formulario.get('ctrol_comentario_comercial')?.enable();  
     }
     
-  }  
-  
   }
+  
+  onReenviarInforme(){
+
+
+      Swal.fire({
+        title: '¿Desea reenviar el caso / reclamo al area de calidad?, Confirme',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No'
+      }).then((result) => {   
+
+        if (result.isConfirmed) {
+
+          
+
+        }
+
+      });    
+    
+  }
+  
+}
 

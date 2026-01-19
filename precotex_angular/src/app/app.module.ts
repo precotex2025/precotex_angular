@@ -614,6 +614,9 @@ import { CotizacionesComponent } from './components/cotizaciones/cotizaciones.co
 
 import { AprobacionDesarrolloTelasEditComponent } from './components/aprobacion-desarrollo-telas/aprobacion-desarrollo-telas-edit/aprobacion-desarrollo-telas-edit.component';
 
+//QUEJAS Y RECLAMOS
+import { ModalQuejaReclamoNuevoComponent } from './components/quejas-reclamos/modal-queja-reclamo-nuevo/modal-queja-reclamo-nuevo.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -1149,6 +1152,9 @@ import { AprobacionDesarrolloTelasEditComponent } from './components/aprobacion-
     //APROBACION DESARROLLO TELAS
     ,AprobacionDesarrolloTelasComponent
     ,AprobacionDesarrolloTelasEditComponent
+
+    //QUEJAS Y RECLAMOS
+    ,ModalQuejaReclamoNuevoComponent
   
   ],
   entryComponents: [DialogJabaComponent],

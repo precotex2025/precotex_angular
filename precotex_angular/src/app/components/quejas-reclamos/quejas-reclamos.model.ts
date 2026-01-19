@@ -30,7 +30,15 @@ export interface ReclamoCliente {
 
   //Nuevos Campos
   idArea?       : number,
-  idResponsable?: number
+  idResponsable?: number,
+
+  //Nuevos Campos
+  Cod_TemCli?: string,
+  temporada?: string,
+
+  Cod_EstCli?: string,
+  estilo?: string,
+
 }
 
 export interface Cliente {
@@ -97,4 +105,14 @@ export interface UnidadNegocio2 {
 
 export interface UnidadNegocio2Response {
   elements: UnidadNegocio2[];
+}
+
+export interface Temporada {
+  codigo: string;
+  descripcion : string;
+}
+
+export interface Estilos {
+  codigo: string;
+  descripcion : string;
 }
