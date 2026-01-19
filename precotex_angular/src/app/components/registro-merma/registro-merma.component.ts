@@ -220,19 +220,37 @@ export class RegistroMermaComponent implements OnInit {
       this.matSnackBar.open("No existen registros...!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
     }
     else {
+      let fecha_start = this.range.get('start')?.value;
+      let fecha_end = this.range.get('end')?.value;
+      let dataReport: PeriodicElement[];
 
-      this.dataSource.data.forEach((row: any) => {
-        this.dataForExcel.push(Object.values(row))
-      })
+      this.despachoTelaCrudaService.CF_Obtener_Lista_Merma(
+        'X',
+        this.oc,
+        this.OP,
+        fecha_start,
+        fecha_end
+      ).subscribe(
+        (result: any) => {
+          dataReport = result;
 
-      let reportData = {
-        title: 'REPORTE REGISTRO DE MERMA',
-        data: this.dataForExcel,
-        headers: Object.keys(this.dataSource.data[0])
-      }
+          dataReport.forEach((row: any) => {
+            this.dataForExcel.push(Object.values(row))
+          })
 
-      this.exceljsService.exportExcel(reportData);
-      //this.dataSource.data = [];
+          let reportData = {
+            title: 'REPORTE REGISTRO DE MERMA',
+            data: this.dataForExcel,
+            headers: Object.keys(this.dataSource.data[0])
+          }
+
+          this.exceljsService.exportExcel(reportData);
+
+        },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+          duration: 1500,
+      }))
+
     }
   }
 

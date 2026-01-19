@@ -22,7 +22,7 @@
     "@angular/platform-browser": "~13.3.1",
     "@angular/platform-browser-dynamic": "~13.3.1",
     "@angular/router": "~13.3.1",
-    "@ericblade/quagga2": "^1.8.4",
+    "@ericblade/quagga2": "^1.12.1",
     "@kolkov/angular-editor": "^2.0.0",
     "@ng-select/ng-select": "^8.3.0",
     "@swimlane/ngx-charts": "^20.3.1",

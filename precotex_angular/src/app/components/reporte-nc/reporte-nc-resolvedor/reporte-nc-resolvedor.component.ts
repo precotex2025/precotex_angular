@@ -249,10 +249,10 @@ export class ReporteNcResolvedorComponent implements OnInit, OnDestroy {
         rep_Id: this.formData.rep_Id,
         rep_Aceptado: this.formDataPatch.rep_Aceptado,
         rep_Est: this.cierreSeleccionado,
-        rep_FecSub: this.formDataPatch.rep_FecSub
-        // ? _moment(this.formDataPatch.rep_FecSub).format('DD/MM/YYYY HH:mm:ss')
-        ? _moment(this.formDataPatch.rep_FecSub, 'DD/MM/YYYY').toDate()
-        : null,
+        // rep_FecSub: this.formDataPatch.rep_FecSub
+        // //? _moment(this.formDataPatch.rep_FecSub).format('DD/MM/YYYY HH:mm:ss')
+        // ? _moment(this.formDataPatch.rep_FecSub, 'DD/MM/YYYY').toDate()
+        // : null,
         rep_Resp_Levantamiento: valor,
         imagenes: base64Concatenado,
         imgnombre: nombres,

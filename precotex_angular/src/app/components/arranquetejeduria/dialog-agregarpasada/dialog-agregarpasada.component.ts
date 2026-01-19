@@ -96,7 +96,7 @@ export class DialogAgregarpasadaComponent implements OnInit {
 
   sCod_Usuario = GlobalVariable.vusu;
   isButtonDisabled_Est: boolean = true;
-  isButtonDisabled_Med: boolean = false;//Inicia Habilitado
+  isButtonDisabled_Med: boolean = true;//Inicia Habilitado
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void {
