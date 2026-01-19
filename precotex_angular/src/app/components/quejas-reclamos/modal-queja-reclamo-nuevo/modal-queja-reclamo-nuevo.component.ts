@@ -108,7 +108,8 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
 
   _glb_temporada: string = '';
   _glb_estilo: string = '';
-
+  _glb_file: HTMLInputElement = null;
+ 
   //variables Globales
   sCod_Usuario = GlobalVariable.vusu;
 
@@ -527,6 +528,10 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
           cod_Ordtra: tipo === 'PARTIDA'? sNroPartida: '',    
           unidadNegocio   : '',  
 
+          //Estilo
+          Cod_TemCli: '',
+          Cod_EstCli: '',          
+
           tipoRegistro: sDesUserAsignado,//this.nuevoReclamo.tipoRegistro, //tmr este weon  crea variables atorrantes --> Tipo de Area no es?
           estadoSolicitud : 'Abierto',
         
@@ -548,7 +553,8 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
           cod_Cliente_Tex     : tipo === 'PARTIDA'? sCliente: sClienteEst,
           cod_Motivo          : motivo,
           idArea              : Number(area),
-          idResponsable       : Number(userAsignado)
+          idResponsable       : Number(userAsignado),
+          archivoAdjunto      : null
         };      
         this.reclamos.push(reclamoReg);
       });
@@ -587,7 +593,8 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
           cod_Cliente_Tex     : tipo === 'PARTIDA'? sCliente: sClienteEst,
           cod_Motivo          : motivo,
           idArea              : Number(area),
-          idResponsable       : Number(userAsignado)
+          idResponsable       : Number(userAsignado),
+          archivoAdjunto      : null
         };       
         this.reclamos.push(reclamoReg);
     }
@@ -714,15 +721,21 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
       this.registroQuejasReclamosService.verArchivo(nombreArchivo);
   }  
 
-  onArchivoSeleccionado(event: Event, index: number): void {
+  onArchivoSeleccionado(event: Event, row: any): void {
+
+
+  console.log('onArchivoSeleccionado', row);
   const input = event.target as HTMLInputElement;
   if (input.files && input.files.length > 0) {
     console.log('input.files:', input.files);
     const archivo = input.files[0];
     console.log('archivo:', archivo);
-    this.reclamos[index].archivoAdjuntoSeleccionado = archivo;
-    this.reclamos[index].archivoAdjunto = archivo;
+    //.reclamos[index].archivoAdjuntoSeleccionado = archivo;
+    //this.reclamos[index].archivoAdjunto = archivo;
+    //this._glb_file = input;
     //this.reclamos[index].nombreArchivo = archivo.name;
+
+    row.archivoAdjunto = archivo;
   }
   console.log('AgregarReclamo:', this.reclamos);
 }
