@@ -172,6 +172,50 @@ export class ControlMermaComponent implements OnInit {
       this.matSnackBar.open("No existen registros...!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
     }
     else {
+      let fecha_start = this.range.get('start')?.value;
+      let fecha_end = this.range.get('end')?.value;
+      let dataReport: PeriodicElement[];
+
+      this.despachoTelaCrudaService.CF_Obtener_Lista_Merma(
+        'X',
+        this.oc,
+        this.OP,
+        fecha_start,
+        fecha_end
+      ).subscribe(
+        (result: any) => {
+          dataReport = result;
+
+          dataReport.forEach((row: any) => {
+            this.dataForExcel.push(Object.values(row))
+          })
+
+          let reportData = {
+            title: 'REPORTE CONTROL INTERNO DE MERMA',
+            data: this.dataForExcel,
+            //headers: Object.keys(this.dataSource.data[0])
+            headers: Object.keys(dataReport[0])
+          }
+
+          this.exceljsService.exportExcel(reportData);
+
+        },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+          duration: 1500,
+      }))
+
+    }
+  }
+  
+
+  old_applyFilter() {
+    console.log(this.dataSource.data)
+
+    this.dataForExcel = [];
+    if (this.dataSource.data.length == 0) {
+      this.matSnackBar.open("No existen registros...!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+    }
+    else {
 
       this.dataSource.data.forEach((row: any) => {
         this.dataForExcel.push(Object.values(row))
