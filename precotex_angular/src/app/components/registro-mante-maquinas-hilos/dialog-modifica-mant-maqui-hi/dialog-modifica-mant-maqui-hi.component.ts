@@ -759,14 +759,14 @@ tipoFallaFiltrada: any[] = []; // Lista filtrada
 
   CargarTipoFalla(Cod_Tarea: string, Flg_ValidaMaquina: string) {
 
-    //nUEVA validacion
-    if (Cod_Tarea === '22'){
+    //console.log('codigo detarea', Cod_Tarea);
+    if (Cod_Tarea === '2'){
       this.formulario.get('Observacion3')?.setValue(''); 
       this.formulario.get('Observacion3').enable();
     }else{
       this.formulario.get('Observacion3')?.setValue(''); 
       this.formulario.get('Observacion3').disable();
-    }
+    }    
 
     //Obtener el valor de flag de validar maquina (1 = "Valida", 0 = "no valida")
     this.Flg_ValidaMaquina = Flg_ValidaMaquina;
@@ -817,17 +817,35 @@ tipoFallaFiltrada: any[] = []; // Lista filtrada
 
   
   ListarArticuloMinMax(Cod_Articulo: string) {
-    this.Cod_Tarea = this.formulario.get('sTarea')?.value;  
-    this.registromantemaquinastej.ListarArticuloMinMax(this.Cod_Tarea.trim(), Cod_Articulo).subscribe(
-      (result: any) => {
-             //console.log("Minimo: "+result[0].Min_Max);
-              this.formulario.get('ct_MinMax')?.setValue(result[0].Min_Max)
-              //this.listar_articulo = result
-              //console.log("Codigo articulo: "+Cod_Articulo+ " Cod_Tarea : "+this.Cod_Tarea);
-              
-           
-      },
-      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
+
+    //console.log('Cod_Articulo', Cod_Articulo);
+    //nUEVA validacion
+    if (Cod_Articulo === '14'){
+      this.formulario.get('Observacion3')?.setValue(''); 
+      this.formulario.get('Observacion3').enable();
+    }else{
+      this.formulario.get('Observacion3')?.setValue(''); 
+      this.formulario.get('Observacion3').disable();
+    }
+
+    if (Cod_Articulo !== '14'){
+
+      this.Cod_Tarea = this.formulario.get('sTarea')?.value;  
+      this.registromantemaquinastej.ListarArticuloMinMax(this.Cod_Tarea.trim(), Cod_Articulo).subscribe(
+        (result: any) => {
+              //console.log("Minimo: "+result[0].Min_Max);
+                this.formulario.get('ct_MinMax')?.setValue(result[0].Min_Max);
+                //this.listar_articulo = result
+                //console.log("Codigo articulo: "+Cod_Articulo+ " Cod_Tarea : "+this.Cod_Tarea);
+                
+            
+        },
+        (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))      
+
+    } else {
+      this.formulario.get('ct_MinMax')?.setValue(0);
+    }
+
   }
 
 
