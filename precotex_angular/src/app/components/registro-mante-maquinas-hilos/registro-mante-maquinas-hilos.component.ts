@@ -381,7 +381,8 @@ openDialogModificar
     Min_Max: string,
     Flg_Atribuido: string,
     Observacion2: string,
-    Num_Planta: string
+    Num_Planta: string,
+    Observacion3: string
  ) 
     {
 
@@ -420,7 +421,8 @@ openDialogModificar
                   //Campos Nuevos
                   Num_Planta: Num_Planta,//this.gl_NumPlanta, //Nuevo parametro Planta.     
                   Flg_Atribuido: Flg_Atribuido,
-                  Observacion2: Observacion2
+                  Observacion2: Observacion2,
+                  Observacion3: Observacion3
                 },
                   minWidth: '46vh'
               });

@@ -155,9 +155,9 @@
 </form>
 
   <mat-dialog-actions align="start" style="margin-top: -50px;">
-    <button mat-raised-button color="primary" (click)="agregarDetalle()"> <mat-icon>add</mat-icon> Agregar </button>  
-    <button mat-raised-button color="accent" (click)="guardar()" [disabled]="dataSource.data.length === 0"> <mat-icon>save</mat-icon> Guardar </button> 
-    <button mat-raised-button color="primary" (click)="limpiar()"> <mat-icon>cleaning_services</mat-icon> Limpiar </button> 
+    <button mat-raised-button color="primary" (click)="agregarDetalle()" [disabled]="flgBtnAgregar"> <mat-icon>add</mat-icon> Agregar </button>  
+    <button mat-raised-button color="accent" (click)="guardar()" [disabled]="dataSource.data.length === 0 || flgBtnguardar"> <mat-icon>save</mat-icon> Guardar </button> 
+    <button mat-raised-button color="primary" (click)="limpiar()" [disabled]="flgBtnLimpiar"> <mat-icon>cleaning_services</mat-icon> Limpiar </button> 
     <button mat-raised-button color="primary" (click)="cerrarModal()"> <mat-icon>cancel</mat-icon> Cerrar </button>
   </mat-dialog-actions>
 

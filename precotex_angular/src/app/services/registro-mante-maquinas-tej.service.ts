@@ -236,7 +236,7 @@ export class RegistroManteMaquinasTejService {
   guardarEditarEliminarMantenimientoSede(xAccion: string, sNum_Mante: string, sFec_Registro: string, cod_maquina: string, cod_tarea: string, ot:string,finicio: string, 
     hinicio: string, ffin: string,hfin: string, observacion: string, dni: string,
     Cod_Espe: string, Cod_Articulo: string, Cod_Area_Tej_Mante_Maq: string, Cod_Tej_Cond: string, Cod_ParMaq_Tej: string, Cod_TipFall: string,
-    Observacion2: string, Flg_Atribuido: string, Num_Planta: string)
+    Observacion2: string, Flg_Atribuido: string, Num_Planta: string, Observacion3: string)
   {
 
     let sFec_Despacho="";
@@ -305,7 +305,8 @@ export class RegistroManteMaquinasTejService {
 
     &Observacion2=${Observacion2}
     &Flg_Atribuido=${Flg_Atribuido}
-    &Num_Planta=${Num_Planta}`);
+    &Num_Planta=${Num_Planta}
+    &Observacion3=${Observacion3}`);
   }
 
   listadoDatosServiceSede(sCod_Accion:string, SFechaReg: string, SFechaReg2: string, sMaquina: string, sOt:string, Tarea: string, Num_Planta: string) {

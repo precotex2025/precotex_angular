@@ -343,6 +343,8 @@ mat-form-field {
             "col14 col15" 55px
             "col16 col17" 55px
             "col18 col18" auto //cambiamos de 55px a Auto para que cuando se oculte quite el espacio tambien
+            "col21 col21" 55px
+            ". ." 55px  //Espacio Vacio
             "col19 col19" 55px
             ". ." 55px  //Espacio Vacio
             "col20 col20" auto;
@@ -460,6 +462,11 @@ mat-form-field {
         width: 320px;        
     }
 
+    .fila1-obs3 {
+        grid-area: col21;
+        width: 320px;        
+    }    
+
 
         // .container-cuerpo-foot {
         
@@ -473,3 +480,5 @@ mat-form-field {
 
 
   }
+
+  .custom-textarea { background-color: #F4EC80 !important; /* fondo amarillo */ color: blue !important; /* texto azul */ }

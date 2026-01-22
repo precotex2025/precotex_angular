@@ -505,6 +505,7 @@ export class ExceljsService {
     worksheet.getColumn(11).width = 10;
     worksheet.getColumn(12).width = 10;
     worksheet.getColumn(13).width = 10;
+    worksheet.getColumn(14).width = 10;
 
 
 

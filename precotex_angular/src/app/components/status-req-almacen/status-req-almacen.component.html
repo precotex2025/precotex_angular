@@ -1,0 +1,154 @@
+<!-- estatus-requerimientos.component.html -->
+<mat-card class="estatus-card">
+  <mat-card-title>Estatus de requerimientos de almacén</mat-card-title>
+
+  <!-- Filtros -->
+  <div class="filtros">
+    <mat-form-field appearance="fill">
+      <mat-label>Departamento</mat-label>
+      <mat-select [(ngModel)]="filtroDepartamento">
+        <mat-option *ngFor="let d of departamentos" [value]="d">{{ d }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="filtroEstado">
+        <mat-option value="">Todos</mat-option>
+        <mat-option value="🔴">🔴 Sin stock / Sin aprobación C/I</mat-option>
+        <mat-option value="🟡">🟡 Sin OC / Sin aprobación</mat-option>
+        <mat-option value="⚪">⚪ Sin ingreso / Sin entrega</mat-option>
+        <mat-option value="🟢">🟢 Proceso completado</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Tabla -->
+   <div class="table-wrapper">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z1" matSort>
+
+        <!-- Estado -->
+        <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+        <td mat-cell *matCellDef="let row">{{ row.estado }}</td>
+        </ng-container>
+
+        <!-- Responsable -->
+        <ng-container matColumnDef="responsable">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Responsable</th>
+        <td mat-cell *matCellDef="let row">{{ row.responsable }}</td>
+        </ng-container>
+
+        <!-- Usuario -->
+        <ng-container matColumnDef="usuario">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Solicitante</th>
+        <td mat-cell *matCellDef="let row">{{ row.usuario }}</td>
+        </ng-container>
+
+        <!-- Req. Nro -->
+        <ng-container matColumnDef="numero">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Req. Nro</th>
+        <td mat-cell *matCellDef="let row">{{ row.numero }}</td>
+        </ng-container>
+
+        <!-- Fecha -->
+        <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fec. Creación</th>
+        <td mat-cell *matCellDef="let row">{{ row.fecha | date:'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <!-- Item -->
+        <ng-container matColumnDef="item">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Item</th>
+        <td mat-cell *matCellDef="let row">{{ row.item }}</td>
+        </ng-container>
+
+        <!-- Cantidad -->
+        <ng-container matColumnDef="cantidad">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</th>
+        <td mat-cell *matCellDef="let row">{{ row.cantidad }}</td>
+        </ng-container>
+
+        <!-- Stock -->
+        <ng-container matColumnDef="stock">
+        <th mat-header-cell *matHeaderCellDef>Stock</th>
+        <td mat-cell *matCellDef="let row">
+            <mat-icon color="{{ row.stock ? 'primary' : 'warn' }}">{{ row.stock ? 'check_circle' : 'cancel' }}</mat-icon>
+        </td>
+        </ng-container>
+
+        <!-- Req. Compra -->
+        <ng-container matColumnDef="flgReqCompra">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Req. Compra</th>
+        <td mat-cell *matCellDef="let row">{{ row.flgReqCompra }}</td>
+        </ng-container>    
+
+        <!-- Enviado C.I -->
+        <ng-container matColumnDef="flgEnviado">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Enviado C/I</th>
+        <td mat-cell *matCellDef="let row">{{ row.flgEnviado }}</td>
+        </ng-container>      
+
+        <!-- Aprobación C.I -->
+        <ng-container matColumnDef="flgAprobacion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Aprobacion C/I</th>
+        <td mat-cell *matCellDef="let row">{{ row.flgAprobacion }}</td>
+        </ng-container>     
+        
+        <!-- Logistica -->
+        <ng-container matColumnDef="estadoLogistica">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Logistica</th>
+        <td mat-cell *matCellDef="let row">{{ row.estadoLogistica }}</td>
+        </ng-container>       
+
+        <!-- Aprobacion de OC -->
+        <ng-container matColumnDef="aprobacionLogistica">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Aprobacion de OC</th>
+        <td mat-cell *matCellDef="let row">{{ row.aprobacionLogistica }}</td>
+        </ng-container>       
+
+        <!-- Fecha de Ingreso -->
+        <ng-container matColumnDef="fechaIngreso">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Ingreso</th>
+        <td mat-cell *matCellDef="let row">{{ row.fechaIngreso | date:'dd/MM/yyyy' }}</td>
+        </ng-container>    
+
+        <!-- Ingreso a Almacen -->
+        <ng-container matColumnDef="flgIngresoAlmacen">
+        <th mat-header-cell *matHeaderCellDef>Ingreso a Almacen</th>
+        <td mat-cell *matCellDef="let row">
+            <mat-icon color="{{ row.stock ? 'primary' : 'warn' }}">{{ row.flgIngresoAlmacen ? 'check_circle' : 'cancel' }}</mat-icon>
+        </td>
+        </ng-container>            
+
+        <!-- Entregado a Mantenimiento -->    
+        <ng-container matColumnDef="flgEntregadoMante">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Entregado a Mnto</th>
+        <td mat-cell *matCellDef="let row">{{ row.flgEntregadoMante | date:'dd/MM/yyyy' }}</td>
+        </ng-container>                 
+        
+        <!-- Acciones -->
+        <!-- <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let row">
+            <button mat-icon-button color="accent" (click)="verDetalle(row)">
+            <mat-icon>visibility</mat-icon>
+            </button>
+        </td>
+        </ng-container> -->
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  <!-- Leyenda -->
+  <br>
+  <mat-card-subtitle class="leyenda">
+    <strong>LEGENDA:</strong>
+    🔴 Sin stock / Sin aprobación C/I |
+    ⚪ Sin ingreso / Sin entrega |
+    🟡 Sin OC / Sin aprobación |
+    🟢 Proceso completado
+  </mat-card-subtitle>
+</mat-card>

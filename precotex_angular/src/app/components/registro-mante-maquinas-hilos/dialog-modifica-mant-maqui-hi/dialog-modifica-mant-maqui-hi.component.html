@@ -174,6 +174,11 @@
                                 </mat-select>
                             </mat-form-field>     
 
+                            <mat-form-field class="fila1-obs3">
+                                <mat-label>Observación Otros</mat-label>
+                                  <textarea  placeholder="Ingrese Observacion Otros" matInput formControlName="Observacion3" autocomplete="off" rows="4" class="custom-textarea"></textarea>
+                            </mat-form-field>   
+
                             <mat-form-field class="fila1-obs">
                                 <mat-label>Descripción del Evento </mat-label>
                                   <textarea  placeholder="Descripción del Evento " matInput formControlName="Observacion" autocomplete="off" rows="4"></textarea>
@@ -182,7 +187,8 @@
                             <mat-form-field class="fila1-obs2" *ngIf="mostrarCtrolOtrasSedes">
                                 <mat-label>Procedimiento Solución</mat-label>
                                   <textarea  placeholder="Ingrese Procedimiento Solución" matInput formControlName="Observacion2" autocomplete="off" rows="4"></textarea>
-                            </mat-form-field>                                 
+                            </mat-form-field>        
+                                                           
 
             </div>
 

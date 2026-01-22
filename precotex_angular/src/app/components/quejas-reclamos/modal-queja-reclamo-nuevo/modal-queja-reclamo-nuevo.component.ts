@@ -11,6 +11,7 @@ import { MatSelectChange } from '@angular/material/select';
 import Swal from 'sweetalert2';
 import { ToastrService } from 'ngx-toastr';
 import { GlobalVariable } from 'src/app/VarGlobals';
+import { forkJoin } from 'rxjs';
 
 interface data {
   Tipo  : String,
@@ -44,8 +45,8 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
     filtroMotivoCtrl: [''],
   })   
   
-
-  displayedColumns: string[] = [
+  displayedColumns: string[] = []; // columnas activas
+  displayedColumnsPartida: string[] = [
     // 'id'        ,
     'partida'   , 
     'cliente'   ,
@@ -112,6 +113,15 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
  
   //variables Globales
   sCod_Usuario = GlobalVariable.vusu;
+  sCodTrabajador = GlobalVariable.vcodtra;
+
+  codArea: string = ""; //01 - Comercial; 02 - Calidad
+
+  //Botones
+  flgBtnAgregar: boolean = false;
+  flgBtnguardar: boolean = false;
+  flgBtnLimpiar: boolean = false;
+
 
   constructor(
      public  dialogRef      : MatDialogRef<ModalQuejaReclamoNuevoComponent>,
@@ -125,9 +135,64 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
 
   ngOnInit(): void {
 
+    console.log('mis datos', this.data.Datos)
+
     this.formulario.get('clientePartida')?.disable();
     this.formulario.get('unidadNegocio')?.disable();
 
+    //Validar.
+    if (this.data.Tipo == "E"){
+      this.formulario.get('tipoRegistro')?.disable();
+      if(this.data.Datos.tipo == "ESTILO"){
+        this.formulario.get('tipoRegistro')?.setValue('ESTILO_CLIENTE');
+        this.displayedColumns = [...this.displayedColumnsEstilo]; 
+      }else{
+        this.formulario.get('tipoRegistro')?.setValue('PARTIDA');
+        this.displayedColumns = [...this.displayedColumnsPartida]; 
+      }
+      
+      //filtro
+      var values = {
+        Id: this.data.Datos.id,
+        NroCaso: this.data.Datos.nroCaso
+      };
+
+
+      forkJoin({
+        reclamos: this.registroQuejasReclamosService.obtenerDetReclamos(values)
+      }).subscribe({
+        next: ({ reclamos }) => {
+
+            if(this.data.Datos.tipo == "ESTILO"){
+              reclamos.elements.forEach(element => {
+                const reclamoReg = this.construirReclamoEstilo(element);
+                this.reclamos.push(reclamoReg);
+              });
+            }else {
+              reclamos.elements.forEach(element => {
+                const reclamoReg = this.construirReclamoPartida(element);
+                this.reclamos.push(reclamoReg);
+              });              
+            }
+
+            this.dataSource.data = [...this.reclamos];
+
+            
+          //this.dataSource.data = reclamos.elements;
+          //this.reclamos = reclamos.elements;
+          //console.log('reclamos Inicial', this.reclamos);
+        },
+        error: (err) => {
+          console.error('Error al obtener datos:', err);
+        }        
+      });
+    } else {
+      console.log('nuevo');
+      this.actualizarColumnas()
+      this.formulario.get('tipoRegistro')?.valueChanges.subscribe(() => { this.actualizarColumnas(); });
+    }    
+    console.log('this.sCodTrabajador', this.sCodTrabajador);
+    this.onObtieneUsuarioArea(this.sCodTrabajador);
     this.onLoadCliente();
     this.onLoadUnidadNegocio();
     this.onLoadAreaResponsable();
@@ -154,9 +219,9 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
 
       }
     });
-        
-    console.log('data', this.data.Tipo);
   }
+
+  
 
   onMotivoSeleccionado(event: any){
 
@@ -324,7 +389,8 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
     const tipo = this.formulario.get('tipoRegistro')?.value; 
     
     if (tipo === 'PARTIDA') { 
-      this.displayedColumns = [...this.displayedColumns]; 
+      console.log('entro a partida');
+      this.displayedColumns = [...this.displayedColumnsPartida]; 
     } else if (tipo === 'ESTILO_CLIENTE') { 
       this.displayedColumns = [...this.displayedColumnsEstilo]; 
     } 
@@ -429,21 +495,9 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
     const sTemporada = this.formulario.get('temporada')?.value || '';    
     const sEstilo = this.formulario.get('estilo')?.value || '';    
     const sObservacion = this.formulario.get('observacion')?.value || '';    
+   
 
-    // 2. Validar cada código contra la grilla actual 
-    for (const codTela of codigosTela) { 
-        const yaExiste = this.reclamos.some(item => item.cod_Tela === codTela); 
-        if (yaExiste) { 
-            this.matSnackBar.open(`El código de tela ${codTela} ya existe en el detalle.`, 'Cerrar', {
-              horizontalPosition: 'center',
-              verticalPosition: 'top',
-              duration: 1500,
-            });            
-            return; // corta el proceso si encuentra duplicado 
-            } 
-        }    
-
-    //VALIDACION     - 01
+    //VALIDACION     - 00
     if (tipo === 'PARTIDA') {
 
       if (sCliente == '' || sNroPartida == '' || sUnidadNegocio == ''){
@@ -497,7 +551,38 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
         duration: 1500,
       });
       return;          
-    }
+    }    
+
+    // 1. Validar que sea el mismo cliente el cual se esta agregando.
+    let clienteActual = '';
+    if (tipo === 'PARTIDA') { 
+      clienteActual = sCliente; 
+    } else if (tipo === 'ESTILO_CLIENTE') { 
+      clienteActual = sClienteEst; 
+    }    
+    // const codClienteExis = this.reclamos[0][0]?.cod_Cliente_Tex;
+    // if (codClienteExis !== clienteActual) { 
+    //     this.matSnackBar.open(`El cliente del detalle no coincide con el cliente del caso.`, 'Cerrar', {
+    //       horizontalPosition: 'center',
+    //       verticalPosition: 'top',
+    //       duration: 1500,
+    //     });      
+    //     return; 
+    // }   
+
+    //2. Validar cada código contra la grilla actual 
+    for (const codTela of codigosTela) { 
+        const yaExiste = this.reclamos.some(item => item.cod_Tela === codTela); 
+        if (yaExiste) { 
+            this.matSnackBar.open(`El código de tela ${codTela} ya existe en el detalle.`, 'Cerrar', {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              duration: 1500,
+            });            
+            return; // corta el proceso si encuentra duplicado 
+            } 
+    }        
+
 
     //Datos comunes
     //Area
@@ -525,7 +610,7 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
         const reclamoReg: ReclamoCliente = {
           id: 0,
           cliente: this._glb_Cliente,
-          cod_Ordtra: tipo === 'PARTIDA'? sNroPartida: '',    
+          cod_Ordtra: sNroPartida,    
           unidadNegocio   : '',  
 
           //Estilo
@@ -550,7 +635,7 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
           num_Secuencia   : numSecuencia,
           cod_Unidad_Negocio  : sUnidadNegocio,
           des_Unidad_Negocio  : "UNIDAD PRUEBA",//cuando tegresoses mostrar la descripcion da la unidad de negocio.
-          cod_Cliente_Tex     : tipo === 'PARTIDA'? sCliente: sClienteEst,
+          cod_Cliente_Tex     : sCliente,
           cod_Motivo          : motivo,
           idArea              : Number(area),
           idResponsable       : Number(userAsignado),
@@ -590,7 +675,7 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
           num_Secuencia   : 0,
           cod_Unidad_Negocio  : sUnidadNegocio,
           des_Unidad_Negocio  : "UNIDAD PRUEBA",//cuando tegresoses mostrar la descripcion da la unidad de negocio.
-          cod_Cliente_Tex     : tipo === 'PARTIDA'? sCliente: sClienteEst,
+          cod_Cliente_Tex     : sClienteEst,
           cod_Motivo          : motivo,
           idArea              : Number(area),
           idResponsable       : Number(userAsignado),
@@ -602,9 +687,12 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
     //Limpia Cabeceras
     this.limpiar();
 
-    console.log('this.reclamos', this.reclamos);
-    this.dataSource.data = [...this.reclamos];
-
+    console.log('this.reclamos agregar', this.reclamos);
+    if (this.data.Tipo == "E"){
+      this.dataSource.data = [...this.reclamos[0]];
+    }else{
+      this.dataSource.data = [...this.reclamos];
+    }
   }
 
   cerrarModal(){
@@ -739,6 +827,135 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
   }
   console.log('AgregarReclamo:', this.reclamos);
 }
+
+  onObtieneUsuarioArea(sCodTrabajador: string){
+
+    this.registroQuejasReclamosService.ObtieneUsuarioArea(sCodTrabajador).subscribe({
+      next: (response) => {
+        if(response.success){
+            if (response.totalElements > 0) {
+
+                const area =  response.elements[0]?.cod_Area;
+                if (area.trim() === '01' && this.data.Datos.cod_Estado.trim() === '01') {
+                  this.flgBtnAgregar = true;
+                  this.flgBtnguardar = true;
+                  this.flgBtnLimpiar = true;
+                }
+
+                // console.log('onObtieneUsuarioArea', response);
+                // this.codArea = response.elements[0]?.cod_Area;
+                // console.log('onObtieneUsuarioArea', this.codArea );
+                // this.flgBotones();
+            }
+            else {
+              this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+            }
+        }
+
+      },
+      error: (err) => {
+        console.error('Error al obtener clientes', err);
+      }
+    });    
+
+  }
+
+construirReclamoPartida(element: any): ReclamoCliente {
+  return {
+    id: Number(element.id),
+    cliente: String(element.cliente),
+    cod_Ordtra: String(element.cod_Ordtra),
+    unidadNegocio: String(element.unidadNegocio),
+    Cod_TemCli: String(element.cod_TemCli),
+    Cod_EstCli: String(element.cod_EstCli),
+    tipoRegistro: String(element.tipoRegistro),
+    estadoSolicitud: String(element.estadoSolicitud),
+    responsable: String(element.responsable),
+    motivoRegistro: String(element.motivoRegistro),
+    usuarioRegistro: String(element.usuarioRegistro),
+    observacion: String(element.observacion),
+    cadenaCodOrdtra: String(element.cadenaCodOrdtra),
+    cod_Tela: String(element.cod_Tela),
+    des_Tela: String(element.des_Tela),
+    cod_Color: String(element.cod_Color),
+    des_Color: String(element.des_Color),
+    num_Secuencia: Number(element.num_Secuencia),
+    cod_Unidad_Negocio: String(element.cod_Unidad_Negocio),
+    des_Unidad_Negocio: String(element.des_Unidad_Negocio),
+    cod_Cliente_Tex: String(element.cod_Cliente_Tex), 
+    cod_Motivo: String(element.cod_Motivo),
+    idArea: Number(element.idArea),
+    idResponsable: Number(element.idResponsable),
+    archivoAdjunto: element.archivoAdjunto
+  };
+}
+
+construirReclamoEstilo(element: any): ReclamoCliente {
+  return {
+    id: Number(element.id),
+    cliente: String(element.cliente),
+    cod_Ordtra: String(element.cod_Ordtra),
+    unidadNegocio: String(element.unidadNegocio),
+    Cod_TemCli: String(element.cod_TemCli),
+    temporada: String(element.temporada),
+    Cod_EstCli: String(element.cod_EstCli),
+    estilo: String(element.estilo),
+    tipoRegistro: String(element.tipoRegistro),
+    estadoSolicitud: String(element.estadoSolicitud),
+    responsable: String(element.responsable),
+    motivoRegistro: String(element.motivoRegistro),
+    usuarioRegistro: String(element.usuarioRegistro),
+    observacion: String(element.observacion),
+    cadenaCodOrdtra: String(element.cadenaCodOrdtra),
+    cod_Tela: String(element.cod_Tela),
+    des_Tela: String(element.des_Tela),
+    cod_Color: String(element.cod_Color),
+    des_Color: String(element.des_Color),
+    num_Secuencia: Number(element.num_Secuencia),
+    cod_Unidad_Negocio: '',
+    des_Unidad_Negocio: String(element.des_Unidad_Negocio),
+    cod_Cliente_Tex: String(element.cod_Cliente_Tex),
+    cod_Motivo: String(element.cod_Motivo),
+    idArea: Number(element.idArea),
+    idResponsable: Number(element.idResponsable),
+    archivoAdjunto: element.archivoAdjunto,
+
+  };
+}
+
+avanzaEstadoReclamo(id: Number){
+  //this.SpinnerService.show();
+  this.registroQuejasReclamosService.AvanzaEstadoReclamo(Number(id)).subscribe({
+    next: (response: any) => {
+          if(response.success){
+            if (response.codeResult == 200){
+              this.toastr.success(response.message, '', {
+                timeOut: 2500,
+              });
+
+              //this.buscar()        
+
+            }else if(response.codeResult == 201){
+              this.toastr.info(response.message, '', {
+                timeOut: 2500,
+              });
+            }
+            //this.SpinnerService.hide();
+          }else{
+            this.toastr.error(response.message, 'Cerrar', {
+              timeOut: 2500,
+            });
+            //this.SpinnerService.hide();
+          }
+
+    },
+    error: (err) => {
+      console.error('❌ Al intentar cambiar de estado recepcionado:', err);
+      alert('Error ❌ Al intentar cambiar de estado recepcionado.');
+    }
+  }); 
+}
+
 
 
 }

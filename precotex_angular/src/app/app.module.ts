@@ -617,6 +617,9 @@ import { AprobacionDesarrolloTelasEditComponent } from './components/aprobacion-
 //QUEJAS Y RECLAMOS
 import { ModalQuejaReclamoNuevoComponent } from './components/quejas-reclamos/modal-queja-reclamo-nuevo/modal-queja-reclamo-nuevo.component';
 
+//VISOR STATUS REQ ALMACEN
+import { StatusReqAlmacenComponent } from './components/status-req-almacen/status-req-almacen.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -1155,6 +1158,9 @@ import { ModalQuejaReclamoNuevoComponent } from './components/quejas-reclamos/mo
 
     //QUEJAS Y RECLAMOS
     ,ModalQuejaReclamoNuevoComponent
+
+    //VISOR STATUS REQ ALMACEN
+    ,StatusReqAlmacenComponent
   
   ],
   entryComponents: [DialogJabaComponent],
