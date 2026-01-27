@@ -99,6 +99,7 @@ interface data{
   Num_Planta: Number
   Flg_Atribuido: string
   Observacion2: string
+  Observacion3: string
 }
 
 @Component({
@@ -323,6 +324,7 @@ tipoFallaFiltrada: any[] = []; // Lista filtrada
    this.formulario.get('ct_MinMax')?.setValue(this.data.Min_Max)
    this.formulario.get('ct_Tipo_Atribuido')?.setValue(this.data.Flg_Atribuido);
    this.formulario.get('Observacion')?.setValue(this.data.Observacion)
+   this.formulario.get('Observacion3')?.setValue(this.data.Observacion3)
 
    this.xNum_Mante = this.data.sNum_Mante;
 

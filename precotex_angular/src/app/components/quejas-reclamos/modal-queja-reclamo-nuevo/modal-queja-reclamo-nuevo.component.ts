@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import { ToastrService } from 'ngx-toastr';
 import { GlobalVariable } from 'src/app/VarGlobals';
 import { forkJoin } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 interface data {
   Tipo  : String,
@@ -121,6 +122,7 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
   flgBtnAgregar: boolean = false;
   flgBtnguardar: boolean = false;
   flgBtnLimpiar: boolean = false;
+  flgBtnEnviar: boolean = true;
 
 
   constructor(
@@ -130,7 +132,9 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
      private matSnackBar    : MatSnackBar     ,
      private dialog         : MatDialog       ,
      private toastr         : ToastrService   ,
+     private SpinnerService      : NgxSpinnerService,
      @Inject(MAT_DIALOG_DATA) public data: data                   ,
+
   ) { }
 
   ngOnInit(): void {
@@ -836,10 +840,20 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
             if (response.totalElements > 0) {
 
                 const area =  response.elements[0]?.cod_Area;
+                console.log('area', area);
+
                 if (area.trim() === '01' && this.data.Datos.cod_Estado.trim() === '01') {
                   this.flgBtnAgregar = true;
                   this.flgBtnguardar = true;
                   this.flgBtnLimpiar = true;
+                }
+
+                if ((area.trim() === '01' || area.trim() === '02') && this.data.Datos.cod_Estado.trim() >= '02') {
+                  console.log('ingresa aqui');
+                  this.flgBtnAgregar = true;
+                  this.flgBtnguardar = true;
+                  this.flgBtnLimpiar = true;
+                  this.flgBtnEnviar = false;
                 }
 
                 // console.log('onObtieneUsuarioArea', response);
@@ -924,7 +938,7 @@ construirReclamoEstilo(element: any): ReclamoCliente {
 }
 
 avanzaEstadoReclamo(id: Number){
-  //this.SpinnerService.show();
+  this.SpinnerService.show();
   this.registroQuejasReclamosService.AvanzaEstadoReclamo(Number(id)).subscribe({
     next: (response: any) => {
           if(response.success){
@@ -932,7 +946,7 @@ avanzaEstadoReclamo(id: Number){
               this.toastr.success(response.message, '', {
                 timeOut: 2500,
               });
-
+              this.dialogRef.close();
               //this.buscar()        
 
             }else if(response.codeResult == 201){
@@ -940,12 +954,12 @@ avanzaEstadoReclamo(id: Number){
                 timeOut: 2500,
               });
             }
-            //this.SpinnerService.hide();
+            this.SpinnerService.hide();
           }else{
             this.toastr.error(response.message, 'Cerrar', {
               timeOut: 2500,
             });
-            //this.SpinnerService.hide();
+            this.SpinnerService.hide();
           }
 
     },
@@ -954,6 +968,28 @@ avanzaEstadoReclamo(id: Number){
       alert('Error ❌ Al intentar cambiar de estado recepcionado.');
     }
   }); 
+}
+
+enviarComercial(){
+  console.log('Id', this.data.Datos.id);
+  const id = this.data.Datos.id;
+
+  Swal.fire({
+    title: '¿Desea cerrar el caso y continuar con el informe?, Confirme',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí',
+    cancelButtonText: 'No'
+  }).then((result) => {   
+
+    if (result.isConfirmed) {
+      this.avanzaEstadoReclamo(id);
+    }
+      
+  });
+
 }
 
 
