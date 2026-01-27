@@ -7,7 +7,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NgxSpinnerService }  from "ngx-spinner";
 import * as _moment from 'moment';
 
+import { GlobalVariable } from 'src/app/VarGlobals';
 import { ControlActivoFijoService } from 'src/app/services/control-activo-fijo.service';
+import { SeguridadControlVehiculoService } from 'src/app/services/seguridad-control-vehiculo.service';
 
 @Component({
   selector: 'app-activar-salida',
@@ -19,6 +21,7 @@ export class ActivarSalidaComponent implements OnInit {
   idDescripcion: number = 192;  //Laptop
   dataTipoActivos: any[];
   dataActivoFijos: any[];
+  ll_Validar: boolean = false;
 
   dataForExcel = [];
   displayedColumns: string[] = ['Cod_Activo', 'Descripcion', 'Nom_Marca', 'Nom_Modelo', 'Num_Serie_Equipo', 'Nom_Area', 'Nom_Responsable','Flg_Salida']
@@ -29,12 +32,14 @@ export class ActivarSalidaComponent implements OnInit {
   constructor(
     private matSnackBar: MatSnackBar,
     private spinnerService: NgxSpinnerService,
-    private controlActivoFijoService: ControlActivoFijoService
+    private controlActivoFijoService: ControlActivoFijoService,
+    private seguridadControlVehiculoService: SeguridadControlVehiculoService
   ) {
     this.dataSource = new MatTableDataSource();
   }
 
   ngOnInit(): void {
+    this.validarCRUDUsuario(228);
     this.listarTipoActivos();
   }
 
@@ -90,5 +95,19 @@ export class ActivarSalidaComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }  
+
+  validarCRUDUsuario(Cod_Opcion: number){
+    let crud: any = [];
+    this.seguridadControlVehiculoService.seg_crud_opcion_usuario(GlobalVariable.empresa, GlobalVariable.vCod_Rol, Cod_Opcion, GlobalVariable.vusu)
+      .subscribe((res) => {
+        crud = res;
+
+        if(crud.length > 0){
+          this.ll_Validar = crud[0].Flg_Verificar == 1 ? true : false;
+        }
+
+      });
+  }
+
 
 }
