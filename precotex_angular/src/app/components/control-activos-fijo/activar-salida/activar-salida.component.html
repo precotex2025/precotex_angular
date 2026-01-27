@@ -68,11 +68,15 @@
                             <ng-container matColumnDef="Flg_Salida">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <mat-slide-toggle (change)="onChangeSalida($event, element)" class="example-margin" color="warn" [checked]="element.Flg_Salida == '1'">
+                                    <mat-slide-toggle (change)="onChangeSalida($event, element)" class="example-margin" color="warn" [checked]="element.Flg_Salida == '1'" *ngIf="ll_Validar">
                                         <span [ngClass]="{'flg_grey':element.Flg_Salida=='0', 'flg_green':element.Flg_Salida=='1'}">
                                             {{ element.Flg_Salida == '1' ? 'Autorizado' : 'Denegado' }}
                                         </span>
                                     </mat-slide-toggle>
+                                    
+                                    <span [ngClass]="{'flg_grey':element.Flg_Salida=='0', 'flg_green':element.Flg_Salida=='1'}" *ngIf="!ll_Validar">
+                                        {{ element.Flg_Salida == '1' ? 'Autorizado' : 'Denegado' }}
+                                    </span>
                                 </td>
                             </ng-container>
 
