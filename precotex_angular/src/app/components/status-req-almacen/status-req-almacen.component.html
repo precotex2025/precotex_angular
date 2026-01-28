@@ -1,17 +1,17 @@
 <!-- estatus-requerimientos.component.html -->
 <mat-card class="estatus-card">
-  <mat-card-title style="text-align: center;">Estatus de requerimientos de almacén</mat-card-title>
+  <mat-card-title style="text-align: center;">Estatus de Requerimientos de Almacén</mat-card-title>
   
   <!-- Filtros -->
    <mat-card-content>
    <form  [formGroup]="formulario" #formDirective="ngForm">
     <div class="filtros">
-      <mat-form-field appearance="fill">
+      <!-- <mat-form-field appearance="fill">
         <mat-label>Departamento</mat-label>
         <mat-select >
           <mat-option *ngFor="let d of departamentos" [value]="d">{{ d }}</mat-option>
         </mat-select>
-      </mat-form-field>
+      </mat-form-field> -->
 
       <mat-form-field appearance="fill">
         <mat-label>Estado</mat-label>
@@ -23,6 +23,20 @@
           <mat-option value="V">🟢 Proceso completado</mat-option>
         </mat-select>
       </mat-form-field>
+
+      <div class="contenedor-leyendas">
+        <mat-card-subtitle class="leyenda">
+          <strong>LEYENDA:</strong>
+          🔴 Sin stock / Sin aprobación C/I |
+          ⚪ Sin ingreso / Sin entrega 
+        </mat-card-subtitle>    
+
+        <mat-card-subtitle class="leyenda2">
+          <strong style="color: azure;">LEYENDA:</strong>
+          🟡 Sin OC / Sin aprobación |
+          🟢 Proceso completado  
+        </mat-card-subtitle>
+      </div>
     </div>
   </form>
   <!-- Tabla -->
@@ -164,14 +178,14 @@
    </mat-card-content>
 
   <!-- Leyenda -->
-  <br>
-  <mat-card-subtitle class="leyenda">
+  <!-- <br> -->
+  <!-- <mat-card-subtitle class="leyenda">
     <strong>LEYENDA:</strong>
     🔴 Sin stock / Sin aprobación C/I |
     ⚪ Sin ingreso / Sin entrega |
     🟡 Sin OC / Sin aprobación |
     🟢 Proceso completado
-  </mat-card-subtitle>
+  </mat-card-subtitle> -->
 </mat-card>
 
 <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">

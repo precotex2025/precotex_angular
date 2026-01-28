@@ -6,14 +6,26 @@
 
 .filtros {
   display: flex;
+  justify-content: space-between; /* separa los dos elementos */
   gap: 20px;
   margin-bottom: 20px;
+  align-items: center; /* opcional: alinea verticalmente */ 
+  flex-wrap: wrap; /* opcional: permite que se acomoden si no hay espacio */  
 }
 
-.leyenda {
-  margin-top: 20px;
+.contenedor-leyendas { 
+  display: flex; 
+  flex-direction: column; /* uno debajo del otro */ 
+  align-items: flex-end; /* todo alineado a la derecha */ 
+  margin-top: 10px; /* opcional: separación respecto a otros bloques */ 
+}
+
+.leyenda,
+.leyenda2 {
+  
   font-size: 14px;
   color: #555;
+  
 }
 
 .full-width-table {
@@ -67,7 +79,14 @@
     overflow-wrap: break-word; /* 🔥 compatible con navegadores modernos */ 
     overflow: visible; /* muestra todo el contenido */
 }
-
+.mat-column-item {
+    width: 200px; 
+    max-width: 200px; 
+    white-space: normal; /* 🔥 permite salto de línea */ 
+    word-wrap: break-word; /* 🔥 divide palabras largas */ 
+    overflow-wrap: break-word; /* 🔥 compatible con navegadores modernos */ 
+    overflow: visible; /* muestra todo el contenido */  
+}
 .mat-column-flgReqCompra,
 .mat-column-flgEnviado,
 .mat-column-flgAprobacion,
