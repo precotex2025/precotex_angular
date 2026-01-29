@@ -6,23 +6,25 @@
    <mat-card-content>
    <form  [formGroup]="formulario" #formDirective="ngForm">
     <div class="filtros">
-      <!-- <mat-form-field appearance="fill">
-        <mat-label>Departamento</mat-label>
-        <mat-select >
-          <mat-option *ngFor="let d of departamentos" [value]="d">{{ d }}</mat-option>
-        </mat-select>
-      </mat-form-field> -->
 
-      <mat-form-field appearance="fill">
-        <mat-label>Estado</mat-label>
-        <mat-select formControlName = "ctrolEstado" (selectionChange)="onEstadoSeleccionado($event.value)">
-          <mat-option value="*">Todos</mat-option>
-          <mat-option value="R">🔴 Sin stock / Sin aprobación C/I</mat-option>
-          <mat-option value="A">🟡 Sin OC / Sin aprobación</mat-option>
-          <mat-option value="G">⚪ Sin ingreso / Sin entrega</mat-option>
-          <mat-option value="V">🟢 Proceso completado</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="filtros-izq">
+
+        <mat-form-field appearance="fill">
+          <mat-label>Estado</mat-label>
+          <mat-select formControlName = "ctrolEstado" (selectionChange)="onEstadoSeleccionado($event.value)">
+            <mat-option value="*">Todos</mat-option>
+            <mat-option value="R">🔴 Sin stock / Sin aprobación C/I</mat-option>
+            <mat-option value="A">🟡 Sin OC / Sin aprobación</mat-option>
+            <mat-option value="G">⚪ Sin ingreso / Sin entrega</mat-option>
+            <mat-option value="V">🟢 Proceso completado</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field  appearance="fill" class="filtroGeneral">
+            <mat-label>Filtros Generales</mat-label>
+            <input matInput type="text" formControlName="txtGenerales">
+        </mat-form-field>  
+      </div>    
 
       <div class="contenedor-leyendas">
         <mat-card-subtitle class="leyenda">
@@ -118,18 +120,19 @@
         <!-- Aprobación C.I -->
         <ng-container matColumnDef="flgAprobacion">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Aprobacion C/I</th>
-        <td mat-cell *matCellDef="let row">{{ row.des_StatusReq }}</td>
+        <td mat-cell *matCellDef="let row">
+          <!-- {{ row.des_StatusReq }} -->
+          <span [ngClass]="getEstadoClass(row.des_StatusReq)">
+          {{ row.des_StatusReq }}
+          </span>            
+        </td>
         </ng-container>     
         
         <!-- Logistica -->
         <ng-container matColumnDef="estadoLogistica">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Logistica</th>
         <td mat-cell *matCellDef="let row">
-          {{ row.logistico }} 
-
-          <!-- <span [ngClass]="getEstadoClass(row.flg_StatusReq)">
-          {{ row.logistico }}
-          </span>   -->
+          {{ row.logistico }}  
         </td>
         </ng-container>       
 

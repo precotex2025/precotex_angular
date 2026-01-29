@@ -26,9 +26,9 @@ export class StatusReqAlmacenComponent implements OnInit {
 
   formulario = this.formBuilder.group({
     ctrolEstado:         [''],
+    txtGenerales:        [''],
   });  
 
-  
   constructor(
     private formBuilder            : FormBuilder       ,
     private visoresGeneralesService: VisoresGeneralesService  ,
@@ -37,70 +37,13 @@ export class StatusReqAlmacenComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     const Estado: string = this.formulario.get('ctrolEstado')?.value || '';
-    
-    console.log('estado',Estado);
     this.verDetalle('*');
 
-//    this.dataSource = new MatTableDataSource([ { estado: '🔴', 
-//                                                 responsable: 'Pedro Abad / Victor Sanchez', 
-//                                                 usuario: 'SISTEMAS', 
-//                                                 numero: 1, 
-//                                                 fecha: new Date('2026-01-13'), 
-//                                                 item: 'ITEM 1', 
-//                                                 cantidad: 2, 
-//                                                 stock: false,
-//                                                 flgReqCompra:   'SI', 
-//                                                 flgEnviado:     'NO', 
-//                                                 flgAprobacion:  'NO',
-//                                                 estadoLogistica: 'Sin OC',
-//                                                 aprobacionLogistica: '2/3',
-//                                                 fechaIngreso: new Date('2026-01-13'),
-//                                                 flgIngresoAlmacen: true,
-//                                                 flgEntregadoMante: '🔴'
-//                                               }, 
-// {
-//   estado: '🔴', 
-//                                                 responsable: 'Pedro Abad / Victor Sanchez', 
-//                                                 usuario: 'SISTEMAS', 
-//                                                 numero: 1, 
-//                                                 fecha: new Date('2026-01-13'), 
-//                                                 item: 'ITEM 1', 
-//                                                 cantidad: 2, 
-//                                                 stock: false,
-//                                                 flgReqCompra:   'SI', 
-//                                                 flgEnviado:     'NO', 
-//                                                 flgAprobacion:  'NO',
-//                                                 estadoLogistica: 'Sin OC',
-//                                                 aprobacionLogistica: '2/3',
-//                                                 fechaIngreso: new Date('2026-01-13'),
-//                                                 flgIngresoAlmacen: true,
-//                                                 flgEntregadoMante: '🔴'
-//                                               },
-                                              
-// {
-//   estado: '🔴', 
-//                                                 responsable: 'Pedro Abad / Victor Sanchez', 
-//                                                 usuario: 'SISTEMAS', 
-                                                
-//                                                 numero: 1, 
-//                                                 fecha: new Date('2026-01-13'), 
-//                                                 item: 'ITEM 1', 
-//                                                 cantidad: 2, 
-//                                                 stock: false,
-//                                                 flgReqCompra:   'SI', 
-//                                                 flgEnviado:     'NO', 
-//                                                 flgAprobacion:  'NO',
-//                                                 estadoLogistica: 'Sin OC',
-//                                                 aprobacionLogistica: '2/3',
-//                                                 fechaIngreso: new Date('2026-01-13'),
-//                                                 flgIngresoAlmacen: true,
-//                                                 flgEntregadoMante: '🔴'
-//                                               },                                              
-                                            
-//                                             ]);
-
+    this.formulario.get('txtGenerales')!.valueChanges
+      .subscribe(valor => {
+        this.dataSource.filter = valor.trim().toLowerCase();
+    });    
   }
 
   onEstadoSeleccionado(object: any){
@@ -109,8 +52,6 @@ export class StatusReqAlmacenComponent implements OnInit {
 
   verDetalle(sEstado: string){
     //Captura Estado
-    //const Estado: string = String(this.formulario.get('').value());
-
     this.SpinnerService.show();
     this.dataListadoStatus = [];
     this.visoresGeneralesService.getEstatusRequerimientoAlmacen(sEstado).subscribe({
@@ -121,10 +62,7 @@ export class StatusReqAlmacenComponent implements OnInit {
               console.log('Listado de Status, Logistico', response.elements);
               this.dataSource.data        = this.dataListadoStatus;
               this.dataSource.paginator   = this.paginator;
-
-              //this.dataSource.sort = this.sort;
-
-            this.SpinnerService.hide();
+              this.SpinnerService.hide();
           }
           else{
             this.dataListadoStatus = [];
@@ -156,30 +94,21 @@ export class StatusReqAlmacenComponent implements OnInit {
   }
 
   getEstadoClass(estado: string): string {
-    console.log('estado','estado');
-    switch (estado.trim().toLowerCase()) {
-      case 'A':
-        return 'estado-anulado';
-      case 'C':
+    switch (estado.trim()) {
+      case 'Rechazado':
+        return 'estado-CI-rechazado';
+      case 'Sin Aprobación':
         return 'estado-cerrado';
-      case 'D':
-        return 'estado-desp-parcial';
-      case 'E':
-        return 'estado-pre-orden';
-      case 'N':
-        return 'estado-por-aprobar';
-      case 'O':
-        return 'estado-en-orden-compra';        
-      case 'P':
-        return 'estado-pendiente';         
-      case 'R':
-        return 'estado-req-compra';     
-      case 'Z':
-        return 'estado-rechazado';                   
+      case 'Aprobado':
+        return 'estado-CI-aprobado ';               
       default:
         return '';
     
     }
+  }
+
+  getReqCompraClass(valor: string): string {
+    return valor === "SI" ? 'paro-activo' : 'paro-inactivo';
   }
   
 
