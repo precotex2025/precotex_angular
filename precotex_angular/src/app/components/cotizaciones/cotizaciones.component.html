@@ -1,260 +1,136 @@
-<form [formGroup]="form" class="costeo-form" (ngSubmit)="onSubmit()">
-<!-- Datos generales -->
-<mat-card>
-    <h2>Datos generales</h2>
-    <div class="general-grid">
-    <mat-form-field appearance="outline">
-        <mat-label>Unidad de Negocio</mat-label>
-        <input matInput formControlName="unidadNegocio" />
+<div class="cotizacion-header-container">
+  <!-- Selects superiores -->
+  <mat-form-field appearance="fill" class="select-field">
+    <mat-label>Unidad de negocio</mat-label>
+    <mat-select [(ngModel)]="unidadNegocio">
+      <mat-option *ngFor="let unidad of unidades" [value]="unidad">{{ unidad }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="select-field">
+    <mat-label>Tipo</mat-label>
+    <mat-select [(ngModel)]="tipo">
+      <mat-option *ngFor="let t of tipos" [value]="t">{{ t }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="select-field">
+    <mat-label>Cliente</mat-label>
+    <mat-select [(ngModel)]="cliente">
+      <mat-option *ngFor="let c of clientes" [value]="c">{{ c }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Código de tela --> 
+    <mat-form-field appearance="fill" class="codigo-field"> 
+        <mat-label>Código de tela</mat-label> 
+        <input matInput [(ngModel)]="codigoTela" (keyup.enter)="buscarDescripcionTela()" /> 
+    </mat-form-field> 
+    <mat-form-field appearance="fill" class="descripcion-field"> 
+        <mat-label>Descripción</mat-label> 
+        <input matInput [(ngModel)]="descripcionTela" readonly /> 
     </mat-form-field>
+  
+  
+  <mat-form-field appearance="fill" class="select-field">
+    <mat-label>Ruta</mat-label>
+    <mat-select [(ngModel)]="codigoRutaTela" (selectionChange)="mostrarRutaDetalle($event.value)">
+      <mat-option *ngFor="let ruta of RutaXCodTela" [value]="ruta.cod_Ruta">{{ ruta.descripcion }}</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <mat-form-field appearance="outline">
-        <mat-label>Tipo</mat-label>
-        <input matInput formControlName="tipo" />
-    </mat-form-field>
+<!-- Código de tela --> 
+    <!-- <mat-form-field appearance="fill" class="codigo-field"> 
+        <mat-label>Código de tela</mat-label> 
+        <input matInput [(ngModel)]="codigoTela" (keyup.enter)="buscarDescripcionTela()" /> 
+    </mat-form-field> 
+    <mat-form-field appearance="fill" class="descripcion-field"> 
+        <mat-label>Descripción</mat-label> 
+        <input matInput [(ngModel)]="descripcionTela" readonly /> 
+    </mat-form-field> -->
 
-    <mat-form-field appearance="outline">
-        <mat-label>Cliente</mat-label>
-        <input matInput formControlName="cliente" />
-    </mat-form-field>
 
-    <mat-form-field appearance="outline">
-        <mat-label>Código Tela</mat-label>
-        <input matInput formControlName="codigoTela" />
-    </mat-form-field>
+  <!-- <mat-form-field appearance="fill" class="select-field">
+    <mat-label>Ruta</mat-label>
+    <mat-select [(ngModel)]="rutaSeleccionada" (selectionChange)="actualizarRuta()">
+      <mat-option *ngFor="let rutaDet of RutaXCodTelaDetalle" [value]="rutaDet.">{{ rutaDet }}</mat-option>
+    </mat-select>
+  </mat-form-field> -->
 
-    <mat-form-field appearance="outline">
-        <mat-label>ID Ruta</mat-label>
-        <input matInput formControlName="idRuta" />
-    </mat-form-field>
+  <!-- Recuadro verde con tabla -->
+  <div class="cuadro-verde" *ngIf="codigoRutaTela">
+    <table mat-table [dataSource]="dataSource" class="tabla-procesos">
 
-    <mat-form-field appearance="outline">
-        <mat-label>Color</mat-label>
-        <input matInput formControlName="color" />
-    </mat-form-field>
-    </div>
-</mat-card>
-
-<!-- Materiales -->
-<mat-card>
-    <div class="card-header">
-    <h2>Materiales</h2>
-    <!-- <div class="actions">
-        <button mat-stroked-button color="primary" type="button" (click)="addMaterial()">
-        <mat-icon>add</mat-icon>
-        Agregar material
-        </button>
-    </div> -->
-    </div>
-
-    <div class="table-container">
-    <table mat-table [dataSource]="materiales.controls" class="mat-elevation-z8 responsive-table">
-        <!-- Código Hilo -->
-        <ng-container matColumnDef="codigoHilo">
-          <th mat-header-cell *matHeaderCellDef>Código Hilo</th>
-          <td mat-cell *matCellDef="let row; let i = index" [formGroup]="row">
-            <input matInput formControlName="codigoHilo" />
-        </td>
-        </ng-container>
-
-        <!-- Descripción -->
-        <ng-container matColumnDef="descripcion">
-          <th mat-header-cell *matHeaderCellDef>Descripción</th>
-          <td mat-cell *matCellDef="let row" [formGroup]="row">
-            <input matInput formControlName="descripcion" />
-        </td>
-        </ng-container>
-
-        <!-- % -->
-        <ng-container matColumnDef="porcentaje">
-          <th mat-header-cell *matHeaderCellDef>%</th>
-          <td mat-cell *matCellDef="let row" [formGroup]="row">
-            <input matInput type="number" formControlName="porcentaje" />
-        </td>
-        </ng-container>
-
-        <!-- $/Kg -->
-        <ng-container matColumnDef="precioKg">
-          <th mat-header-cell *matHeaderCellDef>$ / Kg</th>
-          <td mat-cell *matCellDef="let row" [formGroup]="row">
-            <input matInput type="number" formControlName="precioKg" />
-        </td>
-        </ng-container>
-
-        <!-- Subtotal -->
-        <ng-container matColumnDef="subtotal">
-          <th mat-header-cell *matHeaderCellDef>$</th>
-          <td mat-cell *matCellDef="let row; let i = index" [formGroup]="row">
-            
-            <input matInput type="number" formControlName="subtotal" />
-            <!-- <div class="row-actions">
-            <button mat-icon-button color="warn" type="button" (click)="removeMaterial(i)">
-                <mat-icon>delete</mat-icon>
-            </button>
-            </div> -->
-        </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumnsMateriales"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumnsMateriales"></tr>
-    </table>
-    </div>
-</mat-card>
-
-<!-- Procesos (submenús por código jerárquico) -->
-<mat-card>
-    <div class="card-header">
-    <h2>Procesos</h2>
-    </div>
-
-    <div class="table-container">
-    <table *ngIf="procesos?.controls?.length" mat-table [dataSource]="procesos.controls" class="mat-elevation-z8 responsive-table">
-    <!-- Código -->
-    <ng-container matColumnDef="codigo">
-        <th mat-header-cell *matHeaderCellDef>CÓDIGO</th>
-        <td mat-cell *matCellDef="let row">{{ row.get('codigo')?.value }}</td>
-    </ng-container>
-
-    <!-- Nombre -->
-    <ng-container matColumnDef="nombre">
-        <th mat-header-cell *matHeaderCellDef>ETAPA</th>
-        <td mat-cell *matCellDef="let row">{{ row.get('nombre')?.value }}</td>
-    </ng-container>
+    <!-- Proceso -->
+    <ng-container matColumnDef="proceso">
+      <th mat-header-cell *matHeaderCellDef> Proceso </th>
+      <td mat-cell *matCellDef="let proceso"> {{ proceso.descripcion }} </td>
+    </ng-container>  
 
     <!-- Factor -->
     <ng-container matColumnDef="factor">
-        <th mat-header-cell *matHeaderCellDef>FACTOR</th>
-        <td mat-cell *matCellDef="let row">{{ row.get('factor')?.value }}</td>
+      <th mat-header-cell *matHeaderCellDef> Factor </th>
+      <td mat-cell *matCellDef="let proceso"> {{ proceso.factor }} </td>
     </ng-container>
 
-    <!-- Costo/Kg -->
+    <!-- Costo/kg -->
     <ng-container matColumnDef="costoKg">
-        <th mat-header-cell *matHeaderCellDef>COSTO/KG</th>
-        <td mat-cell *matCellDef="let row">{{ row.get('costoKg')?.value }}</td>
+      <th mat-header-cell *matHeaderCellDef> Costo/kg </th>
+      <td mat-cell *matCellDef="let proceso"> {{ proceso.costoKg | currency:'USD':'symbol':'1.2-2' }} </td>
     </ng-container>
 
-    <!-- Total -->
-    <ng-container matColumnDef="total">
-        <th mat-header-cell *matHeaderCellDef>TOTAL $</th>
-        <td mat-cell *matCellDef="let row">{{ row.get('total')?.value }}</td>
+    <!-- Total Teórico -->
+    <ng-container matColumnDef="totalTeorico">
+      <th mat-header-cell *matHeaderCellDef> Total $ Teórico </th>
+      <td mat-cell *matCellDef="let proceso"> {{ proceso.totalTeorico | currency:'USD':'symbol':'1.2-2' }} </td>
     </ng-container>
 
-    <!-- Ajuste (editable) -->
+    <!-- Total Comercial -->
+    <ng-container matColumnDef="totalComercial">
+      <th mat-header-cell *matHeaderCellDef> Total $ Comercial </th>
+      <td mat-cell *matCellDef="let proceso"> {{ proceso.totalComercial | currency:'USD':'symbol':'1.2-2' }} </td>
+    </ng-container>
+
+    <!-- Ajuste -->
+    <!-- <ng-container matColumnDef="ajuste">
+      <th mat-header-cell *matHeaderCellDef> Ajuste </th>
+      <td mat-cell *matCellDef="let proceso"> {{ proceso.ajuste | currency:'USD':'symbol':'1.2-2' }} </td>
+    </ng-container> -->
+    
+
+    <!-- Ajuste -->
     <ng-container matColumnDef="ajuste">
-        <th mat-header-cell *matHeaderCellDef>AJUSTE</th>
-        <td mat-cell *matCellDef="let row" class="ajuste-cell">
-        <input matInput type="number" [formControl]="row.get('ajuste')" />
-        </td>
+    <th mat-header-cell *matHeaderCellDef> Ajuste </th>
+    <td mat-cell *matCellDef="let proceso" class="ajuste-cell">
+        <mat-form-field appearance="standard">
+        <input matInput type="number"
+                [(ngModel)]="proceso.ajuste"
+                (ngModelChange)="recalcular(proceso)" />
+        </mat-form-field>
+    </td>
     </ng-container>
 
     <!-- Cotización -->
     <ng-container matColumnDef="cotizacion">
-        <th mat-header-cell *matHeaderCellDef>COTIZACIÓN</th>
-        <td mat-cell *matCellDef="let row">{{ row.get('cotizacion')?.value }}</td>
+    <th mat-header-cell *matHeaderCellDef> Cotización </th>
+    <td mat-cell *matCellDef="let proceso">
+        <!-- | currency:'USD':'symbol':'1.2-2' -->
+        {{ proceso.cotizacion  }}
+    </td>
     </ng-container>
 
-    <!-- Header y filas -->
-    <tr mat-header-row *matHeaderRowDef="displayedColumnsProcesos"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumnsProcesos" [ngClass]="{ 'submenu': row.get('codigo')?.value.includes('.') }"></tr>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-
-    </div>
-</mat-card>
-
-<!-- Resumen -->
-<mat-card>
-    <h2>Resumen</h2>
-    <div class="summary-grid">
-    <mat-form-field appearance="outline">
-        <mat-label>Precio materiales (US$)</mat-label>
-        <input matInput type="number" formControlName="precioMateriales" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Precio materiales ajustado</mat-label>
-        <input matInput type="number" formControlName="precioMaterialesAjustado" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Merma %</mat-label>
-        <input matInput type="number" formControlName="mermaPorcentaje" class="resumen-box" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Merma valor</mat-label>
-        <input matInput type="number" formControlName="mermaValor" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Merma ajustada</mat-label>
-        <input matInput type="number" formControlName="mermaValorAjustado" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Costo sin utilidad</mat-label>
-        <input matInput type="number" formControlName="costoSinUtilidad" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Costo sin utilidad ajustado</mat-label>
-        <input matInput type="number" formControlName="costoSinUtilidadAjustado" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Utilidad %</mat-label>
-        <input matInput type="number" formControlName="utilidadPorcentaje" class="resumen-box"/>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Utilidad (US$)</mat-label>
-        <input matInput type="number" formControlName="utilidadValor" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Utilidad ajustada</mat-label>
-        <input matInput type="number" formControlName="utilidadValorAjustado" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Gastos Adm/Financ %</mat-label>
-        <input matInput type="number" formControlName="gastosPorcentaje" class="resumen-box"/>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Gastos (US$)</mat-label>
-        <input matInput type="number" formControlName="gastosValor" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Gastos ajustados</mat-label>
-        <input matInput type="number" formControlName="gastosValorAjustado" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Total (US$)</mat-label>
-        <input matInput type="number" formControlName="total" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Total ajustado</mat-label>
-        <input matInput type="number" formControlName="totalAjustado" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Precio final cliente</mat-label>
-        <input matInput type="number" formControlName="precioFinalCliente" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Rentabilidad %</mat-label>
-        <input matInput type="number" formControlName="rentabilidad" />
-    </mat-form-field>
-    </div>
-</mat-card>
-
-<!-- Acciones -->
-<div class="footer-actions">
-    <button mat-flat-button color="primary" type="submit">Guardar</button>
-    <button mat-stroked-button color="accent" type="button" (click)="onReset()">Limpiar</button>
+  </div>
 </div>
-</form>
+
+
+<!-- Spinner global -->
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="medium" type="custom" [fullScreen]="true">
+  <div class="spinner-wrapper">
+    <p class="spinner-text">Cargando</p>
+    <div class="loader"></div>
+  </div>
+</ngx-spinner>

@@ -1,0 +1,28 @@
+<mat-card class="dni-card">
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nro. DNI</mat-label>
+        <input matInput [(ngModel)]="dni" maxlength="12" (keyup)="onDniChange()" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombres y Apellidos</mat-label>
+        <input matInput [value]="nombres" readonly />
+    </mat-form-field>
+
+    <button mat-raised-button color="accent" (click)="registrarDniFoto()"> Guardar </button>
+    <button mat-raised-button color="primary" (click)="abrirModal()">Tomar Foto</button>
+
+    <div *ngIf="foto" class="foto-preview">
+        <img [src]="foto" alt="Foto capturada" />
+    </div>
+</mat-card>
+
+<div *ngIf="mostrarModal" class="modal-overlay">
+    <div class="modal-content">
+        <video #video autoplay></video>
+        <div class="modal-actions">
+            <button mat-raised-button color="primary" (click)="capturarFoto(video)">Capturar</button>
+            <button mat-button (click)="cerrarModal()">Cerrar</button>
+        </div>
+    </div>
+</div>

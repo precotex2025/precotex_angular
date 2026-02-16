@@ -613,6 +613,8 @@ import { GenerarQrComponent } from './components/control-activos-fijo/generar-qr
 import { CotizacionesComponent } from './components/cotizaciones/cotizaciones.component';
 
 import { AprobacionDesarrolloTelasEditComponent } from './components/aprobacion-desarrollo-telas/aprobacion-desarrollo-telas-edit/aprobacion-desarrollo-telas-edit.component';
+import { RecoFacialComponent } from './components/reconocimientofacial/reco-facial/reco-facial.component';
+import { TomaFotoPersonasComponent } from './components/toma-foto-personas/toma-foto-personas.component';
 
 @NgModule({
   declarations: [
@@ -1149,6 +1151,11 @@ import { AprobacionDesarrolloTelasEditComponent } from './components/aprobacion-
     //APROBACION DESARROLLO TELAS
     ,AprobacionDesarrolloTelasComponent
     ,AprobacionDesarrolloTelasEditComponent
+
+    //RECONOCIMIENTO FACIAL
+    ,RecoFacialComponent
+    //TOMA DE FOTOS
+    ,TomaFotoPersonasComponent
   
   ],
   entryComponents: [DialogJabaComponent],

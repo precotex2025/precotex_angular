@@ -761,8 +761,9 @@ export class MemorandumGralComponent implements OnInit {
       //this.onGetMemorandums();
     });    
   }
-
+ 
   onPrint(data: any){
+     console.log('---------------', data);
     this.SpinnerService.show();
     this.serviceMemorandum.getDescargarMemo(data.num_Memo, 1).subscribe({
       next: (blob) => {

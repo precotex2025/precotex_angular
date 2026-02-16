@@ -18,9 +18,7 @@ export const GlobalVariable = {
   baseUrlProcesoTenido: "https://gestion.precotex.com:444/ubicaciones/api/", // PRODUCCION EIQ <- BACK
   
   
-
-
-
+  
   //COMPLEMENTARIOS
   //baseUrl: "http://192.168.1.36/ws_android_dev", //LOCAL
   baseUrlLocal: "/ws_local",

@@ -1,0 +1,64 @@
+.dni-card {
+    max-width: 400px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.foto-preview img {
+    max-width: 100%;
+    margin-top: 12px;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+}
+
+.dni-card button {
+    width: 100%; 
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+}
+
+@media (max-width: 480px) {
+    .dni-card {
+        gap: 12px;
+    }
+
+    .dni-card button {
+        font-size: 13px;
+        padding: 8px;
+    }
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap; 
+}
