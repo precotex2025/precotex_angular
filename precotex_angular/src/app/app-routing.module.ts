@@ -325,6 +325,7 @@ import { CotizacionesComponent } from './components/cotizaciones/cotizaciones.co
 import { AprobacionDesarrolloTelasComponent } from './components/aprobacion-desarrollo-telas/aprobacion-desarrollo-telas.component';
 import { RecoFacialComponent } from './components/reconocimientofacial/reco-facial/reco-facial.component';
 import { TomaFotoPersonasComponent } from './components/toma-foto-personas/toma-foto-personas.component';
+import { StatusReqAlmacenComponent } from './components/status-req-almacen/status-req-almacen.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -712,10 +713,6 @@ const routes: Routes = [
 
   //COTIZACIONES
   {path: "Cotizaciones", component:CotizacionesComponent},
-
-  //RECONOCIMIENTO FACIAL
-  { path: "ReconocimientoFacial", component:RecoFacialComponent},
-  { path: "TomaFotos", component:TomaFotoPersonasComponent},
 
   //COPIAR RUTAS ANTES DE ESTO
   { path: "", redirectTo: "/", pathMatch: "full" },// Cuando es la raíz

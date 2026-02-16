@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Estados, EstadosOficial, MotivoReclamo, ReclamoCliente, UnidadNegocio, UnidadNegocio2, UsuarioResponsable,  } from './quejas-reclamos.model';
+import { Estados, EstadosOficial, Estilos, MotivoReclamo, ReclamoCliente, Temporada, UnidadNegocio, UnidadNegocio2, UsuarioResponsable,  } from './quejas-reclamos.model';
 import { Cliente, RegistroQuejasReclamosService } from 'src/app/services/quejas-reclamos.service';
 import { GlobalVariable } from 'src/app/VarGlobals';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { forkJoin } from 'rxjs';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,6 +19,23 @@ import { ModalInformeCierreComponent } from './modal-informe-cierre/modal-inform
 import { _ } from 'ag-grid-community';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ExceljsService } from 'src/app/services/exceljs.service';
+import { MatSelectChange } from '@angular/material/select';
+import { Result } from '@zxing/library';
+import { valores } from '../confecciones/liquidacion-corte/dialog-modifica-telas/dialog-modifica-telas.component';
+import { MatTableDataSource } from '@angular/material/table';
+import * as _moment from 'moment';
+import { ModalQuejaReclamoNuevoComponent } from './modal-queja-reclamo-nuevo/modal-queja-reclamo-nuevo.component';
+import { title } from 'process';
+
+interface data_det {
+  nroCaso: string,
+  fechaRegistro: string,
+  cliente: string,
+  tipoRegistro: string,
+  usuarioRegistro: string,
+  estadoSolicitud: string,
+  tipo: string,
+}
 
 @Component({
   selector: 'app-quejas-reclamos',
@@ -28,6 +45,25 @@ import { ExceljsService } from 'src/app/services/exceljs.service';
 
 
 export class QuejasReclamosComponent implements OnInit {
+
+  range = new FormGroup({
+      //start: new FormControl(new Date),
+      start: new FormControl(new Date(new Date().getFullYear(), new Date().getMonth(), 1)),
+      end: new FormControl(new Date),
+  });   
+  
+  displayedColumns: string[] = [
+    'nroCaso'    ,
+    'tipo',
+    'fechaRegistro'      ,
+    'cliente'        , 
+    'tipoRegistro'     , 
+    'usuarioRegistro' , 
+    'estadoSolicitud' , 
+    'indicador'   ,
+    'opciones'       , 
+  ];  
+  dataSource: MatTableDataSource<data_det> = new MatTableDataSource();
 
   nuevoReclamo: Partial<ReclamoCliente> = {};
   reclamos: any[] = [];
@@ -42,6 +78,9 @@ export class QuejasReclamosComponent implements OnInit {
   motivoReclamo: MotivoReclamo[] = [];
   unidadNegocio2: UnidadNegocio2[] = [];
   unidadNegocioFiltro: UnidadNegocio2[] = [];
+
+  temporadas: Temporada[] = [];
+  estilo: Estilos[] = [];
 
   ActivarFormulario: boolean = true;
   esNuvoReclamo: boolean = true; // o false, según lo que necesites
@@ -71,19 +110,47 @@ export class QuejasReclamosComponent implements OnInit {
   dataForExcel    : any = [];
   dataSourceExcel : any = [];   
 
+  formulario = this.formBuilder.group({
+    ctrol_cliente: [''],
+    unidadNegocio: [''],
+    numeroCaso:[''],
+    start: [''],
+    end: [''],
+    temporada: [''],
+    estiloCliente: [''],
+    numeroPartida: [''],
+    estadoReclamo: [''],
+  })
+
+  //filtros
+  dataCliente  : Array<any> = [];
+  filtroClienteCtrl         = new FormControl('');
+  clienteFiltrados          : any[] = []; 
+
+  //Nuevo Grilla
+
+
+
   constructor(
       private registroQuejasReclamosService: RegistroQuejasReclamosService,
       private matSnackBar: MatSnackBar      ,
       private dialog            : MatDialog ,
       private toastr            : ToastrService          ,
       private SpinnerService    : NgxSpinnerService                ,
-      private exceljsService    : ExceljsService
+      private exceljsService    : ExceljsService  ,
+      private formBuilder       : FormBuilder,
     ) { }
 
   ngOnInit(): void {
 
+    this.onLoadCliente();
     this.buscar();
     this.onObtieneUsuarioArea(this.sCodTrabajador);
+
+    // Escucha los cambios del input de búsqueda
+    this.filtroClienteCtrl.valueChanges.subscribe(valor => {
+      this.filtrarClientes(valor);
+    });     
 
     /*REEMPLAZADO POR NUEVOS ESTADO*/ 
     this.registroQuejasReclamosService.obtenerEstados().subscribe({
@@ -428,44 +495,112 @@ export class QuejasReclamosComponent implements OnInit {
 
   buscar() {
 
-    const fechaHoy = new Date();
-    const primerDiaMes = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth(), 1);
-    const lastDay = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth() + 1, 0); // último día del mes actual
+    const sUnidadNegocio  : string = this.formulario.get('unidadNegocio')?.value || '';
+    const sNroCaso  : string = this.formulario.get('numeroCaso')?.value || '';
+    const sCliente  : string = this.formulario.get('ctrol_cliente')?.value || '';
+    const sEstado   : string = this.formulario.get('estadoReclamo')?.value || '';
+    const sCodOrdtra : string = this.formulario.get('numeroPartida')?.value || '';
+    var   sFecIni         : string =  this.range.get('start').value?.toISOString();
+    var   sFecFin         : string =  this.range.get('end').value?.toISOString()  ;    
+
+    if (sFecIni == '' || sFecFin == ''){
+      this.matSnackBar.open("Seleccione Rango de Fechas.", 'Cerrar', {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration: 1500,
+      });
+      return;                 
+    };
     
-    this.nuevoReclamo.fechaInicio = this.formatearFecha(primerDiaMes);
+    // if (!_moment(sFecIni).isValid()) {
+    //   sFecIni = '';
+    // } else {
+    //   sFecIni = _moment(sFecIni.valueOf()).format('MM/DD/YYYY');
+    // }
+
+    // if (!_moment(sFecFin).isValid()) {
+    //   sFecFin = '';
+    // } else {
+    //   sFecFin = _moment(sFecFin.valueOf()).format('MM/DD/YYYY');
+    // }    
+    
+    
+
+    
+    //const fechaHoy = new Date();
+    //const primerDiaMes = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth(), 1);
+    // const lastDay = new Date(fechaHoy.getFullYear(), fechaHoy.getMonth() + 1, 0); // último día del mes actual
+    
+    //this.nuevoReclamo.fechaInicio = this.formatearFecha(primerDiaMes);
+    //this.nuevoReclamo.fechaInicio = sFecIni;
+
+    /*
+filtros    
+    */
+
     this.nuevoReclamo = {
-      ...this.nuevoReclamo,
-      fechaFin: lastDay.toISOString().substring(0, 10) // formato YYYY-MM-DD
+      nroCaso: sNroCaso,
+      cliente: sCliente,
+      tipoRegistro: '',
+      estadoSolicitud: sEstado,
+      responsable: '',
+      fechaInicio : sFecIni,
+      fechaFin    : sFecFin,
+      cod_Ordtra: sCodOrdtra,
+      unidadNegocio: sUnidadNegocio,
     };    
 
+    console.log('Nuevo Reclamo - Nuevo', this.nuevoReclamo);
+
+
     this.SpinnerService.show();
+    //this.dataSource.data = [];
     this.registroQuejasReclamosService.obtenerReclamos(this.nuevoReclamo).subscribe({
       next: (resp) => {
         if (resp.success) {
           if (resp.totalElements > 0){
-            this.filtro = resp.elements;
-            console.log('obtenerReclamos:', this.filtro);
+            //this.filtro = resp.elements;
+            //console.log('obtenerReclamos:', this.filtro);
+
+            this.dataSource.data = resp.elements
             this.SpinnerService.hide();
           }
           else{
+            this.dataSource.data = [];
             this.filtro = [];
             console.warn('No se encontraron datos.');
             this.SpinnerService.hide();
           };
 
-
         } else {
+          this.dataSource.data = [];
           this.filtro = [];
           console.warn('No se encontraron datos.');
           this.SpinnerService.hide();
         }
       },
       error: (err) => {
+        this.dataSource.data = [];
         this.filtro = [];
         console.error('Error al buscar reclamos:', err);
         this.SpinnerService.hide();
       }
     });
+  }
+
+  nuevo2(){
+    const dialogRef = this.dialog.open(ModalQuejaReclamoNuevoComponent, {
+      width: '80%', 
+      height: '80%',
+       data: {
+         Tipo     : "I",
+         Titulo  : "Generación de Nuevo Caso",
+         //Datos  : item
+       }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+        this.buscar();
+    });   
   }
 
   nuevo(){
@@ -586,6 +721,23 @@ export class QuejasReclamosComponent implements OnInit {
         console.error('Error al obtener Unidad Negocio', err);
       }
     });
+  }
+
+  editar2(item: any){
+
+    const dialogRef = this.dialog.open(ModalQuejaReclamoNuevoComponent, {
+      width: '80%', 
+      height: '80%',
+       data: {
+         Tipo     : "E",
+         Titulo   : "Edición de Nuevo Caso",
+         Datos    : item
+       }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+        this.buscar();
+    });       
+
   }
 
   editar(item: any) {
@@ -1185,6 +1337,85 @@ CreateExcel(dataListadoReclamosExportar: any){
         tipo.acronimo === 'US' && tipo.idArea === _idArea
       );
     }
-  }  
+  }
+  
+  onLoadCliente(){
+    this.registroQuejasReclamosService.obtenerClientes().subscribe({
+      next: (response) => {
+        if (response.elements.length > 0)
+          this.dataCliente = response.elements;
+          console.log('onLoadCliente:', response);
+      },
+      error: (err) => {
+        console.error('Error al obtener clientes', err);
+      }
+    });  
+  }
 
+filtrarClientes(valor: string) {
+  const filtro = valor.toLowerCase();
+  this.clienteFiltrados = this.dataCliente.filter(usuario =>
+    usuario.nom_Cliente.toLowerCase().includes(filtro)
+  );
+}  
+
+  // onUsuarioSeleccionado(event: MatSelectChange){
+  //   const id = event.value;
+  //   if(id){
+  //     const clientDest = this.dataCliente.find(u => u.cod_Cliente_Tex === id);
+  //   }
+  // }
+
+  clearDate(event) {
+    event.stopPropagation();
+    this.range.controls['start'].setValue('')
+    this.range.controls['end'].setValue('')
+  }    
+
+  onLoadTemporada(Cod_Cliente: string){
+      this.temporadas = [];
+      this.registroQuejasReclamosService.getObtieneTemporada(Cod_Cliente).subscribe(
+        (result: any) => {
+          if (result.totalElements > 0) {
+            this.temporadas = result.elements;
+          }
+          else {
+            this.estilo = [];
+            console.log('No existen registros..!!');
+            //this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          }
+        },
+        (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+          duration: 1500,
+      })); 
+  }
+
+  onLoadEstilo(Cod_Cliente: string, sTemporada: string){
+      this.estilo = [];
+      this.registroQuejasReclamosService.getObtieneEstilo(Cod_Cliente, sTemporada).subscribe(
+        (result: any) => {
+          if (result.totalElements > 0) {
+            this.estilo = result.elements;
+          }
+          else {
+            console.log('No existen registros..!!');
+            //this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
+          }
+        },
+        (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+          duration: 1500,
+      })); 
+  }
+
+  onClienteSeleccionado(valor: string){
+    console.log('Cliente seleccionado:', valor);
+    const sCliente: string =  valor;
+    this.onLoadTemporada(sCliente);
+  }
+
+  onTemporadaSeleccionado(valor: string){
+    const sCliente: string =  this.formulario.get('ctrol_cliente')?.value;
+    const sCodTemporada: string = valor
+    this.onLoadEstilo(sCliente, sCodTemporada);
+  } 
 }

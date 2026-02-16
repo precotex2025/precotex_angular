@@ -38,6 +38,15 @@
                             <mat-radio-button [value]="false">No</mat-radio-button>
                         </mat-radio-group>
                     </div>   
+
+                    <div class="row" style="align-items: center; margin-top: 16px;">
+                        <label style="flex: 1; font-weight: 500;">¿Incluye Flete Áereo?</label>
+
+                        <mat-radio-group formControlName="ctrol_incluye_flete_aereo" style="flex: 2; display: flex; gap: 24px;">
+                            <mat-radio-button [value]="true">Sí</mat-radio-button>
+                            <mat-radio-button [value]="false">No</mat-radio-button>
+                        </mat-radio-group>                        
+                    </div>
                     
                     <div class="row">
 
@@ -55,8 +64,12 @@
 
 <div class="button-row"> 
     <!-- [disabled]="data.Datos.cod_Estado_Memo !== '04' && bEdita" -->
+    <button *ngIf="isVisibleButtonReenviar" mat-flat-button color="primary" class="form-button" (click)="onReenviarInforme()"> 
+        <mat-icon>autorenew</mat-icon> Reenviar<!--Confirmar Cierre !-->
+    </button>
+
     <button *ngIf="isVisibleButtonCerrar" mat-flat-button color="primary" class="form-button" (click)="onCierreInforme()"> 
-        <mat-icon>save</mat-icon> Confirmar Cierre
+        <mat-icon>save</mat-icon> Cerrar<!--Confirmar Cierre !-->
     </button>
 
     <button mat-flat-button color="warn" mat-dialog-close class="form-button">

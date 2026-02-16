@@ -1,283 +1,32 @@
-
-//ESTILOS DE REGISTRO NUEVO RECLAMO
-
-.container {
-  border: 1px solid #d0d0ff;
-  padding: 10px;
-  border-radius: 12px;
-  background: linear-gradient(to bottom, #fefefe, #f3f6ff);
-  max-width: 100%;
-  box-sizing: border-box;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.card {
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 8px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 640px; 
 }
-
-.title {
-  background-color: #3f51b5;
-  color: #ffffff;
-  padding: 10px 14px;
-  text-align: center;
-  border-radius: 8px 8px 0 0;
-  border-bottom: 2px solid #2c3e95;
-  font-weight: 600;
-  font-size: 1.2rem;
-  letter-spacing: 0.5px;
-}
-
-.formulario {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-input, select {
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  width: 100%;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-
-}
-
-th {
-  background: #a0bfff;
-}
-
-td, th {
-  border: 1px solid #ccc;
-  padding: 8px;
-  text-align: center;
-}
-
-/* Responsive Table */
-@media (max-width: 768px) {
-  table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap; /* Asegura que el texto largo no se rompa y permita desplazamiento horizontal */
-  }
-
-  th, td {
-    padding: 10px; /* Aumenta el tamaño del padding en dispositivos pequeños */
-  }
-
-  /* Opcionalmente, se puede cambiar el tamaño de las celdas */
-  td {
-    font-size: 14px; /* Ajusta el tamaño de la fuente en pantallas pequeñas */
-  }
-}
-
-.buton-cab {
-  background: #3f51b5;
-  color: white;
-  border: none;
-  padding: 0.2rem 1rem;              /* Más compacto */
-  border-radius: 6px;                /* Menos redondeo */
-  font-weight: 500;
-  font-size: 13px;                   /* Letra más pequeña */
-  display: inline-flex;              /* Activa alineación y gap */
-  align-items: center;
-  gap: 6px;
-  text-transform: uppercase;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-  .formulario {
-    grid-template-columns: repeat(2, 1fr); /* Dos columnas en pantallas medianas */
-  }
-}
-
-@media (max-width: 768px) {
-  .formulario {
-    grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
-  }
-
-  .agregar {
-    grid-column: span 1;
-    width: 100%;
-  }
-
-  .guardar {
-    width: 100%;
-    float: none;
-    margin-top: 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding: 10px; /* Menos padding en pantallas muy pequeñas */
-  }
-
-  h2 {
-    font-size: 1.2em; /* Reduce el tamaño del título */
-  }
-
-  .agregar {
-    padding: 10px;
-  }
-
-  .guardar {
-    padding: 12px 20px;
-    font-size: 1.1em;
-  }
-}
-
-select {
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  width: 100%;
-}
-
-option {
-  padding: 10px;
-}
-.boton-excel {
-  background: #3f51b5;
-  color: white;
-  border: none;
-  padding: 0.2rem 1rem; /* reducido */
-  border-radius: 6px;
-  grid-column: span 1;
-
-  font-weight: 500;
-  font-size: 13px; /* reducido */
-  align-items: center;
-  gap: 8px;
-  text-transform: uppercase;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-}
-
-.boton-nuevo {
-  background: #3f51b5;
-  color: white;
-  border: none;
-  padding: 0.2rem 1rem; /* reducido */
-  border-radius: 6px;
-  grid-column: span 1;
-
-  font-weight: 500;
-  font-size: 13px; /* reducido */
-  align-items: center;
-  gap: 8px;
-  text-transform: uppercase;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-}
-
-.icono-boton {
-  font-size: 20px;
-}
-
-
-.boton-buscar {
-  background: #3f51b5;
-  color: white;
-  border: none;
-  padding: 0.2rem 1rem; /* reducido */
-  border-radius: 6px;
-  grid-column: span 1;
-
-  font-weight: 500;
-  font-size: 13px; /* reducido */
-  align-items: center;
-  gap: 8px;
-  text-transform: uppercase;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-}
-
-
-.boton-buscar:hover {
-  background-color: #3f51b5;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-table button {
-  margin: 0 4px;
-  cursor: pointer;
-}
-
-mat-icon {
-  font-size: 20px;
-}
-
-
-.boton-derecha {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 1rem;
+.card-header {
+    background-color: #3f51b5;
+    color: #ffffff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    /* border-bottom: 1px solid #337AB7; */
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-family: corbel, arial;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 
 
-::ng-deep .ngx-pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  margin-top: 16px;
-  flex-wrap: wrap;
-}
 
-::ng-deep .ngx-pagination li {
-  list-style: none;
-}
 
-::ng-deep .ngx-pagination a,
-::ng-deep .ngx-pagination .current {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #3f51b5;
-  border: 1px solid transparent;
-  transition: background-color 0.2s ease, color 0.2s ease;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-::ng-deep .ngx-pagination .current {
-  background-color: #3f51b5;
-  color: #fff;
-  border-color: #3f51b5;
-}
-
-::ng-deep .ngx-pagination a:hover {
-  background-color: rgba(63, 81, 181, 0.1);
-}
-
-::ng-deep .ngx-pagination .disabled {
-  pointer-events: none;
-  opacity: 0.4;
-}
-
-.younger-than-24-hours {
-  background-color: #beecbe;
-}
-
-.older-than-48-hours {
-  background-color: #ffe0e0;
-}
-
-.between-24-and-48-hours {
-  background-color: #ebeabb;
-}
-
-.warning-snackbar {
-  background-color: #ffa000 !important; /* Naranja */
-  color: #fff !important;
-  font-weight: bold;
-}
-
+/************************************/
+/*NUEVOS ESTILOS*/
+/************************************/
+.grid-filtros { display: grid; grid-template-columns: repeat(4, 1fr); /* 4 columnas por fila */ gap: 16px; padding: 1rem; } mat-form-field { width: 100%; } .btn-action { display: flex; gap: 12px; justify-content: flex-start; align-items: center; } /* Responsive tablet → 2 columnas */ @media (max-width: 1024px) { .grid-filtros { grid-template-columns: repeat(2, 1fr); } } /* Responsive móvil → 1 columna */ @media (max-width: 768px) { .grid-filtros { grid-template-columns: 1fr; } }
+.btn-group { display: flex; gap: 12px; justify-content: space-between; /* distribuye uniformemente */ } .btn-group button { flex: 1; /* cada botón ocupa el mismo ancho */ min-width: 0; /* evita que se rompa el layout */ text-align: center; /* centra el contenido */ }
+.boton-buscar { background-color: #1565c0; /* azul intenso */ color: #fff; } .boton-nuevo { background-color: #2e7d32; /* verde */ color: #fff; } .boton-excel { background-color: #f9a825; /* amarillo/mostaza */ color: #fff; } button mat-icon { margin-right: 6px; font-size: 20px; vertical-align: middle; }
+.table-responsive { width: 100%; overflow-x: auto; /* permite scroll horizontal en pantallas pequeñas */ } table { width: 100%; min-width: 600px; /* asegura que las columnas no se colapsen demasiado */ border-collapse: collapse; } th, td { padding: 0.75rem; text-align: left; white-space: nowrap; /* evita que el texto se corte raro */ } tr.mat-row:hover { background-color: #f0f0f0; cursor: pointer; } /* Responsive tablet → reduce padding */ @media (max-width: 1024px) { th, td { padding: 0.5rem; } } /* Responsive móvil → tabla más compacta */ @media (max-width: 768px) { table { min-width: 100%; /* ocupa todo el ancho */ } th, td { font-size: 0.85rem; padding: 0.4rem; } }

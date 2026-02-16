@@ -16,7 +16,7 @@ import { EventosService } from 'src/app/services/eventos.service';
 })
 export class ConsultaValesComponent implements OnInit {
 
-  displayedColumns: string[] = ['c_nume_dni', 'c_nomb_trab', 'c_peri_plan', 'c_nume_refe', 'n_impo_plan', 'moc_numdocrf1', 'canje']
+  displayedColumns: string[] = ['c_nume_dni', 'c_nomb_trab', 'c_peri_plan', 'c_nume_refe', 'n_impo_plan', 'c_esta_regi', 'moc_numdocrf1', 'moc_fechdocu', 'n_sald_cuen', 'canje']
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;

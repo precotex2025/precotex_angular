@@ -99,6 +99,7 @@ interface data{
   Num_Planta: Number
   Flg_Atribuido: string
   Observacion2: string
+  Observacion3: string
 }
 
 @Component({
@@ -170,9 +171,7 @@ export class DialogModificaMantMaquiHiComponent implements OnInit {
   Observacion2  = "";
   Flg_Atribuido = "";
   Num_Planta    = "";
-
-
-
+  Observacion3  = "";
 
   Flg_ValidaMaquina = "1";
 
@@ -201,6 +200,7 @@ export class DialogModificaMantMaquiHiComponent implements OnInit {
                 ct_Tipo_Atribuido:[''],
                 Observacion2:[''],
                 filtro:[''],
+                Observacion3:[''],
 })
 
 mostrarCtrolOtrasSedes: boolean = false; // Esta variable controlará la visibilidad
@@ -246,6 +246,7 @@ tipoFallaFiltrada: any[] = []; // Lista filtrada
     GlobalVariable.num_movdespacho = '';
    
     //Agregado por HMEDINA - 11/03/2025
+    this.formulario.get('Observacion3').disable(); //
     this.formulario.get('ct_Especialidad').disable(); 
     this.formulario.get('Fec_Registro')?.setValue(this.data.sFec_Registro)
     this.formulario.get('Fec_Registro').disable();
@@ -323,6 +324,7 @@ tipoFallaFiltrada: any[] = []; // Lista filtrada
    this.formulario.get('ct_MinMax')?.setValue(this.data.Min_Max)
    this.formulario.get('ct_Tipo_Atribuido')?.setValue(this.data.Flg_Atribuido);
    this.formulario.get('Observacion')?.setValue(this.data.Observacion)
+   this.formulario.get('Observacion3')?.setValue(this.data.Observacion3)
 
    this.xNum_Mante = this.data.sNum_Mante;
 
@@ -596,6 +598,7 @@ tipoFallaFiltrada: any[] = []; // Lista filtrada
       this.hfin=this.formulario.get('hfin')?.value,
       this.Observacion=this.formulario.get('Observacion')?.value
       this.dni_tejedor=this.formulario.get('dnitejedor')?.value;
+      this.Observacion3=this.formulario.get('Observacion3')?.value,
 
       // Cod_Espe = "";
       // Cod_Articulo="";
@@ -647,7 +650,8 @@ tipoFallaFiltrada: any[] = []; // Lista filtrada
             //Campos Nuevos
             this.Observacion2,
             this.Flg_Atribuido,
-            this.Num_Planta
+            this.Num_Planta,
+            this.Observacion3
           ).subscribe(
             (result: any) => {
               //this.dialog.closeAll();
@@ -756,6 +760,16 @@ tipoFallaFiltrada: any[] = []; // Lista filtrada
   }
 
   CargarTipoFalla(Cod_Tarea: string, Flg_ValidaMaquina: string) {
+
+    //console.log('codigo detarea', Cod_Tarea);
+    if (Cod_Tarea === '2'){
+      this.formulario.get('Observacion3')?.setValue(''); 
+      this.formulario.get('Observacion3').enable();
+    }else{
+      this.formulario.get('Observacion3')?.setValue(''); 
+      this.formulario.get('Observacion3').disable();
+    }    
+
     //Obtener el valor de flag de validar maquina (1 = "Valida", 0 = "no valida")
     this.Flg_ValidaMaquina = Flg_ValidaMaquina;
     
@@ -805,17 +819,35 @@ tipoFallaFiltrada: any[] = []; // Lista filtrada
 
   
   ListarArticuloMinMax(Cod_Articulo: string) {
-    this.Cod_Tarea = this.formulario.get('sTarea')?.value;  
-    this.registromantemaquinastej.ListarArticuloMinMax(this.Cod_Tarea.trim(), Cod_Articulo).subscribe(
-      (result: any) => {
-             //console.log("Minimo: "+result[0].Min_Max);
-              this.formulario.get('ct_MinMax')?.setValue(result[0].Min_Max)
-              //this.listar_articulo = result
-              //console.log("Codigo articulo: "+Cod_Articulo+ " Cod_Tarea : "+this.Cod_Tarea);
-              
-           
-      },
-      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
+
+    //console.log('Cod_Articulo', Cod_Articulo);
+    //nUEVA validacion
+    if (Cod_Articulo === '14'){
+      this.formulario.get('Observacion3')?.setValue(''); 
+      this.formulario.get('Observacion3').enable();
+    }else{
+      this.formulario.get('Observacion3')?.setValue(''); 
+      this.formulario.get('Observacion3').disable();
+    }
+
+    if (Cod_Articulo !== '14'){
+
+      this.Cod_Tarea = this.formulario.get('sTarea')?.value;  
+      this.registromantemaquinastej.ListarArticuloMinMax(this.Cod_Tarea.trim(), Cod_Articulo).subscribe(
+        (result: any) => {
+              //console.log("Minimo: "+result[0].Min_Max);
+                this.formulario.get('ct_MinMax')?.setValue(result[0].Min_Max);
+                //this.listar_articulo = result
+                //console.log("Codigo articulo: "+Cod_Articulo+ " Cod_Tarea : "+this.Cod_Tarea);
+                
+            
+        },
+        (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))      
+
+    } else {
+      this.formulario.get('ct_MinMax')?.setValue(0);
+    }
+
   }
 
 
@@ -831,7 +863,15 @@ tipoFallaFiltrada: any[] = []; // Lista filtrada
   /*NUEVAS FUNCIONES NUEVAS */
   CargarValoresMaquiTarea() {
     //console.log('CargarValoresMaquiTarea');
-    //console.log(this.formulario.get('ct_Area')?.value);
+    //console.log('area seleccionada',this.formulario.get('ct_Area')?.value);
+    const _area = this.formulario.get('ct_Area')?.value || '';
+
+    //Bloquea Observacion Otros
+    if (_area !== '001'){
+      this.formulario.get('Observacion3')?.setValue(''); 
+      this.formulario.get('Observacion3').disable();
+    }
+
 
     this.listar_operacionMaquina  = [];
     this.listar_operacionTarea    = [];

@@ -23,6 +23,8 @@
                                 <mat-icon>close</mat-icon>
                             </button>
                         </mat-form-field>
+
+                        <button mat-button type="button" color="primary" (click)="onBuscarVale()"><mat-icon>search</mat-icon>Buscar</button>
                     </div>
                     <br>
                     <mat-divider></mat-divider>
@@ -54,9 +56,24 @@
                                 <td mat-cell *matCellDef="let element"> {{ element.n_impo_plan }} </td>
                             </ng-container>
 
+                            <ng-container matColumnDef="c_esta_regi">
+                                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.c_esta_regi }} </td>
+                            </ng-container>
+
                             <ng-container matColumnDef="moc_numdocrf1">
                                 <th mat-header-cell *matHeaderCellDef> Documento Canje </th>
                                 <td mat-cell *matCellDef="let element"> {{ element.moc_numdocrf1 }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="moc_fechdocu">
+                                <th mat-header-cell *matHeaderCellDef> Fecha Canje </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.moc_fechdocu | date: 'dd-MM-yyyy' }} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="n_sald_cuen">
+                                <th mat-header-cell *matHeaderCellDef> Saldo </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.n_sald_cuen }} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="canje">

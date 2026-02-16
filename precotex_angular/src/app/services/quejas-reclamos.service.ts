@@ -62,6 +62,7 @@ export class RegistroQuejasReclamosService {
     }
 
     obtenerReclamos(filtros: any): Observable<any> {
+      console.log('Filtros', filtros)
       return this.http.post(`${this.url}/postObtenerReclamos`, filtros);
     }
 
@@ -144,6 +145,26 @@ export class RegistroQuejasReclamosService {
 
     ExportarReclamo(filtros: any): Observable<any> {
       return this.http.post(`${this.url}/getExportarReclamo`, filtros);
+    }     
+    
+    //Nuevos Metodos Parte 2
+    getObtieneTemporada(sCodCliente){
+
+      const headers = this.Header;
+      let params = new HttpParams();
+      params = params.append('sCodCliente', sCodCliente);
+
+      return this.http.get(this.baseUrl + 'QuejasReclamos/getObtieneTemporada', { headers, params });
+    }   
+    
+    getObtieneEstilo(sCodCliente, sTemporada){
+
+      const headers = this.Header;
+      let params = new HttpParams();
+      params = params.append('sCodCliente', sCodCliente);
+      params = params.append('sTemporada', sTemporada);
+
+      return this.http.get(this.baseUrl + 'QuejasReclamos/getObtieneEstilo', { headers, params });
     }      
 
   }

@@ -616,6 +616,12 @@ import { AprobacionDesarrolloTelasEditComponent } from './components/aprobacion-
 import { RecoFacialComponent } from './components/reconocimientofacial/reco-facial/reco-facial.component';
 import { TomaFotoPersonasComponent } from './components/toma-foto-personas/toma-foto-personas.component';
 
+//QUEJAS Y RECLAMOS
+import { ModalQuejaReclamoNuevoComponent } from './components/quejas-reclamos/modal-queja-reclamo-nuevo/modal-queja-reclamo-nuevo.component';
+
+//VISOR STATUS REQ ALMACEN
+import { StatusReqAlmacenComponent } from './components/status-req-almacen/status-req-almacen.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -1151,11 +1157,6 @@ import { TomaFotoPersonasComponent } from './components/toma-foto-personas/toma-
     //APROBACION DESARROLLO TELAS
     ,AprobacionDesarrolloTelasComponent
     ,AprobacionDesarrolloTelasEditComponent
-
-    //RECONOCIMIENTO FACIAL
-    ,RecoFacialComponent
-    //TOMA DE FOTOS
-    ,TomaFotoPersonasComponent
   
   ],
   entryComponents: [DialogJabaComponent],
