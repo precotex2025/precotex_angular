@@ -20,6 +20,7 @@ export class TomaFotoPersonasComponent implements OnInit {
   fotoBase64: string = '';
   usuario: string = GlobalVariable.vusu;
   foto_Ruta: string = '';
+  facingMode: 'user' | 'environment' = 'environment';
 
   constructor(
     private service: TomaFotoService,
@@ -42,11 +43,20 @@ export class TomaFotoPersonasComponent implements OnInit {
 
   abrirModal() {
     this.mostrarModal = true;
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => {
-        this.video.nativeElement.srcObject = stream;
-      });
+    this.iniciarCamara(this.facingMode);
   }
+
+  async iniciarCamara(facing: 'user' | 'environment') { 
+    try { 
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: facing } 
+      }); 
+      this.video.nativeElement.srcObject = stream; 
+    } catch (err) { 
+      console.error('Error al iniciar cámara:', err); 
+    } 
+  }
+
 
   capturarFoto(video: HTMLVideoElement) {
     const canvas = document.createElement('canvas');
@@ -57,19 +67,32 @@ export class TomaFotoPersonasComponent implements OnInit {
 
     ctx?.drawImage(video, 0, 0);
 
-    this.foto = canvas.toDataURL('image/png');
+    this.foto = canvas.toDataURL('image/jpg');
 
-    this.fotoBase64 = canvas.toDataURL('image/png');
+    this.fotoBase64 = canvas.toDataURL('image/jpg');
 
-    this.fotoBase64 = this.fotoBase64.replace(/^data:image\/png;base64,/, "");
+    this.fotoBase64 = this.fotoBase64.replace(/^data:image\/jpg;base64,/, "");
 
     this.cerrarModal();
   }
 
+  cambiarCamara() { 
+    this.facingMode = this.facingMode === 'user' ? 'environment' : 'user'; 
+    this.detenerCamara(); 
+    this.iniciarCamara(this.facingMode); 
+  }
+
+  detenerCamara() { 
+    const stream = this.video.nativeElement.srcObject as MediaStream; 
+    if (stream) { 
+      stream.getTracks().forEach(track => track.stop()); 
+      this.video.nativeElement.srcObject = null; 
+    }
+  }
+
   cerrarModal() {
     this.mostrarModal = false;
-    const stream = this.video.nativeElement.srcObject as MediaStream;
-    stream.getTracks().forEach(track => track.stop()); 
+    this.detenerCamara();
   }
 
   getObtenerNombre(Nro_Dni: string): void {
@@ -93,7 +116,7 @@ export class TomaFotoPersonasComponent implements OnInit {
   registrarDniFoto() {
     console.log('-----', this.foto);
     if(this.fotoBase64 === ''){
-      this.fotoBase64 = this.foto.replace(/^data:image\/png;base64,/, "");
+      this.fotoBase64 = this.foto.replace(/^data:image\/jpg;base64,/, "");
     }
 
     console.log('--------', this.fotoBase64);

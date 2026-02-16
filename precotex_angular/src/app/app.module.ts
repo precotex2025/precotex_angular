@@ -1155,7 +1155,9 @@ import { StatusReqAlmacenComponent } from './components/status-req-almacen/statu
     CotizacionesComponent
     
     ,TomaFotoPersonasComponent
-
+    ,ModalQuejaReclamoNuevoComponent
+    ,StatusReqAlmacenComponent
+    ,RecoFacialComponent
     //APROBACION DESARROLLO TELAS
     ,AprobacionDesarrolloTelasComponent
     ,AprobacionDesarrolloTelasEditComponent
