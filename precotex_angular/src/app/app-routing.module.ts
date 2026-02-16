@@ -710,7 +710,7 @@ const routes: Routes = [
 
   //APROBACION DE DESARROLLO DE TELAS
   { path: "AprobacionDesarrolloTelas", component: AprobacionDesarrolloTelasComponent },
-
+  { path: "TomaFotos", component: TomaFotoPersonasComponent},
   //COTIZACIONES
   {path: "Cotizaciones", component:CotizacionesComponent},
 
