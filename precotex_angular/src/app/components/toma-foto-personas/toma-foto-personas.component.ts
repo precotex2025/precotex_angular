@@ -67,11 +67,11 @@ export class TomaFotoPersonasComponent implements OnInit {
 
     ctx?.drawImage(video, 0, 0);
 
-    this.foto = canvas.toDataURL('image/jpg');
+    this.foto = canvas.toDataURL('image/jpeg');
 
-    this.fotoBase64 = canvas.toDataURL('image/jpg');
+    this.fotoBase64 = canvas.toDataURL('image/jpeg');
 
-    this.fotoBase64 = this.fotoBase64.replace(/^data:image\/jpg;base64,/, "");
+    this.fotoBase64 = this.fotoBase64.replace(/^data:image\/jpeg;base64,/, "");
 
     this.cerrarModal();
   }
@@ -116,7 +116,7 @@ export class TomaFotoPersonasComponent implements OnInit {
   registrarDniFoto() {
     console.log('-----', this.foto);
     if(this.fotoBase64 === ''){
-      this.fotoBase64 = this.foto.replace(/^data:image\/jpg;base64,/, "");
+      this.fotoBase64 = this.foto.replace(/^data:image\/jpeg;base64,/, "");
     }
 
     console.log('--------', this.fotoBase64);
