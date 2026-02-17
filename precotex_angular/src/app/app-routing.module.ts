@@ -714,6 +714,9 @@ const routes: Routes = [
   //COTIZACIONES
   {path: "Cotizaciones", component:CotizacionesComponent},
 
+  //Status Req Almacen
+  {path: "StatusReqAlmacen", component:StatusReqAlmacenComponent},
+
   //COPIAR RUTAS ANTES DE ESTO
   { path: "", redirectTo: "/", pathMatch: "full" },// Cuando es la raíz
   //{ path: "**", component: AuditoriaLineaCosturaComponent }
