@@ -108,6 +108,7 @@ export class TomaFotoPersonasComponent implements OnInit {
     this.service.getObtenerNombre(Nro_Dni).subscribe({
       next: (response: any) => {
         if(response.success){
+          console.log('-------------------------', response);
           if(response.totalElements > 0){
             this.nombres = response.elements[0].descripcion;
             this.foto = response.elements[0].fotoBase64 || "";
