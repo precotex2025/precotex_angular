@@ -110,8 +110,8 @@ export class RecoFacialComponent implements OnInit, OnDestroy, AfterViewInit {
         if(response.success){
           if(response.totalElements > 0){
             
-           // cam_mar_id = response.elements[0].cam_Mar_Id;
-            //nro_dni = response.elements[0].cam_Mar_Cod_Usr;    
+            cam_mar_id = response.elements[0].cam_Mar_Id;
+            nro_dni = response.elements[0].cam_Mar_Cod_Usr;    
             
             //console.log('codigo dni leido------', cam_mar_id);
             //console.log('DNI LEIDO: ---------------', nro_dni);
