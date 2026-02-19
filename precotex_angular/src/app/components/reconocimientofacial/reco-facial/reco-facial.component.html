@@ -1,31 +1,9 @@
-<!-- <div class="gallery">
-    <div class="photo" *ngFor="let foto of fotosVisibles; let i = index" [class.show]="animando">
-        <img [src]="foto" alt="Foto demo" />
-    </div>
-</div>
-
-<button class="boton-flotante fullscreen" (click)="alternarPantallaCompleta()" matTooltip="Pantalla completa">
-    <mat-icon>fullscreen</mat-icon>
-</button> -->
-
-<!-- <div class="carousel">
-  <div 
-    class="slide" 
-    *ngFor="let foto of fotos; let i = index" 
-    [class.active]="i === currentIndex">
-    <img [src]="foto" alt="Foto demo" />
-  </div>
-</div>
-
-
-<button class="boton-flotante fullscreen" (click)="alternarPantallaCompleta()" matTooltip="Pantalla completa">
-    <mat-icon>fullscreen</mat-icon>
-</button> -->
-
 
 <div class="carousel">
   <div class="slide" *ngFor="let foto of fotosVisibles">
-    <img [src]="foto" alt="Foto demo" />
+    <img [src]="foto.foto" alt="Foto No Registrada" />
+    <div class="nombre">{{ foto.nombre }}</div>
+    <!-- <div class="nombre"><p>Dominic A.</p></div> -->
   </div>
 </div>
 

@@ -2,6 +2,11 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import screenfull from 'screenfull';
 import { TomaFotoService } from 'src/app/services/toma-foto/toma-foto.service';
 
+interface PersonaCard {
+  foto: string;
+  nombre: string;
+}
+
 @Component({
   selector: 'app-reco-facial',
   templateUrl: './reco-facial.component.html',
@@ -15,17 +20,10 @@ export class RecoFacialComponent implements OnInit, OnDestroy, AfterViewInit {
   ) { }
 
   foto = '';
-  fotos: string[] = [
-    'assets/fotos/FOTO1.jpg',
-    'assets/fotos/FOTO2.jpg',
-    'assets/fotos/FOTO3.jpg',
-    'assets/fotos/FOTO4.jpg',
-    'assets/fotos/FOTO5.jpg',
-    'assets/fotos/FOTO6.jpg'
-  ];
-
-  fotosVisibles: string[] = [];
-  fotosPendientes: string[] = [];
+  // fotosVisibles: string[] = [];
+  // fotosPendientes: string[] = [];
+  fotosVisibles: PersonaCard[] = []; 
+  fotosPendientes: PersonaCard[] = [];
   private intervalDatos: any;
   private intervalFotos: any
 
@@ -65,42 +63,44 @@ export class RecoFacialComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getObtenerDatosRegistro(Cam_Mar_Id: number, Nro_Dni: string): void {
-    console.log('ENTRAMOS AL METODO');
-    this.service.getObtenerDatosRegistro(Cam_Mar_Id, Nro_Dni).subscribe({
-      next: (response: any) => {
-        console.log('ENTRAMOS AL SERVICIO DEL METODO');
-        //console.log('TENEMOS ESTOS ELEMENTOS: -----', response.totalElements);
-        if (response.success) {
-          //console.log('ENTRAMOS CON MÁS DE 0 ELEMENTOS');
-          //console.log('FFFFFFFFFFFFFFFFFFFFF', response.elements);
-          const FotoBase64 = response.elements[0].fotoBase64;
-          //console.log('la foto es --------------------', FotoBase64);
-          if (this.fotosVisibles.length < 6) {
-            this.fotosVisibles.push(FotoBase64);
+  this.service.getObtenerDatosRegistro(Cam_Mar_Id, Nro_Dni).subscribe({
+    next: (response: any) => {
+      if (response.success) {
+        const FotoBase64 = response.elements[0].fotoBase64;
+        const NombreFormateado = response.elements[0].nombre; // 👈 ya viene listo
 
-            if (this.fotosVisibles.length === 6 && !this.intervalFotos) {
-              this.intervalFotos = setInterval(() => {
-                if (this.fotosPendientes.length > 0) {
-                  const nuevaFoto = this.fotosPendientes.shift();
+        const personaCard: PersonaCard = {
+          foto: FotoBase64,
+          nombre: NombreFormateado
+        };
+
+        if (this.fotosVisibles.length < 6) {
+          this.fotosVisibles.push(personaCard);
+
+          if (this.fotosVisibles.length === 6 && !this.intervalFotos) {
+            this.intervalFotos = setInterval(() => {
+              if (this.fotosPendientes.length > 0) {
+                const nuevaPersona = this.fotosPendientes.shift();
+                this.fotosVisibles.shift();
+                this.fotosVisibles.push(nuevaPersona!);
+              } else {
+                if (this.fotosVisibles.length > 0) {
                   this.fotosVisibles.shift();
-                  this.fotosVisibles.push(nuevaFoto!);
-                } else {
-                    if (this.fotosVisibles.length > 0) {
-                    this.fotosVisibles.shift();
-                  }
                 }
-              }, 3000);
-            }
-          } else {
-            this.fotosPendientes.push(FotoBase64);
+              }
+            }, 3000);
           }
+        } else {
+          this.fotosPendientes.push(personaCard);
         }
-      },
-      error: (error: any) => {
-        console.error('Error al obtener foto:', error);
       }
-    });
-  }
+    },
+    error: (error: any) => {
+      console.error('Error al obtener datos:', error);
+    }
+  });
+}
+
 
   getObtenerMarcación1p1(): void {
     let nro_dni: string = '';
@@ -112,10 +112,7 @@ export class RecoFacialComponent implements OnInit, OnDestroy, AfterViewInit {
             
             cam_mar_id = response.elements[0].cam_Mar_Id;
             nro_dni = response.elements[0].cam_Mar_Cod_Usr;    
-            
-            //console.log('codigo dni leido------', cam_mar_id);
-            //console.log('DNI LEIDO: ---------------', nro_dni);
-
+          
             this.getObtenerDatosRegistro(cam_mar_id, nro_dni);
           }
         }
