@@ -326,6 +326,7 @@ import { AprobacionDesarrolloTelasComponent } from './components/aprobacion-desa
 import { RecoFacialComponent } from './components/reconocimientofacial/reco-facial/reco-facial.component';
 import { TomaFotoPersonasComponent } from './components/toma-foto-personas/toma-foto-personas.component';
 import { StatusReqAlmacenComponent } from './components/status-req-almacen/status-req-almacen.component';
+import { AgendaTelefonicaComponent } from './components/agenda-telefonica/agenda-telefonica.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -717,6 +718,9 @@ const routes: Routes = [
 
   //Status Req Almacen
   {path: "StatusReqAlmacen", component:StatusReqAlmacenComponent},
+
+  //Agenda Telefonica
+  { path: "AgendaTelefonica", component: AgendaTelefonicaComponent},
 
   //COPIAR RUTAS ANTES DE ESTO
   { path: "", redirectTo: "/", pathMatch: "full" },// Cuando es la raíz
