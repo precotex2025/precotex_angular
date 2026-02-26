@@ -17,7 +17,11 @@
             <!-- <mat-icon>warning qr_code_scanner notification_important</mat-icon> -->
             <mat-icon matPrefix style="font-size: 45px;">notifications_active</mat-icon>
         </button>
-        
+
+        <button mat-icon-button color="primary" title="Agenda Telefonica" style="margin-left:15px;" (click)="RedireccionarAgendaTelefonica()">
+            <mat-icon matPrefix style="font-size: 30px;">contact_phone</mat-icon>
+        </button>
+
         <span class="example-spacer2"></span>
 
         <button mat-icon-button [matMenuTriggerFor]="menu">

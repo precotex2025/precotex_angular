@@ -206,4 +206,9 @@ getInfoUsuarios(){
     });
   }    
 
+
+  RedireccionarAgendaTelefonica(): void {
+    this.router.navigate(['/AgendaTelefonica']);
+  }
+
 }
