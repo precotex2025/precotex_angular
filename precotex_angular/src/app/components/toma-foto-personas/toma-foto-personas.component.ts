@@ -31,13 +31,12 @@ export class TomaFotoPersonasComponent implements OnInit {
   ngOnInit(): void {}
 
   onDniChange() {
-    console.log('-----------------------', this.dni.length);
-    console.log('-----------------------', this.dni);
     if (this.dni.length >= 8) {
       // this.nombres = "Dominic Ayala Dávila";
       this.getObtenerNombre(this.dni);
     }else if(this.dni.length === 0){
       this.nombres = "";
+      this.foto = "";
     }
   }
 
@@ -57,24 +56,34 @@ export class TomaFotoPersonasComponent implements OnInit {
     } 
   }
 
-
   capturarFoto(video: HTMLVideoElement) {
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
     const ctx = canvas.getContext('2d');
-
     ctx?.drawImage(video, 0, 0);
 
-    this.foto = canvas.toDataURL('image/jpg');
+    let calidad: number = 0.7;
+    let fotoBase64 = canvas.toDataURL('image/jpeg', calidad);
 
-    this.fotoBase64 = canvas.toDataURL('image/jpg');
+    const calcularPesoKB = (base64: string): number => {
+      const stringLength = base64.length - 'data:image/jpeg;base64,'.length;
+      const bytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
+      return bytes / 1024; // convertir a KB
+    };
 
-    this.fotoBase64 = this.fotoBase64.replace(/^data:image\/jpg;base64,/, "");
+    while (calcularPesoKB(fotoBase64) > 50 && calidad > 0.1) {
+      calidad -= 0.1;
+      fotoBase64 = canvas.toDataURL('image/jpeg', calidad);
+    }
+
+    this.foto = fotoBase64;
+    this.fotoBase64 = fotoBase64.replace(/^data:image\/jpeg;base64,/, "");
 
     this.cerrarModal();
   }
+
 
   cambiarCamara() { 
     this.facingMode = this.facingMode === 'user' ? 'environment' : 'user'; 
@@ -98,8 +107,8 @@ export class TomaFotoPersonasComponent implements OnInit {
   getObtenerNombre(Nro_Dni: string): void {
     this.service.getObtenerNombre(Nro_Dni).subscribe({
       next: (response: any) => {
-        console.log('----------------', response);
         if(response.success){
+          console.log('-------------------------', response);
           if(response.totalElements > 0){
             this.nombres = response.elements[0].descripcion;
             this.foto = response.elements[0].fotoBase64 || "";
@@ -114,12 +123,16 @@ export class TomaFotoPersonasComponent implements OnInit {
   }
 
   registrarDniFoto() {
-    console.log('-----', this.foto);
-    if(this.fotoBase64 === ''){
-      this.fotoBase64 = this.foto.replace(/^data:image\/jpg;base64,/, "");
+    if(this.dni === ''){
+      this.toastr.warning('INGRESE DOCUMENTO DE IDENTIDAD', 'Alerta', {
+        timeOut: 2500
+      });
+      return;
     }
 
-    console.log('--------', this.fotoBase64);
+    if(this.fotoBase64 === ''){
+      this.fotoBase64 = this.foto.replace(/^data:image\/jpeg;base64,/, "");
+    }
 
     const data = {
       Foto_Nro_Dni: this.dni,
@@ -134,7 +147,7 @@ export class TomaFotoPersonasComponent implements OnInit {
         
         if(codeTransacc === 2){
           
-          this.toastr.warning('LA PERSONA YA CUENTA CON FOTO REGISTRADA', 'ALERTA', {
+          this.toastr.warning('LA PERSONA YA CUENTA CON FOTO REGISTRADA', 'Alerta', {
             timeOut: 2500
           });
 
@@ -149,8 +162,23 @@ export class TomaFotoPersonasComponent implements OnInit {
               }).then((result: any) =>{
                   if(result.isConfirmed){
                     this.actualizarDniFoto();
+                    this.dni = '';
+                    this.nombres = '';
+                    this.foto = '';
+                    this.fotoBase64 = '';
+                    this.toastr.success('DATOS GUARDADOS', 'Exito', {
+                      timeOut: 2500
+                    });
                   }
               });
+        }else{
+          this.dni = '';
+          this.nombres = '';
+          this.foto = '';
+          this.fotoBase64 = '';
+          this.toastr.success('DATOS GUARDADOS', 'Exito', {
+            timeOut: 2500
+          });
         }
       },
       error: (err: any) => {

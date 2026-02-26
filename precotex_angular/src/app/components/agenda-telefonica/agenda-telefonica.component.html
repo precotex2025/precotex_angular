@@ -1,0 +1,44 @@
+<div class="container">
+
+    <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Buscar contacto</mat-label>
+
+        <input matInput [ngModel]="filtro" (ngModelChange)="aplicarFiltro($event)"
+            placeholder="Nombre, sede, cargo o número">
+
+        <button mat-icon-button matSuffix *ngIf="filtro" (click)="filtro =''; aplicarFiltro('')">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+
+
+
+    <div class="cards-wrapper">
+        <mat-card class="agente-card" *ngFor="let item of contactosFiltrados">
+            <div class="card-content">
+                <div class="info">
+                    <div class="nombre">
+                        {{ item.age_Nom }}
+                    </div>
+
+                    <div class="cargo">
+                        {{ item.age_Car }} - {{ item.age_Sed }}
+                    </div>
+
+                    <div class="telefono">
+                        {{ item.age_Tel }}
+                    </div>
+                </div>
+
+                <div class="acciones">
+                    <a [href]="'tel:' + item.age_Tel">
+                        <button mat-fab color="primary">
+                            <mat-icon>call</mat-icon>
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+</div>

@@ -52,7 +52,7 @@ export const GlobalVariable = {
     COD_TIPORDTRA: ''
   },
 
-  start:{},
+  start:{}, 
   end: {},
   Orden_servicio: '',
   Cod_ClienteG: '',

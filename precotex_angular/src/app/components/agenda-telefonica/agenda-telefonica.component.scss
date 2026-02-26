@@ -1,0 +1,96 @@
+.container {
+    padding: 16px;
+    background-color: #f4f6f9;
+    min-height: 100vh;
+}
+
+.search-field { 
+    width: 100%;
+    margin-bottom: 16px; 
+}
+
+.cards-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.agente-card {
+    position: relative;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    background: #fff;
+}
+
+.card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nombre {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.cargo {
+    font-size: 14px;
+    color: #34495e;
+}
+
+.telefono {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1b30cc;
+    position: relative;
+}
+
+
+.acciones {
+    position: absolute;
+    top: 50%;
+    left: calc(100% - 48px);
+    transform: translateY(-50%);
+    background: #1976d2;
+    color: #fff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+
+    mat-icon {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .acciones {
+        left: auto;
+        right: 12px; 
+        top: 27px;
+        transform: none;
+        width: 36px;
+        height: 36px;
+
+        mat-icon {
+            font-size: 20px;
+        }
+    }
+}

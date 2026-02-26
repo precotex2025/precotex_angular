@@ -1,59 +1,11 @@
-// import { Component, OnInit, OnDestroy } from '@angular/core';
-// import screenfull from 'screenfull';
-
-// @Component({
-//   selector: 'app-reco-facial',
-//   templateUrl: './reco-facial.component.html',
-//   styleUrls: ['./reco-facial.component.scss']
-// })
-// export class RecoFacialComponent implements OnInit, OnDestroy {
-
-//   constructor() { }
-
-//   fotos: string[] = [
-//     'assets/fotos/FOTO1.jpg',
-//     'assets/fotos/FOTO2.jpg',
-//     'assets/fotos/FOTO3.jpg',
-//     'assets/fotos/FOTO4.jpg',
-//     'assets/fotos/FOTO5.jpg',
-//     'assets/fotos/FOTO6.jpg'
-//   ];
-
-//   fotosVisibles: string[] = [];
-//   private index = 0;
-//   private intervalId: any;
-//   animando = false;
-
-//   ngOnInit(): void {
-//     this.mostrarFotos(); this.intervalId = setInterval(() => { 
-//       this.animando = false; 
-//       setTimeout(() => { 
-//         this.index = (this.index + 6) % this.fotos.length; 
-//         this.mostrarFotos(); this.animando = true; 
-//         }, 500); 
-//       }, 3000);
-//   }
-
-//   ngOnDestroy(): void {
-//     if (this.intervalId) {
-//       clearInterval(this.intervalId);
-//     }
-//   }
-
-//   private mostrarFotos(): void {
-//     this.fotosVisibles = this.fotos.slice(this.index, this.index + 6); 
-//     this.animando = true;
-//   }
-
-//   alternarPantallaCompleta(): void { 
-//     if (screenfull.isEnabled) { 
-//       screenfull.toggle(); 
-//     } 
-//   }
-// }
-
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import screenfull from 'screenfull';
+import { TomaFotoService } from 'src/app/services/toma-foto/toma-foto.service';
+
+interface PersonaCard {
+  foto: string;
+  nombre: string;
+}
 
 @Component({
   selector: 'app-reco-facial',
@@ -61,70 +13,46 @@ import screenfull from 'screenfull';
   styleUrls: ['./reco-facial.component.scss']
 })
 
-// export class RecoFacialComponent implements OnInit, OnDestroy {
-//   fotos: string[] = [
-//     'assets/fotos/FOTO1.jpg',
-//     'assets/fotos/FOTO2.jpg',
-//     'assets/fotos/FOTO3.jpg',
-//     'assets/fotos/FOTO4.jpg',
-//     'assets/fotos/FOTO5.jpg',
-//     'assets/fotos/FOTO6.jpg'
-//   ];
+export class RecoFacialComponent implements OnInit, OnDestroy, AfterViewInit {
 
-//   currentIndex = 0;
-//   private intervalId: any;
+  constructor(
+    private service: TomaFotoService
+  ) { }
 
-//   ngOnInit(): void {
-//     this.intervalId = setInterval(() => {
-//       this.nextSlide();
-//     }, 3000); 
-//   }
-
-//   ngOnDestroy(): void {
-//     if (this.intervalId) {
-//       clearInterval(this.intervalId);
-//     }
-//   }
-
-//   nextSlide(): void {
-//     this.currentIndex = (this.currentIndex + 1) % this.fotos.length;
-//   }
-
-//   alternarPantallaCompleta(): void {
-//     if (screenfull.isEnabled) {
-//       screenfull.request();
-//     }
-//   }
-// }
-
-export class RecoFacialComponent implements OnInit, OnDestroy {
-  fotos: string[] = [
-    'assets/fotos/FOTO1.jpg',
-    'assets/fotos/FOTO2.jpg',
-    'assets/fotos/FOTO3.jpg',
-    'assets/fotos/FOTO4.jpg',
-    'assets/fotos/FOTO5.jpg',
-    'assets/fotos/FOTO6.jpg'
-  ];
-
-  fotosVisibles: string[] = [];
-  private intervalId: any;
+  foto = '';
+  // fotosVisibles: string[] = [];
+  // fotosPendientes: string[] = [];
+  fotosVisibles: PersonaCard[] = []; 
+  fotosPendientes: PersonaCard[] = [];
+  private intervalDatos: any;
+  private intervalFotos: any
 
   ngOnInit(): void {
-    // Inicialmente mostramos las primeras 6
-    this.fotosVisibles = this.fotos.slice(0, 6);
+    //this.getObtenerDatosRegistro('70105328');
+    // const listaDnis = ['70105328', '70158368', '70291653', '70531493', '70760806', 
+    //                   '70724978', '70953583', '70899458', '61123360', '60465469', 
+    //                   '60162938', '48028831'];
+    this.intervalDatos = setInterval(() => {
+      // listaDnis.forEach(dni => { 
+      //   console.log('DNI LEIDO: ---------------', dni);
+      //   this.getObtenerDatosRegistro(dni); 
+      // });
+      //this.getObtenerDatosRegistro('70105328');
+      this.getObtenerMarcación1p1();
+    }, 1000);
+  }
 
-    // Cada 3 segundos simulamos la cola
-    this.intervalId = setInterval(() => {
-      this.fotosVisibles.shift(); // quita la primera
-      const siguienteIndex = (this.fotos.indexOf(this.fotosVisibles[this.fotosVisibles.length - 1]) + 1) % this.fotos.length;
-      this.fotosVisibles.push(this.fotos[siguienteIndex]); // agrega la siguiente
-    }, 3000);
+  ngAfterViewInit(): void {
+
   }
 
   ngOnDestroy(): void {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
+    if (this.intervalDatos) {
+      clearInterval(this.intervalDatos);
+    }
+
+    if (this.intervalFotos) {
+      clearInterval(this.intervalFotos);
     }
   }
 
@@ -133,4 +61,66 @@ export class RecoFacialComponent implements OnInit, OnDestroy {
       screenfull.request();
     }
   }
+
+  getObtenerDatosRegistro(Cam_Mar_Id: number, Nro_Dni: string): void {
+  this.service.getObtenerDatosRegistro(Cam_Mar_Id, Nro_Dni).subscribe({
+    next: (response: any) => {
+      if (response.success) {
+        const FotoBase64 = response.elements[0].fotoBase64;
+        const NombreFormateado = response.elements[0].nombre; // 👈 ya viene listo
+
+        const personaCard: PersonaCard = {
+          foto: FotoBase64,
+          nombre: NombreFormateado
+        };
+
+        if (this.fotosVisibles.length < 6) {
+          this.fotosVisibles.push(personaCard);
+
+          if (this.fotosVisibles.length === 6 && !this.intervalFotos) {
+            this.intervalFotos = setInterval(() => {
+              if (this.fotosPendientes.length > 0) {
+                const nuevaPersona = this.fotosPendientes.shift();
+                this.fotosVisibles.shift();
+                this.fotosVisibles.push(nuevaPersona!);
+              } else {
+                if (this.fotosVisibles.length > 0) {
+                  this.fotosVisibles.shift();
+                }
+              }
+            }, 3000);
+          }
+        } else {
+          this.fotosPendientes.push(personaCard);
+        }
+      }
+    },
+    error: (error: any) => {
+      console.error('Error al obtener datos:', error);
+    }
+  });
+}
+
+
+  getObtenerMarcación1p1(): void {
+    let nro_dni: string = '';
+    let cam_mar_id: number = 0;
+    this.service.getObtenerMarcación1p1().subscribe({
+      next: (response: any) => {
+        if(response.success){
+          if(response.totalElements > 0){
+            
+            cam_mar_id = response.elements[0].cam_Mar_Id;
+            nro_dni = response.elements[0].cam_Mar_Cod_Usr;    
+          
+            this.getObtenerDatosRegistro(cam_mar_id, nro_dni);
+          }
+        }
+      },
+      error: (error: any) => {
+      }
+    });
+  }
+
+
 }
