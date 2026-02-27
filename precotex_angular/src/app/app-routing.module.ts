@@ -717,7 +717,7 @@ const routes: Routes = [
   {path: "Cotizaciones", component:CotizacionesComponent},
 
   //Status Req Almacen
-  {path: "StatusReqAlmacen", component:StatusReqAlmacenComponent},
+  {path: "StatusReqAlmacen", component:StatusReqAlmacenComponent},  
 
   //Agenda Telefonica
   { path: "AgendaTelefonica", component: AgendaTelefonicaComponent},

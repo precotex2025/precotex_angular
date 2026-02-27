@@ -353,6 +353,7 @@ export class CalificacionRollosFinalComponent implements OnInit {
               this.PartidaCab.datosTela =  data.elements[result].articulo;
               this.PartidaCab.datosCliente =  data.elements[result].descripcion;
               this.PartidaCab.ancho = String(data.elements[result].ancho) == "0"? "": String(data.elements[result].ancho);
+              this.PartidaCab.densidad = String(data.elements[result].densidad) == "0"? "": String(data.elements[result].densidad);
               console.log('ancho', data.elements[result].ancho);
               //Nuevas  
               this.PartidaCab.auditor = data.elements[result].inspector;              
