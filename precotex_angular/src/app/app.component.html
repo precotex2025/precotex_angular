@@ -57,3 +57,10 @@
 <div *ngIf="!login_activo">
   <app-menu></app-menu>
 </div>
+
+<button 
+    *ngIf="login_activo" 
+    class="boton-flotante" 
+    (click)="abrirModalAgendaTelefonica()" > 
+    <mat-icon>phone_in_talk</mat-icon> 
+</button>

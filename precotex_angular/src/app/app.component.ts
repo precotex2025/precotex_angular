@@ -7,7 +7,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { LoginService } from './services/login.service';
 import { MatIconModule } from '@angular/material/icon';
-
+import { MatDialog } from '@angular/material/dialog';
+import { AgendaTelefonicaComponent } from './components/agenda-telefonica/agenda-telefonica.component';
 
 
 @Component({
@@ -23,7 +24,9 @@ export class AppComponent implements OnInit {
   ruta = ''
 
   userName:any = '';
-  constructor(private loginService: LoginService,
+  constructor(
+    private dialog: MatDialog,
+    private loginService: LoginService,
     private matSnackBar: MatSnackBar,
     private router: Router,
     private route: ActivatedRoute,
@@ -130,6 +133,20 @@ export class AppComponent implements OnInit {
 
   ir_a() {
     this.router.navigate(['/menu']);
+  }
+
+  abrirModalAgendaTelefonica(): void {
+    let dialogref = this.dialog.open(AgendaTelefonicaComponent, {
+      panelClass: 'dialog-tablet',
+      width: '350px',
+      height: '600px',
+      maxWidth: 'none',
+      autoFocus: false,
+      disableClose: false,
+      data: {
+        Title: "Detalle"
+      }
+    });
   }
 
 }

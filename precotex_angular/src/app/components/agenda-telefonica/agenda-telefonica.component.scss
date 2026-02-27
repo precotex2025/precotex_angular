@@ -4,9 +4,9 @@
     min-height: 100vh;
 }
 
-.search-field { 
+.search-field {
     width: 100%;
-    margin-bottom: 16px; 
+    margin-bottom: 16px;
 }
 
 .cards-wrapper {
@@ -54,6 +54,63 @@
 }
 
 
+// .acciones {
+//     position: absolute;
+//     top: 50%;
+//     left: calc(100% - 48px);
+//     transform: translateY(-50%);
+//     background: #1976d2;
+//     color: #fff;
+//     border-radius: 50%;
+//     width: 35px;
+//     height: 35px;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+
+//     button {
+//                 height: 35px;
+//                 width: 35px;
+//                 // padding-bottom: 10px;
+//             }
+
+//     mat-icon {
+//         font-size: 15px;
+//         // padding-bottom: 10px;
+//         // margin-bottom: 10px;
+//     }
+// }
+
+// @media (max-width: 480px) {
+//     .card-content {
+//         flex-direction: column;
+//         align-items: flex-start;
+//         gap: 12px;
+//     }
+
+//     .acciones {
+//         left: auto;
+//         right: 12px; 
+//         // top: 27px;
+//         transform: none;
+//         width: 35px;
+//         height: 35px;
+
+//         button {
+//             height: 35px;
+//             width: 35px;
+//             // padding-bottom: 34px;
+//             // padding-bottom: 10px;
+//         }
+
+//         mat-icon {
+//             // margin-top: -10px;
+//             font-size: 15px;
+//         }
+//     }
+// }
+
 .acciones {
     position: absolute;
     top: 50%;
@@ -62,15 +119,28 @@
     background: #1976d2;
     color: #fff;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 
+    button {
+        height: 35px;
+        width: 35px;
+        min-width: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
     mat-icon {
-        font-size: 22px;
+        font-size: 20px;
+        line-height: 1; 
+        margin: 0; 
     }
 }
 
@@ -83,11 +153,15 @@
 
     .acciones {
         left: auto;
-        right: 12px; 
-        top: 27px;
+        right: 12px;
+        top: 35%;
         transform: none;
-        width: 36px;
-        height: 36px;
+
+        button {
+            height: 32px;
+            width: 32px;
+            min-width: 32px;
+        }
 
         mat-icon {
             font-size: 20px;
