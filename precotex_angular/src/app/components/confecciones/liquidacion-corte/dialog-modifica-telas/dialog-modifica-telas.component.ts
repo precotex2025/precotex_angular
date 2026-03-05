@@ -7,6 +7,7 @@ import { MatTabGroup } from '@angular/material/tabs';
 import * as moment from 'moment';
 import {PageEvent} from '@angular/material/paginator';
 import { FormBuilder } from '@angular/forms';
+import { DatePipe } from "@angular/common";
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -95,7 +96,7 @@ export class DialogModificaTelasComponent implements OnInit {
   formulario = this.formBuilder.group({tela: [],combo: [''],color:[''],calidad:[''],talla:[''],tizado:[''],pdepuradas:[''],retazos:[''],
   telafallada:[''],puntas:[''],devolucion1:[''],entrecortes:[''],devolucion2:[''],kaccesorios:[''],retazospaños:[''],kmermalavanderia:[''],
   puntaspaños:[''],kempalmes:[''],ktelareasig:[''],pppromedio:[''],ptendido:[''],Secuencia:['0'],LTendidoMts:['0'],PesoxPanoKgs:['0'],PrendasxPano:['0'],
-  num_panos:['0'],anchotizado:['0'],anchototalreal:['0'], fec_liquidacion: [''], cod_motivo: [''], prendas_reales: ['']})
+  num_panos:['0'],anchotizado:['0'],anchototalreal:['0'], fec_liquidacion: [new Date], cod_motivo: [''], prendas_reales: ['']})
 
   public data_det = [{
     SECUENCIA:"",
@@ -171,6 +172,7 @@ export class DialogModificaTelasComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private matSnackBar: MatSnackBar,
     private dialog: MatDialog,
+    private datePipe: DatePipe,
     private despachoTelaCrudaService: DialogLiquidacionCorteService) { this.dataSource = new MatTableDataSource(); 
       
     }
@@ -256,8 +258,10 @@ export class DialogModificaTelasComponent implements OnInit {
           if(result[0].FEC_LIQUIDACION_CORTE == null || result[0].FEC_LIQUIDACION_CORTE == 'null'){
             fec_liquidacion = "";
           }else{
-            fec_liquidacion = result[0].FEC_LIQUIDACION_CORTE;
+            //fec_liquidacion = result[0].FEC_LIQUIDACION_CORTE;
+            fec_liquidacion = this.datePipe.transform(result[0].FEC_LIQUIDACION_CORTE, 'yyyy-MM-dd');
           }
+          
           this.formulario.patchValue({
             fec_liquidacion: fec_liquidacion,
             cod_motivo: result[0].COD_MOTIVO_LIQUIDADO
