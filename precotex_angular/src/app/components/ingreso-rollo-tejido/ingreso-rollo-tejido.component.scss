@@ -60,6 +60,7 @@
 .container-cuerpo-fila2 {
     grid-area: fila2;
     overflow: auto;
+    margin-top: 50px;
     margin-bottom: 10px;
     width: 100%;
 }
@@ -79,8 +80,8 @@ mat-form-field {
     display: grid;
 
     grid-template:
-        "col1 col2 col3 col4" auto /
-        200px 200px 160px 160px  auto;
+        "col1 col2 findcolSelect col3 col4" auto /
+        200px 200px 180px 160px 160px  auto;
 }
 
 
@@ -118,7 +119,9 @@ mat-form-field {
     width: 150px;
 }
 
-
+.findcolSelect {
+    grid-area: findcolSelect
+}
 
 
 //fila foot
@@ -228,12 +231,12 @@ tr:active {
         "foot" 55px /
         99%;
     }
-    .container-cuerpo-fila1{
+    .container-cuerpo-fila1 {
         display: grid;
         
         grid-template:
-        "col1 col2 col3 col4 " auto /
-        200px 200px 160px 160px auto;
+        "col1 col2 findcolSelect col3 col4 " auto /
+        200px 200px 160px 160px 160px auto;
     }
     
     .fila1-fecha {
@@ -279,6 +282,7 @@ tr:active {
         
         grid-template:
         "col1 col2" 60px 
+        "findcolSelect findcolSelect" 60px
         "col3 col4" 60px /
         190px 190px;
     } 
@@ -301,6 +305,10 @@ tr:active {
       
         grid-area: col4;
         width: 180px;
+    }
+
+    .findcolSelect {
+        grid-area: findcolSelect
     }
 
   }

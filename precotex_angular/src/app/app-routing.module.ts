@@ -355,7 +355,7 @@ const routes: Routes = [
   { path: "SeguridadControlGuiaHistorial", component: SeguridadControlGuiaHistorialComponent },
 
   { path: "DespachoTelaCruda", component: DespachoTelaCrudaComponent },
-  { path: "DespachoTelaCrudaDetalle", component: DespachoTelaCrudaDetalleComponent},
+  { path: "DespachoTelaCrudaDetalle/:almacen", component: DespachoTelaCrudaDetalleComponent},
 
   { path: "SeguridadControlVehiculo", component: SeguridadControlVehiculoComponent},
   { path: "SeguridadControlVehiculoAccion", component: SeguridadControlVehiculoAccionComponent},
@@ -382,7 +382,7 @@ const routes: Routes = [
   { path: "AuditoriaInspeccionCostura", component: AuditoriaInspeccionCosturaComponent},
 
   { path: "IngresoRolloTejido", component: IngresoRolloTejidoComponent},
-  { path: "IngresoRolloTejidoDetalle", component: IngresoRolloTejidoDetalleComponent},
+  { path: "IngresoRolloTejidoDetalle/:almacen", component: IngresoRolloTejidoDetalleComponent},
 
   { path: "AuditoriaHojaMedida", component: AuditoriaHojaMedidaComponent},
   { path: "AuditoriaHojaMedidaDetalle", component: AuditoriaHojaMedidaDetalleComponent},

@@ -7,6 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { GlobalVariable } from '../../../VarGlobals'; //<==== this one
 import { DespachoTelaCrudaService } from '../../../services/despacho-tela-cruda.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
  
 @Component({
@@ -20,6 +21,7 @@ export class DespachoTelaCrudaDetalleComponent implements OnInit {
   nNum_Movstk_Activo = GlobalVariable.num_movdespacho;
   sCodigo_Barras = '';
   sAccion = '';
+  sCodAlmacen: string = '';
 
   @ViewChild('myinputAdd') inputAdd!: ElementRef;
   @ViewChild('myinputDel') inputDel!: ElementRef;
@@ -40,9 +42,12 @@ export class DespachoTelaCrudaDetalleComponent implements OnInit {
     bultos: ""
   }] 
 
-  constructor(private formBuilder: FormBuilder,
-    private matSnackBar: MatSnackBar,
-    private despachoTelaCrudaService: DespachoTelaCrudaService) { }
+  constructor(
+        private formBuilder: FormBuilder,
+        private matSnackBar: MatSnackBar,
+        private despachoTelaCrudaService: DespachoTelaCrudaService,
+        private route               : ActivatedRoute        
+   ) { }
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -52,6 +57,7 @@ export class DespachoTelaCrudaDetalleComponent implements OnInit {
     });
     this.VerDetalleMovimiento();
     
+    this.sCodAlmacen = this.route.snapshot.paramMap.get('almacen')!;  
     this.form.patchValue({ partida: this.sCod_OrdTra })
   }
 
@@ -167,7 +173,9 @@ export class DespachoTelaCrudaDetalleComponent implements OnInit {
   } 
 
   LecturarBulto(Accion: string) {
-    this.despachoTelaCrudaService.LecturarBulto(Accion, 'T7', this.nNum_Movstk_Activo, this.sCodigo_Barras).subscribe(
+    const sCodAlmacen: string = this.sCodAlmacen;
+    //T7
+    this.despachoTelaCrudaService.LecturarBulto(Accion, sCodAlmacen, this.nNum_Movstk_Activo, this.sCodigo_Barras).subscribe(
       (result: any) => {
         if (result[0].Respuesta == 'OK') {
           this.ReproducirOk;

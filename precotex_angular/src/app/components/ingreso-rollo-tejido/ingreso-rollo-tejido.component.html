@@ -24,21 +24,31 @@
                     <mat-datepicker #Fec_Despacho></mat-datepicker>
                 </mat-form-field>
 
-                    <mat-form-field class="fila1-Orden_Servicio"> 
-                        <mat-label>Orden Servicio</mat-label>
-                        <input matInput type="text" [textMask]="{mask: Orden_ServicioMascara}"  placeholder="Orden Servicio" value=""
-                            autocomplete="off" formControlName="Orden_Servicio" >
-                    </mat-form-field>
+                <mat-form-field class="fila1-Orden_Servicio"> 
+                    <mat-label>Orden Servicio</mat-label>
+                    <input matInput type="text" [textMask]="{mask: Orden_ServicioMascara}"  placeholder="Orden Servicio" value=""
+                        autocomplete="off" formControlName="Orden_Servicio" >
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="flex: 1;" class="findcolSelect">
+                    <mat-label>Almacen </mat-label>
+                    <mat-select formControlName="ctrol_almacen">
+                        <mat-option *ngFor="let alma of lstAlmacen" [value]="alma.Codigo">
+                        {{ alma.Descripcion }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>   
 
                 <button type="button" class="fila1-buscar" mat-flat-button (click)="ListarRolloTejido()">                    
                     <mat-icon aria-label="person">search</mat-icon>Buscar
                 </button>
 
+                <button type="button" class="fila1-agregar" mat-flat-button (click)="AgregarRolloTejido()">
+                    <mat-icon aria-label="person">add
+                    </mat-icon>  Agregar
+                </button>
 
-                <button type="button" class="fila1-agregar" mat-flat-button (click)="AgregarRolloTejido()" [routerLink]="['/IngresoRolloTejidoDetalle']">
-                <mat-icon aria-label="person">add
-                </mat-icon>  Agregar
-            </button>
+                <!-- [routerLink]="['/IngresoRolloTejidoDetalle']" -->
  
 
             </div>    
@@ -70,7 +80,7 @@
                         <th mat-header-cell *matHeaderCellDef>Acciones</th>
                         <td mat-cell *matCellDef="let data_det">
 
-                            <a mat-icon-button style="margin-right:5px;" *ngIf="data_det.num_movstk.length>0"   (click)="VerDetalleRolloTejido(data_det.Orden_Servicio, data_det.num_movstk)" [routerLink]="['/IngresoRolloTejidoDetalle']">
+                            <a mat-icon-button style="margin-right:5px;" *ngIf="data_det.num_movstk.length>0"   (click)="VerDetalleRolloTejido(data_det.Orden_Servicio, data_det.num_movstk)" [routerLink]="['/IngresoRolloTejidoDetalle', '']">
                                 <mat-icon color="primary">assignment</mat-icon>
                             </a>
 

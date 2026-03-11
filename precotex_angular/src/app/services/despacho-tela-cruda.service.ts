@@ -44,5 +44,9 @@ export class DespachoTelaCrudaService {
 
     return this.http.get(`${this.baseUrl}/app_movimiento_despacho_tela_cruda.php?Num_Movstk=${sNum_Movstk}&Cod_Usuario=${this.sCod_Usuario}`);
   }
+
+  ListarAlmacenesService(){
+    return this.http.get(`${this.baseUrl}/app_cargar_almacen.php`);
+  }
   
 }

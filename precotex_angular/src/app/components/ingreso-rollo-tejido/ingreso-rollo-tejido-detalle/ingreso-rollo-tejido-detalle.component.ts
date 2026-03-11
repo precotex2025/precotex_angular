@@ -11,6 +11,8 @@ import { startWith, map, debounceTime } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgxSpinnerService }  from "ngx-spinner";
 import { GlobalVariable } from 'src/app/VarGlobals'; 
+import { ActivatedRoute, Router } from '@angular/router';
+
 interface data_det {
   Num_movstk:     string
   Orden_Servicio: string
@@ -27,7 +29,7 @@ interface data_det {
 export class IngresoRolloTejidoDetalleComponent implements OnInit {
 
   Orden_ServicioMascara = [/[0-9]/i, /[0-9]/i, /[0-9]/i, '-', /[0-9]/i, /[0-9]/i, /[0-9]/i, /[0-9]/i, /[0-9]/i,/[0-9]/i];
-
+  sCodAlmacen: string = '';
   
   public data_det = [{
     secuencia:     '',
@@ -68,11 +70,14 @@ export class IngresoRolloTejidoDetalleComponent implements OnInit {
     private matSnackBar: MatSnackBar,
     private ingresoRolloTejidoService: IngresoRolloTejidoService,
     public dialog: MatDialog,
-    private SpinnerService: NgxSpinnerService) { this.dataSource = new MatTableDataSource(); }
+    private SpinnerService: NgxSpinnerService,
+    private route               : ActivatedRoute  ) { this.dataSource = new MatTableDataSource(); }
 
 
 
   ngOnInit(): void { 
+
+    this.sCodAlmacen = this.route.snapshot.paramMap.get('almacen')!;  
     if(this.num_movstk != ''){
       this.ListarDetalleRolloTejido()
     }
@@ -154,7 +159,9 @@ export class IngresoRolloTejidoDetalleComponent implements OnInit {
   } 
 
   LecturarBulto(Accion: string) {
-    this.ingresoRolloTejidoService.LecturarBultoRolloTejidoService(Accion, 'T7', this.num_movstk, this.Codigo_Barras).subscribe(
+    const sCodAlmacen: string = this.sCodAlmacen;
+    //T7
+    this.ingresoRolloTejidoService.LecturarBultoRolloTejidoService(Accion, sCodAlmacen, this.num_movstk, this.Codigo_Barras).subscribe(
       (result: any) => {
         if (result[0].Respuesta == 'OK') {
           this.ReproducirOk;

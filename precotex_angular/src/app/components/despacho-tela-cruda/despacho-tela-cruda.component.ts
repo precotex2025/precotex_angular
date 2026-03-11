@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatTabGroup } from '@angular/material/tabs';
 import * as moment from 'moment';
 import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,6 +15,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { DespachoTelaCrudaService } from '../../services/despacho-tela-cruda.service';
 import { GlobalVariable } from '../../VarGlobals'; //<==== this one
 
+interface dataAlmacen {
+  Codigo : string,
+  Descripcion: string
+}
+
 @Component({
   selector: 'app-despacho-tela-cruda',
   templateUrl: './despacho-tela-cruda.component.html',
@@ -21,14 +27,15 @@ import { GlobalVariable } from '../../VarGlobals'; //<==== this one
 })
 export class DespachoTelaCrudaComponent implements OnInit {
 
+  lstAlmacen: dataAlmacen[] = [];
   mask_cod_ordtra = [/[A-Z-0-9]/i, /\d/, /\d/, /\d/, /\d/];
 
   //* Declaramos formulario para obtener los controles */
   formulario = this.formBuilder.group({
-    fec_registro: [''],
-    cod_ordtra: ['']
+    fec_registro  : [''],
+    cod_ordtra    : [''],
+    ctrol_almacen : [''],
   })
-
   displayedColumns_cab: string[] = ['num_movstk', 'cod_ordtra', 'peso', 'bultos', 'acciones']
 
   public data_det = [{
@@ -42,17 +49,32 @@ export class DespachoTelaCrudaComponent implements OnInit {
     private formBuilder: FormBuilder,
     private matSnackBar: MatSnackBar,
     private dialog: MatDialog,
-    private despachoTelaCrudaService: DespachoTelaCrudaService
+    private despachoTelaCrudaService: DespachoTelaCrudaService,
+    private router              : Router                ,
   ) {  }
 
   ngOnInit(): void {
     this.formulario = new FormGroup({
-      'fec_despacho': new FormControl(''),
-      'cod_ordtra': new FormControl(''),
+      'fec_despacho'  : new FormControl(''),
+      'cod_ordtra'    : new FormControl(''),
+      'ctrol_almacen' : new FormControl(''),
     });
 
     GlobalVariable.num_movdespacho = '';
+    this.CargaAlmacen();
     this.CargarLista();
+  }
+
+  CargaAlmacen() {
+
+    this.despachoTelaCrudaService.ListarAlmacenesService().subscribe(
+        (result: any) => {
+          this.lstAlmacen = result;
+        },
+        (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+          duration: 1500,
+        }))    
+
   }
 
   CargarLista() {
@@ -72,6 +94,18 @@ export class DespachoTelaCrudaComponent implements OnInit {
   AgregarDespacho() {
     GlobalVariable.cod_ordtra = ''
     GlobalVariable.num_movdespacho = ''
+
+    const _codAlmacen = this.formulario.get('ctrol_almacen')?.value ?? '';
+    if (!_codAlmacen || _codAlmacen.trim() === ''){
+      this.matSnackBar.open("¡Seleccione almacen...!", 'Cerrar', {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration: 1500,
+      });
+      return;
+    }       
+
+    this.router.navigate(['/DespachoTelaCrudaDetalle', _codAlmacen]);
   }
 
 

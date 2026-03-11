@@ -140,4 +140,8 @@ export class IngresoRolloTejidoService {
             return this.http.get(this.baseUrlTeje + 'TxTelaEstructuraTejido/getListaMaquinaRevisadora', { headers });
         }  
 
+        ListarAlmacenesService(){
+          return this.http.get(`${this.baseUrl}/app_cargar_almacen.php`);
+        }        
+
 }
