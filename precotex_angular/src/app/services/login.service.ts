@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Login } from '../models/login';
 import { GlobalVariable } from '../VarGlobals';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -20,7 +21,10 @@ export class LoginService {
   //_url: string ="/ws_android/app_login.php";
   //_url: string ="https://gestion.precotex.com/ws_android/app_login.php";
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) { }
 
   validarUsuario(login: Login) {
     //console.log(this.baseUrl);
@@ -72,4 +76,23 @@ export class LoginService {
     params = params.append('Cod_Rol', Cod_Rol);
     return this.http.get(this.baseUrlTinto + 'TxLogin/getValidaAccesoRol', { headers, params })
   }
+
+
+  Entra: string = '';
+  MetodoGeneralValidarAcceso(Ruta: string, Cod_Rol: number): void {
+    this.getValidaAccesoRol(Ruta, Cod_Rol).subscribe({
+      next: (response: any) => {
+        if(response.success){
+          this.Entra = response.elements[0].resultado;
+          if (this.Entra == 'N'){
+            this.router.navigate(['/']);
+          }
+        }
+      },
+      error: (error: any) => {
+
+      }
+    });
+  }
+
 }

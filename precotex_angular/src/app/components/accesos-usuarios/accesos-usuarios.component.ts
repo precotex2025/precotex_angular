@@ -14,6 +14,9 @@ import { DialogEliminarComponent } from 'src/app/components/dialogs/dialog-elimi
 import { NgxSpinnerService }  from "ngx-spinner";
 import { DialogRegistroUsuariosComponent } from './dialog-registro-usuarios/dialog-registro-usuarios.component';
 import { ModificarUsuarioWebComponent } from './modificar-usuario-web/modificar-usuario-web.component';
+import { Router } from '@angular/router';
+import { LoginService } from 'src/app/services/login.service';
+import { GlobalVariable } from 'src/app/VarGlobals';
 
 interface data_det {
   Id_Usuario:      string, 
@@ -101,12 +104,18 @@ export class AccesosUsuariosComponent implements OnInit {
     private matSnackBar: MatSnackBar,
     private seguridadControlVehiculoService: SeguridadControlVehiculoService,
     public dialog: MatDialog,
-    private SpinnerService: NgxSpinnerService) { this.dataSource = new MatTableDataSource(); }
+    private SpinnerService: NgxSpinnerService,
+    private loginService: LoginService,
+    private router: Router  
+  ) { this.dataSource = new MatTableDataSource(); }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void { 
-
+    const currentUrl: string = this.router.url;
+    let rolUsuario = GlobalVariable.vCod_Rol;
+    this.loginService.getValidaAccesoRol(currentUrl, rolUsuario);
+    
     this.MostrarCabeceraUsuarios()
   }
 

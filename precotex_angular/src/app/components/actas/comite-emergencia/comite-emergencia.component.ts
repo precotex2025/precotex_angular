@@ -20,6 +20,8 @@ import { GlobalVariable } from 'src/app/VarGlobals';
 import { ActasService } from 'src/app/services/actas.service';
 import { ExceljsService } from 'src/app/services/exceljs.service';
 import { DialogRegistarActaComponent } from './dialog-registar-acta/dialog-registar-acta.component';
+import { LoginService } from 'src/app/services/login.service';
+import { Router } from '@angular/router';
 
 interface Detalle {
   Id_Participante?: number;
@@ -99,7 +101,9 @@ export class ComiteEmergenciaComponent implements OnInit {
         private spinnerService: NgxSpinnerService,
         private actasService: ActasService,
         private datePipe: DatePipe,
-        private exceljsService: ExceljsService
+        private exceljsService: ExceljsService,
+        private loginService: LoginService,
+        private router: Router
   ) {
     this.range.controls['start'].setValue(new Date(this.fecha.getFullYear(), this.fecha.getMonth(), this.fecha.getDate()));
     this.range.controls['end'].setValue(new Date(this.fecha.getFullYear(), this.fecha.getMonth(), this.fecha.getDate()));
@@ -107,6 +111,11 @@ export class ComiteEmergenciaComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const currentUrl: string = this.router.url;
+    let rolUsuario = GlobalVariable.vCod_Rol;
+    this.loginService.getValidaAccesoRol(currentUrl, rolUsuario);
+
+
     this.listarComiteEmergencia();
   }
 

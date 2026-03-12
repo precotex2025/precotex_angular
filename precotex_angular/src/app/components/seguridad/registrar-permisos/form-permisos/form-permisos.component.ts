@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Console } from 'console';
 import * as _moment from 'moment';
 import { Router } from '@angular/router';
+import { LoginService } from 'src/app/services/login.service';
 
 export interface PeriodicElement {
   tipo: string;
@@ -40,7 +41,10 @@ export class FormPermisosComponent implements OnInit {
     private dialog: MatDialog,
     private matSnackBar: MatSnackBar,
     private _router: Router,
-    private registroPermisosService: RegistroPermisosService) { 
+    private registroPermisosService: RegistroPermisosService,
+    private loginService: LoginService,
+    private router: Router
+  ) { 
 
       const str = new Date().toLocaleString('en-Es', { year: 'numeric', month: '2-digit', day: '2-digit' });
       var dia = str.substring(3, 5);
@@ -54,6 +58,12 @@ export class FormPermisosComponent implements OnInit {
   formulario = this.formBuilder.group({ fecha: [new Date()], jefe: [this.sCod_Usuario], tipos: [''], motivos: [''], observaciones: [''] })
 
   ngOnInit(): void {
+
+    const currentUrl: string = this.router.url;
+    let rolUsuario = GlobalVariable.vCod_Rol;
+    this.loginService.getValidaAccesoRol(currentUrl, rolUsuario);
+
+
     this.formulario.get('jefe').disable();
     GlobalVariable.Arr_Trabajadores = [];
 

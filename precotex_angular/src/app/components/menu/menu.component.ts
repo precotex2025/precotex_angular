@@ -61,7 +61,7 @@ export class MenuComponent implements OnInit {
     private dialog            : MatDialog            ,
     private serviceMemorandum : MemorandumGralService ,
     private registromantemaquinastej: RegistroManteMaquinasTejService   ,
-    private toastr            : ToastrService ,
+    private toastr            : ToastrService
 
   ) {
   } 
@@ -69,14 +69,8 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
     const currentUrl: string = this.router.url;
-    console.log('::::::::::::.', currentUrl);
     let rolUsuario = GlobalVariable.vCod_Rol;
-    console.log('::::::::::::::::::::', rolUsuario);
-
-    this.getValidaAccesoRol(currentUrl, rolUsuario);
-
-    
-
+    this.loginService.getValidaAccesoRol(currentUrl, rolUsuario);
 
     var dropdown = document.getElementsByClassName("dropdown-btn");
     var i;
@@ -100,24 +94,6 @@ export class MenuComponent implements OnInit {
     this.mostrarTejedor();
     this.ObtieneSedeByUser();    
 
-  }
-  Entra: string = '';
-  getValidaAccesoRol(Ruta: string, Cod_Rol: number): void {
-    console.log(':::::::', Ruta);
-    console.log(':::::::', Cod_Rol);
-    this.loginService.getValidaAccesoRol(Ruta, Cod_Rol).subscribe({
-      next: (response: any) => {
-        if(response.success){
-          this.Entra = response.elements[0].resultado;
-          if (this.Entra == 'N'){
-            this.router.navigate(['/']);
-          }
-        }
-      },
-      error: (error: any) => {
-
-      }
-    });
   }
 
 MuestraMenu(){

@@ -15,6 +15,7 @@ import { DOCUMENT } from '@angular/common';
 import { ExceljsService } from 'src/app/services/exceljs.service';
 import { ActasAcuerdosService } from 'src/app/services/actas-acuerdos.service';
 import { DialogActasParticipantesComponent } from './dialog-actas-participantes/dialog-actas-participantes.component';
+import { LoginService } from 'src/app/services/login.service';
 
 export interface PeriodicElement {
   IdActa: string;
@@ -80,9 +81,18 @@ export class ActasAcuerdoComponent implements OnInit {
     private actasAcuerdosService: ActasAcuerdosService,
     private _router: Router,
     @Inject(DOCUMENT) document: any,
-    private dialog: MatDialog) {
+    private dialog: MatDialog,
+    private loginService: LoginService,
+    private router: Router  
+  ) {
   }
   ngOnInit(): void {
+
+    const currentUrl: string = this.router.url;
+    let rolUsuario = GlobalVariable.vCod_Rol;
+    this.loginService.getValidaAccesoRol(currentUrl, rolUsuario);
+
+
     this.cargarLista();
     var cadena = document.location.href;
 

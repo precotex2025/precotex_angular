@@ -10,6 +10,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AprobacionDesarrolloTelasEditComponent } from './aprobacion-desarrollo-telas-edit/aprobacion-desarrollo-telas-edit.component';
+import { Router } from '@angular/router';
+import { LoginService } from 'src/app/services/login.service';
 
 interface data_det {
   cod_Tela              : string,
@@ -60,9 +62,15 @@ export class AprobacionDesarrolloTelasComponent implements OnInit {
     private toastr                : ToastrService         ,
     private dialog    : MatDialog                             ,
     private sanitizer : DomSanitizer,
+    private router: Router,
+    private loginService: LoginService
   ) { }
 
   ngOnInit(): void {
+
+    const currentUrl: string = this.router.url;
+    let rolUsuario = GlobalVariable.vCod_Rol;
+    this.loginService.getValidaAccesoRol(currentUrl, rolUsuario);
 
     this.onGetListadoDesarrolloTelasPendientes();
     //Refrescar cada 60 segundos
