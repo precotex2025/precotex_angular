@@ -1,0 +1,65 @@
+<form class="container-cuerpo" [formGroup]="formulario" #formDirective="ngForm">
+    <mat-card class="example-card" appearance="outlined"></mat-card>
+    <mat-card-header>
+        <mat-card-title>{{data.Title}} </mat-card-title>
+        <mat-card-subtitle>{{data.SubTitle}}</mat-card-subtitle> 
+    </mat-card-header>       
+
+<!-- <div class="card"> -->
+    <!-- <div class="card-header">
+        {{data.Title}}
+    </div> -->
+
+  
+        <mat-card-content>
+
+            <div class="row">
+                <mat-form-field appearance="outline" style="flex: 1;">
+                <mat-label>Estado (*)</mat-label>
+                <mat-select formControlName="ctrol_estado" (selectionChange)="onChangeEstado($event)">
+                    <mat-option *ngFor="let opcion of opcionesEstado" [value]="opcion.valor">
+                    {{ opcion.texto }}
+                    </mat-option>
+                </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Nueva Partida (*)</mat-label>
+                    <input matInput formControlName="ctrol_nuevaPartida" placeholder="Nueva Partida" >
+                </mat-form-field>                                    
+            </div>         
+
+            <div class="row">
+                             <mat-form-field appearance="outline" >
+                    <mat-label>Kilos Teñidos (*)</mat-label>
+                    <input matInput formControlName="ctrol_kilosTenidos" placeholder="Digite Kilo Teñido" >
+                </mat-form-field>               
+            
+            </div>
+      
+            <div class="row">
+                <mat-form-field appearance="outline" style="flex: 1;">
+                    <mat-label>Comentario</mat-label>
+                    <textarea matInput formControlName="ctrol_comentario" rows="4"></textarea>
+                </mat-form-field>       
+            </div>
+            
+
+            </mat-card-content>
+
+    <div class="button-row"> 
+        <button mat-flat-button color="primary" class="form-button" (click)="onSave()" > 
+            <mat-icon>save</mat-icon> Grabar
+        </button>
+
+        <button mat-flat-button color="warn" mat-dialog-close class="form-button" (click)="onClose()" >
+            <mat-icon>close</mat-icon> Salir
+        </button>
+        
+    </div>              
+ 
+
+<!-- </div>  -->
+       </form>

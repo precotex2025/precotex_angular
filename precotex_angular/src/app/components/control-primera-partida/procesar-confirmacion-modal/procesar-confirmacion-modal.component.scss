@@ -1,0 +1,73 @@
+.card {
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 8px;
+    min-width: 350px;
+    min-height: 400px;
+    height: 640px; 
+}
+
+.card-header {
+    background-color: #3f51b5;
+    color: #ffffff;
+    padding: 8px 10px 10px 10px;
+    text-align: center;
+    /* border-bottom: 1px solid #337AB7; */
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-family: corbel, arial;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+mat-card-header {
+  position: sticky;
+  top: 0;
+  z-index: 10; /* para que quede encima del contenido */
+  background: #002980; /* asegura que no se vea transparente */
+  color: white;
+  margin-bottom: 15px !important;
+}
+
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 138%;
+    padding: 5px;
+    font-family: corbel, arial;
+    font-size: 15px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #337ab7;
+max-width: 100%
+  }
+
+.row {
+    display: flex; 
+    gap: 10px;
+}
+
+mat-card-header {
+  position: sticky;
+  top: -20;
+  z-index: 10; /* para que quede encima del contenido */
+  background: #002980; /* asegura que no se vea transparente */
+  color: white;
+  margin-bottom: 15px !important;
+}
+
+mat-card-subtitle {
+  color: white;
+}
+
+.button-row {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background: #fff; /* para que no se superponga con el contenido */
+  padding: 12px 0;
+}

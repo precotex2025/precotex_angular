@@ -1,0 +1,245 @@
+<div class="bandeja-container">
+
+    <!-- Buscador -->
+    <div class="search-bar">
+        <mat-form-field appearance="outline">
+            <mat-label>Buscar</mat-label>
+                <input matInput [formControl]="filtroControl" placeholder="Ingrese texto a buscar">
+            </mat-form-field>
+            
+            <mat-form-field appearance="fill">
+                <mat-label>Rango de Fecha de Teñido</mat-label>
+                <mat-date-range-input   [formGroup]      = "range" [rangePicker]="picker">
+                <input matStartDate      formControlName = "start"  placeholder="Fecha Inicio">
+                <input matEndDate        formControlName = "end" placeholder="Fecha Final">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+                <mat-icon (click)="clearDate($event)" style=" position: absolute;
+                            float: right;
+                            top: -6px;
+                            margin-left: 190px;
+                            cursor: pointer;
+                            color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+                <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Fecha Invalida</mat-error>
+                <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Fecha Invalida</mat-error>
+            </mat-form-field>            
+
+            <button mat-flat-button class="btn-azul" (click)="onBuscar()">
+                <mat-icon>search</mat-icon> Buscar
+            </button>     
+
+            <button mat-flat-button class="btn-verde" (click)="onProcesar()" >
+                <mat-icon>rule</mat-icon> Procesar
+            </button>            
+
+            <button mat-flat-button class="btn-amarillo" (click)="onExportar()">
+                <mat-icon>drive_folder_upload</mat-icon> Exportar
+            </button>                        
+
+    </div>
+
+  <!-- Grilla -->
+    <div class="table-wrapper">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+            <!-- Cliente -->
+            <ng-container matColumnDef="cliente">
+                <th mat-header-cell *matHeaderCellDef> CLIENTE </th>
+                <td mat-cell *matCellDef="let row"> {{row.cliente}} </td>
+            </ng-container>
+
+            <!-- Grupo Textil / Orden de Compra -->
+            <ng-container matColumnDef="grupo">
+                <th mat-header-cell *matHeaderCellDef> GRUPO TEXTIL /<br> ORDEN DE COMPRA </th>
+                <td mat-cell *matCellDef="let row"> {{row.grupo}} </td>
+            </ng-container>
+
+            <!-- Primera Partida -->
+            <ng-container matColumnDef="primeraPartida">
+                <th mat-header-cell *matHeaderCellDef> 1RA PARTIDA </th>
+                <td mat-cell *matCellDef="let row"> {{row.primeraPartida}} </td>
+            </ng-container>            
+
+            <!-- Código de Tela -->
+            <ng-container matColumnDef="codigoTela">
+                <th mat-header-cell *matHeaderCellDef> CÓDIGO DE <br> TELA </th>
+                <td mat-cell *matCellDef="let row"> {{row.codigoTela}} </td>
+            </ng-container>
+
+            <!-- Descripción de Tela -->
+            <ng-container matColumnDef="descripcionTela">
+                <th mat-header-cell *matHeaderCellDef> DESCRIPCIÓN DE TELA </th>
+                <td mat-cell *matCellDef="let row" matTooltip="{{row.descripcionTela}}" matTooltipPosition="above"> {{row.descripcionTela}} </td>
+            </ng-container>
+
+            <!-- Color -->
+            <ng-container matColumnDef="color">
+                <th mat-header-cell *matHeaderCellDef> COLOR </th>
+                <td mat-cell *matCellDef="let row" matTooltip="{{row.color}}" matTooltipPosition="above"> {{row.color}} </td>
+            </ng-container>
+
+            <!-- Combo -->
+            <ng-container matColumnDef="combo">
+                <th mat-header-cell *matHeaderCellDef> COMBO </th>
+                <td mat-cell *matCellDef="let row"> {{row.combo}} </td>
+            </ng-container>    
+            
+            <!-- talla -->
+            <ng-container matColumnDef="talla">
+                <th mat-header-cell *matHeaderCellDef> TALLA </th>
+                <td mat-cell *matCellDef="let row"> {{row.talla}} </td>
+            </ng-container>                 
+
+            <!-- GRUPO 1 -->
+            <ng-container matColumnDef="g1_Estado">
+                <th mat-header-cell *matHeaderCellDef> ESTADO <br> MATCHING </th>
+                <td mat-cell *matCellDef="let row"> 
+                    <!-- {{row.g1_Estado}}  -->
+                    <span [ngClass]="getEstadoClass(row.g1_Estado)">
+                        {{ row.g1_Estado }}
+                    </span>                       
+
+                </td>
+            </ng-container>            
+            
+            <ng-container matColumnDef="g1_Responsable">
+                <th mat-header-cell *matHeaderCellDef> RESPONSABLE </th>
+                <td mat-cell *matCellDef="let row"> {{row.g1_Responsable}} </td>
+            </ng-container>              
+            
+            <ng-container matColumnDef="g1_FechaHora">
+                <th mat-header-cell *matHeaderCellDef> FECHA <br> EVALUADO</th>
+                <td mat-cell *matCellDef="let row"> {{row.g1_FechaHora | date: 'dd/MM/yyyy hh:mm' }} </td>
+                
+            </ng-container>                 
+
+            <!-- GRUPO 2 -->
+            <ng-container matColumnDef="g2_Estado">
+                <th mat-header-cell *matHeaderCellDef> ESTADO <br> LABORATORIO </th>
+                <td mat-cell *matCellDef="let row"> 
+                    <!-- {{row.g2_Estado}}  -->
+                    <span [ngClass]="getEstadoClass(row.g2_Estado)">
+                        {{ row.g2_Estado }}
+                    </span>   
+                </td>
+            </ng-container>          
+            
+            <ng-container matColumnDef="g2_Responsable">
+                <th mat-header-cell *matHeaderCellDef> EVALUADO <br> POR: </th>
+                <td mat-cell *matCellDef="let row" matTooltip="{{row.g2_Responsable}}" matTooltipPosition="above"> {{row.g2_Responsable}} </td>
+            </ng-container>    
+            
+            <ng-container matColumnDef="g2_FechaHora">
+                <th mat-header-cell *matHeaderCellDef> FECHA <br> EVALUADO</th>
+                <td mat-cell *matCellDef="let row"> {{row.g2_FechaHora | date: 'dd/MM/yyyy hh:mm' }} </td>
+            </ng-container>                
+                         
+            <!-- GRUPO 3 -->
+            <ng-container matColumnDef="g3_Estado">
+                <th mat-header-cell *matHeaderCellDef> ESTADO <br> CALIDAD </th>
+                <td mat-cell *matCellDef="let row"> 
+                    <!-- {{row.g3_Estado}}  -->
+                    <span [ngClass]="getEstadoClass(row.g3_Estado)">
+                        {{ row.g3_Estado }}
+                    </span>  
+                </td>
+            </ng-container>       
+
+            <ng-container matColumnDef="g3_Inspeccionado">
+                <th mat-header-cell *matHeaderCellDef> INSPECCIONADO <br> POR: </th>
+                <td mat-cell *matCellDef="let row" matTooltip="{{row.g3_Inspeccionado}}" matTooltipPosition="above"> {{row.g3_Inspeccionado}} </td>
+            </ng-container>       
+            
+            <ng-container matColumnDef="g3_Supervisado">
+                <th mat-header-cell *matHeaderCellDef> SUPERVISADO <br> POR: </th>
+                <td mat-cell *matCellDef="let row" matTooltip="{{row.g3_Supervisado}}" matTooltipPosition="above"> {{row.g3_Supervisado}} </td>
+            </ng-container>     
+            
+            <ng-container matColumnDef="g3_FechaHora">
+                <th mat-header-cell *matHeaderCellDef> FECHA <br> INSPECCIONADO </th>
+                <td mat-cell *matCellDef="let row"> {{row.g3_FechaHora | date: 'dd/MM/yyyy hh:mm' }} </td>
+            </ng-container>                
+                      
+            <ng-container matColumnDef="g3_Observacion">
+                <th mat-header-cell *matHeaderCellDef> OBSERVACIONES</th>
+                <td mat-cell *matCellDef="let row" matTooltip="{{row.g3_Observacion}}" matTooltipPosition="above"> {{row.g3_Observacion}} </td>
+            </ng-container>                  
+
+            <!-- GRUPO 4 -->
+            <ng-container matColumnDef="g4_Estado">
+                <th mat-header-cell *matHeaderCellDef> ESTADO <br> 1RA PARTIDA </th>
+                <td mat-cell *matCellDef="let row"> 
+                    <!-- {{row.g4_Estado}}  -->
+                    <span [ngClass]="getEstadoClass(row.g4_Estado)">
+                        {{ row.g4_Estado }}
+                    </span>  
+                </td>
+            </ng-container>         
+            
+            <ng-container matColumnDef="g4_Responsable">
+                <th mat-header-cell *matHeaderCellDef> EVALUADO <br> POR: </th>
+                <td mat-cell *matCellDef="let row" matTooltip="{{row.g4_Responsable}}" matTooltipPosition="above"> {{row.g4_Responsable}} </td>
+            </ng-container>     
+            
+            <ng-container matColumnDef="g4_FechaHora">
+                <th mat-header-cell *matHeaderCellDef> FECHA <br> EVALUADO</th>
+                <td mat-cell *matCellDef="let row"> {{row.g4_FechaHora | date: 'dd/MM/yyyy hh:mm' }}</td>
+            </ng-container>         
+            
+            <ng-container matColumnDef="g4_Kgs">
+                <th mat-header-cell *matHeaderCellDef> KGS TEÑIDOS <br> 1RA PARTIDA</th>
+                <td mat-cell *matCellDef="let row"> {{ row.g4_Kgs === 0 ? '' : row.g4_Kgs }} </td>
+            </ng-container>          
+            
+            <ng-container matColumnDef="g4_Comentario">
+                <th mat-header-cell *matHeaderCellDef> COMENTARIO</th>
+                <td mat-cell *matCellDef="let row" matTooltip="{{row.g4_Comentario}}" matTooltipPosition="above"> {{row.g4_Comentario}} </td>
+            </ng-container>             
+
+            <ng-container matColumnDef="g4_NuevaPartida">
+                <th mat-header-cell *matHeaderCellDef> NUEVA <br> PARTIDA</th>
+                <td mat-cell *matCellDef="let row"> {{row.g4_NuevaPartida}} </td>
+            </ng-container>                 
+            
+            <!-- CAMPOS FINALES -->
+            <ng-container matColumnDef="partidasAsociadas">
+                <th mat-header-cell *matHeaderCellDef> PARTIDAS ASOCIADAS</th>
+                <td mat-cell *matCellDef="let row" matTooltip="{{row.partidasAsociadas}}" matTooltipPosition="above"> {{row.partidasAsociadas}} </td>
+            </ng-container>         
+            
+            <ng-container matColumnDef="kgs_Totales">
+                <th mat-header-cell *matHeaderCellDef> KGS <br> POR TEÑIR</th>
+                <td mat-cell *matCellDef="let row"> {{row.kgs_Totales}} </td>
+            </ng-container>          
+            
+            <ng-container matColumnDef="primeraFechaEntrega">
+                <th mat-header-cell *matHeaderCellDef> 1RA FECHA <br> ENTREGA</th>
+                <td mat-cell *matCellDef="let row"> {{row.primeraFechaEntrega | date: 'dd/MM/yyyy' }}</td>
+            </ng-container>                  
+
+            <!-- Botón de acción -->
+            <!-- <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef> ACCIONES </th>
+            <td mat-cell *matCellDef="let row">
+                <button mat-icon-button color="primary" (click)="verDetalle(row)">
+                <mat-icon>visibility</mat-icon>
+                </button>
+            </td>
+            </ng-container> -->
+
+            <!-- Header y filas -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                (click)="seleccionarFila(row)"
+                [class.selected]="filaSeleccionada === row"
+            ></tr>
+        </table>    
+    </div>
+    <!-- Paginador -->
+    <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>    
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default">
+    <div class="loader"></div>
+</ngx-spinner>

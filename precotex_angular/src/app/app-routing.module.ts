@@ -327,6 +327,7 @@ import { RecoFacialComponent } from './components/reconocimientofacial/reco-faci
 import { TomaFotoPersonasComponent } from './components/toma-foto-personas/toma-foto-personas.component';
 import { StatusReqAlmacenComponent } from './components/status-req-almacen/status-req-almacen.component';
 import { AgendaTelefonicaComponent } from './components/agenda-telefonica/agenda-telefonica.component';
+import { ControlPrimeraPartidaComponent } from './components/control-primera-partida/control-primera-partida.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -721,6 +722,9 @@ const routes: Routes = [
 
   //Agenda Telefonica
   { path: "AgendaTelefonica", component: AgendaTelefonicaComponent},
+
+  //Control Primera Partida
+  { path: "PrimeraPartida", component: ControlPrimeraPartidaComponent  },
 
   //COPIAR RUTAS ANTES DE ESTO
   { path: "", redirectTo: "/", pathMatch: "full" },// Cuando es la raíz

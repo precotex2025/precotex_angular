@@ -622,6 +622,8 @@ import { ModalQuejaReclamoNuevoComponent } from './components/quejas-reclamos/mo
 //VISOR STATUS REQ ALMACEN
 import { StatusReqAlmacenComponent } from './components/status-req-almacen/status-req-almacen.component';
 import { AgendaTelefonicaComponent } from './components/agenda-telefonica/agenda-telefonica.component';
+import { ControlPrimeraPartidaComponent } from './components/control-primera-partida/control-primera-partida.component';
+import { ProcesarConfirmacionModalComponent } from './components/control-primera-partida/procesar-confirmacion-modal/procesar-confirmacion-modal.component';
 
 @NgModule({
   declarations: [
@@ -1165,6 +1167,10 @@ import { AgendaTelefonicaComponent } from './components/agenda-telefonica/agenda
 
     //AGENDA TELEFONICA
     ,AgendaTelefonicaComponent
+
+    //Control Primera Partida
+    ,ControlPrimeraPartidaComponent    
+    ,ProcesarConfirmacionModalComponent
   
   ],
   entryComponents: [DialogJabaComponent],
