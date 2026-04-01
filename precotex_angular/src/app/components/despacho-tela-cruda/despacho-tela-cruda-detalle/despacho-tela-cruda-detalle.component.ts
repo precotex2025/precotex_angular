@@ -55,10 +55,11 @@ export class DespachoTelaCrudaDetalleComponent implements OnInit {
       'bulto_añadir': new FormControl(''),
       'bulto_eliminar': new FormControl(''),
     });
-    this.VerDetalleMovimiento();
+    //this.VerDetalleMovimiento();
     
     this.sCodAlmacen = this.route.snapshot.paramMap.get('almacen')!;  
     this.form.patchValue({ partida: this.sCod_OrdTra })
+    this.VerDetalleMovimiento();
   }
 
   Regresar() {
@@ -150,9 +151,10 @@ export class DespachoTelaCrudaDetalleComponent implements OnInit {
   } 
 
   GenerarMovimiento() {
+    const sCodAlmacen: string = this.sCodAlmacen;
     this.nNum_Movstk_Activo = '';
 
-    this.despachoTelaCrudaService.GenerarMovimiento(this.sCod_OrdTra, this.sCodigo_Barras).subscribe(
+    this.despachoTelaCrudaService.GenerarMovimiento(this.sCod_OrdTra, this.sCodigo_Barras, sCodAlmacen).subscribe(
       (result: any) => {
         if (result[0].Respuesta == 'OK') {
           this.nNum_Movstk_Activo = result[0].Num_Movstk
@@ -197,7 +199,8 @@ export class DespachoTelaCrudaDetalleComponent implements OnInit {
   }
 
   VerDetalleMovimiento() {
-    this.despachoTelaCrudaService.MovimientoDespachoService(this.nNum_Movstk_Activo).subscribe(
+    const sCodAlmacen: string = this.sCodAlmacen;
+    this.despachoTelaCrudaService.MovimientoDespachoService(this.nNum_Movstk_Activo, sCodAlmacen).subscribe(
       (result: any) => {
         this.data_det = result
       },

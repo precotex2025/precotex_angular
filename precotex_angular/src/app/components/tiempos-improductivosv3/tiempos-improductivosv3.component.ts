@@ -109,7 +109,7 @@ sData: any;
 
       await Promise.all([
         this.CargarMaquinas() ,
-        this.ObtenerDni()     ,
+        //this.ObtenerDni()     ,
         this.CargarMotivos(),   
       ])
       .then(() => {
@@ -170,40 +170,43 @@ sData: any;
     });
   }
 
-  ObtenerDni(): Promise<any> {
-    return new Promise((resolve, reject)=>{
+  // ObtenerDni(): Promise<any> {
+  //   return new Promise((resolve, reject)=>{
 
-        this.CalificacionRollosProcesoService.obtenerDni(this.sCod_Usuario).subscribe({
-          next: (resp) => {
+  //       this.CalificacionRollosProcesoService.obtenerDni(this.sCod_Usuario).subscribe({
+  //         next: (resp) => {
 
-            this.formulario.get('dni')?.setValue(resp.elements);
-            const sDni = resp.elements;
-            this.MostrarTejedor1(sDni);
+  //           this.formulario.get('dni')?.setValue(resp.elements);
+  //           const sDni = resp.elements;
+  //           this.MostrarTejedor1(sDni);
 
-            resolve(true);
-          },
-          error: (err) => reject(err)
-        });
+  //           resolve(true);
+  //         },
+  //         error: (err) => reject(err)
+  //       });
 
     
-    });
-   }  
+  //   });
+  //  }
 
-  MostrarTejedor1(dni: string):Promise<any> {
-    return new Promise((resolve, reject)=>{
 
-      let dni_tejedor= dni;
-      this.despachoTelaCrudaService.traerTejedor(dni_tejedor).subscribe({
-        next: (resp) => {
-          if (resp[0].Respuesta == 'OK') {
-            this.formulario.get('operador')?.setValue(resp[0].Nombres);
-          }
-          resolve(true);
-        },
-        error: (err) => reject(err)
-      });
-    });
-  }
+  // MostrarTejedor1(dni: string):Promise<any> {
+  //   return new Promise((resolve, reject)=>{
+
+  //     let dni_tejedor= dni;
+  //     this.despachoTelaCrudaService.traerTejedor(dni_tejedor).subscribe({
+  //       next: (resp) => {
+  //         if (resp[0].Respuesta == 'OK') {
+  //           this.formulario.get('operador')?.setValue(resp[0].Nombres);
+  //         }
+  //         resolve(true);
+  //       },
+  //       error: (err) => reject(err)
+  //     });
+  //   });
+  // }
+
+
   
   CargarMotivos():Promise<any> {
     return new Promise((resolve, reject) =>{
@@ -290,10 +293,21 @@ ActualizarHora(sTipo: string) {
     //const sHoraFin = String(this.formulario.get('horaFin')?.value); 
     const sObservaciones = String(this.formulario.get('observacion')?.value);
     const sDni = String(this.formulario.get('dni')?.value)    
+    const sOperador =  String(this.formulario.get('operador')?.value);
+
 
 
     //Validación I
     if(this.sCod_Accion == 'I'){
+
+      if (!sDni || sDni.length < 8 || sOperador.trim() === '') {
+          this.matSnackBar.open("¡Seleccione operador valido!", 'Cerrar', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 1500,
+          });   
+        return;
+      }        
 
       if (!sCodMaquina || sCodMaquina.trim() === '') {
           this.matSnackBar.open("¡Importante seleccionar Maquina!", 'Cerrar', {
@@ -551,6 +565,35 @@ ActualizarHora(sTipo: string) {
       this.formulario.get('codMotivo')?.disable();
     }
   }
+
+   
+  MostrarTejedor1(){
+    
+
+    let dni_tejedor= (this.formulario.get('dni')?.value).toString();
+
+    if (dni_tejedor == null) {
+       this.formulario.get('operador')?.setValue('');   
+    } else if (dni_tejedor.length < 8 || dni_tejedor.length > 10) {
+      this.formulario.get('operador')?.setValue('');  
+    } else {    
+
+
+      this.despachoTelaCrudaService.traerTejedor(dni_tejedor).subscribe({
+        next: (resp) => {
+          console.log('busqueda dni', resp);
+          if (resp[0].Respuesta == 'OK') {
+            this.formulario.get('operador')?.setValue(resp[0].Nombres);
+          }else {
+            this.matSnackBar.open(resp[0].Respuesta, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })          
+            this.formulario.get('dni')?.setValue('');  
+            this.formulario.get('operador')?.setValue('');        
+          }
+
+        }
+      }); 
+    }
+  }    
 
   formatearFechaISO(fechaISO: string): string {
     if (!fechaISO) return "";

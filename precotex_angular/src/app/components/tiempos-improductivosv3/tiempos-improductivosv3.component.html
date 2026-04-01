@@ -16,11 +16,11 @@
                 <div class="row two-columns">
                     <mat-form-field appearance="outline" class="dni-field">
                         <mat-label>DNI</mat-label>
-                        <input matInput formControlName="dni" maxlength="8" readonly>
+                        <input matInput type="text" (keyup)="MostrarTejedor1()" autocomplete="off" formControlName="dni" maxlength="8" placeholder="Dni Trabajador">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline" class="operador-field" >
-                        <mat-label>Operador</mat-label>
+                        <mat-label>Operador</mat-label>                        
                         <input matInput formControlName="operador" readonly>
                     </mat-form-field>
                 </div>                   

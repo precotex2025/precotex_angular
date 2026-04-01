@@ -136,6 +136,17 @@ export class IngresoRolloTejidoComponent implements OnInit {
     GlobalVariable.Orden_servicio = Orden_Servicio
     GlobalVariable.Num_movstk = num_movstk
 
+    const _codAlmacen = this.formulario.get('ctrol_almacen')?.value ?? '';
+    if (!_codAlmacen || _codAlmacen.trim() === ''){
+      this.matSnackBar.open("¡Seleccione almacen...!", 'Cerrar', {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration: 1500,
+      });
+      return;
+    }        
+
+    this.router.navigate(['/IngresoRolloTejidoDetalle', _codAlmacen]);    
   }
 
   CargaAlmacen() {

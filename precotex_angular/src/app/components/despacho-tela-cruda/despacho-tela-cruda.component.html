@@ -79,12 +79,13 @@
                     <th mat-header-cell *matHeaderCellDef>Ver Detalle</th>
                     <td mat-cell *matCellDef="let data_det">
                         <a mat-icon-button *ngIf="data_det.num_movstk.length>0"
-                            (click)="VerDetalle(data_det.cod_ordtra, data_det.num_movstk)" 
-                            [routerLink]="['/DespachoTelaCrudaDetalle', '']">
+                            (click)="VerDetalle(data_det.cod_ordtra, data_det.num_movstk)">
                             <mat-icon color="primary">assignment</mat-icon>
                         </a>
                     </td>
                 </ng-container>
+
+                <!-- [routerLink]="['/DespachoTelaCrudaDetalle', '']" -->
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns_cab"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns_cab;"></tr>

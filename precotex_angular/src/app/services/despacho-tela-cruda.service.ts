@@ -28,9 +28,9 @@ export class DespachoTelaCrudaService {
   }
 
 
-  GenerarMovimiento(sCod_OrdTra: string, sCod_Barras: string) {
+  GenerarMovimiento(sCod_OrdTra: string, sCod_Barras: string, sCod_Almacen: string) {
 
-    return this.http.get(`${this.baseUrl}/app_man_despacho_tela_cruda_genera_mov.php?Cod_OrdTra=${sCod_OrdTra}&Cod_Barras=${sCod_Barras}&Cod_Usuario=${this.sCod_Usuario}`);
+    return this.http.get(`${this.baseUrl}/app_man_despacho_tela_cruda_genera_mov.php?Cod_OrdTra=${sCod_OrdTra}&Cod_Barras=${sCod_Barras}&Cod_Almacen=${sCod_Almacen}&Cod_Usuario=${this.sCod_Usuario}`);
 
   }
 
@@ -40,9 +40,9 @@ export class DespachoTelaCrudaService {
 
   }
 
-  MovimientoDespachoService(sNum_Movstk: string) {
+  MovimientoDespachoService(sNum_Movstk: string, sCod_Almacen: string) {
 
-    return this.http.get(`${this.baseUrl}/app_movimiento_despacho_tela_cruda.php?Num_Movstk=${sNum_Movstk}&Cod_Usuario=${this.sCod_Usuario}`);
+    return this.http.get(`${this.baseUrl}/app_movimiento_despacho_tela_cruda.php?Num_Movstk=${sNum_Movstk}&Cod_Almacen=${sCod_Almacen}&Cod_Usuario=${this.sCod_Usuario}`);
   }
 
   ListarAlmacenesService(){

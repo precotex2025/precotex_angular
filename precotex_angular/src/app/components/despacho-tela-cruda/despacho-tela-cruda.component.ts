@@ -113,6 +113,18 @@ export class DespachoTelaCrudaComponent implements OnInit {
     GlobalVariable.cod_ordtra = sCod_OrdTra
     GlobalVariable.num_movdespacho = nNum_Movstk
 
+    const _codAlmacen = this.formulario.get('ctrol_almacen')?.value ?? '';
+    if (!_codAlmacen || _codAlmacen.trim() === ''){
+      this.matSnackBar.open("¡Seleccione almacen...!", 'Cerrar', {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration: 1500,
+      });
+      return;
+    }      
+    
+    this.router.navigate(['/DespachoTelaCrudaDetalle', _codAlmacen]);
+
     // this.auditoriaLineaCosturaService.ViewAuditoriaService_Det(this.nNum_Auditoria_Activo).subscribe(
     //   (result: any) => {
     //     this.data_det = result
