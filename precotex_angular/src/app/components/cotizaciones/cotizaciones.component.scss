@@ -30,12 +30,14 @@
 }
 
 .mat-header-cell {
+  font-size: 18px;
   font-weight: 600;
-  color: #2e7d32;
+  color: #000000;
 }
 
 .mat-cell {
   color: #333;
+  text-align: center;
 }
 
 @media screen and (max-width: 768px) {
@@ -118,4 +120,57 @@
   justify-content: center; 
   font-weight: 600;       
 }
+
+.subgrupo-row {
+  background-color: #f1f8e9;
+}
+
+.subgrupo-row td:first-child {
+  padding-left: 24px;
+  font-weight: 600;
+  color: #388e3c;
+}
+.hidden {
+  display: none;
+}
+
+
+.expandible-row {
+  background-color: #fff9c4;
+  cursor: pointer;
+}
+
+.col-achi{
+  width: 250px;
+  text-align: left;
+}
+
+.fila-r td {
+  background-color: #fad7a3;
+  font-weight: bold;
+  color: #000000; 
+}
+
+.fila-r td span {
+  display: block;
+  // text-align: left;
+}
+
+.cotizacion-cell {
+  background-color: #fad7a3;
+  font-weight: bold;
+  color: #000000;
+}
+
+.cotizacion-cell span {
+  display: block;
+  text-align: center;
+}
+
+.descripcion-f {
+  background-color: #e0e0e0;
+  font-weight: bold;
+  color: #424242;
+}
+
 

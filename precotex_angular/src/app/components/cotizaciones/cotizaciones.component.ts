@@ -47,15 +47,15 @@ interface Costeo {
     rentabilidad: number;
   }
 
-  interface Proceso {
-  proceso: string;
-  factor: number;
-  costoKg: number;
-  totalTeorico: number;
-  totalComercial: number;
-  ajuste: number;
-  cotizacion: number;
-}
+//   interface Proceso {
+//   proceso: string;
+//   factor: number;
+//   costoKg: number;
+//   totalTeorico: number;
+//   totalComercial: number;
+//   ajuste: number;
+//   cotizacion: number;
+// }
 
 @Component({
   selector: 'app-cotizaciones',
@@ -74,69 +74,73 @@ export class CotizacionesComponent implements OnInit {
   descripcionTela = '';
   //rutaSeleccionada = '';
   codigoRutaTela = '';
-  RutaXCodTela = [];
+  RutaXCodTela: {codigo: string, nombre: string}[] = [];
   RutaXCodTelaDetalle = [];
   codigoColor = '';
   descripcionColor = '';
-
+  centroCosto: {codigo: number, nombre: string}[] = [];
+  
   constructor(
     private SpinnerService: NgxSpinnerService,
     private service: CotizacionesService,
     private toastr: ToastrService
   ){}
 
-  dataSource: MatTableDataSource<Proceso> = new MatTableDataSource();
+  //dataSource: MatTableDataSource<Proceso> = new MatTableDataSource();
+
+  dataSource = new MatTableDataSource<any>();
+  dataSourceFooter = new MatTableDataSource<any>();
   unidades = ['Textil', 'Confección', 'Exportación'];
   tipos = ['Regular', 'Urgente', 'Muestra'];
   clientes = ['Cliente A', 'Cliente B', 'Cliente C'];
   codigosTela = ['TELA001', 'TELA002', 'TELA003'];
   rutas = ['Ruta 1', 'Ruta 2', 'Ruta 3'];
+  expandedRows: Set<string> = new Set(); // usamos el pro_Hover como clave
 
   displayedColumns: string[] = [
-    'proceso',
+    'hover',
+    'descripcion',
     'factor',
-    'costoKg',
-    'totalTeorico',
+    'cosKg',
+    'total',
     'totalComercial',
     'ajuste',
     'cotizacion'
   ];
 
-  procesos: Proceso[] = [];
+  displayedColumnsFooter: string[] = [
+    'hover',
+    'descripcion',
+    'factor',
+    'cosKg',
+    'total',
+    'totalComercial',
+    'ajuste',
+    'cotizacion'
+  ];
+
+  //procesos: Proceso[] = [];
 
   ngOnInit(): void {
     // this.getRutaXCodTela('JE003177');
     // this.getRutaXCodTelaDetalle('JE003177', '01');
+    this.getListaCentroCosto();
   }
-
-  // actualizarRuta() {
-  //   // Aquí simulas datos según la ruta seleccionada
-  //   if (this.rutaSeleccionada === 'Ruta 1') {
-  //     this.procesos = [
-  //       { factor: 1, costoKg: 0.58, totalTeorico: 0.58, totalComercial: 0.58, ajuste: 0, cotizacion: 0 },
-  //       { factor: 1, costoKg: 1.20, totalTeorico: 1.20, totalComercial: 1.20, ajuste: 0, cotizacion: 0 }
-  //     ];
-  //   } else if (this.rutaSeleccionada === 'Ruta 2') {
-  //     this.procesos = [
-  //       { factor: 1, costoKg: 0.15, totalTeorico: 0.15, totalComercial: 0.15, ajuste: 0, cotizacion: 0 }
-  //     ];
-  //   } else {
-  //     this.procesos = [];
-  //   }
-  // }
-
-
-
-
-
-
-
+  
+  toggleExpand(row: any) {
+    if (row.isParent) {
+      if (this.expandedRows.has(row.pro_Hover)) {
+        this.expandedRows.delete(row.pro_Hover); // colapsar
+      } else {
+        this.expandedRows.add(row.pro_Hover); // expandir
+      }
+    }
+  }
 
   ///////////////////////////////////////////////////////////////////////////
 
-
   buscarDescripcionTela() { 
-    console.log('HOLAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+    //console.log('HOLAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     if (this.codigoTela) { 
       this.service.getListaTelas(this.codigoTela).subscribe({
         next: (response: any) => {
@@ -162,8 +166,10 @@ export class CotizacionesComponent implements OnInit {
   }
 
   mostrarRutaDetalle(rutaSeleccionada: string): void {
-    this.codigoRutaTela = rutaSeleccionada;
-    this.getRutaXCodTelaDetalle(this.codigoTela, rutaSeleccionada);
+    //this.codigoRutaTela = rutaSeleccionada;
+    // this.getRutaXCodTelaDetalle(this.codigoTela, rutaSeleccionada);
+    this.getListarProcesosExportacion(1);
+    //this.getListarProcesosExportacionFooter(1);
   }
 
 
@@ -175,7 +181,10 @@ export class CotizacionesComponent implements OnInit {
       next: (response: any) => {
         if(response.success){
           if(response.totalElements > 0){
-            this.RutaXCodTela = response.elements;
+            this.RutaXCodTela = response.elements.map((r: any) => ({
+              codigo: r.cod_Ruta,
+              nombre: r.descripcion
+            }));
           }
         }
         this.SpinnerService.hide();
@@ -190,38 +199,84 @@ export class CotizacionesComponent implements OnInit {
   }
 
 
-  getRutaXCodTelaDetalle(Cod_Tela: string, Cod_Ruta: string): void {
-    this.SpinnerService.show();
-    this.service.getRutaXCodTelaDetalle(Cod_Tela, Cod_Ruta).subscribe({
-      next: (response: any) => {
-        if(response.success){
-          if (response.totalElements > 0){
-            console.log('DETALLE RUTAS: --', response.elements);
-            this.RutaXCodTelaDetalle = response.elements;
-            this.dataSource.data = response.elements;
-            this.dataSource.sort = this.sort;
-          }
-        }
-        this.SpinnerService.hide();
-      },
-      error: (error: any) => {
-        this.toastr.error(error.message, 'Cerrar', {
-          timeOut: 2500
-        });
-        this.SpinnerService.hide();
-      }
-    });
-  }
+  // getRutaXCodTelaDetalle(Cod_Tela: string, Cod_Ruta: string): void {
+  //   this.SpinnerService.show();
+  //   this.service.getRutaXCodTelaDetalle(Cod_Tela, Cod_Ruta).subscribe({
+  //     next: (response: any) => {
+  //       if(response.success){
+  //         if (response.totalElements > 0){
+  //           console.log('DETALLE RUTAS: --', response.elements);
+  //           this.RutaXCodTelaDetalle = response.elements;
+  //           this.dataSource.data = response.elements;
+  //           this.dataSource.sort = this.sort;
+  //         }
+  //       }
+  //       this.SpinnerService.hide();
+  //     },
+  //     error: (error: any) => {
+  //       this.toastr.error(error.message, 'Cerrar', {
+  //         timeOut: 2500
+  //       });
+  //       this.SpinnerService.hide();
+  //     }
+  //   });
+  // }
 
 
-  recalcular(proceso: any) {
-    if (proceso.ajuste && proceso.ajuste !== 0) {
-      proceso.cotizacion = proceso.ajuste;
+  recalcular(row: any) {
+    if (row.pro_Aju == null || row.pro_Aju === 0) {
+      row.pro_Cotizacion = row.pro_Tot;
     } else {
-      proceso.cotizacion = proceso.totalComercial;
+      row.pro_Cotizacion = row.pro_Aju;
     }
   }
 
 
-  
+  getListaCentroCosto(): void {
+    this.service.getListaCentroCosto().subscribe({
+      next: (response: any) => {
+        if(response.success){
+          if(response.totalElements > 0){
+            this.centroCosto = response.elements.map((c: any) => ({
+              codigo: c.cen_Cos_Cod,
+              nombre: c.cen_Cos_Des
+            }));
+          }
+        }
+      },
+      error: (error: any) => {}
+    });
+  }
+
+  getListarProcesosExportacion(Pro_Cen_Cos: number): void {
+    this.SpinnerService.show();
+    this.service.getListarProcesosExportacion(Pro_Cen_Cos).subscribe({
+      next: (response: any) => {
+        if (response.success && response.totalElements > 0) {
+          const planos = response.elements;
+          console.log(':::::::::::::::::::::::::::::::::::.', planos);
+          const planosConFlags = planos.map((p: any) => {
+            if (!p.pro_Hover.includes('.')) {
+              p.isParent = true;
+              p.isChild = false;
+              p.tieneHijos = planos.some(x => x.pro_Hover.startsWith(p.pro_Hover + '.'));
+            } else {
+              p.isChild = true;
+              p.isParent = false;
+              p.padreKey = p.pro_Hover.split('.')[0];
+            }
+            return p;
+          });
+
+          this.dataSource.data = planosConFlags;
+          this.dataSource.sort = this.sort;
+        }
+        this.SpinnerService.hide();
+      },
+      error: (error: any) => {
+        this.toastr.error(error.message, 'Cerrar', { timeOut: 2500 });
+        this.SpinnerService.hide();
+      }
+    });
+  }  
 }

@@ -14,11 +14,18 @@ export class CotizacionesService {
     });
     constructor(private http: HttpClient) { }
   
-  getListarProcesosExportacion(Pro_Cen_Cos: string){
+  getListarProcesosExportacion(Pro_Cen_Cos: number){
     const headers = this.Header;
     let params = new HttpParams();
-    params = params.append("Pro_Cen_Cos", Pro_Cen_Cos)
+    params = params.append("Pro_Cen_Cos", Pro_Cen_Cos);
     return this.http.get(this.baseUrlTinto + 'TxCotizaciones/getListarProcesosExportacion', { headers, params });
+  }
+
+  getListarProcesosExportacionFooter(Pro_Cen_Cos: number){
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append("Pro_Cen_Cos", Pro_Cen_Cos);
+    return this.http.get(this.baseUrlTinto + 'TxCotizaciones/getListarProcesosExportacionFooter', { headers, params });
   }
 
   getRutaXCodTela(Cod_Tela: string) {
@@ -41,6 +48,11 @@ export class CotizacionesService {
     let params = new HttpParams();
     params = params.append("Cod_Tela", Cod_Tela);
     return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaTelas', { headers, params });
+  }
+
+  getListaCentroCosto() {
+    const headers = this.Header;
+    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaCentroCosto', { headers });
   }
 
 

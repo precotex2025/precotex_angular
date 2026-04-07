@@ -70,7 +70,7 @@ export class TomaFotoPersonasComponent implements OnInit {
     const calcularPesoKB = (base64: string): number => {
       const stringLength = base64.length - 'data:image/jpeg;base64,'.length;
       const bytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
-      return bytes / 1024; // convertir a KB
+      return bytes / 1024;
     };
 
     while (calcularPesoKB(fotoBase64) > 50 && calidad > 0.1) {
