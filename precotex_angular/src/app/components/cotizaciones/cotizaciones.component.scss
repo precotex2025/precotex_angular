@@ -24,6 +24,67 @@
   overflow-x: auto;
 }
 
+.cuadro-rojo {
+  flex: 1 1 100%;
+  background-color: #e0f7e9;
+  border-left: 6px solid #c21f40;
+  padding: 16px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+.cuadro-naranja {
+  flex: 1 1 100%;
+  background-color: #e0f7e9;
+  border-left: 6px solid #fb6f24;
+  padding: 16px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+.cuadro-naranja {
+  flex: 1 1 100%;
+  background-color: #e0f7e9;
+  border-left: 6px solid #fb6f24;
+  padding: 16px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+.cuadro-azul {
+  flex: 1 1 100%;
+  background-color: #e0f7e9;
+  border-left: 6px solid #2f2bad;
+  padding: 16px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+.cuadro-amarillo {
+  flex: 1 1 100%;
+  background-color: #e0f7e9;
+  border-left: 6px solid #f7db15;
+  padding: 16px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
 .tabla-procesos {
   width: 100%;
   border-collapse: collapse;
