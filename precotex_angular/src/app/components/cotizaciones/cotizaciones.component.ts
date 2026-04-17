@@ -83,13 +83,27 @@ export class CotizacionesComponent implements OnInit {
   constructor(
     private SpinnerService: NgxSpinnerService,
     private service: CotizacionesService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private formBuilder           : FormBuilder         ,
   ){}
 
   //dataSource: MatTableDataSource<Proceso> = new MatTableDataSource();
 
   dataSource = new MatTableDataSource<any>();
   dataSourceFooter = new MatTableDataSource<any>();
+
+  dataSource_VT = new MatTableDataSource<any>();
+  dataSourceFooter_VT = new MatTableDataSource<any>();
+
+  dataSource_Servicio = new MatTableDataSource<any>();
+  dataSourceFooter_Servicio = new MatTableDataSource<any>();  
+
+  dataSource_VT_Estampado = new MatTableDataSource<any>();
+  dataSourceFooter_VT_Estampado = new MatTableDataSource<any>();  
+
+  dataSource_VT_Servicio = new MatTableDataSource<any>();
+  dataSourceFooter_VT_Servicio = new MatTableDataSource<any>();  
+
   unidades = ['Textil', 'Confección', 'Exportación'];
   tipos = ['Regular', 'Urgente', 'Muestra'];
   clientes = ['Cliente A', 'Cliente B', 'Cliente C'];
@@ -119,6 +133,26 @@ export class CotizacionesComponent implements OnInit {
     'cotizacion'
   ];
 
+  displayedColumns_SV_Estampado: string[] = [
+    'hover',
+    'descripcion',
+    'factor',
+    'cosKg',
+    'totalComercial',    
+    'total',
+    'ajuste',
+    'cotizacion'
+  ];
+
+  formulario = this.formBuilder.group({
+    unidadNegocio   :[''],
+    tipo            :[''],
+    cliente         :[''],
+    codigoTela      :[''],
+    descripcionTela :[''],
+    codigoRutaTela  :['']
+  });  
+
   //procesos: Proceso[] = [];
 
   ngOnInit(): void {
@@ -141,15 +175,18 @@ export class CotizacionesComponent implements OnInit {
 
   buscarDescripcionTela() { 
     //console.log('HOLAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-    if (this.codigoTela) { 
-      this.service.getListaTelas(this.codigoTela).subscribe({
+    const sCodTela = this.formulario.get('codigoTela')?.value! || '';
+
+    if (sCodTela) { 
+      this.service.getListaTelas(sCodTela).subscribe({
         next: (response: any) => {
           if (response.success){
             if (response.totalElements > 0){
-              this.descripcionTela = response.elements[0].des_Tela;
+              //this.descripcionTela = response.elements[0].des_Tela;
+              this.formulario.get('descripcionTela')?.setValue(response.elements[0].des_Tela); 
               console.log('------', this.descripcionTela);
               if (this.descripcionTela != null || this.descripcionTela != ''){
-                this.getRutaXCodTela(this.codigoTela);
+                this.getRutaXCodTela(sCodTela);
               }
             }
           }
@@ -165,10 +202,12 @@ export class CotizacionesComponent implements OnInit {
     } 
   }
 
-  mostrarRutaDetalle(rutaSeleccionada: string): void {
+  mostrarRutaDetalle(rutaSeleccionada: any): void {
+    console.log('objeto:', rutaSeleccionada)
+    this.codigoRutaTela = rutaSeleccionada;
     //this.codigoRutaTela = rutaSeleccionada;
     // this.getRutaXCodTelaDetalle(this.codigoTela, rutaSeleccionada);
-    this.getListarProcesosExportacion(1);
+    this.getListarProcesosExportacion(Number(this.unidadNegocio));
     //this.getListarProcesosExportacionFooter(1);
   }
 
@@ -268,8 +307,23 @@ export class CotizacionesComponent implements OnInit {
             return p;
           });
 
-          this.dataSource.data = planosConFlags;
-          this.dataSource.sort = this.sort;
+          if(Pro_Cen_Cos === 1){
+            this.dataSource.data = planosConFlags;
+            this.dataSource.sort = this.sort;
+          }else if(Pro_Cen_Cos === 2){
+            this.dataSource_VT.data = planosConFlags;
+            this.dataSource_VT.sort = this.sort;
+          }else if(Pro_Cen_Cos === 3){
+            this.dataSource_Servicio.data = planosConFlags;
+            this.dataSource_Servicio.sort = this.sort;
+          }else if(Pro_Cen_Cos === 4){
+            this.dataSource_VT_Estampado.data = planosConFlags;
+            this.dataSource_VT_Estampado.sort = this.sort;
+          }else if(Pro_Cen_Cos === 5){
+            this.dataSource_VT_Servicio.data = planosConFlags;
+            this.dataSource_VT_Servicio.sort = this.sort;
+          }
+
         }
         this.SpinnerService.hide();
       },
@@ -279,4 +333,15 @@ export class CotizacionesComponent implements OnInit {
       }
     });
   }  
+
+  chgUnidadNegocio(){
+    this.codigoRutaTela = '';
+    this.formulario.get('tipo')?.setValue(''); 
+    this.formulario.get('cliente')?.setValue(''); 
+    this.formulario.get('codigoTela')?.setValue(''); 
+    this.formulario.get('descripcionTela')?.setValue(''); 
+    this.formulario.get('codigoRutaTela')?.setValue(''); 
+    this.unidadNegocio = this.formulario.get('unidadNegocio')?.value! || '';
+
+  }
 }

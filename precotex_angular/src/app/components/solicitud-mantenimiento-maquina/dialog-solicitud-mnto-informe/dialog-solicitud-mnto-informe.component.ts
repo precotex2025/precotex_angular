@@ -641,13 +641,9 @@ ngOnInit(): void {
     const codMaq: string = this.formulario.get('ctrolMaquina')?.value || null;
     const paroMaq: string = this.formulario.get('ctrolParoMaquina')?.value;
     const sJefeGrupo: string = this.formulario.get('ctrolJefeGrupo')?.value || '';
-    
-    //const condicion: string = this.formulario.get('ct_Condicion')?.value || null;   
+    const sDescripcion = this.formulario.get('ctrolDescripcionEvento')?.value;
+    const sProcedimiento = this.formulario.get('ctrolProcedimientoSolucion')?.value;    
 
-    console.log('paroMaq', paroMaq);
-    console.log('codArea', codArea);
-    console.log('codTarea', codTarea);
-    console.log('codMaq', codMaq);
 
     if (codArea == null){
       this.matSnackBar.open("¡Importante seleccionar el area!", 'Cerrar', {
@@ -667,7 +663,7 @@ ngOnInit(): void {
       return;
     }     
     
-    if (codTarea == null){
+    if (!codTarea){
       this.matSnackBar.open("¡Importante seleccionar la tarea!", 'Cerrar', {
         horizontalPosition: 'center',
         verticalPosition: 'top',
@@ -705,7 +701,6 @@ ngOnInit(): void {
           return;
         }        
       }      
-
     }    
     
     if (this.Flg_ValidaMaquina == '1' && paroMaq == null){
@@ -729,6 +724,25 @@ ngOnInit(): void {
       return;        
     }    
 
+    //NUEVOS CAMPOS  A CONSIDERAR
+    if (!sDescripcion || sDescripcion.trim() === '') {
+      this.matSnackBar.open("¡Importante ingresar la descripción del evento!", 'Cerrar', {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration: 1500,
+      });
+      return;         
+    }
+
+    if (!sProcedimiento || sProcedimiento.trim() === '') {
+      this.matSnackBar.open("¡Importante ingresar la procedimiento de la solución!", 'Cerrar', {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration: 1500,
+      });
+      return;      
+    }    
+    //return;
 
     //Continua con el Registro de Informacion 
     this.Cod_Accion   = 'I'    
