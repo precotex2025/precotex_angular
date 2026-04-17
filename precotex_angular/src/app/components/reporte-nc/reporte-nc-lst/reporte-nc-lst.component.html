@@ -109,6 +109,15 @@
             </td>
         </ng-container>
 
+        <ng-container matColumnDef="niv_Rgo">
+            <th mat-header-cell *matHeaderCellDef> Nivel de Riesgo </th>
+            <td mat-cell *matCellDef="let reporte" [ngClass]="{
+                'riesgo-bajo': reporte.niv_Rgo_Des === 'BAJO',
+                'riesgo-medio': reporte.niv_Rgo_Des === 'MEDIO',
+                'riesgo-alto': reporte.niv_Rgo_Des === 'ALTO'
+                }"> {{ reporte.niv_Rgo_Des }} </td>
+        </ng-container>
+
         <!-- Acción -->
         <ng-container matColumnDef="accion">
             <th mat-header-cell *matHeaderCellDef> Acción </th>

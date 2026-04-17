@@ -34,6 +34,7 @@ interface FormDataBuscar {
   resp_Id: number;
   niv_Rgo_Id: number;
   est_Id: number;
+  
 }
 
 @Component({
@@ -98,6 +99,7 @@ export class ReporteNcLstComponent implements OnInit {
     'rep_RepPor',
     'rep_FecObs',
     'resp_Id',
+    'niv_Rgo',
     'rep_FecSub',
     'rep_Est'
   ];
