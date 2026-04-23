@@ -146,18 +146,20 @@
                             <div class="caja">
                                 <mat-form-field class="example-form-field" appearance="fill">
                                     <mat-label>Num Prendas</mat-label>
-                                    <input matInput type="text" [value]="Num_Prendas" readonly>
+                                    <!--<input matInput type="text" [value]="Num_Prendas" readonly>-->
+                                    <input matInput type="text" readonly [value]="data[0].Num_Prendas">
                                 </mat-form-field>
                             </div>
                             <div class="caja">
                                 <mat-form-field class="example-form-field" appearance="fill">
                                     <mat-label>Num Merma</mat-label>
-                                    <input matInput type="text" [value]="Num_Merma" readonly>
+                                    <!--<input matInput type="text" [value]="Num_Merma" readonly>-->
+                                    <input matInput type="text" readonly [value]="data[0].Merma_Declarada">
                                 </mat-form-field>
                             </div>
                             <div class="caja">
                                 <mat-form-field class="example-form-field" appearance="fill">
-                                    <mat-label>Porcentaje</mat-label>
+                                    <mat-label [ngStyle]="{'background-color': Porcentaje > 2 ? 'tomato' : 'white' }">Porcentaje (%)</mat-label>
                                     <input matInput type="text" [value]="Porcentaje" readonly>
                                 </mat-form-field>
                             </div>

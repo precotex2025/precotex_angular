@@ -135,6 +135,7 @@ export class AgregarRegistroMermaComponent implements OnInit {
       });
 
       this.defectos.push(defecto);
+//      console.log(this.defectos)
       this.dataSource._updateChangeSubscription();
 
       this.codDefecto = '';
@@ -512,12 +513,15 @@ export class AgregarRegistroMermaComponent implements OnInit {
       this.Prendas_Recuperadas = '';
       this.Valor_Mercado = 0;
       this.Valor_Recuperadas = 0;
+      this.defectos = [];
+      this.dataSource = new MatTableDataSource(this.defectos);
 
       this.getDefectos();
       if(this.tipo == 1){
         this.obtenerMermaPrendasOp();
       }
-      this.obtenerMermaGeneral(OP)
+      //Desactivar merma general, se obtendra la cantidad de prendas de la secuencia (A solicitud del area de Corte ). 2026abr24, Ahmed
+      //this.obtenerMermaGeneral(OP)
       this.despachoTelaCrudaService.obtenerDatosPorOp(
         OP,
         Num_SecOrd
@@ -525,6 +529,7 @@ export class AgregarRegistroMermaComponent implements OnInit {
         (result: any) => {
           if (result != null) {
             this.data = result;
+            this.Porcentaje = Number(this.data[0].Merma_Declarada / this.data[0].Num_Prendas * 100).toFixed(2);
           }
           console.log(this.data);
         },
@@ -561,6 +566,8 @@ export class AgregarRegistroMermaComponent implements OnInit {
     if(this.tipo == 1){
       this.data = '';
       this.OP_Sec = '';
+      //this.defectos = [];
+      //this.dataSource = new MatTableDataSource(this.defectos);
     }
     
     if (this.oc != '') {
