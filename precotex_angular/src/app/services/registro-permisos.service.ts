@@ -156,8 +156,8 @@ export class RegistroPermisosService {
     return this.http.get(`${this.baseUrl}/app_CF_Obtener_Datos_por_OP.php?OP=${OP}&Num_SecOrd=${Num_SecOrd}`);
   }
 
-  obtenerMermaGeneralOp(OP: string){
-    return this.http.get(`${this.baseUrl}/app_CF_Obtener_Merma_General_Op.php?OP=${OP}`);
+  obtenerMermaGeneralOp(OP: string, OC: string){
+    return this.http.get(`${this.baseUrl}/app_CF_Obtener_Merma_General_Op.php?OP=${OP}&OC=${OC}`);
   }
   
   obtenerMermaPrendasOp(Opcion: string, Cod_OrdPro, Num_SecOrd: string, IdMerma){
