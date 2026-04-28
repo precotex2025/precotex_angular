@@ -87,7 +87,7 @@ export class AgregarRegistroMermaComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((res) => {
-      console.log(res);
+      //console.log(res);
       if (res != null) {
         this.tipo = res['tipo'];
         this.cabecera = res['Cabecera'];
@@ -96,7 +96,7 @@ export class AgregarRegistroMermaComponent implements OnInit {
           this.Turno = res['Turno'];
           this.OP_Sec = res['OP_SEC'].trim();
           this.oc = res['OC'];
-          console.log(this.OP_Sec);
+          //console.log(this.OP_Sec);
           this.changeOc();
           this.changeOp();
           this.Defecto_Principal = Number(res['Defecto_Principal']);
@@ -135,6 +135,7 @@ export class AgregarRegistroMermaComponent implements OnInit {
       });
 
       this.defectos.push(defecto);
+//      console.log(this.defectos)
       this.dataSource._updateChangeSubscription();
 
       this.codDefecto = '';
@@ -152,12 +153,12 @@ export class AgregarRegistroMermaComponent implements OnInit {
   }
 
   obtenerMermaDetalleOp(idMerma: Number){
-    console.log("--->idMerma<----")
-    console.log(idMerma)
+    //console.log("--->idMerma<----")
+    //console.log(idMerma)
 
     this.despachoTelaCrudaService.registroMermaPrendasDetalle('L', idMerma, '', '', 0)
       .subscribe((result: any) => {
-        console.log(result);
+        //console.log(result);
         this.defectos = result;
         this.dataSource = new MatTableDataSource(this.defectos);
     });
@@ -167,7 +168,7 @@ export class AgregarRegistroMermaComponent implements OnInit {
   obtenerMermaPrendasOp() {
     var Opcion = '';
     var cadena = this.OP_Sec.split('-');
-    console.log(cadena);
+    //console.log(cadena);
     var OP = cadena[0];
     var Num_SecOrd = cadena[1];
     if (this.tipo == 1) {
@@ -184,7 +185,7 @@ export class AgregarRegistroMermaComponent implements OnInit {
     ).subscribe(
       (result: any) => {
         if (result != null) {
-          console.log(result);
+          //console.log(result);
           this.dataPrendas = result;
         }
       },
@@ -192,8 +193,9 @@ export class AgregarRegistroMermaComponent implements OnInit {
         duration: 1500,
       }))
   }
+
   updateCampo(event, campo, Cod_Talla) {
-    console.log(event.target.value)
+    //console.log(event.target.value)
     var valor = event.target.value;
 
     if (valor >= 0 && valor != '') {
@@ -222,7 +224,7 @@ export class AgregarRegistroMermaComponent implements OnInit {
       event.target.value = 0;
       this.matSnackBar.open("El campo no debe estar vació, y debes ingresar un valor mayor o igual a 0!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 2500 })
     }
-    console.log(this.dataPrendas);
+    //console.log(this.dataPrendas);
   }
 
   saveRegistro(){
@@ -291,7 +293,7 @@ export class AgregarRegistroMermaComponent implements OnInit {
                 this.Notas = '';
                 this.dataOp = [];
                 this.data = '';
-                console.log(result);
+                //console.log(result);
 
                 var IdMerma = result[0].IdMerma;
 
@@ -312,9 +314,9 @@ export class AgregarRegistroMermaComponent implements OnInit {
 
                 // Grabar Prendas
                 if (this.dataPrendas.length > 0) {
-                  console.log('CON TALLAS')
-                  console.log(this.dataPrendas);
-                  console.log(IdMerma);
+                  //console.log('CON TALLAS')
+                  //console.log(this.dataPrendas);
+                  //console.log(IdMerma);
                   for (let i = 0; i < this.dataPrendas.length; i++) {
                     const element = this.dataPrendas[i];
                     this.despachoTelaCrudaService.registroMermaPrendasTalla(
@@ -436,11 +438,11 @@ export class AgregarRegistroMermaComponent implements OnInit {
                 }
                 
                 //Grabar Prendas
-                console.log(result);
+                //console.log(result);
                 if (Prendas_Mercado_Local != '' && Prendas_Recuperadas != '') {
-                  console.log('CON TALLAS')
-                  console.log(this.dataPrendas);
-                  console.log(IdMerma);
+                  //console.log('CON TALLAS')
+                  //console.log(this.dataPrendas);
+                  //console.log(IdMerma);
                   for (let i = 0; i < this.dataPrendas.length; i++) {
                     const element = this.dataPrendas[i];
                     this.despachoTelaCrudaService.registroMermaPrendasTalla(
@@ -505,19 +507,28 @@ export class AgregarRegistroMermaComponent implements OnInit {
     if (this.OP_Sec != '') {
       //console.log(this.OP_Sec);
       var cadena = this.OP_Sec.split('-');
-      console.log(cadena);
+      //console.log(cadena);
       var OP = cadena[0];
       var Num_SecOrd = cadena[1];
       this.Prendas_Mercado_Local = '';
       this.Prendas_Recuperadas = '';
       this.Valor_Mercado = 0;
       this.Valor_Recuperadas = 0;
+      this.defectos = [];
+      this.dataSource = new MatTableDataSource(this.defectos);
 
       this.getDefectos();
       if(this.tipo == 1){
         this.obtenerMermaPrendasOp();
       }
-      this.obtenerMermaGeneral(OP)
+      
+      this.obtenerMermaGeneral(OP, this.oc)
+
+      setTimeout(() => {
+        console.log("pausa")
+      }, 100);
+      //console.log(OP)
+      //console.log(this.oc)
       this.despachoTelaCrudaService.obtenerDatosPorOp(
         OP,
         Num_SecOrd
@@ -525,8 +536,14 @@ export class AgregarRegistroMermaComponent implements OnInit {
         (result: any) => {
           if (result != null) {
             this.data = result;
+            //this.Porcentaje = Number(this.data[0].Merma_Declarada / this.data[0].Num_Prendas * 100).toFixed(2);
+            this.Porcentaje = Number(this.data[0].Merma_Declarada / this.Num_Prendas * 100).toFixed(2);
+            //console.log(Number(this.data[0].Merma_Declarada / this.Num_Prendas * 100).toFixed(2))
+            //console.log(this.data[0].Merma_Declarada / this.Num_Prendas * 100)
+            //console.log(this.data[0].Merma_Declarada)
+            //console.log(this.Num_Prendas)
           }
-          console.log(this.data);
+          //console.log(this.data);
         },
         (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
           duration: 1500,
@@ -538,18 +555,18 @@ export class AgregarRegistroMermaComponent implements OnInit {
     }
   }
 
-  obtenerMermaGeneral(OP){
+  obtenerMermaGeneral(OP,OC){
     this.despachoTelaCrudaService.obtenerMermaGeneralOp(
-      OP
+      OP, OC
     ).subscribe(
       (result: any) => {
         if (result != null) {
           this.dataMermas = result;
           this.Num_Merma = this.dataMermas[0].Num_Mermas;
           this.Num_Prendas = this.dataMermas[0].Num_Prendas;
-          this.Porcentaje = this.dataMermas[0].Porcentaje;
+          //this.Porcentaje = this.dataMermas[0].Porcentaje;
         }
-        console.log(this.data);
+        //console.log(this.data);
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
         duration: 1500,
@@ -557,10 +574,12 @@ export class AgregarRegistroMermaComponent implements OnInit {
   }
 
   changeOc() {
-    console.log(this.oc);
+    //console.log(this.oc);
     if(this.tipo == 1){
       this.data = '';
       this.OP_Sec = '';
+      //this.defectos = [];
+      //this.dataSource = new MatTableDataSource(this.defectos);
     }
     
     if (this.oc != '') {
