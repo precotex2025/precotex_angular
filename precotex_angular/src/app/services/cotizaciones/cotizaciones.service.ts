@@ -14,10 +14,15 @@ export class CotizacionesService {
     });
     constructor(private http: HttpClient) { }
   
-  getListarProcesosExportacion(Pro_Cen_Cos: number){
+  getListarProcesosExportacion(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string){
     const headers = this.Header;
     let params = new HttpParams();
     params = params.append("Pro_Cen_Cos", Pro_Cen_Cos);
+    params = params.append("Tipo", Tipo);
+    params = params.append("Cod_Cliente_Tex", Cod_Cliente_Tex);
+    params = params.append("Cod_Tela", Cod_Tela);
+    params = params.append("Cod_Ruta", Cod_Ruta);
+    params = params.append("Cod_Color", Cod_Color);
     return this.http.get(this.baseUrlTinto + 'TxCotizaciones/getListarProcesosExportacion', { headers, params });
   }
 
@@ -55,6 +60,43 @@ export class CotizacionesService {
     return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaCentroCosto', { headers });
   }
 
+  postProcesoCotizacion(data: any){
+    const headers = this.Header;
+    return this.http.post(this.baseUrlTinto + 'txCotizaciones/postProcesoCotizacion', data, { headers })
+  }  
+
+  getValidaColorExiste(Cod_Color: string) {
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append("Cod_Color", Cod_Color);
+    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getValidaColorExiste', { headers, params });
+  }  
+
+  getListaUnidadNegocio() {
+    const headers = this.Header;
+    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaUnidadNegocio', { headers });
+  }  
+
+  getListaIntensidad(Id_Unidad_NegocioKey: number) {
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append("Id_Unidad_NegocioKey", Id_Unidad_NegocioKey);
+    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaIntensidad', { headers, params });
+  }  
+
+  getListaHiladoxTela(Cod_Tela: string) {
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append("Cod_Tela", Cod_Tela);
+    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaHiladoxTela', { headers, params });
+  }    
+
+  getListaUnidadNegocioTipo(Id_Unidad_NegocioKey: number) {
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append("Id_Unidad_NegocioKey", Id_Unidad_NegocioKey);
+    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaUnidadNegocioTipo', { headers, params });
+  }   
 
 
 }
