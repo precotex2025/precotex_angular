@@ -131,18 +131,18 @@ export class ActualizarControlInternoComponent implements OnInit {
     });
   }
 
-  obtenerMermaGeneral(OP){
+  obtenerMermaGeneral(OP, OC){
     this.despachoTelaCrudaService.obtenerMermaGeneralOp(
-      OP
+      OP, OC
     ).subscribe(
       (result: any) => {
         if (result != null) {
           this.dataMermas = result;
           this.Num_Merma = this.dataMermas[0].Num_Mermas;
           this.Num_Prendas = this.dataMermas[0].Num_Prendas;
-          this.Porcentaje = this.dataMermas[0].Porcentaje;
+          //this.Porcentaje = this.dataMermas[0].Porcentaje;
         }
-        console.log(this.data);
+        //console.log(this.data);
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
         duration: 1500,
@@ -171,7 +171,7 @@ export class ActualizarControlInternoComponent implements OnInit {
     ).subscribe(
       (result: any) => {
         if (result != null) {
-          console.log(result);
+          //console.log(result);
           this.dataPrendas = result;
         }
       },
@@ -179,6 +179,7 @@ export class ActualizarControlInternoComponent implements OnInit {
         duration: 1500,
       }))
   }
+
   updateCampo(event, campo, Cod_Talla) {
     console.log(event.target.value)
     var valor = event.target.value;
@@ -299,7 +300,7 @@ export class ActualizarControlInternoComponent implements OnInit {
     if (this.OP_Sec != '') {
       //console.log(this.OP_Sec);
       var cadena = this.OP_Sec.split('-');
-      console.log(cadena);
+      //console.log(cadena);
       var OP = cadena[0];
       var Num_SecOrd = cadena[1];
       this.Prendas_Mercado_Local = '';
@@ -308,7 +309,12 @@ export class ActualizarControlInternoComponent implements OnInit {
       this.Valor_Recuperadas = 0;
 
       this.getDefectos();
-      this.obtenerMermaGeneral(OP);
+      this.obtenerMermaGeneral(OP, this.oc);
+
+      setTimeout(() => {
+        console.log("pausa")
+      }, 100);
+
       this.obtenerMermaPrendasOp();
       this.despachoTelaCrudaService.obtenerDatosPorOp(
         OP,
@@ -317,8 +323,13 @@ export class ActualizarControlInternoComponent implements OnInit {
         (result: any) => {
           if (result != null) {
             this.data = result;
+            console.log(Number(this.data[0].Merma_Declarada / this.Num_Prendas * 100).toFixed(2))
+            console.log(this.data[0].Merma_Declarada / this.Num_Prendas * 100)
+            console.log(this.data[0].Merma_Declarada)
+            console.log(this.Num_Prendas)
+            this.Porcentaje = Number(this.data[0].Merma_Declarada / this.Num_Prendas * 100).toFixed(2);
           }
-          console.log(this.data);
+          //console.log(this.data);
         },
         (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
           duration: 1500,

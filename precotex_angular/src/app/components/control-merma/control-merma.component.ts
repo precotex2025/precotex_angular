@@ -165,7 +165,7 @@ export class ControlMermaComponent implements OnInit {
   }
 
   applyFilter() {
-    console.log(this.dataSource.data)
+    //console.log(this.dataSource.data)
 
     this.dataForExcel = [];
     if (this.dataSource.data.length == 0) {
@@ -185,7 +185,7 @@ export class ControlMermaComponent implements OnInit {
       ).subscribe(
         (result: any) => {
           dataReport = result;
-
+          
           dataReport.forEach((row: any) => {
             this.dataForExcel.push(Object.values(row))
           })
