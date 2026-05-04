@@ -114,8 +114,13 @@ export class DialogIngresoEmpleadorefrigerioComponent implements OnInit {
     const printTime = _moment(valor, 'HH:mm:ss').format('HH:mm');
 
     const str = new Date().toLocaleString('en-Es', { year: 'numeric', month: '2-digit', day: '2-digit' });
-    var dia = str.substring(3, 5);
-    var mes = str.substring(0, 2);
+    
+    // Se cambia la asignación de valores xq estaba considerando el formato ingles. 2026may04, Ahmed
+    //var dia = str.substring(3, 5);
+    //var mes = str.substring(0, 2);
+    //var anio = str.substring(6, 10);
+    var dia = str.substring(0, 2);
+    var mes = str.substring(3, 5);
     var anio = str.substring(6, 10);
     var totaldia = anio + '/' + mes + '/' + dia;
     var nuevaFecha = new Date(totaldia + ' ' + printTime)

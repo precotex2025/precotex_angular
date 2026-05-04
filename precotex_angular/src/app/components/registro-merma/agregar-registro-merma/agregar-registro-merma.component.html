@@ -198,7 +198,7 @@
                                 <mat-form-field class="example-form-field" appearance="fill">
                                     <mat-label [ngStyle]="{'background-color': tipo == 2 ? 'yellow' : 'white' }">Defecto</mat-label>
                                     <mat-select [(ngModel)]="codDefecto">
-                                        <mat-option *ngFor="let item of dataDefectos" [value]="item.Cod_Defecto">{{item.Des_Defecto}}</mat-option>
+                                        <mat-option *ngFor="let item of dataMotivos" [value]="item.Cod_Defecto">{{item.Des_Defecto}}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
