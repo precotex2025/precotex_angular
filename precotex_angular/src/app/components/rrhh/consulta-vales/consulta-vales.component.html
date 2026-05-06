@@ -10,21 +10,40 @@
                 
                 <mat-card-content>
                     <div>
+                        <mat-form-field class="example-width-20" appearance="outline" *ngIf="ll_super">
+                            <mat-label>Tipo</mat-label>
+                            <mat-select [(ngModel)]="ln_tipo">
+                                <mat-option *ngFor="let item of dataTipo" [value]="item.tipo">
+                                    {{ item.des_tipo }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="example-width-20" appearance="outline" *ngIf="ll_super">
+                            <mat-label>Estado</mat-label>
+                            <mat-select [(ngModel)]="lc_estado">
+                                <mat-option *ngFor="let item of dataEstado" [value]="item.estado">
+                                    {{ item.des_estado }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
                         <mat-form-field class="example-form-field" appearance="fill">
                         <mat-label>Año</mat-label>
-                        <input matInput type="text" maxlength="4" [(ngModel)]="ln_numAno" placeholder="Año" autocomplete="off">
+                        <input matInput type="number" maxlength="4" [(ngModel)]="ln_numAno" placeholder="Año" autocomplete="off">
                         </mat-form-field>
 
                         <mat-form-field class="example-form-field" appearance="fill">
                         <mat-label>N° Documento</mat-label>
-                        <input matInput type="text" maxlength="9" (input)="onBuscarVale()"
-                            (change)="onBuscarVale()" [(ngModel)]="lc_numDoc" placeholder="Documento Identidad" autocomplete="off">
+                        <input matInput type="text" maxlength="9"
+                            (blur)="onBuscarVale()" [(ngModel)]="lc_numDoc" placeholder="Documento Identidad" autocomplete="off">
                             <button matSuffix mat-icon-button aria-label="Clear" (click)="limpiarValor()">
                                 <mat-icon>close</mat-icon>
                             </button>
                         </mat-form-field>
 
                         <button mat-button type="button" color="primary" (click)="onBuscarVale()"><mat-icon>search</mat-icon>Buscar</button>
+                        <button mat-button type="button" color="primary" (click)="onExportarRegistro()" *ngIf="ll_super"><mat-icon>file_download</mat-icon>Descargar</button>
                     </div>
                     <br>
                     <mat-divider></mat-divider>
@@ -93,3 +112,7 @@
         </div>
     </div>
 </div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">  
+    <p style="color: white; text-align: center; " >Cargando... </p>  
+</ngx-spinner> 
