@@ -1,0 +1,102 @@
+<div class="container">
+    <div class="info-fields">
+        <mat-form-field appearance="fill">
+            <mat-label>Movimiento</mat-label>
+            <input matInput [(ngModel)]="movimiento.almacen" readonly>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Nro. Bulto</mat-label>
+            <input matInput 
+            [(ngModel)]="movimiento.nroMov"
+            (keyup.enter)="onEnter()">
+        </mat-form-field>
+
+        <!-- <mat-form-field appearance="fill">
+            <mat-label>Total Bultos</mat-label>
+            <input matInput [(ngModel)]="totalBultos" readonly>
+        </mat-form-field> -->
+
+        <!-- <mat-form-field appearance="fill">
+            <mat-label>Total Bultos</mat-label>
+            <input matInput [(ngModel)]="totalBultos" readonly>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Lecturados</mat-label>
+            <input matInput [(ngModel)]="lecturados" readonly>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Pendientes</mat-label>
+            <input matInput [(ngModel)]="pendientes" readonly>
+        </mat-form-field> -->
+
+        <div class="info-fields">
+            <mat-form-field appearance="fill" class="small-field">
+                <mat-label>Total Bultos</mat-label>
+                <input matInput [(ngModel)]="totalBultos" readonly>
+            </mat-form-field>
+        
+            <mat-form-field appearance="fill" class="small-field">
+                <mat-label>Lecturados</mat-label>
+                <input matInput [(ngModel)]="lecturados" readonly>
+            </mat-form-field>
+        
+            <mat-form-field appearance="fill" class="small-field">
+                <mat-label>Pendientes</mat-label>
+                <input matInput [(ngModel)]="pendientes" readonly>
+            </mat-form-field>
+        </div>
+
+
+        <button mat-raised-button color="warn" (click)="cerrar()">Cerrar</button>
+    </div>
+
+    <div class="table-responsive">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+            <!-- Código -->
+            <ng-container matColumnDef="num_Corre">
+                <th mat-header-cell *matHeaderCellDef> Código </th>
+                <td mat-cell *matCellDef="let d"> {{d.num_Corre}} </td>
+            </ng-container>
+
+            <!-- Cod Hilo -->
+            <ng-container matColumnDef="peso_Neto">
+                <th mat-header-cell *matHeaderCellDef> Peso Neto </th>
+                <td mat-cell *matCellDef="let d"> {{d.peso_Neto}} </td>
+            </ng-container>
+
+            <!-- Proveedor -->
+            <ng-container matColumnDef="fec_Registro">
+                <th mat-header-cell *matHeaderCellDef> Fec. Reg. </th>
+                <td mat-cell *matCellDef="let d"> {{d.fec_Registro | date: 'dd/MM/yyyy'}} </td>
+            </ng-container>
+
+            <!-- Conos -->
+            <ng-container matColumnDef="cod_Usuario">
+                <th mat-header-cell *matHeaderCellDef> Usuario </th>
+                <td mat-cell *matCellDef="let d"> {{d.cod_Usuario}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="flg_Lecturado">
+                <th mat-header-cell *matHeaderCellDef> Lecturado </th>
+                <td mat-cell *matCellDef="let d" [ngClass]="{'fila-verde': d.flg_Lecturado === 'S'}"> {{d.flg_Lecturado}} </td>
+            </ng-container>
+
+            <!-- Lecturado -->
+            <!-- <ng-container matColumnDef="lecturado">
+                <th mat-header-cell *matHeaderCellDef> Lecturado </th>
+                <td mat-cell *matCellDef="let d">
+                    <mat-checkbox [(ngModel)]="d.lecturado" (change)="actualizarLectura(d)">
+                    </mat-checkbox>
+                </td>
+            </ng-container> -->
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                [ngClass]="{'fila-verde': row.flg_Lecturado === 'S'}"></tr>
+        </table>
+    </div>
+</div>

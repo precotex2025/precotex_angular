@@ -1,117 +1,135 @@
     .listado-container {
-    width: 100%;
-    min-height: 100vh;
-    padding: 1.5rem;
-    box-sizing: border-box;
-    background-color: #f5f7fa;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    font-family: 'Roboto', sans-serif;
+        width: 100%;
+        min-height: 100vh;
+        padding: 1.5rem;
+        box-sizing: border-box;
+        background-color: #f5f7fa;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        font-family: 'Roboto', sans-serif;
     }
 
     .listado-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-
-    .titulo {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #333;
-        margin: 0 1rem;
-    }
-
-    .nuevo-btn {
-        min-width: 120px;
-    }
-
-    .dashboard-btn {
-        font-weight: 500;
-    }
-
-    @media (max-width: 600px) {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
 
         .titulo {
-        text-align: center;
-        margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin: 0 1rem;
         }
 
-        .nuevo-btn,
-        .dashboard-btn {
-        width: 100%;
+        .nuevo-btn {
+            min-width: 120px;
         }
-    }
+
+        .dashboard-btn {
+            font-weight: 500;
+        }
+
+        @media (max-width: 600px) {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+
+            .titulo {
+                text-align: center;
+                margin: 0;
+            }
+
+            .nuevo-btn,
+            .dashboard-btn {
+                width: 100%;
+            }
+        }
     }
 
     .tabla-responsive {
-    overflow-x: auto;
+        overflow-x: auto;
 
-    table {
-        width: 100%;
-        min-width: 800px;
-        border-collapse: collapse;
-
-        th {
-        background-color: #e0e0e0;
-        font-weight: 600;
-        padding: 0.75rem;
-        text-align: left;
-        }
-
-        td {
-        padding: 0.75rem;
-        border-bottom: 1px solid #ddd;
-        }
-
-        button {
-        margin-right: 0.25rem;
-        }
-
-        mat-icon {
-        font-size: 20px;
-        }
-    }
-
-    @media (max-width: 768px) {
         table {
-        min-width: 100%;
+            width: 100%;
+            min-width: 800px;
+            border-collapse: collapse;
+
+            th {
+                background-color: #e0e0e0;
+                font-weight: 600;
+                padding: 0.75rem;
+                text-align: left;
+            }
+
+            td {
+                padding: 0.75rem;
+                border-bottom: 1px solid #ddd;
+            }
+
+            button {
+                margin-right: 0.25rem;
+            }
+
+            mat-icon {
+                font-size: 20px;
+            }
         }
 
-        th, td {
-        font-size: 0.9rem;
-        padding: 0.5rem;
+        @media (max-width: 768px) {
+            table {
+                min-width: 100%;
+            }
+
+            th,
+            td {
+                font-size: 0.9rem;
+                padding: 0.5rem;
+            }
         }
     }
+
+    .filtro-panel {
+        display: flex;
+        flex-wrap: wrap;
+        // gap: 1rem;
+        margin: 1rem 0;
+
+        mat-form-field {
+            flex: 1 1 200px;
+            min-width: 180px;
+        }
+
+        @media (max-width: 600px) {
+            flex-direction: column;
+
+            mat-form-field {
+                width: 100%;
+            }
+        }
     }
 
-.filtro-panel {
-display: flex;
-flex-wrap: wrap;
-// gap: 1rem;
-margin: 1rem 0;
-
-mat-form-field {
-    flex: 1 1 200px;
-    min-width: 180px;
-}
-
-@media (max-width: 600px) {
-    flex-direction: column;
-
-    mat-form-field {
-    width: 100%;
+    .filtro-panel-div-separar {
+        margin-bottom: 15px;
     }
-}
-}
-.filtro-panel-div-separar{
-    margin-bottom: 15px;
-}
 
-.pendiente {
-    color: red;
-}
+    .pendiente {
+        color: red;
+    }
+
+
+    .riesgo-bajo {
+        color: green !important;
+        font-weight: bold;
+    }
+
+    .riesgo-medio {
+        color: rgb(245, 229, 10) !important;
+        font-weight: bold;
+    }
+
+    .riesgo-alto {
+        color: red !important;
+        font-weight: bold;
+    }

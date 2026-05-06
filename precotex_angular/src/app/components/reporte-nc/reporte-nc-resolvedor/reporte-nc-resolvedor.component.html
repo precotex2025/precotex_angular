@@ -1,6 +1,6 @@
     <mat-card class="form-container">
     <form #formResolvedor="ngForm" >
-
+        <h2><strong>Datos Generales</strong></h2>
         <!-- Fecha y Hora -->
         <div class="form-section">
         <div class="fecha-hora-row">
@@ -10,7 +10,18 @@
             </mat-form-field>
         </div>
         </div>
+        
+        <mat-form-field appearance="fill">
+            <mat-label>Reportado Por</mat-label>
+            <input matInput [(ngModel)]="formData.reportadoPor" name="reportadoPor" readonly>
+        </mat-form-field>
 
+        <mat-form-field appearance="fill">
+            <mat-label>Persona Cierre</mat-label>
+            <input matInput [(ngModel)]="formData.rep_Usr_Sub" name="rep_Usr_Sub" readonly>
+        </mat-form-field>
+        
+        <h2><strong>Detalle</strong></h2>
         <!-- Descripción -->
         <div class="form-section">
         <mat-form-field appearance="fill">
@@ -46,12 +57,7 @@
             <mat-label>Ubicación</mat-label>
             <input matInput [(ngModel)]="formData.ubicacion" name="ubicacion" readonly>
         </mat-form-field>
-
-        <mat-form-field appearance="fill">
-            <mat-label>Reportado Por</mat-label>
-            <input matInput [(ngModel)]="formData.reportadoPor" name="reportadoPor" readonly>
-        </mat-form-field>
-
+        
         <mat-form-field appearance="fill">
             <mat-label>Responsable</mat-label>
             <input matInput [(ngModel)]="formData.responsable" name="responsable" readonly>

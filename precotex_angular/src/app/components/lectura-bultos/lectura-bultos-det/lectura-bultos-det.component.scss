@@ -1,0 +1,67 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 12px;
+}
+
+h2 {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+// .info-fields {
+//     display: flex;
+//     flex-wrap: wrap;
+//     gap: 12px;
+//     align-items: center;
+// }
+
+.info-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.small-field {
+    flex: 1 1 80px; 
+    min-width: 80px;
+}
+
+mat-form-field {
+    flex: 1 1 200px;
+}
+
+button {
+    width: 100%;
+    align-self: flex-start;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    min-width: 600px;
+}
+
+mat-checkbox {
+    transform: scale(1.2);
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding: 24px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        text-align: left;
+    }
+}
+
+.fila-verde {
+  background-color: #c8e6c9;
+}

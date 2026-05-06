@@ -5,7 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ReporteNCService } from 'src/app/services/ReporteNC/reporte-nc.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
-
+import { GlobalVariable } from 'src/app/VarGlobals';
 
 interface ImagenAdjunta {
   img_Id?: number,
@@ -48,7 +48,8 @@ interface FormDataPatch {
     rep_DetObs: string,
     imagenes?: string,
     imgnombre?: string,
-    img_Fam?: number
+    img_Fam?: number,
+    rep_Usr_Sub?: string
 }
 
 interface FormDataImg{
@@ -57,7 +58,8 @@ interface FormDataImg{
     rep_DetObs: string,
     imagenes?: string,
     imgnombre?: string,
-    img_Fam?: number
+    img_Fam?: number,
+    rep_Usr_Sub?: string
 }
 
 
@@ -113,7 +115,8 @@ export class ReporteNcCierreComponent implements OnInit {
     rep_DetObs: '',
     imagenes: '',
     imgnombre: '',
-    img_Fam: 0
+    img_Fam: 0,
+    rep_Usr_Sub: ''
   }
   formDataImg: FormDataImg = {
     rep_Id: '',
@@ -121,7 +124,8 @@ export class ReporteNcCierreComponent implements OnInit {
     rep_DetObs: '',
     imagenes: '',
     imgnombre: '',
-    img_Fam: 0
+    img_Fam: 0,
+    rep_Usr_Sub: ''
   }
 
   ngOnGetParams(){
@@ -291,10 +295,10 @@ onGuardar(): void{
         rep_Est: this.cierreSeleccionado,
         imagenes: base64Concatenado,
         imgnombre: nombres,
-        img_Fam: 2
+        img_Fam: 2,
+        rep_Usr_Sub: GlobalVariable.vusu
         };
 
-        
       console.log('LOS DATOS A ENVIAR SON: ', EnviarData);
       Swal.fire({
         title: "¿Desea Actualizar el Registro?",

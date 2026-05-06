@@ -32,6 +32,7 @@ export class DialogIngresoEmpleadoComponent implements OnInit {
   subAreas: Array<any> = [];
   searchable = true;
   mostrar = false;
+  xhorafin = "17:15"
   constructor(
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
@@ -43,8 +44,8 @@ export class DialogIngresoEmpleadoComponent implements OnInit {
   formulario = this.formBuilder.group({ codTrabajador: [''], desTrabajador: [''], horainicio: ['00:00'], horafinal: ['00:00'], subAreas: ['TODOS'] })
 
   ngOnInit(): void {
-    console.log(this.data)
-    console.log(screen.height);
+    //console.log(this.data)
+    //console.log(screen.height);
     if (screen.height < 740) {
       this.searchable = false;
     }
@@ -78,16 +79,14 @@ export class DialogIngresoEmpleadoComponent implements OnInit {
   pasarDato() {
 
     let val1 = this.formulario.get('codTrabajador')?.value
-    console.log(val1)
+    //console.log(val1)
 
     let datval1 = val1.split('-')
-    console.log(datval1)
-
+    //console.log(datval1)
     //let valor=this.formulario.get('codTrabajador')?.value
 
     let valor = datval1[1]
-    console.log(valor)
-
+    //console.log(valor)
 
     let contar = this.listar_operacionConductor.length
     for (let index = 0; index < contar; index++) {
@@ -98,8 +97,7 @@ export class DialogIngresoEmpleadoComponent implements OnInit {
         this.formulario.get('desTrabajador')?.setValue(element.Nombre)
         this.formulario.get('desTrabajador').disable();
 
-
-        console.log(this.data.eltipo)
+        //console.log(this.data.eltipo)
         switch (this.data.eltipo) {
           case '001':
 
@@ -109,7 +107,7 @@ export class DialogIngresoEmpleadoComponent implements OnInit {
             break;
           case '002':
             this.formulario.get('horainicio')?.setValue('')
-            console.log(new Date())
+            //console.log(new Date())
             this.RegistroPermisosService.horariosTrabajadores('001', element.Tipo, element.Codigo, '07/09/2022', 'F').subscribe(
               (result: any) => {
                 let valor = JSON.stringify(result[0]).split(':')
@@ -135,7 +133,7 @@ export class DialogIngresoEmpleadoComponent implements OnInit {
                 let hora = valor[1].replace('"', '');
                 let minutos = valor[2].replace('"}', '');
                 this.formulario.get('horainicio')?.setValue(hora + ':' + minutos)
-                console.log(hora + ':' + minutos)
+                //console.log(hora + ':' + minutos)
               },
               (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
             this.formulario.get('horafinal')?.setValue('')
@@ -162,17 +160,18 @@ export class DialogIngresoEmpleadoComponent implements OnInit {
 
       t1.setHours(hora2[0], hora2[1], 0);
       t2.setHours(hora1[0], hora1[1], 0);
-
+      //console.log(t1)
+      //console.log(t2)
       //Aquí hago la resta
       t1.setHours(t1.getHours() - t2.getHours(), t1.getMinutes() - t2.getMinutes(), t1.getSeconds() - t2.getSeconds());
 
       //Imprimo el resultado
       var horas = "La diferencia es de: " + (t1.getHours() ? t1.getHours() + (t1.getHours() > 1 ? " horas" : " hora") : "") + (t1.getMinutes() ? ", " + t1.getMinutes() + (t1.getMinutes() > 1 ? " minutos" : " minuto") : "") + (t1.getSeconds() ? (t1.getHours() || t1.getMinutes() ? " y " : "") + t1.getSeconds() + (t1.getSeconds() > 1 ? " segundos" : " segundo") : "");
 
-      console.log(horas);
-      console.log(this.data.eltipo);
+      ///console.log(horas);
+      //console.log(this.data.eltipo);
 
-      console.log(t1.getHours());
+      //console.log(t1.getHours());
 
       if (this.data.eltipo != '002') {
         if (t1.getHours() >= 8 && t1.getMinutes() >= 0) {
@@ -183,6 +182,8 @@ export class DialogIngresoEmpleadoComponent implements OnInit {
         } else {
 
         }
+      } else{
+        this.formulario.get('horafinal')?.setValue(this.xhorafin.substring(0,5));
       }
 
 
@@ -193,7 +194,7 @@ export class DialogIngresoEmpleadoComponent implements OnInit {
   }
 
   changeSubArea(event) {
-    console.log(event);
+    //console.log(event);
     this.listar_operacionConductor = this.listar_operacionConductor2;
     if (event.value == 'TODOS') {
       this.listar_operacionConductor = this.listar_operacionConductor2;
@@ -208,17 +209,20 @@ export class DialogIngresoEmpleadoComponent implements OnInit {
     console.log(event.target.value);
   }
   Seleccionados(event) {
-    console.log(event);
+    //console.log(event);
     this.seleccionados = event;
     if (this.data.eltipo == '002') {
       this.RegistroPermisosService.horarioTrabajador(event[0].Tipo, event[0].Codigo, this.data.fecha.toLocaleDateString())
         .subscribe((res: any) => {
           if(res.length > 0){
+            //console.log(res)
             this.formulario.get('horainicio')?.setValue(res[0].Hora_Ini);
             this.formulario.get('horafinal')?.setValue(res[0].Hora_Fin);
+            this.xhorafin = res[0].Hora_Fin;
           } else{
             this.formulario.get('horainicio')?.setValue('07:00');
             this.formulario.get('horafinal')?.setValue('17:15');
+            this.xhorafin = "17:15";
           }
         });
 
@@ -239,7 +243,7 @@ export class DialogIngresoEmpleadoComponent implements OnInit {
     let horainicio = this.formulario.get('horainicio')?.value
     let horafinal = this.formulario.get('horafinal')?.value
 
-    console.log(horainicio + horafinal)
+    //console.log(horainicio + horafinal)
 
     if (horainicio == '' && horafinal == '') {
       this.matSnackBar.open("Error: Debe Ingresar un Horario Valido", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
@@ -254,7 +258,7 @@ export class DialogIngresoEmpleadoComponent implements OnInit {
         GlobalVariable.Arr_Trabajadores.push({ tipo: element.Tipo, position: element.Codigo, name: element.Nombre, weight: horainicio, symbol: horafinal, Cod_Empresa: element.Cod_Empresa })
       });
 
-      console.log(GlobalVariable.Arr_Trabajadores);
+      //console.log(GlobalVariable.Arr_Trabajadores);
       this.dialog.closeAll();
 
     }
@@ -264,23 +268,33 @@ export class DialogIngresoEmpleadoComponent implements OnInit {
   changeHoraInicio(event) {
     if (this.data.eltipo != '003') {
       var fecha = _moment(new Date());
+      //console.log(fecha)
       var valor = this.formulario.get('horainicio').value;
       valor = valor + ':00';
+      //console.log(valor)
       const endTime = _moment(valor, 'HH:mm:ss').add(60, 'minutes').format('HH:mm');
       const printTime = _moment(valor, 'HH:mm:ss').format('HH:mm');
 
       const str = new Date().toLocaleString('en-Es', { year: 'numeric', month: '2-digit', day: '2-digit' });
-      var dia = str.substring(3, 5);
-      var mes = str.substring(0, 2);
+      //console.log(str)
+      
+      // Se cambia la asignación de valores xq estaba considerando el formato ingles. 2026may04, Ahmed
+      //var dia = str.substring(3, 5);
+      //var mes = str.substring(0, 2);
+      //var anio = str.substring(6, 10);
+      var dia = str.substring(0, 2);
+      var mes = str.substring(3, 5);
       var anio = str.substring(6, 10);
+
       var totaldia = anio + '/' + mes + '/' + dia;
       var nuevaFecha = new Date(totaldia + ' ' + printTime)
-      console.log(nuevaFecha);
+      //console.log("nuevaFecha");
+      //console.log(nuevaFecha);
       var fecha_validar = _moment(nuevaFecha);
       const diferencia = _moment.duration(fecha_validar.diff(fecha));
       var minutos = (diferencia.asMinutes());
 
-      console.log(minutos);
+      //console.log(minutos);
 
       if (minutos < -30) {
         this.matSnackBar.open("Error: Debe Ingresar una hora a futuro.", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
@@ -299,7 +313,7 @@ export class DialogIngresoEmpleadoComponent implements OnInit {
         this.listar_operacionConductor = result;
 
         this.listar_operacionConductor2 = result;
-        console.log(this.listar_operacionConductor);
+        //console.log(this.listar_operacionConductor);
         this.cargarSubAreas();
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
@@ -310,7 +324,7 @@ export class DialogIngresoEmpleadoComponent implements OnInit {
     this.RegistroPermisosService.Rh_Mostrar_Areas_Permiso_Web(usuario).subscribe(
       (result: any) => {
         this.subAreas = result
-        console.log(this.subAreas);
+        //console.log(this.subAreas);
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
   }

@@ -48,6 +48,7 @@ export class AgregarRegistroMermaComponent implements OnInit {
   dataOp: any = [];
   dataDefectos: any = [];
   dataMermas: any = [];
+  dataMotivos: any = [];
   OP_Sec: string = '';
 
   oc: string = '';
@@ -115,6 +116,8 @@ export class AgregarRegistroMermaComponent implements OnInit {
         }
       }
     });
+
+    this.getMotivos();
   }
   ngAfterViewInit(): void {
 
@@ -128,10 +131,13 @@ export class AgregarRegistroMermaComponent implements OnInit {
       defecto.Cod_Talla = this.talla;
       defecto.Cantidad = this.cantidad;
 
-      this.dataDefectos.forEach(element => {
-        if(element.Cod_Defecto == this.codDefecto) 
+      this.dataMotivos.forEach(element => {
+        if(element.Cod_Defecto == this.codDefecto){
+          console.log(this.codDefecto)
+          console.log(element.Cod_Defecto)
           defecto.Des_Defecto = element.Des_Defecto;
           defecto.Des_Area = element.Des_Area;
+        } 
       });
 
       this.defectos.push(defecto);
@@ -503,6 +509,19 @@ export class AgregarRegistroMermaComponent implements OnInit {
         duration: 1500,
       }))
   }
+
+  getMotivos() {
+    this.despachoTelaCrudaService.ObtenerAdicionalesMerma(
+      'M',
+    ).subscribe(
+      (result: any) => {
+        this.dataMotivos = result;
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+        duration: 1500,
+      }))
+  }
+
   changeOp() {
     if (this.OP_Sec != '') {
       //console.log(this.OP_Sec);

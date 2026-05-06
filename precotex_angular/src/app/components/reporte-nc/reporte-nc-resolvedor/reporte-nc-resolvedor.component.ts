@@ -39,6 +39,7 @@ interface FormData {
     imagenes?: string,
     imgnombre?: string,
     est_Id: string,
+    rep_Usr_Sub?: string
 }
 
 interface FormDataPatch {
@@ -89,7 +90,8 @@ export class ReporteNcResolvedorComponent implements OnInit, OnDestroy {
     area: '',
     imagenes: '',
     imgnombre: '',
-    est_Id: ''
+    est_Id: '',
+    rep_Usr_Sub: ''
   };
 
   formDataPatch: FormDataPatch = {
@@ -184,6 +186,7 @@ export class ReporteNcResolvedorComponent implements OnInit, OnDestroy {
               // cierre: datos.cierre,
               // observacion: datos.observacion,
               est_Id: datos.rep_Est,
+              rep_Usr_Sub: datos.rep_Usr_Sub
             }
 
             this.formDataPatch = {
