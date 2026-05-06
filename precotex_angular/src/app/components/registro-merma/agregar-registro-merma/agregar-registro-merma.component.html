@@ -193,20 +193,34 @@
                         DEFECTOS
                     </mat-card-header>
                     <mat-card-content class="content">
-                        <div class="findcol1">
+                        <div class="findcol1" [formGroup]="formulario">
                             <div class="caja">
                                 <mat-form-field class="example-form-field" appearance="fill">
                                     <mat-label [ngStyle]="{'background-color': tipo == 2 ? 'yellow' : 'white' }">Defecto</mat-label>
-                                    <mat-select [(ngModel)]="codDefecto">
+                                    <input matInput type="text" #trigger="matAutocompleteTrigger" placeholder="Defecto" formControlName="nomDefecto" [matAutocomplete]="autoDataPuesto" />
+                                    <mat-autocomplete autoActiveFirstOption #autoDataPuesto="matAutocomplete">
+                                        <mat-option *ngFor="let option of filtroPuesto | async" [value]="option.Des_Defecto" (click)="selectPuesto(option)">
+                                            {{ option.Des_Defecto }}
+                                        </mat-option> 
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+
+                            <!--<div class="caja">
+                                <mat-form-field class="example-form-field" appearance="fill">
+                                    <mat-label [ngStyle]="{'background-color': tipo == 2 ? 'yellow' : 'white' }">Defecto</mat-label>
+                                    <!-<mat-select [(ngModel)]="codDefecto">->
+                                    <mat-select formControlName="codDefecto">
                                         <mat-option *ngFor="let item of dataMotivos" [value]="item.Cod_Defecto">{{item.Des_Defecto}}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
-                            </div>
+                            </div>-->
 
                             <div class="caja">
                                 <mat-form-field class="example-form-field" appearance="fill">
                                     <mat-label [ngStyle]="{'background-color': tipo == 2 ? 'yellow' : 'white' }">Talla</mat-label>
-                                    <mat-select [(ngModel)]="talla">
+                                    <!--<mat-select [(ngModel)]="talla">-->
+                                    <mat-select formControlName="talla">
                                         <mat-option *ngFor="let item of dataPrendas" [value]="item.Cod_Talla">{{item.Cod_Talla}}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
@@ -215,7 +229,8 @@
                             <div class="caja">
                                 <mat-form-field class="example-form-field" appearance="fill">
                                     <mat-label>Cantidad</mat-label>
-                                    <input matInput type="number" [(ngModel)]="cantidad">
+                                    <!--<input matInput type="number" [(ngModel)]="cantidad">-->
+                                    <input matInput type="number" formControlName="cantidad">
                                 </mat-form-field>
                             </div>
 
