@@ -9,12 +9,13 @@ import { LecturaBultosService } from 'src/app/services/LecturaBultos/lectura-bul
   styleUrls: ['./lectura-bultos.component.scss']
 })
 export class LecturaBultosComponent implements OnInit {
-
+  esPendiente: string = 'N';
   displayedColumns: string[] = [
     'detalle',
     'fecha',
     'movimiento',
     'bultos',
+    'canLecturados',
     'peso',
     'lecturado'
   ];
@@ -51,10 +52,7 @@ export class LecturaBultosComponent implements OnInit {
     //   { fecha: new Date(), nroMov: 248889, bultos: 11, peso: 112, todosLecturados: true },
     //   { fecha: new Date(), nroMov: 248890, bultos: 5, peso: 50, todosLecturados: false }
     // ];
-    console.log(this.filtro.movimiento);
-    console.log(this.filtro.almacen);
-    console.log(this.filtro.fecha);
-    this.ListarMovimientos(this.filtro.movimiento, this.filtro.almacen, this.filtro.fecha);
+    this.ListarMovimientos(this.filtro.movimiento, this.filtro.almacen, this.filtro.fecha, this.esPendiente);
   }
 
   abrirDetalle(movimiento: any): void {
@@ -80,7 +78,7 @@ export class LecturaBultosComponent implements OnInit {
 
             this.filtro.almacen = this.almacenes[0].codigo;
             
-            this.ListarMovimientos(this.filtro.movimiento, this.filtro.almacen, this.filtro.fecha);
+            this.ListarMovimientos(this.filtro.movimiento, this.filtro.almacen, this.filtro.fecha, this.esPendiente);
           }
         }
       }, 
@@ -90,9 +88,13 @@ export class LecturaBultosComponent implements OnInit {
     });
   }
 
-  ListarMovimientos(Num_MovStk: string, Cod_Almacen: string, Fec_MovStk: any): void {
-    let fec_Movstk: Date = Fec_MovStk;
-    this.service.getListarMovimientos(Num_MovStk, Cod_Almacen, fec_Movstk).subscribe({
+  ListarMovimientos(Cod_Almacen: string,  Num_MovStk: string, Fec_MovStk: any, Flg_Pendiente: string): void {
+    //let fec_Movstk: Date = Fec_MovStk;
+    console.log(Cod_Almacen);
+    console.log(Num_MovStk);
+    console.log(Fec_MovStk);
+    console.log(Flg_Pendiente);
+    this.service.getListarMovimientos(Cod_Almacen, Num_MovStk, Fec_MovStk, Flg_Pendiente).subscribe({
       next: (response: any) => {
         if(response.success) {
           if (response.totalElements > 0) {
@@ -104,6 +106,14 @@ export class LecturaBultosComponent implements OnInit {
         }
       }
     });
+  }
+
+  onTogglePendientes(): void {
+    if (this.filtro.verPendientes) {
+      this.esPendiente = 'S';
+    } else {
+      this.esPendiente = 'N';
+    }
   }
 
 

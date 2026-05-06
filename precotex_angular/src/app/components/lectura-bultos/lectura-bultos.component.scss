@@ -17,7 +17,7 @@ button {
 
 table {
     width: 100%;
-    min-width: 600px; // asegura scroll horizontal en pantallas pequeñas
+    min-width: 600px;
 }
 
 mat-icon {
@@ -43,4 +43,15 @@ mat-icon {
     .table-responsive {
         flex: 1 1 100%;
     }
+}
+
+.col-detalle {
+    width: 80px;
+    max-width: 100px;
+    text-align: center;
+}
+
+.col-detalle button {
+    min-width: auto;
+    padding: 0 8px;
 }
