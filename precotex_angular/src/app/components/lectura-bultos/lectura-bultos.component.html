@@ -8,7 +8,8 @@
 
     <mat-form-field appearance="fill">
         <mat-label>Movimiento</mat-label>
-        <input matInput [(ngModel)]="filtro.movimiento">
+        <input matInput [(ngModel)]="filtro.movimiento"
+        (keyup.enter)="onEnter()">
     </mat-form-field>
 
     <mat-form-field appearance="fill">

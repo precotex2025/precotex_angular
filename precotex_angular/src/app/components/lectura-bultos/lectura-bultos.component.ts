@@ -116,5 +116,8 @@ export class LecturaBultosComponent implements OnInit {
     }
   }
 
+  onEnter(): void {
+    this.ListarMovimientos(this.filtro.movimiento, this.filtro.almacen, this.filtro.fecha, this.esPendiente);
+  }
 
 }
