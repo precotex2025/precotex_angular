@@ -82,7 +82,7 @@
 
             <ng-container matColumnDef="flg_Lecturado">
                 <th mat-header-cell *matHeaderCellDef> Lecturado </th>
-                <td mat-cell *matCellDef="let d"> {{d.flg_Lecturado}} </td>
+                <td mat-cell *matCellDef="let d" [ngClass]="{'fila-verde': d.flg_Lecturado === 'S'}"> {{d.flg_Lecturado}} </td>
             </ng-container>
 
             <!-- Lecturado -->
@@ -95,7 +95,8 @@
             </ng-container> -->
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                [ngClass]="{'fila-verde': row.flg_Lecturado === 'S'}"></tr>
         </table>
     </div>
 </div>
