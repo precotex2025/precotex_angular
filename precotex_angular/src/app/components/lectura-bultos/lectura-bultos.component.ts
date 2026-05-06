@@ -100,6 +100,7 @@ export class LecturaBultosComponent implements OnInit {
           if (response.totalElements > 0) {
             this.dataSource.data = response.elements;
             // this.dataSource.sort = this.sort;
+            this.filtro.movimiento = '';
           }else{
             this.dataSource.data = [];
           }
