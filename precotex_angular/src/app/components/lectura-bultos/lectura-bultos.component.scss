@@ -1,0 +1,46 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 12px;
+}
+
+mat-form-field,
+mat-checkbox,
+button {
+    width: 100%;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    min-width: 600px; // asegura scroll horizontal en pantallas pequeñas
+}
+
+mat-icon {
+    font-size: 20px;
+    vertical-align: middle;
+}
+
+@media (min-width: 768px) {
+    .container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    mat-form-field,
+    mat-checkbox,
+    button {
+        width: auto;
+        flex: 1;
+        min-width: 180px;
+    }
+
+    .table-responsive {
+        flex: 1 1 100%;
+    }
+}

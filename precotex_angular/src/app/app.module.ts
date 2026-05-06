@@ -624,6 +624,8 @@ import { StatusReqAlmacenComponent } from './components/status-req-almacen/statu
 import { AgendaTelefonicaComponent } from './components/agenda-telefonica/agenda-telefonica.component';
 import { ControlPrimeraPartidaComponent } from './components/control-primera-partida/control-primera-partida.component';
 import { ProcesarConfirmacionModalComponent } from './components/control-primera-partida/procesar-confirmacion-modal/procesar-confirmacion-modal.component';
+import { LecturaBultosComponent } from './components/lectura-bultos/lectura-bultos.component';
+import { LecturaBultosDetComponent } from './components/lectura-bultos/lectura-bultos-det/lectura-bultos-det.component';
 
 @NgModule({
   declarations: [
@@ -1171,6 +1173,10 @@ import { ProcesarConfirmacionModalComponent } from './components/control-primera
     //Control Primera Partida
     ,ControlPrimeraPartidaComponent    
     ,ProcesarConfirmacionModalComponent
+
+    //LECTURA BULTOS
+    ,LecturaBultosComponent
+    ,LecturaBultosDetComponent
   
   ],
   entryComponents: [DialogJabaComponent],

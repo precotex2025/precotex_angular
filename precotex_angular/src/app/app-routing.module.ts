@@ -328,6 +328,8 @@ import { TomaFotoPersonasComponent } from './components/toma-foto-personas/toma-
 import { StatusReqAlmacenComponent } from './components/status-req-almacen/status-req-almacen.component';
 import { AgendaTelefonicaComponent } from './components/agenda-telefonica/agenda-telefonica.component';
 import { ControlPrimeraPartidaComponent } from './components/control-primera-partida/control-primera-partida.component';
+import { LecturaBultosComponent } from './components/lectura-bultos/lectura-bultos.component';
+import { LecturaBultosDetComponent } from './components/lectura-bultos/lectura-bultos-det/lectura-bultos-det.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -725,6 +727,10 @@ const routes: Routes = [
 
   //Control Primera Partida
   { path: "PrimeraPartida", component: ControlPrimeraPartidaComponent  },
+
+  //LECTURA BULTOS
+  { path: "LecturaBultosListado", component: LecturaBultosComponent},
+  { path: "LecturaBultosListadoDetalle", component: LecturaBultosDetComponent},
 
   //COPIAR RUTAS ANTES DE ESTO
   { path: "", redirectTo: "/", pathMatch: "full" },// Cuando es la raíz
