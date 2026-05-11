@@ -1,8 +1,9 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LecturaBultosService } from 'src/app/services/LecturaBultos/lectura-bultos.service';
+import { ToastrService } from 'ngx-toastr';
 
 interface data {
   Num_MovStk: string,
@@ -14,7 +15,8 @@ interface data {
   templateUrl: './lectura-bultos-det.component.html',
   styleUrls: ['./lectura-bultos-det.component.scss']
 })
-export class LecturaBultosDetComponent implements OnInit {
+export class LecturaBultosDetComponent implements OnInit, AfterViewInit {
+  @ViewChild('movimientoInput') movimientoInput!: ElementRef;
 
   displayedColumns: string[] = ['num_Corre', 'peso_Neto', 'fec_Registro', 'cod_Usuario', 'flg_Lecturado'];
   dataSource = new MatTableDataSource<any>([]);
@@ -27,11 +29,16 @@ export class LecturaBultosDetComponent implements OnInit {
     private route: ActivatedRoute, 
     private router: Router,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: data,
-    private service: LecturaBultosService
+    private service: LecturaBultosService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
     this.onGetParams();
+  }
+
+  ngAfterViewInit(): void {
+    this.movimientoInput.nativeElement.focus();
   }
 
   onGetParams(): void {
@@ -66,6 +73,7 @@ export class LecturaBultosDetComponent implements OnInit {
 
   onEnter(): void {
     this.actualizarLectura(this.data.Num_MovStk, this.data.Cod_Almacen, this.movimiento.nroMov);
+    setTimeout(() => this.movimientoInput.nativeElement.focus(), 0);
   }
 
   actualizarLectura(Num_MovStk: string, Cod_Almacen: string, Num_Corre: string): void {
@@ -77,11 +85,15 @@ export class LecturaBultosDetComponent implements OnInit {
 
     this.service.patchLecturarBulto(data).subscribe({
       next: (response: any) => {
-        this.cargarDetalle(this.data.Num_MovStk, this.data.Cod_Almacen);
-        this.movimiento.nroMov = '';
+        if(response.success){
+          this.cargarDetalle(this.data.Num_MovStk, this.data.Cod_Almacen);
+          this.movimiento.nroMov = '';  
+        }
       },
       error: (error: any) => {
-
+        const mensaje = error.message || 'Error inesperado';
+        this.movimiento.nroMov = '';
+        // this.toastr.error('Error', mensaje);
       }
     });
   }
@@ -94,8 +106,14 @@ export class LecturaBultosDetComponent implements OnInit {
 
 
   cerrar(): void {
-    this.router.navigate(['/LecturaBultosListado']);
+    this.router.navigate(['/LecturaBultosListado']
+      , {
+        queryParams: {
+          Num_MovStk: this.data.Num_MovStk,
+          Cod_Almacen: this.data.Cod_Almacen,
+          esCerrar: 'S'
+        }
+      });
   }
-
 
 }
