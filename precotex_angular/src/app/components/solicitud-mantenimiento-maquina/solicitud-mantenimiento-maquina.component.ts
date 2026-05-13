@@ -43,6 +43,7 @@ export interface SolicitudMantenimiento {
   tiempoTranscurrido: string;
   supervisor: string;
   estado: string;
+  cod_Estado_Mant: string;
 }
 
 @Component({
@@ -266,9 +267,19 @@ export class SolicitudMantenimientoMaquinaComponent implements OnInit {
   //     width: '450px',
   //     data: element
   //   });
-  // }  
+  // }
 
   onInforme(element: SolicitudMantenimiento){
+
+    //SOLO A LOS TECNICOS LES MUESTRA ESTE MENSAJE
+    if (this.sCod_Espe != '23'){
+        if (element.cod_Estado_Mant == '03' || element.cod_Estado_Mant == '04'){
+          this.matSnackBar.open("La solicitud se encuentra en estado Pendiente de V.B (Supervisor) ó Cerrada..!!", 'Cerrar', 
+            { horizontalPosition: 'center', verticalPosition: 'top', duration: 3000 });
+            return;
+        }
+    }
+
     let dialogRef = this.dialog.open(DialogSolicitudMntoInformeComponent,{
       //width:'500px',
       width: '90vw',     // 90% del ancho del viewport

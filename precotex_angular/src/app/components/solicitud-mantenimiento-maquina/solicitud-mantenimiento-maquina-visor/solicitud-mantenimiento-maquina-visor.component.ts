@@ -90,7 +90,6 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
 
     //Refrescar cada 60 segundos
     this.intervalId = setInterval(() => {
-      console.log('🔄 Refrescando bandeja...');
       this.ObtenerDatosVisor();
     }, 60000);    
 
@@ -273,10 +272,8 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
     let Cod_Trabajador=GlobalVariable.vcodtra;
     let Tip_Trabajador=GlobalVariable.vtiptra;
     //if (dni_tejedor.length===8) {
-      console.log(Cod_Trabajador.length);
       this.registromantemaquinastej.traerTejedorTra(Cod_Trabajador, Tip_Trabajador).subscribe(
         (result: any) => {
-          console.log(result);
            if (result[0].Respuesta == 'OK') {
             this.CargarEspecialidad(String(result[0].Nro_DocIde));
            }
