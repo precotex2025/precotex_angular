@@ -125,6 +125,7 @@ export class CotizacionesComponent implements OnInit {
   bMuestraMenuFlotante: boolean = false;
   dataClientes    : any[] = [];
   ClientesFiltrada: any[] = [];  
+  planos          : any[] = [];
   sUsuario        = GlobalVariable.vusu;
 
   dataDetalles: dataDetalle[] = [];
@@ -319,9 +320,9 @@ export class CotizacionesComponent implements OnInit {
     } 
   }
 
-  mostrarRutaDetalle(rutaSeleccionada: any): void {
-    console.log('objeto:', rutaSeleccionada)
-    this.codigoRutaTela = rutaSeleccionada;
+  mostrarRutaDetalle(): void {
+    
+    //this.codigoRutaTela = rutaSeleccionada;
     //this.codigoRutaTela = rutaSeleccionada;
     // this.getRutaXCodTelaDetalle(this.codigoTela, rutaSeleccionada);
 
@@ -330,14 +331,9 @@ export class CotizacionesComponent implements OnInit {
     const _tela = this.formulario.get('codigoTela')?.value || '';
     const _ruta = this.formulario.get('codigoRutaTela')?.value || '';
     const _color = this.formulario.get('codigoColor')?.value || '';
+
+    this.codigoRutaTela = _ruta;
     
-
-    console.log("_tipo", _tipo);
-    console.log("_cliente", _cliente);
-    console.log("_tela", _tela);
-    console.log("_ruta", _ruta);
-    console.log("_color", _color);
-
     //return;
     this.loadHilo(_tela);
 
@@ -399,11 +395,36 @@ export class CotizacionesComponent implements OnInit {
 
 
   recalcular(row: any) {
+
+    console.log('ajuste', row.pro_Cotizacion);
+    console.log('planos', this.planos);
+
+    //Actualiza el Campos pro_Cotizacion con el nuevo Valor
     if (row.pro_Aju == null || row.pro_Aju === 0) {
       row.pro_Cotizacion = row.pro_Tot;
     } else {
       row.pro_Cotizacion = row.pro_Aju;
-    }
+    }    
+
+    const sumaColCotizacion = this.planos
+      .filter(fila => fila.nivel === 1)
+      .reduce((acum, fila) => acum + (fila.pro_Cotizacion || 0), 0);   
+      
+    this.planos.forEach(fila => {
+      if (fila.cod_Subtotal === 1 && fila.nivel === 3) {
+        fila.pro_Cotizacion = sumaColCotizacion;   // asignamos la suma calculada
+      }
+    });      
+
+    console.log('resultado de la sumatoria de cotización: ', sumaColCotizacion);
+
+
+
+    
+
+
+
+
   }
 
 
@@ -428,13 +449,14 @@ export class CotizacionesComponent implements OnInit {
     this.service.getListarProcesosExportacion(Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color).subscribe({
       next: (response: any) => {
         if (response.success && response.totalElements > 0) {
-          const planos = response.elements;
-          console.log(':::::::::::::::::::::::::::::::::::.', planos);
-          const planosConFlags = planos.map((p: any) => {
+          //const planos = response.elements;
+          this.planos = response.elements;
+          console.log(':::::::::::::::::::::::::::::::::::.', this.planos);
+          const planosConFlags = this.planos.map((p: any) => {
             if (!p.pro_Hover.includes('.')) {
               p.isParent = true;
               p.isChild = false;
-              p.tieneHijos = planos.some(x => x.pro_Hover.startsWith(p.pro_Hover + '.'));
+              p.tieneHijos = this.planos.some(x => x.pro_Hover.startsWith(p.pro_Hover + '.'));
             } else {
               p.isChild = true;
               p.isParent = false;
@@ -827,6 +849,10 @@ export class CotizacionesComponent implements OnInit {
 
   onEliminar(){
 
+  }
+
+  onBuscar() {
+    this.mostrarRutaDetalle();
   }
 
   private mapToDetalle(item: any): dataDetalle {

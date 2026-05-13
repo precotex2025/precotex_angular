@@ -53,7 +53,8 @@
    <div class="row-grid">
   <mat-form-field appearance="outline" class="select-field">
     <mat-label>Ruta</mat-label>
-    <mat-select formControlName="codigoRutaTela" (selectionChange)="mostrarRutaDetalle($event.value)">
+    <!-- <mat-select formControlName="codigoRutaTela" (selectionChange)="mostrarRutaDetalle($event.value)"> -->
+    <mat-select formControlName="codigoRutaTela">
       <mat-option *ngFor="let ruta of RutaXCodTela" [value]="ruta.codigo">{{ ruta.nombre }}</mat-option>
     </mat-select>
   </mat-form-field>
@@ -66,7 +67,13 @@
   <mat-form-field appearance="outline" class="descripcion-field">
     <mat-label>Descripción</mat-label>
     <input matInput formControlName="descripcionColor" readonly />
-  </mat-form-field>     
+  </mat-form-field>    
+
+  <button mat-flat-button class="btn-azul" (click)="onBuscar()">
+      <mat-icon>search</mat-icon> Buscar
+  </button>   
+  
+  
 
   <!-- <mat-form-field appearance="outline" class="select-field">
     <mat-label>Intensidad</mat-label>
@@ -149,7 +156,12 @@
       <ng-container matColumnDef="cosKg">
         <th mat-header-cell *matHeaderCellDef>Costo Kg</th>
         <td mat-cell *matCellDef="let row">
-          <span *ngIf="!(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
+
+          <mat-form-field appearance="standard" *ngIf="row.cod_Subtotal == 2">
+            <input matInput type="number" [(ngModel)]="row.pro_Cos_Kg" (ngModelChange)="recalcular(row)" />
+          </mat-form-field>          
+        
+          <span *ngIf="row.cod_Subtotal != 2 && !(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
             {{ row.pro_Cos_Kg }}
           </span>
         </td>
@@ -189,8 +201,14 @@
       <ng-container matColumnDef="cotizacion">
         <th mat-header-cell *matHeaderCellDef>Cotización</th>
         <td mat-cell *matCellDef="let row" class="cotizacion-cell">
-          <span *ngIf="!row.isChild">
-            <ng-container *ngIf="row.pro_Tip === 'R' && row.pro_Des === 'RENTABILIDAD'; else cotizacionNormal">
+
+          <mat-form-field appearance="standard" *ngIf="row.cod_Subtotal == 4">
+            <input matInput type="number" [(ngModel)]="row.pro_Cotizacion" (ngModelChange)="recalcular(row)" />
+          </mat-form-field>                 
+
+          <span *ngIf="row.cod_Subtotal != 4 && !row.isChild">
+            <!-- <ng-container *ngIf="row.pro_Tip === 'R' && row.pro_Des === 'RENTABILIDAD'; else cotizacionNormal"> -->
+            <ng-container *ngIf="row.cod_Subtotal == 5 ; else cotizacionNormal">
               {{ row.pro_Por | number:'1.2-2' }} %
             </ng-container>
             <ng-template #cotizacionNormal>
