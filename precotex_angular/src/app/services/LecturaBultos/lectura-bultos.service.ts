@@ -20,7 +20,7 @@ export class LecturaBultosService {
     return this.http.get(this.baseUrlTinto + 'LecturaBultos/getListarAlmacenesDisponibles', { headers })
   }
 
-  getListarMovimientos(Num_MovStk: string, Cod_Almacen: string, Fec_MovStk: any){
+  getListarMovimientos(Cod_Almacen: string, Num_MovStk: string,  Fec_MovStk: any, Flg_Pendiente: string){
     
     if(!_moment(Fec_MovStk).isValid())
     { Fec_MovStk = ''; }
@@ -28,14 +28,15 @@ export class LecturaBultosService {
     //{ Fec_MovStk = _moment(Fec_MovStk.valueOf()).format('YYYY-MM-DD'); }
     { Fec_MovStk = _moment(Fec_MovStk.valueOf()).format('DD/MM/YYYY'); }
 
-    console.log(Num_MovStk);
-    console.log(Fec_MovStk);
+    // console.log(Num_MovStk);
+    // console.log(Fec_MovStk);
 
     const headers = this.Header;
     let params = new HttpParams();
     params = params.append("Num_MovStk", Num_MovStk ?? "");
     params = params.append("Cod_Almacen", Cod_Almacen ?? "");
-    params = params.append("Fec_MovStk", Fec_MovStk);
+    params = params.append("Fec_MovStk", Fec_MovStk ?? null);
+    params = params.append("Flg_Pendiente", Flg_Pendiente ?? "N");
 
     return this.http.get(this.baseUrlTinto + 'LecturaBultos/getListarMovimientos', { headers, params })
   }

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -13,7 +13,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DOCUMENT } from '@angular/common';
 import { DialogEliminarComponent } from '../../dialogs/dialog-eliminar/dialog-eliminar.component';
-import { element } from 'protractor';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 interface Defectos {
   IdMerma?:number;
@@ -39,8 +40,16 @@ export class AgregarRegistroMermaComponent implements OnInit {
   defectos: Defectos[] = [];
 
   codDefecto: string = "";
+  nomDefecto: string = "";
   talla: string = "";
   cantidad: number;
+
+  formulario = this.formBuilder.group({
+    codDefecto: [""],
+    nomDefecto: [""],
+    talla: [""],
+    cantidad: [0]
+  });
 
   deshabilitar: boolean = false;
 
@@ -74,6 +83,9 @@ export class AgregarRegistroMermaComponent implements OnInit {
   Num_Prendas: any = 0;
   Num_Merma: any = 0;
   Porcentaje: any = 0;
+
+  filtroPuesto: Observable<any[]> | undefined;
+
   constructor(private formBuilder: FormBuilder,
     private matSnackBar: MatSnackBar,
     private SpinnerService: NgxSpinnerService,
@@ -124,6 +136,12 @@ export class AgregarRegistroMermaComponent implements OnInit {
   }
 
   InsertarFila(){
+    this.codDefecto = this.formulario.get('codDefecto')?.value;
+    this.talla = this.formulario.get('talla')?.value;  
+    this.cantidad = this.formulario.get('cantidad')?.value;
+
+    //console.log(this.codDefecto)
+    
     if(this.codDefecto != '' && this.talla != '' && this.cantidad > 0){
       let defecto: Defectos = {};
       defecto.IdMerma = this.IdMerma;
@@ -133,8 +151,8 @@ export class AgregarRegistroMermaComponent implements OnInit {
 
       this.dataMotivos.forEach(element => {
         if(element.Cod_Defecto == this.codDefecto){
-          console.log(this.codDefecto)
-          console.log(element.Cod_Defecto)
+          //console.log(this.codDefecto)
+          //console.log(element.Cod_Defecto)
           defecto.Des_Defecto = element.Des_Defecto;
           defecto.Des_Area = element.Des_Area;
         } 
@@ -147,6 +165,14 @@ export class AgregarRegistroMermaComponent implements OnInit {
       this.codDefecto = '';
       this.talla = '';
       this.cantidad = 0;
+
+      this.formulario.patchValue({
+        nomDefecto: '',
+        codDefecto: '',
+        talla: '',
+        cantidad: 0,
+      });
+
     } else {
       this.matSnackBar.open("Registe defecto, talla y cantidad!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 2500 })
     }
@@ -510,18 +536,6 @@ export class AgregarRegistroMermaComponent implements OnInit {
       }))
   }
 
-  getMotivos() {
-    this.despachoTelaCrudaService.ObtenerAdicionalesMerma(
-      'M',
-    ).subscribe(
-      (result: any) => {
-        this.dataMotivos = result;
-      },
-      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
-        duration: 1500,
-      }))
-  }
-
   changeOp() {
     if (this.OP_Sec != '') {
       //console.log(this.OP_Sec);
@@ -626,9 +640,40 @@ export class AgregarRegistroMermaComponent implements OnInit {
       })
     }
 
-
   }
 
+  // Autocompletar Puesto
 
+  getMotivos() {
+    this.despachoTelaCrudaService.ObtenerAdicionalesMerma(
+      'M',
+    ).subscribe(
+      (result: any) => {
+        this.dataMotivos = result;
+        this.recargarPuesto();
+      },
+      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+        duration: 1500,
+      }))
+  }
+
+  recargarPuesto(){
+    this.filtroPuesto = this.formulario.controls['nomDefecto'].valueChanges.pipe(
+      startWith(''),
+      map(option => (option ? this._filterPuesto(option) : this.dataMotivos.slice())),
+    );
+  }  
+
+  private _filterPuesto(value: string): any[] {
+    this.formulario.controls['codDefecto'].setValue('');
+    const filterValue = value.toLowerCase();
+    
+    return this.dataMotivos.filter(option => String(option.Des_Defecto).toLowerCase().includes(filterValue));
+  }
+
+  selectPuesto(option: any){
+    //console.log(option)
+    this.formulario.controls['codDefecto'].setValue(option.Cod_Defecto);
+  }
 }
 

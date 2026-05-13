@@ -8,7 +8,9 @@
 
     <mat-form-field appearance="fill">
         <mat-label>Movimiento</mat-label>
-        <input matInput [(ngModel)]="filtro.movimiento">
+        <input matInput [(ngModel)]="filtro.movimiento"
+        (keyup.enter)="onEnter()" 
+        #movimientoInput>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
@@ -18,7 +20,7 @@
         </mat-select>
     </mat-form-field>
 
-    <mat-checkbox [(ngModel)]="filtro.verPendientes">Ver solo pendientes</mat-checkbox>
+    <mat-checkbox [(ngModel)]="filtro.verPendientes" (change)="onTogglePendientes()">Ver solo pendientes</mat-checkbox>
     <button mat-raised-button color="primary" (click)="buscar()">Buscar</button>
 
     <div class="table-responsive">
@@ -42,6 +44,12 @@
                 <td mat-cell *matCellDef="let m"> {{ m.can_Bulto }} </td>
             </ng-container>
 
+            <!-- Lecturados -->
+            <ng-container matColumnDef="canLecturados">
+                <th mat-header-cell *matHeaderCellDef> Lecturados </th>
+                <td mat-cell *matCellDef="let m"> {{ m.can_Lecturado }} </td>
+            </ng-container>
+
             <!-- Peso -->
             <ng-container matColumnDef="peso">
                 <th mat-header-cell *matHeaderCellDef> Peso </th>
@@ -50,7 +58,7 @@
 
             <!-- Lecturado -->
             <ng-container matColumnDef="lecturado">
-                <th mat-header-cell *matHeaderCellDef> Lecturado </th>
+                <th mat-header-cell *matHeaderCellDef> Completo </th>
                 <td mat-cell *matCellDef="let m">
                 {{ m.flg_Lecturado }}
                     <!-- <mat-icon color="primary" *ngIf="m.todosLecturados">check_circle</mat-icon>
@@ -60,8 +68,8 @@
 
             <!-- Detalle -->
             <ng-container matColumnDef="detalle">
-                <th mat-header-cell *matHeaderCellDef> Detalle </th>
-                <td mat-cell *matCellDef="let m">
+                <th mat-header-cell *matHeaderCellDef class="col-detalle"> Detalle </th>
+                <td mat-cell *matCellDef="let m" class="col-detalle">
                     <button mat-button color="accent" (click)="abrirDetalle(m)">Ver</button>
                 </td>
             </ng-container>
