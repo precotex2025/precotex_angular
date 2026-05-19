@@ -17,11 +17,11 @@ import { DialogCapturarFotoCajaComponent } from './../dialog-capturar-foto-caja/
 })
 export class DialogEvidenciaPackingCajaComponent implements OnInit {
 
-  @ViewChild('video', { static: true }) video!: ElementRef<HTMLVideoElement>;
-  @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
+  //@ViewChild('video', { static: true }) video!: ElementRef<HTMLVideoElement>;
+  //@ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
 
-  videoDevices: MediaDeviceInfo[] = [];
-  selectedDeviceId: string | null = null;
+  //videoDevices: MediaDeviceInfo[] = [];
+  //selectedDeviceId: string | null = null;
 
   formulario = this.formBuilder.group({
     Accion: [''],
@@ -33,7 +33,8 @@ export class DialogEvidenciaPackingCajaComponent implements OnInit {
     Peso_Caja: [0],
     Evidencia: ['', Validators.required],
     Fec_Evidencia: [''],
-    Cod_Usuario: ['']
+    Cod_Usuario: [''],
+    imgbase64: [""],
   }) 
 
   lc_Numero: string = '';
@@ -41,7 +42,7 @@ export class DialogEvidenciaPackingCajaComponent implements OnInit {
   numImg: number = 0;
   ll_nuevo: boolean = true;
   ll_caja: boolean = false;
-  camaraActiva: boolean = true;
+  //camaraActiva: boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -204,6 +205,5 @@ export class DialogEvidenciaPackingCajaComponent implements OnInit {
 
     });
   }
-
-    
+      
 }
