@@ -6,26 +6,20 @@
             <form class="list-form" (ngSubmit)="submit()" >
                 <mat-card>
                     <mat-card-content>
-                        <div>
-                            <!--<select (change)="onDeviceSelect($event)">
-                                <option *ngFor="let device of videoDevices" [value]="device.deviceId">
-                                    {{ device.label || 'Cámara ' + device.deviceId }}
-                                </option>
-                            </select>-->
-
-                            <video #video autoplay></video>
-                            <canvas id="canvasId" #canvas style="display: none;"></canvas>
-
-                            <!--<div *ngIf="capturedImage">
-                                <h3>Foto Capturada:</h3>
-                                <img [src]="capturedImage" alt="Foto capturada">
-                                <a [href]="capturedImage" download="foto.png">Guardar Foto</a>
-                            </div>-->
+                        <div *ngIf="mostrarModal" class="modal-overlay">
+                            <div class="modal-content">
+                                <video #video autoplay></video>
+                                <div class="modal-actions">
+                                    <button mat-button (click)="capturarFoto(video)"><mat-icon>photo_camera</mat-icon>Capturar</button>
+                                    <button mat-button (click)="cambiarCamara()"><mat-icon>flip_camera_ios</mat-icon>Cambiar Cámara</button>
+                                </div>
+                            </div>
                         </div>
                     </mat-card-content>
 
                     <mat-card-actions>
-                        <button mat-button type="submit" color="primary" [disabled]="capturedImage"><mat-icon>done</mat-icon>Tomar Foto</button>
+                        <!--<button mat-button type="submit" color="primary" [disabled]="capturedImage"><mat-icon>done</mat-icon>Tomar Foto</button>-->
+                        <button mat-button type="submit" color="primary"><mat-icon>done</mat-icon>Tomar Foto</button>
                         <button mat-button mat-dialog-close color="warn"><mat-icon>close</mat-icon>Salir</button>
                     </mat-card-actions>
                 </mat-card>

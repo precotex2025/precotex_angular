@@ -2,6 +2,7 @@
     box-sizing: border-box;
     width: 100%;
     min-height: 50%;
+    height: 500px;
     padding: 5px 5px 5px 5px;
     font-family: corbel, arial;
     font-size: 16px;
@@ -51,8 +52,19 @@
 	font-size: 10px;
 }
 
+.image-container {
+  overflow: hidden; /* Asegura que el contenedor se ajuste al contenido flotante */
+}
+
+.image-container img {
+  float: left; /* Flota las imágenes a la izquierda */
+  width: 90%; /* Ocupa ancho del contenedor */
+  box-sizing: border-box; /* Incluye el padding y border en el ancho */
+  padding: 10px; /* Añade un espacio entre las imágenes */
+}
+
 video, canvas {
-  width: 100%;
+  width: 95%;
   max-width: 500px;
   margin: 10px 0;
 }
