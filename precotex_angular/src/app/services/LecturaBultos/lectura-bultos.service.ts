@@ -20,7 +20,7 @@ export class LecturaBultosService {
     return this.http.get(this.baseUrlTinto + 'LecturaBultos/getListarAlmacenesDisponibles', { headers })
   }
 
-  getListarMovimientos(Num_MovStk: string, Cod_Almacen: string, Fec_MovStk: any, Flg_Pendiente: string){
+  getListarMovimientos(Cod_Almacen: string, Num_MovStk: string,  Fec_MovStk: any, Flg_Pendiente: string){
     
     if(!_moment(Fec_MovStk).isValid())
     { Fec_MovStk = ''; }
