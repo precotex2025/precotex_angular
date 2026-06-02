@@ -149,10 +149,22 @@
     <ng-container matColumnDef="ruta_Fotografia">
       <th mat-header-cell *matHeaderCellDef>FOTO</th>
       <td mat-cell *matCellDef="let data_visor">
-      <img [src]="solicitudService.getImagenUrl(data_visor.ruta_Fotografia)" 
+      
+        <!-- Mostrar botón solo si existe ruta -->
+        <button mat-button color="primary" *ngIf="data_visor.ruta_Fotografia"
+                (click)="verFoto(solicitudService.getImagenUrl(data_visor.ruta_Fotografia))">
+          Ver
+        </button>      
+      
+
+      <!-- <img
                   alt='Foto' width="40" height="40" 
                   (click)="verFoto(solicitudService.getImagenUrl(data_visor.ruta_Fotografia))"
-                  />
+                  />         -->
+      <!-- <img [src]="solicitudService.getImagenUrl(data_visor.ruta_Fotografia)" 
+                  alt='Foto' width="40" height="40" 
+                  (click)="verFoto(solicitudService.getImagenUrl(data_visor.ruta_Fotografia))"
+                  /> -->
                   <a *ngIf = "data_visor.ruta_Fotografia == '' "></a>
       </td>
     </ng-container>    

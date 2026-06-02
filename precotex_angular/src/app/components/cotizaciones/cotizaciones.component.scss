@@ -13,6 +13,13 @@
   min-width: 180px;
 }
 
+.botones {
+  grid-column: span 2;       /* ocupa dos columnas */
+  display: flex;
+  justify-content: flex-start; /* alinea a la derecha */
+  gap: 1rem;                 /* espacio entre botones */
+}
+
 .cuadro-verde {
   flex: 1 1 100%;
   background-color: #e0f7e9;
@@ -101,6 +108,8 @@
   display: grid;
   grid-template-columns: 1.5fr 1.3fr 2fr 1fr 2fr;
   column-gap: 1rem;   /* espacio horizontal entre columnas */
+  height: 58px !important;
+
 }
 
 .select-field, .codigo-field, .descripcion-field {
@@ -114,9 +123,35 @@
 
 .tabla-procesos {
   width: 100%;
-  border-collapse: collapse;
+ // border-collapse: collapse;
 }
 
+/* Reducir altura de filas */
+.tabla-procesos .mat-row,
+.tabla-procesos .mat-header-row {
+  min-height: 35px !important; /* antes ~52px */
+  height: 35px !important;
+}
+
+/* Reducir padding de celdas */
+.tabla-procesos .mat-cell,
+.tabla-procesos .mat-header-cell {
+  padding: 2px 6px !important;
+  line-height: 1.2 !important;
+  font-size: 12px; /* opcional: fuente más pequeña */
+}
+
+/* Compactar los mat-form-field dentro de la tabla */
+.tabla-procesos .mat-form-field {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.2 !important;
+}
+
+.tabla-procesos .mat-form-field-infix {
+  padding: 0 !important;
+  border-top: 0 !important;
+}
 .mat-header-cell {
   font-size: 18px;
   font-weight: 600;
@@ -326,4 +361,8 @@ button:disabled {
   overflow-x: auto;
   padding: 1rem;
   box-sizing: border-box;
+}
+
+.fila-seleccionada {
+  background-color: rgba(63, 81, 181, 0.1); /* azul suave */
 }

@@ -98,5 +98,24 @@ export class CotizacionesService {
     return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaUnidadNegocioTipo', { headers, params });
   }   
 
+  getListaColoresXCliente(Cod_Cliente: string) {
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append("Cod_Cliente", Cod_Cliente);
+    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaColoresXCliente', { headers, params });
+  }   
 
+  //Nuevos
+  getListaPrecioXColor(Cod_Color: string) {
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append("Cod_Color", Cod_Color);
+    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaPrecioXColor', { headers, params });
+  }   
+    
+  getListaRecetasAntipilling() {
+    const headers = this.Header;
+    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaRecetasAntipilling', { headers });
+  }    
+  
 }

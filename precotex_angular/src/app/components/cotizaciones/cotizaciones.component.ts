@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { CotizacionesService } from 'src/app/services/cotizaciones/cotizaciones.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -10,6 +10,8 @@ import { ProcesoColgadoresService } from 'src/app/services/proceso-colgadores.se
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 import { GlobalVariable } from 'src/app/VarGlobals';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { color } from 'html2canvas/dist/types/css/types/color';
 
 interface Costeo {
     unidadNegocio: string;
@@ -52,19 +54,32 @@ interface Costeo {
   }
 
   interface dataDetalle {
-    Pro_Cen_Cos   : number;
-    Pro_Des       : string;
+    //Pro_Cen_Cos   : number;
+    //Pro_Des       : string;
     Pro_Hover     : string; 
     Pro_Factor    : number; 
     Pro_Cos_Kg    : number; 
     Pro_Tot       : number; 
+    Pro_Tot_Com   : number; 
     Pro_Aju       : number; 
     Pro_Cotizacion: number; 
-    Pro_Tip       : string; 
-    Pro_Tot_Com   : number; 
     Pro_Por       : number; 
-    Flg_Estatus   : string; 
-    Usu_Registro  : string; 
+    Pro_Tip       : string; 
+    //Nuevos Campos
+    Observacion   : string; 
+    Nivel : number; 
+    cod_Subtotal : number; 
+    parteEntera : number; 
+    parteDecimal : number; 
+    isParent : boolean,
+    isChild : boolean,
+    tieneHijos : boolean,
+    cod_ProcesoPadre : string; 
+    cod_Proceso_Tex : string;  
+    Cod_SubProceso : string;
+      
+    //Flg_Estatus   : string; 
+    //Usu_Registro  : string; 
   }
 
   interface dataHilo {
@@ -78,6 +93,13 @@ interface Costeo {
   interface dataCombo {
     codigo : string,
     descripcion: string
+  }
+
+  interface dataPrecio {
+    corR_CARTA  : string,
+    tiempo      : number,
+    preC_TINTO  : number,
+    preC_ACABADO: number    
   }
 
 //   interface Proceso {
@@ -97,6 +119,11 @@ interface Costeo {
 })
 export class CotizacionesComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('dialogObservacion') dialogObservacion!: TemplateRef<any>;
+  @ViewChild('dialogListaPrecios') dialogListaPrecios!: TemplateRef<any>;
+  observacion: string = '';
+
+  dialogRef!: MatDialogRef<any>;
 
   maskCodigo: (string | RegExp)[] = [
     /[A-Z]/, // Primera letra mayúscula
@@ -124,13 +151,22 @@ export class CotizacionesComponent implements OnInit {
 
   bMuestraMenuFlotante: boolean = false;
   dataClientes    : any[] = [];
-  ClientesFiltrada: any[] = [];  
+  ClientesFiltrada: any[] = [];
   planos          : any[] = [];
+  dataRecetas     : any[] = [];
   sUsuario        = GlobalVariable.vusu;
 
   dataDetalles: dataDetalle[] = [];
   isAjusteBloqueado = true;
+  dialogAbierto = false;
+  bBuscarTela = false;
   
+  filaSeleccionada: any = null;
+
+  global_Tiempo       : number = 0;
+  global_PrecioTinto  : number = 0;
+  global_CodReceta    : string = "";
+
   constructor(
     private SpinnerService      : NgxSpinnerService         ,
     private service             : CotizacionesService       ,
@@ -138,6 +174,7 @@ export class CotizacionesComponent implements OnInit {
     private toastr              : ToastrService             ,
     private formBuilder         : FormBuilder               ,
     private matSnackBar         : MatSnackBar               ,
+    private dialog              : MatDialog                 ,
   ){}
 
   //dataSource: MatTableDataSource<Proceso> = new MatTableDataSource();
@@ -160,6 +197,7 @@ export class CotizacionesComponent implements OnInit {
   unidadesNegocio : dataCombo[] =[]; // ['Textil', 'Confección', 'Exportación'];
   tipoUnidadesNegocio : dataCombo[] =[];
   intensidad: dataCombo[] =[];
+  listaCodigoColor: dataCombo[] = [];
 
 
   tipos = [
@@ -175,6 +213,7 @@ export class CotizacionesComponent implements OnInit {
   isDisabledBtnSave   = false; 
   isDisabledBtnEdit   = false;
   isDisabledBtnDelete = false;
+  isDisabledBtnFind   = false;
 
   displayedColumns: string[] = [
     'hover',
@@ -218,6 +257,16 @@ export class CotizacionesComponent implements OnInit {
   ];  
   dataSource_Hilos: MatTableDataSource<dataHilo> = new MatTableDataSource();
 
+  displayedColumns_Precio: string[] = [
+      'opcion'        , 
+      'corR_CARTA'    ,
+      'tiempo'        ,
+      'preC_TINTO'    ,
+      'preC_ACABADO'          
+  ];
+  dataSource_Precios: MatTableDataSource<dataPrecio> = new MatTableDataSource();
+
+
   formulario = this.formBuilder.group({
     unidadNegocio   :[''],
     tipo            :[''],
@@ -229,6 +278,8 @@ export class CotizacionesComponent implements OnInit {
     descripcionColor:[''],
     filtro          :[''],
     intensidad      :[''],
+    color           :[''],
+    ctrl_receta     :[''],
   });  
 
   //procesos: Proceso[] = [];
@@ -260,10 +311,11 @@ export class CotizacionesComponent implements OnInit {
 
   ///////////////////////////////////////////////////////////////////////////
 
-  buscarDescripcionTela() { 
+  buscarDescripcionTela() {
     //console.log('HOLAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     //const sCodTela = this.formulario.get('codigoTela')?.value! || '';
 
+    this.bBuscarTela = true;
 
     let articleNumber = this.formulario.get('codigoTela')?.value;
 
@@ -293,7 +345,6 @@ export class CotizacionesComponent implements OnInit {
     // Asignar el valor corregido al control
     this.formulario.get('codigoTela')?.setValue(nuevoValor);
     articleNumber = nuevoValor;    
-
 
     if (articleNumber) { 
       this.service.getListaTelas(articleNumber).subscribe({
@@ -326,19 +377,24 @@ export class CotizacionesComponent implements OnInit {
     //this.codigoRutaTela = rutaSeleccionada;
     // this.getRutaXCodTelaDetalle(this.codigoTela, rutaSeleccionada);
 
-    const _tipo = this.formulario.get('tipo')?.value || '';
-    const _cliente = this.formulario.get('cliente')?.value || '';
-    const _tela = this.formulario.get('codigoTela')?.value || '';
-    const _ruta = this.formulario.get('codigoRutaTela')?.value || '';
-    const _color = this.formulario.get('codigoColor')?.value || '';
+    const _tipo     = this.formulario.get('tipo')?.value ||    '';
+    const _cliente  = this.formulario.get('cliente')?.value || '';
+    const _tela     = this.formulario.get('codigoTela')?.value || '';
+    const _ruta     = this.formulario.get('codigoRutaTela')?.value || '';
+    const _color    = this.formulario.get('color')?.value! || '';
 
     this.codigoRutaTela = _ruta;
     
-    //return;
-    this.loadHilo(_tela);
+    //return;   ---NO APLICA EN SERVICIO
+    //this.loadHilo(_tela);
 
     //SE COMENTA PORQUE CUANDO RECIEN ESCOGE LA RUTA DEBE DE MOSTRAR LOS VALORES
-    this.getListarProcesosExportacion(Number(this.unidadNegocio), _tipo, _cliente, _tela, _ruta, _color);
+    if (!this.bBuscarTela)
+    {
+      console.log('MARCA LOG');
+      this.getListarProcesosExportacion(Number(this.unidadNegocio), _tipo, _cliente, _tela, _ruta, _color);
+    }
+
 
     //this.getListarProcesosExportacionFooter(1);
   }
@@ -357,6 +413,7 @@ export class CotizacionesComponent implements OnInit {
               nombre: r.descripcion
             }));
           }
+          this.bBuscarTela = false;
         }
         this.SpinnerService.hide();
       },
@@ -396,9 +453,6 @@ export class CotizacionesComponent implements OnInit {
 
   recalcular(row: any) {
 
-    console.log('ajuste', row.pro_Cotizacion);
-    console.log('planos', this.planos);
-
     //Actualiza el Campos pro_Cotizacion con el nuevo Valor
     if (row.pro_Aju == null || row.pro_Aju === 0) {
       row.pro_Cotizacion = row.pro_Tot;
@@ -414,19 +468,119 @@ export class CotizacionesComponent implements OnInit {
       if (fila.cod_Subtotal === 1 && fila.nivel === 3) {
         fila.pro_Cotizacion = sumaColCotizacion;   // asignamos la suma calculada
       }
-    });      
-
-    console.log('resultado de la sumatoria de cotización: ', sumaColCotizacion);
-
-
-
+    });  
     
+    //Obtener Datos de la Fila Utilidad y Total US$
+    const fila_Utilidad = this.planos.find(f => f.nivel === 3 && f.cod_Subtotal === 2);
+    const utilidad = fila_Utilidad ? fila_Utilidad.pro_Cos_Kg : 0;
+    
+    //FILA(UTILIDAD) y setea Valor - COLUMNA COTIZACIÓN
+    const _Valor_UtiProCotizacion: number = parseFloat(Number((sumaColCotizacion * utilidad)/100).toFixed(2));
+    this.planos.forEach(fila => {
+      if (fila.cod_Subtotal === 2 && fila.nivel === 3) {
+        fila.pro_Cotizacion = _Valor_UtiProCotizacion;
+      }
+    });    
+    
+    const _Valor_TotalUSProCotizacion = parseFloat(Number(sumaColCotizacion + _Valor_UtiProCotizacion).toFixed(2));
 
+    //FILA(TOTAL US$)  (SUM(PRECIO KG) + SUM(UTILIDAD)) -  COLUMNA COTIZACIÓN
+    this.planos.forEach(fila => {
+      if (fila.cod_Subtotal === 3 && fila.nivel === 3) {
+        fila.pro_Cotizacion = _Valor_TotalUSProCotizacion;
+      }
+    });    
+    
+    //FILA (PRECIO FINAL CLIENTE) - COLUMNA COTIZACIÓN
+    this.planos.forEach(fila => {
+      if (fila.cod_Subtotal === 4 && fila.nivel === 3) {
+        fila.pro_Cotizacion = _Valor_TotalUSProCotizacion;
+      }
+    });       
+    
+ 
+  }
 
+  recalcularUtilidad(row: any) {
 
+    const utilidad: number = Number(row.pro_Cos_Kg);
+
+    //OBTIENE VALORES DE LA FILA PRECIO KG. DE MATERIALES
+    const fila_PrecioKG       = this.planos.find(f => f.nivel === 3 && f.cod_Subtotal === 1);
+    const valorProTot         = fila_PrecioKG ? fila_PrecioKG.pro_Tot         : 0;
+    const valorProTotCom      = fila_PrecioKG ? fila_PrecioKG.pro_Tot_Com     : 0;
+    const valorpro_Cotizacion = fila_PrecioKG ? fila_PrecioKG.pro_Cotizacion  : 0;    
+
+    /****************************************************/
+    /************ CALCULO FILA DE UTILIDAD **************/
+    /****************************************************/
+    //CALCULA LOS VALORES
+    const _Valor_UtiProTot: number = parseFloat(Number((valorProTot * utilidad)/100).toFixed(2));
+    const _Valor_UtiProTotCom: number = parseFloat(Number((valorProTotCom * utilidad)/100).toFixed(2));
+    const _Valor_UtiProCotizacion: number = parseFloat(((valorpro_Cotizacion * utilidad)/100).toFixed(2));
+
+    //SETEA LOS VALORES OBTENIDOS
+    this.planos.forEach(fila => {
+      if (fila.cod_Subtotal === 2 && fila.nivel === 3) {
+        fila.pro_Tot = _Valor_UtiProTot;
+      }
+    });   
+    this.planos.forEach(fila => {
+      if (fila.cod_Subtotal === 2 && fila.nivel === 3) {
+        fila.pro_Tot_Com = _Valor_UtiProTotCom;
+      }
+    });   
+    this.planos.forEach(fila => {
+      if (fila.cod_Subtotal === 2 && fila.nivel === 3) {
+        fila.pro_Cotizacion = _Valor_UtiProCotizacion;
+      }
+    });   
+
+    /*****************************************************/
+    /************ CALCULO FILA DE TOTAL US$ **************/
+    /*****************************************************/  
+    //CALCULA LOS VALORES  
+    const _Valor_TotalUSProTot: number = parseFloat(Number(valorProTot + _Valor_UtiProTot).toFixed(2));
+    const _Valor_TotalUSProTotCom: number = parseFloat(Number(valorProTotCom + _Valor_UtiProTotCom).toFixed(2));
+    const _Valor_TotalUSProCotizacion: number = parseFloat(Number(valorpro_Cotizacion + _Valor_UtiProCotizacion).toFixed(2));
+
+    //SETEA LOS VALORES OBTENIDOS
+    this.planos.forEach(fila => {
+      if (fila.cod_Subtotal === 3 && fila.nivel === 3) {
+        fila.pro_Tot = _Valor_TotalUSProTot;
+      }
+    });     
+    this.planos.forEach(fila => {
+      if (fila.cod_Subtotal === 3 && fila.nivel === 3) {
+        fila.pro_Tot_Com = _Valor_TotalUSProTotCom;
+      }
+    }); 
+    this.planos.forEach(fila => {
+      if (fila.cod_Subtotal === 3 && fila.nivel === 3) {
+        fila.pro_Cotizacion = _Valor_TotalUSProCotizacion;
+      }
+    });     
 
   }
 
+  recalcularPrecioFinal(row: any) {
+    console.log('recalcula precio');
+    
+    const fila_PrecioKG = this.planos.find(f => f.nivel === 3 && f.cod_Subtotal === 1);
+    const valorProTotCom = fila_PrecioKG ? fila_PrecioKG.pro_Tot_Com : 0;
+    const ValorPrecioFinalCliente: number = Number(row.pro_Cotizacion);
+    const ValorRentabilidad: number = parseFloat(Number((ValorPrecioFinalCliente - valorProTotCom)/ValorPrecioFinalCliente).toFixed(2))
+
+    console.log('ValorRentabilidad', ValorRentabilidad);
+    //return;
+    //SETEAMOS EL VALOR  DE LA RENTABILIDAD
+    this.planos.forEach(fila => {
+      if (fila.cod_Subtotal === 5 && fila.nivel === 3) {
+        fila.pro_Por = parseFloat(Number(ValorRentabilidad * 100).toFixed(2));
+      }
+    });      
+
+  }
 
   getListaCentroCosto(): void {
     this.service.getListaCentroCosto().subscribe({
@@ -466,6 +620,7 @@ export class CotizacionesComponent implements OnInit {
           });
 
           if(Pro_Cen_Cos === 1){
+            console.log('Pro_Cen_Cos', Pro_Cen_Cos);
             this.dataSource.data = [];
             this.dataSource.data = planosConFlags;
             this.dataSource.sort = this.sort;
@@ -565,8 +720,10 @@ export class CotizacionesComponent implements OnInit {
     this.formulario.get('descripcionTela')?.setValue(''); 
     this.formulario.get('codigoRutaTela')?.setValue(''); 
     this.formulario.get('codigoColor')?.setValue(''); 
+    this.formulario.get('color')?.setValue(''); 
     //DesHabilita botoneria
     this.bMuestraMenuFlotante = false;
+    this.isDisabledBtnFind    = false;
   }
 
   usarClientes(codigoCliente: string) {
@@ -625,7 +782,7 @@ export class CotizacionesComponent implements OnInit {
   }    
 
   validaCodigoColor() {
-    const sCodColor = this.formulario.get('codigoColor')?.value! || '';
+    const sCodColor = this.formulario.get('color')?.value! || '';
 
     if (!sCodColor || sCodColor.trim() === ''){
       this.matSnackBar.open("¡Ingrese codigo de color...!", 'Cerrar', {
@@ -751,10 +908,38 @@ export class CotizacionesComponent implements OnInit {
     });       
   }
 
+  loadListaCodigoColor(Cod_Cliente: string) {
+    this.listaCodigoColor = [];
+    this.SpinnerService.show();
+    this.service.getListaColoresXCliente(Cod_Cliente).subscribe({
+      next: (response: any) => {
+        if(response.success){
+          if (response.totalElements > 0){
+            this.listaCodigoColor = response.elements;
+            console.log('Lista de colores', this.listaCodigoColor);
+            this.SpinnerService.hide();
+          }
+          else{
+            this.listaCodigoColor = [];            
+            this.SpinnerService.hide();
+          };
+        }else{
+          this.listaCodigoColor = [];
+        }
+      },
+      error: (error: any) => {
+        this.SpinnerService.hide();
+        console.log(error.error.message, 'Cerrar', {
+          timeout: 2500
+        })
+      }
+    });    
+  }  
+
   onGuardar(){
     //Bloque 1 --> Validaciones
     Swal.fire({
-      title: '¿Desea Registrar Cotización?, Confirme',
+      title: '¿Desea registrar ajustes de cotización?, Confirme',
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -769,12 +954,12 @@ export class CotizacionesComponent implements OnInit {
         const _cliente  = this.formulario.get('cliente')?.value         || '';
         const _tela     = this.formulario.get('codigoTela')?.value      || '';
         const _ruta     = this.formulario.get('codigoRutaTela')?.value  || '';
-        const _color    = this.formulario.get('codigoColor')?.value     || '';        
+        const _color    = this.formulario.get('color')?.value     || '';        
         
         //PASO 1 - OBTENEMOS EL DETALLE
         if (Number(this.unidadNegocio) === 1){
             this.dataDetalles = this.dataSource.data.map(item => this.mapToDetalle(item));
-            console.log('DETALLE EXPORTACION', this.dataDetalles);
+            console.log('SERVICIO PRIMERA CARGA', this.dataDetalles);
         }else if(Number(this.unidadNegocio) === 2){
           console.log('VENTA DE TELA',this.dataSource);
             this.dataDetalles = this.dataSource_VT.data.map(item => this.mapToDetalle(item));
@@ -799,11 +984,16 @@ export class CotizacionesComponent implements OnInit {
             "cod_Tela"        : _tela,
             "cod_Ruta"        : _ruta,
             "cod_Color"       : _color,
+            "Cod_RecetaAcabado" : this.global_CodReceta,
             "flg_Estatus"     : "A",
             "usu_Registro"    : this.sUsuario,
             "accion"          : "I",
             "detalles"        : this.dataDetalles
         };
+
+        console.log('Data registro', data);
+
+        //return;
 
         this.SpinnerService.show();
         this.service.postProcesoCotizacion(data).subscribe({
@@ -855,21 +1045,189 @@ export class CotizacionesComponent implements OnInit {
     this.mostrarRutaDetalle();
   }
 
-  private mapToDetalle(item: any): dataDetalle {
-    return {
-      Pro_Cen_Cos   : item.pro_Cen_Cos,
-      Pro_Des       : item.pro_Des,
+  guardarObservacion(data: any){
+    console.log('observacion', data);
+    data.row.observacion = data.observacion;
+    this.dialog.closeAll();
+  } 
+
+  abrirDialog(row: any) {
+
+    if (row.pro_Aju != null && row.pro_Aju !== '' && row.pro_Aju !== 0) {
+      if (!this.dialogAbierto) {
+        this.dialogAbierto = true;
+        const ref = this.dialog.open(this.dialogObservacion, {
+          width: '600px',
+          data: { observacion: row.observacion ?? '', row }
+        }); 
+        // Cuando se cierra el diálogo, resetea la bandera
+        ref.afterClosed().subscribe(() => {
+          this.dialogAbierto = false;
+        });         
+      }
+    }
+    
+}
+
+validarObservacion(row: any, event: FocusEvent) {
+  if (row.pro_Aju == null || row.pro_Aju === '' || row.pro_Aju === 0) {
+    row.observacion = '';   
+    return;
+  }
+
+  // Si el ajuste es distinto al Total Comercial
+  if (row.pro_Aju != row.pro_Tot_Com) {
+    if (!row.observacion || row.observacion.trim() === '') {
+      if (!this.dialogAbierto) {
+        this.dialogAbierto = true;
+        // Evita que el foco se pierda y abre el diálogo
+        (event.target as HTMLInputElement).focus();
+        const ref = this.dialog.open(this.dialogObservacion, {
+          width: '600px',
+          data: { observacion: row.observacion ?? '', row }
+        });        
+
+        // Cuando se cierra el diálogo, resetea la bandera
+        ref.afterClosed().subscribe(() => {
+          this.dialogAbierto = false;
+        });        
+      }
+
+    }
+  }  
+}
+
+onLimpiarFiltros(){
+  this.reiniciaControles();
+}
+
+onChangeCliente(){
+  const _cliente = this.formulario.get('cliente')?.value || '';
+  this.loadListaCodigoColor(_cliente);
+}
+
+onChangeColor(){
+  this.isDisabledBtnFind = true;
+  const _CodColor = this.formulario.get('color')?.value || '';
+  this.onBuscaPreciosxColor(_CodColor);
+}
+
+onBuscaPreciosxColor(sCodColor: string){
+  this.dataSource_Precios = null;
+  this.SpinnerService.show();
+  this.service.getListaPrecioXColor(sCodColor).subscribe({
+    next: (response: any) => {
+      if(response.success){
+        if (response.totalElements > 0){
+          console.log('precios', response);
+          this.dataSource_Precios = response.elements;       
+          
+          //Carga Recetas
+          this.loadRecetas();          
+
+          this.dialogRef = this.dialog.open(this.dialogListaPrecios, {
+            width: '600px'
+          });        
+
+          this.dialogRef.afterClosed().subscribe(() => {
+                //aqui tu funcion
+          });                   
+          this.SpinnerService.hide();
+        }
+        else{
+          this.dataSource_Precios = null;            
+          this.SpinnerService.hide();
+        };
+      }else{
+        this.dataSource_Precios = null;
+      }
+    },
+    error: (error: any) => {
+      this.SpinnerService.hide();
+      console.log(error.error.message, 'Cerrar', {
+        timeout: 2500
+      })
+    }
+  });  
+}
+
+loadRecetas(){
+    this.SpinnerService.show();
+    this.service.getListaRecetasAntipilling().subscribe({
+      next: (response: any) => {
+        if(response.success){
+          if (response.totalElements > 0){
+            this.dataRecetas = response.elements;
+            this.SpinnerService.hide();
+          }
+          else{
+            this.dataSource_Hilos.data = [];            
+            this.SpinnerService.hide();
+          };
+        }else{
+          this.dataSource_Hilos.data = [];
+        }
+      },
+      error: (error: any) => {
+        this.SpinnerService.hide();
+        console.log(error.error.message, 'Cerrar', {
+          timeout: 2500
+        })
+      }
+    });      
+  }
+
+seleccionarFila(row: any) {
+  this.filaSeleccionada = row;
+  console.log('seleccionada', this.filaSeleccionada);
+
+  this.global_Tiempo = Number(row.tiempo);
+  this.global_PrecioTinto = Number(row.preC_TINTO);
+}  
+
+
+onGuardarPrecio(){
+  const _receta     = this.formulario.get('ctrl_receta')?.value || '';
+  this.global_CodReceta = _receta;
+
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    }  
+}
+
+//onChangeColor(){
+  //this.validaCodigoColor();
+//}
+
+private mapToDetalle(item: any): dataDetalle {
+    console.log('MAPDETALLE', item);
+  return {
+      //Pro_Cen_Cos   : item.pro_Cen_Cos,
+      //Pro_Des       : item.pro_Des,
       Pro_Hover     : item.pro_Hover,
       Pro_Factor    : item.pro_Factor,
       Pro_Cos_Kg    : item.pro_Cos_Kg,
       Pro_Tot       : item.pro_Tot,
+      Pro_Tot_Com   : item.pro_Tot_Com,
       Pro_Aju       : item.pro_Aju,
       Pro_Cotizacion: item.pro_Cotizacion,
-      Pro_Tip       : item.pro_Tip,
-      Pro_Tot_Com   : item.pro_Tot_Com,
       Pro_Por       : item.pro_Por,
-      Flg_Estatus   : 'A',
-      Usu_Registro  : this.sUsuario
+      Pro_Tip       : item.pro_Tip,
+      //Nuevos Campos
+      Observacion   : item.observacion,
+      Nivel         : item.nivel,
+      cod_Subtotal  : item.cod_Subtotal,
+      parteEntera   : item.parteEntera,
+      parteDecimal  : item.parteDecimal,
+      isParent      : item.isParent,
+      isChild       : item.isChild,
+      tieneHijos    : item.tieneHijos,
+      cod_ProcesoPadre  : item.cod_ProcesoPadre,
+      cod_Proceso_Tex   : item.cod_Proceso_Tex,
+      Cod_SubProceso : item.cod_SubProceso
+      
+      //Flg_Estatus   : 'A',
+      //Usu_Registro  : this.sUsuario
     };
   }
 }

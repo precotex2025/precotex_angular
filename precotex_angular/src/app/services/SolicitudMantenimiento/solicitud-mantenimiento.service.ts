@@ -69,7 +69,6 @@ export class SolicitudMantenimientoService {
   private bas = 'https://gestion.precotex.com:444/ubicaciones/api/TxRetiroRepuestos/getImagenDesdeBackEnd';
   
   getImagenUrl(imageId: string): string {
-    console.log('el nombre de la imagen es: ', imageId);
     return `${this.bas}?imageId=${encodeURIComponent(imageId)}`;
   }
 
