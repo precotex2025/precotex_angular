@@ -9,12 +9,12 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogCapturarFotoCajaComponent implements OnInit {
 
-  @ViewChild('video', { static: true }) video!: ElementRef<HTMLVideoElement>;
-  @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
-
-  videoDevices: MediaDeviceInfo[] = [];
-  selectedDeviceId: string | null = null;
-  capturedImage: string | null = null;
+  @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
+  mostrarModal: boolean = false;
+  fotoBase64: string = '';
+  imagen64: string | null = null;
+  facingMode: 'user' | 'environment' = 'environment';
+  ll_camara: boolean = true;  //false;  
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -22,84 +22,138 @@ export class DialogCapturarFotoCajaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.checkPermission();
+    this.abrirModal()
   }
 
   submit() :void{
-    const video = this.video.nativeElement;
-    const canvas = this.canvas.nativeElement;
-    const context = canvas.getContext('2d');
-
-    if (context) {
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      const canvas64 = <HTMLCanvasElement> document.getElementById('canvasId');
-      const image = canvas64.toDataURL();
-      this.capturedImage = image;
-
-      //this.capturedImage = canvas.toDataURL('image/png');
-      
-      this.dialogRef.close(this.capturedImage);
-    }    
+    //this.dialogRef.close(this.fotoBase64);
+    this.dialogRef.close(this.imagen64);
   }
 
-  iniciarCamara() {
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then((stream) => {
-        this.video.nativeElement.srcObject = stream;
-      })
-      .catch((error) => {
-        console.error('Error al acceder a la cámara:', error);
-      });
-  }
+  // Guardar Imangen
+  onGuardarImagen(event: any){
+    const archivoCapturado = event.target.files[0];
 
-
-
-  async getVideoDevices() {
-    try {
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      this.videoDevices = devices.filter(device => device.kind === 'videoinput');
-      if (this.videoDevices.length > 0) {
-        this.selectedDeviceId = this.videoDevices[1].deviceId; // Selecciona la primera cámara por defecto
-        this.startVideoStream(this.selectedDeviceId);
+    // Preparar imagen a binario para previsualización
+    const extraerBase64 = async ($event: any) => new Promise ((resolve) => {
+      try {
+        const reader = new FileReader();
+        reader.readAsDataURL($event);
+        reader.onload = () => {
+          resolve({          
+            base: reader.result
+          });
+        };
+        reader.onerror = error => {
+          resolve({
+            base: null
+          });
+        };
       }
-    } catch (error) {
-      console.error('Error al obtener dispositivos:', error);
+      catch (e) {
+        resolve({
+          base: null
+        });
+      }
+    });
+  
+    // Generar imagen para previsualización
+    extraerBase64(archivoCapturado).then((imagen: any) => {
+        this.imagen64 = imagen.base;
+        //this.formulario.controls['img_Evidencia'].setValue(imagen.base);
+    });
+
+    // Preperar imagen string a binario para grabar en servidor
+    var reader = new FileReader();
+    reader.onload = this._handleReaderLoaded.bind(this);
+    reader.readAsBinaryString(archivoCapturado);
+
+    this.ll_camara = true;
+  }
+
+  _handleReaderLoaded(readerEvent: any) {
+    var binaryString = readerEvent.target.result;
+    
+    //this.formulario.patchValue({
+    //  base64: btoa(binaryString)
+    //}); 
+
+  }
+
+  // Capturar Imangen desde camara
+  abrirModal() {
+    this.mostrarModal = true;
+    this.iniciarCamara(this.facingMode);
+  }
+
+  async iniciarCamara(facing: 'user' | 'environment') { 
+    try { 
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: facing } 
+      }); 
+      this.video.nativeElement.srcObject = stream; 
+    } catch (err) { 
+      console.error('Error al iniciar cámara:', err); 
+      this.ll_camara = false;
+      this.mostrarModal = false;
+    } 
+  }
+
+  capturarFoto(video: HTMLVideoElement) {
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext('2d');
+    ctx?.drawImage(video, 0, 0);
+
+    let calidad: number = 0.7;
+    let fotoBase64 = canvas.toDataURL('image/jpeg', calidad);
+
+    const calcularPesoKB = (base64: string): number => {
+      const stringLength = base64.length - 'data:image/jpeg;base64,'.length;
+      const bytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
+      return bytes / 1024; // convertir a KB
+    };
+
+    while (calcularPesoKB(fotoBase64) > 50 && calidad > 0.1) {
+      calidad -= 0.1;
+      fotoBase64 = canvas.toDataURL('image/jpeg', calidad);
+    }
+
+    this.imagen64 = fotoBase64;
+    this.fotoBase64 = fotoBase64.replace(/^data:image\/jpeg;base64,/, "");
+    
+    //this.formulario.patchValue({
+    //  base64: this.fotoBase64
+    //});
+
+    //this.cerrarModal();
+    this.submit();
+  }
+
+  cambiarCamara() { 
+    this.facingMode = this.facingMode === 'user' ? 'environment' : 'user'; 
+    this.detenerCamara(); 
+    this.iniciarCamara(this.facingMode); 
+  }
+
+  detenerCamara() { 
+    const stream = this.video.nativeElement.srcObject as MediaStream; 
+    if (stream) { 
+      stream.getTracks().forEach(track => track.stop()); 
+      this.video.nativeElement.srcObject = null; 
     }
   }
 
-  async checkPermission(){
-    navigator.mediaDevices.getUserMedia({video:{width:500,height:500}})
-      .then((response) => {
-        console.log(response)
-        this.getVideoDevices();
-      }).catch(err => {
-        console.log("Error al acceder a la cámara")
-      })
+  cerrarModal(){
+    this.mostrarModal = false;
+    this.detenerCamara();
   }
 
-  async startVideoStream(deviceId: string | null) {
-    try {
-      const constraints = {
-        video: deviceId ? { deviceId: { exact: deviceId } } : true
-      };
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      const videoElement = document.querySelector('video') as HTMLVideoElement;
-      if (videoElement) {
-        videoElement.srcObject = stream;
-      }
-    } catch (error) {
-      console.error('Error al iniciar el video:', error);
-    }
+  buscarImagen(){
+    this.cerrarModal();
+    this.ll_camara = false;
   }
-
-  onDeviceSelect(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    this.selectedDeviceId = selectElement.value;
-    this.startVideoStream(this.selectedDeviceId);
-  }
-
 
 }
