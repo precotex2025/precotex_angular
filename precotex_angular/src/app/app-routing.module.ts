@@ -330,6 +330,7 @@ import { AgendaTelefonicaComponent } from './components/agenda-telefonica/agenda
 import { ControlPrimeraPartidaComponent } from './components/control-primera-partida/control-primera-partida.component';
 import { LecturaBultosComponent } from './components/lectura-bultos/lectura-bultos.component';
 import { LecturaBultosDetComponent } from './components/lectura-bultos/lectura-bultos-det/lectura-bultos-det.component';
+import { SaldoHiloTelaComponent } from './components/tejeduria/saldo-hilo-tela/saldo-hilo-tela.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -731,6 +732,9 @@ const routes: Routes = [
   //LECTURA BULTOS
   { path: "LecturaBultosListado", component: LecturaBultosComponent},
   { path: "LecturaBultosListadoDetalle", component: LecturaBultosDetComponent},
+
+  //SALDO HILO TELA
+  { path: "SaldoHiloTela", component: SaldoHiloTelaComponent },
 
   //COPIAR RUTAS ANTES DE ESTO
   { path: "", redirectTo: "/", pathMatch: "full" },// Cuando es la raíz

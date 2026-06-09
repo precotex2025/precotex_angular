@@ -627,6 +627,10 @@ import { ProcesarConfirmacionModalComponent } from './components/control-primera
 import { LecturaBultosComponent } from './components/lectura-bultos/lectura-bultos.component';
 import { LecturaBultosDetComponent } from './components/lectura-bultos/lectura-bultos-det/lectura-bultos-det.component';
 
+//SALDO HILO TELA
+import { SaldoHiloTelaComponent } from './components/tejeduria/saldo-hilo-tela/saldo-hilo-tela.component';
+import { SaldoHiloTelaProgramadaComponent } from './components/tejeduria/saldo-hilo-tela/saldo-hilo-tela-programada/saldo-hilo-tela-programada.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -1177,6 +1181,10 @@ import { LecturaBultosDetComponent } from './components/lectura-bultos/lectura-b
     //LECTURA BULTOS
     ,LecturaBultosComponent
     ,LecturaBultosDetComponent
+
+    //SALDO HILO TELA
+    ,SaldoHiloTelaComponent
+    ,SaldoHiloTelaProgramadaComponent
   
   ],
   entryComponents: [DialogJabaComponent],

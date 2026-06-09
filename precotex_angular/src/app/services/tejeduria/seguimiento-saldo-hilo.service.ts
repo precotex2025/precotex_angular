@@ -1,0 +1,49 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { GlobalVariable } from '../../VarGlobals';
+import * as _moment from 'moment';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SeguimientoSaldoHiloService {
+  baseUrlTinto  = GlobalVariable.baseUrlProcesoTenido;
+  Header = new HttpHeaders({
+    'Content-type': 'application/json'
+  });
+  constructor(private http: HttpClient) { }
+
+  getListaOT_Programada(Cod_OrdProv, Cod_HilTel){
+
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('Cod_OrdProv', Cod_OrdProv);
+    params = params.append('Cod_HilTel', Cod_HilTel);
+
+    return this.http.get(this.baseUrlTinto + 'TjSeguimientoSaldoHilo/getListaOT_Programada', { headers, params });
+  }  
+
+  getListaOT_Terminada(Fecha, Flg_Pendiente){
+
+    if (!_moment(Fecha).isValid()) {
+      Fecha = '';
+    } else {
+      Fecha = _moment(Fecha.valueOf()).format('MM/DD/YYYY');
+    }    
+
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('Fecha', Fecha);
+    params = params.append('Flg_Pendiente', Flg_Pendiente);
+
+    return this.http.get(this.baseUrlTinto + 'TjSeguimientoSaldoHilo/getListaOT_Terminada', { headers, params });
+  }    
+
+  postProceso(data: any){
+    const headers = this.Header;
+    return this.http.post(this.baseUrlTinto + 'TjSeguimientoSaldoHilo/postProceso', data, { headers })
+  }
+
+
+}

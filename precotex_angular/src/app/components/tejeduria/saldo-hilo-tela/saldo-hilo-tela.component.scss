@@ -1,0 +1,122 @@
+.contenedor {
+  margin: 20px;
+}
+
+.bloque-titulo, .bloque-filtros, .bloque-tabla {
+  margin-bottom: 15px;
+  border: 1px solid #333;
+}
+
+.bloque-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.fila1-buscar {
+    width: 100%;
+
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 180px;
+    
+}
+
+.fila {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* espacio entre controles */
+}
+
+@media (max-width: 768px) {
+
+  .fecha-field {
+    max-width: 140px; /* ancho reducido */
+  }
+
+.fila {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* espacio entre controles */
+}  
+
+  mat-cell {
+    display: block;
+    padding-left: 50%;
+    position: relative;
+  }
+
+}
+
+.tabla-scroll {
+  overflow-x: auto;   /* habilita scroll horizontal */
+}
+
+
+.mat-header-cell.mat-column-opciones,
+.mat-header-cell.mat-column-cod_Maquina,
+.mat-header-cell.mat-column-ot,
+.mat-header-cell.mat-column-lote,
+.mat-header-cell.mat-column-fibra,
+.mat-header-cell.mat-column-titulo,
+.mat-header-cell.mat-column-fec_Termino    {
+  background-color: #E3E6E8; /* verde claro */
+}
+
+.mat-column-cod_Maquina {
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-ot {
+  width: 70px;
+  min-width: 70px;
+  max-width: 70px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-lote {
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-fibra {
+  width: 70px;
+  min-width: 70px;
+  max-width: 70px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-titulo {
+  width: 90px;
+  min-width: 90px;
+  max-width: 90px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-fec_Termino {
+  width: 115px;
+  min-width: 115px;
+  max-width: 115px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}

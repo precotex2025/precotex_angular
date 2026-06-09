@@ -1,0 +1,206 @@
+.contenedor {
+  margin: 5px;
+}
+
+.bloque-titulo, .bloque-filtros, .bloque-tabla {
+  margin-bottom: 15px;
+  border: 1px solid #333;
+}
+
+
+.bloque-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-wrapper
+ {
+    margin: .25em 0;
+    margin-bottom: -15px;
+}
+
+.fila {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 1px !important;
+}
+
+@media (max-width: 768px) {
+
+  .fila {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-start;
+    margin-bottom: 1px !important;
+  }
+
+  mat-cell {
+    display: block;
+    padding-left: 50%;
+    position: relative;
+  }  
+
+  .ot-field {
+    width     : 116px !important;
+    max-width : 116px !important;
+    flex      : 0 0 116px !important;
+  }
+  .lote-field {
+    width     : 140px !important;
+    max-width : 140px !important;
+    flex      : 0 0 140px !important;
+  }
+
+  .fibra-field {
+    width     : 100% !important;
+    max-width : 100% !important;
+  }
+
+}
+
+.tabla-scroll {
+  overflow-x: auto;
+}
+
+.mat-header-cell.mat-column-fec_Inicio,
+.mat-header-cell.mat-column-ot,
+.mat-header-cell.mat-column-familia,
+.mat-header-cell.mat-column-cod_Maquina,
+.mat-header-cell.mat-column-can_Salida,
+.mat-header-cell.mat-column-can_Teorico,
+.mat-header-cell.mat-column-can_PorPedir    {
+  background-color: #E3E6E8; /* verde claro */
+}
+
+.mat-column-fec_Inicio {
+  width: 115px;
+  min-width: 115px;
+  max-width: 115px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-ot {
+  width: 70px;
+  min-width: 70px;
+  max-width: 70px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-familia {
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-cod_Maquina {
+  width: 120px;
+  min-width: 120px;
+  max-width: 120px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-can_Salida {
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-can_Teorico {
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-can_PorPedir {
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+//menu flotante
+.menu-flotante {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.boton-principal {
+  position: absolute; 
+  bottom: 0;
+  right: 0;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  z-index: 20;
+}
+
+.opciones {
+  position: absolute; 
+  bottom: 60px;      
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: fadeIn 0.3s forwards;
+}
+
+.opciones.oculto {
+  animation: fadeOut 0.3s forwards;
+  pointer-events: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(20px); }
+}
+
+.boton-flotante {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  mat-icon { font-size: 24px; }
+}
+
+.boton-flotante.save { background-color: #0d7012; }
+
+.selected {
+  background-color: #c8e6c9; /* verde claro */
+}

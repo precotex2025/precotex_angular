@@ -1,0 +1,97 @@
+<div class="contenedor">
+
+  <!-- Bloque de título -->
+  <mat-card class="bloque-titulo">
+    <mat-card-title>DIR. DE HILO - AUX TEJ</mat-card-title>
+  </mat-card>
+
+  <!-- Bloque de filtros -->
+  <mat-card class="bloque-filtros">
+    <form  [formGroup]="formulario" #formDirective="ngForm">
+
+        <div class="fila">
+
+            <mat-form-field appearance="outline" class="fecha-field">
+                <mat-label>Fecha</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="fecha" (dateChange)="onFechaChange($event)">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-card class="bloque-filtros">
+                <mat-slide-toggle formControlName="pendiente" (change)="chgPendiente($event)">
+                    Pendiente
+                </mat-slide-toggle>
+            </mat-card>    
+
+        </div>        
+
+    </form>
+
+
+                <!-- <button type="button" class="fila1-buscar" mat-flat-button>                    
+                    <mat-icon aria-label="person">search</mat-icon>Buscar
+                </button> -->
+  </mat-card>
+
+  <!-- Bloque de tabla -->
+  <mat-card class="bloque-tabla">
+    <div class="tabla-scroll">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
+
+        <!-- Columnas -->
+            <ng-container matColumnDef="opciones">
+                <th mat-header-cell *matHeaderCellDef>  </th>
+                <td mat-cell *matCellDef="let data_det">
+                    <a mat-icon-button style="margin-right:5px;" (click)="onEspecificacion(data_det)" >
+                        <mat-icon matTooltip="Ver línea de tiempo" color="primary">open_in_new</mat-icon>
+                    </a>                                       
+                </td>
+            </ng-container> 
+        <!-- (click)="onTime(data_det)" -->
+
+
+        <ng-container matColumnDef="cod_Maquina">
+            <th mat-header-cell *matHeaderCellDef>MAQ</th>
+            <td mat-cell *matCellDef="let element">{{element.cod_Maquina}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ot">
+            <th mat-header-cell *matHeaderCellDef>OT</th>
+            <td mat-cell *matCellDef="let element">{{element.ot}}</td>
+        </ng-container>      
+
+        <ng-container matColumnDef="lote">
+            <th mat-header-cell *matHeaderCellDef>LOTE</th>
+            <td mat-cell *matCellDef="let element">{{element.lote}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fibra">
+            <th mat-header-cell *matHeaderCellDef>FIBRA</th>
+            <td mat-cell *matCellDef="let element">{{element.fibra}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="titulo">
+            <th mat-header-cell *matHeaderCellDef>TIT</th>
+            <td mat-cell *matCellDef="let element">{{element.titulo}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fec_Termino">
+            <th mat-header-cell *matHeaderCellDef>FECHA <br> TERMINO</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.fec_Termino | date: 'dd/MM/yyyy' }}
+            </td>
+        </ng-container>
+
+        <!-- Header y filas -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+  </mat-card>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin">
+    <p style="color: white; text-align: center; ">Cargando... </p>
+</ngx-spinner>
