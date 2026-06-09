@@ -107,8 +107,9 @@ export class DialogCapturarFotoCajaComponent implements OnInit {
     const ctx = canvas.getContext('2d');
     ctx?.drawImage(video, 0, 0);
 
-    let calidad: number = 0.7;
-    let fotoBase64 = canvas.toDataURL('image/jpeg', calidad);
+    let calidad: number = 0.92;  // 0.7;
+    //let fotoBase64 = canvas.toDataURL('image/jpeg', calidad);
+    let fotoBase64 = canvas.toDataURL('image/jpeg');
 
     const calcularPesoKB = (base64: string): number => {
       const stringLength = base64.length - 'data:image/jpeg;base64,'.length;
@@ -116,10 +117,10 @@ export class DialogCapturarFotoCajaComponent implements OnInit {
       return bytes / 1024; // convertir a KB
     };
 
-    while (calcularPesoKB(fotoBase64) > 50 && calidad > 0.1) {
-      calidad -= 0.1;
-      fotoBase64 = canvas.toDataURL('image/jpeg', calidad);
-    }
+    //while (calcularPesoKB(fotoBase64) > 50 && calidad > 0.1) {
+    //  calidad -= 0.1;
+    //  fotoBase64 = canvas.toDataURL('image/jpeg', calidad);
+    //}
 
     this.imagen64 = fotoBase64;
     this.fotoBase64 = fotoBase64.replace(/^data:image\/jpeg;base64,/, "");
