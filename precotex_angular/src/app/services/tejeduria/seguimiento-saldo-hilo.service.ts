@@ -24,7 +24,7 @@ export class SeguimientoSaldoHiloService {
     return this.http.get(this.baseUrlTinto + 'TjSeguimientoSaldoHilo/getListaOT_Programada', { headers, params });
   }  
 
-  getListaOT_Terminada(Fecha, Flg_Pendiente){
+  getListaOT_Terminada(Fecha, Fecha_Fin, Flg_Pendiente){
 
     if (!_moment(Fecha).isValid()) {
       Fecha = '';
@@ -32,9 +32,16 @@ export class SeguimientoSaldoHiloService {
       Fecha = _moment(Fecha.valueOf()).format('MM/DD/YYYY');
     }    
 
+    if (!_moment(Fecha_Fin).isValid()) {
+      Fecha_Fin = '';
+    } else {
+      Fecha_Fin = _moment(Fecha_Fin.valueOf()).format('MM/DD/YYYY');
+    }      
+
     const headers = this.Header;
     let params = new HttpParams();
     params = params.append('Fecha', Fecha);
+    params = params.append('Fecha_Fin', Fecha_Fin);
     params = params.append('Flg_Pendiente', Flg_Pendiente);
 
     return this.http.get(this.baseUrlTinto + 'TjSeguimientoSaldoHilo/getListaOT_Terminada', { headers, params });

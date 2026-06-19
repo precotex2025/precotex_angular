@@ -366,3 +366,10 @@ button:disabled {
 .fila-seleccionada {
   background-color: rgba(63, 81, 181, 0.1); /* azul suave */
 }
+
+::ng-deep .mat-select-panel .sticky-option {
+  position: sticky;
+  top: 0;
+  background: #fff;   /* fondo sólido para que no se mezcle */
+  z-index: 2;         /* asegura que quede encima */
+}

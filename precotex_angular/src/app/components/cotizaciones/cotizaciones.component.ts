@@ -51,6 +51,8 @@ interface Costeo {
     totalAjustado: number;
     precioFinalCliente: number;
     rentabilidad: number;
+    //Verificamos si tiene Historial
+    bTieneHistorialPrecios: number;
   }
 
   interface dataDetalle {
@@ -152,14 +154,17 @@ export class CotizacionesComponent implements OnInit {
   bMuestraMenuFlotante: boolean = false;
   dataClientes    : any[] = [];
   ClientesFiltrada: any[] = [];
+  ColoresFiltrada: any[] = [];
   planos          : any[] = [];
+  planosBackup : any[] = [];
   dataRecetas     : any[] = [];
   sUsuario        = GlobalVariable.vusu;
 
   dataDetalles: dataDetalle[] = [];
-  isAjusteBloqueado = true;
-  dialogAbierto = false;
-  bBuscarTela = false;
+  isAjusteBloqueado   = true;
+  dialogAbierto       = false;
+  bBuscarTela         = false;
+  bValidaHistorial    = false;
   
   filaSeleccionada: any = null;
 
@@ -280,6 +285,7 @@ export class CotizacionesComponent implements OnInit {
     intensidad      :[''],
     color           :[''],
     ctrl_receta     :[''],
+    filtroColores   :[''],
   });  
 
   //procesos: Proceso[] = [];
@@ -561,6 +567,13 @@ export class CotizacionesComponent implements OnInit {
       }
     });     
 
+    //Elmismo valor calculado se debe de mostrar al mismo PRECIO VALOR DEL CLIENTE
+    this.planos.forEach(fila => {
+      if (fila.cod_Subtotal === 4 && fila.nivel === 3) {
+        fila.pro_Cotizacion = _Valor_TotalUSProCotizacion;
+      }
+    });  
+
   }
 
   recalcularPrecioFinal(row: any) {
@@ -599,12 +612,18 @@ export class CotizacionesComponent implements OnInit {
   }
 
   getListarProcesosExportacion(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string): void {
+    //limpia
+    this.planos = []
+    this.planosBackup = [];
+    
     this.SpinnerService.show();
     this.service.getListarProcesosExportacion(Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color).subscribe({
       next: (response: any) => {
         if (response.success && response.totalElements > 0) {
           //const planos = response.elements;
           this.planos = response.elements;
+          this.planosBackup = JSON.parse(JSON.stringify(response.elements));
+
           console.log(':::::::::::::::::::::::::::::::::::.', this.planos);
           const planosConFlags = this.planos.map((p: any) => {
             if (!p.pro_Hover.includes('.')) {
@@ -657,7 +676,12 @@ export class CotizacionesComponent implements OnInit {
               this.isDisabledBtnSave    = true;
               this.isDisabledBtnEdit    = false;
               this.isDisabledBtnDelete  = false;
-          }             
+          }      
+          
+          //Busca color solo si no tiene regitros de historial
+          //if (response.elements[0].existeCotizacion == "0"){
+          //  this.onBuscaPreciosxColor(Cod_Color);    
+          //}
 
           //Habilita botoneria
           this.bMuestraMenuFlotante = true;
@@ -724,6 +748,12 @@ export class CotizacionesComponent implements OnInit {
     //DesHabilita botoneria
     this.bMuestraMenuFlotante = false;
     this.isDisabledBtnFind    = false;
+
+    this.formulario.get('filtro')?.setValue(''); 
+    this.formulario.get('filtroColores')?.setValue(''); 
+    
+    this.RutaXCodTela = [];
+    this.ColoresFiltrada = [];
   }
 
   usarClientes(codigoCliente: string) {
@@ -780,6 +810,14 @@ export class CotizacionesComponent implements OnInit {
       item.abr_Cliente.toLowerCase().includes(filtroTexto)
     );
   }    
+
+  filtrarColores() {
+    const filtroTexto = this.formulario.get('filtroColores')?.value?.toLowerCase();
+    this.ColoresFiltrada = this.listaCodigoColor.filter(item =>
+      item.codigo.toLowerCase().includes(filtroTexto) ||
+      item.descripcion.toLowerCase().includes(filtroTexto)      
+    );
+  }
 
   validaCodigoColor() {
     const sCodColor = this.formulario.get('color')?.value! || '';
@@ -984,7 +1022,7 @@ export class CotizacionesComponent implements OnInit {
             "cod_Tela"        : _tela,
             "cod_Ruta"        : _ruta,
             "cod_Color"       : _color,
-            "Cod_RecetaAcabado" : this.global_CodReceta,
+            "cod_RecetaAcabado" : this.global_CodReceta,
             "flg_Estatus"     : "A",
             "usu_Registro"    : this.sUsuario,
             "accion"          : "I",
@@ -1053,6 +1091,13 @@ export class CotizacionesComponent implements OnInit {
 
   abrirDialog(row: any) {
 
+  console.log('abtrir dialog', row);
+  const proAjuActual = Number(row.pro_Aju);
+  const proAjuBackup = this.planosBackup.filter(p => p.cod_Proceso_Tex == row.cod_Proceso_Tex).map(p => p.pro_Aju);
+
+  //Solo se ejecuta cuando es diferente
+  if (proAjuBackup !== undefined && proAjuActual !== Number(proAjuBackup)) {
+
     if (row.pro_Aju != null && row.pro_Aju !== '' && row.pro_Aju !== 0) {
       if (!this.dialogAbierto) {
         this.dialogAbierto = true;
@@ -1065,8 +1110,12 @@ export class CotizacionesComponent implements OnInit {
           this.dialogAbierto = false;
         });         
       }
-    }
-    
+    }    
+
+  }
+
+  //console.log('proAjuActual', proAjuActual);
+  //console.log('proAjuActual', proAjuBackup);
 }
 
 validarObservacion(row: any, event: FocusEvent) {
@@ -1075,7 +1124,33 @@ validarObservacion(row: any, event: FocusEvent) {
     return;
   }
 
+  const proAjuActual = Number(row.pro_Aju);
+  const proAjuBackup = this.planosBackup.filter(p => p.cod_Proceso_Tex == row.cod_Proceso_Tex).map(p => p.pro_Aju);
+
+  if (proAjuBackup !== undefined && proAjuActual !== Number(proAjuBackup)) {
+    console.log('entro aquí');
+    //if (!row.observacion || row.observacion.trim() === '') {
+      console.log('entro aquí observacion');
+      if (!this.dialogAbierto) {
+        this.dialogAbierto = true;
+        // Evita que el foco se pierda y abre el diálogo
+        (event.target as HTMLInputElement).focus();
+        const ref = this.dialog.open(this.dialogObservacion, {
+          width: '600px',
+          data: { observacion: row.observacion ?? '', row }
+        });        
+
+        // Cuando se cierra el diálogo, resetea la bandera
+        ref.afterClosed().subscribe(() => {
+          this.dialogAbierto = false;
+        });        
+      }
+    //}
+
+  }
+
   // Si el ajuste es distinto al Total Comercial
+  /*
   if (row.pro_Aju != row.pro_Tot_Com) {
     if (!row.observacion || row.observacion.trim() === '') {
       if (!this.dialogAbierto) {
@@ -1092,9 +1167,9 @@ validarObservacion(row: any, event: FocusEvent) {
           this.dialogAbierto = false;
         });        
       }
-
     }
   }  
+    */
 }
 
 onLimpiarFiltros(){
@@ -1108,8 +1183,16 @@ onChangeCliente(){
 
 onChangeColor(){
   this.isDisabledBtnFind = true;
-  const _CodColor = this.formulario.get('color')?.value || '';
-  this.onBuscaPreciosxColor(_CodColor);
+  this.dataSource.data = [];
+  // const _CodColor = this.formulario.get('color')?.value || '';
+  // this.onBuscaPreciosxColor(_CodColor);
+
+  //AQUI DEBE LLAMAR AL LISTAR 
+  //this.onBuscar();
+  
+  this.onValidaExistenciaHistorialxColor();
+
+
 }
 
 onBuscaPreciosxColor(sCodColor: string){
@@ -1118,20 +1201,22 @@ onBuscaPreciosxColor(sCodColor: string){
   this.service.getListaPrecioXColor(sCodColor).subscribe({
     next: (response: any) => {
       if(response.success){
-        if (response.totalElements > 0){
-          console.log('precios', response);
-          this.dataSource_Precios = response.elements;       
-          
-          //Carga Recetas
-          this.loadRecetas();          
+        if (response.totalElements > 1){
 
+          this.dataSource_Precios = response.elements;       
+          //Carga Recetas
+          this.loadRecetas();
+          
+          //Abre el dialog
           this.dialogRef = this.dialog.open(this.dialogListaPrecios, {
             width: '600px'
           });        
 
           this.dialogRef.afterClosed().subscribe(() => {
-                //aqui tu funcion
-          });                   
+                //aqui FUNCION
+          });        
+          
+          
           this.SpinnerService.hide();
         }
         else{
@@ -1186,13 +1271,61 @@ seleccionarFila(row: any) {
 }  
 
 
-onGuardarPrecio(){
+onSeleccionarPrecio(){
   const _receta     = this.formulario.get('ctrl_receta')?.value || '';
   this.global_CodReceta = _receta;
 
     if (this.dialogRef) {
       this.dialogRef.close();
     }  
+}
+
+onValidaExistenciaHistorialxColor(){
+
+    const _unidad     = this.formulario.get('unidadNegocio')?.value || '';
+    const _tipo       = this.formulario.get('tipo')?.value || '';
+    const _cliente    = this.formulario.get('cliente')?.value || '';
+    const _tela       = this.formulario.get('codigoTela')?.value || '';
+    const _ruta       = this.formulario.get('codigoRutaTela')?.value || '';
+    const _color      = this.formulario.get('color')?.value || '';
+    const _receta     = this.global_CodReceta || '';
+
+    this.SpinnerService.show();
+    this.service.getValidaExistenciaHistorialxColor(_unidad, _tipo, _cliente, _tela, _ruta, _color, _receta).subscribe({
+      next: (response: any) => {
+        if(response.success){
+          if (response.totalElements > 0){
+            //Aqui habilita el semaforo
+            //this.bValidaHistorial = true;    
+
+            //MUESTRA PRECIOS DEL HISTORIAL SI ES QUE EXISTE
+            //this.onBuscaPreciosxColor(_color); 
+
+            console.log('Valida historial', this.bValidaHistorial);     
+            this.SpinnerService.hide();
+          }
+          else{
+            this.dataSource_Hilos.data = [];     
+
+            console.log('MARCA SIN HISTORIAL');
+            
+            //MUESTRA PRECIOS DE LA BD SI ES QUE NO EXISTE HISTORIAL
+            this.onBuscaPreciosxColor(_color);
+
+            this.SpinnerService.hide();
+          };
+        }else{
+          this.dataSource_Hilos.data = [];
+        }
+      },
+      error: (error: any) => {
+        this.SpinnerService.hide();
+        console.log(error.error.message, 'Cerrar', {
+          timeout: 2500
+        })
+      }
+    });       
+
 }
 
 //onChangeColor(){

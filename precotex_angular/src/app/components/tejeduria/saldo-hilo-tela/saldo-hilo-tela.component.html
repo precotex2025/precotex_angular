@@ -11,12 +11,30 @@
 
         <div class="fila">
 
-            <mat-form-field appearance="outline" class="fecha-field">
+            <!-- <mat-form-field appearance="outline" class="fecha-field">
                 <mat-label>Fecha</mat-label>
                 <input matInput [matDatepicker]="picker" formControlName="fecha" (dateChange)="onFechaChange($event)">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
+            </mat-form-field> -->
+
+            <mat-form-field class="fecha-field" appearance="fill">
+                <mat-label>Rango de Fecha de Memorandum(s)</mat-label>
+                <mat-date-range-input   [formGroup]      = "range" [rangePicker]="picker">
+                <input matStartDate      formControlName = "start"  placeholder="Fecha Inicio">
+                <input matEndDate        formControlName = "end" placeholder="Fecha Final">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+                <mat-icon (click)="clearDate($event)" style=" position: absolute;
+                            float: right;
+                            top: -6px;
+                            margin-left: 190px;
+                            cursor: pointer;
+                            color: rgba(0, 0, 0, 0.54);">clear</mat-icon>
+                <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Fecha Invalida</mat-error>
+                <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Fecha Invalida</mat-error>
+            </mat-form-field>            
 
             <mat-card class="bloque-filtros">
                 <mat-slide-toggle formControlName="pendiente" (change)="chgPendiente($event)">
