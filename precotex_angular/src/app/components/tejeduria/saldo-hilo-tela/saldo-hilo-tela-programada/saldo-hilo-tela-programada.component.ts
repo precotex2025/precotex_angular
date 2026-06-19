@@ -124,15 +124,24 @@ export class SaldoHiloTelaProgramadaComponent implements OnInit {
     }
 
     if (!this.filaSeleccionada) {
-      this.snackBar.open('¡Por favor, seleccione el destino!', 'Cerrar', {
-        duration: 3000,
-        verticalPosition: 'top'
-      });
-      return;
+
+      const estado  = this.formulario.get('mv').value || '';
+      if (estado === 'MV') {
+        this.snackBar.open('¡Por favor, seleccione el destino!', 'Cerrar', {
+          duration: 3000,
+          verticalPosition: 'top'
+        });
+        return;        
+      }
+      // else{
+      //   if (this.dataSource.data.length > 0) {
+      //     this.seleccionarFila(this.dataSource.data[0]); // primera fila
+      //   }
+      // }
     }
 
     console.log('fila seleccionada', this.filaSeleccionada);
-
+    //return;
     Swal.fire({
       title: '¿Desea Registrar Seguimiento de Saldo?, Confirme',
       icon: 'question',
@@ -152,13 +161,13 @@ export class SaldoHiloTelaProgramadaComponent implements OnInit {
         const cod_Maquina_Ori = String(this.data.Datos.cod_Maquina);
         const cod_HilTel      = String(this.data.Datos.cod_Hilado);
         const cod_Color       = String(this.data.Datos.cod_Color);
-        const kg_Programado = Number(this.filaSeleccionada.can_Teorico);
-        const kg_Salida   = Number(this.filaSeleccionada.can_Salida);
-        const kg_Consumo  = Number(this.filaSeleccionada.can_Salida);
-        const kg_Devolver = Number(this.filaSeleccionada.can_PorPedir);
+        const kg_Programado = this.formulario.get('mv').value == "MV" ? Number(this.filaSeleccionada.can_Teorico)  : 0;
+        const kg_Salida     = this.formulario.get('mv').value == "MV" ? Number(this.filaSeleccionada.can_Salida)   : 0;
+        const kg_Consumo    = this.formulario.get('mv').value == "MV" ? Number(this.filaSeleccionada.can_Salida)   : 0;
+        const kg_Devolver   = this.formulario.get('mv').value == "MV" ? Number(this.filaSeleccionada.can_PorPedir) : 0;
         const estado  = this.formulario.get('mv').value || '';
-        const cod_Ordtra_Des  = String(this.filaSeleccionada.ot);
-        const cod_Maquina_Des = String(this.filaSeleccionada.cod_Maquina);
+        const cod_Ordtra_Des  = this.formulario.get('mv').value == "MV" ? String(this.filaSeleccionada.ot) : '';
+        const cod_Maquina_Des = this.formulario.get('mv').value == "MV" ? String(this.filaSeleccionada.cod_Maquina) : '';
         const cod_Usuario =   String(this.sUsuario);
         
         var data: any = 
@@ -227,7 +236,6 @@ export class SaldoHiloTelaProgramadaComponent implements OnInit {
 
   seleccionarFila(row: any) {
     this.filaSeleccionada = row;
-    
   }
 
 }
