@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import { GlobalVariable } from 'src/app/VarGlobals';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { color } from 'html2canvas/dist/types/css/types/color';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 interface Costeo {
     unidadNegocio: string;
@@ -101,7 +102,9 @@ interface Costeo {
     corR_CARTA  : string,
     tiempo      : number,
     preC_TINTO  : number,
-    preC_ACABADO: number    
+    preC_ACABADO: number,
+    idCotizacion_Cab: number,
+    idrecetalabprod: string
   }
 
 //   interface Proceso {
@@ -165,12 +168,16 @@ export class CotizacionesComponent implements OnInit {
   dialogAbierto       = false;
   bBuscarTela         = false;
   bValidaHistorial    = false;
+  dialogPrecio        = false;
   
   filaSeleccionada: any = null;
 
   global_Tiempo       : number = 0;
   global_PrecioTinto  : number = 0;
+  global_SDC          : string = ""; 
   global_CodReceta    : string = "";
+  global_Observacion  : string = "";
+  global_idCotizacion_Cab : number = 0;
 
   constructor(
     private SpinnerService      : NgxSpinnerService         ,
@@ -187,24 +194,24 @@ export class CotizacionesComponent implements OnInit {
   dataSource = new MatTableDataSource<any>();
   dataSourceFooter = new MatTableDataSource<any>();
 
-  dataSource_VT = new MatTableDataSource<any>();
-  dataSourceFooter_VT = new MatTableDataSource<any>();
+  // dataSource_VT = new MatTableDataSource<any>();
+  // dataSourceFooter_VT = new MatTableDataSource<any>();
 
-  dataSource_Servicio = new MatTableDataSource<any>();
-  dataSourceFooter_Servicio = new MatTableDataSource<any>();  
+  // dataSource_Servicio = new MatTableDataSource<any>();
+  // dataSourceFooter_Servicio = new MatTableDataSource<any>();  
 
-  dataSource_VT_Estampado = new MatTableDataSource<any>();
-  dataSourceFooter_VT_Estampado = new MatTableDataSource<any>();  
+  // dataSource_VT_Estampado = new MatTableDataSource<any>();
+  // dataSourceFooter_VT_Estampado = new MatTableDataSource<any>();  
 
-  dataSource_VT_Servicio = new MatTableDataSource<any>();
-  dataSourceFooter_VT_Servicio = new MatTableDataSource<any>();  
+  // dataSource_VT_Servicio = new MatTableDataSource<any>();
+  // dataSourceFooter_VT_Servicio = new MatTableDataSource<any>();  
 
   unidadesNegocio : dataCombo[] =[]; // ['Textil', 'Confección', 'Exportación'];
   tipoUnidadesNegocio : dataCombo[] =[];
   intensidad: dataCombo[] =[];
   listaCodigoColor: dataCombo[] = [];
 
-
+  /*
   tipos = [
     { value: '01', descripcion: 'REGULAR' },
     { value: '02', descripcion: 'URGENTE' },
@@ -213,6 +220,7 @@ export class CotizacionesComponent implements OnInit {
   clientes = ['Cliente A', 'Cliente B', 'Cliente C'];
   codigosTela = ['TELA001', 'TELA002', 'TELA003'];
   rutas = ['Ruta 1', 'Ruta 2', 'Ruta 3'];
+  */
   expandedRows: Set<string> = new Set(); // usamos el pro_Hover como clave
 
   isDisabledBtnSave   = false; 
@@ -267,7 +275,8 @@ export class CotizacionesComponent implements OnInit {
       'corR_CARTA'    ,
       'tiempo'        ,
       'preC_TINTO'    ,
-      'preC_ACABADO'          
+      //'preC_ACABADO'  ,
+      'idrecetalabprod',  
   ];
   dataSource_Precios: MatTableDataSource<dataPrecio> = new MatTableDataSource();
 
@@ -284,19 +293,28 @@ export class CotizacionesComponent implements OnInit {
     filtro          :[''],
     intensidad      :[''],
     color           :[''],
-    ctrl_receta     :[''],
+    //ctrl_receta     :[''],
     filtroColores   :[''],
+    ctrl_historial  :[false]
   });  
+
+  formulario_Precio = this.formBuilder.group({
+    ctrl_receta: ['']
+  });
 
   //procesos: Proceso[] = [];
 
   ngOnInit(): void {
+
+
+
     // this.getRutaXCodTela('JE003177');
     // this.getRutaXCodTelaDetalle('JE003177', '01');
     //this.getListaCentroCosto();
     this.loadUnidadNeg();
     this.LoadClientes(null);
-  
+    this.loadRecetas();//PORQUE LAS RECETAS SON UNICAS NO DEPENDEN DE NADIE
+
 
     this.formulario.get('codigoColor')?.valueChanges.subscribe((valor: any) => {
       if (valor && valor.length === 5) {
@@ -333,7 +351,7 @@ export class CotizacionesComponent implements OnInit {
       });
       return;
     }
-
+    
     articleNumber = articleNumber.toUpperCase(); // Asegura letras en mayúscula
     const letras = articleNumber.substring(0, 2);
     const numeros = articleNumber.substring(2).replace(/\D/g, ''); // Solo dígitos
@@ -353,11 +371,12 @@ export class CotizacionesComponent implements OnInit {
     articleNumber = nuevoValor;    
 
     if (articleNumber) { 
+      console.log('Codigo Tela:', articleNumber);
       this.service.getListaTelas(articleNumber).subscribe({
         next: (response: any) => {
           if (response.success){
             if (response.totalElements > 0){
-              //this.descripcionTela = response.elements[0].des_Tela;
+              this.descripcionTela = response.elements[0].des_Tela;
               this.formulario.get('descripcionTela')?.setValue(response.elements[0].des_Tela); 
               console.log('------', this.descripcionTela);
               if (this.descripcionTela != null || this.descripcionTela != ''){
@@ -378,31 +397,11 @@ export class CotizacionesComponent implements OnInit {
   }
 
   mostrarRutaDetalle(): void {
-    
-    //this.codigoRutaTela = rutaSeleccionada;
-    //this.codigoRutaTela = rutaSeleccionada;
-    // this.getRutaXCodTelaDetalle(this.codigoTela, rutaSeleccionada);
 
-    const _tipo     = this.formulario.get('tipo')?.value ||    '';
-    const _cliente  = this.formulario.get('cliente')?.value || '';
-    const _tela     = this.formulario.get('codigoTela')?.value || '';
-    const _ruta     = this.formulario.get('codigoRutaTela')?.value || '';
-    const _color    = this.formulario.get('color')?.value! || '';
+    //BLOQUE DE VALIDACION
+    //this.dataSource.data = [];
+    this.onValidaExistenciaHistorialxColor();
 
-    this.codigoRutaTela = _ruta;
-    
-    //return;   ---NO APLICA EN SERVICIO
-    //this.loadHilo(_tela);
-
-    //SE COMENTA PORQUE CUANDO RECIEN ESCOGE LA RUTA DEBE DE MOSTRAR LOS VALORES
-    if (!this.bBuscarTela)
-    {
-      console.log('MARCA LOG');
-      this.getListarProcesosExportacion(Number(this.unidadNegocio), _tipo, _cliente, _tela, _ruta, _color);
-    }
-
-
-    //this.getListarProcesosExportacionFooter(1);
   }
 
 
@@ -611,20 +610,20 @@ export class CotizacionesComponent implements OnInit {
     });
   }
 
-  getListarProcesosExportacion(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string): void {
+  getListarProcesosExportacion(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string, precio: number, tiempo: number, IdCotizacion_Cab: number): void {
     //limpia
     this.planos = []
     this.planosBackup = [];
     
     this.SpinnerService.show();
-    this.service.getListarProcesosExportacion(Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color).subscribe({
+    this.service.getListarProcesosExportacion(Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color, precio, tiempo, IdCotizacion_Cab).subscribe({
       next: (response: any) => {
         if (response.success && response.totalElements > 0) {
           //const planos = response.elements;
           this.planos = response.elements;
           this.planosBackup = JSON.parse(JSON.stringify(response.elements));
 
-          console.log(':::::::::::::::::::::::::::::::::::.', this.planos);
+          console.log('Datos de planos :::::::::::: ', this.planos);
           const planosConFlags = this.planos.map((p: any) => {
             if (!p.pro_Hover.includes('.')) {
               p.isParent = true;
@@ -639,27 +638,33 @@ export class CotizacionesComponent implements OnInit {
           });
 
           if(Pro_Cen_Cos === 1){
-            console.log('Pro_Cen_Cos', Pro_Cen_Cos);
+            console.log('marca 1');
             this.dataSource.data = [];
             this.dataSource.data = planosConFlags;
             this.dataSource.sort = this.sort;
-          }else if(Pro_Cen_Cos === 2){
-            this.dataSource_VT.data = [];
-            this.dataSource_VT.data = planosConFlags;
-            this.dataSource_VT.sort = this.sort;          
-          }else if(Pro_Cen_Cos === 3){
-            this.dataSource_Servicio.data = [];
-            this.dataSource_Servicio.data = planosConFlags;
-            this.dataSource_Servicio.sort = this.sort;
-          }else if(Pro_Cen_Cos === 4){
-            this.dataSource_VT_Estampado.data = [];
-            this.dataSource_VT_Estampado.data = planosConFlags;
-            this.dataSource_VT_Estampado.sort = this.sort;
-          }else if(Pro_Cen_Cos === 5){
-            this.dataSource_VT_Servicio.data = [];
-            this.dataSource_VT_Servicio.data = planosConFlags;
-            this.dataSource_VT_Servicio.sort = this.sort;
+            console.log('marca 1 - FIN');
           }
+          // else if(Pro_Cen_Cos === 2){
+          //   console.log('marca 2');
+          //   this.dataSource_VT.data = [];
+          //   this.dataSource_VT.data = planosConFlags;
+          //   this.dataSource_VT.sort = this.sort;          
+          // }else if(Pro_Cen_Cos === 3){
+          //   console.log('marca 3');
+          //   this.dataSource_Servicio.data = [];
+          //   this.dataSource_Servicio.data = planosConFlags;
+          //   this.dataSource_Servicio.sort = this.sort;
+          // }else if(Pro_Cen_Cos === 4){
+          //   console.log('marca 4');
+          //   this.dataSource_VT_Estampado.data = [];
+          //   this.dataSource_VT_Estampado.data = planosConFlags;
+          //   this.dataSource_VT_Estampado.sort = this.sort;
+          // }else if(Pro_Cen_Cos === 5){
+          //   console.log('marca 5');
+          //   this.dataSource_VT_Servicio.data = [];
+          //   this.dataSource_VT_Servicio.data = planosConFlags;
+          //   this.dataSource_VT_Servicio.sort = this.sort;
+          // }
 
           //Existe Cotizacion
           if (planosConFlags[0].existeCotizacion === '1'){
@@ -730,7 +735,8 @@ export class CotizacionesComponent implements OnInit {
       const _color      = this.formulario.get('codigoColor')?.value || '';
 
       //return;
-      this.getListarProcesosExportacion(Number(this.unidadNegocio), _tipo, _cliente, _tela, _ruta, _color);          
+      //deshabilitado porque solo debe de mostrar los procesos cuando se clickea el boton de buscar
+      //this.getListarProcesosExportacion(Number(this.unidadNegocio), _tipo, _cliente, _tela, _ruta, _color);          
     } 
 
   }
@@ -745,6 +751,7 @@ export class CotizacionesComponent implements OnInit {
     this.formulario.get('codigoRutaTela')?.setValue(''); 
     this.formulario.get('codigoColor')?.setValue(''); 
     this.formulario.get('color')?.setValue(''); 
+    this.formulario.get('ctrl_historial')?.setValue(false);
     //DesHabilita botoneria
     this.bMuestraMenuFlotante = false;
     this.isDisabledBtnFind    = false;
@@ -998,7 +1005,9 @@ export class CotizacionesComponent implements OnInit {
         if (Number(this.unidadNegocio) === 1){
             this.dataDetalles = this.dataSource.data.map(item => this.mapToDetalle(item));
             console.log('SERVICIO PRIMERA CARGA', this.dataDetalles);
-        }else if(Number(this.unidadNegocio) === 2){
+        }
+        /*
+        else if(Number(this.unidadNegocio) === 2){
           console.log('VENTA DE TELA',this.dataSource);
             this.dataDetalles = this.dataSource_VT.data.map(item => this.mapToDetalle(item));
         }else if(Number(this.unidadNegocio) === 3){
@@ -1011,6 +1020,7 @@ export class CotizacionesComponent implements OnInit {
           console.log('ESTAMPADO SERVICIO',this.dataSource);
             this.dataDetalles = this.dataSource_VT_Servicio.data.map(item => this.mapToDetalle(item));             
         }
+        */
 
         //PASO 2 - OBTENEMOS LA CABECERA
         let data: any = {
@@ -1023,6 +1033,9 @@ export class CotizacionesComponent implements OnInit {
             "cod_Ruta"        : _ruta,
             "cod_Color"       : _color,
             "cod_RecetaAcabado" : this.global_CodReceta,
+            "tiempo_Referencia" : Number(this.global_Tiempo),
+            "precio_Referencia" : Number(this.global_PrecioTinto),
+            "sDC_Referencia"    : this.global_SDC,
             "flg_Estatus"     : "A",
             "usu_Registro"    : this.sUsuario,
             "accion"          : "I",
@@ -1030,7 +1043,6 @@ export class CotizacionesComponent implements OnInit {
         };
 
         console.log('Data registro', data);
-
         //return;
 
         this.SpinnerService.show();
@@ -1083,10 +1095,13 @@ export class CotizacionesComponent implements OnInit {
     this.mostrarRutaDetalle();
   }
 
-  guardarObservacion(data: any){
-    console.log('observacion', data);
-    data.row.observacion = data.observacion;
-    this.dialog.closeAll();
+  guardarObservacion(row: any){
+    //console.log('observacion', data);
+    //data.row.observacion = data.observacion;
+    this.global_Observacion = row.observacion;
+    console.log('guardarObservacion', row);
+    this.dialog.closeAll(); ;
+
   } 
 
   abrirDialog(row: any) {
@@ -1095,10 +1110,17 @@ export class CotizacionesComponent implements OnInit {
   const proAjuActual = Number(row.pro_Aju);
   const proAjuBackup = this.planosBackup.filter(p => p.cod_Proceso_Tex == row.cod_Proceso_Tex).map(p => p.pro_Aju);
 
+
+  console.log('proAjuActual', proAjuActual);
+  console.log('proAjuActual', proAjuBackup);    
+
   //Solo se ejecuta cuando es diferente
   if (proAjuBackup !== undefined && proAjuActual !== Number(proAjuBackup)) {
 
-    if (row.pro_Aju != null && row.pro_Aju !== '' && row.pro_Aju !== 0) {
+    // Limpia la observación del row (pero el backup mantiene la original)
+    row.observacion = '';    
+
+    //if (row.pro_Aju != null && row.pro_Aju !== '' && row.pro_Aju !== 0) {
       if (!this.dialogAbierto) {
         this.dialogAbierto = true;
         const ref = this.dialog.open(this.dialogObservacion, {
@@ -1108,8 +1130,24 @@ export class CotizacionesComponent implements OnInit {
         // Cuando se cierra el diálogo, resetea la bandera
         ref.afterClosed().subscribe(() => {
           this.dialogAbierto = false;
+
+          if (this.global_Observacion && this.global_Observacion.trim() !== '') {
+            // Actualiza la fila
+            row.observacion = this.global_Observacion;
+
+            // Actualiza también el backup
+            const backupItem = this.planosBackup.find(
+              p => p.cod_Proceso_Tex === row.cod_Proceso_Tex
+            );
+            if (backupItem) {
+              console.log('Actualizando backup con observacion:', this.global_Observacion);
+              backupItem.observacion = this.global_Observacion;
+              backupItem.pro_Aju = proAjuActual;
+            }
+          }  
+          
         });         
-      }
+      //}
     }    
 
   }
@@ -1127,7 +1165,14 @@ validarObservacion(row: any, event: FocusEvent) {
   const proAjuActual = Number(row.pro_Aju);
   const proAjuBackup = this.planosBackup.filter(p => p.cod_Proceso_Tex == row.cod_Proceso_Tex).map(p => p.pro_Aju);
 
+  console.log('proAjuActual', proAjuActual);
+  console.log('proAjuActual', proAjuBackup);  
+
   if (proAjuBackup !== undefined && proAjuActual !== Number(proAjuBackup)) {
+
+    // Limpia la observación del row (pero el backup mantiene la original)
+    row.observacion = '';
+
     console.log('entro aquí');
     //if (!row.observacion || row.observacion.trim() === '') {
       console.log('entro aquí observacion');
@@ -1141,8 +1186,26 @@ validarObservacion(row: any, event: FocusEvent) {
         });        
 
         // Cuando se cierra el diálogo, resetea la bandera
-        ref.afterClosed().subscribe(() => {
+        ref.afterClosed().subscribe(()=>{
           this.dialogAbierto = false;
+
+          if (this.global_Observacion && this.global_Observacion.trim() !== '') {
+            // Actualiza la fila
+            row.observacion = this.global_Observacion;
+
+            // Actualiza también el backup
+            const backupItem = this.planosBackup.find(
+              p => p.cod_Proceso_Tex === row.cod_Proceso_Tex
+            );
+            if (backupItem) {
+              console.log('Actualizando backup con observacion:', this.global_Observacion);
+              backupItem.observacion = this.global_Observacion;
+              backupItem.pro_Aju = proAjuActual;
+            }
+          }          
+
+
+
         });        
       }
     //}
@@ -1183,46 +1246,94 @@ onChangeCliente(){
 
 onChangeColor(){
   this.isDisabledBtnFind = true;
-  this.dataSource.data = [];
+  //this.dataSource.data = [];
   // const _CodColor = this.formulario.get('color')?.value || '';
   // this.onBuscaPreciosxColor(_CodColor);
 
   //AQUI DEBE LLAMAR AL LISTAR 
   //this.onBuscar();
   
-  this.onValidaExistenciaHistorialxColor();
+  //this.onValidaExistenciaHistorialxColor();
 
 
 }
 
-onBuscaPreciosxColor(sCodColor: string){
+onBuscaPreciosxColor(Tipo_Busqueda: string, Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string){
   this.dataSource_Precios = null;
   this.SpinnerService.show();
-  this.service.getListaPrecioXColor(sCodColor).subscribe({
+  this.service.getListaPrecioXColor(Tipo_Busqueda, Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color).subscribe({
     next: (response: any) => {
       if(response.success){
+        console.log(':::::::::::::RESULTADO DE PRECIO', response);
+        //Variables generales
+        //const _tipo     = this.formulario.get('tipo')?.value ||    '';
+        //const _cliente  = this.formulario.get('cliente')?.value || '';
+        //const _tela     = this.formulario.get('codigoTela')?.value || '';
+        //const _ruta     = this.formulario.get('codigoRutaTela')?.value || '';
+        //const _color    = this.formulario.get('color')?.value! || '';        
+        
+        //this.codigoRutaTela     = _ruta;
+        this.codigoRutaTela     = Cod_Ruta;
+
+        //solo muestra informacion cuando tiene mas de un registro, si es uno solo no muestra nada
         if (response.totalElements > 1){
+
+          console.log(':::::::::::::TIENE MAS DE UN PRECIO');
 
           this.dataSource_Precios = response.elements;       
           //Carga Recetas
-          this.loadRecetas();
+          //this.loadRecetas();
           
           //Abre el dialog
+          this.global_CodReceta = '';
           this.dialogRef = this.dialog.open(this.dialogListaPrecios, {
             width: '600px'
           });        
 
           this.dialogRef.afterClosed().subscribe(() => {
-                //aqui FUNCION
+
+            //console.log('Dialogo cerrado');
+
+            //Lista de procesos de exportacion
+            if(!this.dialogPrecio){
+              this.getListarProcesosExportacion(Number(this.unidadNegocio), Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color, Number(this.global_PrecioTinto), Number(this.global_Tiempo), Number(this.global_idCotizacion_Cab)); 
+            }
+
           });        
           
           
           this.SpinnerService.hide();
         }
-        else{
-          this.dataSource_Precios = null;            
-          this.SpinnerService.hide();
-        };
+        else if (response.totalElements === 1){
+
+          console.log(':::::::::::::TIENE UN PRECIO');
+          console.log('this.datos', response.elements[0]);
+          //Bloque de variables
+          this.global_PrecioTinto = Number(response.elements[0].preC_TINTO);
+          this.global_Tiempo      = Number(response.elements[0].tiempo);     
+          this.global_SDC         = String(response.elements[0].corR_CARTA);    
+          this.global_idCotizacion_Cab = Number(response.elements[0].idcotizacioN_CAB);
+          console.log('unidadNegocio', Number(this.unidadNegocio));
+          //metOdo de nuscar informacion de procesos
+          this.getListarProcesosExportacion(Number(this.unidadNegocio), Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color, Number(this.global_PrecioTinto), Number(this.global_Tiempo), Number(this.global_idCotizacion_Cab));
+     
+          //this.dataSource_Precios = null;            
+          //this.SpinnerService.hide();
+
+        }else if (response.totalElements === 0){
+          console.log(':::::::::::::NO TIENE PRECIOS');
+          //Bloque de variables
+          this.global_PrecioTinto = 0;
+          this.global_Tiempo      = 0;    
+          this.global_SDC         = "";  
+          this.global_idCotizacion_Cab = 0;    
+
+          //metOdo de nuscar informacion de procesos
+          this.getListarProcesosExportacion(Number(this.unidadNegocio), Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color, Number(this.global_PrecioTinto), Number(this.global_Tiempo), Number(this.global_idCotizacion_Cab));
+
+          //this.dataSource_Precios = null;            
+          //this.SpinnerService.hide();          
+        }
       }else{
         this.dataSource_Precios = null;
       }
@@ -1235,6 +1346,8 @@ onBuscaPreciosxColor(sCodColor: string){
     }
   });  
 }
+
+
 
 loadRecetas(){
     this.SpinnerService.show();
@@ -1266,23 +1379,36 @@ seleccionarFila(row: any) {
   this.filaSeleccionada = row;
   console.log('seleccionada', this.filaSeleccionada);
 
-  this.global_Tiempo = Number(row.tiempo);
+  this.global_Tiempo      = Number(row.tiempo)    ;
   this.global_PrecioTinto = Number(row.preC_TINTO);
+  this.global_SDC         = String(row.corR_CARTA);     
+  this.global_idCotizacion_Cab = Number(row.idcotizacioN_CAB); 
 }  
 
 
 onSeleccionarPrecio(){
-  const _receta     = this.formulario.get('ctrl_receta')?.value || '';
-  this.global_CodReceta = _receta;
+  // const _receta     = this.formulario.get('ctrl_receta')?.value || '';
+  // console.log('Receta seleccionada', _receta);
+  // this.global_CodReceta = _receta;
+
+    console.log('global_Tiempo', this.global_Tiempo);
+    console.log('global_PrecioTinto', this.global_PrecioTinto);  
 
     if (this.dialogRef) {
+      this.dialogPrecio = false;
       this.dialogRef.close();
     }  
 }
 
+onRecetaChange(event: any) {
+  console.log('Receta seleccionada:', event.value);
+  // Capturamos
+  this.global_CodReceta = event.value || '';
+}
+
 onValidaExistenciaHistorialxColor(){
 
-    const _unidad     = this.formulario.get('unidadNegocio')?.value || '';
+    const _unidad     = Number(this.unidadNegocio);
     const _tipo       = this.formulario.get('tipo')?.value || '';
     const _cliente    = this.formulario.get('cliente')?.value || '';
     const _tela       = this.formulario.get('codigoTela')?.value || '';
@@ -1290,19 +1416,26 @@ onValidaExistenciaHistorialxColor(){
     const _color      = this.formulario.get('color')?.value || '';
     const _receta     = this.global_CodReceta || '';
 
+    const bHistorial =  this.bValidaHistorial?"1":"0";
+
+
+    this.onBuscaPreciosxColor(String(bHistorial), _unidad, _tipo, _cliente, _tela, _ruta, _color);
+    return;
+
     this.SpinnerService.show();
     this.service.getValidaExistenciaHistorialxColor(_unidad, _tipo, _cliente, _tela, _ruta, _color, _receta).subscribe({
       next: (response: any) => {
         if(response.success){
           if (response.totalElements > 0){
             //Aqui habilita el semaforo
-            //this.bValidaHistorial = true;    
+            this.bValidaHistorial = true;    
 
-            //MUESTRA PRECIOS DEL HISTORIAL SI ES QUE EXISTE
-            //this.onBuscaPreciosxColor(_color); 
+            console.log('MARCA CON HISTORIAL', response.elements);
 
-            console.log('Valida historial', this.bValidaHistorial);     
-            this.SpinnerService.hide();
+            //metOdo de nuscar informacion de procesos desde la tabla de historial
+            //this.getListarProcesosExportacion(_unidad, _tipo, _cliente, _tela, _ruta, _color, 0, 0);     
+ 
+            //this.SpinnerService.hide();
           }
           else{
             this.dataSource_Hilos.data = [];     
@@ -1310,9 +1443,9 @@ onValidaExistenciaHistorialxColor(){
             console.log('MARCA SIN HISTORIAL');
             
             //MUESTRA PRECIOS DE LA BD SI ES QUE NO EXISTE HISTORIAL
-            this.onBuscaPreciosxColor(_color);
+            //this.onBuscaPreciosxColor(_color);
 
-            this.SpinnerService.hide();
+            //this.SpinnerService.hide();
           };
         }else{
           this.dataSource_Hilos.data = [];
@@ -1325,12 +1458,24 @@ onValidaExistenciaHistorialxColor(){
         })
       }
     });       
+  
+}
 
+onCancelarPrecio(){
+  if (this.dialogRef) {
+    this.dialogPrecio = true;
+    this.dialogRef.close();
+  }
 }
 
 //onChangeColor(){
   //this.validaCodigoColor();
 //}
+
+onHistorialChange(event: MatCheckboxChange) {
+  console.log('Historial marcado:', event.checked);
+  this.bValidaHistorial = event.checked;
+}
 
 private mapToDetalle(item: any): dataDetalle {
     console.log('MAPDETALLE', item);

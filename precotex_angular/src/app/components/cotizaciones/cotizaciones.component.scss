@@ -373,3 +373,16 @@ button:disabled {
   background: #fff;   /* fondo sólido para que no se mezcle */
   z-index: 2;         /* asegura que quede encima */
 }
+
+.bloque-historial {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+
+  mat-checkbox {
+    font-weight: 600;
+    color: #333;
+  }
+}

@@ -83,10 +83,10 @@
     </mat-select>
   </mat-form-field>
   -->
+  	<!-- (selectionChange)="onChangeColor()" -->
   <mat-form-field appearance="outline" class="select-field">
     <mat-label>Color</mat-label>
-    <mat-select formControlName="color" (selectionChange)="onChangeColor()">
-	
+    <mat-select formControlName="color" >
 	  <mat-option class="sticky-option" disabled>
         <input matInput placeholder="Buscar..." formControlName="filtroColores"
                (ngModelChange)="filtrarColores()"
@@ -101,16 +101,29 @@
   </mat-form-field>
 
 
+
+
+
+
+
   <div class="botones">
-    <button mat-flat-button class="btn-azul" (click)="onBuscar()" [disabled]="!isDisabledBtnFind">
+
+  <mat-checkbox formControlName="ctrl_historial"
+  (change)="onHistorialChange($event)">
+    Ver Historial
+  </mat-checkbox>
+
+    <!-- [disabled]="!isDisabledBtnFind" -->
+     
+    <button mat-flat-button class="btn-azul" (click)="onBuscar()" >
         <mat-icon>search</mat-icon> Buscar
     </button>   
 
     <button mat-flat-button class="btn-azul" (click)="onLimpiarFiltros()">
         <mat-icon>refresh</mat-icon> Limpiar Filtro
-    </button>     
-  </div>
-  
+    </button>      
+</div>  
+
 
   <!-- <mat-form-field appearance="outline" class="select-field">
     <mat-label>Intensidad</mat-label>
@@ -124,39 +137,7 @@
        </div>
   </form>
 
-  <div class="cuadro-morado" *ngIf="dataSource_Hilos.data.length > 0">
-    <table mat-table [dataSource]="dataSource_Hilos" class="tabla-procesos">
 
-      <ng-container matColumnDef="Cod_Hilado_Estructurado">
-          <th mat-header-cell *matHeaderCellDef class="centradoCabecera ">CODIGO HILO</th>
-          <td mat-cell *matCellDef="let r" class="centrado ">{{ r.cod_Hilado_Estructurado }}</td>
-      </ng-container>              
-
-      <ng-container matColumnDef="des_hiltel">
-          <th mat-header-cell *matHeaderCellDef class="centradoCabecera ">DESC HILO</th>
-          <td mat-cell *matCellDef="let r" class="centrado ">{{ r.des_hiltel }}</td>
-      </ng-container>         
-      
-      <ng-container matColumnDef="Porcentaje">
-          <th mat-header-cell *matHeaderCellDef class="centradoCabecera ">%</th>
-          <td mat-cell *matCellDef="let r" class="centrado ">{{ r.porcentaje }}</td>
-      </ng-container>         
-      
-      <ng-container matColumnDef="Precio_Final">
-          <th mat-header-cell *matHeaderCellDef class="centradoCabecera ">$/KG.</th>
-          <td mat-cell *matCellDef="let r" class="centrado ">{{ r.precio_Final }}</td>
-      </ng-container>        
-      
-      <ng-container matColumnDef="Total">
-          <th mat-header-cell *matHeaderCellDef class="centradoCabecera ">$</th>
-          <td mat-cell *matCellDef="let r" class="centrado ">{{ r.total }}</td>
-      </ng-container>       
-      
-      <tr mat-header-row *matHeaderRowDef="displayedColumns_Hilo"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns_Hilo;"></tr>           
-
-    </table>
-  </div>
 
   <!-- Recuadro verde con tabla -->
   <div class="cuadro-verde" *ngIf="codigoRutaTela && unidadNegocio=='1'">
@@ -201,7 +182,7 @@
             </span>
           </mat-form-field>          
         
-          <span *ngIf="row.cod_Subtotal != 2 && !(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
+          <span *ngIf="row.cod_Subtotal != 2 && !(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'" style="text-align: right !important;">
             {{ row.pro_Cos_Kg }}
           </span>
         </td>
@@ -211,7 +192,7 @@
       <ng-container matColumnDef="total">
         <th mat-header-cell *matHeaderCellDef>Total</th>
         <td mat-cell *matCellDef="let row">
-          <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot }}</span>
+          <span *ngIf="row.pro_Tip !== 'R'" style="text-align: right !important;">{{ row.pro_Tot }}</span>
         </td>
       </ng-container>
 
@@ -286,459 +267,6 @@
     </table>
   </div>
 
-  <!-- Recuadro rojo con tabla -->
-   <div class="cuadro-rojo" *ngIf="codigoRutaTela && unidadNegocio=='2'"> 
-    <table mat-table [dataSource]="dataSource_VT" class="tabla-procesos">
-
-      <!-- Hover -->
-      <ng-container matColumnDef="hover">
-        <th mat-header-cell *matHeaderCellDef>/</th>
-        <td mat-cell *matCellDef="let row" (click)="toggleExpand(row)" [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">
-          {{ row.pro_Hover }}
-          <!-- <mat-icon *ngIf="row.isParent && row.tieneHijos" style="cursor:pointer">
-            {{ expandedRows.has(row.pro_Hover) ? 'expand_less' : 'expand_more' }}
-          </mat-icon> -->
-        </td>
-      </ng-container>
-    
-      <!-- Descripción -->
-      <ng-container matColumnDef="descripcion">
-        <th mat-header-cell *matHeaderCellDef class="col-achi">Descripción</th>
-        <td mat-cell *matCellDef="let row" class="col-achi" [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">{{ row.pro_Des }}</td>
-      </ng-container>
-    
-      <!-- Factor -->
-      <ng-container matColumnDef="factor">
-        <th mat-header-cell *matHeaderCellDef>Factor</th>
-        <td mat-cell *matCellDef="let row">
-         <span *ngIf="!(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            {{ row.pro_Factor }}
-          </span>
-        </td>
-      </ng-container>
-    
-      <!-- Costo Kg -->
-      <ng-container matColumnDef="cosKg">
-        <th mat-header-cell *matHeaderCellDef>Costo Kg</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="!(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            {{ row.pro_Cos_Kg }}
-          </span>
-        </td>
-      </ng-container>
-    
-      <!-- Total -->
-      <ng-container matColumnDef="total">
-        <th mat-header-cell *matHeaderCellDef>Total</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot }}</span>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="totalComercial">
-        <th mat-header-cell *matHeaderCellDef>Total Comercial</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot_Com }}</span>
-        </td>
-      </ng-container>
-    
-      <!-- Ajuste -->
-      <ng-container matColumnDef="ajuste">
-        <th mat-header-cell *matHeaderCellDef>Ajuste</th>
-        <td mat-cell *matCellDef="let row" class="ajuste-cell">
-          <mat-form-field appearance="standard" *ngIf="row.isParent && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            <input matInput type="number" [(ngModel)]="row.pro_Aju" (ngModelChange)="recalcular(row)" />
-          </mat-form-field>
-          <span *ngIf="row.isChild && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            <!-- <span *ngIf="!row.isParent && !row.isChild"> -->
-              {{ row.pro_Aju }}
-            <!-- </span> -->
-          </span>
-        </td>
-      </ng-container>
-    
-      <!-- Cotización -->
-      <ng-container matColumnDef="cotizacion">
-        <th mat-header-cell *matHeaderCellDef>Cotización</th>
-        <td mat-cell *matCellDef="let row" class="cotizacion-cell">
-          <span *ngIf="!row.isChild">
-            <ng-container *ngIf="row.pro_Tip === 'R' && row.pro_Des === 'RENTABILIDAD'; else cotizacionNormal">
-              {{ row.pro_Por | number:'1.2-2' }} %
-            </ng-container>
-            <ng-template #cotizacionNormal>
-              {{ row.pro_Cotizacion | number:'1.2-2' }}
-            </ng-template>
-          </span>
-        </td>
-      </ng-container>
-
-      
-      <ng-container matColumnDef="porcentaje">
-        <th mat-header-cell *matHeaderCellDef>Porcentaje</th>
-        <td mat-cell *matCellDef="let row">{{ row.pro_Por }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="TipoUbicacion">
-        <th mat-header-cell *matHeaderCellDef>Tipo</th>
-        <td mat-cell *matCellDef="let row">{{ row.pro_Tip }}</td>
-      </ng-container>
-    
-      <!-- Header -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    
-      <!-- Filas -->
-      <!-- <tr mat-row *matRowDef="let row; columns: displayedColumns"
-        [class.hidden]="row.isChild && !expandedRows.has(row.padreKey)" [class.subgrupo-row]="row.isChild">
-      </tr> -->
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"
-        [class.hidden]="row.isChild && !expandedRows.has(row.padreKey)" [class.subgrupo-row]="row.isChild"
-        [class.expandible-row]="row.isParent && row.tieneHijos"
-        [ngClass]="{'fila-r': row.pro_Tip === 'R'}">
-      </tr>      
-
-    </table>
-   </div>
-
-  <!-- Recuadro naranja con tabla -->   
-   <div class="cuadro-naranja" *ngIf="codigoRutaTela && unidadNegocio=='3'"> 
-    <table mat-table [dataSource]="dataSource_Servicio" class="tabla-procesos">
-
-      <!-- Hover -->
-      <ng-container matColumnDef="hover">
-        <th mat-header-cell *matHeaderCellDef>/</th>
-        <td mat-cell *matCellDef="let row" (click)="toggleExpand(row)" [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">
-          {{ row.pro_Hover }}
-          <!-- <mat-icon *ngIf="row.isParent && row.tieneHijos" style="cursor:pointer">
-            {{ expandedRows.has(row.pro_Hover) ? 'expand_less' : 'expand_more' }}
-          </mat-icon> -->
-        </td>
-      </ng-container>
-    
-      <!-- Descripción -->
-      <ng-container matColumnDef="descripcion">
-        <th mat-header-cell *matHeaderCellDef class="col-achi">Descripción</th>
-        <td mat-cell *matCellDef="let row" class="col-achi" [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">{{ row.pro_Des }}</td>
-      </ng-container>
-    
-      <!-- Factor -->
-      <ng-container matColumnDef="factor">
-        <th mat-header-cell *matHeaderCellDef>Factor</th>
-        <td mat-cell *matCellDef="let row">
-         <span *ngIf="!(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            {{ row.pro_Factor }}
-          </span>
-        </td>
-      </ng-container>
-    
-      <!-- Costo Kg -->
-      <ng-container matColumnDef="cosKg">
-        <th mat-header-cell *matHeaderCellDef>Costo Kg</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="!(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            {{ row.pro_Cos_Kg }}
-          </span>
-        </td>
-      </ng-container>
-    
-      <!-- Total -->
-      <ng-container matColumnDef="total">
-        <th mat-header-cell *matHeaderCellDef>Total</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot }}</span>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="totalComercial">
-        <th mat-header-cell *matHeaderCellDef>Total Comercial</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot_Com }}</span>
-        </td>
-      </ng-container>
-    
-      <!-- Ajuste -->
-      <ng-container matColumnDef="ajuste">
-        <th mat-header-cell *matHeaderCellDef>Ajuste</th>
-        <td mat-cell *matCellDef="let row" class="ajuste-cell">
-          <mat-form-field appearance="standard" *ngIf="row.isParent && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            <input matInput type="number" [(ngModel)]="row.pro_Aju" (ngModelChange)="recalcular(row)" />
-          </mat-form-field>
-          <span *ngIf="row.isChild && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            <!-- <span *ngIf="!row.isParent && !row.isChild"> -->
-              {{ row.pro_Aju }}
-            <!-- </span> -->
-          </span>
-        </td>
-      </ng-container>
-    
-      <!-- Cotización -->
-      <ng-container matColumnDef="cotizacion">
-        <th mat-header-cell *matHeaderCellDef>Cotización</th>
-        <td mat-cell *matCellDef="let row" class="cotizacion-cell">
-          <span *ngIf="!row.isChild">
-            <ng-container *ngIf="row.pro_Tip === 'R' && row.pro_Des === 'RENTABILIDAD'; else cotizacionNormal">
-              {{ row.pro_Por | number:'1.2-2' }} %
-            </ng-container>
-            <ng-template #cotizacionNormal>
-              {{ row.pro_Cotizacion | number:'1.2-2' }}
-            </ng-template>
-          </span>
-        </td>
-      </ng-container>
-
-      
-      <ng-container matColumnDef="porcentaje">
-        <th mat-header-cell *matHeaderCellDef>Porcentaje</th>
-        <td mat-cell *matCellDef="let row">{{ row.pro_Por }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="TipoUbicacion">
-        <th mat-header-cell *matHeaderCellDef>Tipo</th>
-        <td mat-cell *matCellDef="let row">{{ row.pro_Tip }}</td>
-      </ng-container>
-    
-      <!-- Header -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    
-      <!-- Filas -->
-      <!-- <tr mat-row *matRowDef="let row; columns: displayedColumns"
-        [class.hidden]="row.isChild && !expandedRows.has(row.padreKey)" [class.subgrupo-row]="row.isChild">
-      </tr> -->
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"
-        [class.hidden]="row.isChild && !expandedRows.has(row.padreKey)" [class.subgrupo-row]="row.isChild"
-        [class.expandible-row]="row.isParent && row.tieneHijos"
-        [ngClass]="{'fila-r': row.pro_Tip === 'R'}">
-      </tr>      
-
-    </table>    
-   </div>
-
-  <!-- Recuadro azul con tabla -->   
-   <div class="cuadro-azul" *ngIf="codigoRutaTela && unidadNegocio=='4'"> 
-    <table mat-table [dataSource]="dataSource_VT_Estampado" class="tabla-procesos">
-
-      <!-- Hover -->
-      <ng-container matColumnDef="hover">
-        <th mat-header-cell *matHeaderCellDef>/</th>
-        <td mat-cell *matCellDef="let row" (click)="toggleExpand(row)" [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">
-          {{ row.pro_Hover }}
-          <!-- <mat-icon *ngIf="row.isParent && row.tieneHijos" style="cursor:pointer">
-            {{ expandedRows.has(row.pro_Hover) ? 'expand_less' : 'expand_more' }}
-          </mat-icon> -->
-        </td>
-      </ng-container>
-    
-      <!-- Descripción -->
-      <ng-container matColumnDef="descripcion">
-        <th mat-header-cell *matHeaderCellDef class="col-achi">Descripción</th>
-        <td mat-cell *matCellDef="let row" class="col-achi" [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">{{ row.pro_Des }}</td>
-      </ng-container>
-    
-      <!-- Factor -->
-      <ng-container matColumnDef="factor">
-        <th mat-header-cell *matHeaderCellDef>Factor</th>
-        <td mat-cell *matCellDef="let row">
-         <span *ngIf="!(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            {{ row.pro_Factor }}
-          </span>
-        </td>
-      </ng-container>
-    
-      <!-- Costo Kg -->
-      <ng-container matColumnDef="cosKg">
-        <th mat-header-cell *matHeaderCellDef>Costo Kg</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="!(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            {{ row.pro_Cos_Kg }}
-          </span>
-        </td>
-      </ng-container>
-    
-      <!-- Total -->
-      <ng-container matColumnDef="total">
-        <th mat-header-cell *matHeaderCellDef>Total</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot }}</span>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="totalComercial">
-        <th mat-header-cell *matHeaderCellDef>Total Comercial</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot_Com }}</span>
-        </td>
-      </ng-container>
-    
-      <!-- Ajuste -->
-      <ng-container matColumnDef="ajuste">
-        <th mat-header-cell *matHeaderCellDef>Ajuste</th>
-        <td mat-cell *matCellDef="let row" class="ajuste-cell">
-          <mat-form-field appearance="standard" *ngIf="row.isParent && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            <input matInput type="number" [(ngModel)]="row.pro_Aju" (ngModelChange)="recalcular(row)" />
-          </mat-form-field>
-          <span *ngIf="row.isChild && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            <!-- <span *ngIf="!row.isParent && !row.isChild"> -->
-              {{ row.pro_Aju }}
-            <!-- </span> -->
-          </span>
-        </td>
-      </ng-container>
-    
-      <!-- Cotización -->
-      <ng-container matColumnDef="cotizacion">
-        <th mat-header-cell *matHeaderCellDef>Cotización</th>
-        <td mat-cell *matCellDef="let row" class="cotizacion-cell">
-          <span *ngIf="!row.isChild">
-            <ng-container *ngIf="row.pro_Tip === 'R' && row.pro_Des === 'RENTABILIDAD'; else cotizacionNormal">
-              {{ row.pro_Por | number:'1.2-2' }} %
-            </ng-container>
-            <ng-template #cotizacionNormal>
-              {{ row.pro_Cotizacion | number:'1.2-2' }}
-            </ng-template>
-          </span>
-        </td>
-      </ng-container>
-
-      
-      <ng-container matColumnDef="porcentaje">
-        <th mat-header-cell *matHeaderCellDef>Porcentaje</th>
-        <td mat-cell *matCellDef="let row">{{ row.pro_Por }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="TipoUbicacion">
-        <th mat-header-cell *matHeaderCellDef>Tipo</th>
-        <td mat-cell *matCellDef="let row">{{ row.pro_Tip }}</td>
-      </ng-container>
-    
-      <!-- Header -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    
-      <!-- Filas -->
-      <!-- <tr mat-row *matRowDef="let row; columns: displayedColumns"
-        [class.hidden]="row.isChild && !expandedRows.has(row.padreKey)" [class.subgrupo-row]="row.isChild">
-      </tr> -->
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"
-        [class.hidden]="row.isChild && !expandedRows.has(row.padreKey)" [class.subgrupo-row]="row.isChild"
-        [class.expandible-row]="row.isParent && row.tieneHijos"
-        [ngClass]="{'fila-r': row.pro_Tip === 'R'}">
-      </tr>      
-
-    </table>    
-   </div>   
-
-  <!-- Recuadro amarillo con tabla -->   
-   <div class="cuadro-amarillo" *ngIf="codigoRutaTela && unidadNegocio=='5'"> 
-    <table mat-table [dataSource]="dataSource_VT_Servicio" class="tabla-procesos">
-
-      <!-- Hover -->
-      <ng-container matColumnDef="hover">
-        <th mat-header-cell *matHeaderCellDef>/</th>
-        <td mat-cell *matCellDef="let row" (click)="toggleExpand(row)" [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">
-          {{ row.pro_Hover }}
-          <!-- <mat-icon *ngIf="row.isParent && row.tieneHijos" style="cursor:pointer">
-            {{ expandedRows.has(row.pro_Hover) ? 'expand_less' : 'expand_more' }}
-          </mat-icon> -->
-        </td>
-      </ng-container>
-    
-      <!-- Descripción -->
-      <ng-container matColumnDef="descripcion">
-        <th mat-header-cell *matHeaderCellDef class="col-achi">Descripción</th>
-        <td mat-cell *matCellDef="let row" class="col-achi" [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">{{ row.pro_Des }}</td>
-      </ng-container>
-    
-      <!-- Factor -->
-      <ng-container matColumnDef="factor">
-        <th mat-header-cell *matHeaderCellDef>Factor</th>
-        <td mat-cell *matCellDef="let row">
-         <span *ngIf="!(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            {{ row.pro_Factor }}
-          </span>
-        </td>
-      </ng-container>
-    
-      <!-- Costo Kg -->
-      <ng-container matColumnDef="cosKg">
-        <th mat-header-cell *matHeaderCellDef>Costo Kg</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="!(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            {{ row.pro_Cos_Kg }}
-          </span>
-        </td>
-      </ng-container>
-
-      <!-- Valor -->
-      <ng-container matColumnDef="totalComercial">
-        <th mat-header-cell *matHeaderCellDef>Valor</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot_Com }}</span>
-        </td>
-      </ng-container>      
-    
-      <!-- Total -->
-      <ng-container matColumnDef="total">
-        <th mat-header-cell *matHeaderCellDef>Total</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot }}</span>
-        </td>
-      </ng-container>
-    
-      <!-- Ajuste -->
-      <ng-container matColumnDef="ajuste">
-        <th mat-header-cell *matHeaderCellDef>Ajuste</th>
-        <td mat-cell *matCellDef="let row" class="ajuste-cell">
-          <mat-form-field appearance="standard" *ngIf="row.isParent && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            <input matInput type="number" [(ngModel)]="row.pro_Aju" (ngModelChange)="recalcular(row)" />
-          </mat-form-field>
-          <span *ngIf="row.isChild && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            <!-- <span *ngIf="!row.isParent && !row.isChild"> -->
-              {{ row.pro_Aju }}
-            <!-- </span> -->
-          </span>
-        </td>
-      </ng-container>
-    
-      <!-- Cotización -->
-      <ng-container matColumnDef="cotizacion">
-        <th mat-header-cell *matHeaderCellDef>Cotización</th>
-        <td mat-cell *matCellDef="let row" class="cotizacion-cell">
-          <span *ngIf="!row.isChild">
-            <ng-container *ngIf="row.pro_Tip === 'R' && row.pro_Des === 'RENTABILIDAD'; else cotizacionNormal">
-              {{ row.pro_Por | number:'1.2-2' }} %
-            </ng-container>
-            <ng-template #cotizacionNormal>
-              {{ row.pro_Cotizacion | number:'1.2-2' }}
-            </ng-template>
-          </span>
-        </td>
-      </ng-container>
-
-      
-      <ng-container matColumnDef="porcentaje">
-        <th mat-header-cell *matHeaderCellDef>Porcentaje</th>
-        <td mat-cell *matCellDef="let row">{{ row.pro_Por }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="TipoUbicacion">
-        <th mat-header-cell *matHeaderCellDef>Tipo</th>
-        <td mat-cell *matCellDef="let row">{{ row.pro_Tip }}</td>
-      </ng-container>
-    
-      <!-- Header -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns_SV_Estampado"></tr>
-    
-      <!-- Filas -->
-      <!-- <tr mat-row *matRowDef="let row; columns: displayedColumns"
-        [class.hidden]="row.isChild && !expandedRows.has(row.padreKey)" [class.subgrupo-row]="row.isChild">
-      </tr> -->
-      <tr mat-row *matRowDef="let row; columns: displayedColumns_SV_Estampado"
-        [class.hidden]="row.isChild && !expandedRows.has(row.padreKey)" [class.subgrupo-row]="row.isChild"
-        [class.expandible-row]="row.isParent && row.tieneHijos"
-        [ngClass]="{'fila-r': row.pro_Tip === 'R'}">
-      </tr>      
-
-    </table>    
-   </div>     
-
 
 </div>
 
@@ -804,10 +332,15 @@
           <td mat-cell *matCellDef="let r" class="centrado ">{{ r.preC_TINTO }}</td>
       </ng-container>      
       
-      <ng-container matColumnDef="preC_ACABADO">
+      <!-- <ng-container matColumnDef="preC_ACABADO">
           <th mat-header-cell *matHeaderCellDef class="centradoCabecera ">PRE. ACAB.</th>
           <td mat-cell *matCellDef="let r" class="centrado ">{{ r.preC_ACABADO }}</td>
-      </ng-container>        
+      </ng-container>  -->
+      
+      <ng-container matColumnDef="idrecetalabprod">
+          <th mat-header-cell *matHeaderCellDef class="centradoCabecera "> RECETA</th>
+          <td mat-cell *matCellDef="let r" class="centrado ">{{ r.idrecetalabprod }}</td>
+      </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns_Precio"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns_Precio;"></tr>      
@@ -815,16 +348,18 @@
     </table>
 
     <!-- Sección de selección de receta -->
-    <div style="margin-top: 20px;">
-      <mat-form-field appearance="outline" style="width:100%">
-        <mat-label>Seleccionar Receta</mat-label>
-        <mat-select formControlName="ctrl_receta">
-          <mat-option *ngFor="let receta of dataRecetas" [value]="receta.codigo">
-            {{ receta.descripcion }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>    
+    <form [formGroup]="formulario_Precio" #formDirective="ngForm"> 
+      <div style="margin-top: 20px;">
+        <mat-form-field appearance="outline" style="width:100%">
+          <mat-label>Seleccionar Receta</mat-label>
+          <mat-select formControlName="ctrl_receta" (selectionChange)="onRecetaChange($event)">
+            <mat-option *ngFor="let receta of dataRecetas" [value]="receta.codigo">
+              {{ receta.descripcion }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>   
+    </form> 
 
   </mat-dialog-content>
   <mat-dialog-actions align="end">
@@ -833,7 +368,10 @@
         <mat-icon>save</mat-icon> Seleccionar
     </button>      
 
-    <button mat-button mat-dialog-close>Cancelar</button>
+    <button mat-flat-button class="btn-azul" (click)="onCancelarPrecio()" >
+        <mat-icon>close</mat-icon> Cancelar
+    </button>        
+    <!-- <button mat-button mat-dialog-close>Cancelar</button> -->
     <!-- <button mat-button (click)="guardarObservacion(data)">Guardar</button> -->
   </mat-dialog-actions>  
 </ng-template>

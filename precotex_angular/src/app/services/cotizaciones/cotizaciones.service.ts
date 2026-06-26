@@ -14,7 +14,7 @@ export class CotizacionesService {
     });
     constructor(private http: HttpClient) { }
   
-  getListarProcesosExportacion(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string){
+  getListarProcesosExportacion(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string, precio: number, tiempo: number, IdCotizacion_Cab: number) {
     const headers = this.Header;
     let params = new HttpParams();
     params = params.append("Pro_Cen_Cos", Pro_Cen_Cos);
@@ -23,6 +23,9 @@ export class CotizacionesService {
     params = params.append("Cod_Tela", Cod_Tela);
     params = params.append("Cod_Ruta", Cod_Ruta);
     params = params.append("Cod_Color", Cod_Color);
+    params = params.append("precio", precio);
+    params = params.append("tiempo", tiempo);
+    params = params.append("IdCotizacion_Cab", IdCotizacion_Cab);
     return this.http.get(this.baseUrlTinto + 'TxCotizaciones/getListarProcesosExportacion', { headers, params });
   }
 
@@ -106,10 +109,18 @@ export class CotizacionesService {
   }   
 
   //Nuevos
-  getListaPrecioXColor(Cod_Color: string) {
+  getListaPrecioXColor( Tipo_Busqueda: string, Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string) {
     const headers = this.Header;
     let params = new HttpParams();
+
+    params = params.append("Tipo_Busqueda", Tipo_Busqueda);
+    params = params.append("Pro_Cen_Cos", Pro_Cen_Cos);
+    params = params.append("Tipo", Tipo);
+    params = params.append("Cod_Cliente_Tex", Cod_Cliente_Tex);
+    params = params.append("Cod_Tela", Cod_Tela);
+    params = params.append("Cod_Ruta", Cod_Ruta);
     params = params.append("Cod_Color", Cod_Color);
+
     return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaPrecioXColor', { headers, params });
   }   
     
