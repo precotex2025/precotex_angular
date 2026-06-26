@@ -52,6 +52,7 @@ export class AgregarRegistroMermaComponent implements OnInit {
   });
 
   deshabilitar: boolean = false;
+  insDefecto: boolean = false;
 
   Cod_Empresa: string = '';
   dataOp: any = [];
@@ -81,6 +82,7 @@ export class AgregarRegistroMermaComponent implements OnInit {
   Dif: any = '';
   Notas = '';
   Num_Prendas: any = 0;
+  Merma_Declarada: any = 0;
   Num_Merma: any = 0;
   Porcentaje: any = 0;
 
@@ -100,7 +102,7 @@ export class AgregarRegistroMermaComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((res) => {
-      //console.log(res);
+      console.log(res);
       if (res != null) {
         this.tipo = res['tipo'];
         this.cabecera = res['Cabecera'];
@@ -123,6 +125,7 @@ export class AgregarRegistroMermaComponent implements OnInit {
           this.Valor_Recuperadas = res['Valor_Recuperadas'];
           this.Notas = res['Notas'];
           this.IdMerma = res['IdMerma'];
+          this.Merma_Declarada = res['Merma_Declarada'];
           this.obtenerMermaPrendasOp();
           this.obtenerMermaDetalleOp(this.IdMerma);
         }
@@ -135,12 +138,28 @@ export class AgregarRegistroMermaComponent implements OnInit {
 
   }
 
+  //Validar que la cantidad de defectos no supere la merma fisica declarada
+  onValidarCantidad(){
+    let cantidad: number = this.formulario.get('cantidad')?.value;
+    let totDefectos: number
+
+    totDefectos = this.dataSource.data.map(t => t.Cantidad).reduce((acc, value) => acc + value, 0);
+    totDefectos = totDefectos + cantidad;
+
+    if(totDefectos > this.Merma_Fisica){
+      this.insDefecto = true;
+      this.matSnackBar.open('El total de defectos la merma fisica...!', 'Cerrar', { horizontalPosition: 'center',  verticalPosition: 'top',duration: 1500 })
+    } else {
+      this.insDefecto = false;
+    }
+    //fin validacion
+  }
+
+
   InsertarFila(){
     this.codDefecto = this.formulario.get('codDefecto')?.value;
     this.talla = this.formulario.get('talla')?.value;  
-    this.cantidad = this.formulario.get('cantidad')?.value;
-
-    //console.log(this.codDefecto)
+    this.cantidad = this.formulario.get('cantidad')?.value;    
     
     if(this.codDefecto != '' && this.talla != '' && this.cantidad > 0){
       let defecto: Defectos = {};
@@ -260,130 +279,135 @@ export class AgregarRegistroMermaComponent implements OnInit {
   }
 
   saveRegistro(){
+    console.log(this.data[0].Ult_fase)
     if (this.data != '') {
       if (this.Defecto_Principal != '' && this.Defecto_Principal != undefined) {
         if (this.Turno != '') {
-          var Turno = this.Turno;
-          var OP_SEC = this.OP_Sec;
-          var OC = this.oc;
-          var Partida = this.data[0].Partida;
-          var Estilo = this.data[0].Estilo;
-          var Color = this.data[0].Color;
-          var Defecto_Principal = this.Defecto_Principal;
-          var Pzas_Buenas = this.Pzas_Buenas;
-          var Merma_Declarada = this.data[0].Merma_Declarada;
-          var Merma_Fisica = this.Merma_Fisica;
-          var Dif = Number(this.data[0].Merma_Declarada) - this.Merma_Fisica;
-          var Prendas_Mercado_Local = this.Prendas_Mercado_Local;
-          var Valor_Mercado = this.Valor_Mercado;
-          var Prendas_Recuperadas = this.Prendas_Recuperadas;
-          var Valor_Recuperadas = this.Valor_Recuperadas;
-          var Notas = this.Notas;
-          var Cod_Auditor_Calidad = GlobalVariable.vusu;
-          var Cliente = this.data[0].Cliente;
-          this.SpinnerService.show();
-          this.despachoTelaCrudaService.registroMermaPrendasOp(
-            'I',
-            Turno,
-            OP_SEC,
-            OC,
-            Partida,
-            Estilo,
-            Color,
-            Defecto_Principal,
-            Pzas_Buenas,
-            Merma_Declarada,
-            Merma_Fisica,
-            Dif,
-            Prendas_Mercado_Local,
-            Valor_Mercado,
-            Prendas_Recuperadas,
-            Valor_Recuperadas,
-            Notas,
-            Cod_Auditor_Calidad,
-            Cliente,
-            this.IdMerma,
-            this.Fase
-          ).subscribe(
-            (result: any) => {
-              if (result != false) {
+          if (this.Fase > this.data[0].Ult_fase){  // Validar que la fase de la OC no este registrada
 
-                this.Turno = '';
-                this.OP_Sec = '';
-                this.oc = '';
-                this.data.Partida = '';
-                this.data.Estilo = '';
-                this.data.Color = '';
-                this.Defecto_Principal = '';
-                this.Pzas_Buenas = '';
-                this.data.Merma_Declarada = '';
-                this.Merma_Fisica = 0;
-                this.Prendas_Mercado_Local = '';
-                this.Valor_Mercado = 0;
-                this.Prendas_Recuperadas = '';
-                this.Valor_Recuperadas = 0;
-                this.Notas = '';
-                this.dataOp = [];
-                this.data = '';
-                //console.log(result);
+            var Turno = this.Turno;
+            var OP_SEC = this.OP_Sec;
+            var OC = this.oc;
+            var Partida = this.data[0].Partida;
+            var Estilo = this.data[0].Estilo;
+            var Color = this.data[0].Color;
+            var Defecto_Principal = this.Defecto_Principal;
+            var Pzas_Buenas = this.Pzas_Buenas;
+            var Merma_Declarada = this.data[0].Merma_Declarada;
+            var Merma_Fisica = this.Merma_Fisica;
+            var Dif = Number(this.data[0].Merma_Declarada) - this.Merma_Fisica;
+            var Prendas_Mercado_Local = this.Prendas_Mercado_Local;
+            var Valor_Mercado = this.Valor_Mercado;
+            var Prendas_Recuperadas = this.Prendas_Recuperadas;
+            var Valor_Recuperadas = this.Valor_Recuperadas;
+            var Notas = this.Notas;
+            var Cod_Auditor_Calidad = GlobalVariable.vusu;
+            var Cliente = this.data[0].Cliente;
+            this.SpinnerService.show();
+            this.despachoTelaCrudaService.registroMermaPrendasOp(
+              'I',
+              Turno,
+              OP_SEC,
+              OC,
+              Partida,
+              Estilo,
+              Color,
+              Defecto_Principal,
+              Pzas_Buenas,
+              Merma_Declarada,
+              Merma_Fisica,
+              Dif,
+              Prendas_Mercado_Local,
+              Valor_Mercado,
+              Prendas_Recuperadas,
+              Valor_Recuperadas,
+              Notas,
+              Cod_Auditor_Calidad,
+              Cliente,
+              this.IdMerma,
+              this.Fase
+            ).subscribe(
+              (result: any) => {
+                if (result != false) {
 
-                var IdMerma = result[0].IdMerma;
+                  this.Turno = '';
+                  this.OP_Sec = '';
+                  this.oc = '';
+                  this.data.Partida = '';
+                  this.data.Estilo = '';
+                  this.data.Color = '';
+                  this.Defecto_Principal = '';
+                  this.Pzas_Buenas = '';
+                  this.data.Merma_Declarada = '';
+                  this.Merma_Fisica = 0;
+                  this.Prendas_Mercado_Local = '';
+                  this.Valor_Mercado = 0;
+                  this.Prendas_Recuperadas = '';
+                  this.Valor_Recuperadas = 0;
+                  this.Notas = '';
+                  this.dataOp = [];
+                  this.data = '';
+                  //console.log(result);
 
-                // Greabar defectos
-                if(this.dataSource.data.length>0){
-                  this.defectos.forEach(element => {
-                    this.despachoTelaCrudaService.registroMermaPrendasDetalle(
-                      'I',
-                      IdMerma,
-                      element.Cod_Defecto,
-                      element.Cod_Talla,
-                      element.Cantidad
-                    ).subscribe((result: any) => {
-                      console.log(result);
+                  var IdMerma = result[0].IdMerma;
+
+                  // Greabar defectos
+                  if(this.dataSource.data.length>0){
+                    this.defectos.forEach(element => {
+                      this.despachoTelaCrudaService.registroMermaPrendasDetalle(
+                        'I',
+                        IdMerma,
+                        element.Cod_Defecto,
+                        element.Cod_Talla,
+                        element.Cantidad
+                      ).subscribe((result: any) => {
+                        console.log(result);
+                      })
                     })
-                  })
-                }
-
-                // Grabar Prendas
-                if (this.dataPrendas.length > 0) {
-                  //console.log('CON TALLAS')
-                  //console.log(this.dataPrendas);
-                  //console.log(IdMerma);
-                  for (let i = 0; i < this.dataPrendas.length; i++) {
-                    const element = this.dataPrendas[i];
-                    this.despachoTelaCrudaService.registroMermaPrendasTalla(
-                      'I',
-                      IdMerma,
-                      element.Cod_Talla,
-                      element.MERCADO_LOCAL,
-                      element.RECUPERACION
-                    ).subscribe(
-                      (result: any) => {
-                        if (i == (this.dataPrendas.length - 1)) {
-                          this.SpinnerService.hide();
-                          this.dataPrendas = [];
-                        }
-                      },
-                      (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
-                        duration: 1500,
-                      }))
                   }
+
+                  // Grabar Prendas
+                  if (this.dataPrendas.length > 0) {
+                    //console.log('CON TALLAS')
+                    //console.log(this.dataPrendas);
+                    //console.log(IdMerma);
+                    for (let i = 0; i < this.dataPrendas.length; i++) {
+                      const element = this.dataPrendas[i];
+                      this.despachoTelaCrudaService.registroMermaPrendasTalla(
+                        'I',
+                        IdMerma,
+                        element.Cod_Talla,
+                        element.MERCADO_LOCAL,
+                        element.RECUPERACION
+                      ).subscribe(
+                        (result: any) => {
+                          if (i == (this.dataPrendas.length - 1)) {
+                            this.SpinnerService.hide();
+                            this.dataPrendas = [];
+                          }
+                        },
+                        (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+                          duration: 1500,
+                        }))
+                    }
+                  } else {
+                    this.SpinnerService.hide();
+                    this.dataPrendas = [];
+                  }
+                  this.matSnackBar.open("Registro  Completado correctamente!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 2500 })
                 } else {
+                  this.matSnackBar.open("Completado los datos obligatorios.!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 2500 })
                   this.SpinnerService.hide();
-                  this.dataPrendas = [];
                 }
-                this.matSnackBar.open("Registro  Completado correctamente!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 2500 })
-              } else {
-                this.matSnackBar.open("Completado los datos obligatorios.!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 2500 })
-                this.SpinnerService.hide();
-              }
 
-            },
-            (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
-              duration: 1500,
-            }))
+              },
+              (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', {
+                duration: 1500,
+              }));
 
-
+          }else{
+            this.matSnackBar.open("La fase para esta OC ya fue registrada...!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 2500 })
+          }
         } else {
           this.matSnackBar.open("El turno es obligatorio!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 2500 })
         }
@@ -571,6 +595,23 @@ export class AgregarRegistroMermaComponent implements OnInit {
             this.data = result;
             //this.Porcentaje = Number(this.data[0].Merma_Declarada / this.data[0].Num_Prendas * 100).toFixed(2);
             this.Porcentaje = Number(this.data[0].Merma_Declarada / this.Num_Prendas * 100).toFixed(2);
+
+            //Validar que la merma registrada no supere la declarada.
+            if(this.boton == 'Guardar'){
+              this.Num_Merma = this.data[0].Merma_Declarada - this.data[0].Merma_Registrada
+
+              if(parseInt(this.data[0].Merma_Declarada) <= parseInt(this.data[0].Merma_Registrada)){
+                this.deshabilitar = true;
+                this.matSnackBar.open('La merma registrada supera a la declarada...!', 'Cerrar', {
+                  duration: 1500,
+                })
+              }else {
+                this.deshabilitar = false;
+              }
+            } else{
+              this.Num_Merma = this.Merma_Declarada
+            }
+
             //console.log(Number(this.data[0].Merma_Declarada / this.Num_Prendas * 100).toFixed(2))
             //console.log(this.data[0].Merma_Declarada / this.Num_Prendas * 100)
             //console.log(this.data[0].Merma_Declarada)
@@ -595,7 +636,7 @@ export class AgregarRegistroMermaComponent implements OnInit {
       (result: any) => {
         if (result != null) {
           this.dataMermas = result;
-          this.Num_Merma = this.dataMermas[0].Num_Mermas;
+          //this.Num_Merma = this.dataMermas[0].Num_Mermas;
           this.Num_Prendas = this.dataMermas[0].Num_Prendas;
           //this.Porcentaje = this.dataMermas[0].Porcentaje;
         }

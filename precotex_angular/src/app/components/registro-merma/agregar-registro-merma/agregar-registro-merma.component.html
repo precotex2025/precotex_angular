@@ -161,8 +161,8 @@
                             <div class="caja">
                                 <mat-form-field class="example-form-field" appearance="fill">
                                     <mat-label>Num Merma</mat-label>
-                                    <!--<input matInput type="text" [value]="Num_Merma" readonly>-->
-                                    <input matInput type="text" readonly [value]="data[0].Merma_Declarada">
+                                    <input matInput type="text" [value]="Num_Merma" readonly>
+                                    <!--<input matInput type="text" readonly [value]="data[0].Merma_Declarada">-->
                                 </mat-form-field>
                             </div>
                             <div class="caja">
@@ -230,13 +230,13 @@
                                 <mat-form-field class="example-form-field" appearance="fill">
                                     <mat-label>Cantidad</mat-label>
                                     <!--<input matInput type="number" [(ngModel)]="cantidad">-->
-                                    <input matInput type="number" formControlName="cantidad">
+                                    <input matInput type="number" formControlName="cantidad" (input)="onValidarCantidad()">
                                 </mat-form-field>
                             </div>
 
                             <div>
                                 <button type="button" (click)="InsertarFila()"
-                                    class="button-fila-dialog" mat-flat-button>
+                                    class="button-fila-dialog" mat-flat-button [disabled]="insDefecto">
                                     <mat-icon aria-label="person">add
                                     </mat-icon> Añadir
                                 </button>
