@@ -630,6 +630,7 @@ import { LecturaBultosDetComponent } from './components/lectura-bultos/lectura-b
 //SALDO HILO TELA
 import { SaldoHiloTelaComponent } from './components/tejeduria/saldo-hilo-tela/saldo-hilo-tela.component';
 import { SaldoHiloTelaProgramadaComponent } from './components/tejeduria/saldo-hilo-tela/saldo-hilo-tela-programada/saldo-hilo-tela-programada.component';
+import { SolicitudMantenimientoMaquinaReporteComponent } from './solicitud-mantenimiento-maquina-reporte/solicitud-mantenimiento-maquina-reporte.component';
 
 @NgModule({
   declarations: [
@@ -1185,6 +1186,9 @@ import { SaldoHiloTelaProgramadaComponent } from './components/tejeduria/saldo-h
     //SALDO HILO TELA
     ,SaldoHiloTelaComponent
     ,SaldoHiloTelaProgramadaComponent
+
+    //MANTENIMIENTO DE MAQUINAS REPORTE
+    ,SolicitudMantenimientoMaquinaReporteComponent
   
   ],
   entryComponents: [DialogJabaComponent],

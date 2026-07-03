@@ -77,4 +77,27 @@ export class SolicitudMantenimientoService {
     return this.http.post(this.baseUrlTinto + 'TMSolicitudMantenimiento/postProcesoMntoTiempoManMquina', data, { headers })
   }   
 
+  getReporteSolicitudMantenimiento(FecIni, FecFin, codEstado: string){
+    
+    if (!_moment(FecIni).isValid()) {
+      FecIni = '';
+    } else {
+      FecIni = _moment(FecIni.valueOf()).format('MM/DD/YYYY');
+    }
+
+    if (!_moment(FecFin).isValid()) {
+      FecFin = '';
+    } else {
+      FecFin = _moment(FecFin.valueOf()).format('MM/DD/YYYY');
+    }
+
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('FecIni', FecIni);
+    params = params.append('FecFin', FecFin);
+    params = params.append('codEstado', codEstado);
+
+    return this.http.get(this.baseUrlTinto + 'TMSolicitudMantenimiento/getReporteSolicitudMantenimiento', { headers, params });
+  } 
+
 }

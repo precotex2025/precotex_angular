@@ -1286,6 +1286,7 @@ onBuscaPreciosxColor(Tipo_Busqueda: string, Pro_Cen_Cos: number, Tipo: string, C
           
           //Abre el dialog
           this.global_CodReceta = '';
+          this.formulario_Precio.get('ctrl_receta').setValue('');
           this.dialogRef = this.dialog.open(this.dialogListaPrecios, {
             width: '600px'
           });        
