@@ -331,6 +331,7 @@ import { ControlPrimeraPartidaComponent } from './components/control-primera-par
 import { LecturaBultosComponent } from './components/lectura-bultos/lectura-bultos.component';
 import { LecturaBultosDetComponent } from './components/lectura-bultos/lectura-bultos-det/lectura-bultos-det.component';
 import { SaldoHiloTelaComponent } from './components/tejeduria/saldo-hilo-tela/saldo-hilo-tela.component';
+import { SaldoPruebaComponent } from './components/tejeduria/auditoria-devol-de-hilo-tej/auditoria-devol-hilo-component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -735,6 +736,7 @@ const routes: Routes = [
 
   //SALDO HILO TELA
   { path: "SaldoHiloTela", component: SaldoHiloTelaComponent },
+  { path: "AuditoriaDevolHilo", component: SaldoPruebaComponent },
 
   //COPIAR RUTAS ANTES DE ESTO
   { path: "", redirectTo: "/", pathMatch: "full" },// Cuando es la raíz
