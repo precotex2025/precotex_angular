@@ -631,6 +631,10 @@ import { LecturaBultosDetComponent } from './components/lectura-bultos/lectura-b
 import { SaldoHiloTelaComponent } from './components/tejeduria/saldo-hilo-tela/saldo-hilo-tela.component';
 import { SaldoHiloTelaProgramadaComponent } from './components/tejeduria/saldo-hilo-tela/saldo-hilo-tela-programada/saldo-hilo-tela-programada.component';
 import { SolicitudMantenimientoMaquinaReporteComponent } from './solicitud-mantenimiento-maquina-reporte/solicitud-mantenimiento-maquina-reporte.component';
+import { SaldoPruebaComponent } from './components/tejeduria/auditoria-devol-de-hilo-tej/auditoria-devol-hilo-component';
+import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/auditoria-devol-de-hilo-tej/auditoria-devol-de-hilo-programada/auditoria-devol-de-hilo-programada.component';
+import { SaldoPruebaComponent } from './components/tejeduria/auditoria-devol-de-hilo-tej/auditoria-devol-hilo-component';
+import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/auditoria-devol-de-hilo-tej/auditoria-devol-de-hilo-programada/auditoria-devol-de-hilo-programada.component';
 
 @NgModule({
   declarations: [
@@ -1190,6 +1194,8 @@ import { SolicitudMantenimientoMaquinaReporteComponent } from './solicitud-mante
     //MANTENIMIENTO DE MAQUINAS REPORTE
     ,SolicitudMantenimientoMaquinaReporteComponent
   
+    ,SaldoPruebaComponent
+    ,AuditoriaDevolDeHiloProgramadaComponent
   ],
   entryComponents: [DialogJabaComponent],
   imports: [

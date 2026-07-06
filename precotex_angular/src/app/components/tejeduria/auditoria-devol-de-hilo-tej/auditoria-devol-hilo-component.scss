@@ -1,0 +1,269 @@
+.contenedor {
+  margin: 20px;
+}
+
+.bloque-titulo, .bloque-filtros, .bloque-tabla {
+  margin-bottom: 15px;
+  border: 1px solid #333;
+}
+
+.bloque-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.fila1-buscar {
+    width: 100%;
+
+    height: 40px;
+    max-width: 280px;
+    margin: auto;
+    margin-top: 3px;
+    background-color: #3f51b5;
+    color: #ffffff;
+    width: 180px;
+    
+}
+
+.form-filtros {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.grupo-filtros-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.rango-fechas-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Control general de filtros */
+.filtro-control {
+  flex: 1;
+  min-width: 180px;
+}
+
+/* Ajustes de anchos específicos para escritorio */
+.rango-fechas-wrapper .filtro-control {
+  max-width: 220px;
+}
+
+.select-estado {
+  max-width: 250px;
+}
+
+.grupo-filtros-row .filtro-control {
+  max-width: 250px;
+}
+
+/* Botón limpiar fecha */
+.btn-clear-date {
+  margin-bottom: 20px; /* Alineación con mat-form-field */
+}
+
+/* Botón exportar excel */
+.btn-export-excel {
+  height: 48px;
+  margin-bottom: 20px; /* Alineación con mat-form-field */
+  background-color: #217346 !important;
+  color: white !important;
+  min-width: 180px;
+}
+
+table {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .contenedor {
+    margin: 10px;
+  }
+
+  .grupo-filtros-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .rango-fechas-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .filtro-control,
+  .rango-fechas-wrapper .filtro-control,
+  .select-estado,
+  .grupo-filtros-row .filtro-control {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .btn-clear-date {
+    margin-bottom: 10px;
+    align-self: center;
+  }
+
+  .btn-export-excel {
+    margin-bottom: 10px;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  mat-cell {
+    display: block;
+    padding-left: 50%;
+    position: relative;
+  }
+}
+
+.tabla-scroll {
+  overflow-x: auto;   /* habilita scroll horizontal */
+}
+
+
+.mat-header-cell.mat-column-opciones,
+.mat-header-cell.mat-column-ot,
+.mat-header-cell.mat-column-lote,
+.mat-header-cell.mat-column-sem,
+.mat-header-cell.mat-column-nBultos,
+.mat-header-cell.mat-column-estado    {
+  background-color: #E3E6E8; /* verde claro */
+}
+
+.mat-column-ot {
+  width: 130px;
+  min-width: 130px;
+  max-width: 130px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-lote {
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-sem {
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-nBultos {
+  width: 130px;
+  min-width: 130px;
+  max-width: 130px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-opciones {
+  width: 120px;
+  min-width: 120px;
+  max-width: 120px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+.mat-column-estado {
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* evita que se desborde */
+}
+
+::ng-deep {
+  @media print {
+    @page {
+      size: auto;
+      margin: 0; /* Oculta fecha, hora, url y título nativos del navegador */
+    }
+
+    body {
+      background: white !important;
+      color: black !important;
+      margin: 1.5cm !important; /* Añade margen al contenido impreso */
+      padding: 0 !important;
+      height: auto !important;
+    }
+
+    /* Ocultar barra de navegación (mat-toolbar) global y menús laterales */
+    mat-toolbar,
+    .example-toolbar,
+    mat-sidenav {
+      display: none !important;
+    }
+
+    /* Ocultar elementos de interfaz locales, filtros, botones y título */
+    .bloque-titulo,
+    .bloque-filtros,
+    ngx-spinner,
+    .fila1-buscar,
+    button,
+    mat-icon {
+      display: none !important;
+    }
+
+    /* Ajustar la tabla para impresión */
+    .bloque-tabla {
+      border: none !important;
+      box-shadow: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .tabla-scroll {
+      overflow: visible !important;
+    }
+
+    /* Ocultar columna VER DETALLE (opciones) al imprimir */
+    .mat-column-opciones {
+      display: none !important;
+    }
+
+    table {
+      width: 100% !important;
+      border-collapse: collapse !important;
+    }
+
+    th, td {
+      border: 1px solid #ddd !important;
+      padding: 8px !important;
+      text-align: left !important;
+    }
+
+    th {
+      background-color: #f2f2f2 !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+}
