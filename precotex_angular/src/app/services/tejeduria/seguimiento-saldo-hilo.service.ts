@@ -52,5 +52,50 @@ export class SeguimientoSaldoHiloService {
     return this.http.post(this.baseUrlTinto + 'TjSeguimientoSaldoHilo/postProceso', data, { headers })
   }
 
+  getListaSolicitudAuditoria(Num_Solicitud, Cod_OrdProv, FecInicio, FecFin, Estado){
+
+    if (!_moment(FecInicio).isValid()) {
+      FecInicio = '';
+    } else {
+      FecInicio = _moment(FecInicio.valueOf()).format('MM/DD/YYYY');
+    }
+
+    if (!_moment(FecFin).isValid()) {
+      FecFin = '';
+    } else {
+      FecFin = _moment(FecFin.valueOf()).format('MM/DD/YYYY');
+    }      
+
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('Num_Solicitud', Num_Solicitud);
+    params = params.append('Cod_OrdProv', Cod_OrdProv);
+    params = params.append('FecInicio', FecInicio);
+    params = params.append('FecFin', FecFin);
+    params = params.append('Estado', Estado);
+
+    return this.http.get(this.baseUrlTinto + 'TjSolicitudDevolucionAuditoria/getListaSolicitudAuditoria', { headers, params });
+  }    
+
+  getListaSolicitudAuditoriaBultos(Num_Solicitud, Lote, Semana, Color, Marca, Conera){
+
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append('Num_Solicitud', Num_Solicitud);
+    params = params.append('Lote', Lote);
+    params = params.append('Semana', Semana);
+    params = params.append('Color', Color);
+    params = params.append('Marca', Marca);
+    params = params.append('Conera', Conera);
+
+    return this.http.get(this.baseUrlTinto + 'TjSolicitudDevolucionAuditoria/getListaSolicitudAuditoriaBultos', { headers, params });
+  }      
+
+  postProcesoSolAuditoria(data: any){
+    const headers = this.Header;
+    return this.http.post(this.baseUrlTinto + 'TjSolicitudDevolucionAuditoria/postProceso', data, { headers })
+  }
+
+
 
 }
