@@ -215,7 +215,7 @@ export class QuejasReclamosComponent implements OnInit {
         if(response.success){
             if (response.totalElements > 0) {
                 this.codArea = response.elements[0].cod_Area;
-                
+                console.log('Area de Usuario', this.codArea);
             }
             else {
               this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })

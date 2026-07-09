@@ -92,16 +92,16 @@ export class AuditoriaDevolDeHiloProgramadaComponent implements OnInit {
   }); 
 
   onCargarData(data: any){
-    this.formulario.get('solicNum')?.setValue(data.Datos.ot);
+    this.formulario.get('solicNum')?.setValue(data.Datos.solicitud || '');
     this.formulario.get('lote')?.setValue(data.Datos.lote);
     this.formulario.get('proveedor')?.setValue(data.Datos.proveedor || '');
-    this.formulario.get('descripcion_hilo')?.setValue(data.Datos.descripcion_hilo || '');
+    this.formulario.get('descripcion_hilo')?.setValue(data.Datos.hilo || '');
     this.formulario.get('color')?.setValue(data.Datos.color || '');
     this.formulario.get('marca')?.setValue(data.Datos.marca || '');
-    this.formulario.get('semana')?.setValue(data.Datos.sem || '');
+    this.formulario.get('semana')?.setValue(data.Datos.semana || '');
     this.formulario.get('conera')?.setValue(data.Datos.conera || '');
-    this.formulario.get('total_bultos')?.setValue(data.Datos.nBultos || '');
-    this.formulario.get('ot')?.setValue(data.Datos.solic_ot || '');
+    this.formulario.get('total_bultos')?.setValue(data.Datos.bultos || '');
+    this.formulario.get('ot')?.setValue(data.Datos.ot || '');
     this.formulario.get('oc')?.setValue(data.Datos.oc || '');
     if (data?.Datos?.estado) {
       this.formulario.get('mv')?.setValue(data.Datos.estado);
@@ -109,6 +109,7 @@ export class AuditoriaDevolDeHiloProgramadaComponent implements OnInit {
   }
 
   onLoadOTProgramadas(){
+    /*
     const mockDetails: data_det[] = [
       {
         sticker: 'STK-9901-A',
@@ -129,23 +130,29 @@ export class AuditoriaDevolDeHiloProgramadaComponent implements OnInit {
         cantConos: 12
       }
     ];
-
-    const valorLote: String = this.data.Datos.lote;
+    */
+    const valorSolicitud: String = this.data.Datos.solicitud || 0;
+    const valorLote: String = this.data.Datos.lote || '';
+    const valorSemana: String = this.data.Datos.semana || '';
+    const valorColor: String = this.data.Datos.color || '';
+    const valorMarca: String = this.data.Datos.marca || '';
+    const valorConera: String = this.data.Datos.conera || '';
 
     this.dataSource.data = [];
     this.SpinnerService.show();
-    this.serviceSaldoHiloTela.getListaOT_Programada(valorLote, "").subscribe({
+    this.serviceSaldoHiloTela.getListaSolicitudAuditoriaBultos(valorSolicitud, valorLote, valorSemana, valorColor, valorMarca, valorConera).subscribe({
       next: (response: any)=> {
         if(response.success && response.elements && response.elements.length > 0){
+          console.log('response.elements detalle', response.elements);
           this.dataSource.data = response.elements;
           this.SpinnerService.hide();
         } else {
-          this.dataSource.data = mockDetails;
+          this.dataSource.data = [];
           this.SpinnerService.hide();
         }
       },  
       error: (error) => {
-        this.dataSource.data = mockDetails;
+        this.dataSource.data = [];
         this.SpinnerService.hide();
       }         
     })
@@ -153,29 +160,14 @@ export class AuditoriaDevolDeHiloProgramadaComponent implements OnInit {
 
   onGuardar(){
 
-    if (!this.formulario.get('mv')?.value) {
+   
+    const valor = this.formulario.get('mv')?.value;
+    if (valor !== 'A' && valor !== 'D') {
       this.snackBar.open('¡Por favor, seleccione estado!', 'Cerrar', {
         duration: 3000,
         verticalPosition: 'top'
       });
       return;
-    }
-
-    if (!this.filaSeleccionada) {
-
-      const estado  = this.formulario.get('mv').value || '';
-      if (estado === 'MV') {
-        this.snackBar.open('¡Por favor, seleccione el destino!', 'Cerrar', {
-          duration: 3000,
-          verticalPosition: 'top'
-        });
-        return;        
-      }
-      // else{
-      //   if (this.dataSource.data.length > 0) {
-      //     this.seleccionarFila(this.dataSource.data[0]); // primera fila
-      //   }
-      // }
     }
 
     console.log('fila seleccionada', this.filaSeleccionada);
@@ -193,51 +185,43 @@ export class AuditoriaDevolDeHiloProgramadaComponent implements OnInit {
       if (result.isConfirmed) {
         
    
-        const num_Traslado  = ''; 
+        
+         const estado  = this.formulario.get('mv').value || '';
+         const num_Solicitud  = String(this.data.Datos.solicitud); 
         const cod_OrdProv     = String(this.data.Datos.lote);
-        const cod_Ordtra_Ori  = String(this.data.Datos.ot);
-        const cod_Maquina_Ori = String(this.data.Datos.cod_Maquina);
-        const cod_HilTel      = String(this.data.Datos.cod_Hilado);
-        const cod_Color       = String(this.data.Datos.cod_Color);
-        const kg_Programado = this.formulario.get('mv').value == "MV" ? Number(this.filaSeleccionada.can_Teorico)  : 0;
-        const kg_Salida     = this.formulario.get('mv').value == "MV" ? Number(this.filaSeleccionada.can_Salida)   : 0;
-        const kg_Consumo    = this.formulario.get('mv').value == "MV" ? Number(this.filaSeleccionada.can_Salida)   : 0;
-        const kg_Devolver   = this.formulario.get('mv').value == "MV" ? Number(this.filaSeleccionada.can_PorPedir) : 0;
-        const estado  = this.formulario.get('mv').value || '';
-        const cod_Ordtra_Des  = this.formulario.get('mv').value == "MV" ? String(this.filaSeleccionada.ot) : '';
-        const cod_Maquina_Des = this.formulario.get('mv').value == "MV" ? String(this.filaSeleccionada.cod_Maquina) : '';
+        const cod_Color       = String(this.data.Datos.color);
+        const cod_Marca       = String(this.data.Datos.marca);
+        const cod_Conera      = String(this.data.Datos.conera);
+        const cod_semana      = String(this.data.Datos.semana);
+        const tipo            = String(this.data.Datos.tipo);
         const cod_Usuario =   String(this.sUsuario);
         
         var data: any = 
           {
-            "accion"        : "I",
-            "num_Traslado"  : num_Traslado,
-            "cod_OrdProv"   : cod_OrdProv,
-            "cod_Ordtra_Ori": cod_Ordtra_Ori,
-            "cod_Maquina_Ori": cod_Maquina_Ori,
-            "cod_HilTel"     : cod_HilTel,
-            "cod_Color"       : cod_Color,
-            "kg_Programado" : kg_Programado,
-            "kg_Salida"   : kg_Salida,
-            "kg_Consumo"  : kg_Consumo,
-            "kg_Devolver" : kg_Devolver,
-            "estado"      : estado,
-            "cod_Ordtra_Des"    : cod_Ordtra_Des,
-            "cod_Maquina_Des"   : cod_Maquina_Des,
+            "accion"        : "U",
+            "num_Solicitud"  : num_Solicitud,
+            "lote"   : cod_OrdProv,
+            "semana" : cod_semana,
+            "color"  : cod_Color,
+            "marca"  : cod_Marca,
+            "conera" : cod_Conera,
+            "estado"    : estado,
+            "tipo"      : tipo, //VERIFICAR DE DONDE SALE ESTE TIPO
             "cod_Usuario"       : cod_Usuario
           };
           console.log('data paar guardar', data);
+          //return;
 
-        if (cod_Ordtra_Ori && (cod_Ordtra_Ori.startsWith('OT-') || cod_Ordtra_Ori.startsWith('SOL-'))) {
-          this.toastr.success('Simulado: Seguimiento de Saldo Registrado con éxito', '', {
-            timeOut: 2500,
-          });
-          this.dialogRef.close(estado);
-          return;
-        }
+        // if (cod_Ordtra_Ori && (cod_Ordtra_Ori.startsWith('OT-') || cod_Ordtra_Ori.startsWith('SOL-'))) {
+        //   this.toastr.success('Simulado: Seguimiento de Saldo Registrado con éxito', '', {
+        //     timeOut: 2500,
+        //   });
+        //   this.dialogRef.close(estado);
+        //   return;
+        // }
 
       this.SpinnerService.show();
-      this.serviceSaldoHiloTela.postProceso(data).subscribe({
+      this.serviceSaldoHiloTela.postProcesoSolAuditoria(data).subscribe({
           next: (response: any)=> {
             if(response.success){
               if (response.codeResult == 200){

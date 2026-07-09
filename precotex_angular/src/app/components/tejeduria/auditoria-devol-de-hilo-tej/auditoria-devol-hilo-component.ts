@@ -18,7 +18,7 @@ interface data_det {
   cod_Hilado?   : string,
   articulo?     : number,
   estado?       : string,
-  sem?          : string,
+  semana?          : string,
   nBultos?      : number,
   proveedor?      : string,
   descripcion_hilo?: string,
@@ -27,6 +27,11 @@ interface data_det {
   conera?         : string,
   solic_ot?       : string,
   oc?             : string,
+  peso_Bruto? : number,
+  peso_Neto?  : number,
+
+  can_Conos? : number,
+  solicitud? : number,
 }
 
 @Component({
@@ -70,130 +75,32 @@ export class SaldoPruebaComponent implements OnInit {
     filtroLote : ['']
   });  
 
-  onLoadOTTerminadas(start: Date, end: Date, valorPendiente: string){
-    const mockItems: data_det[] = [
-      {
-        ot: 'SOL-1048',
-        lote: 'LOT-23A40',
-        sem: '26',
-        nBultos: 12,
-        fec_Termino: '2026-06-25T12:00:00Z',
-        cod_Maquina: '10',
-        fibra: 'ALGODON 100%',
-        titulo: '30/1',
-        cod_Hilado: 'HIL-TEST-001',
-        articulo: 9999,
-        proveedor: 'PRECOTEX',
-        descripcion_hilo: 'ALGODÓN AMERICANO 30/1 PEINADO',
-        color: 'PINEEDLE',
-        marca: '10',
-        conera: '1',
-        solic_ot: '2026045',
-        oc: 'OC-9901'
-      },
-      {
-        ot: 'SOL-1052',
-        lote: 'LOT-23B12',
-        sem: '27',
-        nBultos: 8,
-        fec_Termino: '2026-06-28T14:30:00Z',
-        cod_Maquina: '12',
-        fibra: 'POLIESTER 100%',
-        titulo: '40/1',
-        cod_Hilado: 'HIL-TEST-002',
-        articulo: 8888,
-        estado: 'A',
-        proveedor: 'PRECOTEX',
-        descripcion_hilo: 'ALGODÓN TANGUIS 20/1',
-        color: 'MELANGE',
-        marca: '12',
-        conera: '2',
-        solic_ot: '2026098',
-        oc: 'OC-9902'
-      },
-      {
-        ot: 'SOL-1065',
-        lote: 'LOT-23C55',
-        sem: '25',
-        nBultos: 15,
-        fec_Termino: '2026-06-20T09:15:00Z',
-        cod_Maquina: '6',
-        fibra: 'VISCOSA 100%',
-        titulo: '20/1',
-        cod_Hilado: 'HIL-TEST-003',
-        articulo: 7777,
-        estado: 'D',
-        proveedor: 'PRECOTEX',
-        descripcion_hilo: 'VISCOSA / POLIESTER 40/1',
-        color: 'CRU',
-        marca: '6',
-        conera: '1',
-        solic_ot: '2026112',
-        oc: 'OC-9903'
-      },
-      {
-        ot: 'SOL-1070',
-        lote: 'LOT-23D77',
-        sem: '28',
-        nBultos: 6,
-        fec_Termino: '2026-06-29T10:00:00Z',
-        cod_Maquina: '14',
-        fibra: 'ALGODON / POLIESTER',
-        titulo: '24/1',
-        cod_Hilado: 'HIL-TEST-004',
-        articulo: 6666,
-        proveedor: 'PRECOTEX',
-        descripcion_hilo: 'ALGODÓN PIMA 50/1',
-        color: 'BLANCO',
-        marca: '14',
-        conera: '3',
-        solic_ot: '2026154',
-        oc: 'OC-9904'
-      },
-      {
-        ot: 'SOL-1082',
-        lote: 'LOT-23E89',
-        sem: '26',
-        nBultos: 20,
-        fec_Termino: '2026-06-30T08:00:00Z',
-        cod_Maquina: '21',
-        fibra: 'LINO 100%',
-        titulo: '50/1',
-        cod_Hilado: 'HIL-TEST-005',
-        articulo: 5555,
-        proveedor: 'PRECOTEX',
-        descripcion_hilo: 'LINO / ALGODÓN 30/1',
-        color: 'AZUL MARINO',
-        marca: '21',
-        conera: '1',
-        solic_ot: '2026210',
-        oc: 'OC-9905'
-      }
-    ];
-
+  onLoadOTTerminadas(start: Date, end: Date, Num_Solicitud: string, Cod_OrdProv: string, Estado: string){
     this.dataSource.data = [];
     this.SpinnerService.show();
-    this.serviceSaldoHiloTela.getListaOT_Terminada(start, end, valorPendiente).subscribe({
+    this.serviceSaldoHiloTela.getListaSolicitudAuditoria(Num_Solicitud, Cod_OrdProv, start, end, Estado).subscribe({
       next: (response: any)=> {
         if(response.success){
-          const elements = response.elements || [];
-          this.allOTs = [...mockItems, ...elements];
-          this.aplicarFiltros();
-          this.SpinnerService.hide();
-        } else {
-          this.allOTs = mockItems;
-          this.aplicarFiltros();
-          this.SpinnerService.hide();
+          console.log('total de resgistros',response);
+          if (response.totalElements > 0){
+              this.dataSource.data = response.elements;
+
+            this.SpinnerService.hide();
+          }
+          else{
+            this.dataSource.data = [];            
+            this.SpinnerService.hide();
+          };
+        }else{
+          this.dataSource.data = [];
         }
       },  
       error: (error) => {
         this.SpinnerService.hide();
-        console.log(error?.error?.message || 'Error', 'Cerrar', {
-          timeOut: 2500,
-        });
-        this.allOTs = mockItems;
-        this.aplicarFiltros();
-      }         
+        console.log(error.error.message, 'Cerrar', {
+        timeOut: 2500,
+         });
+      }        
     })
   }
 
@@ -211,19 +118,22 @@ export class SaldoPruebaComponent implements OnInit {
       }
     });
     dialogRef.afterClosed().subscribe((resState) => {
-      if (resState) {
-        const mockOTs = ['SOL-1048', 'SOL-1052', 'SOL-1065', 'SOL-1070', 'SOL-1082'];
-        const isMock = mockOTs.includes(data.ot);
-        const testItemIndex = this.allOTs.findIndex(item => item.ot === data.ot);
-        if (testItemIndex > -1 && isMock) {
-          this.allOTs[testItemIndex].estado = resState;
+
+       if (resState) {
           this.aplicarFiltros();
-        } else {
-          const sFecIni = this.range.get('start').value;
-          const sFecFin = this.range.get('end').value;
-          this.onLoadOTTerminadas(new Date(sFecIni), new Date(sFecFin), 'N');
-        }
-      }
+      //   /*
+      //   const mockOTs = ['SOL-1048', 'SOL-1052', 'SOL-1065', 'SOL-1070', 'SOL-1082'];
+      //   const isMock = mockOTs.includes(data.ot);
+      //   const testItemIndex = this.allOTs.findIndex(item => item.ot === data.ot);
+      //   if (testItemIndex > -1 && isMock) {
+      //     this.allOTs[testItemIndex].estado = resState;
+      //     this.aplicarFiltros();
+      //   } else {
+      //     const sFecIni = this.range.get('start').value;
+      //     const sFecFin = this.range.get('end').value;
+      //     //this.onLoadOTTerminadas(new Date(sFecIni), new Date(sFecFin), 'N');
+      //   }
+       }
     });    
   }
 
@@ -231,7 +141,11 @@ export class SaldoPruebaComponent implements OnInit {
 
   onDateRangeSelected(start: Date, end: Date) {
     if (start && end) {
-      this.onLoadOTTerminadas(new Date(start), new Date(end), 'N');
+      const estado = this.formulario.get('filtroEstado')?.value || '';
+      const filtroOT = this.formulario.get('filtroOT')?.value || 0;
+      const filtroLote = this.formulario.get('filtroLote')?.value || '';
+      this.onLoadOTTerminadas(start, end, filtroOT, filtroLote, estado);
+      //this.serviceSaldoHiloTela.getListaSolicitudAuditoria(filtroOT, filtroLote, new Date(start), new Date(end), estado);
     }
   }  
 
@@ -242,37 +156,39 @@ export class SaldoPruebaComponent implements OnInit {
   }    
 
   aplicarFiltros() {
-    const otVal = (this.formulario.get('filtroOT')?.value || '').toLowerCase().trim();
-    const loteVal = (this.formulario.get('filtroLote')?.value || '').toLowerCase().trim();
-    const estadoVal = this.formulario.get('filtroEstado')?.value || '';
+    // const otVal = (this.formulario.get('filtroOT')?.value || '').toLowerCase().trim();
+    // const loteVal = (this.formulario.get('filtroLote')?.value || '').toLowerCase().trim();
+    // const estadoVal = this.formulario.get('filtroEstado')?.value || '';
     const startVal = this.range.get('start')?.value;
     const endVal = this.range.get('end')?.value;
 
-    this.dataSource.data = this.allOTs.filter(item => {
-      const matchOT = !otVal || (item.ot && item.ot.toString().toLowerCase().includes(otVal));
-      const matchLote = !loteVal || (item.lote && item.lote.toString().toLowerCase().includes(loteVal));
+    this.onDateRangeSelected(startVal, endVal);     
+
+    // this.dataSource.data = this.allOTs.filter(item => {
+    //   const matchOT = !otVal || (item.ot && item.ot.toString().toLowerCase().includes(otVal));
+    //   const matchLote = !loteVal || (item.lote && item.lote.toString().toLowerCase().includes(loteVal));
       
-      let matchEstado = true;
-      if (estadoVal === 'A') {
-        matchEstado = item.estado === 'A';
-      } else if (estadoVal === 'D') {
-        matchEstado = item.estado === 'D';
-      } else if (estadoVal === '--') {
-        matchEstado = !item.estado || (item.estado !== 'A' && item.estado !== 'D');
-      }
+    //   let matchEstado = true;
+    //   if (estadoVal === 'A') {
+    //     matchEstado = item.estado === 'A';
+    //   } else if (estadoVal === 'D') {
+    //     matchEstado = item.estado === 'D';
+    //   } else if (estadoVal === '--') {
+    //     matchEstado = !item.estado || (item.estado !== 'A' && item.estado !== 'D');
+    //   }
 
-      let matchDate = true;
-      if (startVal && endVal && item.fec_Termino) {
-        const itemDate = new Date(item.fec_Termino);
-        const start = new Date(startVal);
-        start.setHours(0, 0, 0, 0);
-        const end = new Date(endVal);
-        end.setHours(23, 59, 59, 999);
-        matchDate = itemDate >= start && itemDate <= end;
-      }
+    //   let matchDate = true;
+    //   if (startVal && endVal && item.fec_Termino) {
+    //     const itemDate = new Date(item.fec_Termino);
+    //     const start = new Date(startVal);
+    //     start.setHours(0, 0, 0, 0);
+    //     const end = new Date(endVal);
+    //     end.setHours(23, 59, 59, 999);
+    //     matchDate = itemDate >= start && itemDate <= end;
+    //   }
 
-      return matchOT && matchLote && matchEstado && matchDate;
-    });
+    //   return matchOT && matchLote && matchEstado && matchDate;
+    // });
   }
 
   exportarAExcel() {
@@ -319,7 +235,7 @@ export class SaldoPruebaComponent implements OnInit {
 
     // Table Headers
     const row6 = worksheet.getRow(6);
-    row6.values = ['SOLIC #', 'LOTE', 'SEM', 'N BULTOS', 'ESTADO'];
+    row6.values = ['SOLIC #', 'LOTE', 'COLOR', 'MARCA', 'PROVEEDOR', 'SEMANA', 'N BULTOS', 'PESO BRUTO', 'PESO NETO','CANT. CONOS', 'OT', 'OC','ESTADO'];
     row6.height = 25;
     row6.eachCell((cell, colNumber) => {
       cell.fill = {
@@ -349,15 +265,23 @@ export class SaldoPruebaComponent implements OnInit {
     const activeData = this.dataSource.data;
     let currentRow = 7;
     activeData.forEach((item, index) => {
-      const estadoDesc = item.estado === 'A' ? 'Aprobado' : (item.estado === 'D' ? 'Desaprobado' : 'Sin Asignar');
+      const estadoDesc = item.estado === 'A' ? 'Aprobado' : (item.estado === 'D' ? 'Desaprobado' : '');
       const bultosVal = (item.nBultos !== null && item.nBultos !== undefined) ? item.nBultos : '';
       
       const row = worksheet.getRow(currentRow);
       row.values = [
-        item.ot !== null && item.ot !== undefined ? String(item.ot) : '',
+        item.solicitud !== null && item.solicitud !== undefined ? String(item.solicitud) : '',
         item.lote !== null && item.lote !== undefined ? String(item.lote) : '',
-        item.sem !== null && item.sem !== undefined ? String(item.sem) : '',
+        item.color !== null && item.color !== undefined ? String(item.color) : '',
+        item.marca !== null && item.marca !== undefined ? String(item.marca) : '',
+        item.proveedor !== null && item.proveedor !== undefined ? String(item.proveedor) : '',
+        item.semana !== null && item.semana !== undefined ? String(item.semana) : '',
         bultosVal,
+        item.peso_Bruto !== null && item.peso_Bruto !== undefined ? item.peso_Bruto : '',
+        item.peso_Neto !== null && item.peso_Neto !== undefined ? item.peso_Neto : '',
+        item.can_Conos !== null && item.can_Conos !== undefined ? item.can_Conos : '',
+        item.ot !== null && item.ot !== undefined ? String(item.ot) : '',
+        item.oc !== null && item.oc !== undefined ? String(item.oc) : '',
         estadoDesc
       ];
       row.height = 20;

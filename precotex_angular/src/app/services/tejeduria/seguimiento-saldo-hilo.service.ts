@@ -69,9 +69,9 @@ export class SeguimientoSaldoHiloService {
     const headers = this.Header;
     let params = new HttpParams();
     params = params.append('Num_Solicitud', Num_Solicitud);
-    params = params.append('Cod_OrdProv', Cod_OrdProv);
-    params = params.append('FecInicio', FecInicio);
-    params = params.append('FecFin', FecFin);
+    params = params.append('Lote', Cod_OrdProv);
+    params = params.append('FechaIni', FecInicio);
+    params = params.append('FechaFin', FecFin);
     params = params.append('Estado', Estado);
 
     return this.http.get(this.baseUrlTinto + 'TjSolicitudDevolucionAuditoria/getListaSolicitudAuditoria', { headers, params });
