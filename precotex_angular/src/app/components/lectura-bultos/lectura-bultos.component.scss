@@ -40,6 +40,22 @@ mat-icon {
         min-width: 180px;
     }
 
+    .filtro-fecha,
+    .filtro-movimiento {
+        flex: 0 1 140px;
+        min-width: 130px;
+    }
+
+    .filtro-almacen {
+        flex: 2 1 240px;
+        min-width: 220px;
+    }
+
+    .filtro-tipo {
+        flex: 1 1 160px;
+        min-width: 150px;
+    }
+
     .table-responsive {
         flex: 1 1 100%;
     }
