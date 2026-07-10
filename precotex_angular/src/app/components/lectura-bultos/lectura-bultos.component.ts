@@ -30,12 +30,14 @@ export class LecturaBultosComponent implements OnInit, AfterViewInit {
   ];
 
   dataSource = new MatTableDataSource<any>([]);
+  movimientosOriginales: any[] = [];
   
   filtro = {
     fecha: new Date(),
     almacen: null,
     verPendientes: false,
-    movimiento: null
+    movimiento: null,
+    tipo: null
   };
 
   // almacenes: any[] = [
@@ -145,18 +147,37 @@ export class LecturaBultosComponent implements OnInit, AfterViewInit {
                   this.filtro.movimiento = '';
                   this.ListarMovimientos(this.filtro.almacen, this.filtro.movimiento, this.filtro.fecha, this.esPendiente);
                 }else{
-                  this.dataSource.data = response.elements;
+                  this.movimientosOriginales = response.elements;
+                  this.filtrarLocalmente();
                 }
               }else{
-                this.dataSource.data = response.elements;
+                this.movimientosOriginales = response.elements;
+                this.filtrarLocalmente();
               }
             this.filtro.movimiento = '';
           }else{
-            this.dataSource.data = [];
+            this.movimientosOriginales = [];
+            this.filtrarLocalmente();
           }
         }
       }
     });
+  }
+
+  filtrarLocalmente(): void {
+    if (!this.filtro.tipo) {
+      this.dataSource.data = this.movimientosOriginales;
+    } else {
+      const tipoBusqueda = this.filtro.tipo.toLowerCase();
+      this.dataSource.data = this.movimientosOriginales.filter((m: any) => {
+        const tipoMov = (m.tipo || '').toLowerCase();
+        return this.normalizarTexto(tipoMov).includes(this.normalizarTexto(tipoBusqueda));
+      });
+    }
+  }
+
+  normalizarTexto(texto: string): string {
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
   onTogglePendientes(): void {

@@ -24,6 +24,7 @@ export class LecturaBultosDetComponent implements OnInit, AfterViewInit {
   totalBultos: number = 0;
   lecturados: number = 0;
   pendientes: number = 0;
+  bultoNoEncontrado: boolean = false;
 
   constructor(
     private route: ActivatedRoute, 
@@ -72,8 +73,8 @@ export class LecturaBultosDetComponent implements OnInit, AfterViewInit {
   }
 
   onEnter(): void {
+    this.bultoNoEncontrado = false;
     this.actualizarLectura(this.data.Num_MovStk, this.data.Cod_Almacen, this.movimiento.nroMov);
-    setTimeout(() => this.movimientoInput.nativeElement.focus(), 0);
   }
 
   actualizarLectura(Num_MovStk: string, Cod_Almacen: string, Num_Corre: string): void {
@@ -86,14 +87,19 @@ export class LecturaBultosDetComponent implements OnInit, AfterViewInit {
     this.service.patchLecturarBulto(data).subscribe({
       next: (response: any) => {
         if(response.success){
+          this.bultoNoEncontrado = false;
           this.cargarDetalle(this.data.Num_MovStk, this.data.Cod_Almacen);
-          this.movimiento.nroMov = '';  
+          this.movimiento.nroMov = '';
+        } else {
+          this.bultoNoEncontrado = true;
+          this.movimiento.nroMov = '';
+          setTimeout(() => this.movimientoInput.nativeElement.focus(), 0);
         }
       },
       error: (error: any) => {
-        const mensaje = error.message || 'Error inesperado';
+        this.bultoNoEncontrado = true;
         this.movimiento.nroMov = '';
-        // this.toastr.error('Error', mensaje);
+        setTimeout(() => this.movimientoInput.nativeElement.focus(), 0);
       }
     });
   }

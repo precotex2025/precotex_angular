@@ -20,17 +20,17 @@ h2 {
 
 .info-fields {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 12px;
 }
 
 .small-field {
-    flex: 1 1 80px; 
+    flex: 1 1 80px;
     min-width: 80px;
 }
 
 mat-form-field {
-    flex: 1 1 200px;
+    width: 100%;
 }
 
 button {
@@ -60,8 +60,94 @@ mat-checkbox {
         font-size: 1.5rem;
         text-align: left;
     }
+
+    .info-fields {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+
+    mat-form-field {
+        flex: 1 1 200px;
+        width: auto;
+    }
+
+    .campo-bulto-wrapper {
+        flex: 1 1 200px;
+    }
 }
 
 .fila-verde {
   background-color: #c8e6c9;
 }
+
+/* ── Bulto no corresponde ─────────────────────────────── */
+.campo-bulto-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.campo-bulto {
+  width: 100%;
+}
+
+:host ::ng-deep .campo-error .mat-form-field-outline {
+  color: #e53935 !important;
+}
+
+:host ::ng-deep .campo-error .mat-form-field-outline-thick {
+  color: #e53935 !important;
+}
+
+:host ::ng-deep .campo-error .mat-form-field-label {
+  color: #e53935 !important;
+}
+
+.icono-error {
+  color: #e53935;
+  font-size: 22px;
+}
+
+.mensaje-bulto-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #c62828;
+  font-size: 1.8rem;
+  font-weight: 800;
+  background-color: #ffebee;
+  border: 2.5px solid #ef9a9a;
+  border-radius: 10px;
+  padding: 16px 24px;
+  width: 100%;
+  box-sizing: border-box;
+  animation: slideDown 0.2s ease-out;
+
+  mat-icon {
+    font-size: 32px;
+    height: 32px;
+    width: 32px;
+    color: #e53935;
+    flex-shrink: 0;
+  }
+
+  span {
+    line-height: 1.3;
+    letter-spacing: 0.5px;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ───────────────────────────────────────────────────── */
