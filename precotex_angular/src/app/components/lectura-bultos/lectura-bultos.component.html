@@ -21,8 +21,8 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="filtro-tipo">
-        <mat-label>Tipo</mat-label>
-        <mat-select [(ngModel)]="filtro.tipo" (selectionChange)="filtrarLocalmente()">
+        <mat-label>Área</mat-label>
+        <mat-select [(ngModel)]="filtro.area" (selectionChange)="buscar()">
             <mat-option [value]="null">Todos</mat-option>
             <mat-option value="circular">Circular</mat-option>
             <mat-option value="rectilineo">Rectilíneo</mat-option>

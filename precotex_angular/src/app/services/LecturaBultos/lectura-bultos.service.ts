@@ -20,7 +20,7 @@ export class LecturaBultosService {
     return this.http.get(this.baseUrlTinto + 'LecturaBultos/getListarAlmacenesDisponibles', { headers })
   }
 
-  getListarMovimientos(Cod_Almacen: string, Num_MovStk: string,  Fec_MovStk: any, Flg_Pendiente: string){
+  getListarMovimientos(Cod_Almacen: string, Num_MovStk: string,  Fec_MovStk: any, Flg_Pendiente: string, Area: string){
     
     if(!_moment(Fec_MovStk).isValid())
     { Fec_MovStk = ''; }
@@ -37,6 +37,7 @@ export class LecturaBultosService {
     params = params.append("Cod_Almacen", Cod_Almacen ?? "");
     params = params.append("Fec_MovStk", Fec_MovStk ?? null);
     params = params.append("Flg_Pendiente", Flg_Pendiente ?? "N");
+    params = params.append("Area", Area ?? "");
 
     return this.http.get(this.baseUrlTinto + 'LecturaBultos/getListarMovimientos', { headers, params })
   }
