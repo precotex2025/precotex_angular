@@ -37,7 +37,7 @@ export class LecturaBultosComponent implements OnInit, AfterViewInit {
     almacen: null,
     verPendientes: false,
     movimiento: null,
-    tipo: null
+    area: null
   };
 
   // almacenes: any[] = [
@@ -69,7 +69,7 @@ export class LecturaBultosComponent implements OnInit, AfterViewInit {
     //   { fecha: new Date(), nroMov: 248889, bultos: 11, peso: 112, todosLecturados: true },
     //   { fecha: new Date(), nroMov: 248890, bultos: 5, peso: 50, todosLecturados: false }
     // ];
-    this.ListarMovimientos(this.filtro.almacen, this.filtro.movimiento, this.filtro.fecha, this.esPendiente);
+    this.ListarMovimientos(this.filtro.almacen, this.filtro.movimiento, this.filtro.fecha, this.esPendiente, this.filtro.area ?? '');
     console.log(this.filtro.movimiento);
     setTimeout(() => this.movimientoInput.nativeElement.focus(), 0);
   }
@@ -114,9 +114,9 @@ export class LecturaBultosComponent implements OnInit, AfterViewInit {
               this.filtro.almacen = Cod_Almacen;
               this.filtro.movimiento = Num_MovStk;
               this.esPendiente = 'N';
-              this.ListarMovimientos(this.filtro.almacen, this.filtro.movimiento, this.filtro.fecha, this.esPendiente);
+              this.ListarMovimientos(this.filtro.almacen, this.filtro.movimiento, this.filtro.fecha, this.esPendiente, this.filtro.area ?? '');
             }else{
-              this.ListarMovimientos(this.filtro.almacen, this.filtro.movimiento, this.filtro.fecha, this.esPendiente);
+              this.ListarMovimientos(this.filtro.almacen, this.filtro.movimiento, this.filtro.fecha, this.esPendiente, this.filtro.area ?? '');
             }
           }
         }
@@ -127,13 +127,13 @@ export class LecturaBultosComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ListarMovimientos(Cod_Almacen: string,  Num_MovStk: string, Fec_MovStk: any, Flg_Pendiente: string): void {
+  ListarMovimientos(Cod_Almacen: string,  Num_MovStk: string, Fec_MovStk: any, Flg_Pendiente: string, Area: string): void {
     //let fec_Movstk: Date = Fec_MovStk;
     // console.log(Cod_Almacen);
     console.log('el numero movimiento al inicio es: ', Num_MovStk);
     // console.log(Fec_MovStk);
     // console.log(Flg_Pendiente);
-    this.service.getListarMovimientos(Cod_Almacen, Num_MovStk, Fec_MovStk, Flg_Pendiente).subscribe({
+    this.service.getListarMovimientos(Cod_Almacen, Num_MovStk, Fec_MovStk, Flg_Pendiente, Area).subscribe({
       next: (response: any) => {
         if(response.success) {
           if (response.totalElements > 0) {
@@ -145,7 +145,7 @@ export class LecturaBultosComponent implements OnInit, AfterViewInit {
                 if(alerta === 'NO EXISTE'){
                   this.toastr.error('EL NUMERO DE MOVIMIENTO NO EXISTE', 'ERROR');
                   this.filtro.movimiento = '';
-                  this.ListarMovimientos(this.filtro.almacen, this.filtro.movimiento, this.filtro.fecha, this.esPendiente);
+                  this.ListarMovimientos(this.filtro.almacen, this.filtro.movimiento, this.filtro.fecha, this.esPendiente, this.filtro.area ?? '');
                 }else{
                   this.movimientosOriginales = response.elements;
                   this.filtrarLocalmente();
@@ -165,13 +165,16 @@ export class LecturaBultosComponent implements OnInit, AfterViewInit {
   }
 
   filtrarLocalmente(): void {
-    if (!this.filtro.tipo) {
+    if (!this.filtro.area) {
       this.dataSource.data = this.movimientosOriginales;
     } else {
-      const tipoBusqueda = this.filtro.tipo.toLowerCase();
+      const areaBusqueda = this.filtro.area.toLowerCase();
       this.dataSource.data = this.movimientosOriginales.filter((m: any) => {
-        const tipoMov = (m.tipo || '').toLowerCase();
-        return this.normalizarTexto(tipoMov).includes(this.normalizarTexto(tipoBusqueda));
+        if (m.area === undefined) {
+          return true;
+        }
+        const areaMov = (m.area || '').toLowerCase();
+        return this.normalizarTexto(areaMov).includes(this.normalizarTexto(areaBusqueda));
       });
     }
   }
@@ -189,7 +192,7 @@ export class LecturaBultosComponent implements OnInit, AfterViewInit {
   }
 
   onEnter(): void {
-    this.ListarMovimientos(this.filtro.almacen, this.filtro.movimiento, this.filtro.fecha, this.esPendiente);
+    this.ListarMovimientos(this.filtro.almacen, this.filtro.movimiento, this.filtro.fecha, this.esPendiente, this.filtro.area ?? '');
     setTimeout(() => this.movimientoInput.nativeElement.focus(), 0);
     //this.filtro.movimiento = '';
   }
