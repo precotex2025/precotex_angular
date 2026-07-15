@@ -14,6 +14,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { RegistroManteMaquinasTejService } from 'src/app/services/registro-mante-maquinas-tej.service';
 import { ToastrService } from 'ngx-toastr';
 
+//Para el Excel 
+import * as ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
+
 
 interface data_visor{
   cod_Solicitud: number,
@@ -54,6 +58,18 @@ export interface SolicitudMantenimiento {
   styleUrls: ['./solicitud-mantenimiento-maquina-visor.component.scss']
 })
 export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
+
+  // Paleta de colores (mismo estilo del reporte "DIR. DE HILO")
+  private readonly COLOR_HEADER_BANNER = 'FF1A5F63';   // Banner título (teal oscuro)
+  private readonly COLOR_HEADER_TABLA  = 'FF1A5F63';   // Fila de encabezados de tabla
+  private readonly COLOR_TEXTO_BLANCO  = 'FFFFFFFF';
+  private readonly COLOR_FILA_PAR      = 'FFF2F6F6';   // Zebra striping
+  private readonly COLOR_FILA_IMPAR    = 'FFFFFFFF';
+  private readonly COLOR_PARO_SI       = 'FFF8D7DA';   // Rojo suave -> paro de máquina
+  private readonly COLOR_PARO_SI_TXT   = 'FF842029';
+  private readonly COLOR_BORDE         = 'FFD9D9D9';  
+
+  private URL_IMAGE = 'https://gestion.precotex.com:444/ubicaciones/api/TxRetiroRepuestos/getImagenDesdeBackEnd?imageId='
   
 
   //RUTA -> SolicitudMantenimientoMaquinaVisor
@@ -122,6 +138,7 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
   ];
 
   exportarExcel() {
+    //this.generarReporte(this.solicitudesLst, 'Reporte_Solicitud_Mantenimiento');
     this.onExportarExcel();
   }
 
@@ -203,25 +220,29 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
         
           this.solicitudesLstExcel = response.elements;
           
-          this.dataForExcel = this.solicitudesLstExcel.map((item: any) => ({
-            ['Id']          : item.cod_Solicitud,
-            ['Area']        : item.area,
-            ['Maquina']     : item.cod_Maquina,
-            ['Observacion'] : item.observacion,
-            ['Paro Maquina']: item.paro_Maquina?'SI':'NO',
-            ['Prioridad']   : item.prioridad_Des ,
-            ['Fecha Registro']: item.fec_Registro,
-            ['Hora Reporte']: item.hora_Reporte,
-            ['Hora Inicio'] : item.hora_Inicio,
-            ['Tiempo T1 (Requerimiento)'] : item.t1_Tiempo_Espera_Min_Des,
-            ['Tiempo T2 (Intervencion)']  : item.t2_Tiempo_Interv_Min_Des,
-            ['Tiempo T3 (Validación)']    : item.t3_Tiempo_VB_Min_Des,
-            ['Nombre Solicitante']  : item.supervisor,
-            ['Nombre Tecnico']      : item.des_Usuario_Tecnico,
-            ['Foto']: item.ruta_Fotografia,
-            ['Estado']: item.nombre_Estado
-          }));
+          
+          // this.dataForExcel = this.solicitudesLstExcel.map((item: any) => ({
+          //   ['Id']          : item.cod_Solicitud,
+          //   ['Area']        : item.area,
+          //   ['Maquina']     : item.cod_Maquina,
+          //   ['Observacion'] : item.observacion,
+          //   ['Paro Maquina']: item.paro_Maquina?'SI':'NO',
+          //   ['Prioridad']   : item.prioridad_Des ,
+          //   ['Fecha Registro']: item.fec_Registro,
+          //   ['Hora Reporte']: item.hora_Reporte,
+          //   ['Hora Inicio'] : item.hora_Inicio,
+          //   ['Tiempo T1 (Requerimiento)'] : item.t1_Tiempo_Espera_Min_Des,
+          //   ['Tiempo T2 (Intervencion)']  : item.t2_Tiempo_Interv_Min_Des,
+          //   ['Tiempo T3 (Validación)']    : item.t3_Tiempo_VB_Min_Des,
+          //   ['Nombre Solicitante']  : item.supervisor,
+          //   ['Nombre Tecnico']      : item.des_Usuario_Tecnico,
+          //   ['Ruta_Fotografia']: item.ruta_Fotografia ? (this.URL_IMAGE + item.ruta_Fotografia) : '',
+          //   ['Estado']: item.nombre_Estado
+          // }));
 
+          this.generarReporte(this.solicitudesLstExcel, 'Reporte_Solicitud_Mantenimiento');          
+
+          /*
           const reportData = {
             title: 'REPORTE SOLICITUD DE MANTENIMIENTO MAQUINAS',
             data: this.dataForExcel,
@@ -230,7 +251,8 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
           };
   
           this.exceljsService.exportExcel4(reportData);
-  
+          */
+
         this.SpinnerService.hide();
       },
       error: (error) => {
@@ -365,5 +387,129 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
     restoreFocus: false
     });
   }
-  
+
+  async generarReporte(solicitudesLstExcel: any[], nombreArchivo: string = 'Reporte_Mantenimiento'): Promise<void> {
+ 
+    // 1. Mapeo de datos (igual al que ya tenías)
+    const dataForExcel = solicitudesLstExcel.map((item: any) => ({
+      'N° Solicitud': item.cod_Solicitud,
+      'Area': item.area,
+      'Maquina': item.cod_Maquina,
+      'Observacion': item.observacion,
+      'Paro Maquina': item.paro_Maquina ? 'SI' : 'NO',
+      'Prioridad': item.prioridad_Des,
+      'Fecha Registro': item.fec_Registro,
+      'Hora Reporte': item.hora_Reporte,
+      'Hora Inicio': item.hora_Inicio,
+      'Tiempo T1 (Requerimiento)': item.t1_Tiempo_Espera_Min_Des,
+      'Tiempo T2 (Intervencion)': item.t2_Tiempo_Interv_Min_Des,
+      'Tiempo T3 (Validación)': item.t3_Tiempo_VB_Min_Des,
+      'Nombre Solicitante': item.supervisor,
+      'Nombre Tecnico': item.des_Usuario_Tecnico,
+      //'Foto': item.ruta_Fotografia,
+      'Estado': item.nombre_Estado
+    }));
+ 
+    const columnas = Object.keys(dataForExcel[0] ?? {});
+    const totalCols = columnas.length;
+ 
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'Sistema de Mantenimiento';
+    workbook.created = new Date();
+ 
+    const sheet = workbook.addWorksheet('Reporte', {
+      views: [{ state: 'frozen', ySplit: 6 }] // Congela hasta la fila de encabezados
+    });
+ 
+    // 2. Ancho de columnas
+    const anchos = [14, 14, 12, 30, 12, 12, 14, 12, 12, 16, 16, 16, 20, 20, /*25,*/ 14];
+    sheet.columns = columnas.map((_, i) => ({ width: anchos[i] ?? 16 }));
+ 
+    // 3. Banner de título (fila 1-2, combinada)
+    sheet.mergeCells(1, 1, 2, totalCols);
+    const tituloCell = sheet.getCell(1, 1);
+    tituloCell.value = 'DIR. DE MANTENIMIENTO - REPORTE DE SOLICITUDES';
+    tituloCell.font = { bold: true, size: 16, color: { argb: this.COLOR_TEXTO_BLANCO } };
+    tituloCell.alignment = { vertical: 'middle', horizontal: 'center' };
+    tituloCell.fill = {
+      type: 'pattern', pattern: 'solid',
+      fgColor: { argb: this.COLOR_HEADER_BANNER }
+    };
+    sheet.getRow(1).height = 20;
+    sheet.getRow(2).height = 20;
+ 
+    // 4. Fila informativa: fecha de generación y rango
+    const hoy = new Date();
+    const fechaTexto = hoy.toLocaleDateString('es-PE');
+ 
+    sheet.getCell(4, 1).value = 'Reporte generado el:';
+    sheet.getCell(4, 1).font = { italic: true, bold: true };
+    sheet.getCell(4, 2).value = fechaTexto;
+    sheet.getCell(4, 2).font = { italic: true };
+ 
+    sheet.getCell(4, 5).value = 'Total de registros:';
+    sheet.getCell(4, 5).font = { italic: true, bold: true };
+    sheet.getCell(4, 6).value = dataForExcel.length;
+    sheet.getCell(4, 6).font = { italic: true };
+ 
+    // 5. Encabezados de tabla (fila 6)
+    const filaHeaderIdx = 6;
+    const filaHeader = sheet.getRow(filaHeaderIdx);
+    columnas.forEach((col, i) => {
+      const cell = filaHeader.getCell(i + 1);
+      cell.value = col;
+      cell.font = { bold: true, color: { argb: this.COLOR_TEXTO_BLANCO } };
+      cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+      cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: this.COLOR_HEADER_TABLA } };
+      cell.border = this.bordeCelda();
+    });
+    filaHeader.height = 22;
+ 
+    // 6. Filas de datos con zebra striping y resaltado de "Paro Maquina"
+    dataForExcel.forEach((row: any, idx: number) => {
+      const filaIdx = filaHeaderIdx + 1 + idx;
+      const excelRow = sheet.getRow(filaIdx);
+      const colorFondo = idx % 2 === 0 ? this.COLOR_FILA_PAR : this.COLOR_FILA_IMPAR;
+ 
+      columnas.forEach((col, i) => {
+        const cell = excelRow.getCell(i + 1);
+        cell.value = row[col] ?? '';
+        cell.border = this.bordeCelda();
+        cell.alignment = { vertical: 'middle', horizontal: col === 'Observacion' ? 'left' : 'center', wrapText: col === 'Observacion' };
+ 
+        const esParoSi = col === 'Paro Maquina' && row[col] === 'SI';
+        cell.fill = {
+          type: 'pattern', pattern: 'solid',
+          fgColor: { argb: esParoSi ? this.COLOR_PARO_SI : colorFondo }
+        };
+        if (esParoSi) {
+          cell.font = { bold: true, color: { argb: this.COLOR_PARO_SI_TXT } };
+        }
+      });
+      excelRow.height = 18;
+    });
+ 
+    // 7. Autofiltro sobre la tabla
+    sheet.autoFilter = {
+      from: { row: filaHeaderIdx, column: 1 },
+      to: { row: filaHeaderIdx, column: totalCols }
+    };
+ 
+    // 8. Generar y descargar el archivo
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], {
+      type: 'application/octet-stream'
+    });
+    saveAs(blob, `${nombreArchivo}_${fechaTexto.replace(/\//g, '-')}.xlsx`);
+  }  
+
+  private bordeCelda(): Partial<ExcelJS.Borders> {
+    const estilo: ExcelJS.BorderStyle = 'thin';
+    return {
+      top: { style: estilo, color: { argb: this.COLOR_BORDE } },
+      left: { style: estilo, color: { argb: this.COLOR_BORDE } },
+      bottom: { style: estilo, color: { argb: this.COLOR_BORDE } },
+      right: { style: estilo, color: { argb: this.COLOR_BORDE } }
+    };
+  }  
 }
