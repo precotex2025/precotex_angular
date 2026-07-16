@@ -23,6 +23,7 @@ export class LecturaBultosComponent implements OnInit, AfterViewInit {
     'detalle',
     'fecha',
     'movimiento',
+    'maquina',
     'bultos',
     'canLecturados',
     'peso',
