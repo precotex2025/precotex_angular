@@ -4,14 +4,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ImageCropperModule } from 'ngx-image-cropper';
 
 import { MaterialModule } from '../app/material.module';
 import { MenuComponent } from './components/menu/menu.component';
 import { AuditoriaLineaCosturaComponent } from './components/auditoria-calidad/auditoria-linea-costura/auditoria-linea-costura.component';
-import { PrincipalComponent } from './components/principal/principal.component'
+import { PrincipalComponent } from './components/principal/principal.component';
 import { FilterByValuePipe } from './pipes/filter-by-value.pipe';
 import { getCustomPaginatorIntl } from './paginacion-custom';
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
@@ -52,7 +52,7 @@ import { SeguridadControlVehiculoRegistroConductorComponent } from './components
 import { DialogVehiculoRegistrarComponent } from './components/seguridad/seguridad-control-vehiculo/dialog-vehiculo/dialog-vehiculo-registrar/dialog-vehiculo-registrar.component';
 import { ReporteDefectosAlmacenDerivadosComponent } from './components/auditoria-calidad/defectos-almacen-derivados/reporte-almacen-derivado/reporte-defectos-almacen-derivados/reporte-defectos-almacen-derivados.component';
 
-import { NgxSpinnerModule } from "ngx-spinner";
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { DialogConfirmacionComponent } from './components/dialogs/dialog-confirmacion/dialog-confirmacion.component';
 import { DialogVehiculoRegistrarVehiculoComponent } from './components/seguridad/seguridad-control-vehiculo/dialog-vehiculo/dialog-vehiculo-registrar-vehiculo/dialog-vehiculo-registrar-vehiculo.component';
 import { DialogDerivadosTotalComponent } from './components/auditoria-calidad/defectos-almacen-derivados/dialog-almacen-derivado/dialog-derivados-total/dialog-derivados-total.component';
@@ -74,7 +74,7 @@ import { MenuItemComponent } from './components/menu/menu-item/menu-item.compone
 import { AuditoriaHojaMedidaComponent } from './components/auditoria-calidad/auditoria-hoja-medida/auditoria-hoja-medida.component';
 import { AuditoriaHojaMedidaDetalleComponent } from './components/auditoria-calidad/auditoria-hoja-medida/auditoria-hoja-medida-detalle/auditoria-hoja-medida-detalle.component';
 import { SeguridadControlJabaComponent } from './components/seguridad/seguridad-control-jaba/seguridad-control-jaba.component';
-import { DialogRegistrarCabeceraJabaComponent} from './components/seguridad/seguridad-control-jaba/dialog-seguridad-control-jaba/dialog-registrar-cabecera-jaba/dialog-registrar-cabecera-jaba.component';
+import { DialogRegistrarCabeceraJabaComponent } from './components/seguridad/seguridad-control-jaba/dialog-seguridad-control-jaba/dialog-registrar-cabecera-jaba/dialog-registrar-cabecera-jaba.component';
 import { RegistrarSeguridadControlJabaComponent } from './components/seguridad/seguridad-control-jaba/registrar-seguridad-control-jaba/registrar-seguridad-control-jaba.component';
 import { RegistrarDetalleSeguridadControlJabaComponent } from './components/seguridad/seguridad-control-jaba/registrar-detalle-seguridad-control-jaba/registrar-detalle-seguridad-control-jaba.component';
 import { DialogColorRegistrarDetalleComponent } from './components/seguridad/seguridad-control-jaba/dialog-seguridad-control-jaba/dialog-color-registrar-detalle/dialog-color-registrar-detalle.component';
@@ -88,7 +88,7 @@ import { HttpErrorInterceptor } from './interceptors/http-error-response.service
 import { SeguridadControlMovimientosJabasAccionComponent } from './components/seguridad/seguridad-control-movimientos-jabas/seguridad-control-movimientos-jabas-accion/seguridad-control-movimientos-jabas-accion.component';
 import { DialogRegistrarEstadoControlMovmientosJabasComponent } from './components/seguridad/seguridad-control-movimientos-jabas/dialog-seguridad-control-movimientos-jabas/dialog-registrar-estado-control-movmientos-jabas/dialog-registrar-estado-control-movmientos-jabas.component';
 
-import { AgGridModule} from 'ag-grid-angular';
+import { AgGridModule } from 'ag-grid-angular';
 import { DialogRegistroHojaMedidaComponent } from './components/auditoria-calidad/auditoria-hoja-medida/dialog-auditoria-hoja-medida/dialog-registro-hoja-medida/dialog-registro-hoja-medida.component';
 import { DialogObservacionHojaMedidaComponent } from './components/auditoria-calidad/auditoria-hoja-medida/dialog-auditoria-hoja-medida/dialog-observacion-hoja-medida/dialog-observacion-hoja-medida.component';
 import { ControlActivoFijoComponent } from './components/control-activo-fijo/control-activo-fijo.component';
@@ -257,7 +257,7 @@ import { DialogAprobacionReposicionComponent } from './components/reposiciones/a
 import { DialogGenerarDespachoComponent } from './components/reposiciones/generar-despacho/dialog-generar-despacho/dialog-generar-despacho.component';
 import { DialogDetalleReposicionComponent } from './components/reposiciones/historial-reposicion/dialog-detalle-reposicion/dialog-detalle-reposicion.component';
 import { DialogRecepcionReposicionComponent } from './components/reposiciones/historial-reposicion/dialog-recepcion-reposicion/dialog-recepcion-reposicion.component';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { PantallaReposicionesComponent } from './components/reposiciones/pantalla-reposiciones/pantalla-reposiciones.component';
 import { RegistrarTransitoCosturaComponent } from './components/reposiciones/registrar-transito-costura/registrar-transito-costura.component';
 import { RegistrarTransitoCorteComponent } from './components/reposiciones/registrar-transito-corte/registrar-transito-corte.component';
@@ -387,8 +387,8 @@ import { DialogModificalongitudmallaComponent } from './components/arranquetejed
 import { DialogModificalongitudmalla2Component } from './components/arranquetejeduria/dialog-modificalongitudmalla2/dialog-modificalongitudmalla2.component';
 import { ProduccionInspeccionSalidaListComponent } from './components/produccion-inspeccion-salida-list/produccion-inspeccion-salida-list.component';
 import { DialogProduccionInspeccionSalidaCrearComponent } from './components/produccion-inspeccion-salida-list/dialog-produccion-inspeccion-salida-crear/dialog-produccion-inspeccion-salida-crear.component';
-import { DialogVerImagenInspeccionComponent} from './components/auditoria-externa/auditoria-final-externa/dialog-auditoria-externo/dialog-ver-imagen-inspeccion/dialog-ver-imagen-inspeccion.component';
-import { VistaPreviaAuditoriaExternaComponent  } from './components/auditoria-externa/auditoria-final-externa/dialog-auditoria-externo/vista-previa-auditoria-externa/vista-previa-auditoria-externa.component';
+import { DialogVerImagenInspeccionComponent } from './components/auditoria-externa/auditoria-final-externa/dialog-auditoria-externo/dialog-ver-imagen-inspeccion/dialog-ver-imagen-inspeccion.component';
+import { VistaPreviaAuditoriaExternaComponent } from './components/auditoria-externa/auditoria-final-externa/dialog-auditoria-externo/vista-previa-auditoria-externa/vista-previa-auditoria-externa.component';
 import { DialogCrearImagenesAuditoriaFinalComponent } from './components/auditoria-externa/auditoria-final-externa/dialog-auditoria-externo/dialog-crear-imagenes-auditoria-final/dialog-crear-imagenes-auditoria-final.component';
 import { DialogVerAuditoriaFinalComponent } from './components/auditoria-externa/auditoria-final-externa/dialog-auditoria-externo/dialog-ver-auditoria-final/dialog-ver-auditoria-final.component';
 import { DialogRegistrarDespachoComponent } from './components/auditoria-externa/auditoria-final-externa/dialog-auditoria-externo/dialog-registrar-despacho/dialog-registrar-despacho.component';
@@ -415,7 +415,7 @@ import { DialogRegistrarDetalleChecklistComponent } from './components/check-lis
 import { DialogChecklistDefectosCosturaComponent } from './components/check-list-ingreso-costura/dialog-checklist-defectos-costura/dialog-checklist-defectos-costura.component';
 import { DialogRegistrarDefectosCosturaComponent } from './components/check-list-ingreso-costura/dialog-registrar-defectos-costura/dialog-registrar-defectos-costura.component';
 import { DialogRegistrarDatosIngresoComponent } from './components/check-list-ingreso-costura/dialog-registrar-datos-ingreso/dialog-registrar-datos-ingreso.component';
-import { VistaPreviaChecklistDefectosComponent  } from './components/check-list-ingreso-costura/vista-previa-checklist-defectos/vista-previa-checklist-defectos.component';
+import { VistaPreviaChecklistDefectosComponent } from './components/check-list-ingreso-costura/vista-previa-checklist-defectos/vista-previa-checklist-defectos.component';
 import { ReporteJabasOpComponent } from './components/reporte-jabas-op/reporte-jabas-op.component';
 import { ReporteAlmacenArteComponent } from './components/reporte-almacen-arte/reporte-almacen-arte.component';
 import { DialogHojaIngenieriaOperacionVerComponent } from './components/hoja-ingenieria-operacion-list/dialog-hoja-ingenieria-operacion-ver/dialog-hoja-ingenieria-operacion-ver.component';
@@ -425,7 +425,7 @@ import { AuditoriaAcabadosComponent } from './components/auditoria-calidad/audit
 import { AuditoriaAcabadosDetalleComponent } from './components/auditoria-calidad/auditoria-acabados/auditoria-acabados-detalle/auditoria-acabados-detalle.component';
 import { DialogObservacionAcabadosMedidaComponent } from './components/auditoria-calidad/auditoria-acabados/dialog-auditoria-acabados-medida/dialog-observacion-acabados-medida/dialog-observacion-acabados-medida.component';
 import { DialogRegistroAcabadosMedidaComponent } from './components/auditoria-calidad/auditoria-acabados/dialog-auditoria-acabados-medida/dialog-registro-acabados-medida/dialog-registro-acabados-medida.component';
-import { ProdTejeRectilineoComponent} from './components/tejeduria/prod-teje-rectilineo';
+import { ProdTejeRectilineoComponent } from './components/tejeduria/prod-teje-rectilineo';
 import { ProdTejeRectilineoRegistroComponent } from './components/tejeduria/prod-teje-rectilineo-registro/prod-teje-rectilineo-registro';
 import { DialogAddProdTejeRectilineoComponent } from './components/tejeduria/prod-teje-rectilineo-registro/dialog-add-prod-teje-rectilineo-registro/dialog-add-prod-teje-rectilineo-registro';
 import { DigitalizacionFichasComponent } from './components/digitalizacion-fichas/digitalizacion-fichas.component';
@@ -516,9 +516,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { CalificacionRollosProcesoComponent } from './components/calificacion-rollos-proceso/calificacion-rollos-proceso.component';
 import { ModalSeleccionPartidaComponent } from './components/calificacion-rollos-proceso/modal-seleccion-partida.component';
 import { ModalSeleccionPartidaFComponent } from './components/calificacion-rollos-final/modal-seleccion-partida.component';
-import {ModalMetrosComponent} from './components/calificacion-rollos-proceso/modal-metros.component';
-import {ModalMetrosFComponent} from './components/calificacion-rollos-final/modal-metros.component';
-import { LecturaRollosEmbalajeComponent } from './components/lectura-rollos-embalaje/lectura-rollos-embalaje.component'
+import { ModalMetrosComponent } from './components/calificacion-rollos-proceso/modal-metros.component';
+import { ModalMetrosFComponent } from './components/calificacion-rollos-final/modal-metros.component';
+import { LecturaRollosEmbalajeComponent } from './components/lectura-rollos-embalaje/lectura-rollos-embalaje.component';
 import { DialogVisorRegComponent } from './components/estatus-control-tenido/dialog-visor-reg/dialog-visor-reg.component';
 import { EncogimientoPrendaComponent } from './components/confecciones/encogimiento-prenda/encogimiento-prenda.component';
 import { DialogEncogimientoPrendaRegistroComponent } from './components/confecciones/encogimiento-prenda/dialog-encogimiento-prenda-registro/dialog-encogimiento-prenda-registro.component';
@@ -766,7 +766,6 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     DialogObservacionesCorteComponent,
     SaldoDevolverIndicadorComponent,
     SaldoDevolverComponent,
-    DialogObservacionesCorteComponent,
     VerAvancesComponent,
     VerRatioConsumoComponent,
     ConfeccionesAperturaTextilComponent,
@@ -897,7 +896,6 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     DialogGenerarPaqueteComponent,
     DialogMuestraPaquetesComponent,
     DialogImprimirTicketComponent,
-    DialogMantenimientoComponent,
     LiberarOpComponent,
     ModularLiquidacionAdicionalComponent,
     DialogMaestroBolsaTransComponent,
@@ -949,7 +947,6 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     DialogProduccionArtesCrearComponent,
     ProduccionInspeccionListComponent,
     DialogProduccionInspeccionCrearComponent,
-    DialogDetallePackComponent,
     SolicitudAgujasComponent,
     DialogAddSolicitudAgujasComponent,
     MantenimientoHoraComponent,
@@ -1037,7 +1034,6 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     LecturaQ2H4Component,
     ProgramaEmpastadoComponent,
     DialogProgramaEmpastadoComponent,
-    BusquedaRollosPartidaComponent,
     AuditoriaSalidaAcabadoComponent,
     DialogRegistrarSalidaAcabadoComponent,
     DialogDefectosSalidaAcabadoComponent,
@@ -1090,13 +1086,13 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     ModalSeleccionPartidaFComponent,
     LecturaRollosEmbalajeComponent,
 
-    CortesEncogimientoComponent, //Cortes Encogimiento EIQ
-    ArranquetejeduriaVersionHistComponent,//Historial de Arranque de tejeduria Versión
-    CnfRegistroColgadoresComponent,//Bandeja de configuracion de colgadores
+    //Cortes Encogimiento EIQ
+    ArranquetejeduriaVersionHistComponent, //Historial de Arranque de tejeduria Versión
+    CnfRegistroColgadoresComponent, //Bandeja de configuracion de colgadores
     DialogRegistrarColgadoresComponent, //Dialogo de Crear Colgadores
-    CnfRegistroUbicacionesComponent,//Bandeja y configuracion de Tipos de Ubicaciones
+    CnfRegistroUbicacionesComponent, //Bandeja y configuracion de Tipos de Ubicaciones
     DialogRegistrarUbicacionesComponent,
-    CnfRegistroPresentacionComponent,//Presentacion MOBILE para colgadores.
+    CnfRegistroPresentacionComponent, //Presentacion MOBILE para colgadores.
     CnfRegistroColgadoresIngresoComponent,
     CnfRegistroColgadoresIngresoDetalleComponent,
     CnfReubicacionColgadoresComponent,
@@ -1108,8 +1104,8 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     LecturaRergistroQreComponent,
     TiemposImproductivosv2Component,
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent,
-    CalificacionRollosFinalComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ModalEditarDesgloseComponent, ConfirmDialogComponent,
-    GenerarQrComponent,ConsultaValesComponent, 
+    EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ModalEditarDesgloseComponent, ConfirmDialogComponent,
+    GenerarQrComponent, ConsultaValesComponent,
     
     //Memorandum en GRAL
     MemorandumGralComponent,
@@ -1123,11 +1119,9 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     ModalSeleccionPartidaQrComponent,
     ModalInformeComponent,
     ModalInformeCierreComponent,
-    CalificacionRollosFinalComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ModalEditarDesgloseComponent, ConfirmDialogComponent, QuejasReclamosv2Component,
+    QuejasReclamosv2Component,
     ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent,
-    DialogPendienteEmpaqueCajasComponent, 
-    EncogimientoPrendaComponent, 
-    DialogEncogimientoPrendaRegistroComponent, 
+    DialogPendienteEmpaqueCajasComponent,
     
     //RETIRO DE REPUESTOS
     RetiroRepuestosComponent,
@@ -1136,7 +1130,7 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     DialogRetiroRepuestosDetalleComponent,
     DialogRetiroRepuestosDetalleNuevoComponent,
   
-    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent ,
+    LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent,
     EvidenciaEmpaqueCajaComponent,
     DialogCapturarFotoCajaComponent,
 
@@ -1158,42 +1152,42 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     DialogSolicitudMntoCreateComponent,
     DialogSolicitudMntoInformeComponent,
     SolicitudMantenimientoMaquinaVisorComponent,
-    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent, DialogCapturarFotoCajaComponent, EvidenciaEmpaqueCajaComponent, ReporteVehiculoInmovilizadoComponent 
+    ReporteVehiculoInmovilizadoComponent,
     
     //TIEMPOS IMPRODUCTIVOS V3
-    ,TiemposImproductivosv3Component,
+    TiemposImproductivosv3Component,
 
     //COTIZACIONES
-    CotizacionesComponent
+    CotizacionesComponent,
     
-    ,TomaFotoPersonasComponent
-    ,ModalQuejaReclamoNuevoComponent
-    ,StatusReqAlmacenComponent
-    ,RecoFacialComponent
+    TomaFotoPersonasComponent,
+    ModalQuejaReclamoNuevoComponent,
+    StatusReqAlmacenComponent,
+    RecoFacialComponent,
     //APROBACION DESARROLLO TELAS
-    ,AprobacionDesarrolloTelasComponent
-    ,AprobacionDesarrolloTelasEditComponent
+    AprobacionDesarrolloTelasComponent,
+    AprobacionDesarrolloTelasEditComponent,
 
     //AGENDA TELEFONICA
-    ,AgendaTelefonicaComponent
+    AgendaTelefonicaComponent,
 
     //Control Primera Partida
-    ,ControlPrimeraPartidaComponent    
-    ,ProcesarConfirmacionModalComponent
+    ControlPrimeraPartidaComponent,
+    ProcesarConfirmacionModalComponent,
 
     //LECTURA BULTOS
-    ,LecturaBultosComponent
-    ,LecturaBultosDetComponent
+    LecturaBultosComponent,
+    LecturaBultosDetComponent,
 
     //SALDO HILO TELA
-    ,SaldoHiloTelaComponent
-    ,SaldoHiloTelaProgramadaComponent
+    SaldoHiloTelaComponent,
+    SaldoHiloTelaProgramadaComponent,
 
     //MANTENIMIENTO DE MAQUINAS REPORTE
-    ,SolicitudMantenimientoMaquinaReporteComponent
+    SolicitudMantenimientoMaquinaReporteComponent,
   
-    ,SaldoPruebaComponent
-    ,AuditoriaDevolDeHiloProgramadaComponent
+    SaldoPruebaComponent,
+    AuditoriaDevolDeHiloProgramadaComponent,
   ],
   entryComponents: [DialogJabaComponent],
   imports: [

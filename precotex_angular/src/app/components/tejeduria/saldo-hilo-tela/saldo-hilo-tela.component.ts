@@ -5,6 +5,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SeguimientoSaldoHiloService } from 'src/app/services/tejeduria/seguimiento-saldo-hilo.service';
 import { SaldoHiloTelaProgramadaComponent } from './saldo-hilo-tela-programada/saldo-hilo-tela-programada.component';
+import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
+import { GlobalVariable } from 'src/app/VarGlobals';
 
 interface data_det {
   cod_Maquina   : string,
@@ -38,6 +41,7 @@ export class SaldoHiloTelaComponent implements OnInit {
      private dialog               : MatDialog  ,
      private serviceSaldoHiloTela : SeguimientoSaldoHiloService,
      private SpinnerService       : NgxSpinnerService ,
+     private toastr               : ToastrService,
   ) { }
 
   ngOnInit(): void {
@@ -108,8 +112,98 @@ export class SaldoHiloTelaComponent implements OnInit {
        }
     });
     dialogRef.afterClosed().subscribe(() => {
-      //this.onGetMemorandums();
+      const sFecIni = this.range.get('start').value;
+      const sFecFin = this.range.get('end').value;
+      if (sFecIni && sFecFin) {
+        this.onDateRangeSelected(sFecIni, sFecFin);
+      }
     });    
+  }
+
+  onRevertir(row: any){
+    Swal.fire({
+      title: '¿Desea Revertir la Asignación?, Confirme',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No'
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+        const num_Traslado  = ''; 
+        const cod_OrdProv     = String(row.lote);
+        const cod_Ordtra_Ori  = String(row.ot);
+        const cod_Maquina_Ori = String(row.cod_Maquina);
+        const cod_HilTel      = String(row.cod_Hilado);
+        const cod_Color       = String(row.cod_Color || '');
+        const kg_Programado = 0;
+        const kg_Salida     = 0;
+        const kg_Consumo    = 0;
+        const kg_Devolver   = 0;
+        const estado  = '';
+        const cod_Ordtra_Des  = '';
+        const cod_Maquina_Des = '';
+        const cod_Usuario =   String(GlobalVariable.vusu);
+        
+        var data: any = 
+          {
+            "accion"        : "D",
+            "num_Traslado"  : num_Traslado,
+            "cod_OrdProv"   : cod_OrdProv,
+            "cod_Ordtra_Ori": cod_Ordtra_Ori,
+            "cod_Maquina_Ori": cod_Maquina_Ori,
+            "cod_HilTel"     : cod_HilTel,
+            "cod_Color"       : cod_Color,
+            "kg_Programado" : kg_Programado,
+            "kg_Salida"   : kg_Salida,
+            "kg_Consumo"  : kg_Consumo,
+            "kg_Devolver" : kg_Devolver,
+            "estado"      : estado,
+            "cod_Ordtra_Des"    : cod_Ordtra_Des,
+            "cod_Maquina_Des"   : cod_Maquina_Des,
+            "cod_Usuario"       : cod_Usuario
+          };
+
+        this.SpinnerService.show();
+        this.serviceSaldoHiloTela.postProceso(data).subscribe({
+          next: (response: any)=> {
+            if(response.success){
+              if (response.codeResult == 200){
+                this.toastr.success(response.message, '', {
+                  timeOut: 2500,
+                });
+                
+                // Reload main grid
+                const sFecIni = this.range.get('start').value;
+                const sFecFin = this.range.get('end').value;
+                if (sFecIni && sFecFin) {
+                  this.onDateRangeSelected(sFecIni, sFecFin);
+                }
+
+              }else if(response.codeResult == 201){
+                this.toastr.info(response.message, '', {
+                  timeOut: 2500,
+                });
+              }
+              this.SpinnerService.hide();
+            }else{
+              this.toastr.error(response.message, 'Cerrar', {
+                timeOut: 2500,
+              });
+              this.SpinnerService.hide();
+            }
+          },
+          error: (error) => {
+            this.SpinnerService.hide();
+            this.toastr.error(error.message, 'Cerrar', {
+            timeOut: 2500,
+            });
+          }
+        });            
+      }
+    });          
   }
 
   chgPendiente(event: any){
