@@ -104,21 +104,6 @@ MuestraMenu(){
     this.Cod_Empresa
   ).subscribe(
     (result: any) => {
-      // Find the menu key that belongs to Huachipa (case-insensitive)
-      const huachipaKey = Object.keys(result).find(k => k.toUpperCase().includes('HUACHIPA'));
-      if (huachipaKey) {
-        const exists = result[huachipaKey].some((sub: any) => sub.Ruta_Opcion === '/AuditoriaDevolHilo' || sub.Ruta_Opcion === 'AuditoriaDevolHilo');
-        if (!exists) {
-          result[huachipaKey].push({
-            Opcion: 'Auditoria devolucion de Hilo',
-            Ruta_Opcion: '/AuditoriaDevolHilo',
-            Des_Menu: huachipaKey,
-            Des_Opcion: 'Auditoria devolucion de Hilo - Tej'
-          });
-          // Sort alphabetically by option name
-          result[huachipaKey].sort((a: any, b: any) => a.Opcion.localeCompare(b.Opcion));
-        }
-      }
       this.Menu  = result;
       GlobalVariable.Global_menu = result;
       console.log(GlobalVariable.Global_menu);
