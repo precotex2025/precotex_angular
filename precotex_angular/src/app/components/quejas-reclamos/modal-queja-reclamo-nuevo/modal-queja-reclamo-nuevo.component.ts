@@ -119,10 +119,10 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
   codArea: string = ""; //01 - Comercial; 02 - Calidad
 
   //Botones
-  flgBtnAgregar: boolean = false;
-  flgBtnguardar: boolean = false;
-  flgBtnLimpiar: boolean = false;
-  flgBtnEnviar: boolean = true;
+  flgBtnAgregar : boolean = false;
+  flgBtnguardar : boolean = false;
+  flgBtnLimpiar : boolean = false;
+  flgBtnEnviar  : boolean = true;
 
 
   constructor(
@@ -840,19 +840,29 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
             if (response.totalElements > 0) {
 
                 const area =  response.elements[0]?.cod_Area;
-                console.log('area', area);
+                console.log('area x', area);
+                //console.log('estado x', this.data.Datos.cod_Estado);
 
-                if (area.trim() === '01' && this.data.Datos.cod_Estado.trim() === '01') {
-                  this.flgBtnAgregar = true;
-                  this.flgBtnguardar = true;
-                  this.flgBtnLimpiar = true;
-                }
+                if (this.data.Tipo == "E"){
+              
+                  //if (area.trim() === '01' && this.data.Datos.cod_Estado.trim() === '01') {
+                  if ((area.trim() === '01' || area.trim() === '02') && this.data.Datos.cod_Estado.trim() === '01') {
+                    console.log('Marca 100');
+                    this.flgBtnAgregar = true;
+                    this.flgBtnguardar = true;
+                    this.flgBtnLimpiar = true;
+                    //this.flgBtnEnviar = true;
+                  }
 
-                if ((area.trim() === '01' || area.trim() === '02') && this.data.Datos.cod_Estado.trim() >= '02') {
-                  console.log('ingresa aqui');
-                  this.flgBtnAgregar = true;
-                  this.flgBtnguardar = true;
-                  this.flgBtnLimpiar = true;
+                  if ((area.trim() === '01' || area.trim() === '02') && this.data.Datos.cod_Estado.trim() >= '02') {
+                    console.log('Marca 101');
+                    this.flgBtnAgregar = true;
+                    this.flgBtnguardar = true;
+                    this.flgBtnLimpiar = true;
+                    this.flgBtnEnviar = false;
+                  }
+                } else {
+                  console.log('marca 300');
                   this.flgBtnEnviar = false;
                 }
 
@@ -937,9 +947,9 @@ construirReclamoEstilo(element: any): ReclamoCliente {
   };
 }
 
-avanzaEstadoReclamo(id: Number){
+avanzaEstadoReclamo(sTipo: string, id: Number){
   this.SpinnerService.show();
-  this.registroQuejasReclamosService.AvanzaEstadoReclamo(Number(id)).subscribe({
+  this.registroQuejasReclamosService.AvanzaEstadoReclamo(String(sTipo), Number(id)).subscribe({
     next: (response: any) => {
           if(response.success){
             if (response.codeResult == 200){
@@ -975,7 +985,8 @@ enviarComercial(){
   const id = this.data.Datos.id;
 
   Swal.fire({
-    title: '¿Desea cerrar el caso y continuar con el informe?, Confirme',
+    //title: '¿Desea cerrar el caso y continuar con el informe?, Confirme',
+    title: '¿Desea cerrar las modificaciones y marcar el caso como listo para el siguiente proceso?, Confirme',
     icon: 'question',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
@@ -985,7 +996,7 @@ enviarComercial(){
   }).then((result) => {   
 
     if (result.isConfirmed) {
-      this.avanzaEstadoReclamo(id);
+      this.avanzaEstadoReclamo("01", id);
     }
       
   });

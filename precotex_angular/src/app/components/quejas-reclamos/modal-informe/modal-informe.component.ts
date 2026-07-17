@@ -109,7 +109,8 @@ export class ModalInformeComponent implements OnInit {
       }      
 
       Swal.fire({
-        title: '¿Desea enviar a comercial?, Confirme',
+        //title: '¿Desea enviar a comercial?, Confirme',
+        title: '¿Desea enviar este informe al área comercial para continuar con el proceso?, Confirme', 
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',

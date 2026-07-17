@@ -94,9 +94,13 @@ export class RegistroQuejasReclamosService {
       return this.http.get<any>(`${this.url}/getListaAreasCalidad`);
     }        
 
-    AvanzaEstadoReclamo(sId: number){
+    AvanzaEstadoReclamo(sTipo: string, sId: number){
       const headers = this.Header;
-      return this.http.post(`${this.url}/postAvanzaEstadoReclamo`, sId, { headers })
+      var data = {
+        "sTipo": sTipo,
+        "iId":sId
+      }
+      return this.http.post(`${this.url}/postAvanzaEstadoReclamo`, data, { headers })
     }   
 
     ProcesoConfirmarReclamo(data: any){

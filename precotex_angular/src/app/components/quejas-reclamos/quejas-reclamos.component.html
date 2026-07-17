@@ -96,7 +96,9 @@
             <!--FILA 3-->
             <div class="btn-group">
               <!-- Botón Buscar --> 
-              <button mat-raised-button color="primary" class="boton-buscar" (click)="buscar()"> <mat-icon>search</mat-icon> Buscar </button> <!-- Botón Nuevo --> <button mat-raised-button color="accent" class="boton-nuevo" (click)="nuevo2()"> <mat-icon>add_circle</mat-icon> Nuevo </button> <!-- Botón Exportar --> <button mat-raised-button color="warn" class="boton-excel" (click)="exportarExcel()"> <mat-icon>file_download</mat-icon> Exportar </button>                
+              <button mat-raised-button color="primary" class="boton-buscar" (click)="buscar()"> <mat-icon>search</mat-icon> Buscar </button> <!-- Botón Nuevo --> 
+              <button mat-raised-button color="accent" *ngIf="!bHabilitarBtnNuevo" class="boton-nuevo" (click)="nuevo2()"> <mat-icon>add_circle</mat-icon> Nuevo </button> <!-- Botón Exportar --> 
+              <button mat-raised-button color="warn" class="boton-excel" (click)="exportarExcel()"> <mat-icon>file_download</mat-icon> Exportar </button>                
             </div>
 
           </div>

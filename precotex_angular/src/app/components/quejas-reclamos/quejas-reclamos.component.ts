@@ -128,6 +128,7 @@ export class QuejasReclamosComponent implements OnInit {
   clienteFiltrados          : any[] = []; 
 
   //Nuevo Grilla
+  bHabilitarBtnNuevo: boolean = false;
 
 
 
@@ -214,8 +215,14 @@ export class QuejasReclamosComponent implements OnInit {
       next: (response) => {
         if(response.success){
             if (response.totalElements > 0) {
-                this.codArea = response.elements[0].cod_Area;
-                console.log('Area de Usuario', this.codArea);
+                this.codArea = String(response.elements[0].cod_Area);
+
+                //Habilitar Boton Nuevo
+                if (Number(this.codArea) === 2) {
+                    this.bHabilitarBtnNuevo = true;
+                }
+
+                console.log('Area de Usuario v', String(this.codArea));
             }
             else {
               this.matSnackBar.open("No existen registros..!!", 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 })
@@ -841,7 +848,7 @@ filtros
 
     //nueva validacion si es cod Area realiza el proceso de RECEPCIONADO
     if (this.codArea.trim() == '02' && item.cod_Estado == '01'){
-      this.avanzaEstadoReclamo(item.id);
+      this.avanzaEstadoReclamo("01",item.id);
       this.nuevoReclamo.cod_Estado = '02'; //Cambia el estado a 02 porque el area de calidad ingreso y lo toma como recepcionado
     }
 
@@ -1102,9 +1109,9 @@ filtros
 
 // }  
 
-avanzaEstadoReclamo(id: Number){
+avanzaEstadoReclamo(sTipo: string, id: Number){
       this.SpinnerService.show();
-      this.registroQuejasReclamosService.AvanzaEstadoReclamo(Number(id)).subscribe({
+      this.registroQuejasReclamosService.AvanzaEstadoReclamo(String(sTipo), Number(id)).subscribe({
         next: (response: any) => {
               if(response.success){
                 if (response.codeResult == 200){

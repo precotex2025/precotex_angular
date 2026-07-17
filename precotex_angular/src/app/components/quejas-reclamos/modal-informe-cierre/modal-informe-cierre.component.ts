@@ -109,7 +109,8 @@ export class ModalInformeCierreComponent implements OnInit {
       }       
 
       Swal.fire({
-        title: '¿Desea cerrar el caso / reclamo?, Confirme',
+        //title: '¿Desea cerrar el caso / reclamo?, Confirme',
+        title:'¿Confirma que quiere dar por cerrado el reclamo y concluir el proceso?',
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -235,9 +236,9 @@ export class ModalInformeCierreComponent implements OnInit {
   
   onReenviarInforme(){
 
-
       Swal.fire({
-        title: '¿Desea reenviar el caso / reclamo al area de calidad?, Confirme',
+        //title: '¿Desea reenviar el caso / reclamo al area de calidad?, Confirme',
+        title: '¿Desea devolver el caso al área de calidad para adjuntar evidencia adicional o actualizar el informe?',
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -247,14 +248,45 @@ export class ModalInformeCierreComponent implements OnInit {
       }).then((result) => {   
 
         if (result.isConfirmed) {
-
-          
-
+          this.avanzaEstadoReclamo("02", Number(this.data.Datos.id));
         }
 
       });    
     
   }
+
+  avanzaEstadoReclamo(sTipo: string, id: Number){
+    this.SpinnerService.show();
+    this.RegistroQuejasReclamosService.AvanzaEstadoReclamo(String(sTipo), Number(id)).subscribe({
+      next: (response: any) => {
+            if(response.success){
+              if (response.codeResult == 200){
+                this.toastr.success(response.message, '', {
+                  timeOut: 2500,
+                });
+                this.dialogRef.close();
+                //this.buscar()        
+
+              }else if(response.codeResult == 201){
+                this.toastr.info(response.message, '', {
+                  timeOut: 2500,
+                });
+              }
+              this.SpinnerService.hide();
+            }else{
+              this.toastr.error(response.message, 'Cerrar', {
+                timeOut: 2500,
+              });
+              this.SpinnerService.hide();
+            }
+
+      },
+      error: (err) => {
+        console.error('❌ Al intentar cambiar de estado recepcionado:', err);
+        alert('Error ❌ Al intentar cambiar de estado recepcionado.');
+      }
+    }); 
+  }  
   
 }
 
