@@ -94,6 +94,11 @@
                 <td mat-cell *matCellDef="let d" [ngClass]="{'fila-verde': d.flg_Lecturado === 'S'}"> {{d.flg_Lecturado}} </td>
             </ng-container>
 
+            <ng-container matColumnDef="cod_Usuario_Lectura">
+                <th mat-header-cell *matHeaderCellDef> Usuario lectura </th>
+                <td mat-cell *matCellDef="let d"> {{d.cod_Usuario_Lectura}} </td>
+            </ng-container>
+
             <!-- Lecturado -->
             <!-- <ng-container matColumnDef="lecturado">
                 <th mat-header-cell *matHeaderCellDef> Lecturado </th>

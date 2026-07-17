@@ -5,6 +5,8 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LecturaBultosService } from 'src/app/services/LecturaBultos/lectura-bultos.service';
 import { ToastrService } from 'ngx-toastr';
 
+import { GlobalVariable } from 'src/app/VarGlobals';
+
 interface data {
   Num_MovStk: string,
   Cod_Almacen: string
@@ -18,7 +20,7 @@ interface data {
 export class LecturaBultosDetComponent implements OnInit, AfterViewInit {
   @ViewChild('movimientoInput') movimientoInput!: ElementRef;
 
-  displayedColumns: string[] = ['num_Corre', 'peso_Neto', 'fec_Registro', 'cod_Usuario', 'flg_Lecturado'];
+  displayedColumns: string[] = ['num_Corre', 'peso_Neto', 'fec_Registro', 'cod_Usuario', 'flg_Lecturado', 'cod_Usuario_Lectura'];
   dataSource = new MatTableDataSource<any>([]);
   movimiento: any = {};
   totalBultos: number = 0;
@@ -81,7 +83,8 @@ export class LecturaBultosDetComponent implements OnInit, AfterViewInit {
     const data = {
       Num_MovStk: Num_MovStk,
       Cod_Almacen: Cod_Almacen,
-      Num_Corre: Num_Corre
+      Num_Corre: Num_Corre,
+      Cod_Usuario: GlobalVariable.vusu
     }
 
     this.service.patchLecturarBulto(data).subscribe({
