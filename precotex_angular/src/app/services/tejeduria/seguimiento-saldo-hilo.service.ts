@@ -14,12 +14,12 @@ export class SeguimientoSaldoHiloService {
   });
   constructor(private http: HttpClient) { }
 
-  getListaOT_Programada(Cod_OrdProv, Cod_HilTel){
+  getListaOT_Programada(Cod_OrdProv, Tit_Hilado){
 
     const headers = this.Header;
     let params = new HttpParams();
     params = params.append('Cod_OrdProv', Cod_OrdProv);
-    params = params.append('Cod_HilTel', Cod_HilTel);
+    params = params.append('Tit_Hilado', Tit_Hilado);
 
     return this.http.get(this.baseUrlTinto + 'TjSeguimientoSaldoHilo/getListaOT_Programada', { headers, params });
   }  
