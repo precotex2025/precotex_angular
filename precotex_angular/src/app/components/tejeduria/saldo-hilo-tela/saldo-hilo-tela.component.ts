@@ -18,7 +18,7 @@ interface data_det {
   fec_Termino   : string,
   cod_Hilado    : string,
   articulo      : number,
-
+  cod_hiltel?   : string,
 }
 
 @Component({
