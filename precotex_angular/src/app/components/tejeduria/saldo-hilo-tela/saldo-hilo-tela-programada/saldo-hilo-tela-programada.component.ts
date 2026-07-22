@@ -84,11 +84,12 @@ export class SaldoHiloTelaProgramadaComponent implements OnInit {
   }
 
   onLoadOTProgramadas(){
-    const valorLote: String = this.data.Datos.lote;
+    const valorLote: String = String(this.data.Datos.lote || '').trim();
+    const valorHilado: String = String(this.data.Datos.titulo || '').trim();
 
     this.dataSource.data = [];
     this.SpinnerService.show();
-    this.serviceSaldoHiloTela.getListaOT_Programada(valorLote, "").subscribe({
+    this.serviceSaldoHiloTela.getListaOT_Programada(valorLote, valorHilado).subscribe({
       next: (response: any)=> {
         if(response.success){
           if (response.totalElements > 0){
