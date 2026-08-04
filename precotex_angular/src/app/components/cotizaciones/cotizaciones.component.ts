@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { CotizacionesService } from 'src/app/services/cotizaciones/cotizaciones.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -223,10 +223,18 @@ export class CotizacionesComponent implements OnInit {
   */
   expandedRows: Set<string> = new Set(); // usamos el pro_Hover como clave
 
-  isDisabledBtnSave   = false; 
+  isDisabledBtnSave   = false;
   isDisabledBtnEdit   = false;
   isDisabledBtnDelete = false;
   isDisabledBtnFind   = false;
+
+  // --- Estado de presentación (rediseño UX) ---
+  panelCriteriosAbierto = true;
+  densidad: 'compacta' | 'comoda' = 'compacta';
+
+  // Tabla de solo lectura + panel lateral de edición
+  filaEnEdicion: any = null;
+  tipoEdicion: 'utilidad' | 'ajuste' | 'cotizacion' | null = null;
 
   displayedColumns: string[] = [
     'hover',
@@ -331,6 +339,60 @@ export class CotizacionesComponent implements OnInit {
         this.expandedRows.add(row.pro_Hover); // expandir
       }
     }
+  }
+
+  // --- Estado de presentación (rediseño UX) ---
+
+  toggleCriterios() {
+    this.panelCriteriosAbierto = !this.panelCriteriosAbierto;
+  }
+
+  onDensidadChange(valor: 'compacta' | 'comoda') {
+    this.densidad = valor;
+  }
+
+  abrirEdicion(row: any, tipo: 'utilidad' | 'ajuste' | 'cotizacion') {
+    if (tipo === 'ajuste' && (!row.pro_Tot_Com || row.pro_Tot_Com === 0)) {
+      return; // misma condición que antes bloqueaba el input embebido
+    }
+    this.filaEnEdicion = row;
+    this.tipoEdicion = tipo;
+  }
+
+  cerrarEdicion() {
+    this.filaEnEdicion = null;
+    this.tipoEdicion = null;
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapePress() {
+    if (this.filaEnEdicion) {
+      this.cerrarEdicion();
+    }
+  }
+
+  get resumenCriterios(): { label: string, value: string }[] {
+    const v = this.formulario.value;
+    const chips: { label: string, value: string }[] = [];
+
+    const undNeg = this.unidadesNegocio.find(u => u.codigo === v.unidadNegocio);
+    if (undNeg) chips.push({ label: 'Und. Negocio', value: undNeg.descripcion });
+
+    const tipo = this.tipoUnidadesNegocio.find(t => t.codigo === v.tipo);
+    if (tipo) chips.push({ label: 'Tipo', value: tipo.descripcion });
+
+    const cliente = this.dataClientes.find(c => c.cod_Cliente_Tex === v.cliente);
+    if (cliente) chips.push({ label: 'Cliente', value: cliente.abr_Cliente });
+
+    if (v.codigoTela) chips.push({ label: 'Tela', value: v.codigoTela });
+
+    const ruta = this.RutaXCodTela.find(r => r.codigo === v.codigoRutaTela);
+    if (ruta) chips.push({ label: 'Ruta', value: ruta.nombre });
+
+    const color = this.listaCodigoColor.find(c => c.codigo === v.color);
+    if (color) chips.push({ label: 'Color', value: color.descripcion });
+
+    return chips;
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -755,6 +817,7 @@ export class CotizacionesComponent implements OnInit {
     //DesHabilita botoneria
     this.bMuestraMenuFlotante = false;
     this.isDisabledBtnFind    = false;
+    this.panelCriteriosAbierto = true; // vuelve a mostrar el formulario completo
 
     this.formulario.get('filtro')?.setValue(''); 
     this.formulario.get('filtroColores')?.setValue(''); 
@@ -788,7 +851,11 @@ export class CotizacionesComponent implements OnInit {
       next: (response: any)=> {
         if(response.success){
           if (response.totalElements > 0){
-              this.dataClientes = response.elements;
+              // "label" es el texto que muestra el <ng-select> (bindLabel="label")
+              this.dataClientes = response.elements.map((c: any) => ({
+                ...c,
+                label: c.abr_Cliente + ' - ' + c.nom_Cliente
+              }));
               this.SpinnerService.hide();
 
               if (codigoCliente && codigoCliente.trim() !== ''){
@@ -809,6 +876,9 @@ export class CotizacionesComponent implements OnInit {
     });   
   }  
 
+  // NOTA: filtrarClientes()/filtrarColores() y los controles filtro/filtroColores
+  // quedaron sin uso en el template tras migrar Cliente/Color a <ng-select>, que
+  // filtra por su cuenta. Se dejan declarados para no tocar el payload del form.
   filtrarClientes() {
     //this.tipoFallaFiltrada = [];
     const filtroTexto = this.formulario.get('filtro')?.value?.toLowerCase();
@@ -1093,6 +1163,7 @@ export class CotizacionesComponent implements OnInit {
 
   onBuscar() {
     this.mostrarRutaDetalle();
+    this.panelCriteriosAbierto = false; // colapsa criterios y deja toda la altura a la tabla
   }
 
   guardarObservacion(row: any){

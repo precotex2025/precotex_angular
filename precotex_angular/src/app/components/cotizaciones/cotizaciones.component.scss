@@ -1,388 +1,746 @@
-.cotizacion-header-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  padding: 16px;
-  background-color: #FFF;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+/* ============================================================
+   COTIZACIONES — HOJA DE ESTILOS
+   Rediseño UX: workspace de 2 zonas (criterios colapsables +
+   tabla de costeo a pantalla completa) sobre design tokens.
+
+   Las Secciones 1-3 (tokens) son portables: cuando se defina el
+   sistema de diseño global, copiar tal cual a src/styles.scss
+   dentro de :root y quitar el prefijo ":host" de aquí.
+   ============================================================ */
+
+:host {
+  /* --- 1. TOKENS: PRIMITIVAS (paleta cruda, no usar directo) --- */
+  --c-indigo-900: #1a237e;
+  --c-indigo-700: #303f9f;
+  --c-indigo-500: #3f51b5;   /* = primary del tema indigo-pink de Material */
+  --c-indigo-050: #e8eaf6;
+
+  --c-neutral-900: #0f172a;  /* texto principal      16.1:1 sobre blanco */
+  --c-neutral-600: #475569;  /* texto secundario      7.5:1 */
+  --c-neutral-400: #94a3b8;  /* texto deshabilitado */
+  --c-neutral-200: #e2e8f0;  /* bordes */
+  --c-neutral-100: #f1f5f9;  /* superficie alterna */
+  --c-neutral-050: #f8fafc;  /* fondo de página */
+  --c-white:       #ffffff;
+
+  --c-success-700: #2e7d32;  /* 4.9:1 */
+  --c-success-050: #e8f5e9;
+  --c-warning-800: #8a4b00;  /* 7.0:1 — no usar #ed6c02 en texto (falla AA) */
+  --c-warning-050: #fff4e5;
+  --c-danger-700:  #c62828;  /* 5.9:1 */
+  --c-danger-050:  #ffebee;
+  --c-info-700:    #0277bd;  /* 5.1:1 */
+  --c-info-050:    #e1f5fe;
+
+  /* --- 2. TOKENS: SEMÁNTICOS (rol de cada color) --- */
+  --color-brand:          var(--c-indigo-500);
+  --color-brand-hover:    var(--c-indigo-700);
+  --color-brand-subtle:   var(--c-indigo-050);
+  --color-text:           var(--c-neutral-900);
+  --color-text-muted:     var(--c-neutral-600);
+  --color-text-disabled:  var(--c-neutral-400);
+  --color-border:         var(--c-neutral-200);
+  --color-surface:        var(--c-white);
+  --color-surface-sunken: var(--c-neutral-050);
+  --color-surface-alt:    var(--c-neutral-100);
+  --color-focus-ring:     rgba(63, 81, 181, 0.35);
+
+  /* Roles de fila de la tabla de costeo — reemplazan .cuadro-* / .fila-r */
+  --row-group-bg:    var(--c-neutral-100);  /* proceso padre agrupador */
+  --row-subtotal-bg: var(--c-warning-050);  /* pro_Tip === 'R' */
+  --row-total-bg:    var(--c-indigo-050);   /* fila de cotización final */
+  --row-hover-bg:    #eef2ff;
+  --row-zebra-bg:    var(--c-neutral-050);
+
+  --cell-editable-bg: var(--c-white);
+  --cell-editable-bd: var(--c-neutral-400);
+
+  /* --- 3. TOKENS: ESCALAS --- */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;  --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px;
+
+  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px; --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, .06);
+  --shadow-md: 0 2px 8px rgba(15, 23, 42, .10);
+  --shadow-lg: 0 8px 24px rgba(15, 23, 42, .14);
+
+  --font-ui: Roboto, "Helvetica Neue", sans-serif;
+  --fs-xs: 11px; --fs-sm: 12px; --fs-md: 14px; --fs-lg: 16px; --fs-xl: 20px;
+  --fw-regular: 400; --fw-medium: 500; --fw-bold: 600;
+
+  /* Densidad de tabla — la cambia el toggle Compacta/Cómoda, no un @media */
+  --row-h-compacta: 34px;
+  --row-h-comoda:   44px;
+  --row-h: var(--row-h-compacta);
+
+  display: block;
+  height: 100%;
+  font-family: var(--font-ui);
+  color: var(--color-text);
 }
 
-.select-field {
-  flex: 1 1 200px;
-  min-width: 180px;
+/* La densidad se activa con una clase en .cot-workspace (raíz del template),
+   no en :host — Angular no permite [class] sobre el propio host desde el
+   template sin @HostBinding, y las variables CSS igual cascan hacia abajo. */
+.cot-workspace.densidad-comoda {
+  --row-h: var(--row-h-comoda);
 }
 
-.botones {
-  grid-column: span 2;       /* ocupa dos columnas */
-  display: flex;
-  justify-content: flex-start; /* alinea a la derecha */
-  gap: 1rem;                 /* espacio entre botones */
-}
+/* ============================================================
+   SECCIÓN 4 — LAYOUT DE PÁGINA
+   ============================================================ */
 
-.cuadro-verde {
-  flex: 1 1 100%;
-  background-color: #e0f7e9;
-  border-left: 6px solid #4caf50;
-  padding: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  margin-top: 12px;
-  overflow-x: auto;
-}
-
-.cuadro-rojo {
-  flex: 1 1 100%;
-  background-color: #e0f7e9;
-  border-left: 6px solid #c21f40;
-  padding: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  margin-top: 12px;
-  overflow-x: auto;
-}
-
-.cuadro-naranja {
-  flex: 1 1 100%;
-  background-color: #e0f7e9;
-  border-left: 6px solid #fb6f24;
-  padding: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  margin-top: 12px;
-  overflow-x: auto;
-}
-
-.cuadro-naranja {
-  flex: 1 1 100%;
-  background-color: #e0f7e9;
-  border-left: 6px solid #fb6f24;
-  padding: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  margin-top: 12px;
-  overflow-x: auto;
-}
-
-.cuadro-azul {
-  flex: 1 1 100%;
-  background-color: #e0f7e9;
-  border-left: 6px solid #2f2bad;
-  padding: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  margin-top: 12px;
-  overflow-x: auto;
-}
-
-.cuadro-amarillo {
-  flex: 1 1 100%;
-  background-color: #e0f7e9;
-  border-left: 6px solid #f7db15;
-  padding: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  margin-top: 12px;
-  overflow-x: auto;
-}
-
-.cuadro-morado {
-  flex: 1 1 100%;
-  background-color: #e0f7e9;
-  border-left: 6px solid #a351a2;
-  padding: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  margin-top: 12px;
-  overflow-x: auto;
-}
-
-.form-grid {
+.cot-workspace {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem; /* espacio mínimo entre filas */
-
+  gap: var(--sp-4);
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: var(--sp-4) var(--sp-5);
 }
 
-.row-grid {
+.cot-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+.cot-toolbar__title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+
+  h1 {
+    margin: 0;
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-bold);
+    color: var(--color-text);
+  }
+}
+
+.cot-toolbar__count {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.cot-densidad-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.cot-densidad-label {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  font-weight: var(--fw-medium);
+}
+
+.cot-densidad ::ng-deep .mat-button-toggle-label-content {
+  line-height: 32px;
+  padding: 0 var(--sp-3);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-sm);
+}
+
+.cot-densidad ::ng-deep .mat-button-toggle-checked {
+  background: var(--color-brand-subtle);
+  color: var(--color-brand-hover);
+  font-weight: var(--fw-bold);
+}
+
+/* ============================================================
+   SECCIÓN 5 — PANEL DE CRITERIOS
+   ============================================================ */
+
+.cot-criterios {
+  flex: 0 0 auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--sp-4);
+  transition: padding 0.15s ease;
+}
+
+.cot-criterios--colapsado {
+  padding: var(--sp-2) var(--sp-4);
+}
+
+/* --- Estado colapsado: resumen tipo chip --- */
+.cot-criterios__resumen {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.cot-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.cot-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--radius-pill);
+  background: var(--color-brand-subtle);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+
+.cot-chip__label {
+  color: var(--color-text-muted);
+  font-weight: var(--fw-medium);
+}
+
+.cot-chip__value {
+  color: var(--color-text);
+  font-weight: var(--fw-bold);
+}
+
+.cot-btn-editar {
+  flex: 0 0 auto;
+}
+
+/* --- Estado expandido: formulario ---
+   Grid fijo de 4 columnas (no auto-fit): 7 campos + Cliente a doble ancho
+   llenan exactamente 2 filas completas, así todo queda en columnas
+   predecibles en vez de reacomodarse según el espacio libre. */
+.cot-form-grid {
   display: grid;
-  grid-template-columns: 1.5fr 1.3fr 2fr 1fr 2fr;
-  column-gap: 1rem;   /* espacio horizontal entre columnas */
-  height: 58px !important;
-
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-4);
+  align-items: end; /* alinea los campos por su borde inferior */
 }
 
-.select-field, .codigo-field, .descripcion-field {
+.cot-field {
+  width: 100%;
+  height: 56px; /* misma altura para mat-form-field y ng-select */
+}
+
+.cot-field--span2 {
+  grid-column: span 2;
+}
+
+/* ng-select estilizado para calzar EXACTO con mat-form-field appearance="outline":
+   mismo alto (56px) y misma etiqueta flotante sobre el borde superior. */
+.cot-field--select {
+  position: relative;
+}
+
+.cot-outline-label {
+  position: absolute;
+  top: -8px;
+  left: 10px;
+  padding: 0 4px;
+  background: var(--color-surface);
+  font-size: 11px;
+  line-height: 1;
+  color: var(--color-text-muted);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.cot-ng-select {
+  height: 56px;
+}
+
+.cot-ng-select ::ng-deep .ng-select-container {
+  height: 56px;
+  min-height: 56px;
+  border-radius: var(--radius-sm);
+  border-color: var(--color-border);
+  align-items: center;
+}
+
+.cot-ng-select ::ng-deep .ng-select-focused .ng-select-container,
+.cot-ng-select ::ng-deep.ng-select-focused .ng-select-container {
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+/* Fila de cierre: checkbox de historial a la izquierda, acciones a la derecha,
+   separada del grid por un borde para agrupar visualmente "buscar" de "filtrar". */
+.cot-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.cot-form-actions {
+  display: flex;
+  gap: var(--sp-3);
+}
+
+/* ============================================================
+   SECCIÓN 6 — TABLA DE COSTEO
+   ============================================================ */
+
+.cot-costeo {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.cot-tabla-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.cot-tabla {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Encabezado fijo */
+.cot-tabla ::ng-deep .mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+.cot-tabla ::ng-deep .mat-header-cell {
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  text-align: center;
+  justify-content: center;
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 2px solid var(--color-border);
+  white-space: nowrap;
+}
+
+/* Filas y celdas: densidad controlada por --row-h */
+.cot-tabla ::ng-deep .mat-row {
+  height: var(--row-h);
+  min-height: var(--row-h);
+  transition: background-color 0.1s ease;
+}
+
+.cot-tabla ::ng-deep .mat-row:nth-child(even) {
+  background: var(--row-zebra-bg);
+}
+
+.cot-tabla ::ng-deep .mat-row:hover {
+  background: var(--row-hover-bg);
+}
+
+.cot-tabla ::ng-deep .mat-cell {
+  padding: var(--sp-1) var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+  text-align: right; /* la mayoría de columnas son numéricas */
+  font-variant-numeric: tabular-nums;
+}
+
+/* Columna Descripción: texto a la izquierda, ancho reservado, sticky */
+.col-descripcion {
+  width: 260px;
+  min-width: 260px;
+  text-align: left !important;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: inherit;
+}
+
+th.col-descripcion {
+  z-index: 4;
+}
+
+/* Columna de expandir/colapsar: ancla el contexto en scroll horizontal */
+.col-hover {
+  width: 40px;
+  min-width: 40px;
+  text-align: center !important;
+  cursor: pointer;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: inherit;
+}
+
+.col-hover mat-icon {
+  font-size: var(--fs-md);
+  vertical-align: middle;
+  color: var(--color-text-muted);
+}
+
+/* Indentación por nivel jerárquico */
+.row-child .col-descripcion {
+  padding-left: var(--sp-6);
+}
+
+/* Celda editable: la tabla es de solo lectura, esto es un botón que abre
+   el panel lateral — se distingue de una celda plana por el borde punteado
+   y el ícono de lápiz que aparece al pasar el mouse. */
+.cot-cell-editable {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  padding: 3px var(--sp-2);
+  border: 1px dashed var(--cell-editable-bd);
+  border-radius: var(--radius-sm);
+  background: var(--cell-editable-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    color: var(--color-text-disabled);
+    opacity: 0;
+    transition: opacity 0.1s ease;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-brand);
+    border-style: solid;
+    background: var(--color-brand-subtle);
+
+    mat-icon { opacity: 1; color: var(--color-brand); }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    border-style: solid;
+  }
+}
+
+.cot-cell-editable--activa {
+  border-color: var(--color-brand);
+  border-style: solid;
+  background: var(--color-brand-subtle);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+
+  mat-icon { opacity: 1; color: var(--color-brand); }
+}
+
+.cot-cell-editable--total {
+  font-weight: var(--fw-bold);
+}
+
+/* Fila cuyo panel de edición está abierto */
+.row--seleccionada {
+  background: var(--color-brand-subtle) !important;
+}
+
+/* Filas semánticas — reemplazan .fila-r / .cotizacion-cell / .descripcion-f */
+.row--group td {
+  background: var(--row-group-bg);
+  font-weight: var(--fw-bold);
+}
+
+.row--child {
+  font-weight: var(--fw-regular);
+}
+
+.row--subtotal td {
+  background: var(--row-subtotal-bg);
+  color: var(--c-warning-800);
+  font-weight: var(--fw-bold);
+}
+
+.cell-total {
+  background: var(--row-total-bg);
+  color: var(--color-brand-hover);
+  font-weight: var(--fw-bold);
+}
+
+.row-hidden {
+  display: none;
+}
+
+/* Estado vacío */
+.cot-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-7) var(--sp-4);
+  color: var(--color-text-muted);
+
+  mat-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    color: var(--color-text-disabled);
+  }
+
+  p {
+    margin: 0;
+    font-size: var(--fs-md);
+  }
+}
+
+/* ============================================================
+   SECCIÓN 6B — PANEL LATERAL DE EDICIÓN (drawer)
+   Tabla de solo lectura + este panel para editar: separa "ver" de "editar".
+   ============================================================ */
+
+.cot-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.32);
+  z-index: 1000;
+}
+
+.cot-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 380px;
+  max-width: 92vw;
+  z-index: 1001;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  animation: cot-drawer-in 0.18s ease-out;
+}
+
+@keyframes cot-drawer-in {
+  from { transform: translateX(24px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.cot-drawer__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  border-bottom: 1px solid var(--color-border);
+
+  h3 {
+    margin: 2px 0 0;
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-bold);
+  }
+}
+
+.cot-drawer__eyebrow {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  font-weight: var(--fw-medium);
+}
+
+.cot-drawer__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.cot-drawer__contexto {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  background: var(--color-surface-sunken);
+  border-radius: var(--radius-md);
+}
+
+.cot-drawer__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  span {
+    font-size: var(--fs-xs);
+    color: var(--color-text-muted);
+  }
+
+  strong {
+    font-size: var(--fs-md);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.cot-drawer__field {
   width: 100%;
 }
 
-/* Cliente más ancho en fila 1 */
-.cliente-field {
-  grid-column: 3;
+.cot-drawer__hint {
+  margin: calc(var(--sp-3) * -1) 0 0;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
 }
 
-.tabla-procesos {
-  width: 100%;
- // border-collapse: collapse;
+.cot-drawer__footer {
+  padding: var(--sp-3) var(--sp-4);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: flex-end;
 }
 
-/* Reducir altura de filas */
-.tabla-procesos .mat-row,
-.tabla-procesos .mat-header-row {
-  min-height: 35px !important; /* antes ~52px */
-  height: 35px !important;
+/* ============================================================
+   SECCIÓN 7 — DIÁLOGOS
+   ============================================================ */
+
+.cot-dialog-precio-select {
+  margin-top: var(--sp-4);
 }
 
-/* Reducir padding de celdas */
-.tabla-procesos .mat-cell,
-.tabla-procesos .mat-header-cell {
-  padding: 2px 6px !important;
-  line-height: 1.2 !important;
-  font-size: 12px; /* opcional: fuente más pequeña */
-}
-
-/* Compactar los mat-form-field dentro de la tabla */
-.tabla-procesos .mat-form-field {
-  margin: 0 !important;
-  padding: 0 !important;
-  line-height: 1.2 !important;
-}
-
-.tabla-procesos .mat-form-field-infix {
-  padding: 0 !important;
-  border-top: 0 !important;
-}
-.mat-header-cell {
-  font-size: 18px;
-  font-weight: 600;
-  color: #000000;
-}
-
-.mat-cell {
-  color: #333;
+.cot-tabla-precios th.centrado,
+.cot-tabla-precios td.centrado {
   text-align: center;
 }
 
-@media screen and (max-width: 768px) {
-  .cotizacion-header-container {
+/* ============================================================
+   SECCIÓN 8 — RESPONSIVE (único bloque con @media)
+   ============================================================ */
+
+@media screen and (max-width: 1199px) {
+  .cot-workspace {
+    padding: var(--sp-3) var(--sp-4);
+  }
+
+  .cot-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cot-field--span2 {
+    grid-column: span 2;
+  }
+}
+
+@media screen and (max-width: 899px) {
+  .cot-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .cot-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cot-field--span2 {
+    grid-column: span 1;
+  }
+
+  .cot-form-footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .cot-form-actions {
+    flex-direction: column-reverse;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .cot-criterios__resumen {
     flex-direction: column;
+    align-items: stretch;
   }
 
-  .select-field {
-    width: 100%;
-  }
+  .cot-actionbar {
+    flex-direction: column-reverse;
 
-  .tabla-procesos {
-    font-size: 14px;
+    button {
+      width: 100%;
+    }
   }
 }
 
-.codigo-field, .descripcion-field {
-  flex: 1 1 200px;
-  min-width: 180px;
+/* ============================================================
+   SECCIÓN 9 — UTILIDADES Y ANIMACIONES
+   ============================================================ */
+
+.btn-azul {
+  background-color: var(--color-brand);
+  color: var(--c-white);
 }
 
-.descripcion-field input {
-  font-weight: 500;
+.cot-actionbar {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.cot-actionbar button[disabled] {
+  opacity: 0.6;
 }
 
 .spinner-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
   height: 100vh;
 }
 
 .spinner-text {
-  color: white;
+  color: var(--c-white);
   font-size: 1.2rem;
-  margin-bottom: 30px;
+  margin-bottom: var(--sp-6);
   text-align: center;
 }
-
 
 .loader {
-    position: relative;
-    width: 85px;
-    height: 50px;
-    background-repeat: no-repeat;
-    background-image: linear-gradient(#FFF 50px, transparent 0),
-                      linear-gradient(#FFF 50px, transparent 0),
-                      linear-gradient(#FFF 50px, transparent 0),
-                      linear-gradient(#FFF 50px, transparent 0),
-                      linear-gradient(#FFF 50px, transparent 0),
-                      linear-gradient(#FFF 50px, transparent 0);
-    background-position: 0px center, 15px center, 30px center, 45px center, 60px center, 75px center, 90px center;
-    animation: rikSpikeRoll 0.65s linear infinite alternate;
-  }
+  position: relative;
+  width: 85px;
+  height: 50px;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(#FFF 50px, transparent 0),
+                    linear-gradient(#FFF 50px, transparent 0),
+                    linear-gradient(#FFF 50px, transparent 0),
+                    linear-gradient(#FFF 50px, transparent 0),
+                    linear-gradient(#FFF 50px, transparent 0),
+                    linear-gradient(#FFF 50px, transparent 0);
+  background-position: 0px center, 15px center, 30px center, 45px center, 60px center, 75px center, 90px center;
+  animation: rikSpikeRoll 0.65s linear infinite alternate;
+}
+
 @keyframes rikSpikeRoll {
-  0% { background-size: 10px 3px;}
-  16% { background-size: 10px 50px, 10px 3px, 10px 3px, 10px 3px, 10px 3px, 10px 3px}
-  33% { background-size: 10px 30px, 10px 50px, 10px 3px, 10px 3px, 10px 3px, 10px 3px}
-  50% { background-size: 10px 10px, 10px 30px, 10px 50px, 10px 3px, 10px 3px, 10px 3px}
-  66% { background-size: 10px 3px, 10px 10px, 10px 30px, 10px 50px, 10px 3px, 10px 3px}
-  83% { background-size: 10px 3px, 10px 3px,  10px 10px, 10px 30px, 10px 50px, 10px 3px}
-  100% { background-size: 10px 3px, 10px 3px, 10px 3px,  10px 10px, 10px 30px, 10px 50px}
-}
-    
-
-.ajuste-cell {
-  text-align: center;   
-  color: red;         
-}
-
-.ajuste-cell input {
-  text-align: center;   
-  color: red;       
-  font-weight: 600;  
-}
-
-.mat-header-cell {
-  text-align: center;
-  justify-content: center; 
-  font-weight: 600;       
-}
-
-.subgrupo-row {
-  background-color: #f1f8e9;
-}
-
-.subgrupo-row td:first-child {
-  padding-left: 24px;
-  font-weight: 600;
-  color: #388e3c;
-}
-.hidden {
-  display: none;
-}
-
-
-.expandible-row {
-  background-color: #eff2f3;
-  cursor: pointer;
-}
-
-.col-achi{
-  width: 250px;
-  text-align: left;
-}
-
-.fila-r td {
-  background-color: #fad7a3;
-  font-weight: bold;
-  color: #000000; 
-}
-
-.fila-r td span {
-  display: block;
-  // text-align: left;
-}
-
-.cotizacion-cell {
-  background-color: #fad7a3;
-  font-weight: bold;
-  color: #000000;
-}
-
-.cotizacion-cell span {
-  display: block;
-  text-align: center;
-}
-
-.descripcion-f {
-  background-color: #eff2f3;
-  font-weight: bold;
-  color: #424242;
-}
-
-/* Color Botones */
-.btn-azul {
-    background-color: #3f51b5;
-    color: #fff;
-    width: 150px;
-    height: 45px;
-}
-
-.btn-amarillo {
-  background-color: #ffeb3b; /* amarillo Material */
-  color: #000;   
-    width: 150px;
-    height: 45px;             /* texto negro para contraste */
-}
-
-.btn-verde {
-    background-color: #4caf50;
-    color: #fff;
-    width: 150px;
-    height: 45px;
-}
-
-
-.opciones {
-  position: fixed; 
-  bottom: 60px;      
-  right: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  animation: fadeIn 0.3s forwards;
-  z-index: 1000; 
-}
-
-.boton-flotante {
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-
-  mat-icon { font-size: 24px; }
-}
-
-.boton-flotante.save { background-color:  #4caf50; }
-.boton-flotante.edit { background-color: #1565c0; }
-.boton-flotante.delete { background-color:  #d32f2f; }
-
-button:disabled {
-  background-color: #ccc !important;   /* Fondo gris */
-  color: #666 !important;              /* Texto/ícono gris */
-  cursor: not-allowed;                 /* Cursor de prohibido */
-  opacity: 0.7;                        /* Un poco más tenue */
-}
-
-.tabla-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  padding: 1rem;
-  box-sizing: border-box;
-}
-
-.fila-seleccionada {
-  background-color: rgba(63, 81, 181, 0.1); /* azul suave */
-}
-
-::ng-deep .mat-select-panel .sticky-option {
-  position: sticky;
-  top: 0;
-  background: #fff;   /* fondo sólido para que no se mezcle */
-  z-index: 2;         /* asegura que quede encima */
-}
-
-.bloque-historial {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #f9f9f9;
-
-  mat-checkbox {
-    font-weight: 600;
-    color: #333;
-  }
+  0% { background-size: 10px 3px; }
+  16% { background-size: 10px 50px, 10px 3px, 10px 3px, 10px 3px, 10px 3px, 10px 3px; }
+  33% { background-size: 10px 30px, 10px 50px, 10px 3px, 10px 3px, 10px 3px, 10px 3px; }
+  50% { background-size: 10px 10px, 10px 30px, 10px 50px, 10px 3px, 10px 3px, 10px 3px; }
+  66% { background-size: 10px 3px, 10px 10px, 10px 30px, 10px 50px, 10px 3px, 10px 3px; }
+  83% { background-size: 10px 3px, 10px 3px,  10px 10px, 10px 30px, 10px 50px, 10px 3px; }
+  100% { background-size: 10px 3px, 10px 3px, 10px 3px,  10px 10px, 10px 30px, 10px 50px; }
 }

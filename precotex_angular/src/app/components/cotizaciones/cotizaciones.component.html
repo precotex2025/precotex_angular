@@ -1,285 +1,338 @@
-<div class="cotizacion-header-container">
-  <form [formGroup]="formulario" #formDirective="ngForm"> 
-    <div class="form-grid">
+<div class="cot-workspace" [class.densidad-comoda]="densidad === 'comoda'">
 
+  <header class="cot-toolbar">
+    <div class="cot-toolbar__title">
+      <h1>Cotizaciones</h1>
+      <span class="cot-toolbar__count" *ngIf="dataSource.data?.length">
+        {{ dataSource.data.length }} procesos
+      </span>
+    </div>
 
-  <!-- Fila 1 -->
-    <div class="row-grid" >
-  <mat-form-field appearance="outline" class="select-field">
-    <mat-label>Und. Negocio</mat-label>
-    <mat-select formControlName="unidadNegocio" (selectionChange)="chgUnidadNegocio()">
-      <mat-option *ngFor="let unidad of unidadesNegocio" [value]="unidad.codigo">
-        {{ unidad.descripcion }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+    <div class="cot-densidad-wrap" *ngIf="dataSource.data?.length">
+      <span class="cot-densidad-label">Vista de tabla</span>
+      <mat-button-toggle-group class="cot-densidad" [value]="densidad"
+        (change)="onDensidadChange($event.value)" aria-label="Densidad de la tabla">
+        <mat-button-toggle value="compacta" matTooltip="Filas más juntas, ideal para ver muchos procesos">
+          <mat-icon>density_small</mat-icon> Compacta
+        </mat-button-toggle>
+        <mat-button-toggle value="comoda" matTooltip="Filas más espaciadas, más fácil de tocar/leer">
+          <mat-icon>density_medium</mat-icon> Cómoda
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+  </header>
 
-  <mat-form-field appearance="outline" class="select-field">
-    <mat-label>Tipo Und. Negocio</mat-label>
-    <mat-select formControlName="tipo" (selectionChange)="chgTipo()">
-      <mat-option *ngFor="let t of tipoUnidadesNegocio" [value]="t.codigo">
-        {{ t.descripcion }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <!-- Zona de criterios: colapsa a resumen luego de Buscar -->
+  <section class="cot-criterios" [class.cot-criterios--colapsado]="!panelCriteriosAbierto">
 
-  <mat-form-field appearance="outline" class="select-field cliente-field">
-    <mat-label>Cliente</mat-label>
-    <mat-select formControlName="cliente" (selectionChange)="onChangeCliente()">
-
-      <mat-option class="sticky-option" disabled>
-        <input matInput placeholder="Buscar..." formControlName="filtro"
-               (ngModelChange)="filtrarClientes()"
-               (click)="$event.stopPropagation()"
-               (keydown)="$event.stopPropagation()" autocomplete="off">
-      </mat-option> 
-      
-      <mat-option *ngFor="let cli of ClientesFiltrada" [value]="cli.cod_Cliente_Tex">
-        {{ cli.abr_Cliente + ' - ' + cli.nom_Cliente }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="codigo-field">
-    <mat-label>Código de tela</mat-label>
-    <input [textMask]="{mask: maskCodigo}" matInput formControlName="codigoTela"
-           (keyup.enter)="buscarDescripcionTela()" placeholder="AA000000"/>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="descripcion-field">
-    <mat-label>Descripción</mat-label>
-    <input matInput formControlName="descripcionTela" readonly />
-  </mat-form-field>
-</div>
-  <!-- Fila 2 -->
-   <div class="row-grid">
-  <mat-form-field appearance="outline" class="select-field">
-    <mat-label>Ruta</mat-label>
-    <!-- <mat-select formControlName="codigoRutaTela" (selectionChange)="mostrarRutaDetalle($event.value)"> -->
-    <mat-select formControlName="codigoRutaTela">
-      <mat-option *ngFor="let ruta of RutaXCodTela" [value]="ruta.codigo">{{ ruta.nombre }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <!--
-  <mat-form-field appearance="outline" class="codigo-field">
-    <mat-label>Código de Color</mat-label>
-    <input matInput formControlName="codigoColor" (keyup)="validaCodigoColor()" maxlength="6" />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="descripcion-field">
-    <mat-label>Descripción</mat-label>
-    <input matInput formControlName="descripcionColor" readonly />
-  </mat-form-field>    
--->
-
-  <!--
-  <mat-form-field appearance="outline" class="select-field">
-    <mat-label>Color</mat-label>
-    <mat-select formControlName="color" (selectionChange)="onChangeColor()">
-      <mat-option *ngFor="let color of listaCodigoColor" [value]="color.codigo">
-        {{ color.descripcion }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  -->
-  	<!-- (selectionChange)="onChangeColor()" -->
-  <mat-form-field appearance="outline" class="select-field">
-    <mat-label>Color</mat-label>
-    <mat-select formControlName="color" >
-	  <mat-option class="sticky-option" disabled>
-        <input matInput placeholder="Buscar..." formControlName="filtroColores"
-               (ngModelChange)="filtrarColores()"
-               (click)="$event.stopPropagation()"
-               (keydown)="$event.stopPropagation()" autocomplete="off">		
-	  </mat-option> 
-	
-      <mat-option *ngFor="let color of ColoresFiltrada" [value]="color.codigo">
-        {{ color.descripcion }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-
-
-
-
-
-
-  <div class="botones">
-
-  <mat-checkbox formControlName="ctrl_historial"
-  (change)="onHistorialChange($event)">
-    Ver Historial
-  </mat-checkbox>
-
-    <!-- [disabled]="!isDisabledBtnFind" -->
-     
-    <button mat-flat-button class="btn-azul" (click)="onBuscar()" >
-        <mat-icon>search</mat-icon> Buscar
-    </button>   
-
-    <button mat-flat-button class="btn-azul" (click)="onLimpiarFiltros()">
-        <mat-icon>refresh</mat-icon> Limpiar Filtro
-    </button>      
-</div>  
-
-
-  <!-- <mat-form-field appearance="outline" class="select-field">
-    <mat-label>Intensidad</mat-label>
-    <mat-select formControlName="intensidad">
-      <mat-option *ngFor="let intensidad of intensidad" [value]="intensidad.codigo">
-        {{ intensidad.descripcion }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>          -->
+    <div class="cot-criterios__resumen" *ngIf="!panelCriteriosAbierto">
+      <div class="cot-chips">
+        <span class="cot-chip" *ngFor="let c of resumenCriterios">
+          <span class="cot-chip__label">{{ c.label }}</span>
+          <span class="cot-chip__value">{{ c.value }}</span>
+        </span>
       </div>
-       </div>
-  </form>
+      <button mat-stroked-button class="cot-btn-editar" (click)="toggleCriterios()">
+        <mat-icon>edit</mat-icon> Editar criterios
+      </button>
+    </div>
 
+    <form [formGroup]="formulario" #formDirective="ngForm" *ngIf="panelCriteriosAbierto">
+      <div class="cot-form-grid">
 
+        <mat-form-field appearance="outline" class="cot-field">
+          <mat-label>Und. Negocio</mat-label>
+          <mat-select formControlName="unidadNegocio" (selectionChange)="chgUnidadNegocio()">
+            <mat-option *ngFor="let unidad of unidadesNegocio" [value]="unidad.codigo">
+              {{ unidad.descripcion }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-  <!-- Recuadro verde con tabla -->
-  <div class="cuadro-verde" *ngIf="codigoRutaTela && unidadNegocio=='1'">
-    <table mat-table [dataSource]="dataSource" class="tabla-procesos">
-    
-      <!-- Hover -->
-      <ng-container matColumnDef="hover">
-        <th mat-header-cell *matHeaderCellDef>/</th>
-        <td mat-cell *matCellDef="let row" (click)="toggleExpand(row)" [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">
-          {{ row.pro_Hover }}
-          <!-- <mat-icon *ngIf="row.isParent && row.tieneHijos" style="cursor:pointer">
-            {{ expandedRows.has(row.pro_Hover) ? 'expand_less' : 'expand_more' }}
-          </mat-icon> -->
-        </td>
-      </ng-container>
-    
-      <!-- Descripción -->
-      <ng-container matColumnDef="descripcion">
-        <th mat-header-cell *matHeaderCellDef class="col-achi">Descripción</th>
-        <td mat-cell *matCellDef="let row" class="col-achi" [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">{{ row.pro_Des }}</td>
-      </ng-container>
-    
-      <!-- Factor -->
-      <ng-container matColumnDef="factor">
-        <th mat-header-cell *matHeaderCellDef>Factor</th>
-        <td mat-cell *matCellDef="let row">
-         <span *ngIf="!(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            {{ row.pro_Factor }}
-          </span>
-        </td>
-      </ng-container>
-    
-      <!-- Costo Kg -->
-      <ng-container matColumnDef="cosKg">
-        <th mat-header-cell *matHeaderCellDef>Costo Kg</th>
-        <td mat-cell *matCellDef="let row">
+        <mat-form-field appearance="outline" class="cot-field">
+          <mat-label>Tipo Und. Negocio</mat-label>
+          <mat-select formControlName="tipo" (selectionChange)="chgTipo()">
+            <mat-option *ngFor="let t of tipoUnidadesNegocio" [value]="t.codigo">
+              {{ t.descripcion }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-          <!--TIPO SUBTOTAL - "UTILIDAD" -->
-          <mat-form-field appearance="standard" *ngIf="row.cod_Subtotal == 2" style="text-align: left !important;">
-            <span matSuffix>%
-            <input matInput type="number" [(ngModel)]="row.pro_Cos_Kg" (ngModelChange)="recalcularUtilidad(row)" />
+        <div class="cot-field cot-field--select cot-field--span2">
+          <label class="cot-outline-label">Cliente</label>
+          <ng-select formControlName="cliente" class="cot-ng-select"
+            bindLabel="label" bindValue="cod_Cliente_Tex"
+            [items]="dataClientes" [searchable]="true" [clearable]="true"
+            appendTo="body" placeholder="Buscar cliente..."
+            (change)="onChangeCliente()">
+          </ng-select>
+        </div>
+
+        <mat-form-field appearance="outline" class="cot-field">
+          <mat-label>Código de tela</mat-label>
+          <input [textMask]="{mask: maskCodigo}" matInput formControlName="codigoTela"
+                 (keyup.enter)="buscarDescripcionTela()" placeholder="AA000000"/>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="cot-field">
+          <mat-label>Descripción</mat-label>
+          <input matInput formControlName="descripcionTela" readonly />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="cot-field">
+          <mat-label>Ruta</mat-label>
+          <mat-select formControlName="codigoRutaTela">
+            <mat-option *ngFor="let ruta of RutaXCodTela" [value]="ruta.codigo">
+              {{ ruta.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="cot-field cot-field--select">
+          <label class="cot-outline-label">Color</label>
+          <ng-select formControlName="color" class="cot-ng-select"
+            bindLabel="descripcion" bindValue="codigo"
+            [items]="listaCodigoColor" [searchable]="true" [clearable]="true"
+            appendTo="body" placeholder="Buscar color...">
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="cot-form-footer">
+        <mat-checkbox formControlName="ctrl_historial" (change)="onHistorialChange($event)">
+          Ver Historial
+        </mat-checkbox>
+
+        <div class="cot-form-actions">
+          <button mat-stroked-button type="button" (click)="onLimpiarFiltros()">
+            <mat-icon>refresh</mat-icon> Limpiar filtro
+          </button>
+          <button mat-flat-button type="button" class="btn-azul" (click)="onBuscar()">
+            <mat-icon>search</mat-icon> Buscar
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <!-- Zona de costeo: recibe toda la altura restante -->
+  <section class="cot-costeo" *ngIf="codigoRutaTela && unidadNegocio=='1'">
+    <div class="cot-tabla-scroll">
+      <table mat-table [dataSource]="dataSource" class="cot-tabla">
+
+        <!-- Hover / expandir-colapsar -->
+        <ng-container matColumnDef="hover">
+          <th mat-header-cell *matHeaderCellDef class="col-hover">/</th>
+          <td mat-cell *matCellDef="let row" class="col-hover"
+              (click)="toggleExpand(row)" [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">
+            <mat-icon *ngIf="row.isParent && row.tieneHijos">
+              {{ expandedRows.has(row.pro_Hover) ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+            <ng-container *ngIf="!(row.isParent && row.tieneHijos)">{{ row.pro_Hover }}</ng-container>
+          </td>
+        </ng-container>
+
+        <!-- Descripción -->
+        <ng-container matColumnDef="descripcion">
+          <th mat-header-cell *matHeaderCellDef class="col-descripcion">Descripción</th>
+          <td mat-cell *matCellDef="let row" class="col-descripcion"
+              [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">{{ row.pro_Des }}</td>
+        </ng-container>
+
+        <!-- Factor -->
+        <ng-container matColumnDef="factor">
+          <th mat-header-cell *matHeaderCellDef>Factor</th>
+          <td mat-cell *matCellDef="let row">
+            <span *ngIf="!(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
+              {{ row.pro_Factor }}
             </span>
-          </mat-form-field>          
-        
-          <span *ngIf="row.cod_Subtotal != 2 && !(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'" style="text-align: right !important;">
-            {{ row.pro_Cos_Kg }}
-          </span>
-        </td>
-      </ng-container>
-    
-      <!-- Total -->
-      <ng-container matColumnDef="total">
-        <th mat-header-cell *matHeaderCellDef>Total</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="row.pro_Tip !== 'R'" style="text-align: right !important;">{{ row.pro_Tot }}</span>
-        </td>
-      </ng-container>
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="totalComercial">
-        <th mat-header-cell *matHeaderCellDef>Total Comercial</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot_Com }}</span>
-        </td>
-      </ng-container>
-    
-      <!-- Ajuste -->
-      <ng-container matColumnDef="ajuste">
-        <th mat-header-cell *matHeaderCellDef>Ajuste</th>
-        <td mat-cell *matCellDef="let row" class="ajuste-cell">
-          <mat-form-field appearance="standard" *ngIf="row.isParent && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            <input matInput type="number" [(ngModel)]="row.pro_Aju" (ngModelChange)="recalcular(row)" (keydown.enter)="abrirDialog(row)" (blur)="validarObservacion(row, $event)"
-            [disabled]="!row.pro_Tot_Com || row.pro_Tot_Com === 0" />
-            <!-- [disabled]="isAjusteBloqueado || !row.pro_Tot_Com || row.pro_Tot_Com === 0" -->
-          </mat-form-field>
-          <span *ngIf="row.isChild && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-            <!-- <span *ngIf="!row.isParent && !row.isChild"> -->
+        <!-- Costo Kg -->
+        <ng-container matColumnDef="cosKg">
+          <th mat-header-cell *matHeaderCellDef>Costo Kg</th>
+          <td mat-cell *matCellDef="let row">
+
+            <!-- TIPO SUBTOTAL - "UTILIDAD": abre panel lateral, la tabla es solo lectura -->
+            <button type="button" class="cot-cell-editable" *ngIf="row.cod_Subtotal == 2"
+              [class.cot-cell-editable--activa]="filaEnEdicion === row && tipoEdicion === 'utilidad'"
+              (click)="abrirEdicion(row, 'utilidad')">
+              {{ row.pro_Cos_Kg }}%
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <span *ngIf="row.cod_Subtotal != 2 && !(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
+              {{ row.pro_Cos_Kg }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Total -->
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef>Total</th>
+          <td mat-cell *matCellDef="let row">
+            <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalComercial">
+          <th mat-header-cell *matHeaderCellDef>Total Comercial</th>
+          <td mat-cell *matCellDef="let row">
+            <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot_Com }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Ajuste -->
+        <ng-container matColumnDef="ajuste">
+          <th mat-header-cell *matHeaderCellDef>Ajuste</th>
+          <td mat-cell *matCellDef="let row">
+            <button type="button" class="cot-cell-editable"
+              *ngIf="row.isParent && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'"
+              [class.cot-cell-editable--activa]="filaEnEdicion === row && tipoEdicion === 'ajuste'"
+              [disabled]="!row.pro_Tot_Com || row.pro_Tot_Com === 0"
+              (click)="abrirEdicion(row, 'ajuste')">
+              {{ row.pro_Aju || 0 }}
+              <mat-icon>edit</mat-icon>
+            </button>
+            <span *ngIf="row.isChild && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
               {{ row.pro_Aju }}
-            <!-- </span> -->
-          </span>
-        </td>
-      </ng-container>
-    
-      <!-- Cotización -->
-      <ng-container matColumnDef="cotizacion">
-        <th mat-header-cell *matHeaderCellDef>Cotización</th>
-        <td mat-cell *matCellDef="let row" class="cotizacion-cell">
+            </span>
+          </td>
+        </ng-container>
 
-          <mat-form-field appearance="standard" *ngIf="row.cod_Subtotal == 4">
-            <input matInput type="number" [(ngModel)]="row.pro_Cotizacion" (ngModelChange)="recalcularPrecioFinal(row)" />
-          </mat-form-field>                 
+        <!-- Cotización -->
+        <ng-container matColumnDef="cotizacion">
+          <th mat-header-cell *matHeaderCellDef>Cotización</th>
+          <td mat-cell *matCellDef="let row" class="cell-total">
 
-          <span *ngIf="row.cod_Subtotal != 4 && !row.isChild">
-            <!-- <ng-container *ngIf="row.pro_Tip === 'R' && row.pro_Des === 'RENTABILIDAD'; else cotizacionNormal"> -->
-            <ng-container *ngIf="row.cod_Subtotal == 5 ; else cotizacionNormal">
-              {{ row.pro_Por | number:'1.2-2' }} %
-            </ng-container>
-            <ng-template #cotizacionNormal>
+            <button type="button" class="cot-cell-editable cot-cell-editable--total" *ngIf="row.cod_Subtotal == 4"
+              [class.cot-cell-editable--activa]="filaEnEdicion === row && tipoEdicion === 'cotizacion'"
+              (click)="abrirEdicion(row, 'cotizacion')">
               {{ row.pro_Cotizacion | number:'1.2-2' }}
-            </ng-template>
-          </span>
-        </td>
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <span *ngIf="row.cod_Subtotal != 4 && !row.isChild">
+              <ng-container *ngIf="row.cod_Subtotal == 5; else cotizacionNormal">
+                {{ row.pro_Por | number:'1.2-2' }} %
+              </ng-container>
+              <ng-template #cotizacionNormal>
+                {{ row.pro_Cotizacion | number:'1.2-2' }}
+              </ng-template>
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="porcentaje">
+          <th mat-header-cell *matHeaderCellDef>Porcentaje</th>
+          <td mat-cell *matCellDef="let row">{{ row.pro_Por }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="TipoUbicacion">
+          <th mat-header-cell *matHeaderCellDef>Tipo</th>
+          <td mat-cell *matCellDef="let row">{{ row.pro_Tip }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"
+          [class.row-hidden]="row.isChild && !expandedRows.has(row.padreKey)"
+          [class.row--group]="row.isParent && row.tieneHijos"
+          [class.row-child]="row.isChild"
+          [class.row--seleccionada]="filaEnEdicion === row"
+          [ngClass]="{'row--subtotal': row.pro_Tip === 'R'}">
+        </tr>
+      </table>
+
+      <div class="cot-empty" *ngIf="!dataSource.data?.length">
+        <mat-icon>inventory_2</mat-icon>
+        <p>No hay procesos para mostrar. Ajusta los criterios de búsqueda.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Panel lateral de edición: la tabla es solo lectura, editar abre este panel -->
+  <div class="cot-drawer-backdrop" *ngIf="filaEnEdicion" (click)="cerrarEdicion()"></div>
+
+  <aside class="cot-drawer" *ngIf="filaEnEdicion" role="dialog" aria-modal="true">
+    <div class="cot-drawer__header">
+      <div>
+        <span class="cot-drawer__eyebrow">Editando</span>
+        <h3>{{ filaEnEdicion.pro_Des }}</h3>
+      </div>
+      <button mat-icon-button (click)="cerrarEdicion()" aria-label="Cerrar panel">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="cot-drawer__body">
+      <div class="cot-drawer__contexto">
+        <div class="cot-drawer__stat">
+          <span>Factor</span>
+          <strong>{{ filaEnEdicion.pro_Factor }}</strong>
+        </div>
+        <div class="cot-drawer__stat">
+          <span>Costo Kg</span>
+          <strong>{{ filaEnEdicion.pro_Cos_Kg }}</strong>
+        </div>
+        <div class="cot-drawer__stat">
+          <span>Total</span>
+          <strong>{{ filaEnEdicion.pro_Tot }}</strong>
+        </div>
+        <div class="cot-drawer__stat">
+          <span>Total Comercial</span>
+          <strong>{{ filaEnEdicion.pro_Tot_Com }}</strong>
+        </div>
+      </div>
+
+      <mat-form-field appearance="outline" class="cot-drawer__field" *ngIf="tipoEdicion === 'utilidad'">
+        <mat-label>% Utilidad</mat-label>
+        <input matInput type="number" [(ngModel)]="filaEnEdicion.pro_Cos_Kg"
+          [ngModelOptions]="{standalone: true}"
+          (ngModelChange)="recalcularUtilidad(filaEnEdicion)" />
+        <span matSuffix>%</span>
+      </mat-form-field>
+
+      <ng-container *ngIf="tipoEdicion === 'ajuste'">
+        <mat-form-field appearance="outline" class="cot-drawer__field">
+          <mat-label>Ajuste</mat-label>
+          <input matInput type="number" [(ngModel)]="filaEnEdicion.pro_Aju"
+            [ngModelOptions]="{standalone: true}"
+            (ngModelChange)="recalcular(filaEnEdicion)"
+            (keydown.enter)="abrirDialog(filaEnEdicion)"
+            (blur)="validarObservacion(filaEnEdicion, $event)" />
+        </mat-form-field>
+        <p class="cot-drawer__hint">
+          Si el ajuste cambia respecto al valor guardado, se pedirá una observación.
+        </p>
       </ng-container>
 
-      
-      <ng-container matColumnDef="porcentaje">
-        <th mat-header-cell *matHeaderCellDef>Porcentaje</th>
-        <td mat-cell *matCellDef="let row">{{ row.pro_Por }}</td>
-      </ng-container>
+      <mat-form-field appearance="outline" class="cot-drawer__field" *ngIf="tipoEdicion === 'cotizacion'">
+        <mat-label>Precio Final Cliente</mat-label>
+        <input matInput type="number" [(ngModel)]="filaEnEdicion.pro_Cotizacion"
+          [ngModelOptions]="{standalone: true}"
+          (ngModelChange)="recalcularPrecioFinal(filaEnEdicion)" />
+      </mat-form-field>
+    </div>
 
-      <ng-container matColumnDef="TipoUbicacion">
-        <th mat-header-cell *matHeaderCellDef>Tipo</th>
-        <td mat-cell *matCellDef="let row">{{ row.pro_Tip }}</td>
-      </ng-container>
-    
-      <!-- Header -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    
-      <!-- Filas -->
-      <!-- <tr mat-row *matRowDef="let row; columns: displayedColumns"
-        [class.hidden]="row.isChild && !expandedRows.has(row.padreKey)" [class.subgrupo-row]="row.isChild">
-      </tr> -->
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"
-        [class.hidden]="row.isChild && !expandedRows.has(row.padreKey)" [class.subgrupo-row]="row.isChild"
-        [class.expandible-row]="row.isParent && row.tieneHijos"
-        [ngClass]="{'fila-r': row.pro_Tip === 'R'}">
-      </tr>
-    </table>
-  </div>
+    <div class="cot-drawer__footer">
+      <button mat-flat-button class="btn-azul" (click)="cerrarEdicion()">Listo</button>
+    </div>
+  </aside>
 
-
-</div>
-
-<div class="opciones" *ngIf="bMuestraMenuFlotante">
-  <button class="boton-flotante save" [disabled]="!isDisabledBtnSave" (click)="onGuardar()" matTooltip="Guardar / Editar">
-    <mat-icon>save</mat-icon>
-  </button>
-  <button class="boton-flotante edit" [disabled]="!isDisabledBtnEdit" (click)="onEditar()" matTooltip="Modificar Cotización">
-    <mat-icon>edit</mat-icon>
-  </button>
-  <button class="boton-flotante delete" [disabled]="!isDisabledBtnDelete" (click)="onEliminar()" matTooltip="Eliminar Cotización">
-    <mat-icon>delete</mat-icon>
-  </button>
+  <!-- Barra de acciones -->
+  <footer class="cot-actionbar" *ngIf="bMuestraMenuFlotante">
+    <button mat-stroked-button [disabled]="!isDisabledBtnDelete" (click)="onEliminar()">
+      <mat-icon>delete</mat-icon> Eliminar
+    </button>
+    <button mat-stroked-button [disabled]="!isDisabledBtnEdit" (click)="onEditar()">
+      <mat-icon>edit</mat-icon> Modificar
+    </button>
+    <button mat-flat-button class="btn-azul" [disabled]="!isDisabledBtnSave" (click)="onGuardar()">
+      <mat-icon>save</mat-icon> Guardar
+    </button>
+  </footer>
 </div>
 
 
@@ -289,7 +342,6 @@
   <mat-dialog-content>
     <mat-form-field appearance="outline" style="width:100%">
       <mat-label>Observación</mat-label>
-      <!-- usa exactamente el mismo nombre -->
       <textarea matInput [(ngModel)]="data.observacion"></textarea>
     </mat-form-field>
   </mat-dialog-content>
@@ -300,82 +352,67 @@
 </ng-template>
 
 <ng-template #dialogListaPrecios let-data>
-  <h2 mat-dialog-title>Listado de Precios </h2>
+  <h2 mat-dialog-title>Listado de Precios</h2>
   <mat-dialog-content>
 
-    <!--Material-->
-    <table mat-table [dataSource]="dataSource_Precios" class="tabla-procesos">
+    <table mat-table [dataSource]="dataSource_Precios" class="cot-tabla cot-tabla-precios">
 
       <ng-container matColumnDef="opcion">
-        <th mat-header-cell *matHeaderCellDef> Opción </th>
-        <td mat-cell *matCellDef="let data_det"> 
+        <th mat-header-cell *matHeaderCellDef>Opción</th>
+        <td mat-cell *matCellDef="let data_det">
           <button mat-icon-button (click)="seleccionarFila(data_det)">
             <mat-icon>
               {{ filaSeleccionada === data_det ? 'check_circle' : 'radio_button_unchecked' }}
             </mat-icon>
-          </button>          
-        </td>    
-      </ng-container>   
+          </button>
+        </td>
+      </ng-container>
 
       <ng-container matColumnDef="corR_CARTA">
-          <th mat-header-cell *matHeaderCellDef class="centradoCabecera ">SDC</th>
-          <td mat-cell *matCellDef="let r" class="centrado ">{{ r.corR_CARTA }}</td>
-      </ng-container>     
+        <th mat-header-cell *matHeaderCellDef class="centrado">SDC</th>
+        <td mat-cell *matCellDef="let r" class="centrado">{{ r.corR_CARTA }}</td>
+      </ng-container>
 
       <ng-container matColumnDef="tiempo">
-          <th mat-header-cell *matHeaderCellDef class="centradoCabecera ">TIEMPO</th>
-          <td mat-cell *matCellDef="let r" class="centrado ">{{ r.tiempo }}</td>
-      </ng-container>         
-      
+        <th mat-header-cell *matHeaderCellDef class="centrado">TIEMPO</th>
+        <td mat-cell *matCellDef="let r" class="centrado">{{ r.tiempo }}</td>
+      </ng-container>
+
       <ng-container matColumnDef="preC_TINTO">
-          <th mat-header-cell *matHeaderCellDef class="centradoCabecera ">PRE. TINTO</th>
-          <td mat-cell *matCellDef="let r" class="centrado ">{{ r.preC_TINTO }}</td>
-      </ng-container>      
-      
-      <!-- <ng-container matColumnDef="preC_ACABADO">
-          <th mat-header-cell *matHeaderCellDef class="centradoCabecera ">PRE. ACAB.</th>
-          <td mat-cell *matCellDef="let r" class="centrado ">{{ r.preC_ACABADO }}</td>
-      </ng-container>  -->
-      
+        <th mat-header-cell *matHeaderCellDef class="centrado">PRE. TINTO</th>
+        <td mat-cell *matCellDef="let r" class="centrado">{{ r.preC_TINTO }}</td>
+      </ng-container>
+
       <ng-container matColumnDef="idrecetalabprod">
-          <th mat-header-cell *matHeaderCellDef class="centradoCabecera "> RECETA</th>
-          <td mat-cell *matCellDef="let r" class="centrado ">{{ r.idrecetalabprod }}</td>
+        <th mat-header-cell *matHeaderCellDef class="centrado">RECETA</th>
+        <td mat-cell *matCellDef="let r" class="centrado">{{ r.idrecetalabprod }}</td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns_Precio"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns_Precio;"></tr>      
-
+      <tr mat-row *matRowDef="let row; columns: displayedColumns_Precio;"></tr>
     </table>
 
-    <!-- Sección de selección de receta -->
-    <form [formGroup]="formulario_Precio" #formDirective="ngForm"> 
-      <div style="margin-top: 20px;">
-        <mat-form-field appearance="outline" style="width:100%">
-          <mat-label>Seleccionar Receta</mat-label>
-          <mat-select formControlName="ctrl_receta" (selectionChange)="onRecetaChange($event)">
-            <mat-option *ngFor="let receta of dataRecetas" [value]="receta.codigo">
-              {{ receta.descripcion }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>   
-    </form> 
+    <form [formGroup]="formulario_Precio" #formDirectivePrecio="ngForm" class="cot-dialog-precio-select">
+      <mat-form-field appearance="outline" style="width:100%">
+        <mat-label>Seleccionar Receta</mat-label>
+        <mat-select formControlName="ctrl_receta" (selectionChange)="onRecetaChange($event)">
+          <mat-option *ngFor="let receta of dataRecetas" [value]="receta.codigo">
+            {{ receta.descripcion }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
 
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-
-    <button mat-flat-button class="btn-azul" (click)="onSeleccionarPrecio()" >
-        <mat-icon>save</mat-icon> Seleccionar
-    </button>      
-
-    <button mat-flat-button class="btn-azul" (click)="onCancelarPrecio()" >
-        <mat-icon>close</mat-icon> Cancelar
-    </button>        
-    <!-- <button mat-button mat-dialog-close>Cancelar</button> -->
-    <!-- <button mat-button (click)="guardarObservacion(data)">Guardar</button> -->
-  </mat-dialog-actions>  
+    <button mat-flat-button class="btn-azul" (click)="onSeleccionarPrecio()">
+      <mat-icon>save</mat-icon> Seleccionar
+    </button>
+    <button mat-stroked-button (click)="onCancelarPrecio()">
+      <mat-icon>close</mat-icon> Cancelar
+    </button>
+  </mat-dialog-actions>
 </ng-template>
-
 
 
 <!-- Spinner global -->
