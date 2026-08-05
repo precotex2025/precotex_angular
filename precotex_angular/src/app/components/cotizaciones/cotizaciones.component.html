@@ -2,10 +2,14 @@
 
   <header class="cot-toolbar">
     <div class="cot-toolbar__title">
+      <div class="cot-toolbar__icon-circle">
+        <mat-icon>receipt_long</mat-icon>
+      </div>
       <h1>Cotizaciones</h1>
-      <span class="cot-toolbar__count" *ngIf="dataSource.data?.length">
+      <div class="cot-toolbar__badge" *ngIf="dataSource.data?.length">
+        <span class="cot-badge-dot"></span>
         {{ dataSource.data.length }} procesos
-      </span>
+      </div>
     </div>
 
     <div class="cot-densidad-wrap" *ngIf="dataSource.data?.length">
@@ -28,6 +32,7 @@
     <div class="cot-criterios__resumen" *ngIf="!panelCriteriosAbierto">
       <div class="cot-chips">
         <span class="cot-chip" *ngFor="let c of resumenCriterios">
+          <mat-icon>label</mat-icon>
           <span class="cot-chip__label">{{ c.label }}</span>
           <span class="cot-chip__value">{{ c.value }}</span>
         </span>
@@ -100,11 +105,11 @@
 
       <div class="cot-form-footer">
         <mat-checkbox formControlName="ctrl_historial" (change)="onHistorialChange($event)">
-          Ver Historial
+          <mat-icon>history</mat-icon> Ver Historial
         </mat-checkbox>
 
         <div class="cot-form-actions">
-          <button mat-stroked-button type="button" (click)="onLimpiarFiltros()">
+          <button mat-stroked-button type="button" class="btn-ghost" (click)="onLimpiarFiltros()">
             <mat-icon>refresh</mat-icon> Limpiar filtro
           </button>
           <button mat-flat-button type="button" class="btn-azul" (click)="onBuscar()">
@@ -317,17 +322,19 @@
     </div>
 
     <div class="cot-drawer__footer">
-      <button mat-flat-button class="btn-azul" (click)="cerrarEdicion()">Listo</button>
+      <button mat-flat-button class="btn-success" (click)="cerrarEdicion()">
+        <mat-icon>check</mat-icon> Listo
+      </button>
     </div>
   </aside>
 
   <!-- Barra de acciones -->
   <footer class="cot-actionbar" *ngIf="bMuestraMenuFlotante">
-    <button mat-stroked-button [disabled]="!isDisabledBtnDelete" (click)="onEliminar()">
-      <mat-icon>delete</mat-icon> Eliminar
+    <button mat-stroked-button class="btn-danger" [disabled]="!isDisabledBtnDelete" (click)="onEliminar()">
+      <mat-icon>delete_outline</mat-icon> Eliminar
     </button>
-    <button mat-stroked-button [disabled]="!isDisabledBtnEdit" (click)="onEditar()">
-      <mat-icon>edit</mat-icon> Modificar
+    <button mat-stroked-button class="btn-ghost" [disabled]="!isDisabledBtnEdit" (click)="onEditar()">
+      <mat-icon>edit_note</mat-icon> Modificar
     </button>
     <button mat-flat-button class="btn-azul" [disabled]="!isDisabledBtnSave" (click)="onGuardar()">
       <mat-icon>save</mat-icon> Guardar

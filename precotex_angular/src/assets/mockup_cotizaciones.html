@@ -274,6 +274,7 @@
       border-bottom: 1px solid var(--slate-200);
       padding-top: 10px;
       padding-bottom: 10px;
+      font-size: 14px;
     }
     .row-group-header:hover td {
       background: var(--indigo-50);
@@ -326,6 +327,18 @@
       color: var(--indigo-700);
       border-top: 2px solid var(--indigo-200);
       border-bottom: 2px solid var(--indigo-200);
+      font-size: 14px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+
+    /* ── Subtotal rows (Merma, Costo sin Utilidad, Utilidad) ── */
+    .row-subtotal td {
+      background: var(--slate-100);
+      font-weight: 700;
+      color: var(--slate-700);
+      border-top: 2px solid var(--slate-200);
+      border-bottom: 2px solid var(--slate-200);
       font-size: 14px;
       padding-top: 12px;
       padding-bottom: 12px;
@@ -512,6 +525,46 @@
     .fade-in { animation: fadeIn 0.35s cubic-bezier(0.4,0,0.2,1); }
     @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 
+    /* ── History panel ── */
+    .history-card {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 16px 20px; border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border); background: var(--white);
+      cursor: pointer; transition: all 0.2s; margin-bottom: 12px;
+    }
+    .history-card:last-child { margin-bottom: 0; }
+    .history-card:hover { border-color: var(--brand); background: var(--brand-light); box-shadow: var(--shadow-sm); }
+    .history-card--active { border-color: var(--brand); }
+    .history-dot {
+      width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+    }
+    .history-body { flex: 1; }
+    .history-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+    .history-version { font-size: 15px; font-weight: 700; color: var(--text); }
+    .history-badge {
+      display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px;
+      border-radius: var(--radius-pill); font-size: 11px; font-weight: 600;
+    }
+    .history-recent-tag {
+      font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: var(--radius-pill);
+      background: var(--teal-400); color: white; margin-left: auto;
+    }
+    .history-meta {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 12px; color: var(--text-muted);
+    }
+    .history-meta .material-icons-round { font-size: 14px; color: var(--slate-400); }
+    .history-sep { color: var(--slate-300); margin: 0 4px; }
+    .version-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 20px; border-bottom: 1px solid var(--indigo-100);
+      background: var(--indigo-50);
+    }
+    .version-bar__info { display: flex; align-items: center; gap: 8px; }
+    .version-bar__label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+    .version-bar__value { font-size: 13px; font-weight: 700; color: var(--brand); }
+
     [data-tooltip] { position: relative; }
     [data-tooltip]::after {
       content: attr(data-tooltip); position: absolute; bottom: calc(100% + 8px);
@@ -638,6 +691,16 @@
 
   <!-- ═══════════ TABLE ═══════════ -->
   <section class="card costeo-card" id="costeoSection" style="display:none;">
+    <div id="versionBar" class="version-bar" style="display:none;">
+      <div class="version-bar__info">
+        <span class="material-icons-round" style="font-size:18px;color:var(--brand)">history</span>
+        <span class="version-bar__label">Versión consultada:</span>
+        <span class="version-bar__value" id="versionLabel">—</span>
+      </div>
+      <button class="btn btn--ghost" onclick="backToHistory()" style="padding:6px 14px;font-size:12px;">
+        <span class="material-icons-round" style="font-size:16px">arrow_back</span> Volver al historial
+      </button>
+    </div>
     <div class="table-scroll">
       <table class="tabla" id="mainTable">
         <thead>
@@ -656,6 +719,22 @@
         </thead>
         <tbody id="tableBody"></tbody>
       </table>
+    </div>
+  </section>
+
+  <!-- ═══════════ HISTORY ═══════════ -->
+  <section class="card" id="historySection" style="display:none;">
+    <div style="padding: var(--sp-5) var(--sp-6) var(--sp-6);">
+      <div style="display:flex;align-items:center;gap:var(--sp-3);margin-bottom:var(--sp-5);">
+        <div style="width:40px;height:40px;border-radius:var(--radius-md);background:var(--gradient-brand);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(79,70,229,0.25);flex-shrink:0;">
+          <span class="material-icons-round" style="font-size:22px;color:white;">history</span>
+        </div>
+        <div>
+          <h2 style="font-size:16px;font-weight:700;color:var(--text);">Historial de Cotizaciones</h2>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:2px;">Selecciona una versión para visualizarla</p>
+        </div>
+      </div>
+      <div id="historyList"></div>
     </div>
   </section>
 
@@ -732,7 +811,7 @@
   const expanded = new Set(['MAT','TEJ','TIN','ACA']);
 
   // ─── Data ───
-  const groups = [
+  let groups = [
     { key:'MAT', desc:'MATERIALES', icon:'inventory_2', total:8.52, totCom:8.52, ajuste:0.15, cotizacion:8.67, children:[
       {desc:'Algodón Pima 30/1', factor:0.85, cosKg:7.20, total:6.12, totCom:6.12},
       {desc:'Lycra 20D', factor:0.15, cosKg:16.00, total:2.40, totCom:2.40},
@@ -751,14 +830,14 @@
     ]},
   ];
 
-  const summaryRows = [
+  let summaryRows = [
     { desc:'Merma (5%)', value: 0.70, cotVal: 0.72 },
     { desc:'Costo sin Utilidad', value: 14.67, cotVal: 15.14 },
   ];
 
-  const utilidad = { pct: 15, total: 2.20, totCom: 2.22, cotizacion: 2.27 };
-  const precioFinal = { total: 16.87, totCom: 17.04, ajuste: 0.30, cotizacion: 17.41 };
-  const rentabilidad = '2.17';
+  let utilidad = { pct: 15, total: 2.20, totCom: 2.22, cotizacion: 2.27 };
+  let precioFinal = { total: 16.87, totCom: 17.04, ajuste: 0.30, cotizacion: 17.41 };
+  let rentabilidad = '2.17';
 
   // ─── Render ───
   function renderTable() {
@@ -807,9 +886,9 @@
 
     // Summary rows (clean)
     summaryRows.forEach(s => {
-      tbody.appendChild(tr('row-summary', `
+      tbody.appendChild(tr('row-subtotal', `
         <td></td>
-        <td class="col-desc"><span class="material-icons-round" style="font-size:14px;vertical-align:middle;margin-right:6px;color:var(--slate-400)">functions</span>${s.desc}</td>
+        <td class="col-desc"><span class="material-icons-round" style="font-size:14px;vertical-align:middle;margin-right:6px;color:var(--slate-500)">functions</span>${s.desc}</td>
         <td></td><td></td>
         <td>${fmt(s.value)}</td><td>${fmt(s.value)}</td>
         <td></td><td>${fmt(s.cotVal)}</td>
@@ -817,9 +896,9 @@
     });
 
     // Utilidad
-    tbody.appendChild(tr('row-summary', `
+    tbody.appendChild(tr('row-subtotal', `
       <td></td>
-      <td class="col-desc"><span class="material-icons-round" style="font-size:14px;vertical-align:middle;margin-right:6px;color:var(--slate-400)">trending_up</span>Utilidad</td>
+      <td class="col-desc"><span class="material-icons-round" style="font-size:14px;vertical-align:middle;margin-right:6px;color:var(--slate-500)">trending_up</span>Utilidad</td>
       <td></td>
       <td>${makeEditable(utilidad.pct+'%', utilidad.pct, 'util-pct')}</td>
       <td>${fmt(utilidad.total)}</td><td>${fmt(utilidad.totCom)}</td>
@@ -897,13 +976,25 @@
   function confirmEdit(id) {
     const cell = document.getElementById('cell-' + id);
     const inp = document.getElementById('input-' + id);
-    const nv = parseFloat(inp.value).toFixed(2);
+    const nv = parseFloat(inp.value);
     cell.classList.remove('editing');
     cell.closest('tr')?.classList.remove('row-editing');
     const disp = cell.querySelector('.cell-editable__display');
     const suf = id.startsWith('util') ? '%' : '';
-    disp.innerHTML = `${nv}${suf} <span class="material-icons-round edit-icon">edit</span>`;
-    showToast('Valor actualizado: ' + nv + suf, 'success');
+    disp.innerHTML = `${nv.toFixed(2)}${suf} <span class="material-icons-round edit-icon">edit</span>`;
+
+    // Sync data model
+    if (id.startsWith('aju-')) {
+      const key = id.replace('aju-', '');
+      const g = groups.find(x => x.key === key);
+      if (g) { g.ajuste = nv; g.cotizacion = parseFloat((g.total + nv).toFixed(2)); }
+    } else if (id === 'util-pct') {
+      utilidad.pct = nv;
+    } else if (id === 'cot-final') {
+      precioFinal.cotizacion = nv;
+    }
+
+    showToast('Valor actualizado: ' + nv.toFixed(2) + suf, 'success');
   }
 
   function cancelEdit(id) {
@@ -949,7 +1040,55 @@
     document.getElementById('actionRead').style.display = 'block';
     document.getElementById('actionEdit').style.display = 'none';
     document.getElementById('mainTable').className = 'tabla read-mode';
-    showToast('¡Cotización guardada correctamente!', 'success');
+
+    // Promote previous "Vigente" to "Aprobada"
+    historialData.forEach(h => {
+      if (h.estado === 'Vigente') {
+        h.estado = 'Aprobada'; h.icon = 'verified';
+        h.bg = 'rgba(99,102,241,0.1)'; h.color = 'var(--indigo-600)';
+      }
+    });
+
+    // Create new version
+    const maxVer = historialData.reduce((m, h) => Math.max(m, h.version), 0);
+    const newVer = maxVer + 1;
+    const d = new Date();
+    const fecha = String(d.getDate()).padStart(2,'0') + '/' +
+                  String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
+    historialData.unshift({
+      version: newVer, estado: 'Vigente', user: 'J. Calles', fecha,
+      icon: 'check_circle', bg: 'var(--green-50)', color: 'var(--green-600)'
+    });
+
+    saveToStorage();
+    renderTable();
+    showToast('¡Versión ' + newVer + ' guardada correctamente!', 'success');
+  }
+
+  // ─── Storage ───
+  function saveToStorage() {
+    try {
+      localStorage.setItem('pcx_groups', JSON.stringify(groups));
+      localStorage.setItem('pcx_historial', JSON.stringify(historialData));
+      localStorage.setItem('pcx_utilidad', JSON.stringify(utilidad));
+      localStorage.setItem('pcx_precioFinal', JSON.stringify(precioFinal));
+      localStorage.setItem('pcx_rentabilidad', rentabilidad);
+    } catch(e) {}
+  }
+
+  function loadFromStorage() {
+    try {
+      const g = localStorage.getItem('pcx_groups');
+      const h = localStorage.getItem('pcx_historial');
+      const u = localStorage.getItem('pcx_utilidad');
+      const p = localStorage.getItem('pcx_precioFinal');
+      const r = localStorage.getItem('pcx_rentabilidad');
+      if (g) { groups = JSON.parse(g); }
+      if (h) { historialData = JSON.parse(h); }
+      if (u) { utilidad = JSON.parse(u); }
+      if (p) { precioFinal = JSON.parse(p); }
+      if (r) { rentabilidad = r; }
+    } catch(e) {}
   }
 
   // ─── Delete ───
@@ -981,9 +1120,40 @@
     document.documentElement.style.setProperty('--row-h', mode === 'comoda' ? '52px' : '42px');
   }
 
+  // ─── Historial data ───
+  let historialData = [
+    { version:3, estado:'Vigente',  user:'J. Calles', fecha:'04/08/2026', icon:'check_circle', bg:'var(--green-50)',       color:'var(--green-600)'  },
+    { version:2, estado:'Aprobada', user:'M. López',  fecha:'28/07/2026', icon:'verified',     bg:'rgba(99,102,241,0.1)', color:'var(--indigo-600)' },
+    { version:1, estado:'Borrador', user:'J. Calles', fecha:'25/07/2026', icon:'edit_note',    bg:'var(--amber-50)',       color:'var(--amber-700)'  },
+  ];
+  let viewingFromHistory = false;
+  let currentVersion = null;
+
   // ─── Search ───
   function doSearch() {
     document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('historySection').style.display = 'none';
+    const historialOn = document.querySelector('.toggle-wrap').classList.contains('active');
+    if (historialOn && historialData.length > 0) {
+      document.getElementById('costeoSection').style.display = 'none';
+      document.getElementById('actionbar').style.display = 'none';
+      const hs = document.getElementById('historySection');
+      hs.style.display = 'block';
+      hs.classList.add('fade-in');
+      renderHistory();
+      toggleCriterios();
+      showToast('Historial cargado — ' + historialData.length + ' versiones', 'success');
+    } else {
+      viewingFromHistory = false;
+      currentVersion = null;
+      document.getElementById('versionBar').style.display = 'none';
+      showCosteoTable();
+      toggleCriterios();
+      showToast('4 procesos encontrados', 'success');
+    }
+  }
+
+  function showCosteoTable() {
     const cs = document.getElementById('costeoSection');
     cs.style.display = 'flex';
     cs.classList.add('fade-in');
@@ -992,8 +1162,58 @@
     document.getElementById('actionRead').style.display = 'block';
     document.getElementById('actionEdit').style.display = 'none';
     renderTable();
-    toggleCriterios();
-    showToast('4 procesos encontrados', 'success');
+  }
+
+  function renderHistory() {
+    const list = document.getElementById('historyList');
+    list.innerHTML = '';
+    historialData.forEach((item, idx) => {
+      const card = document.createElement('div');
+      card.className = 'history-card' + (idx === 0 ? ' history-card--active' : '');
+      card.onclick = () => selectVersion(idx);
+      card.innerHTML = `
+        <div class="history-dot" style="background:${item.color}"></div>
+        <div class="history-body">
+          <div class="history-header">
+            <span class="history-version">Versión ${item.version}</span>
+            <span class="history-badge" style="background:${item.bg};color:${item.color}">
+              <span class="material-icons-round" style="font-size:12px">${item.icon}</span>
+              ${item.estado}
+            </span>
+            ${idx === 0 ? '<span class="history-recent-tag">Más reciente</span>' : ''}
+          </div>
+          <div class="history-meta">
+            <span class="material-icons-round">person</span>
+            ${item.user}
+            <span class="history-sep">•</span>
+            <span class="material-icons-round">calendar_today</span>
+            ${item.fecha}
+          </div>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  function selectVersion(idx) {
+    viewingFromHistory = true;
+    currentVersion = historialData[idx];
+    document.getElementById('historySection').style.display = 'none';
+    document.getElementById('versionLabel').textContent =
+      'v' + currentVersion.version + ' — ' + currentVersion.estado + ' · ' + currentVersion.user + ' · ' + currentVersion.fecha;
+    document.getElementById('versionBar').style.display = 'flex';
+    showCosteoTable();
+    showToast('Versión ' + currentVersion.version + ' cargada', 'success');
+  }
+
+  function backToHistory() {
+    document.getElementById('costeoSection').style.display = 'none';
+    document.getElementById('actionbar').style.display = 'none';
+    document.getElementById('versionBar').style.display = 'none';
+    const hs = document.getElementById('historySection');
+    hs.style.display = 'block';
+    viewingFromHistory = false;
+    currentVersion = null;
   }
 
   // ─── Toast ───
@@ -1007,6 +1227,9 @@
     clearTimeout(window._tt);
     window._tt = setTimeout(() => toast.classList.remove('show'), 2800);
   }
+
+  // ─── Init ───
+  loadFromStorage();
 
   // Close inline edits on outside click
   document.addEventListener('click', e => {

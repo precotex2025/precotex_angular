@@ -1,39 +1,44 @@
 /* ============================================================
    COTIZACIONES — HOJA DE ESTILOS
-   Rediseño UX: workspace de 2 zonas (criterios colapsables +
-   tabla de costeo a pantalla completa) sobre design tokens.
-
-   Las Secciones 1-3 (tokens) son portables: cuando se defina el
-   sistema de diseño global, copiar tal cual a src/styles.scss
-   dentro de :root y quitar el prefijo ":host" de aquí.
+   Rediseño UX: tokens actualizados, gradientes de marca,
+   cards con borde superior degradado, toolbar con ícono-círculo,
+   tabla con header indigo, action bar flotante glassmorphism.
    ============================================================ */
 
 :host {
-  /* --- 1. TOKENS: PRIMITIVAS (paleta cruda, no usar directo) --- */
+  /* 1. TOKENS: PRIMITIVAS */
   --c-indigo-900: #1a237e;
-  --c-indigo-700: #303f9f;
-  --c-indigo-500: #3f51b5;   /* = primary del tema indigo-pink de Material */
-  --c-indigo-050: #e8eaf6;
+  --c-indigo-700: #4338CA;
+  --c-indigo-600: #4F46E5;
+  --c-indigo-500: #6366F1;
+  --c-indigo-200: #C7D2FE;
+  --c-indigo-100: #E0E7FF;
+  --c-indigo-050: #EEF2FF;
+  --c-violet-600: #7C3AED;
+  --c-teal-400: #2DD4BF;
 
-  --c-neutral-900: #0f172a;  /* texto principal      16.1:1 sobre blanco */
-  --c-neutral-600: #475569;  /* texto secundario      7.5:1 */
-  --c-neutral-400: #94a3b8;  /* texto deshabilitado */
-  --c-neutral-200: #e2e8f0;  /* bordes */
-  --c-neutral-100: #f1f5f9;  /* superficie alterna */
-  --c-neutral-050: #f8fafc;  /* fondo de página */
-  --c-white:       #ffffff;
+  --c-neutral-900: #0f172a;
+  --c-neutral-600: #475569;
+  --c-neutral-400: #94a3b8;
+  --c-neutral-300: #CBD5E1;
+  --c-neutral-200: #e2e8f0;
+  --c-neutral-100: #f1f5f9;
+  --c-neutral-050: #f8fafc;
+  --c-white: #ffffff;
 
-  --c-success-700: #2e7d32;  /* 4.9:1 */
-  --c-success-050: #e8f5e9;
-  --c-warning-800: #8a4b00;  /* 7.0:1 — no usar #ed6c02 en texto (falla AA) */
+  --c-success-700: #16A34A;
+  --c-success-600: #22C55E;
+  --c-success-050: #F0FDF4;
+  --c-warning-800: #8a4b00;
   --c-warning-050: #fff4e5;
-  --c-danger-700:  #c62828;  /* 5.9:1 */
-  --c-danger-050:  #ffebee;
-  --c-info-700:    #0277bd;  /* 5.1:1 */
-  --c-info-050:    #e1f5fe;
+  --c-danger-700: #DC2626;
+  --c-danger-600: #EF4444;
+  --c-danger-050: #FEF2F2;
+  --c-orange-500: #F97316;
+  --c-orange-050: #FFF7ED;
 
-  /* --- 2. TOKENS: SEMÁNTICOS (rol de cada color) --- */
-  --color-brand:          var(--c-indigo-500);
+  /* 2. TOKENS: SEMÁNTICOS */
+  --color-brand:          var(--c-indigo-600);
   --color-brand-hover:    var(--c-indigo-700);
   --color-brand-subtle:   var(--c-indigo-050);
   --color-text:           var(--c-neutral-900);
@@ -43,33 +48,36 @@
   --color-surface:        var(--c-white);
   --color-surface-sunken: var(--c-neutral-050);
   --color-surface-alt:    var(--c-neutral-100);
-  --color-focus-ring:     rgba(63, 81, 181, 0.35);
+  --color-focus-ring:     rgba(99, 102, 241, 0.3);
 
-  /* Roles de fila de la tabla de costeo — reemplazan .cuadro-* / .fila-r */
-  --row-group-bg:    var(--c-neutral-100);  /* proceso padre agrupador */
-  --row-subtotal-bg: var(--c-warning-050);  /* pro_Tip === 'R' */
-  --row-total-bg:    var(--c-indigo-050);   /* fila de cotización final */
+  --gradient-brand:      linear-gradient(135deg, var(--c-indigo-600), var(--c-violet-600));
+  --gradient-top-border: linear-gradient(90deg, var(--c-indigo-500), var(--c-teal-400));
+
+  /* Roles de fila */
+  --row-group-bg:    var(--c-neutral-100);
+  --row-subtotal-bg: var(--c-warning-050);
+  --row-total-bg:    var(--c-indigo-050);
   --row-hover-bg:    #eef2ff;
   --row-zebra-bg:    var(--c-neutral-050);
-
   --cell-editable-bg: var(--c-white);
   --cell-editable-bd: var(--c-neutral-400);
 
-  /* --- 3. TOKENS: ESCALAS --- */
+  /* 3. TOKENS: ESCALAS */
   --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;  --sp-4: 16px;
   --sp-5: 24px; --sp-6: 32px; --sp-7: 48px;
 
-  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px; --radius-pill: 999px;
+  --radius-sm: 4px;  --radius-md: 8px;   --radius-lg: 12px;
+  --radius-xl: 18px; --radius-pill: 999px;
 
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, .06);
-  --shadow-md: 0 2px 8px rgba(15, 23, 42, .10);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, .07), 0 2px 4px rgba(15, 23, 42, .04);
   --shadow-lg: 0 8px 24px rgba(15, 23, 42, .14);
+  --shadow-xl: 0 16px 48px rgba(15, 23, 42, .12);
 
   --font-ui: Roboto, "Helvetica Neue", sans-serif;
   --fs-xs: 11px; --fs-sm: 12px; --fs-md: 14px; --fs-lg: 16px; --fs-xl: 20px;
   --fw-regular: 400; --fw-medium: 500; --fw-bold: 600;
 
-  /* Densidad de tabla — la cambia el toggle Compacta/Cómoda, no un @media */
   --row-h-compacta: 34px;
   --row-h-comoda:   44px;
   --row-h: var(--row-h-compacta);
@@ -80,9 +88,6 @@
   color: var(--color-text);
 }
 
-/* La densidad se activa con una clase en .cot-workspace (raíz del template),
-   no en :host — Angular no permite [class] sobre el propio host desde el
-   template sin @HostBinding, y las variables CSS igual cascan hacia abajo. */
 .cot-workspace.densidad-comoda {
   --row-h: var(--row-h-comoda);
 }
@@ -99,7 +104,12 @@
   min-height: 0;
   box-sizing: border-box;
   padding: var(--sp-4) var(--sp-5);
+  padding-bottom: 88px; /* espacio para action bar flotante */
 }
+
+/* ============================================================
+   SECCIÓN 5 — TOOLBAR
+   ============================================================ */
 
 .cot-toolbar {
   display: flex;
@@ -111,7 +121,7 @@
 
 .cot-toolbar__title {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--sp-3);
 
   h1 {
@@ -119,12 +129,59 @@
     font-size: var(--fs-xl);
     font-weight: var(--fw-bold);
     color: var(--color-text);
+    letter-spacing: -0.02em;
   }
 }
 
-.cot-toolbar__count {
+.cot-toolbar__icon-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background: var(--gradient-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.cot-toolbar__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--gradient-brand);
+  color: white;
   font-size: var(--fs-sm);
-  color: var(--color-text-muted);
+  font-weight: var(--fw-bold);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+}
+
+.cot-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #A5B4FC;
+  animation: cotBadgePulse 2s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes cotBadgePulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* El span legacy queda oculto — lo reemplaza el badge */
+.cot-toolbar__count {
+  display: none;
 }
 
 .cot-densidad-wrap {
@@ -139,6 +196,19 @@
   font-weight: var(--fw-medium);
 }
 
+/* Density toggle: pill shape */
+.cot-densidad ::ng-deep .mat-button-toggle-group {
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: var(--c-neutral-100);
+  overflow: hidden;
+}
+
+.cot-densidad ::ng-deep .mat-button-toggle {
+  border-radius: var(--radius-pill);
+  border: none;
+}
+
 .cot-densidad ::ng-deep .mat-button-toggle-label-content {
   line-height: 32px;
   padding: 0 var(--sp-3);
@@ -149,30 +219,47 @@
 }
 
 .cot-densidad ::ng-deep .mat-button-toggle-checked {
-  background: var(--color-brand-subtle);
-  color: var(--color-brand-hover);
+  background: var(--c-white);
+  color: var(--color-brand);
+  box-shadow: var(--shadow-sm);
   font-weight: var(--fw-bold);
 }
 
+.cot-densidad ::ng-deep .mat-button-toggle:not(.mat-button-toggle-checked):hover {
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--c-neutral-900);
+}
+
 /* ============================================================
-   SECCIÓN 5 — PANEL DE CRITERIOS
+   SECCIÓN 6 — PANEL DE CRITERIOS (card con borde superior degradado)
    ============================================================ */
 
 .cot-criterios {
   flex: 0 0 auto;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
   padding: var(--sp-4);
+  position: relative;
+  overflow: hidden;
   transition: padding 0.15s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gradient-top-border);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
 }
 
 .cot-criterios--colapsado {
   padding: var(--sp-2) var(--sp-4);
 }
 
-/* --- Estado colapsado: resumen tipo chip --- */
+/* --- Estado colapsado --- */
 .cot-criterios__resumen {
   display: flex;
   align-items: center;
@@ -190,12 +277,25 @@
 .cot-chip {
   display: inline-flex;
   align-items: center;
-  gap: var(--sp-1);
-  padding: var(--sp-1) var(--sp-3);
+  gap: 6px;
+  padding: 6px 14px;
   border-radius: var(--radius-pill);
   background: var(--color-brand-subtle);
   font-size: var(--fs-sm);
   white-space: nowrap;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    color: var(--color-brand);
+  }
 }
 
 .cot-chip__label {
@@ -210,30 +310,34 @@
 
 .cot-btn-editar {
   flex: 0 0 auto;
+  border-radius: var(--radius-pill) !important;
+  transition: all 0.2s !important;
+
+  &:hover {
+    border-color: var(--color-brand) !important;
+    color: var(--color-brand) !important;
+    background: var(--color-brand-subtle) !important;
+  }
 }
 
 /* --- Estado expandido: formulario ---
-   Grid fijo de 4 columnas (no auto-fit): 7 campos + Cliente a doble ancho
-   llenan exactamente 2 filas completas, así todo queda en columnas
-   predecibles en vez de reacomodarse según el espacio libre. */
+   Grid fijo de 4 columnas; Cliente ocupa doble ancho. */
 .cot-form-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--sp-4);
-  align-items: end; /* alinea los campos por su borde inferior */
+  align-items: end;
 }
 
 .cot-field {
   width: 100%;
-  height: 56px; /* misma altura para mat-form-field y ng-select */
+  height: 56px;
 }
 
 .cot-field--span2 {
   grid-column: span 2;
 }
 
-/* ng-select estilizado para calzar EXACTO con mat-form-field appearance="outline":
-   mismo alto (56px) y misma etiqueta flotante sobre el borde superior. */
 .cot-field--select {
   position: relative;
 }
@@ -269,8 +373,6 @@
   box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
-/* Fila de cierre: checkbox de historial a la izquierda, acciones a la derecha,
-   separada del grid por un borde para agrupar visualmente "buscar" de "filtrar". */
 .cot-form-footer {
   display: flex;
   align-items: center;
@@ -282,13 +384,26 @@
   flex-wrap: wrap;
 }
 
+.cot-form-footer mat-checkbox ::ng-deep .mat-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cot-form-footer mat-checkbox ::ng-deep .mat-checkbox-label mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
 .cot-form-actions {
   display: flex;
   gap: var(--sp-3);
 }
 
 /* ============================================================
-   SECCIÓN 6 — TABLA DE COSTEO
+   SECCIÓN 7 — TABLA DE COSTEO (card con borde superior degradado)
    ============================================================ */
 
 .cot-costeo {
@@ -298,15 +413,27 @@
   flex-direction: column;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gradient-top-border);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    z-index: 5;
+  }
 }
 
 .cot-tabla-scroll {
   flex: 1 1 auto;
   min-height: 0;
   overflow: auto;
+  margin-top: 3px; /* compensa el borde degradado ::before */
 }
 
 .cot-tabla {
@@ -323,22 +450,25 @@
 }
 
 .cot-tabla ::ng-deep .mat-header-cell {
-  background: var(--color-surface-alt);
-  color: var(--color-text);
-  font-size: var(--fs-sm);
-  font-weight: var(--fw-bold);
+  background: var(--c-indigo-050);
+  color: var(--c-neutral-600);
+  font-size: var(--fs-xs);
+  font-weight: 700;
   text-align: center;
   justify-content: center;
   padding: var(--sp-2) var(--sp-3);
-  border-bottom: 2px solid var(--color-border);
+  border-bottom: 2px solid var(--c-indigo-100);
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-/* Filas y celdas: densidad controlada por --row-h */
+/* Filas: densidad + hover con acento izquierdo */
 .cot-tabla ::ng-deep .mat-row {
   height: var(--row-h);
   min-height: var(--row-h);
-  transition: background-color 0.1s ease;
+  transition: background-color 0.1s ease, border-left-color 0.1s ease;
+  border-left: 4px solid transparent;
 }
 
 .cot-tabla ::ng-deep .mat-row:nth-child(even) {
@@ -347,17 +477,20 @@
 
 .cot-tabla ::ng-deep .mat-row:hover {
   background: var(--row-hover-bg);
+  border-left-color: var(--color-brand);
 }
 
 .cot-tabla ::ng-deep .mat-cell {
   padding: var(--sp-1) var(--sp-3);
   font-size: var(--fs-sm);
   color: var(--color-text);
-  text-align: right; /* la mayoría de columnas son numéricas */
+  text-align: right;
   font-variant-numeric: tabular-nums;
+  border-bottom: 1px solid var(--c-neutral-100);
+  white-space: nowrap;
 }
 
-/* Columna Descripción: texto a la izquierda, ancho reservado, sticky */
+/* Columna Descripción */
 .col-descripcion {
   width: 260px;
   min-width: 260px;
@@ -372,7 +505,7 @@ th.col-descripcion {
   z-index: 4;
 }
 
-/* Columna de expandir/colapsar: ancla el contexto en scroll horizontal */
+/* Columna expandir/colapsar */
 .col-hover {
   width: 40px;
   min-width: 40px;
@@ -390,27 +523,27 @@ th.col-descripcion {
   color: var(--color-text-muted);
 }
 
-/* Indentación por nivel jerárquico */
+/* Indentación de filas hijo */
 .row-child .col-descripcion {
   padding-left: var(--sp-6);
 }
 
-/* Celda editable: la tabla es de solo lectura, esto es un botón que abre
-   el panel lateral — se distingue de una celda plana por el borde punteado
-   y el ícono de lápiz que aparece al pasar el mouse. */
+/* Celda editable (abre el drawer) */
 .cot-cell-editable {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   margin-left: auto;
   padding: 3px var(--sp-2);
-  border: 1px dashed var(--cell-editable-bd);
+  border: 1.5px dashed var(--cell-editable-bd);
   border-radius: var(--radius-sm);
   background: var(--cell-editable-bg);
   color: var(--color-text);
   font: inherit;
   font-variant-numeric: tabular-nums;
   cursor: pointer;
+  min-width: 70px;
+  justify-content: flex-end;
 
   mat-icon {
     font-size: 14px;
@@ -418,15 +551,21 @@ th.col-descripcion {
     height: 14px;
     color: var(--color-text-disabled);
     opacity: 0;
-    transition: opacity 0.1s ease;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    transform: scale(0.5);
   }
 
   &:hover:not(:disabled) {
     border-color: var(--color-brand);
     border-style: solid;
     background: var(--color-brand-subtle);
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
 
-    mat-icon { opacity: 1; color: var(--color-brand); }
+    mat-icon {
+      opacity: 1;
+      color: var(--color-brand);
+      transform: scale(1);
+    }
   }
 
   &:disabled {
@@ -442,38 +581,62 @@ th.col-descripcion {
   background: var(--color-brand-subtle);
   box-shadow: 0 0 0 3px var(--color-focus-ring);
 
-  mat-icon { opacity: 1; color: var(--color-brand); }
+  mat-icon { opacity: 1; color: var(--color-brand); transform: scale(1); }
 }
 
 .cot-cell-editable--total {
   font-weight: var(--fw-bold);
 }
 
-/* Fila cuyo panel de edición está abierto */
+/* Fila con edición abierta */
 .row--seleccionada {
   background: var(--color-brand-subtle) !important;
+  border-left-color: var(--color-brand) !important;
 }
 
-/* Filas semánticas — reemplazan .fila-r / .cotizacion-cell / .descripcion-f */
-.row--group td {
-  background: var(--row-group-bg);
-  font-weight: var(--fw-bold);
+/* Filas semánticas */
+.row--group {
+  cursor: pointer;
+  user-select: none;
+
+  td {
+    background: var(--row-group-bg);
+    font-weight: var(--fw-bold);
+    color: var(--c-neutral-900);
+    border-bottom: 1px solid var(--c-neutral-200);
+    font-size: 14px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  &:hover td {
+    background: var(--c-indigo-050);
+  }
 }
 
 .row--child {
   font-weight: var(--fw-regular);
 }
 
-.row--subtotal td {
-  background: var(--row-subtotal-bg);
-  color: var(--c-warning-800);
-  font-weight: var(--fw-bold);
+.row--subtotal {
+  td {
+    background: var(--row-subtotal-bg);
+    color: var(--c-warning-800);
+    font-weight: var(--fw-bold);
+    border-top: 2px solid var(--c-neutral-200);
+    border-bottom: 2px solid var(--c-neutral-200);
+    font-size: 14px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
 }
 
 .cell-total {
-  background: var(--row-total-bg);
+  background: var(--row-total-bg) !important;
   color: var(--color-brand-hover);
   font-weight: var(--fw-bold);
+  border-top: 2px solid var(--c-indigo-200) !important;
+  font-size: 14px;
 }
 
 .row-hidden {
@@ -504,14 +667,15 @@ th.col-descripcion {
 }
 
 /* ============================================================
-   SECCIÓN 6B — PANEL LATERAL DE EDICIÓN (drawer)
-   Tabla de solo lectura + este panel para editar: separa "ver" de "editar".
+   SECCIÓN 8 — DRAWER LATERAL
    ============================================================ */
 
 .cot-drawer-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.32);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 1000;
 }
 
@@ -532,7 +696,7 @@ th.col-descripcion {
 
 @keyframes cot-drawer-in {
   from { transform: translateX(24px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(0);    opacity: 1; }
 }
 
 .cot-drawer__header {
@@ -610,7 +774,7 @@ th.col-descripcion {
 }
 
 /* ============================================================
-   SECCIÓN 7 — DIÁLOGOS
+   SECCIÓN 9 — DIÁLOGOS
    ============================================================ */
 
 .cot-dialog-precio-select {
@@ -623,12 +787,102 @@ th.col-descripcion {
 }
 
 /* ============================================================
-   SECCIÓN 8 — RESPONSIVE (único bloque con @media)
+   SECCIÓN 10 — BOTONES: pill + variantes de color
+   ============================================================ */
+
+.btn-azul {
+  background: var(--gradient-brand) !important;
+  color: var(--c-white) !important;
+  border-radius: var(--radius-pill) !important;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3) !important;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s !important;
+
+  &:hover:not([disabled]) {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(79, 70, 229, 0.35) !important;
+  }
+}
+
+.btn-danger {
+  color: var(--c-danger-600) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  border-radius: var(--radius-pill) !important;
+  transition: all 0.2s !important;
+
+  &:hover:not([disabled]) {
+    background: var(--c-danger-050) !important;
+    border-color: var(--c-danger-600) !important;
+  }
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--c-success-600), var(--c-success-700)) !important;
+  color: var(--c-white) !important;
+  border-radius: var(--radius-pill) !important;
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3) !important;
+  transition: transform 0.25s, box-shadow 0.25s !important;
+
+  &:hover:not([disabled]) {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.35) !important;
+  }
+}
+
+.btn-ghost {
+  border-radius: var(--radius-pill) !important;
+  transition: all 0.2s !important;
+
+  &:hover:not([disabled]) {
+    background: var(--c-neutral-050) !important;
+    border-color: var(--c-neutral-300) !important;
+  }
+}
+
+/* stroked buttons: pill por defecto */
+button[mat-stroked-button] {
+  border-radius: var(--radius-pill) !important;
+}
+
+/* ============================================================
+   SECCIÓN 11 — ACTION BAR FLOTANTE (glassmorphism)
+   ============================================================ */
+
+.cot-actionbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-xl);
+  z-index: 100;
+  animation: cotActionbarIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes cotActionbarIn {
+  from { transform: translateX(-50%) translateY(30px); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0);    opacity: 1; }
+}
+
+.cot-actionbar button[disabled] {
+  opacity: 0.45;
+}
+
+/* ============================================================
+   SECCIÓN 12 — RESPONSIVE
    ============================================================ */
 
 @media screen and (max-width: 1199px) {
   .cot-workspace {
     padding: var(--sp-3) var(--sp-4);
+    padding-bottom: 88px;
   }
 
   .cot-form-grid {
@@ -661,9 +915,7 @@ th.col-descripcion {
   .cot-form-actions {
     flex-direction: column-reverse;
 
-    button {
-      width: 100%;
-    }
+    button { width: 100%; }
   }
 
   .cot-criterios__resumen {
@@ -672,38 +924,20 @@ th.col-descripcion {
   }
 
   .cot-actionbar {
-    flex-direction: column-reverse;
+    left: var(--sp-4);
+    right: var(--sp-4);
+    transform: none;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-radius: var(--radius-lg);
 
-    button {
-      width: 100%;
-    }
+    &.ng-animating { transform: none; }
   }
 }
 
 /* ============================================================
-   SECCIÓN 9 — UTILIDADES Y ANIMACIONES
+   SECCIÓN 13 — SPINNER
    ============================================================ */
-
-.btn-azul {
-  background-color: var(--color-brand);
-  color: var(--c-white);
-}
-
-.cot-actionbar {
-  flex: 0 0 auto;
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--sp-3);
-  padding: var(--sp-3) var(--sp-4);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-}
-
-.cot-actionbar button[disabled] {
-  opacity: 0.6;
-}
 
 .spinner-wrapper {
   display: flex;
@@ -725,22 +959,25 @@ th.col-descripcion {
   width: 85px;
   height: 50px;
   background-repeat: no-repeat;
-  background-image: linear-gradient(#FFF 50px, transparent 0),
-                    linear-gradient(#FFF 50px, transparent 0),
-                    linear-gradient(#FFF 50px, transparent 0),
-                    linear-gradient(#FFF 50px, transparent 0),
-                    linear-gradient(#FFF 50px, transparent 0),
-                    linear-gradient(#FFF 50px, transparent 0);
-  background-position: 0px center, 15px center, 30px center, 45px center, 60px center, 75px center, 90px center;
+  background-image:
+    linear-gradient(#FFF 50px, transparent 0),
+    linear-gradient(#FFF 50px, transparent 0),
+    linear-gradient(#FFF 50px, transparent 0),
+    linear-gradient(#FFF 50px, transparent 0),
+    linear-gradient(#FFF 50px, transparent 0),
+    linear-gradient(#FFF 50px, transparent 0);
+  background-position:
+    0px center, 15px center, 30px center,
+    45px center, 60px center, 75px center, 90px center;
   animation: rikSpikeRoll 0.65s linear infinite alternate;
 }
 
 @keyframes rikSpikeRoll {
-  0% { background-size: 10px 3px; }
-  16% { background-size: 10px 50px, 10px 3px, 10px 3px, 10px 3px, 10px 3px, 10px 3px; }
-  33% { background-size: 10px 30px, 10px 50px, 10px 3px, 10px 3px, 10px 3px, 10px 3px; }
-  50% { background-size: 10px 10px, 10px 30px, 10px 50px, 10px 3px, 10px 3px, 10px 3px; }
-  66% { background-size: 10px 3px, 10px 10px, 10px 30px, 10px 50px, 10px 3px, 10px 3px; }
-  83% { background-size: 10px 3px, 10px 3px,  10px 10px, 10px 30px, 10px 50px, 10px 3px; }
-  100% { background-size: 10px 3px, 10px 3px, 10px 3px,  10px 10px, 10px 30px, 10px 50px; }
+  0%   { background-size: 10px 3px; }
+  16%  { background-size: 10px 50px, 10px 3px,  10px 3px,  10px 3px,  10px 3px,  10px 3px; }
+  33%  { background-size: 10px 30px, 10px 50px, 10px 3px,  10px 3px,  10px 3px,  10px 3px; }
+  50%  { background-size: 10px 10px, 10px 30px, 10px 50px, 10px 3px,  10px 3px,  10px 3px; }
+  66%  { background-size: 10px 3px,  10px 10px, 10px 30px, 10px 50px, 10px 3px,  10px 3px; }
+  83%  { background-size: 10px 3px,  10px 3px,  10px 10px, 10px 30px, 10px 50px, 10px 3px; }
+  100% { background-size: 10px 3px,  10px 3px,  10px 3px,  10px 10px, 10px 30px, 10px 50px; }
 }
