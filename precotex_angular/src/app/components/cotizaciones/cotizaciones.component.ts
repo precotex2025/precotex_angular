@@ -354,6 +354,30 @@ export class CotizacionesComponent implements OnInit {
     }
   }
 
+  private static readonly ICONOS_SECCION: { claves: string[]; icono: string }[] = [
+    { claves: ['MATERIA', 'HILADO', 'ALGODON', 'INSUMO'], icono: 'inventory_2' },
+    { claves: ['TEJID', 'TEJEDURIA', 'URDID'], icono: 'precision_manufacturing' },
+    { claves: ['TENID', 'TINTOR'], icono: 'color_lens' },
+    { claves: ['PREPARA', 'DESCRUD', 'BLANQUE'], icono: 'science' },
+    { claves: ['ACABAD', 'RAMA', 'COMPACT', 'PERCHA', 'ANTIPILLING', 'ABRIDORA'], icono: 'auto_fix_high' },
+  ];
+
+  // Icono por sección: mapea el nombre del proceso (pro_Des) a un icono Material.
+  // No viene del backend, así que se infiere por palabra clave; sin coincidencia usa un icono genérico.
+  iconoSeccion(row: any): string {
+    const nombre = (row.pro_Des || '')
+      .toUpperCase()
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '');
+
+    for (const grupo of CotizacionesComponent.ICONOS_SECCION) {
+      if (grupo.claves.some(clave => nombre.includes(clave))) {
+        return grupo.icono;
+      }
+    }
+    return 'layers';
+  }
+
   // --- Estado de presentación (rediseño UX) ---
 
   toggleCriterios() {

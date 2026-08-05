@@ -250,6 +250,113 @@
   box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
+/* Icono a la izquierda de los ng-select (Cliente, Color) */
+.cot-select-icon-wrap {
+  position: relative;
+
+  ::ng-deep .ng-value-container {
+    padding-left: 30px !important;
+  }
+
+  ::ng-deep .ng-placeholder {
+    left: 30px !important;
+  }
+}
+
+.cot-select-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  pointer-events: none;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-disabled);
+  transition: color 0.2s ease;
+}
+
+.cot-select-icon-wrap:focus-within .cot-select-icon {
+  color: var(--color-brand);
+}
+
+/* ------------------------------------------------------------
+   Restyle de mat-form-field outline (tema legacy indigo-pink):
+   el borde/label por defecto se ven planos y grises frente al
+   resto de tarjetas con acento de marca del módulo. */
+.cot-criterios,
+.cot-drawer__body {
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+
+  ::ng-deep .mat-form-field-subscript-wrapper {
+    display: none;
+  }
+
+  ::ng-deep .mat-form-field-flex {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    transition: box-shadow 0.2s ease;
+  }
+
+  ::ng-deep .mat-form-field-infix {
+    padding: 0.6em 0;
+    border-top: 0.6em solid transparent;
+  }
+
+  ::ng-deep .mat-form-field-outline {
+    color: var(--color-border);
+  }
+
+  ::ng-deep .mat-form-field-outline-thick {
+    color: var(--c-neutral-300);
+  }
+
+  ::ng-deep .mat-form-field-label {
+    color: var(--color-text-muted);
+  }
+
+  ::ng-deep .mat-focused .mat-form-field-outline-thick {
+    color: var(--color-brand);
+  }
+
+  ::ng-deep .mat-focused .mat-form-field-flex {
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
+  }
+
+  ::ng-deep .mat-focused .mat-form-field-label {
+    color: var(--color-brand) !important;
+  }
+
+  /* Campo de solo lectura (Descripción): superficie hundida para
+     distinguirlo de los campos editables */
+  ::ng-deep .mat-form-field-disabled .mat-form-field-flex {
+    background: var(--color-surface-sunken);
+  }
+}
+
+/* Campo readonly (Descripción): marcado desde el template con
+   .cot-field--readonly ya que CSS no puede seleccionar el
+   ancestro .mat-form-field-flex desde el input[readonly] interno */
+.cot-field--readonly ::ng-deep .mat-form-field-flex {
+  background: var(--color-surface-sunken) !important;
+}
+
+.cot-field-icon {
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  color: var(--color-text-disabled) !important;
+  margin-right: var(--sp-2);
+  transition: color 0.2s ease;
+}
+
+.mat-focused .cot-field-icon {
+  color: var(--color-brand) !important;
+}
+
 .cot-form-footer {
   display: flex;
   align-items: center;
@@ -626,9 +733,40 @@ th.col-descripcion {
   color: var(--color-text-muted);
 }
 
+/* Número de sección sin hijos (atenuado, sin chevron que expandir) */
+.cot-row-num {
+  color: var(--color-text-disabled);
+  font-size: var(--fs-xs);
+}
+
 /* Indentación de filas hijo */
 .row-child .col-descripcion {
   padding-left: var(--sp-6);
+}
+
+/* Icono identificador de sección / fila de resumen, antes del nombre */
+.cot-row-icon {
+  font-size: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+  vertical-align: middle;
+  margin-right: 6px;
+  color: var(--color-brand);
+  flex-shrink: 0;
+}
+
+.cot-row-icon--resumen {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  color: var(--color-text-muted);
+}
+
+.cot-row-icon--total {
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  color: var(--color-brand-hover);
 }
 
 /* Celda editable (abre el drawer) */
@@ -698,10 +836,9 @@ th.col-descripcion {
 }
 
 /* Filas semánticas */
-.row--group {
-  cursor: pointer;
-  user-select: none;
 
+/* Aspecto de sección (toda fila padre de proceso, tenga o no hijos) */
+.row--seccion {
   td {
     background: var(--row-group-bg);
     font-weight: var(--fw-bold);
@@ -711,6 +848,12 @@ th.col-descripcion {
     padding-top: 10px;
     padding-bottom: 10px;
   }
+}
+
+/* Solo las secciones con hijos son expandibles/colapsables */
+.row--group {
+  cursor: pointer;
+  user-select: none;
 
   &:hover td {
     background: var(--c-indigo-050);
@@ -905,6 +1048,19 @@ th.col-descripcion {
   font-weight: var(--fw-bold);
   color: var(--color-brand);
   cursor: pointer;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+}
+
+.cot-modal__accordion-icon {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  color: var(--color-brand);
 }
 
 .cot-modal__chevron {
@@ -961,9 +1117,19 @@ th.col-descripcion {
 }
 
 .cot-drawer__observacion-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: var(--fs-sm);
   font-weight: var(--fw-medium);
   color: var(--color-text);
+}
+
+.cot-drawer__observacion-icon {
+  font-size: 15px !important;
+  width: 15px !important;
+  height: 15px !important;
+  color: var(--color-text-muted);
 }
 
 .cot-drawer__required {

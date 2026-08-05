@@ -48,6 +48,7 @@
 
         <mat-form-field appearance="outline" class="cot-field">
           <mat-label>Und. Negocio</mat-label>
+          <mat-icon matPrefix class="cot-field-icon">apartment</mat-icon>
           <mat-select formControlName="unidadNegocio" (selectionChange)="chgUnidadNegocio()">
             <mat-option *ngFor="let unidad of unidadesNegocio" [value]="unidad.codigo">
               {{ unidad.descripcion }}
@@ -57,6 +58,7 @@
 
         <mat-form-field appearance="outline" class="cot-field">
           <mat-label>Tipo Und. Negocio</mat-label>
+          <mat-icon matPrefix class="cot-field-icon">category</mat-icon>
           <mat-select formControlName="tipo" (selectionChange)="chgTipo()">
             <mat-option *ngFor="let t of tipoUnidadesNegocio" [value]="t.codigo">
               {{ t.descripcion }}
@@ -66,27 +68,33 @@
 
         <div class="cot-field cot-field--select cot-field--span2">
           <label class="cot-outline-label">Cliente</label>
-          <ng-select formControlName="cliente" class="cot-ng-select"
-            bindLabel="label" bindValue="cod_Cliente_Tex"
-            [items]="dataClientes" [searchable]="true" [clearable]="true"
-            appendTo="body" placeholder="Buscar cliente..."
-            (change)="onChangeCliente()">
-          </ng-select>
+          <div class="cot-select-icon-wrap">
+            <mat-icon class="cot-select-icon">storefront</mat-icon>
+            <ng-select formControlName="cliente" class="cot-ng-select"
+              bindLabel="label" bindValue="cod_Cliente_Tex"
+              [items]="dataClientes" [searchable]="true" [clearable]="true"
+              appendTo="body" placeholder="Buscar cliente..."
+              (change)="onChangeCliente()">
+            </ng-select>
+          </div>
         </div>
 
         <mat-form-field appearance="outline" class="cot-field">
           <mat-label>Código de tela</mat-label>
+          <mat-icon matPrefix class="cot-field-icon">qr_code_2</mat-icon>
           <input [textMask]="{mask: maskCodigo}" matInput formControlName="codigoTela"
                  (keyup.enter)="buscarDescripcionTela()" placeholder="AA000000"/>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="cot-field">
+        <mat-form-field appearance="outline" class="cot-field cot-field--readonly">
           <mat-label>Descripción</mat-label>
+          <mat-icon matPrefix class="cot-field-icon">description</mat-icon>
           <input matInput formControlName="descripcionTela" readonly />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="cot-field">
           <mat-label>Ruta</mat-label>
+          <mat-icon matPrefix class="cot-field-icon">alt_route</mat-icon>
           <mat-select formControlName="codigoRutaTela">
             <mat-option *ngFor="let ruta of RutaXCodTela" [value]="ruta.codigo">
               {{ ruta.nombre }}
@@ -96,11 +104,14 @@
 
         <div class="cot-field cot-field--select">
           <label class="cot-outline-label">Color</label>
-          <ng-select formControlName="color" class="cot-ng-select"
-            bindLabel="descripcion" bindValue="codigo"
-            [items]="listaCodigoColor" [searchable]="true" [clearable]="true"
-            appendTo="body" placeholder="Buscar color...">
-          </ng-select>
+          <div class="cot-select-icon-wrap">
+            <mat-icon class="cot-select-icon">palette</mat-icon>
+            <ng-select formControlName="color" class="cot-ng-select"
+              bindLabel="descripcion" bindValue="codigo"
+              [items]="listaCodigoColor" [searchable]="true" [clearable]="true"
+              appendTo="body" placeholder="Buscar color...">
+            </ng-select>
+          </div>
         </div>
       </div>
 
@@ -185,7 +196,8 @@
             <mat-icon *ngIf="row.isParent && row.tieneHijos">
               {{ expandedRows.has(row.pro_Hover) ? 'expand_less' : 'expand_more' }}
             </mat-icon>
-            <ng-container *ngIf="!(row.isParent && row.tieneHijos)">{{ row.pro_Hover }}</ng-container>
+            <span class="cot-row-num" *ngIf="row.isParent && !row.tieneHijos && row.pro_Tip !== 'R'">{{ row.pro_Hover }}</span>
+            <ng-container *ngIf="!row.isParent || row.pro_Tip === 'R'">{{ row.pro_Hover }}</ng-container>
           </td>
         </ng-container>
 
@@ -194,6 +206,11 @@
           <th mat-header-cell *matHeaderCellDef class="col-descripcion">Descripción</th>
           <td mat-cell *matCellDef="let row" class="col-descripcion"
               [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">
+            <mat-icon class="cot-row-icon" *ngIf="row.isParent && row.pro_Tip !== 'R'">{{ iconoSeccion(row) }}</mat-icon>
+            <mat-icon class="cot-row-icon cot-row-icon--resumen" *ngIf="row.pro_Tip === 'R' && row.cod_Subtotal != 2 && row.cod_Subtotal != 4 && row.cod_Subtotal != 5">functions</mat-icon>
+            <mat-icon class="cot-row-icon cot-row-icon--resumen" *ngIf="row.cod_Subtotal == 2">trending_up</mat-icon>
+            <mat-icon class="cot-row-icon cot-row-icon--total" *ngIf="row.cod_Subtotal == 4">paid</mat-icon>
+            <mat-icon class="cot-row-icon cot-row-icon--total" *ngIf="row.cod_Subtotal == 5">show_chart</mat-icon>
             {{ row.pro_Des }}
             <span class="cot-group-badge" *ngIf="row.isParent && row.tieneHijos">{{ row.childCount }}</span>
           </td>
@@ -300,6 +317,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"
           [class.row-hidden]="row.isChild && !expandedRows.has(row.padreKey)"
           [class.row--group]="row.isParent && row.tieneHijos"
+          [class.row--seccion]="row.isParent && row.pro_Tip !== 'R'"
           [class.row-child]="row.isChild"
           [class.row--seleccionada]="filaEnEdicion === row"
           [ngClass]="{'row--subtotal': row.pro_Tip === 'R'}">
@@ -333,7 +351,7 @@
       <div class="cot-modal__datos-box">
         <button type="button" class="cot-modal__accordion-header"
           (click)="datosGeneralesAbierto = !datosGeneralesAbierto">
-          <span>Datos Generales</span>
+          <span><mat-icon class="cot-modal__accordion-icon">info</mat-icon> Datos Generales</span>
           <mat-icon class="cot-modal__chevron" [class.cot-modal__chevron--colapsado]="!datosGeneralesAbierto">expand_more</mat-icon>
         </button>
         <div class="cot-modal__datos-item">
@@ -358,6 +376,7 @@
 
       <mat-form-field appearance="outline" class="cot-drawer__field" *ngIf="data.tipo === 'utilidad'">
         <mat-label>% Utilidad</mat-label>
+        <mat-icon matPrefix class="cot-field-icon">percent</mat-icon>
         <input matInput type="number" [(ngModel)]="data.row.pro_Cos_Kg"
           [ngModelOptions]="{standalone: true}"
           (ngModelChange)="recalcularUtilidad(data.row)" />
@@ -367,6 +386,7 @@
       <ng-container *ngIf="data.tipo === 'ajuste'">
         <mat-form-field appearance="outline" class="cot-drawer__field">
           <mat-label>Cantidad de Ajuste</mat-label>
+          <mat-icon matPrefix class="cot-field-icon">tune</mat-icon>
           <input matInput type="number" [(ngModel)]="data.row.pro_Aju"
             [ngModelOptions]="{standalone: true}"
             (ngModelChange)="recalcular(data.row)"
@@ -375,7 +395,10 @@
         </mat-form-field>
 
         <div class="cot-drawer__observacion">
-          <label class="cot-drawer__observacion-label">Observación <span class="cot-drawer__required">*</span></label>
+          <label class="cot-drawer__observacion-label">
+            <mat-icon class="cot-drawer__observacion-icon">chat</mat-icon>
+            Observación <span class="cot-drawer__required">*</span>
+          </label>
           <textarea class="cot-drawer__observacion-input" rows="3"
             [(ngModel)]="data.row.observacion" [ngModelOptions]="{standalone: true}"
             placeholder="Escribe el motivo del ajuste..."></textarea>
@@ -384,6 +407,7 @@
 
       <mat-form-field appearance="outline" class="cot-drawer__field" *ngIf="data.tipo === 'cotizacion'">
         <mat-label>Precio Final Cliente</mat-label>
+        <mat-icon matPrefix class="cot-field-icon">sell</mat-icon>
         <input matInput type="number" [(ngModel)]="data.row.pro_Cotizacion"
           [ngModelOptions]="{standalone: true}"
           (ngModelChange)="recalcularPrecioFinal(data.row)" />
