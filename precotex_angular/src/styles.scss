@@ -2,6 +2,91 @@
 @import 'ag-grid-community/dist/styles/ag-grid.css';
 @import 'ag-grid-community/dist/styles/ag-theme-material.css';
 
+/* ============================================================
+   TOKENS DE DISEÑO — módulo Cotizaciones
+   Viven en :root (no en :host del componente) porque el
+   MatDialog de Cotizaciones se renderiza en el CDK overlay,
+   fuera del árbol del componente, y necesita heredar estas
+   variables para no perder el lenguaje visual de las cards.
+   ============================================================ */
+:root {
+  /* 1. TOKENS: PRIMITIVAS */
+  --c-indigo-900: #1a237e;
+  --c-indigo-700: #4338CA;
+  --c-indigo-600: #4F46E5;
+  --c-indigo-500: #6366F1;
+  --c-indigo-200: #C7D2FE;
+  --c-indigo-100: #E0E7FF;
+  --c-indigo-050: #EEF2FF;
+  --c-violet-600: #7C3AED;
+  --c-teal-400: #2DD4BF;
+
+  --c-neutral-900: #0f172a;
+  --c-neutral-600: #475569;
+  --c-neutral-400: #94a3b8;
+  --c-neutral-300: #CBD5E1;
+  --c-neutral-200: #e2e8f0;
+  --c-neutral-100: #f1f5f9;
+  --c-neutral-050: #f8fafc;
+  --c-white: #ffffff;
+
+  --c-success-700: #16A34A;
+  --c-success-600: #22C55E;
+  --c-success-050: #F0FDF4;
+  --c-warning-800: #8a4b00;
+  --c-warning-050: #fff4e5;
+  --c-danger-700: #DC2626;
+  --c-danger-600: #EF4444;
+  --c-danger-050: #FEF2F2;
+  --c-orange-500: #F97316;
+  --c-orange-050: #FFF7ED;
+
+  /* 2. TOKENS: SEMÁNTICOS */
+  --color-brand:          var(--c-indigo-600);
+  --color-brand-hover:    var(--c-indigo-700);
+  --color-brand-subtle:   var(--c-indigo-050);
+  --color-text:           var(--c-neutral-900);
+  --color-text-muted:     var(--c-neutral-600);
+  --color-text-disabled:  var(--c-neutral-400);
+  --color-border:         var(--c-neutral-200);
+  --color-surface:        var(--c-white);
+  --color-surface-sunken: var(--c-neutral-050);
+  --color-surface-alt:    var(--c-neutral-100);
+  --color-focus-ring:     rgba(99, 102, 241, 0.3);
+
+  --gradient-brand:      linear-gradient(135deg, var(--c-indigo-600), var(--c-violet-600));
+  --gradient-top-border: linear-gradient(90deg, var(--c-indigo-500), var(--c-teal-400));
+
+  /* Roles de fila */
+  --row-group-bg:    var(--c-neutral-100);
+  --row-subtotal-bg: var(--c-warning-050);
+  --row-total-bg:    var(--c-indigo-050);
+  --row-hover-bg:    #eef2ff;
+  --row-zebra-bg:    var(--c-neutral-050);
+  --cell-editable-bg: var(--c-white);
+  --cell-editable-bd: var(--c-neutral-400);
+
+  /* 3. TOKENS: ESCALAS */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;  --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px;
+
+  --radius-sm: 4px;  --radius-md: 8px;   --radius-lg: 12px;
+  --radius-xl: 18px; --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, .06);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, .07), 0 2px 4px rgba(15, 23, 42, .04);
+  --shadow-lg: 0 8px 24px rgba(15, 23, 42, .14);
+  --shadow-xl: 0 16px 48px rgba(15, 23, 42, .12);
+
+  --font-ui: Roboto, "Helvetica Neue", sans-serif;
+  --fs-xs: 11px; --fs-sm: 12px; --fs-md: 14px; --fs-lg: 16px; --fs-xl: 20px;
+  --fw-regular: 400; --fw-medium: 500; --fw-bold: 600;
+
+  --row-h-compacta: 34px;
+  --row-h-comoda:   44px;
+  --row-h: var(--row-h-compacta);
+}
+
 
 .ag-theme-material .ag-overlay-loading-center {
     display: none

@@ -12,7 +12,6 @@ import Swal from 'sweetalert2';
 import { GlobalVariable } from 'src/app/VarGlobals';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { color } from 'html2canvas/dist/types/css/types/color';
-import { MatCheckboxChange } from '@angular/material/checkbox';
 
 interface Costeo {
     unidadNegocio: string;
@@ -126,9 +125,11 @@ export class CotizacionesComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('dialogObservacion') dialogObservacion!: TemplateRef<any>;
   @ViewChild('dialogListaPrecios') dialogListaPrecios!: TemplateRef<any>;
+  @ViewChild('dialogAjuste') dialogAjuste!: TemplateRef<any>;
   observacion: string = '';
 
   dialogRef!: MatDialogRef<any>;
+  dialogRefAjuste!: MatDialogRef<any>;
 
   maskCodigo: (string | RegExp)[] = [
     /[A-Z]/, // Primera letra mayúscula
@@ -167,6 +168,7 @@ export class CotizacionesComponent implements OnInit {
   isAjusteBloqueado   = true;
   dialogAbierto       = false;
   bBuscarTela         = false;
+  // --- Historial: sin control en UI, se envía siempre en false ---
   bValidaHistorial    = false;
   dialogPrecio        = false;
   
@@ -232,9 +234,21 @@ export class CotizacionesComponent implements OnInit {
   panelCriteriosAbierto = true;
   densidad: 'compacta' | 'comoda' = 'compacta';
 
-  // Tabla de solo lectura + panel lateral de edición
+  // Tabla de solo lectura + modal de edición
   filaEnEdicion: any = null;
   tipoEdicion: 'utilidad' | 'ajuste' | 'cotizacion' | null = null;
+  datosGeneralesAbierto = true;
+
+  // --- Panel de Historial (UI estática, sin conexión a servicio) ---
+  // Datos de ejemplo únicamente para reflejar el mockup; no representan versiones reales.
+  historialVersiones: { id: number, version: string, estado: 'Vigente' | 'Aprobada' | 'Borrador', reciente?: boolean, usuario: string, fecha: string }[] = [
+    { id: 4, version: 'Versión 4', estado: 'Vigente',  reciente: true, usuario: 'J. Calles', fecha: '04/08/2026' },
+    { id: 3, version: 'Versión 3', estado: 'Aprobada', usuario: 'J. Calles', fecha: '04/08/2026' },
+    { id: 2, version: 'Versión 2', estado: 'Aprobada', usuario: 'M. López', fecha: '28/07/2026' },
+    { id: 1, version: 'Versión 1', estado: 'Borrador', usuario: 'J. Calles', fecha: '25/07/2026' },
+  ];
+  historialPineado = true;
+  versionSeleccionada = this.historialVersiones[0];
 
   displayedColumns: string[] = [
     'hover',
@@ -302,9 +316,8 @@ export class CotizacionesComponent implements OnInit {
     intensidad      :[''],
     color           :[''],
     //ctrl_receta     :[''],
-    filtroColores   :[''],
-    ctrl_historial  :[false]
-  });  
+    filtroColores   :['']
+  });
 
   formulario_Precio = this.formBuilder.group({
     ctrl_receta: ['']
@@ -357,11 +370,24 @@ export class CotizacionesComponent implements OnInit {
     }
     this.filaEnEdicion = row;
     this.tipoEdicion = tipo;
+    this.datosGeneralesAbierto = true;
+    this.dialogRefAjuste = this.dialog.open(this.dialogAjuste, {
+      width: '460px',
+      maxWidth: '92vw',
+      autoFocus: false,
+      panelClass: 'cot-modal-panel',
+      data: { row, tipo }
+    });
+    this.dialogRefAjuste.afterClosed().subscribe(() => {
+      this.filaEnEdicion = null;
+      this.tipoEdicion = null;
+    });
   }
 
   cerrarEdicion() {
-    this.filaEnEdicion = null;
-    this.tipoEdicion = null;
+    if (this.dialogRefAjuste) {
+      this.dialogRefAjuste.close();
+    }
   }
 
   @HostListener('document:keydown.escape')
@@ -369,6 +395,25 @@ export class CotizacionesComponent implements OnInit {
     if (this.filaEnEdicion) {
       this.cerrarEdicion();
     }
+  }
+
+  // --- Panel de Historial (UI estática) ---
+  /** Alterna la visibilidad del panel de Historial. Anclado = visible. */
+  toggleHistorialPin() {
+    this.historialPineado = !this.historialPineado;
+  }
+
+  /** El anclaje solo tiene sentido cuando hay procesos cargados. */
+  get puedeAnclarHistorial(): boolean {
+    return !!this.dataSource.data?.length;
+  }
+
+  seleccionarVersion(v: any) {
+    this.versionSeleccionada = v;
+  }
+
+  nuevaCotizacionUI() {
+    this.toastr.info('Función en desarrollo', '', { timeOut: 2000 });
   }
 
   get resumenCriterios(): { label: string, value: string }[] {
@@ -691,6 +736,7 @@ export class CotizacionesComponent implements OnInit {
               p.isParent = true;
               p.isChild = false;
               p.tieneHijos = this.planos.some(x => x.pro_Hover.startsWith(p.pro_Hover + '.'));
+              p.childCount = this.planos.filter(x => x.pro_Hover.startsWith(p.pro_Hover + '.')).length;
             } else {
               p.isChild = true;
               p.isParent = false;
@@ -812,8 +858,7 @@ export class CotizacionesComponent implements OnInit {
     this.formulario.get('descripcionTela')?.setValue(''); 
     this.formulario.get('codigoRutaTela')?.setValue(''); 
     this.formulario.get('codigoColor')?.setValue(''); 
-    this.formulario.get('color')?.setValue(''); 
-    this.formulario.get('ctrl_historial')?.setValue(false);
+    this.formulario.get('color')?.setValue('');
     //DesHabilita botoneria
     this.bMuestraMenuFlotante = false;
     this.isDisabledBtnFind    = false;
@@ -1543,11 +1588,6 @@ onCancelarPrecio(){
 //onChangeColor(){
   //this.validaCodigoColor();
 //}
-
-onHistorialChange(event: MatCheckboxChange) {
-  console.log('Historial marcado:', event.checked);
-  this.bValidaHistorial = event.checked;
-}
 
 private mapToDetalle(item: any): dataDetalle {
     console.log('MAPDETALLE', item);

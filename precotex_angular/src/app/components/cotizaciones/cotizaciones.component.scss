@@ -5,83 +5,10 @@
    tabla con header indigo, action bar flotante glassmorphism.
    ============================================================ */
 
+/* Los tokens de diseño (--color-*, --gradient-*, --sp-*, etc.) viven en
+   :root (src/styles.scss): el MatDialog de este módulo se renderiza en el
+   CDK overlay, fuera del árbol del :host, y necesita heredarlos. */
 :host {
-  /* 1. TOKENS: PRIMITIVAS */
-  --c-indigo-900: #1a237e;
-  --c-indigo-700: #4338CA;
-  --c-indigo-600: #4F46E5;
-  --c-indigo-500: #6366F1;
-  --c-indigo-200: #C7D2FE;
-  --c-indigo-100: #E0E7FF;
-  --c-indigo-050: #EEF2FF;
-  --c-violet-600: #7C3AED;
-  --c-teal-400: #2DD4BF;
-
-  --c-neutral-900: #0f172a;
-  --c-neutral-600: #475569;
-  --c-neutral-400: #94a3b8;
-  --c-neutral-300: #CBD5E1;
-  --c-neutral-200: #e2e8f0;
-  --c-neutral-100: #f1f5f9;
-  --c-neutral-050: #f8fafc;
-  --c-white: #ffffff;
-
-  --c-success-700: #16A34A;
-  --c-success-600: #22C55E;
-  --c-success-050: #F0FDF4;
-  --c-warning-800: #8a4b00;
-  --c-warning-050: #fff4e5;
-  --c-danger-700: #DC2626;
-  --c-danger-600: #EF4444;
-  --c-danger-050: #FEF2F2;
-  --c-orange-500: #F97316;
-  --c-orange-050: #FFF7ED;
-
-  /* 2. TOKENS: SEMÁNTICOS */
-  --color-brand:          var(--c-indigo-600);
-  --color-brand-hover:    var(--c-indigo-700);
-  --color-brand-subtle:   var(--c-indigo-050);
-  --color-text:           var(--c-neutral-900);
-  --color-text-muted:     var(--c-neutral-600);
-  --color-text-disabled:  var(--c-neutral-400);
-  --color-border:         var(--c-neutral-200);
-  --color-surface:        var(--c-white);
-  --color-surface-sunken: var(--c-neutral-050);
-  --color-surface-alt:    var(--c-neutral-100);
-  --color-focus-ring:     rgba(99, 102, 241, 0.3);
-
-  --gradient-brand:      linear-gradient(135deg, var(--c-indigo-600), var(--c-violet-600));
-  --gradient-top-border: linear-gradient(90deg, var(--c-indigo-500), var(--c-teal-400));
-
-  /* Roles de fila */
-  --row-group-bg:    var(--c-neutral-100);
-  --row-subtotal-bg: var(--c-warning-050);
-  --row-total-bg:    var(--c-indigo-050);
-  --row-hover-bg:    #eef2ff;
-  --row-zebra-bg:    var(--c-neutral-050);
-  --cell-editable-bg: var(--c-white);
-  --cell-editable-bd: var(--c-neutral-400);
-
-  /* 3. TOKENS: ESCALAS */
-  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;  --sp-4: 16px;
-  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px;
-
-  --radius-sm: 4px;  --radius-md: 8px;   --radius-lg: 12px;
-  --radius-xl: 18px; --radius-pill: 999px;
-
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, .06);
-  --shadow-md: 0 4px 12px rgba(15, 23, 42, .07), 0 2px 4px rgba(15, 23, 42, .04);
-  --shadow-lg: 0 8px 24px rgba(15, 23, 42, .14);
-  --shadow-xl: 0 16px 48px rgba(15, 23, 42, .12);
-
-  --font-ui: Roboto, "Helvetica Neue", sans-serif;
-  --fs-xs: 11px; --fs-sm: 12px; --fs-md: 14px; --fs-lg: 16px; --fs-xl: 20px;
-  --fw-regular: 400; --fw-medium: 500; --fw-bold: 600;
-
-  --row-h-compacta: 34px;
-  --row-h-comoda:   44px;
-  --row-h: var(--row-h-compacta);
-
   display: block;
   height: 100%;
   font-family: var(--font-ui);
@@ -114,19 +41,21 @@
 .cot-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: var(--sp-4);
-  flex-wrap: wrap;
+  padding: var(--sp-1) 0 var(--sp-2);
 }
 
 .cot-toolbar__title {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: var(--sp-3);
+  text-align: center;
 
   h1 {
     margin: 0;
-    font-size: var(--fs-xl);
+    font-size: 20px;
     font-weight: var(--fw-bold);
     color: var(--color-text);
     letter-spacing: -0.02em;
@@ -134,15 +63,15 @@
 }
 
 .cot-toolbar__icon-circle {
-  width: 42px;
-  height: 42px;
-  border-radius: var(--radius-md);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-lg);
   background: var(--gradient-brand);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.32);
   flex-shrink: 0;
 
   mat-icon {
@@ -150,84 +79,6 @@
     width: 22px;
     height: 22px;
   }
-}
-
-.cot-toolbar__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 14px;
-  border-radius: var(--radius-pill);
-  background: var(--gradient-brand);
-  color: white;
-  font-size: var(--fs-sm);
-  font-weight: var(--fw-bold);
-  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
-}
-
-.cot-badge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #A5B4FC;
-  animation: cotBadgePulse 2s infinite;
-  flex-shrink: 0;
-}
-
-@keyframes cotBadgePulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.4; }
-}
-
-/* El span legacy queda oculto — lo reemplaza el badge */
-.cot-toolbar__count {
-  display: none;
-}
-
-.cot-densidad-wrap {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
-}
-
-.cot-densidad-label {
-  font-size: var(--fs-sm);
-  color: var(--color-text-muted);
-  font-weight: var(--fw-medium);
-}
-
-/* Density toggle: pill shape */
-.cot-densidad ::ng-deep .mat-button-toggle-group {
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--color-border);
-  background: var(--c-neutral-100);
-  overflow: hidden;
-}
-
-.cot-densidad ::ng-deep .mat-button-toggle {
-  border-radius: var(--radius-pill);
-  border: none;
-}
-
-.cot-densidad ::ng-deep .mat-button-toggle-label-content {
-  line-height: 32px;
-  padding: 0 var(--sp-3);
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: var(--fs-sm);
-}
-
-.cot-densidad ::ng-deep .mat-button-toggle-checked {
-  background: var(--c-white);
-  color: var(--color-brand);
-  box-shadow: var(--shadow-sm);
-  font-weight: var(--fw-bold);
-}
-
-.cot-densidad ::ng-deep .mat-button-toggle:not(.mat-button-toggle-checked):hover {
-  background: rgba(255, 255, 255, 0.5);
-  color: var(--c-neutral-900);
 }
 
 /* ============================================================
@@ -268,44 +119,70 @@
   flex-wrap: wrap;
 }
 
-.cot-chips {
-  display: flex;
-  flex-wrap: wrap;
+.cot-criterios-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: var(--sp-2);
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
-.cot-chip {
-  display: inline-flex;
+.cot-criterio-card {
+  display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
-  background: var(--color-brand-subtle);
-  font-size: var(--fs-sm);
-  white-space: nowrap;
+  gap: var(--sp-2);
+  padding: 8px 12px;
+  min-width: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-brand);
+  border-radius: var(--radius-lg);
   transition: transform 0.2s, box-shadow 0.2s;
 
   &:hover {
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
   }
+}
+
+.cot-criterio-card__icon {
+  display: flex;
+  flex-shrink: 0;
 
   mat-icon {
-    font-size: 14px;
-    width: 14px;
-    height: 14px;
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
     color: var(--color-brand);
   }
 }
 
-.cot-chip__label {
-  color: var(--color-text-muted);
-  font-weight: var(--fw-medium);
+.cot-criterio-card__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* habilita el ellipsis del valor */
 }
 
-.cot-chip__value {
-  color: var(--color-text);
+.cot-criterio-card__label {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.cot-criterio-card__value {
+  font-size: var(--fs-sm);
   font-weight: var(--fw-bold);
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cot-criterios__resumen-actions {
+  display: flex;
+  gap: var(--sp-2);
+  flex: 0 0 auto;
 }
 
 .cot-btn-editar {
@@ -376,7 +253,7 @@
 .cot-form-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: var(--sp-4);
   margin-top: var(--sp-4);
   padding-top: var(--sp-3);
@@ -384,22 +261,248 @@
   flex-wrap: wrap;
 }
 
-.cot-form-footer mat-checkbox ::ng-deep .mat-checkbox-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.cot-form-footer mat-checkbox ::ng-deep .mat-checkbox-label mat-icon {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-}
-
 .cot-form-actions {
   display: flex;
   gap: var(--sp-3);
+}
+
+.cot-btn-pin-filtro mat-icon {
+  transition: transform 0.2s;
+}
+
+.cot-btn-pin-filtro--activo {
+  color: var(--color-brand);
+  border-color: var(--color-brand);
+
+  mat-icon { transform: rotate(-45deg); }
+}
+
+/* ============================================================
+   SECCIÓN 6B — LAYOUT HISTORIAL + COSTEO
+   ============================================================ */
+
+.cot-workspace-content {
+  display: flex;
+  gap: var(--sp-4);
+  flex: 1 1 auto;
+  min-height: 0;
+  align-items: stretch;
+}
+
+/* Panel de Historial (UI estática) */
+.cot-history-panel {
+  width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.cot-history-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--c-neutral-100);
+}
+
+.cot-history-panel__title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+
+  h2 { margin: 0; font-size: var(--fs-md); font-weight: var(--fw-bold); }
+  p  { margin: 0; font-size: var(--fs-xs); color: var(--color-text-muted); }
+}
+
+.cot-history-panel__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: var(--gradient-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 3px 8px rgba(79, 70, 229, 0.25);
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: var(--c-white); }
+}
+
+.cot-btn-pin {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-disabled);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+
+  &:hover { background: var(--color-brand-subtle); color: var(--color-brand); }
+
+  &--activo {
+    color: var(--color-brand);
+    background: var(--color-brand-subtle);
+    transform: rotate(-45deg);
+  }
+}
+
+.cot-history-panel__nuevo {
+  width: 100%;
+  justify-content: center !important;
+  font-size: var(--fs-sm) !important;
+}
+
+.cot-history-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cot-history-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover { border-color: var(--color-brand); background: var(--color-brand-subtle); }
+
+  &--activa {
+    border-color: var(--color-brand);
+    background: rgba(99, 102, 241, 0.03);
+  }
+}
+
+.cot-history-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  background: var(--color-brand);
+
+  &.cot-dot--vigente  { background: var(--c-success-600); }
+  &.cot-dot--aprobada { background: var(--color-brand); }
+  &.cot-dot--borrador { background: var(--c-orange-500); }
+}
+
+.cot-history-body { flex: 1; min-width: 0; }
+
+.cot-history-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.cot-history-version { font-size: var(--fs-sm); font-weight: var(--fw-bold); color: var(--color-text); }
+
+.cot-history-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+
+  &.cot-badge--vigente  { background: var(--c-success-050); color: var(--c-success-700); }
+  &.cot-badge--aprobada { background: var(--color-brand-subtle); color: var(--color-brand); }
+  &.cot-badge--borrador { background: var(--c-orange-050); color: var(--c-orange-500); }
+}
+
+.cot-history-recent-tag {
+  font-size: 9px;
+  font-weight: var(--fw-bold);
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+  background: var(--c-teal-400);
+  color: var(--c-white);
+  margin-left: auto;
+}
+
+.cot-history-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+
+  mat-icon { font-size: 13px; width: 13px; height: 13px; color: var(--color-text-disabled); }
+}
+
+.cot-history-sep { color: var(--c-neutral-300); margin: 0 2px; }
+
+/* Barra "Versión consultada" */
+.cot-version-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--c-indigo-100);
+  background: var(--c-indigo-050);
+  flex-wrap: wrap;
+}
+
+.cot-version-bar__info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: var(--color-brand); flex-shrink: 0; }
+}
+
+.cot-version-bar__label { font-size: var(--fs-sm); color: var(--color-text-muted); font-weight: var(--fw-medium); }
+.cot-version-bar__value {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-brand);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Badge contador de hijos en fila grupo */
+.cot-group-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--c-indigo-600);
+  margin-left: 6px;
+}
+
+/* Ícono de comentario en celda Ajuste */
+.cot-ajuste-comment-icon {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  color: var(--color-brand);
+  cursor: help;
+  margin-left: 6px;
+  vertical-align: middle;
 }
 
 /* ============================================================
@@ -667,103 +770,23 @@ th.col-descripcion {
 }
 
 /* ============================================================
-   SECCIÓN 8 — DRAWER LATERAL
+   SECCIÓN 8 — CONTENIDO DEL MODAL DE EDICIÓN
+   (nombres "cot-drawer__*" se conservan por compatibilidad de
+   estructura interna, aunque ahora viven dentro de un MatDialog)
    ============================================================ */
-
-.cot-drawer-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.32);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  z-index: 1000;
-}
-
-.cot-drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 380px;
-  max-width: 92vw;
-  z-index: 1001;
-  background: var(--color-surface);
-  box-shadow: var(--shadow-lg);
-  display: flex;
-  flex-direction: column;
-  animation: cot-drawer-in 0.18s ease-out;
-}
-
-@keyframes cot-drawer-in {
-  from { transform: translateX(24px); opacity: 0; }
-  to   { transform: translateX(0);    opacity: 1; }
-}
-
-.cot-drawer__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--sp-3);
-  padding: var(--sp-4);
-  border-bottom: 1px solid var(--color-border);
-
-  h3 {
-    margin: 2px 0 0;
-    font-size: var(--fs-lg);
-    font-weight: var(--fw-bold);
-  }
-}
-
-.cot-drawer__eyebrow {
-  font-size: var(--fs-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--color-text-muted);
-  font-weight: var(--fw-medium);
-}
 
 .cot-drawer__body {
   flex: 1 1 auto;
   overflow-y: auto;
+  max-height: calc(88vh - 150px);
   padding: var(--sp-4);
   display: flex;
   flex-direction: column;
-  gap: var(--sp-4);
-}
-
-.cot-drawer__contexto {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: var(--sp-3);
-  padding: var(--sp-3);
-  background: var(--color-surface-sunken);
-  border-radius: var(--radius-md);
-}
-
-.cot-drawer__stat {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-
-  span {
-    font-size: var(--fs-xs);
-    color: var(--color-text-muted);
-  }
-
-  strong {
-    font-size: var(--fs-md);
-    font-variant-numeric: tabular-nums;
-  }
 }
 
 .cot-drawer__field {
   width: 100%;
-}
-
-.cot-drawer__hint {
-  margin: calc(var(--sp-3) * -1) 0 0;
-  font-size: var(--fs-xs);
-  color: var(--color-text-muted);
 }
 
 .cot-drawer__footer {
@@ -771,6 +794,198 @@ th.col-descripcion {
   border-top: 1px solid var(--color-border);
   display: flex;
   justify-content: flex-end;
+  gap: var(--sp-3);
+}
+
+/* Panel del diálogo: misma card que .cot-criterios/.cot-costeo
+   (borde superior degradado, radio y sombra del módulo). El
+   mat-dialog-container es de Angular Material, no vive dentro de
+   nuestro template, por eso requiere ::ng-deep para alcanzarlo. */
+::ng-deep .cot-modal-panel .mat-dialog-container {
+  padding: 0;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+}
+
+::ng-deep .cot-modal-panel {
+  max-width: 480px !important;
+}
+
+.cot-modal {
+  display: flex;
+  flex-direction: column;
+  max-height: 88vh;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gradient-top-border);
+    z-index: 2;
+  }
+}
+
+.cot-modal__close {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.cot-modal__header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  text-align: left;
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--color-border);
+
+  h3 {
+    margin: 0;
+    font-size: var(--fs-lg);
+    line-height: 1.2;
+    font-weight: var(--fw-bold);
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.cot-modal__header-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-width: 0;
+}
+
+.cot-modal__icon-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-lg);
+  background: var(--color-brand-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-brand);
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Card "Datos Generales" colapsable */
+.cot-modal__datos-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: var(--sp-3);
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.cot-modal__accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: none;
+  background: transparent;
+  padding: 0 0 8px;
+  margin: 0 0 4px;
+  border-bottom: 1px solid var(--c-indigo-100);
+  font: inherit;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-brand);
+  cursor: pointer;
+}
+
+.cot-modal__chevron {
+  font-size: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+  transition: transform 0.2s ease;
+}
+
+.cot-modal__chevron--colapsado {
+  transform: rotate(-90deg);
+}
+
+.cot-modal__datos-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cot-modal__datos-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--c-neutral-200);
+
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  span {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  strong {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    color: var(--color-text);
+    text-align: right;
+    word-break: break-word;
+  }
+}
+
+/* Campo Observación (modal de ajuste) */
+.cot-drawer__observacion {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cot-drawer__observacion-label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text);
+}
+
+.cot-drawer__required {
+  color: var(--c-danger-600);
+}
+
+.cot-drawer__observacion-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+  outline: none;
+  resize: none;
+  transition: all 0.2s;
+
+  &:focus {
+    border-color: var(--color-brand);
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
+  }
 }
 
 /* ============================================================
@@ -899,6 +1114,20 @@ button[mat-stroked-button] {
     flex-wrap: wrap;
   }
 
+  .cot-workspace-content {
+    flex-direction: column;
+  }
+
+  .cot-history-panel {
+    width: 100%;
+    max-height: 240px;
+  }
+
+  .cot-version-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .cot-form-grid {
     grid-template-columns: 1fr;
   }
@@ -923,6 +1152,15 @@ button[mat-stroked-button] {
     align-items: stretch;
   }
 
+  .cot-criterios-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .cot-criterios__resumen-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
   .cot-actionbar {
     left: var(--sp-4);
     right: var(--sp-4);
@@ -932,6 +1170,12 @@ button[mat-stroked-button] {
     border-radius: var(--radius-lg);
 
     &.ng-animating { transform: none; }
+  }
+}
+
+@media screen and (max-width: 599px) {
+  ::ng-deep .cot-modal-panel {
+    max-width: calc(100vw - 32px) !important;
   }
 }
 
