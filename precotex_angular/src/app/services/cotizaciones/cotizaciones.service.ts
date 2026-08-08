@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { GlobalVariable } from 'src/app/VarGlobals';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -14,6 +13,33 @@ export class CotizacionesService {
     });
     constructor(private http: HttpClient) { }
   
+  getListaUnidadNegocio() {
+    const headers = this.Header;
+    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaUnidadNegocio', { headers });
+  }  
+
+  getListaRecetasAntipilling() {
+    const headers = this.Header;
+    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaRecetasAntipilling', { headers });
+  }    
+
+  getValidaColorExiste(Cod_Color: string) {
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append("Cod_Color", Cod_Color);
+    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getValidaColorExiste', { headers, params });
+  }  
+
+
+
+
+
+
+
+
+
+
+
   getListarProcesosExportacion(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string, precio: number, tiempo: number, IdCotizacion_Cab: number) {
     const headers = this.Header;
     let params = new HttpParams();
@@ -68,17 +94,9 @@ export class CotizacionesService {
     return this.http.post(this.baseUrlTinto + 'txCotizaciones/postProcesoCotizacion', data, { headers })
   }  
 
-  getValidaColorExiste(Cod_Color: string) {
-    const headers = this.Header;
-    let params = new HttpParams();
-    params = params.append("Cod_Color", Cod_Color);
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getValidaColorExiste', { headers, params });
-  }  
 
-  getListaUnidadNegocio() {
-    const headers = this.Header;
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaUnidadNegocio', { headers });
-  }  
+
+
 
   getListaIntensidad(Id_Unidad_NegocioKey: number) {
     const headers = this.Header;
@@ -124,10 +142,7 @@ export class CotizacionesService {
     return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaPrecioXColor', { headers, params });
   }   
     
-  getListaRecetasAntipilling() {
-    const headers = this.Header;
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaRecetasAntipilling', { headers });
-  }    
+
 
   getValidaExistenciaHistorialxColor(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string, Cod_Receta: string){
     const headers = this.Header;

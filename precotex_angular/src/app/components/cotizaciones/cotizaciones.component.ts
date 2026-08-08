@@ -325,10 +325,10 @@ export class CotizacionesComponent implements OnInit {
 
   //procesos: Proceso[] = [];
 
+
+
+  //INICIALIZACION DE COMPONENTE
   ngOnInit(): void {
-
-
-
     // this.getRutaXCodTela('JE003177');
     // this.getRutaXCodTelaDetalle('JE003177', '01');
     //this.getListaCentroCosto();
@@ -336,13 +336,156 @@ export class CotizacionesComponent implements OnInit {
     this.LoadClientes(null);
     this.loadRecetas();//PORQUE LAS RECETAS SON UNICAS NO DEPENDEN DE NADIE
 
-
     this.formulario.get('codigoColor')?.valueChanges.subscribe((valor: any) => {
       if (valor && valor.length === 5) {
         this.validaCodigoColor();
       }
     });     
   }
+
+  loadUnidadNeg(){
+    this.unidadesNegocio = [];   
+    this.SpinnerService.show();
+    this.service.getListaUnidadNegocio().subscribe({
+      next: (response: any) => {
+        if(response.success){
+          if (response.totalElements > 0){
+            this.unidadesNegocio = response.elements;
+            this.SpinnerService.hide();
+          }
+          else{
+            this.unidadesNegocio = [];            
+            this.SpinnerService.hide();
+          };
+        }else{
+          this.unidadesNegocio = [];
+        }
+      },
+      error: (error: any) => {
+        this.SpinnerService.hide();
+        console.log(error.error.message, 'Cerrar', {
+          timeout: 2500
+        })
+      }
+    });       
+  }
+
+  LoadClientes(codigoCliente: string){
+    this.dataClientes = [];
+    this.SpinnerService.show();
+    this.serviceColgadores.getObtieneInformacionClienteColgador().subscribe({
+      next: (response: any)=> {
+        if(response.success){
+          if (response.totalElements > 0){
+              // "label" es el texto que muestra el <ng-select> (bindLabel="label")
+              this.dataClientes = response.elements.map((c: any) => ({
+                ...c,
+                label: c.abr_Cliente + ' - ' + c.nom_Cliente
+              }));
+              this.SpinnerService.hide();
+
+              if (codigoCliente && codigoCliente.trim() !== ''){
+                this.usarClientes(codigoCliente);
+              }
+          }
+          else{
+            this.SpinnerService.hide();
+          };
+        }
+      },
+      error: (error) => {
+        this.SpinnerService.hide();
+        console.log(error.error.message, 'Cerrar', {
+        timeOut: 2500,
+         });
+      }
+    });   
+  }  
+
+  loadRecetas(){
+    this.SpinnerService.show();
+    this.service.getListaRecetasAntipilling().subscribe({
+      next: (response: any) => {
+        if(response.success){
+          if (response.totalElements > 0){
+            this.dataRecetas = response.elements;
+            this.SpinnerService.hide();
+          }
+          else{
+            this.dataSource_Hilos.data = [];            
+            this.SpinnerService.hide();
+          };
+        }else{
+          this.dataSource_Hilos.data = [];
+        }
+      },
+      error: (error: any) => {
+        this.SpinnerService.hide();
+        console.log(error.error.message, 'Cerrar', {
+          timeout: 2500
+        })
+      }
+    });      
+  }
+
+  validaCodigoColor() {
+    const sCodColor = this.formulario.get('color')?.value! || '';
+
+    if (!sCodColor || sCodColor.trim() === ''){
+      this.matSnackBar.open("¡Ingrese codigo de color...!", 'Cerrar', {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration: 1500,
+      });
+      return;
+    }  
+    
+    //Ejecuta cuando es longitud 5
+    if (sCodColor && sCodColor.length === 6) {
+      this.SpinnerService.show();
+      this.service.getValidaColorExiste(sCodColor).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            if (response.totalElements == 0) {
+
+              this.toastr.info(response.message, '', {
+                timeOut: 2500,
+              });                 
+
+              this.formulario.get('codigoColor')?.setValue('');  
+
+            }else{
+              console.log('Resultado color', response)
+              this.formulario.get('descripcionColor')?.setValue(response.elements[0].descripcion); 
+            }
+          }
+          this.SpinnerService.hide();
+        },
+        error: (error: any) => {
+          this.SpinnerService.hide();
+          console.log(error.error.message, 'Cerrar', {
+            timeout: 2500
+          })
+        }
+      });      
+    }
+    else {
+      //this.formulario.get('codigoColor')?.setValue(''); 
+    }
+
+  }  
+
+
+
+
+
+
+
+
+
+
+
+//#Region EVENTOS DEL FORMULARIO
 
   toggleExpand(row: any) {
     if (row.isParent) {
@@ -353,6 +496,11 @@ export class CotizacionesComponent implements OnInit {
       }
     }
   }
+
+//#endregion
+
+
+  
 
   private static readonly ICONOS_SECCION: { claves: string[]; icono: string }[] = [
     { claves: ['MATERIA', 'HILADO', 'ALGODON', 'INSUMO'], icono: 'inventory_2' },
@@ -913,37 +1061,7 @@ export class CotizacionesComponent implements OnInit {
 
   }  
 
-  LoadClientes(codigoCliente: string){
-    this.dataClientes = [];
-    this.SpinnerService.show();
-    this.serviceColgadores.getObtieneInformacionClienteColgador().subscribe({
-      next: (response: any)=> {
-        if(response.success){
-          if (response.totalElements > 0){
-              // "label" es el texto que muestra el <ng-select> (bindLabel="label")
-              this.dataClientes = response.elements.map((c: any) => ({
-                ...c,
-                label: c.abr_Cliente + ' - ' + c.nom_Cliente
-              }));
-              this.SpinnerService.hide();
-
-              if (codigoCliente && codigoCliente.trim() !== ''){
-                this.usarClientes(codigoCliente);
-              }
-          }
-          else{
-            this.SpinnerService.hide();
-          };
-        }
-      },
-      error: (error) => {
-        this.SpinnerService.hide();
-        console.log(error.error.message, 'Cerrar', {
-        timeOut: 2500,
-         });
-      }
-    });   
-  }  
+  
 
   // NOTA: filtrarClientes()/filtrarColores() y los controles filtro/filtroColores
   // quedaron sin uso en el template tras migrar Cliente/Color a <ng-select>, que
@@ -965,52 +1083,7 @@ export class CotizacionesComponent implements OnInit {
     );
   }
 
-  validaCodigoColor() {
-    const sCodColor = this.formulario.get('color')?.value! || '';
-
-    if (!sCodColor || sCodColor.trim() === ''){
-      this.matSnackBar.open("¡Ingrese codigo de color...!", 'Cerrar', {
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-        duration: 1500,
-      });
-    return;
-    }  
-    
-    //Ejecuta cuando es longitud 5
-    if (sCodColor && sCodColor.length === 6) {
-      this.SpinnerService.show();
-      this.service.getValidaColorExiste(sCodColor).subscribe({
-        next: (response: any) => {
-          if (response.success) {
-            if (response.totalElements == 0) {
-
-              this.toastr.info(response.message, '', {
-                timeOut: 2500,
-              });                 
-
-              this.formulario.get('codigoColor')?.setValue('');  
-
-            }else{
-              console.log('Resultado color', response)
-              this.formulario.get('descripcionColor')?.setValue(response.elements[0].descripcion); 
-            }
-          }
-          this.SpinnerService.hide();
-        },
-        error: (error: any) => {
-          this.SpinnerService.hide();
-          console.log(error.error.message, 'Cerrar', {
-            timeout: 2500
-          })
-        }
-      });      
-    }
-    else {
-      //this.formulario.get('codigoColor')?.setValue(''); 
-    }
-
-  }  
+  
 
   loadHilo(sCodTela: string){
     this.SpinnerService.show();
@@ -1065,32 +1138,7 @@ export class CotizacionesComponent implements OnInit {
     });    
   }
 
-  loadUnidadNeg(){
-    this.unidadesNegocio = [];   
-    this.SpinnerService.show();
-    this.service.getListaUnidadNegocio().subscribe({
-      next: (response: any) => {
-        if(response.success){
-          if (response.totalElements > 0){
-            this.unidadesNegocio = response.elements;
-            this.SpinnerService.hide();
-          }
-          else{
-            this.unidadesNegocio = [];            
-            this.SpinnerService.hide();
-          };
-        }else{
-          this.unidadesNegocio = [];
-        }
-      },
-      error: (error: any) => {
-        this.SpinnerService.hide();
-        console.log(error.error.message, 'Cerrar', {
-          timeout: 2500
-        })
-      }
-    });       
-  }
+  
 
   loadListaCodigoColor(Cod_Cliente: string) {
     this.listaCodigoColor = [];
@@ -1490,31 +1538,7 @@ onBuscaPreciosxColor(Tipo_Busqueda: string, Pro_Cen_Cos: number, Tipo: string, C
 
 
 
-loadRecetas(){
-    this.SpinnerService.show();
-    this.service.getListaRecetasAntipilling().subscribe({
-      next: (response: any) => {
-        if(response.success){
-          if (response.totalElements > 0){
-            this.dataRecetas = response.elements;
-            this.SpinnerService.hide();
-          }
-          else{
-            this.dataSource_Hilos.data = [];            
-            this.SpinnerService.hide();
-          };
-        }else{
-          this.dataSource_Hilos.data = [];
-        }
-      },
-      error: (error: any) => {
-        this.SpinnerService.hide();
-        console.log(error.error.message, 'Cerrar', {
-          timeout: 2500
-        })
-      }
-    });      
-  }
+
 
 seleccionarFila(row: any) {
   this.filaSeleccionada = row;
