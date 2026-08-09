@@ -496,9 +496,27 @@ export class CotizacionesComponent implements OnInit {
 
   }  
 
-
-
-
+  /********************** SWAL ALERT MOSTRAR CARGANDO ********************************* */
+  
+  private MostrarCargando(titulo: string = 'Cargando...', texto: string = 'Por favor espere.') {
+      Swal.fire({
+          title: titulo,
+          text: texto,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showConfirmButton: false,
+          background: '#fff',
+          didOpen: () => {
+              Swal.showLoading();
+          }
+      });
+  }
+  
+  /********************** SWAL ALERT CERRAR CARGANDO ********************************* */
+  
+  private CerrarCargando() {
+      Swal.close();
+  }
 
 
 
@@ -635,9 +653,16 @@ export class CotizacionesComponent implements OnInit {
 
   ///////////////////////////////////////////////////////////////////////////
 
-  buscarDescripcionTela() {
+  buscarDescripcionTela(event?: KeyboardEvent) {
     //console.log('HOLAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     //const sCodTela = this.formulario.get('codigoTela')?.value! || '';
+
+    event?.preventDefault();
+    event?.stopPropagation();
+
+    if (this.bBuscarTela) {
+      return;
+    }
 
     this.bBuscarTela = true;
 
@@ -649,6 +674,7 @@ export class CotizacionesComponent implements OnInit {
         verticalPosition: 'top',
         duration: 1500,
       });
+      this.bBuscarTela = false;
       return;
     }
     
@@ -659,6 +685,7 @@ export class CotizacionesComponent implements OnInit {
     // Validar letras
     if (!/^[A-Z]{2}$/.test(letras)) {
       console.warn('Las primeras 2 posiciones deben ser letras mayúsculas');
+      this.bBuscarTela = false;
       return;
     }
 
@@ -683,6 +710,19 @@ export class CotizacionesComponent implements OnInit {
                 this.getRutaXCodTela(articleNumber);
               }
             }
+            else {
+              // Tela NO encontrada
+              this.descripcionTela = '';
+              this.formulario.get('descripcionTela')?.setValue('');
+              document.getElementById('codigoTela')?.focus();
+              this.bBuscarTela = false;
+            }
+          }
+          else {
+            this.descripcionTela = '';
+            this.formulario.get('descripcionTela')?.setValue('');
+            document.getElementById('codigoTela')?.focus();
+            this.bBuscarTela = false;
           }
         },
         error: (error: any) => {
@@ -718,11 +758,21 @@ export class CotizacionesComponent implements OnInit {
               nombre: r.descripcion
             }));
           }
-          this.bBuscarTela = false;
+          //this.bBuscarTela = false;
         }
         this.SpinnerService.hide();
+
+        // Pasar foco al siguiente campo
+        setTimeout(() => {
+          document.getElementById('codigoRutaTela')?.focus();
+
+          setTimeout(() => {
+            this.bBuscarTela = false;
+          }, 0);
+        });
       },
       error: (error: any) => {
+        this.bBuscarTela = false;
         this.toastr.error(error.message, 'Cerrar', {
           timeOut: 2500
         });
@@ -1049,6 +1099,7 @@ export class CotizacionesComponent implements OnInit {
     this.formulario.get('filtro')?.setValue('');
     this.formulario.get('codigoTela')?.setValue(''); 
     this.formulario.get('descripcionTela')?.setValue(''); 
+    this.formulario.get('descripcionTela')?.disable();
     this.formulario.get('codigoRutaTela')?.setValue(''); 
     this.formulario.get('codigoColor')?.setValue(''); 
     this.formulario.get('color')?.setValue('');

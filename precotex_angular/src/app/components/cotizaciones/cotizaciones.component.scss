@@ -7,8 +7,11 @@
 :host {
 
   /* ==========================================================
-     COLOR PRINCIPAL DEL MÓDULO  
-     CAMBIA SOLO ESTA LÍNEA PARA MODIFICAR EL TEMA:
+     COLOR PRINCIPAL DEL MÓDULO
+     CAMBIA SOLO ESTA LÍNEA PARA MODIFICAR EL TEMA
+     (declarado también en :root más abajo, ver [6.0], porque el
+     desplegable de ng-select cuelga de <body> vía appendTo y no
+     alcanza las variables de :host).
   ========================================================== */
   --cot-primary: #514f6b;
 
@@ -56,12 +59,42 @@
   --color-text-disabled: #94a3b8;
 
   /* ==========================================================
-     VARIABLES DEL COMPONENTE
+     [6.0] GEOMETRÍA DE CAMPO DE FILTRO
+     Fuente única de verdad para mat-form-field y ng-select.
+     Cambiar --cot-filter-height reajusta el resto por calc().
   ========================================================== */
 
-  --cot-filter-height: 56px;
+  --cot-filter-height: 48px;
   --cot-filter-radius: 10px;
   --cot-filter-border: var(--color-border);
+  --cot-filter-border-w: 1px;
+
+  /* Sangría horizontal: borde -> icono -> texto */
+  --cot-filter-pad-x: 12px;
+  --cot-filter-icon-size: 18px;
+  --cot-filter-icon-gap: 8px;
+  --cot-filter-text-indent: calc(
+    var(--cot-filter-pad-x) +
+    var(--cot-filter-icon-size) +
+    var(--cot-filter-icon-gap)
+  );
+
+  /* Tipografía del valor */
+  --cot-filter-font-size: 14px;
+  --cot-filter-line-h: 18px;
+
+  /* 0.84375em: espacio que Material reserva dentro del infix
+     para el label flotante. Se replica en ng-select para que el
+     texto caiga a la misma altura en ambos controles. */
+  --cot-filter-label-space: 13.5px;
+  --cot-filter-label-size: 10.5px; /* = 14px * 0.75 (scale de Material) */
+
+  /* Relleno vertical derivado: centra el bloque label+texto */
+  --cot-filter-pad-y: calc(
+    (var(--cot-filter-height) -
+      var(--cot-filter-label-space) -
+      var(--cot-filter-line-h)) / 2
+  );
 
   display: block;
   height: 100%;
@@ -69,6 +102,19 @@
   font-family: var(--font-ui);
   color: var(--color-text);
 
+}
+
+/* El desplegable de ng-select (Cliente/Color) se monta en <body>
+   vía appendTo="body", fuera del alcance de :host. Se publican
+   aquí los tokens que usa el panel en [6.7] — mismo valor que su
+   contraparte en :host — para poder estilarlo desde este mismo
+   archivo en vez de tocar styles.scss global. */
+::ng-deep :root {
+  --cot-primary: #514f6b;
+  --color-border: #d9dee7;
+  --color-text: #1e293b;
+  --color-text-disabled: #94a3b8;
+  --color-brand-subtle: color-mix(in srgb, var(--cot-primary) 10%, white);
 }
 
 .cot-workspace.densidad-comoda {
@@ -253,22 +299,25 @@
   }
 }
 
-/* --- Estado expandido: formulario ---
-   Grid fijo de 4 columnas; Cliente ocupa doble ancho. */
+/* ============================================================
+   [6.3] GRID DEL FORMULARIO DE FILTROS
+   4 columnas; Cliente ocupa doble ancho (.cot-field--span2).
+   ============================================================ */
 .cot-form-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--sp-4);
-  align-items: end;
+  align-items: start; /* todos los campos miden lo mismo: ya no
+                          hace falta anclar por abajo */
 }
 
 /* ============================================================
-   BASE COMÚN DE TODOS LOS FILTROS
+   [6.4] BASE COMÚN — se aplica a los 7 campos del filtro
    ============================================================ */
-
 .cot-field {
   width: 100%;
-  height: var(--cot-filter-height);
+  /* Sin 'height' fija: la altura la produce el propio control
+     (mat-form-field en [6.5], ng-select en [6.6]). */
 }
 
 .cot-field--span2 {
@@ -276,301 +325,95 @@
 }
 
 /* ============================================================
-   FILTROS PERSONALIZADOS - NG SELECT
-   Cliente y Color
+   [6.5] CAMPOS MATERIAL (mat-form-field appearance="outline")
+   Und. Negocio · Tipo Und. Negocio · Código de tela ·
+   Descripción · Ruta
    ============================================================ */
-
-.cot-filter-select {
-  position: relative;
-  height: var(--cot-filter-height);
-}
-
-.cot-filter-select__label {
-  position: absolute;
-
-  top: -7px;
-  left: 12px;
-
-  z-index: 3;
-
-  padding: 0 5px;
-
-  background: var(--color-surface);
-
-  color: var(--color-text-muted);
-
-  font-size: 11px;
-  font-weight: 500;
-
-  line-height: 1;
-
-  pointer-events: none;
-}
-
-.cot-filter-select__control {
-  position: relative;
-
-  width: 100%;
-  height: 100%;
-}
-
-.cot-filter-select__icon {
-  position: absolute;
-
-  top: 50%;
-  left: 14px;
-
-  transform: translateY(-50%);
-
-  z-index: 2;
-
-  width: 18px;
-  height: 18px;
-
-  font-size: 18px;
-
-  color: var(--color-text-disabled);
-
-  pointer-events: none;
-
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-
-/* ============================================================
-   NG-SELECT BASE
-   ============================================================ */
-
-.cot-ng-select {
-  display: block;
-  width: 100%;
-  height: var(--cot-filter-height);
-}
-
-.cot-ng-select ::ng-deep .ng-select-container {
-  height: var(--cot-filter-height) !important;
-  min-height: var(--cot-filter-height) !important;
-
-  padding-left: 38px;
-
-  background: var(--color-surface) !important;
-
-  border: 1px solid var(--cot-filter-border) !important;
-
-  border-radius: var(--cot-filter-radius) !important;
-
-  box-shadow: none;
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-
-/* Placeholder */
-
-.cot-ng-select ::ng-deep .ng-placeholder {
-  color: var(--color-text-disabled) !important;
-}
-
-
-/* Texto seleccionado */
-
-.cot-ng-select ::ng-deep .ng-value-label {
-  color: var(--color-text) !important;
-}
-
-
-/* Flecha */
-
-.cot-ng-select ::ng-deep .ng-arrow-wrapper {
-  padding-right: 8px;
-}
-
-
-/* ============================================================
-   ESTADO HOVER
-   ============================================================ */
-
-.cot-ng-select:hover ::ng-deep .ng-select-container {
-  border-color: var(--cot-primary) !important;
-}
-
-
-/* ============================================================
-   ESTADO FOCUS
-   ============================================================ */
-
-.cot-filter-select:focus-within
-.cot-filter-select__icon {
-  color: var(--cot-primary);
-
-  transform:
-    translateY(-50%)
-    scale(1.05);
-}
-
-.cot-ng-select ::ng-deep.ng-select-focused .ng-select-container,
-.cot-ng-select ::ng-deep .ng-select-focused .ng-select-container {
-  border-color: var(--cot-primary) !important;
-
-  box-shadow:
-    0 0 0 3px var(--color-focus-ring) !important;
-}
-
-
-/* ============================================================
-   INPUT INTERNO DEL BUSCADOR
-   ============================================================ */
-
-.cot-ng-select ::ng-deep .ng-input > input {
-  color: var(--color-text) !important;
-
-  font-family: inherit;
-  font-size: 14px;
-}
-
-
-/* ============================================================
-   ESTADO CON VALOR
-   ============================================================ */
-
-.cot-ng-select ::ng-deep .ng-value-container {
-  padding-left: 0 !important;
-}
-
-
-/* ============================================================
-   BOTÓN LIMPIAR
-   ============================================================ */
-
-.cot-ng-select ::ng-deep .ng-clear-wrapper {
-  color: var(--color-text-muted);
-}
-
-.cot-ng-select ::ng-deep .ng-clear-wrapper:hover {
-  color: var(--cot-primary);
-}
-
-
-
-// .cot-field--select {
-//   position: relative;
-// }
-
-// .cot-outline-label {
-//   position: absolute;
-//   top: -8px;
-//   left: 10px;
-//   padding: 0 4px;
-//   background: var(--color-surface);
-//   font-size: 11px;
-//   line-height: 1;
-//   color: var(--color-text-muted);
-//   z-index: 1;
-//   pointer-events: none;
-// }
-
-// .cot-ng-select {
-//   height: 56px;
-// }
-
-// .cot-ng-select ::ng-deep .ng-select-container {
-//   height: 56px;
-//   min-height: 56px;
-//   border-radius: var(--radius-sm);
-//   border-color: var(--color-border);
-//   align-items: center;
-// }
-
-// .cot-ng-select ::ng-deep .ng-select-focused .ng-select-container,
-// .cot-ng-select ::ng-deep.ng-select-focused .ng-select-container {
-//   border-color: var(--color-brand);
-//   box-shadow: 0 0 0 3px var(--color-focus-ring);
-// }
-
-// /* Icono a la izquierda de los ng-select (Cliente, Color) */
-// .cot-select-icon-wrap {
-//   position: relative;
-
-//   ::ng-deep .ng-value-container {
-//     padding-left: 30px !important;
-//   }
-
-//   ::ng-deep .ng-placeholder {
-//     left: 30px !important;
-//   }
-// }
-
-// .cot-select-icon {
-//   position: absolute;
-//   left: 10px;
-//   top: 50%;
-//   transform: translateY(-50%);
-//   z-index: 1;
-//   pointer-events: none;
-//   font-size: 18px;
-//   width: 18px;
-//   height: 18px;
-//   color: var(--color-text-disabled);
-//   transition: color 0.2s ease;
-// }
-
-// .cot-select-icon-wrap:focus-within .cot-select-icon {
-//   color: var(--color-brand);
-// }
-
-/* ------------------------------------------------------------
-   Restyle de mat-form-field outline (tema legacy indigo-pink):
-   el borde/label por defecto se ven planos y grises frente al
-   resto de tarjetas con acento de marca del módulo. */
 .cot-criterios,
 .cot-drawer__body {
+
+  /* [6.5.1] Wrapper/subscript: el legacy reserva espacio para
+     hint/error que este formulario no usa. */
   ::ng-deep .mat-form-field-wrapper {
     padding-bottom: 0;
+    margin: 0;
   }
 
   ::ng-deep .mat-form-field-subscript-wrapper {
     display: none;
   }
 
+  /* [6.5.2] Caja del campo: el legacy trae margin-top:-0.25em
+     en el flex y align-items:baseline (descuadra icono/flecha
+     respecto al texto); se anulan para que la altura sea exacta
+     y el contenido quede centrado, igual que el ng-select. */
   ::ng-deep .mat-form-field-flex {
+    margin-top: 0;
+    align-items: center;
+    padding: 0 var(--cot-filter-pad-x);
     background: var(--color-surface);
-
-    border-radius: var(--cot-filter-radius);
-
     transition:
       box-shadow 0.2s ease,
       background 0.2s ease;
   }
 
-  // ::ng-deep .mat-form-field-flex {
-  //   background: var(--color-surface);
-  //   border-radius: var(--radius-md);
-  //   transition: box-shadow 0.2s ease;
-  // }
-
-  ::ng-deep .mat-form-field-infix {
-    padding: 0.6em 0;
-    border-top: 0.6em solid transparent;
+  /* Corrige el desfase de ~1px entre campos <input> y campos
+     <mat-select> que trae el tema legacy en .mat-input-element. */
+  ::ng-deep .mat-input-element {
+    margin-top: 0;
   }
 
+  /* El trigger del mat-select tiene una altura fija en em que no
+     sigue --cot-filter-line-h; se iguala al alto de línea. */
+  ::ng-deep .mat-select-trigger {
+    height: var(--cot-filter-line-h);
+  }
+
+  /* La flecha del mat-select se desplaza -25% para compensar el
+     padding asimétrico del tema stock; con el contenido ya
+     centrado (align-items:center arriba) esa compensación sobra
+     y la descuadraría respecto al icono/flecha del ng-select. */
+  ::ng-deep .mat-select-arrow-wrapper {
+    transform: none;
+  }
+
+  /* [6.5.3] Infix: altura = border-top (hueco del label) +
+     2×pad-y + line-height. Con --cot-filter-height:48px suma
+     exactamente 48px, igual que el ng-select de [6.6]. */
+  ::ng-deep .mat-form-field-infix {
+    width: auto; /* el legacy fuerza 180px de ancho mínimo */
+    padding: var(--cot-filter-pad-y) 0;
+    border-top: var(--cot-filter-label-space) solid transparent;
+    font-size: var(--cot-filter-font-size);
+    line-height: calc(var(--cot-filter-line-h) / var(--cot-filter-font-size));
+  }
+
+  /* [6.5.4] Borde y radio: el outline legacy lo pintan 3 divs
+     (start/gap/end); border-radius en .mat-form-field-flex no
+     los afecta, por eso se ataca start/end directamente para
+     igualar el radio del ng-select. */
   ::ng-deep .mat-form-field-outline {
     color: var(--cot-filter-border);
   }
 
-  // ::ng-deep .mat-form-field-outline {
-  //   color: var(--color-border);
-  // }
+  ::ng-deep .mat-form-field-outline-start {
+    border-radius: var(--cot-filter-radius) 0 0 var(--cot-filter-radius) !important;
+    min-width: var(--cot-filter-radius) !important;
+  }
 
+  ::ng-deep .mat-form-field-outline-end {
+    border-radius: 0 var(--cot-filter-radius) var(--cot-filter-radius) 0 !important;
+  }
+
+  /* [6.5.5] Hover / focus: el grosor del outline-thick baja de
+     2px a 1px para no saltar frente al borde fijo del ng-select;
+     el realce visual lo aporta el ring de foco. */
   ::ng-deep .mat-form-field-outline-thick {
     color: var(--c-neutral-300);
   }
 
-  ::ng-deep .mat-form-field-label {
-    color: var(--color-text-muted);
+  ::ng-deep .mat-form-field-outline-thick > div {
+    border-width: var(--cot-filter-border-w) !important;
   }
 
   ::ng-deep .mat-focused .mat-form-field-outline-thick {
@@ -581,12 +424,18 @@
     box-shadow: 0 0 0 3px var(--color-focus-ring);
   }
 
+  /* [6.5.6] Label — queda siempre arriba por floatLabel="always"
+     en el HTML, igual que el label fijo de Cliente/Color. */
+  ::ng-deep .mat-form-field-label {
+    color: var(--color-text-muted);
+  }
+
   ::ng-deep .mat-focused .mat-form-field-label {
     color: var(--color-brand) !important;
   }
 
-  /* Campo de solo lectura (Descripción): superficie hundida para
-     distinguirlo de los campos editables */
+  /* [6.5.7] Campo de solo lectura (Descripción): superficie
+     hundida para distinguirlo de los campos editables */
   ::ng-deep .mat-form-field-disabled .mat-form-field-flex {
     background: var(--color-surface-sunken);
   }
@@ -599,12 +448,14 @@
   background: var(--color-surface-sunken) !important;
 }
 
+/* [6.5.8] Icono matPrefix — misma métrica que el icono del
+   ng-select ([6.6.3]) para que ambos queden a la misma altura. */
 .cot-field-icon {
-  font-size: 18px !important;
-  width: 18px !important;
-  height: 18px !important;
+  font-size: var(--cot-filter-icon-size) !important;
+  width: var(--cot-filter-icon-size) !important;
+  height: var(--cot-filter-icon-size) !important;
+  margin-right: var(--cot-filter-icon-gap);
   color: var(--color-text-disabled) !important;
-  margin-right: var(--sp-2);
   transition: color 0.2s ease;
 }
 
@@ -612,6 +463,318 @@
   color: var(--color-brand) !important;
 }
 
+/* ============================================================
+   [6.6] CAMPOS NG-SELECT — Cliente · Color
+   El proyecto carga material.theme.css de ng-select
+   (angular.json). Ese tema impone métricas propias que deben
+   neutralizarse una por una antes de aplicar las nuestras; cada
+   anulación va comentada con su motivo.
+   ============================================================ */
+
+/* [6.6.1] Wrapper: contiene el label fijo y el control */
+.cot-filter-select {
+  position: relative;
+  height: var(--cot-filter-height);
+}
+
+/* [6.6.2] Label fijo sobre el borde — equivalente al notch de
+   Material con floatLabel="always" ([6.5.6]) */
+.cot-filter-select__label {
+  position: absolute;
+
+  top: calc(var(--cot-filter-label-size) / -2 - 1px);
+  left: var(--cot-filter-pad-x);
+
+  z-index: 5;
+
+  padding: 0 4px;
+
+  background: var(--color-surface);
+
+  color: var(--color-text-muted);
+
+  font-size: var(--cot-filter-label-size);
+  font-weight: 500;
+
+  line-height: 1;
+
+  pointer-events: auto;
+  cursor: default;
+
+  transition: color 0.2s ease;
+}
+
+.cot-filter-select:focus-within .cot-filter-select__label {
+  color: var(--color-brand);
+}
+
+.cot-filter-select__control {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  background: var(--color-surface);
+  border-radius: var(--cot-filter-radius);
+}
+
+/* [6.6.3] Icono — misma sangría que el matPrefix de Material */
+.cot-filter-select__icon {
+  position: absolute;
+
+  top: 50%;
+  left: var(--cot-filter-pad-x);
+
+  transform: translateY(-50%);
+
+  z-index: 4;
+
+  width: var(--cot-filter-icon-size);
+  height: var(--cot-filter-icon-size);
+
+  font-size: var(--cot-filter-icon-size);
+
+  color: var(--color-text-disabled);
+
+  pointer-events: auto;
+  cursor: default;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.cot-filter-select:focus-within .cot-filter-select__icon {
+  color: var(--cot-primary);
+
+  transform:
+    translateY(-50%)
+    scale(1.05);
+}
+
+/* [6.6.4] Host del control: material.theme.css añade
+   padding-bottom:1.25em (20px) — causa principal de que
+   Cliente/Color se vieran más altos que el resto de campos. */
+.cot-ng-select {
+  display: block;
+  width: 100%;
+  height: var(--cot-filter-height);
+  padding-bottom: 0 !important;
+}
+
+/* [6.6.5] Contenedor: caja, borde y radio equivalentes al
+   mat-form-field de [6.5]. align-items pasa de 'baseline'
+   (valor del tema) a 'stretch' para centrar el contenido. */
+.cot-ng-select ::ng-deep .ng-select-container {
+  height: var(--cot-filter-height) !important;
+  min-height: var(--cot-filter-height) !important;
+
+  align-items: stretch !important;
+
+  padding: 0 var(--cot-filter-pad-x) 0 var(--cot-filter-text-indent);
+
+  //background: var(--color-surface) !important;
+  background: transparent !important;
+
+  border: var(--cot-filter-border-w) solid var(--cot-filter-border) !important;
+
+  border-radius: var(--cot-filter-radius) !important;
+
+  box-shadow: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* El tema dibuja una línea inferior con ::after encima de
+   nuestro borde de 1px (línea fantasma): se elimina. */
+.cot-ng-select ::ng-deep .ng-select-container::after {
+  display: none !important;
+}
+
+/* [6.6.6] Valor: mismo reparto vertical que el
+   .mat-form-field-infix de [6.5.3], así el texto cae a la misma
+   altura en ambos tipos de control. */
+.cot-ng-select ::ng-deep .ng-value-container {
+  padding: 0 !important;
+  border-top: 0 !important;
+  align-items: center;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  height: 100%;
+}
+
+.cot-ng-select ::ng-deep .ng-value-label,
+.cot-ng-select ::ng-deep .ng-input > input {
+  color: var(--color-text) !important;
+
+  font-family: inherit;
+  font-size: var(--cot-filter-font-size);
+  line-height: var(--cot-filter-line-h);
+}
+
+/* [6.6.7] Placeholder: el tema lo hace flotar con
+   translateY(-1.28125em) al haber valor, chocando con el label
+   fijo de [6.6.2]. Se deja estático dentro del campo. */
+.cot-ng-select ::ng-deep .ng-placeholder {
+  position: static !important;
+  transform: none !important;
+  padding: 0 !important;
+  background: none !important;
+
+  color: var(--color-text-disabled) !important;
+  font-size: var(--cot-filter-font-size);
+  line-height: var(--cot-filter-line-h);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cot-ng-select ::ng-deep .ng-has-value .ng-placeholder,
+.cot-ng-select ::ng-deep.ng-select-opened .ng-placeholder {
+  transform: none !important;
+}
+
+/* Con valor seleccionado el tema reactiva el placeholder
+   (.ng-has-value .ng-placeholder{display:initial}) y quedaría
+   flotando encima del valor ya elegido; se oculta. */
+.cot-ng-select ::ng-deep .ng-has-value .ng-placeholder {
+  display: none !important;
+}
+
+/* Input de búsqueda: estructuralmente es position:absolute;
+   left:0;width:100% (no del tema, del propio componente), y su
+   bloque contenedor es la caja de padding de .ng-select-container
+   ([6.6.5]) — con left:0 el texto tecleado caía a la izquierda
+   del icono, bajo .ng-select-container__icon. Se ancla al mismo
+   carril horizontal que el valor/placeholder. */
+.cot-ng-select ::ng-deep .ng-input {
+  top: 0 !important;
+  bottom: 0 !important;
+  left: var(--cot-filter-text-indent) !important;
+  right: var(--cot-filter-pad-x) !important;
+  width: auto !important;
+  display: flex;
+  align-items: center;
+}
+
+/* [6.6.8] Flecha y botón limpiar: el tema los ancla abajo con
+   align-self:flex-end + bottom. Se centran verticalmente. */
+.cot-ng-select ::ng-deep .ng-arrow-wrapper,
+.cot-ng-select ::ng-deep .ng-clear-wrapper {
+  align-self: center !important;
+  bottom: auto !important;
+  top: auto !important;
+  display: flex;
+  align-items: center;
+}
+
+.cot-ng-select ::ng-deep .ng-arrow-wrapper {
+  padding-right: 0;
+}
+
+.cot-ng-select ::ng-deep .ng-arrow {
+  color: var(--color-text-muted);
+}
+
+.cot-ng-select ::ng-deep .ng-clear-wrapper {
+  color: var(--color-text-muted);
+}
+
+.cot-ng-select ::ng-deep .ng-clear-wrapper:hover {
+  color: var(--cot-primary);
+}
+
+/* [6.6.9] Hover / focus — mismo tratamiento que [6.5.5]. El tema
+   pinta el focus en #3f51b5 (indigo hardcode) sobre el ::after
+   ya anulado en [6.6.5], así que basta con borde + ring de marca. */
+.cot-ng-select:hover ::ng-deep .ng-select-container {
+  border-color: var(--cot-primary) !important;
+}
+
+.cot-ng-select ::ng-deep.ng-select-focused .ng-select-container,
+.cot-ng-select ::ng-deep .ng-select-focused .ng-select-container {
+  border-color: var(--cot-primary) !important;
+
+  box-shadow:
+    0 0 0 3px var(--color-focus-ring) !important;
+}
+
+/* ============================================================
+   [6.7] PANEL DESPLEGABLE DE NG-SELECT (Cliente · Color)
+   Con appendTo="body" el panel se monta fuera del componente,
+   así que ::ng-deep sin prefijo de host es la única vía para
+   alcanzarlo. ng-select copia el atributo class del <ng-select>
+   al panel cuando hay appendTo, por eso se acota el selector con
+   .cot-ng-select--filter y no afecta a los ng-select de otros
+   módulos. Los tokens --cot-* usados aquí se publican en :root
+   (ver [6.0] / bloque ::ng-deep :root al inicio del archivo).
+   ============================================================ */
+::ng-deep .ng-dropdown-panel.cot-ng-select--filter {
+  border: 1px solid var(--color-border);
+  border-radius: var(--cot-filter-radius);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  margin-top: 4px;
+  width: auto !important;
+  min-width: 100%;
+  max-width: 500px;
+
+  /* El tema compensa con top:calc(100% - 1.25em) el
+     padding-bottom eliminado en [6.6.4]; sin esta corrección el
+     panel se solapa 20px sobre el campo. */
+  &.ng-select-bottom {
+    top: 100%;
+  }
+
+  &.ng-select-top {
+    bottom: 100%;
+  }
+
+  .ng-dropdown-panel-items {
+    max-height: 260px;
+    padding: 6px 0;
+  }
+
+  .ng-option {
+    padding: 6px 16px;
+    line-height: 24px;
+    min-height: 36px;
+    font-size: var(--cot-filter-font-size);
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    // padding: 0 var(--cot-filter-pad-x);
+    // line-height: 36px;
+    // min-height: 36px;
+    // font-size: var(--cot-filter-font-size);
+    // color: var(--color-text);
+  }
+
+  .ng-option.ng-option-marked {
+    background: var(--color-brand-subtle);
+    color: var(--color-text);
+  }
+
+  .ng-option.ng-option-selected {
+    background: var(--color-brand-subtle);
+    color: var(--cot-primary);
+    font-weight: 600;
+  }
+
+  .ng-option.ng-option-disabled {
+    color: var(--color-text-disabled);
+  }
+}
+
+/* ============================================================
+   [6.8] FOOTER DE ACCIONES DEL FORMULARIO
+   ============================================================ */
 .cot-form-footer {
   display: flex;
   align-items: center;
