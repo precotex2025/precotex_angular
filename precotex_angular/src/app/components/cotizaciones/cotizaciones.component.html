@@ -28,7 +28,7 @@
       <!-- Resumen de criterios en cartas -->
       <div class="cot-criterios-cards">
         <article class="cot-criterio-card" *ngFor="let c of resumenCriterios">
-          <div class="cot-criterio-card__icon"><mat-icon>label</mat-icon></div>
+          <div class="cot-criterio-card__icon"><mat-icon [matTooltip]="c.label">{{ c.icon }}</mat-icon></div>
           <div class="cot-criterio-card__body">
             <span class="cot-criterio-card__label">{{ c.label }}</span>
             <span class="cot-criterio-card__value" [matTooltip]="c.value">{{ c.value }}</span>
@@ -46,24 +46,42 @@
     <form [formGroup]="formulario" #formDirective="ngForm" *ngIf="panelCriteriosAbierto">
       <div class="cot-form-grid">
 
+        <!-- ********************** UNIDAD DE NEGOCIO ********************************* -->
         <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
-          <mat-label>Und. Negocio</mat-label>
-          <mat-icon matPrefix class="cot-field-icon">apartment</mat-icon>
-          <mat-select formControlName="unidadNegocio" placeholder="Seleccione..."
-                      (selectionChange)="chgUnidadNegocio()">
-            <mat-option *ngFor="let unidad of unidadesNegocio" [value]="unidad.codigo">
-              {{ unidad.descripcion }}
+          <mat-label>{{ COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.label }}</mat-label>
+          <mat-icon 
+            matPrefix class="cot-field-icon"
+            [matTooltip]="COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.label">
+              {{ COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.icon }}
+            </mat-icon>
+          <mat-select 
+            formControlName="unidadNegocio" 
+            placeholder="Seleccione..."
+            panelClass="cot-select-panel"
+            (selectionChange)="chgUnidadNegocio()">
+            <mat-option 
+              *ngFor="let unidad of unidadesNegocio" 
+              [value]="unidad.codigo">
+                {{ unidad.descripcion }}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
+        <!-- ********************** TIPO UNIDAD DE NEGOCIO ********************************* -->
         <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
-          <mat-label>Tipo Und. Negocio</mat-label>
-          <mat-icon matPrefix class="cot-field-icon">category</mat-icon>
-          <mat-select formControlName="tipo" placeholder="Seleccione..."
-                      (selectionChange)="chgTipo()">
-            <mat-option *ngFor="let t of tipoUnidadesNegocio" [value]="t.codigo">
-              {{ t.descripcion }}
+          <mat-label>{{ COTIZACIONES_FIELDS.TIPO_UNIDAD.label }}</mat-label>
+          <mat-icon matPrefix class="cot-field-icon"
+            [matTooltip]="COTIZACIONES_FIELDS.TIPO_UNIDAD.label">
+              {{ COTIZACIONES_FIELDS.TIPO_UNIDAD.icon }}
+          </mat-icon>
+          <mat-select 
+            formControlName="tipo" 
+            placeholder="Seleccione..."
+            (selectionChange)="chgTipo()">
+            <mat-option 
+              *ngFor="let t of tipoUnidadesNegocio" 
+              [value]="t.codigo">
+                {{ t.descripcion }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -74,15 +92,14 @@
         ========================================================= -->
         <div class="cot-field cot-filter-select cot-field--span2">
 
-          <label class="cot-filter-select__label" #labelCliente>
-            Cliente
+          <label class="cot-filter-select__label">
+            {{ COTIZACIONES_FIELDS.CLIENTE.label }}
           </label>
 
           <div class="cot-filter-select__control">
-
             <mat-icon class="cot-filter-select__icon"
-              [matTooltip]="labelCliente.textContent.trim()" >
-              storefront
+              [matTooltip]="COTIZACIONES_FIELDS.CLIENTE.label" >
+              {{ COTIZACIONES_FIELDS.CLIENTE.icon }}
             </mat-icon>
 
             <ng-select
@@ -103,12 +120,12 @@
         </div>
 
         <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
-          <mat-label>Código de tela</mat-label>
-          <mat-icon matPrefix class="cot-field-icon">qr_code_2</mat-icon>
+          <mat-label>{{ COTIZACIONES_FIELDS.TELA.label }}</mat-label>
+          <mat-icon matPrefix class="cot-field-icon">{{ COTIZACIONES_FIELDS.TELA.icon }}</mat-icon>
           <input [textMask]="{mask: maskCodigo}" matInput formControlName="codigoTela"
                  (keyup.enter)="buscarDescripcionTela()" 
                  placeholder="AA000000"
-                 (blur)="buscarDescripcionTela()" />
+                 (blur)="buscarDescripcionTela()"  />
         </mat-form-field>
 
         <mat-form-field appearance="outline" floatLabel="always" class="cot-field cot-field--readonly">
@@ -118,8 +135,8 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
-          <mat-label>Ruta</mat-label>
-          <mat-icon matPrefix class="cot-field-icon">alt_route</mat-icon>
+          <mat-label>{{ COTIZACIONES_FIELDS.RUTA.label }}</mat-label>
+          <mat-icon matPrefix class="cot-field-icon">{{ COTIZACIONES_FIELDS.RUTA.icon }}</mat-icon>
           <mat-select id="codigoRutaTela" formControlName="codigoRutaTela" placeholder="Seleccione...">
             <mat-option *ngFor="let ruta of RutaXCodTela" [value]="ruta.codigo">
               {{ ruta.nombre }}
@@ -133,14 +150,14 @@
         <div class="cot-field cot-filter-select">
 
           <label class="cot-filter-select__label" #labelColor>
-            Color
+            {{ COTIZACIONES_FIELDS.COLOR.label }}
           </label>
 
           <div class="cot-filter-select__control">
 
             <mat-icon class="cot-filter-select__icon"
               [matTooltip]="labelColor.textContent.trim()" >
-              palette
+              {{ COTIZACIONES_FIELDS.COLOR.icon }}
             </mat-icon>
 
             <ng-select

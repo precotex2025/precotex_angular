@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import { GlobalVariable } from 'src/app/VarGlobals';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { color } from 'html2canvas/dist/types/css/types/color';
+import { COTIZACIONES_FIELDS } from 'src/app/shared/constants/cotizaciones-fields';
 
 interface Costeo {
     unidadNegocio: string;
@@ -338,7 +339,7 @@ export class CotizacionesComponent implements OnInit {
 
 
 
-
+  COTIZACIONES_FIELDS = COTIZACIONES_FIELDS;
 
   //INICIALIZACION DE COMPONENTE
   ngOnInit(): void {
@@ -547,9 +548,18 @@ export class CotizacionesComponent implements OnInit {
       title: titulo,
       text: texto,
       confirmButtonText: 'Aceptar',
+
       timer: timer > 0 ? timer : undefined,
-      timerProgressBar: timer > 0
+      timerProgressBar: timer > 0,
+
+      customClass: {
+        popup: 'cot-swal-popup',
+        title: 'cot-swal-title',
+        htmlContainer: 'cot-swal-text',
+        confirmButton: 'cot-swal-confirm'
+      }
     });
+
   }
 
   /********************** SWAL ALERT MOSTRAR INFORMACIÓN ********************************* */
@@ -673,26 +683,26 @@ export class CotizacionesComponent implements OnInit {
     this.toastr.info('Función en desarrollo', '', { timeOut: 2000 });
   }
 
-  get resumenCriterios(): { label: string, value: string }[] {
+  get resumenCriterios(): { label: string, value: string, icon: string }[] {
     const v = this.formulario.value;
-    const chips: { label: string, value: string }[] = [];
+    const chips: { label: string, value: string, icon: string }[] = [];
 
     const undNeg = this.unidadesNegocio.find(u => u.codigo === v.unidadNegocio);
-    if (undNeg) chips.push({ label: 'Und. Negocio', value: undNeg.descripcion });
+    if (undNeg) chips.push({ label: 'Und. Negocio', value: undNeg.descripcion, icon: COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.icon });
 
     const tipo = this.tipoUnidadesNegocio.find(t => t.codigo === v.tipo);
-    if (tipo) chips.push({ label: 'Tipo', value: tipo.descripcion });
+    if (tipo) chips.push({ label: 'Tipo', value: tipo.descripcion, icon: COTIZACIONES_FIELDS.TIPO_UNIDAD.icon });
 
     const cliente = this.dataClientes.find(c => c.cod_Cliente_Tex === v.cliente);
-    if (cliente) chips.push({ label: 'Cliente', value: cliente.abr_Cliente });
+    if (cliente) chips.push({ label: 'Cliente', value: cliente.abr_Cliente, icon: COTIZACIONES_FIELDS.CLIENTE.icon });
 
-    if (v.codigoTela) chips.push({ label: 'Tela', value: v.codigoTela });
+    if (v.codigoTela) chips.push({ label: 'Tela', value: v.codigoTela, icon: COTIZACIONES_FIELDS.TELA.icon });
 
     const ruta = this.RutaXCodTela.find(r => r.codigo === v.codigoRutaTela);
-    if (ruta) chips.push({ label: 'Ruta', value: ruta.nombre });
+    if (ruta) chips.push({ label: 'Ruta', value: ruta.nombre, icon: COTIZACIONES_FIELDS.RUTA.icon });
 
     const color = this.listaCodigoColor.find(c => c.codigo === v.color);
-    if (color) chips.push({ label: 'Color', value: color.descripcion });
+    if (color) chips.push({ label: 'Color', value: color.descripcion, icon: COTIZACIONES_FIELDS.COLOR.icon });
 
     return chips;
   }
@@ -700,9 +710,6 @@ export class CotizacionesComponent implements OnInit {
   ///////////////////////////////////////////////////////////////////////////
 
   buscarDescripcionTela(event?: KeyboardEvent) {
-    //console.log('HOLAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-    //const sCodTela = this.formulario.get('codigoTela')?.value! || '';
-
     event?.preventDefault();
     event?.stopPropagation();
 
@@ -715,11 +722,7 @@ export class CotizacionesComponent implements OnInit {
     let articleNumber = this.formulario.get('codigoTela')?.value;
 
     if (!articleNumber || articleNumber.trim() === '') {
-      this.matSnackBar.open("¡Importante ingresar Codigo Articulo!", 'Cerrar', {
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-        duration: 1500,
-      });
+      //this.MostrarAdvertencia('¡Importante!', '¡Importante ingresar Codigo Articulo!', 1500);
       this.bBuscarTela = false;
       return;
     }
@@ -730,7 +733,7 @@ export class CotizacionesComponent implements OnInit {
 
     // Validar letras
     if (!/^[A-Z]{2}$/.test(letras)) {
-      console.warn('Las primeras 2 posiciones deben ser letras mayúsculas');
+      this.MostrarAdvertencia('¡Importante!', 'Las primeras 2 posiciones deben ser letras mayúsculas', 1500);
       this.bBuscarTela = false;
       return;
     }
@@ -1547,6 +1550,11 @@ onLimpiarFiltros(){
 
 onChangeCliente(){
   const _cliente = this.formulario.get('cliente')?.value || '';
+
+  if (_cliente === null || _cliente === undefined || _cliente === '') {
+    return;
+  }
+
   this.loadListaCodigoColor(_cliente);
 }
 

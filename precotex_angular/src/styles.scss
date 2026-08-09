@@ -214,3 +214,221 @@ body {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+
+
+// /* ============================================================
+//    SWEETALERT - TEMA COTIZACIONES
+// ============================================================ */
+
+// .cot-swal-popup {
+//   border: 1px solid #e5e7eb !important;
+//   border-radius: 16px !important;
+
+//   padding: 24px !important;
+
+//   box-shadow:
+//     0 20px 40px rgba(15, 23, 42, 0.12),
+//     0 4px 12px rgba(15, 23, 42, 0.08) !important;
+
+//   background: #ffffff !important;
+// }
+
+
+// /* Icono */
+
+// .cot-swal-popup .swal2-icon.swal2-warning {
+//   border-width: 2px !important;
+// }
+
+
+// /* Título */
+
+// .cot-swal-title {
+//   margin-top: 8px !important;
+
+//   font-size: 20px !important;
+//   font-weight: 700 !important;
+
+//   color: #1e293b !important;
+// }
+
+
+// /* Texto */
+
+// .cot-swal-text {
+//   margin-top: 8px !important;
+
+//   font-size: 14px !important;
+//   line-height: 1.5 !important;
+
+//   color: #64748b !important;
+// }
+
+
+// /* Botón */
+
+// .cot-swal-confirm {
+//   min-width: 110px !important;
+
+//   border: none !important;
+//   border-radius: 999px !important;
+
+//   padding: 10px 22px !important;
+
+//   background: #514f6b !important;
+//   color: #ffffff !important;
+
+//   font-size: 14px !important;
+//   font-weight: 600 !important;
+
+//   box-shadow: 0 4px 10px rgba(81, 79, 107, 0.25) !important;
+
+//   transition:
+//     transform 0.2s ease,
+//     box-shadow 0.2s ease !important;
+// }
+
+// .cot-swal-confirm:hover {
+//   transform: translateY(-1px);
+
+//   box-shadow:
+//     0 6px 14px rgba(81, 79, 107, 0.32) !important;
+// }
+
+
+
+
+
+
+/* ============================================================
+   SWEETALERT - DISEÑO MODERNO
+============================================================ */
+
+.cot-swal-popup {
+  border-radius: 20px !important;
+
+  border: 1px solid rgba(81, 79, 107, 0.18) !important;
+
+  box-shadow:
+    0 20px 50px rgba(15, 23, 42, 0.18),
+    0 5px 15px rgba(81, 79, 107, 0.12) !important;
+
+  overflow: hidden !important;
+
+  padding: 2rem !important;
+}
+
+
+/* Línea superior */
+
+.cot-swal-popup::before {
+  content: '';
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 4px;
+
+  background: linear-gradient(
+    90deg,
+    #514f6b,
+    #817d9b,
+    #514f6b
+  );
+}
+
+
+/* Icono */
+
+.cot-swal-popup .swal2-icon {
+  margin-top: 10px !important;
+
+  transform: scale(1);
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease;
+}
+
+.cot-swal-popup .swal2-icon:hover {
+  transform: scale(1.08);
+}
+
+
+/* Título */
+
+.cot-swal-title {
+  color: #1e293b !important;
+
+  font-size: 21px !important;
+
+  font-weight: 700 !important;
+
+  letter-spacing: -0.02em;
+}
+
+
+/* Texto */
+
+.cot-swal-text {
+  color: #64748b !important;
+
+  font-size: 14px !important;
+
+  line-height: 1.6 !important;
+}
+
+
+/* Botón */
+
+.cot-swal-confirm {
+  background: #514f6b !important;
+
+  color: #ffffff !important;
+
+  border: none !important;
+
+  border-radius: 12px !important;
+
+  padding: 10px 26px !important;
+
+  font-size: 14px !important;
+
+  font-weight: 600 !important;
+
+  cursor: pointer !important;
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    background .2s ease !important;
+}
+
+.cot-swal-confirm:hover {
+  background: #5d5a78 !important;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 18px rgba(81, 79, 107, 0.30) !important;
+}
+
+.cot-swal-confirm:active {
+  transform: scale(.96);
+}
+
+
+/* Barra del timer */
+
+.cot-swal-popup .swal2-timer-progress-bar {
+  background: #514f6b !important;
+}
+
+
+
+
+

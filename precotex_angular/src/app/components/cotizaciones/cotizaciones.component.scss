@@ -248,8 +248,18 @@
 }
 
 .cot-criterio-card__icon {
+  // display: flex;
+  // flex-shrink: 0;
+
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+
+  width: 28px;
+  height: 28px;
+
+  cursor: help;
 
   mat-icon {
     font-size: 16px;
@@ -448,6 +458,23 @@
   background: var(--color-surface-sunken) !important;
 }
 
+/* ============================================================
+[6.5.9] PANEL MAT-SELECT
+Alineación y tamaño del dropdown
+============================================================ */
+
+::ng-deep .cot-select-panel {
+  min-width: 100% !important;
+  max-width: min(100vw - 32px, 500px) !important;
+
+  border-radius: var(--cot-filter-radius) !important;
+
+  box-sizing: border-box;
+
+  margin-top: 4px;
+}
+
+
 /* [6.5.8] Icono matPrefix — misma métrica que el icono del
    ng-select ([6.6.3]) para que ambos queden a la misma altura. */
 .cot-field-icon {
@@ -475,6 +502,7 @@
 .cot-filter-select {
   position: relative;
   height: var(--cot-filter-height);
+  box-sizing: border-box;
 }
 
 /* [6.6.2] Label fijo sobre el borde — equivalente al notch de
@@ -482,7 +510,9 @@
 .cot-filter-select__label {
   position: absolute;
 
-  top: calc(var(--cot-filter-label-size) / -2 - 1px);
+  // top: calc(var(--cot-filter-label-size) / -2 - 1px);
+  top: 0;
+  transform: translateY(-50%);
   left: var(--cot-filter-pad-x);
 
   z-index: 5;
@@ -498,7 +528,7 @@
 
   line-height: 1;
 
-  pointer-events: auto;
+  pointer-events: none;
   cursor: default;
 
   transition: color 0.2s ease;
