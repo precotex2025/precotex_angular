@@ -497,25 +497,71 @@ export class CotizacionesComponent implements OnInit {
   }  
 
   /********************** SWAL ALERT MOSTRAR CARGANDO ********************************* */
-  
   private MostrarCargando(titulo: string = 'Cargando...', texto: string = 'Por favor espere.') {
-      Swal.fire({
-          title: titulo,
-          text: texto,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          showConfirmButton: false,
-          background: '#fff',
-          didOpen: () => {
-              Swal.showLoading();
-          }
-      });
+    Swal.fire({
+        title: titulo,
+        text: texto,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        background: '#fff',
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
   }
   
   /********************** SWAL ALERT CERRAR CARGANDO ********************************* */
-  
   private CerrarCargando() {
-      Swal.close();
+    Swal.close();
+  }
+
+  /********************** SWAL ALERT MOSTRAR ERROR ********************************* */
+  private MostrarError(titulo: string = 'Error', texto: string = 'Ocurrió un error inesperado.', timer: number = 0 ): void {
+    Swal.fire({
+      icon: 'error',
+      title: titulo,
+      text: texto,
+      confirmButtonText: 'Aceptar',
+      timer: timer > 0 ? timer : undefined,
+      timerProgressBar: timer > 0
+    });
+  }
+
+  /********************** SWAL ALERT MOSTRAR ÉXITO ********************************* */
+  private MostrarExito(titulo: string = 'Operación exitosa', texto: string = 'La operación se realizó correctamente.', timer: number = 2000 ): void {
+    Swal.fire({
+      icon: 'success',
+      title: titulo,
+      text: texto,
+      confirmButtonText: 'Aceptar',
+      timer: timer > 0 ? timer : undefined,
+      timerProgressBar: timer > 0
+    });
+  }
+
+  /********************** SWAL ALERT MOSTRAR ADVERTENCIA ********************************* */
+  private MostrarAdvertencia(titulo: string = 'Advertencia', texto: string = 'Revise la información ingresada.', timer: number = 0 ): void {
+    Swal.fire({
+      icon: 'warning',
+      title: titulo,
+      text: texto,
+      confirmButtonText: 'Aceptar',
+      timer: timer > 0 ? timer : undefined,
+      timerProgressBar: timer > 0
+    });
+  }
+
+  /********************** SWAL ALERT MOSTRAR INFORMACIÓN ********************************* */
+  private MostrarInformacion(titulo: string = 'Información', texto: string = '', timer: number = 0 ): void {
+    Swal.fire({
+      icon: 'info',
+      title: titulo,
+      text: texto,
+      confirmButtonText: 'Aceptar',
+      timer: timer > 0 ? timer : undefined,
+      timerProgressBar: timer > 0
+    });
   }
 
 
