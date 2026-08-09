@@ -1,18 +1,74 @@
 /* ============================================================
-   COTIZACIONES — HOJA DE ESTILOS
-   Rediseño UX: tokens actualizados, gradientes de marca,
-   cards con borde superior degradado, toolbar con ícono-círculo,
-   tabla con header indigo, action bar flotante glassmorphism.
+   TEMA - COTIZACIONES
+   Cambiar --cot-primary para modificar el color principal
+   de todo el módulo.
    ============================================================ */
 
-/* Los tokens de diseño (--color-*, --gradient-*, --sp-*, etc.) viven en
-   :root (src/styles.scss): el MatDialog de este módulo se renderiza en el
-   CDK overlay, fuera del árbol del :host, y necesita heredarlos. */
 :host {
+
+  /* ==========================================================
+     COLOR PRINCIPAL DEL MÓDULO  
+     CAMBIA SOLO ESTA LÍNEA PARA MODIFICAR EL TEMA:
+  ========================================================== */
+  --cot-primary: #514f6b;
+
+  /* ==========================================================
+     COLORES DERIVADOS AUTOMÁTICAMENTE
+  ========================================================== */
+
+  --color-brand: var(--cot-primary);
+
+  --color-brand-subtle: color-mix(
+    in srgb,
+    var(--cot-primary) 10%,
+    white
+  );
+
+  --color-focus-ring: color-mix(
+    in srgb,
+    var(--cot-primary) 22%,
+    transparent
+  );
+
+  --gradient-brand: linear-gradient(
+    135deg,
+    var(--cot-primary),
+    color-mix(in srgb, var(--cot-primary) 70%, #ffffff)
+  );
+
+  --gradient-top-border: linear-gradient(
+    90deg,
+    var(--cot-primary),
+    color-mix(in srgb, var(--cot-primary) 55%, #ffffff)
+  );
+
+  /* ==========================================================
+     COLORES BASE DEL FORMULARIO
+  ========================================================== */
+
+  --color-surface: #ffffff;
+  --color-surface-sunken: #f8fafc;
+
+  --color-border: #d9dee7;
+
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+  --color-text-disabled: #94a3b8;
+
+  /* ==========================================================
+     VARIABLES DEL COMPONENTE
+  ========================================================== */
+
+  --cot-filter-height: 56px;
+  --cot-filter-radius: 10px;
+  --cot-filter-border: var(--color-border);
+
   display: block;
   height: 100%;
+
   font-family: var(--font-ui);
   color: var(--color-text);
+
 }
 
 .cot-workspace.densidad-comoda {
@@ -206,80 +262,265 @@
   align-items: end;
 }
 
+/* ============================================================
+   BASE COMÚN DE TODOS LOS FILTROS
+   ============================================================ */
+
 .cot-field {
   width: 100%;
-  height: 56px;
+  height: var(--cot-filter-height);
 }
 
 .cot-field--span2 {
   grid-column: span 2;
 }
 
-.cot-field--select {
+/* ============================================================
+   FILTROS PERSONALIZADOS - NG SELECT
+   Cliente y Color
+   ============================================================ */
+
+.cot-filter-select {
   position: relative;
+  height: var(--cot-filter-height);
 }
 
-.cot-outline-label {
+.cot-filter-select__label {
   position: absolute;
-  top: -8px;
-  left: 10px;
-  padding: 0 4px;
+
+  top: -7px;
+  left: 12px;
+
+  z-index: 3;
+
+  padding: 0 5px;
+
   background: var(--color-surface);
-  font-size: 11px;
-  line-height: 1;
+
   color: var(--color-text-muted);
-  z-index: 1;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  line-height: 1;
+
   pointer-events: none;
 }
 
+.cot-filter-select__control {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+}
+
+.cot-filter-select__icon {
+  position: absolute;
+
+  top: 50%;
+  left: 14px;
+
+  transform: translateY(-50%);
+
+  z-index: 2;
+
+  width: 18px;
+  height: 18px;
+
+  font-size: 18px;
+
+  color: var(--color-text-disabled);
+
+  pointer-events: none;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+/* ============================================================
+   NG-SELECT BASE
+   ============================================================ */
+
 .cot-ng-select {
-  height: 56px;
+  display: block;
+  width: 100%;
+  height: var(--cot-filter-height);
 }
 
 .cot-ng-select ::ng-deep .ng-select-container {
-  height: 56px;
-  min-height: 56px;
-  border-radius: var(--radius-sm);
-  border-color: var(--color-border);
-  align-items: center;
+  height: var(--cot-filter-height) !important;
+  min-height: var(--cot-filter-height) !important;
+
+  padding-left: 38px;
+
+  background: var(--color-surface) !important;
+
+  border: 1px solid var(--cot-filter-border) !important;
+
+  border-radius: var(--cot-filter-radius) !important;
+
+  box-shadow: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.cot-ng-select ::ng-deep .ng-select-focused .ng-select-container,
-.cot-ng-select ::ng-deep.ng-select-focused .ng-select-container {
-  border-color: var(--color-brand);
-  box-shadow: 0 0 0 3px var(--color-focus-ring);
+
+/* Placeholder */
+
+.cot-ng-select ::ng-deep .ng-placeholder {
+  color: var(--color-text-disabled) !important;
 }
 
-/* Icono a la izquierda de los ng-select (Cliente, Color) */
-.cot-select-icon-wrap {
-  position: relative;
 
-  ::ng-deep .ng-value-container {
-    padding-left: 30px !important;
-  }
+/* Texto seleccionado */
 
-  ::ng-deep .ng-placeholder {
-    left: 30px !important;
-  }
+.cot-ng-select ::ng-deep .ng-value-label {
+  color: var(--color-text) !important;
 }
 
-.cot-select-icon {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
-  pointer-events: none;
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-  color: var(--color-text-disabled);
-  transition: color 0.2s ease;
+
+/* Flecha */
+
+.cot-ng-select ::ng-deep .ng-arrow-wrapper {
+  padding-right: 8px;
 }
 
-.cot-select-icon-wrap:focus-within .cot-select-icon {
-  color: var(--color-brand);
+
+/* ============================================================
+   ESTADO HOVER
+   ============================================================ */
+
+.cot-ng-select:hover ::ng-deep .ng-select-container {
+  border-color: var(--cot-primary) !important;
 }
+
+
+/* ============================================================
+   ESTADO FOCUS
+   ============================================================ */
+
+.cot-filter-select:focus-within
+.cot-filter-select__icon {
+  color: var(--cot-primary);
+
+  transform:
+    translateY(-50%)
+    scale(1.05);
+}
+
+.cot-ng-select ::ng-deep.ng-select-focused .ng-select-container,
+.cot-ng-select ::ng-deep .ng-select-focused .ng-select-container {
+  border-color: var(--cot-primary) !important;
+
+  box-shadow:
+    0 0 0 3px var(--color-focus-ring) !important;
+}
+
+
+/* ============================================================
+   INPUT INTERNO DEL BUSCADOR
+   ============================================================ */
+
+.cot-ng-select ::ng-deep .ng-input > input {
+  color: var(--color-text) !important;
+
+  font-family: inherit;
+  font-size: 14px;
+}
+
+
+/* ============================================================
+   ESTADO CON VALOR
+   ============================================================ */
+
+.cot-ng-select ::ng-deep .ng-value-container {
+  padding-left: 0 !important;
+}
+
+
+/* ============================================================
+   BOTÓN LIMPIAR
+   ============================================================ */
+
+.cot-ng-select ::ng-deep .ng-clear-wrapper {
+  color: var(--color-text-muted);
+}
+
+.cot-ng-select ::ng-deep .ng-clear-wrapper:hover {
+  color: var(--cot-primary);
+}
+
+
+
+// .cot-field--select {
+//   position: relative;
+// }
+
+// .cot-outline-label {
+//   position: absolute;
+//   top: -8px;
+//   left: 10px;
+//   padding: 0 4px;
+//   background: var(--color-surface);
+//   font-size: 11px;
+//   line-height: 1;
+//   color: var(--color-text-muted);
+//   z-index: 1;
+//   pointer-events: none;
+// }
+
+// .cot-ng-select {
+//   height: 56px;
+// }
+
+// .cot-ng-select ::ng-deep .ng-select-container {
+//   height: 56px;
+//   min-height: 56px;
+//   border-radius: var(--radius-sm);
+//   border-color: var(--color-border);
+//   align-items: center;
+// }
+
+// .cot-ng-select ::ng-deep .ng-select-focused .ng-select-container,
+// .cot-ng-select ::ng-deep.ng-select-focused .ng-select-container {
+//   border-color: var(--color-brand);
+//   box-shadow: 0 0 0 3px var(--color-focus-ring);
+// }
+
+// /* Icono a la izquierda de los ng-select (Cliente, Color) */
+// .cot-select-icon-wrap {
+//   position: relative;
+
+//   ::ng-deep .ng-value-container {
+//     padding-left: 30px !important;
+//   }
+
+//   ::ng-deep .ng-placeholder {
+//     left: 30px !important;
+//   }
+// }
+
+// .cot-select-icon {
+//   position: absolute;
+//   left: 10px;
+//   top: 50%;
+//   transform: translateY(-50%);
+//   z-index: 1;
+//   pointer-events: none;
+//   font-size: 18px;
+//   width: 18px;
+//   height: 18px;
+//   color: var(--color-text-disabled);
+//   transition: color 0.2s ease;
+// }
+
+// .cot-select-icon-wrap:focus-within .cot-select-icon {
+//   color: var(--color-brand);
+// }
 
 /* ------------------------------------------------------------
    Restyle de mat-form-field outline (tema legacy indigo-pink):
@@ -297,9 +538,19 @@
 
   ::ng-deep .mat-form-field-flex {
     background: var(--color-surface);
-    border-radius: var(--radius-md);
-    transition: box-shadow 0.2s ease;
+
+    border-radius: var(--cot-filter-radius);
+
+    transition:
+      box-shadow 0.2s ease,
+      background 0.2s ease;
   }
+
+  // ::ng-deep .mat-form-field-flex {
+  //   background: var(--color-surface);
+  //   border-radius: var(--radius-md);
+  //   transition: box-shadow 0.2s ease;
+  // }
 
   ::ng-deep .mat-form-field-infix {
     padding: 0.6em 0;
@@ -307,8 +558,12 @@
   }
 
   ::ng-deep .mat-form-field-outline {
-    color: var(--color-border);
+    color: var(--cot-filter-border);
   }
+
+  // ::ng-deep .mat-form-field-outline {
+  //   color: var(--color-border);
+  // }
 
   ::ng-deep .mat-form-field-outline-thick {
     color: var(--c-neutral-300);

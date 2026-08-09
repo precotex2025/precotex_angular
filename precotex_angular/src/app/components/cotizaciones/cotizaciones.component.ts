@@ -327,6 +327,19 @@ export class CotizacionesComponent implements OnInit {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
   //INICIALIZACION DE COMPONENTE
   ngOnInit(): void {
     // this.getRutaXCodTela('JE003177');
@@ -342,6 +355,8 @@ export class CotizacionesComponent implements OnInit {
       }
     });     
   }
+
+  /* --- Cargar Unidad de Negocio --- */
 
   loadUnidadNeg(){
     this.unidadesNegocio = [];   
@@ -369,6 +384,8 @@ export class CotizacionesComponent implements OnInit {
       }
     });       
   }
+
+  /* --- Cargar Clientes --- */
 
   LoadClientes(codigoCliente: string){
     this.dataClientes = [];
@@ -400,7 +417,9 @@ export class CotizacionesComponent implements OnInit {
          });
       }
     });   
-  }  
+  } 
+  
+  /* --- Cargar Recetas Antipilling --- */
 
   loadRecetas(){
     this.SpinnerService.show();
@@ -427,6 +446,8 @@ export class CotizacionesComponent implements OnInit {
       }
     });      
   }
+
+  /* --- Cargar Colores --- */
 
   validaCodigoColor() {
     const sCodColor = this.formulario.get('color')?.value! || '';
