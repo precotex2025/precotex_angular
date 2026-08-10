@@ -76,8 +76,7 @@
           </mat-icon>
           <mat-select 
             formControlName="tipo" 
-            placeholder="Seleccione..."
-            (selectionChange)="chgTipo()">
+            placeholder="Seleccione...">
             <mat-option 
               *ngFor="let t of tipoUnidadesNegocio" 
               [value]="t.codigo">
@@ -86,22 +85,17 @@
           </mat-select>
         </mat-form-field>
 
-
-        <!-- =========================================================
-            FILTRO: CLIENTE
-        ========================================================= -->
+        <!-- ********************** CLIENTE ********************************* -->
         <div class="cot-field cot-filter-select cot-field--span2">
-
           <label class="cot-filter-select__label">
             {{ COTIZACIONES_FIELDS.CLIENTE.label }}
           </label>
-
           <div class="cot-filter-select__control">
-            <mat-icon class="cot-filter-select__icon"
+            <mat-icon 
+              class="cot-filter-select__icon"
               [matTooltip]="COTIZACIONES_FIELDS.CLIENTE.label" >
-              {{ COTIZACIONES_FIELDS.CLIENTE.icon }}
+                {{ COTIZACIONES_FIELDS.CLIENTE.icon }}
             </mat-icon>
-
             <ng-select
               formControlName="cliente"
               class="cot-ng-select cot-ng-select--filter"
@@ -114,26 +108,30 @@
               placeholder="Buscar cliente..."
               (change)="onChangeCliente()">
             </ng-select>
-
           </div>
-
         </div>
 
+        <!-- ********************** CODIGO DE TELA ********************************* -->
         <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
           <mat-label>{{ COTIZACIONES_FIELDS.TELA.label }}</mat-label>
           <mat-icon matPrefix class="cot-field-icon">{{ COTIZACIONES_FIELDS.TELA.icon }}</mat-icon>
-          <input [textMask]="{mask: maskCodigo}" matInput formControlName="codigoTela"
-                 (keyup.enter)="buscarDescripcionTela()" 
-                 placeholder="AA000000"
-                 (blur)="buscarDescripcionTela()"  />
+          <input 
+            [textMask]="{mask: maskCodigo}" 
+            matInput 
+            formControlName="codigoTela"
+            (keyup.enter)="buscarDescripcionTela()" 
+            placeholder="AA000000"
+            (blur)="buscarDescripcionTela()"  />
         </mat-form-field>
 
+        <!-- ********************** DESCRIPCION DE TELA ********************************* -->
         <mat-form-field appearance="outline" floatLabel="always" class="cot-field cot-field--readonly">
-          <mat-label>Descripción</mat-label>
-          <mat-icon matPrefix class="cot-field-icon">description</mat-icon>
+          <mat-label>{{ COTIZACIONES_FIELDS.DESCRIPCION_TELA.label }}</mat-label>
+          <mat-icon matPrefix class="cot-field-icon">{{ COTIZACIONES_FIELDS.DESCRIPCION_TELA.icon }}</mat-icon>
           <input matInput formControlName="descripcionTela" readonly placeholder="—" />
         </mat-form-field>
 
+        <!-- ********************** RUTA ********************************* -->
         <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
           <mat-label>{{ COTIZACIONES_FIELDS.RUTA.label }}</mat-label>
           <mat-icon matPrefix class="cot-field-icon">{{ COTIZACIONES_FIELDS.RUTA.icon }}</mat-icon>
@@ -144,22 +142,16 @@
           </mat-select>
         </mat-form-field>
 
-        <!-- =========================================================
-            FILTRO: COLOR
-        ========================================================= -->
+        <!-- ********************** COLOR ********************************* -->
         <div class="cot-field cot-filter-select">
-
           <label class="cot-filter-select__label" #labelColor>
             {{ COTIZACIONES_FIELDS.COLOR.label }}
           </label>
-
           <div class="cot-filter-select__control">
-
             <mat-icon class="cot-filter-select__icon"
               [matTooltip]="labelColor.textContent.trim()" >
               {{ COTIZACIONES_FIELDS.COLOR.icon }}
             </mat-icon>
-
             <ng-select
               formControlName="color"
               class="cot-ng-select cot-ng-select--filter"
@@ -171,9 +163,7 @@
               appendTo="body"
               placeholder="Buscar color...">
             </ng-select>
-
           </div>
-
         </div>
       </div>
 

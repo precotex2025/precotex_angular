@@ -11,13 +11,18 @@ export const COTIZACIONES_FIELDS = {
   },
 
   TIPO_UNIDAD: {
-    label: 'Tipo Und. Negocio',
+    label: 'Tipo Negocio',
     icon: 'category'
   },
 
   TELA: {
     label: 'Código de tela',
     icon: 'texture'
+  },
+
+  DESCRIPCION_TELA: {
+    label: 'Descripción de tela',
+    icon: 'description'
   },
 
   RUTA: {
