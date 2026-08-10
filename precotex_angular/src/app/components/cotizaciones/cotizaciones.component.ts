@@ -107,7 +107,9 @@ interface Costeo {
     idrecetalabprod: string
   }
 
-  // Item del panel de Historial, construido a partir de cada elemento de getListaPrecioXColor.
+  // Item del panel de Cotizaciones. Pendiente: hoy el panel no la usa (queda en su
+  // empty state); se reactiva cuando el backend entregue el listado de cotizaciones
+  // guardadas por criterios. Ver TODO en onBuscaPreciosxColor.
   interface VersionPrecio {
     id            : number;   // idcotizacioN_CAB
     titulo        : string;   // 'Opción 1', 'Opción 2', ... (correlativo local)
@@ -736,7 +738,6 @@ export class CotizacionesComponent implements OnInit {
 
   mostrarRutaDetalle(): void {
     //BLOQUE DE VALIDACION
-    //this.dataSource.data = [];
     this.onValidaExistenciaHistorialxColor();
   }
 
@@ -801,7 +802,7 @@ export class CotizacionesComponent implements OnInit {
 
           this.codigoRutaTela = Cod_Ruta;
 
-          // Filtros de esta búsqueda: seleccionarVersion() los reutiliza al cambiar de card.
+          // Filtros de esta búsqueda: seleccionarBorrador()/nuevaCotizacionUI() los reutilizan.
           this.ultimaBusqueda = {
             unidad: Number(this.unidadNegocio),
             tipo: Tipo,
@@ -811,24 +812,44 @@ export class CotizacionesComponent implements OnInit {
             color: Cod_Color
           };
 
-          // Mantenemos dataSource_Precios por compatibilidad con el modal (inerte, no se abre).
           this.dataSource_Precios = response.elements;
-
-          this.global_CodReceta = '';
-          this.formulario_Precio.get('ctrl_receta').setValue('');
-
-          this.historialVersiones = this.mapPreciosAVersiones(response.elements);
           this.busquedaRealizada = true;
           this.historialPineado = true;
           this.borrador = null;
           this.borradorActivo = false;
 
-          if (this.historialVersiones.length > 0){
-            // Autoselecciona la primera opción; internamente ya dispara getListarProcesosExportacion.
-            this.seleccionarVersion(this.historialVersiones[0]);
+          // TODO(backend): cuando exista el endpoint de cotizaciones guardadas por
+          // criterios, llenar historialVersiones aquí. Hoy el panel muestra su empty state.
+          this.historialVersiones = [];
+          this.versionSeleccionada = null;
+
+          // Solo muestra el modal de precios cuando hay más de un registro; con uno solo
+          // o ninguno, se autoselecciona y se carga la tabla de costeo directamente.
+          if (response.totalElements > 1){
+
+            this.global_CodReceta = '';
+            this.formulario_Precio.get('ctrl_receta').setValue('');
+            this.dialogRef = this.dialog.open(this.dialogListaPrecios, {
+              width: '600px'
+            });
+
+            this.dialogRef.afterClosed().subscribe(() => {
+              if (!this.dialogPrecio){
+                this.getListarProcesosExportacion(Number(this.unidadNegocio), Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color, Number(this.global_PrecioTinto), Number(this.global_Tiempo), Number(this.global_idCotizacion_Cab));
+              }
+            });
+
+          } else if (response.totalElements === 1){
+
+            const e = response.elements[0];
+            this.global_PrecioTinto      = Number(e.preC_TINTO);
+            this.global_Tiempo           = Number(e.tiempo);
+            this.global_SDC              = String(e.corR_CARTA);
+            this.global_idCotizacion_Cab = Number(e.idcotizacioN_CAB);
+
+            this.getListarProcesosExportacion(Number(this.unidadNegocio), Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color, this.global_PrecioTinto, this.global_Tiempo, this.global_idCotizacion_Cab);
+
           } else {
-            console.log(':::::::::::::NO TIENE PRECIOS');
-            this.versionSeleccionada = null;
             this.global_PrecioTinto = 0;
             this.global_Tiempo      = 0;
             this.global_SDC         = "";
@@ -855,7 +876,8 @@ export class CotizacionesComponent implements OnInit {
     });
   }
 
-  // Mapea la respuesta cruda de getListaPrecioXColor a las cards del panel de Historial.
+  // Pendiente: sin llamador desde el HTML mientras el panel esté en su empty state.
+  // Se reactiva cuando el backend entregue el listado de cotizaciones guardadas.
   private mapPreciosAVersiones(elements: any[]): VersionPrecio[] {
     return (elements ?? []).map((e, i) => ({
       id            : Number(e.idcotizacioN_CAB) || 0,
@@ -1141,6 +1163,8 @@ export class CotizacionesComponent implements OnInit {
 
 
 
+  // Pendiente: sin llamador desde el HTML mientras el panel esté en su empty state.
+  // Se reactiva junto con historialVersiones (ver mapPreciosAVersiones).
   seleccionarVersion(v: VersionPrecio) {
     // Si veníamos del borrador, se guarda snapshot antes de abandonarlo (conserva ajustes).
     if (this.borradorActivo) { this.snapshotBorrador(); }
