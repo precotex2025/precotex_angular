@@ -161,10 +161,25 @@
               [searchable]="true"
               [clearable]="true"
               appendTo="body"
+              (change)="onChangeColor()"
               placeholder="Buscar color...">
             </ng-select>
           </div>
         </div>
+
+        <!-- ********************** PRECIO / SDC ********************************* -->
+        <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
+          <mat-label>Precio / SDC</mat-label>
+          <mat-icon matPrefix class="cot-field-icon">payments</mat-icon>
+          <mat-select [value]="precioSeleccionado"
+                      [disabled]="!dataSource_Precios?.length"
+                      (selectionChange)="onChangePrecio($event.value)"
+                      placeholder="Elegir precio...">
+            <mat-option *ngFor="let p of dataSource_Precios" [value]="p">
+              {{ p.corR_CARTA }} — Tiempo {{ p.tiempo }} — {{ p.preC_TINTO }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
 
       <div class="cot-form-footer">
@@ -185,7 +200,7 @@
   <div class="cot-workspace-content"
        *ngIf="codigoRutaTela && unidadNegocio=='1'">
 
-    <!-- Panel de Cotizaciones: alimentado por getListaPrecioXColor + borrador en memoria (ver onBuscaPreciosxColor / seleccionarBorrador en el .ts) -->
+    <!-- Panel de Cotizaciones: alimentado por getListarProcesosExportacion + borrador en memoria (ver onBuscar / seleccionarBorrador en el .ts) -->
     <section class="cot-history-panel" *ngIf="historialPineado && busquedaRealizada">
       <div class="cot-history-panel__header">
         <div class="cot-history-panel__title">
@@ -204,6 +219,29 @@
         <mat-icon>add_circle</mat-icon> Nueva Cotización
       </button>
       <div class="cot-history-list">
+        <div class="cot-history-card" *ngFor="let v of historialVersiones"
+             [class.cot-history-card--activa]="versionSeleccionada === v && !borradorActivo"
+             (click)="seleccionarVersion(v)">
+          <span class="cot-history-dot cot-dot--vigente"></span>
+          <div class="cot-history-body">
+            <div class="cot-history-header">
+              <span class="cot-history-version">{{ v.titulo }}</span>
+              <span class="cot-history-badge cot-badge--vigente" *ngIf="v.estado">{{ v.estado }}</span>
+            </div>
+            <div class="cot-history-meta">
+              <mat-icon>sell</mat-icon>SDC {{ v.sdc }} · Precio {{ v.precioTinto | number:'1.2-2' }} · Tiempo {{ v.tiempo }}
+            </div>
+          </div>
+          <div class="cot-history-card__acciones">
+            <button mat-icon-button matTooltip="Modificar" (click)="onEditar(v); $event.stopPropagation()">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Eliminar" (click)="onEliminar(v); $event.stopPropagation()">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+        </div>
+
         <div class="cot-history-card cot-history-card--nueva"
              *ngIf="borrador"
              [class.cot-history-card--activa]="borradorActivo"
@@ -218,9 +256,16 @@
               <mat-icon>edit_note</mat-icon>En edición · sin precio de referencia
             </div>
           </div>
+          <div class="cot-history-card__acciones">
+            <button mat-icon-button matTooltip="Modificar" (click)="onEditar(); $event.stopPropagation()">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Eliminar" (click)="onEliminar(); $event.stopPropagation()">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
         </div>
-        <!-- TODO(backend): listado de cotizaciones guardadas por criterios.
-             El endpoint aún no existe; ver historialVersiones en onBuscaPreciosxColor. -->
+
         <div class="cot-history-empty" *ngIf="!historialVersiones.length && !borrador">
           <mat-icon>search_off</mat-icon>
           <p>Sin cotizaciones para estos criterios</p>
@@ -481,13 +526,8 @@
   </ng-template>
 
   <!-- Barra de acciones -->
+  <!-- Eliminar/Modificar se movieron a las cards del panel de Cotizaciones (ver onEditar/onEliminar) -->
   <footer class="cot-actionbar" *ngIf="bMuestraMenuFlotante">
-    <button mat-stroked-button class="btn-danger" [disabled]="!isDisabledBtnDelete" (click)="onEliminar()">
-      <mat-icon>delete_outline</mat-icon> Eliminar
-    </button>
-    <button mat-stroked-button class="btn-ghost" [disabled]="!isDisabledBtnEdit" (click)="onEditar()">
-      <mat-icon>edit_note</mat-icon> Modificar
-    </button>
     <button mat-flat-button class="btn-azul" [disabled]="!isDisabledBtnSave" (click)="onGuardar()">
       <mat-icon>save</mat-icon> Guardar
     </button>
@@ -507,69 +547,6 @@
   <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>Cancelar</button>
     <button mat-button (click)="guardarObservacion(data)">Guardar</button>
-  </mat-dialog-actions>
-</ng-template>
-
-<ng-template #dialogListaPrecios let-data>
-  <h2 mat-dialog-title>Listado de Precios</h2>
-  <mat-dialog-content>
-
-    <table mat-table [dataSource]="dataSource_Precios" class="cot-tabla cot-tabla-precios">
-
-      <ng-container matColumnDef="opcion">
-        <th mat-header-cell *matHeaderCellDef>Opción</th>
-        <td mat-cell *matCellDef="let data_det">
-          <button mat-icon-button (click)="seleccionarFila(data_det)">
-            <mat-icon>
-              {{ filaSeleccionada === data_det ? 'check_circle' : 'radio_button_unchecked' }}
-            </mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="corR_CARTA">
-        <th mat-header-cell *matHeaderCellDef class="centrado">SDC</th>
-        <td mat-cell *matCellDef="let r" class="centrado">{{ r.corR_CARTA }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="tiempo">
-        <th mat-header-cell *matHeaderCellDef class="centrado">TIEMPO</th>
-        <td mat-cell *matCellDef="let r" class="centrado">{{ r.tiempo }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="preC_TINTO">
-        <th mat-header-cell *matHeaderCellDef class="centrado">PRE. TINTO</th>
-        <td mat-cell *matCellDef="let r" class="centrado">{{ r.preC_TINTO }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="idrecetalabprod">
-        <th mat-header-cell *matHeaderCellDef class="centrado">RECETA</th>
-        <td mat-cell *matCellDef="let r" class="centrado">{{ r.idrecetalabprod }}</td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns_Precio"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns_Precio;"></tr>
-    </table>
-
-    <form [formGroup]="formulario_Precio" #formDirectivePrecio="ngForm" class="cot-dialog-precio-select">
-      <mat-form-field appearance="outline" style="width:100%">
-        <mat-label>Seleccionar Receta</mat-label>
-        <mat-select formControlName="ctrl_receta" (selectionChange)="onRecetaChange($event)">
-          <mat-option *ngFor="let receta of dataRecetas" [value]="receta.codigo">
-            {{ receta.descripcion }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </form>
-
-  </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button mat-flat-button class="btn-azul" (click)="onSeleccionarPrecio()">
-      <mat-icon>save</mat-icon> Seleccionar
-    </button>
-    <button mat-stroked-button (click)="onCancelarPrecio()">
-      <mat-icon>close</mat-icon> Cancelar
-    </button>
   </mat-dialog-actions>
 </ng-template>
 

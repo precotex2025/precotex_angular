@@ -966,6 +966,28 @@ Alineación y tamaño del dropdown
 
 .cot-history-body { flex: 1; min-width: 0; }
 
+.cot-history-card__acciones {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.15s;
+
+  .mat-icon-button {
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+
+    .mat-icon { font-size: 18px; width: 18px; height: 18px; line-height: 18px; }
+  }
+}
+
+.cot-history-card:hover .cot-history-card__acciones,
+.cot-history-card:focus-within .cot-history-card__acciones {
+  opacity: 1;
+}
+
 .cot-history-header {
   display: flex;
   align-items: center;
@@ -1763,6 +1785,11 @@ button[mat-stroked-button] {
   .cot-history-panel {
     width: 100%;
     max-height: 240px;
+  }
+
+  // Sin hover en touch: los botones de acción quedan siempre visibles.
+  .cot-history-card__acciones {
+    opacity: 1;
   }
 
   .cot-version-bar {

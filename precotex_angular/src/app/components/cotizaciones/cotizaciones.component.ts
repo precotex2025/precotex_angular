@@ -107,9 +107,8 @@ interface Costeo {
     idrecetalabprod: string
   }
 
-  // Item del panel de Cotizaciones. Pendiente: hoy el panel no la usa (queda en su
-  // empty state); se reactiva cuando el backend entregue el listado de cotizaciones
-  // guardadas por criterios. Ver TODO en onBuscaPreciosxColor.
+  // Item del panel de Cotizaciones: una fila por cotización existente para los filtros
+  // buscados. Alimentado por getListaPrecioXColor (ver mapPreciosAVersiones / onBuscar).
   interface VersionPrecio {
     id            : number;   // idcotizacioN_CAB
     titulo        : string;   // 'Opción 1', 'Opción 2', ... (correlativo local)
@@ -125,6 +124,10 @@ interface Costeo {
     usuario?: string;  // usu_Registro
     fecha?  : string;  // fec_Registro
     estado? : 'Vigente' | 'Aprobada' | 'Borrador';  // estado
+
+    // Solo presentes cuando la "versión" es en realidad el borrador nuevo (ver crearBorradorNuevo)
+    correlativo?: string;
+    version?    : number;
   }
 
 //   interface Proceso {
@@ -146,11 +149,9 @@ interface Costeo {
 export class CotizacionesComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('dialogObservacion') dialogObservacion!: TemplateRef<any>;
-  @ViewChild('dialogListaPrecios') dialogListaPrecios!: TemplateRef<any>;
   @ViewChild('dialogAjuste') dialogAjuste!: TemplateRef<any>;
   observacion: string = '';
 
-  dialogRef!: MatDialogRef<any>;
   dialogRefAjuste!: MatDialogRef<any>;
 
   maskCodigo: (string | RegExp)[] = [
@@ -192,16 +193,18 @@ export class CotizacionesComponent implements OnInit {
   bBuscarTela         = false;
   // --- Historial: sin control en UI, se envía siempre en false ---
   bValidaHistorial    = false;
-  dialogPrecio        = false;
-  
+
   filaSeleccionada: any = null;
 
   global_Tiempo       : number = 0;
   global_PrecioTinto  : number = 0;
-  global_SDC          : string = ""; 
+  global_SDC          : string = "";
   global_CodReceta    : string = "";
   global_Observacion  : string = "";
   global_idCotizacion_Cab : number = 0;
+
+  // Precio elegido en el combo "Precio / SDC" (se puebla al elegir Color, ver onChangeColor/onChangePrecio)
+  precioSeleccionado: any = null;
 
   constructor(
     private SpinnerService      : NgxSpinnerService         ,
@@ -234,15 +237,16 @@ export class CotizacionesComponent implements OnInit {
   tipoEdicion: 'utilidad' | 'ajuste' | 'cotizacion' | null = null;
   datosGeneralesAbierto = true;
 
-  // --- Panel de Historial: alimentado por getListaPrecioXColor (ver onBuscaPreciosxColor) ---
+  // --- Panel de Historial: alimentado por getListarProcesosExportacion (ver onBuscar) ---
   historialVersiones: VersionPrecio[] = [];
   historialPineado = true;
   versionSeleccionada: VersionPrecio | null = null;
   busquedaRealizada = false;   // controla la visibilidad del panel tras el primer Buscar
 
-  // Borrador en curso: sobrevive a la navegación entre cotizaciones (conserva ajustes escritos).
-  // Se destruye solo al pulsar Buscar o tras guardar (ver reiniciaControles). Uno solo a la vez.
-  borrador: { planos: any[], planosBackup: any[], recetaCod: string } | null = null;
+  // Borrador en curso: sobrevive a la navegación entre versiones (conserva ajustes escritos).
+  // onBuscar lo crea automáticamente cuando no hay cotizaciones para los filtros
+  // (ver crearBorradorNuevo). Se destruye tras guardar (ver reiniciaControles). Uno solo a la vez.
+  borrador: { planos: any[], planosBackup: any[], recetaCod: string, correlativo: string, version: number } | null = null;
   borradorActivo = false;   // true = la grilla está mostrando el borrador
 
   // Filtros de la última búsqueda, para poder re-disparar getListarProcesosExportacion
@@ -302,7 +306,8 @@ export class CotizacionesComponent implements OnInit {
       //'preC_ACABADO'  ,
       'idrecetalabprod',  
   ];
-  dataSource_Precios: MatTableDataSource<dataPrecio> = new MatTableDataSource();
+  // Lista de precios por color (array crudo del backend, ver onBuscaPreciosxColor)
+  dataSource_Precios: any[] | null = null;
 
 
   formulario = this.formBuilder.group({
@@ -730,68 +735,113 @@ export class CotizacionesComponent implements OnInit {
     return !!this.dataSource.data?.length;
   }
 
-  /* --- Buscar Cotización --- */
+  /* --- Buscar Cotización: consulta directa a getListarProcesosExportacion con los filtros
+     del formulario + el precio elegido en el combo Precio/SDC (ver onChangeColor). El propio
+     backend informa vía existeCotizacion si esos filtros+precio ya tienen cotización guardada;
+     si no la tienen, getListarProcesosExportacion activa el borrador automáticamente
+     (ver el bloque "no existe cotización" más abajo). --- */
   onBuscar() {
-    this.mostrarRutaDetalle();
+    const _unidad  = Number(this.unidadNegocio);
+    const _tipo    = this.formulario.get('tipo')?.value || '';
+    const _cliente = this.formulario.get('cliente')?.value || '';
+    const _tela    = this.formulario.get('codigoTela')?.value || '';
+    const _ruta    = this.formulario.get('codigoRutaTela')?.value || '';
+    const _color   = this.formulario.get('color')?.value || '';
+
+    this.codigoRutaTela = _ruta;
+
+    // Filtros de esta búsqueda: seleccionarVersion()/seleccionarBorrador()/nuevaCotizacionUI() los reutilizan.
+    this.ultimaBusqueda = {
+      unidad: _unidad,
+      tipo: _tipo,
+      cliente: _cliente,
+      tela: _tela,
+      ruta: _ruta,
+      color: _color
+    };
+
+    this.busquedaRealizada = true;
+    this.historialPineado = true;
+    this.borrador = null;
+    this.borradorActivo = false;
+    this.versionSeleccionada = null;
+
+    // TODO(backend): cuando exista un endpoint real de listado de cotizaciones guardadas
+    // por criterios, llenar historialVersiones aquí. Hoy el panel solo muestra la card del
+    // borrador (si getListarProcesosExportacion determina que no hay cotización) o su empty state.
+    this.historialVersiones = [];
+
+    this.getListarProcesosExportacion(
+      _unidad, _tipo, _cliente, _tela, _ruta, _color,
+      this.global_PrecioTinto, this.global_Tiempo, this.global_idCotizacion_Cab
+    );
+
     this.panelCriteriosAbierto = false; // colapsa criterios y deja toda la altura a la tabla
   }
 
-  mostrarRutaDetalle(): void {
-    //BLOQUE DE VALIDACION
-    this.onValidaExistenciaHistorialxColor();
+  /* --- Crea un borrador nuevo pidiendo correlativo/versión al backend y lo preselecciona.
+     Se usa desde el botón manual "Nueva Cotización" (ver nuevaCotizacionUI), donde no hay
+     planos ya cargados para reutilizar. Cuando el borrador se activa automáticamente tras
+     una búsqueda sin cotización existente, ver el bloque dedicado en getListarProcesosExportacion,
+     que reutiliza los planos recién cargados en vez de volver a pedirlos. --- */
+  private crearBorradorNuevo() {
+    const f = this.ultimaBusqueda;
+    if (!f) { return; }
+
+    this.SpinnerService.show();
+    this.service.getObtieneNuevaVersionCotizacion(f.unidad, f.tipo, f.cliente, f.tela, f.ruta, f.color).subscribe({
+      next: (response: any) => {
+        const e = response?.elements?.[0] ?? {};
+        this.borrador = {
+          planos: [], planosBackup: [], recetaCod: '',
+          correlativo: String(e.correlativo ?? ''),
+          version: Number(e.version) || 1
+        };
+        this.global_CodReceta = '';
+        this.formulario_Precio.get('ctrl_receta').setValue('');
+
+        this.seleccionarBorrador();
+      },
+      error: (error: any) => {
+        this.SpinnerService.hide();
+        this.toastr.error(error.message, 'Cerrar', { timeOut: 2500 });
+      }
+    });
   }
 
-  onValidaExistenciaHistorialxColor(){
-    const _unidad     = Number(this.unidadNegocio);
-    const _tipo       = this.formulario.get('tipo')?.value || '';
-    const _cliente    = this.formulario.get('cliente')?.value || '';
-    const _tela       = this.formulario.get('codigoTela')?.value || '';
-    const _ruta       = this.formulario.get('codigoRutaTela')?.value || '';
-    const _color      = this.formulario.get('color')?.value || '';
-    const bHistorial =  this.bValidaHistorial?"1":"0";
+  /* --- Cambio de Color: solo trae la lista de precios por color para el combo Precio/SDC.
+     No toca la tabla de costeo; eso lo dispara únicamente onBuscar. --- */
+  onChangeColor(){
+    this.precioSeleccionado = null;
+    this.dataSource_Precios = null;
+    this.global_PrecioTinto = 0;
+    this.global_Tiempo      = 0;
+    this.global_SDC         = "";
+    this.global_idCotizacion_Cab = 0;
+
+    const _color = this.formulario.get('color')?.value || '';
+    if (!_color) { return; }
+
+    const _unidad    = Number(this.unidadNegocio);
+    const _tipo      = this.formulario.get('tipo')?.value || '';
+    const _cliente   = this.formulario.get('cliente')?.value || '';
+    const _tela      = this.formulario.get('codigoTela')?.value || '';
+    const _ruta      = this.formulario.get('codigoRutaTela')?.value || '';
+    const bHistorial = this.bValidaHistorial ? "1" : "0";
 
     this.onBuscaPreciosxColor(String(bHistorial), _unidad, _tipo, _cliente, _tela, _ruta, _color);
-    return;
-
-    // this.SpinnerService.show();
-    // this.service.getValidaExistenciaHistorialxColor(_unidad, _tipo, _cliente, _tela, _ruta, _color, _receta).subscribe({
-    //   next: (response: any) => {
-    //     if(response.success){
-    //       if (response.totalElements > 0){
-    //         //Aqui habilita el semaforo
-    //         this.bValidaHistorial = true;    
-
-    //         console.log('MARCA CON HISTORIAL', response.elements);
-
-    //         //metOdo de nuscar informacion de procesos desde la tabla de historial
-    //         //this.getListarProcesosExportacion(_unidad, _tipo, _cliente, _tela, _ruta, _color, 0, 0);     
- 
-    //         //this.SpinnerService.hide();
-    //       }
-    //       else{
-    //         this.dataSource_Hilos.data = [];     
-
-    //         console.log('MARCA SIN HISTORIAL');
-            
-    //         //MUESTRA PRECIOS DE LA BD SI ES QUE NO EXISTE HISTORIAL
-    //         //this.onBuscaPreciosxColor(_color);
-
-    //         //this.SpinnerService.hide();
-    //       };
-    //     }else{
-    //       this.dataSource_Hilos.data = [];
-    //     }
-    //   },
-    //   error: (error: any) => {
-    //     this.SpinnerService.hide();
-    //     console.log(error.error.message, 'Cerrar', {
-    //       timeout: 2500
-    //     })
-    //   }
-    // });       
-  
   }
 
+  /* --- Selección de precio en el combo Precio/SDC --- */
+  onChangePrecio(p: any){
+    this.precioSeleccionado = p;
+    this.global_PrecioTinto      = Number(p.preC_TINTO);
+    this.global_Tiempo           = Number(p.tiempo);
+    this.global_SDC              = String(p.corR_CARTA);
+    this.global_idCotizacion_Cab = Number(p.idcotizacioN_CAB);
+  }
+
+  /** Trae la lista de precios por color (catálogo). No dispara getListarProcesosExportacion. */
   onBuscaPreciosxColor(Tipo_Busqueda: string, Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string){
     this.dataSource_Precios = null;
     this.SpinnerService.show();
@@ -800,70 +850,14 @@ export class CotizacionesComponent implements OnInit {
         if(response.success){
           console.log(':::::::::::::RESULTADO DE PRECIO', response);
 
-          this.codigoRutaTela = Cod_Ruta;
-
-          // Filtros de esta búsqueda: seleccionarBorrador()/nuevaCotizacionUI() los reutilizan.
-          this.ultimaBusqueda = {
-            unidad: Number(this.unidadNegocio),
-            tipo: Tipo,
-            cliente: Cod_Cliente_Tex,
-            tela: Cod_Tela,
-            ruta: Cod_Ruta,
-            color: Cod_Color
-          };
-
           this.dataSource_Precios = response.elements;
-          this.busquedaRealizada = true;
-          this.historialPineado = true;
-          this.borrador = null;
-          this.borradorActivo = false;
 
-          // TODO(backend): cuando exista el endpoint de cotizaciones guardadas por
-          // criterios, llenar historialVersiones aquí. Hoy el panel muestra su empty state.
-          this.historialVersiones = [];
-          this.versionSeleccionada = null;
-
-          // Solo muestra el modal de precios cuando hay más de un registro; con uno solo
-          // o ninguno, se autoselecciona y se carga la tabla de costeo directamente.
-          if (response.totalElements > 1){
-
-            this.global_CodReceta = '';
-            this.formulario_Precio.get('ctrl_receta').setValue('');
-            this.dialogRef = this.dialog.open(this.dialogListaPrecios, {
-              width: '600px'
-            });
-
-            this.dialogRef.afterClosed().subscribe(() => {
-              if (!this.dialogPrecio){
-                this.getListarProcesosExportacion(Number(this.unidadNegocio), Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color, Number(this.global_PrecioTinto), Number(this.global_Tiempo), Number(this.global_idCotizacion_Cab));
-              }
-            });
-
-          } else if (response.totalElements === 1){
-
-            const e = response.elements[0];
-            this.global_PrecioTinto      = Number(e.preC_TINTO);
-            this.global_Tiempo           = Number(e.tiempo);
-            this.global_SDC              = String(e.corR_CARTA);
-            this.global_idCotizacion_Cab = Number(e.idcotizacioN_CAB);
-
-            this.getListarProcesosExportacion(Number(this.unidadNegocio), Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color, this.global_PrecioTinto, this.global_Tiempo, this.global_idCotizacion_Cab);
-
-          } else {
-            this.global_PrecioTinto = 0;
-            this.global_Tiempo      = 0;
-            this.global_SDC         = "";
-            this.global_idCotizacion_Cab = 0;
-
-            this.getListarProcesosExportacion(Number(this.unidadNegocio), Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color, this.global_PrecioTinto, this.global_Tiempo, this.global_idCotizacion_Cab);
+          // Con un solo resultado, se autoselecciona para no obligar a abrir el combo.
+          if (response.totalElements === 1){
+            this.onChangePrecio(response.elements[0]);
           }
         }else{
           this.dataSource_Precios = null;
-          this.historialVersiones = [];
-          this.versionSeleccionada = null;
-          this.busquedaRealizada = true;
-          this.borrador = null;
-          this.borradorActivo = false;
         }
         this.SpinnerService.hide();
       },
@@ -876,8 +870,9 @@ export class CotizacionesComponent implements OnInit {
     });
   }
 
-  // Pendiente: sin llamador desde el HTML mientras el panel esté en su empty state.
-  // Se reactiva cuando el backend entregue el listado de cotizaciones guardadas.
+  // Pendiente: sin llamador. dataSource_Precios (precios por color) NO es lo mismo que
+  // "cotizaciones guardadas por criterios" — no reusar esto para historialVersiones (ver
+  // TODO en onBuscar). Queda listo para cuando exista un endpoint real de listado.
   private mapPreciosAVersiones(elements: any[]): VersionPrecio[] {
     return (elements ?? []).map((e, i) => ({
       id            : Number(e.idcotizacioN_CAB) || 0,
@@ -968,8 +963,12 @@ export class CotizacionesComponent implements OnInit {
               this.isDisabledBtnSave    = true;
               this.isDisabledBtnEdit    = false;
               this.isDisabledBtnDelete  = false;
-          }      
-          
+
+              // No existe cotización para estos filtros: activa el borrador con los planos
+              // recién cargados (no hace falta volver a pedirlos) y pide su correlativo/versión.
+              this.activarBorradorConPlanosActuales(Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color);
+          }
+
           //Busca color solo si no tiene regitros de historial
           //if (response.elements[0].existeCotizacion == "0"){
           //  this.onBuscaPreciosxColor(Cod_Color);    
@@ -987,6 +986,39 @@ export class CotizacionesComponent implements OnInit {
       error: (error: any) => {
         this.toastr.error(error.message, 'Cerrar', { timeOut: 2500 });
         this.SpinnerService.hide();
+      }
+    });
+  }
+
+  /* --- Activa el borrador cuando getListarProcesosExportacion informa que no existe
+     cotización para estos filtros. Reutiliza los planos que esa misma llamada acaba de
+     cargar (no vuelve a pedirlos) y solo consulta correlativo/versión al backend. Si el
+     borrador ya existía (p.ej. el usuario lo reseleccionó desde el panel), no vuelve a
+     pedir correlativo. --- */
+  private activarBorradorConPlanosActuales(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string): void {
+    this.borradorActivo = true;
+    this.versionSeleccionada = null;
+
+    if (this.borrador) { return; }
+
+    this.borrador = {
+      planos: JSON.parse(JSON.stringify(this.planos)),
+      planosBackup: JSON.parse(JSON.stringify(this.planosBackup)),
+      recetaCod: this.global_CodReceta,
+      correlativo: '',
+      version: 0
+    };
+
+    this.service.getObtieneNuevaVersionCotizacion(Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color).subscribe({
+      next: (response: any) => {
+        const e = response?.elements?.[0] ?? {};
+        if (this.borrador) {
+          this.borrador.correlativo = String(e.correlativo ?? '');
+          this.borrador.version = Number(e.version) || 1;
+        }
+      },
+      error: (error: any) => {
+        this.toastr.error(error.message, 'Cerrar', { timeOut: 2500 });
       }
     });
   }
@@ -1163,8 +1195,7 @@ export class CotizacionesComponent implements OnInit {
 
 
 
-  // Pendiente: sin llamador desde el HTML mientras el panel esté en su empty state.
-  // Se reactiva junto con historialVersiones (ver mapPreciosAVersiones).
+  // Activa una versión guardada: la selecciona en el panel y carga su grilla de costeo.
   seleccionarVersion(v: VersionPrecio) {
     // Si veníamos del borrador, se guarda snapshot antes de abandonarlo (conserva ajustes).
     if (this.borradorActivo) { this.snapshotBorrador(); }
@@ -1199,11 +1230,7 @@ export class CotizacionesComponent implements OnInit {
       return;
     }
 
-    this.borrador = { planos: [], planosBackup: [], recetaCod: '' };
-    this.global_CodReceta = '';
-    this.formulario_Precio.get('ctrl_receta').setValue('');
-
-    this.seleccionarBorrador();
+    this.crearBorradorNuevo();
   }
 
   /* --- Activa el borrador: restaura desde memoria si ya tiene snapshot, o lo pide al backend ---
@@ -1492,6 +1519,11 @@ export class CotizacionesComponent implements OnInit {
     this.borradorActivo       = false;
     this.ultimaBusqueda       = null;
     this.dataSource_Precios   = null;
+    this.precioSeleccionado   = null;
+    this.global_PrecioTinto   = 0;
+    this.global_Tiempo        = 0;
+    this.global_SDC           = "";
+    this.global_idCotizacion_Cab = 0;
   }
 
    
@@ -1607,6 +1639,8 @@ export class CotizacionesComponent implements OnInit {
             "tiempo_Referencia" : Number(this.global_Tiempo),
             "precio_Referencia" : Number(this.global_PrecioTinto),
             "sDC_Referencia"    : this.global_SDC,
+            "correlativo"     : this.borrador?.correlativo ?? '',
+            "version"         : this.borrador?.version ?? 0,
             "flg_Estatus"     : "A",
             "usu_Registro"    : this.sUsuario,
             "accion"          : "I",
@@ -1652,14 +1686,45 @@ export class CotizacionesComponent implements OnInit {
     });
   }
 
-  onEditar(){
+  /** Modificar una card del panel. Sin argumento = la card de borrador; con VersionPrecio =
+   *  una cotización guardada. Solo UI por ahora: no hay endpoint de actualización —
+   *  desbloquea Ajuste/Guardar sobre la card indicada. */
+  onEditar(v?: VersionPrecio){
+    if (v) {
+      if (this.versionSeleccionada !== v) { this.seleccionarVersion(v); }
+    } else if (this.borrador && !this.borradorActivo) {
+      this.seleccionarBorrador();
+    }
     this.isAjusteBloqueado = false;
     this.isDisabledBtnSave = true;
     this.isDisabledBtnEdit = false;
   }
 
-  onEliminar(){
+  /** Eliminar una card del panel. Sin argumento = descarta el borrador local (sin backend,
+   *  nunca se guardó). Con VersionPrecio = cotización ya guardada; no hay endpoint de borrado
+   *  todavía, solo se avisa. */
+  onEliminar(v?: VersionPrecio){
+    Swal.fire({
+      title: '¿Eliminar esta cotización?',
+      text: v ? 'Esta acción no se puede deshacer.' : 'Se descartará el borrador sin guardar.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (!result.isConfirmed) { return; }
 
+      if (v) {
+        this.toastr.info('Eliminar cotización guardada aún no disponible', '', { timeOut: 2500 });
+        return;
+      }
+
+      // Borrador: solo vive en memoria, se puede descartar sin más.
+      this.borrador = null;
+      this.borradorActivo = false;
+      this.dataSource.data = [];
+      this.bMuestraMenuFlotante = false;
+    });
   }
 
 
@@ -1808,50 +1873,8 @@ validarObservacion(row: any, event: FocusEvent) {
 
 
 
-onChangeColor(){
-  this.isDisabledBtnFind = true;
-  //this.dataSource.data = [];
-  // const _CodColor = this.formulario.get('color')?.value || '';
-  // this.onBuscaPreciosxColor(_CodColor);
-
-  //AQUI DEBE LLAMAR AL LISTAR 
-  //this.onBuscar();
-  
-  //this.onValidaExistenciaHistorialxColor();
 
 
-}
-
-
-
-
-
-
-
-seleccionarFila(row: any) {
-  this.filaSeleccionada = row;
-  console.log('seleccionada', this.filaSeleccionada);
-
-  this.global_Tiempo      = Number(row.tiempo)    ;
-  this.global_PrecioTinto = Number(row.preC_TINTO);
-  this.global_SDC         = String(row.corR_CARTA);     
-  this.global_idCotizacion_Cab = Number(row.idcotizacioN_CAB); 
-}  
-
-
-onSeleccionarPrecio(){
-  // const _receta     = this.formulario.get('ctrl_receta')?.value || '';
-  // console.log('Receta seleccionada', _receta);
-  // this.global_CodReceta = _receta;
-
-    console.log('global_Tiempo', this.global_Tiempo);
-    console.log('global_PrecioTinto', this.global_PrecioTinto);  
-
-    if (this.dialogRef) {
-      this.dialogPrecio = false;
-      this.dialogRef.close();
-    }  
-}
 
 onRecetaChange(event: any) {
   console.log('Receta seleccionada:', event.value);
@@ -1860,13 +1883,6 @@ onRecetaChange(event: any) {
 }
 
 
-
-onCancelarPrecio(){
-  if (this.dialogRef) {
-    this.dialogPrecio = true;
-    this.dialogRef.close();
-  }
-}
 
 //onChangeColor(){
   //this.validaCodigoColor();

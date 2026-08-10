@@ -92,7 +92,20 @@ export class CotizacionesService {
   postProcesoCotizacion(data: any){
     const headers = this.Header;
     return this.http.post(this.baseUrlTinto + 'txCotizaciones/postProcesoCotizacion', data, { headers })
-  } 
+  }
+
+  // Devuelve el siguiente correlativo/versión para un borrador nuevo (elements[0] = { correlativo, version })
+  getObtieneNuevaVersionCotizacion(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string) {
+    const headers = this.Header;
+    let params = new HttpParams();
+    params = params.append("Pro_Cen_Cos", Pro_Cen_Cos);
+    params = params.append("Tipo", Tipo);
+    params = params.append("Cod_Cliente_Tex", Cod_Cliente_Tex);
+    params = params.append("Cod_Tela", Cod_Tela);
+    params = params.append("Cod_Ruta", Cod_Ruta);
+    params = params.append("Cod_Color", Cod_Color);
+    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getObtieneNuevaVersionCotizacion', { headers, params });
+  }
 
 
 
