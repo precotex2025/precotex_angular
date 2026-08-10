@@ -185,14 +185,14 @@
   <div class="cot-workspace-content"
        *ngIf="codigoRutaTela && unidadNegocio=='1'">
 
-    <!-- Panel de Historial (UI estática, sin conexión a servicio) -->
-    <section class="cot-history-panel" *ngIf="historialPineado && dataSource.data?.length">
+    <!-- Panel de Cotizaciones: alimentado por getListaPrecioXColor + borrador en memoria (ver onBuscaPreciosxColor / seleccionarBorrador en el .ts) -->
+    <section class="cot-history-panel" *ngIf="historialPineado && busquedaRealizada">
       <div class="cot-history-panel__header">
         <div class="cot-history-panel__title">
           <div class="cot-history-panel__icon"><mat-icon>history</mat-icon></div>
           <div>
-            <h2>Historial</h2>
-            <p>Versiones registradas</p>
+            <h2>Cotizaciones</h2>
+            <p>Para los criterios aplicados</p>
           </div>
         </div>
         <button class="cot-btn-pin" [class.cot-btn-pin--activo]="historialPineado"
@@ -204,19 +204,51 @@
         <mat-icon>add_circle</mat-icon> Nueva Cotización
       </button>
       <div class="cot-history-list">
-        <div class="cot-history-card" *ngFor="let v of historialVersiones"
-             [class.cot-history-card--activa]="versionSeleccionada === v"
-             (click)="seleccionarVersion(v)">
-          <span class="cot-history-dot"
-                [ngClass]="{'cot-dot--vigente': v.estado === 'Vigente', 'cot-dot--aprobada': v.estado === 'Aprobada', 'cot-dot--borrador': v.estado === 'Borrador'}"></span>
+        <div class="cot-history-card cot-history-card--nueva"
+             *ngIf="borrador"
+             [class.cot-history-card--activa]="borradorActivo"
+             (click)="seleccionarBorrador()">
+          <span class="cot-history-dot cot-dot--borrador"></span>
           <div class="cot-history-body">
             <div class="cot-history-header">
-              <span class="cot-history-version">{{ v.version }}</span>
+              <span class="cot-history-version">Nueva cotización</span>
+              <span class="cot-history-badge cot-badge--borrador">Sin guardar</span>
+            </div>
+            <div class="cot-history-meta">
+              <mat-icon>edit_note</mat-icon>En edición · sin precio de referencia
+            </div>
+          </div>
+        </div>
+        <div class="cot-history-empty" *ngIf="!historialVersiones.length && !borrador">
+          <mat-icon>search_off</mat-icon>
+          <p>Sin cotizaciones para estos criterios</p>
+        </div>
+        <div class="cot-history-card" *ngFor="let v of historialVersiones"
+             [class.cot-history-card--activa]="!borradorActivo && versionSeleccionada?.id === v.id"
+             (click)="seleccionarVersion(v)">
+          <span class="cot-history-dot"
+                [ngClass]="v.estado
+                  ? {'cot-dot--vigente': v.estado === 'Vigente', 'cot-dot--aprobada': v.estado === 'Aprobada', 'cot-dot--borrador': v.estado === 'Borrador'}
+                  : {'cot-dot--vigente': versionSeleccionada?.id === v.id, 'cot-dot--aprobada': versionSeleccionada?.id !== v.id}"></span>
+          <div class="cot-history-body">
+            <div class="cot-history-header">
+              <span class="cot-history-version">{{ v.titulo }}</span>
               <span class="cot-history-badge"
-                    [ngClass]="{'cot-badge--vigente': v.estado === 'Vigente', 'cot-badge--aprobada': v.estado === 'Aprobada', 'cot-badge--borrador': v.estado === 'Borrador'}">{{ v.estado }}</span>
+                    [ngClass]="v.estado
+                      ? {'cot-badge--vigente': v.estado === 'Vigente', 'cot-badge--aprobada': v.estado === 'Aprobada', 'cot-badge--borrador': v.estado === 'Borrador'}
+                      : {'cot-badge--aprobada': true}">{{ v.estado || ('SDC ' + v.sdc) }}</span>
               <span class="cot-history-recent-tag" *ngIf="v.reciente">Más reciente</span>
             </div>
             <div class="cot-history-meta">
+              <mat-icon>payments</mat-icon>{{ v.precioTinto | number:'1.2-2' }}
+              <span class="cot-history-sep">·</span>
+              <mat-icon>schedule</mat-icon>{{ v.tiempo }}
+              <ng-container *ngIf="v.receta">
+                <span class="cot-history-sep">·</span>
+                <mat-icon>science</mat-icon>{{ v.receta }}
+              </ng-container>
+            </div>
+            <div class="cot-history-meta" *ngIf="v.usuario || v.fecha">
               <mat-icon>person</mat-icon>{{ v.usuario }}
               <span class="cot-history-sep">·</span>
               <mat-icon>calendar_today</mat-icon>{{ v.fecha }}
@@ -224,14 +256,25 @@
           </div>
         </div>
       </div>
+      <form [formGroup]="formulario_Precio" #formDirectivePrecioPanel="ngForm" class="cot-history-panel__receta">
+        <mat-form-field appearance="outline" style="width:100%">
+          <mat-label>Seleccionar Receta</mat-label>
+          <mat-select formControlName="ctrl_receta" (selectionChange)="onRecetaChange($event)">
+            <mat-option *ngFor="let receta of dataRecetas" [value]="receta.codigo">
+              {{ receta.descripcion }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
     </section>
 
     <section class="cot-costeo">
-      <div class="cot-version-bar" *ngIf="dataSource.data?.length">
+      <div class="cot-version-bar" *ngIf="versionSeleccionada || borradorActivo">
         <div class="cot-version-bar__info">
           <mat-icon>history</mat-icon>
-          <span class="cot-version-bar__label">Versión consultada:</span>
-          <span class="cot-version-bar__value">{{ versionSeleccionada.version }} — {{ versionSeleccionada.estado }} · {{ versionSeleccionada.usuario }} · {{ versionSeleccionada.fecha }}</span>
+          <span class="cot-version-bar__label">Cotización consultada:</span>
+          <span class="cot-version-bar__value" *ngIf="borradorActivo">Nueva cotización — sin guardar · sin precio de referencia</span>
+          <span class="cot-version-bar__value" *ngIf="!borradorActivo">{{ versionSeleccionada.titulo }} — SDC {{ versionSeleccionada.sdc }} · Precio {{ versionSeleccionada.precioTinto | number:'1.2-2' }} · Tiempo {{ versionSeleccionada.tiempo }}</span>
         </div>
         <button mat-stroked-button class="btn-ghost" (click)="nuevaCotizacionUI()">
           <mat-icon>add</mat-icon> Nueva Cotización

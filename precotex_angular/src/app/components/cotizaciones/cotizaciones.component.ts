@@ -107,6 +107,24 @@ interface Costeo {
     idrecetalabprod: string
   }
 
+  // Item del panel de Historial, construido a partir de cada elemento de getListaPrecioXColor.
+  interface VersionPrecio {
+    id            : number;   // idcotizacioN_CAB
+    titulo        : string;   // 'Opción 1', 'Opción 2', ... (correlativo local)
+    sdc           : string;   // corR_CARTA
+    precioTinto   : number;   // preC_TINTO
+    precioAcabado : number;   // preC_ACABADO
+    tiempo        : number;   // tiempo
+    receta        : string;   // idrecetalabprod
+    reciente      : boolean;  // true solo en el primer elemento
+    raw           : any;      // elemento crudo, por si se necesita otro campo
+
+    // --- Fase 2: pendientes de que el backend agregue estos campos a getListaPrecioXColor ---
+    usuario?: string;  // usu_Registro
+    fecha?  : string;  // fec_Registro
+    estado? : 'Vigente' | 'Aprobada' | 'Borrador';  // estado
+  }
+
 //   interface Proceso {
 //   proceso: string;
 //   factor: number;
@@ -214,16 +232,23 @@ export class CotizacionesComponent implements OnInit {
   tipoEdicion: 'utilidad' | 'ajuste' | 'cotizacion' | null = null;
   datosGeneralesAbierto = true;
 
-  // --- Panel de Historial (UI estática, sin conexión a servicio) ---
-  // Datos de ejemplo únicamente para reflejar el mockup; no representan versiones reales.
-  historialVersiones: { id: number, version: string, estado: 'Vigente' | 'Aprobada' | 'Borrador', reciente?: boolean, usuario: string, fecha: string }[] = [
-    { id: 4, version: 'Versión 4', estado: 'Vigente',  reciente: true, usuario: 'J. Calles', fecha: '04/08/2026' },
-    { id: 3, version: 'Versión 3', estado: 'Aprobada', usuario: 'J. Calles', fecha: '04/08/2026' },
-    { id: 2, version: 'Versión 2', estado: 'Aprobada', usuario: 'M. López', fecha: '28/07/2026' },
-    { id: 1, version: 'Versión 1', estado: 'Borrador', usuario: 'J. Calles', fecha: '25/07/2026' },
-  ];
+  // --- Panel de Historial: alimentado por getListaPrecioXColor (ver onBuscaPreciosxColor) ---
+  historialVersiones: VersionPrecio[] = [];
   historialPineado = true;
-  versionSeleccionada = this.historialVersiones[0];
+  versionSeleccionada: VersionPrecio | null = null;
+  busquedaRealizada = false;   // controla la visibilidad del panel tras el primer Buscar
+
+  // Borrador en curso: sobrevive a la navegación entre cotizaciones (conserva ajustes escritos).
+  // Se destruye solo al pulsar Buscar o tras guardar (ver reiniciaControles). Uno solo a la vez.
+  borrador: { planos: any[], planosBackup: any[], recetaCod: string } | null = null;
+  borradorActivo = false;   // true = la grilla está mostrando el borrador
+
+  // Filtros de la última búsqueda, para poder re-disparar getListarProcesosExportacion
+  // cuando el usuario elige otra card del historial sin volver a leer el formulario.
+  private ultimaBusqueda: {
+    unidad: number; tipo: string; cliente: string;
+    tela: string; ruta: string; color: string;
+  } | null = null;
 
   displayedColumns: string[] = [
     'hover',
@@ -773,76 +798,51 @@ export class CotizacionesComponent implements OnInit {
       next: (response: any) => {
         if(response.success){
           console.log(':::::::::::::RESULTADO DE PRECIO', response);
-          //Variables generales
-          //const _tipo     = this.formulario.get('tipo')?.value ||    '';
-          //const _cliente  = this.formulario.get('cliente')?.value || '';
-          //const _tela     = this.formulario.get('codigoTela')?.value || '';
-          //const _ruta     = this.formulario.get('codigoRutaTela')?.value || '';
-          //const _color    = this.formulario.get('color')?.value! || '';        
-          
-          //this.codigoRutaTela     = _ruta;
-          this.codigoRutaTela     = Cod_Ruta;
 
-          //solo muestra informacion cuando tiene mas de un registro, si es uno solo no muestra nada
-          if (response.totalElements > 1){
+          this.codigoRutaTela = Cod_Ruta;
 
-            console.log(':::::::::::::TIENE MAS DE UN PRECIO');
+          // Filtros de esta búsqueda: seleccionarVersion() los reutiliza al cambiar de card.
+          this.ultimaBusqueda = {
+            unidad: Number(this.unidadNegocio),
+            tipo: Tipo,
+            cliente: Cod_Cliente_Tex,
+            tela: Cod_Tela,
+            ruta: Cod_Ruta,
+            color: Cod_Color
+          };
 
-            this.dataSource_Precios = response.elements;       
-            //Carga Recetas
-            //this.loadRecetas();
-            
-            //Abre el dialog
-            this.global_CodReceta = '';
-            this.formulario_Precio.get('ctrl_receta').setValue('');
-            this.dialogRef = this.dialog.open(this.dialogListaPrecios, {
-              width: '600px'
-            });        
+          // Mantenemos dataSource_Precios por compatibilidad con el modal (inerte, no se abre).
+          this.dataSource_Precios = response.elements;
 
-            this.dialogRef.afterClosed().subscribe(() => {
+          this.global_CodReceta = '';
+          this.formulario_Precio.get('ctrl_receta').setValue('');
 
-              //console.log('Dialogo cerrado');
+          this.historialVersiones = this.mapPreciosAVersiones(response.elements);
+          this.busquedaRealizada = true;
+          this.historialPineado = true;
+          this.borrador = null;
+          this.borradorActivo = false;
 
-              //Lista de procesos de exportacion
-              if(!this.dialogPrecio){
-                this.getListarProcesosExportacion(Number(this.unidadNegocio), Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color, Number(this.global_PrecioTinto), Number(this.global_Tiempo), Number(this.global_idCotizacion_Cab)); 
-              }
-
-            });        
-            
-          }
-          else if (response.totalElements === 1){
-
-            console.log(':::::::::::::TIENE UN PRECIO');
-            console.log('this.datos', response.elements[0]);
-            //Bloque de variables
-            this.global_PrecioTinto = Number(response.elements[0].preC_TINTO);
-            this.global_Tiempo      = Number(response.elements[0].tiempo);     
-            this.global_SDC         = String(response.elements[0].corR_CARTA);    
-            this.global_idCotizacion_Cab = Number(response.elements[0].idcotizacioN_CAB);
-            console.log('unidadNegocio', Number(this.unidadNegocio));
-            //metOdo de nuscar informacion de procesos
-            this.getListarProcesosExportacion(Number(this.unidadNegocio), Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color, Number(this.global_PrecioTinto), Number(this.global_Tiempo), Number(this.global_idCotizacion_Cab));
-      
-            //this.dataSource_Precios = null;            
-            //this.SpinnerService.hide();
-
-          }else if (response.totalElements === 0){
+          if (this.historialVersiones.length > 0){
+            // Autoselecciona la primera opción; internamente ya dispara getListarProcesosExportacion.
+            this.seleccionarVersion(this.historialVersiones[0]);
+          } else {
             console.log(':::::::::::::NO TIENE PRECIOS');
-            //Bloque de variables
+            this.versionSeleccionada = null;
             this.global_PrecioTinto = 0;
-            this.global_Tiempo      = 0;    
-            this.global_SDC         = "";  
-            this.global_idCotizacion_Cab = 0;    
+            this.global_Tiempo      = 0;
+            this.global_SDC         = "";
+            this.global_idCotizacion_Cab = 0;
 
-            //metOdo de nuscar informacion de procesos
-            this.getListarProcesosExportacion(Number(this.unidadNegocio), Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color, Number(this.global_PrecioTinto), Number(this.global_Tiempo), Number(this.global_idCotizacion_Cab));
-
-            //this.dataSource_Precios = null;            
-            //this.SpinnerService.hide();          
+            this.getListarProcesosExportacion(Number(this.unidadNegocio), Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color, this.global_PrecioTinto, this.global_Tiempo, this.global_idCotizacion_Cab);
           }
         }else{
           this.dataSource_Precios = null;
+          this.historialVersiones = [];
+          this.versionSeleccionada = null;
+          this.busquedaRealizada = true;
+          this.borrador = null;
+          this.borradorActivo = false;
         }
         this.SpinnerService.hide();
       },
@@ -852,7 +852,26 @@ export class CotizacionesComponent implements OnInit {
           timeout: 2500
         })
       }
-    });  
+    });
+  }
+
+  // Mapea la respuesta cruda de getListaPrecioXColor a las cards del panel de Historial.
+  private mapPreciosAVersiones(elements: any[]): VersionPrecio[] {
+    return (elements ?? []).map((e, i) => ({
+      id            : Number(e.idcotizacioN_CAB) || 0,
+      titulo        : `Opción ${i + 1}`,
+      sdc           : String(e.corR_CARTA ?? ''),
+      precioTinto   : Number(e.preC_TINTO) || 0,
+      precioAcabado : Number(e.preC_ACABADO) || 0,
+      tiempo        : Number(e.tiempo) || 0,
+      receta        : String(e.idrecetalabprod ?? ''),
+      reciente      : i === 0,
+      raw           : e,
+      // Fase 2 — hoy llegan undefined, la card los omite con *ngIf
+      usuario : e.usu_Registro,
+      fecha   : e.fec_Registro,
+      estado  : e.estado
+    }));
   }
 
   getListarProcesosExportacion(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string, precio: number, tiempo: number, IdCotizacion_Cab: number): void {
@@ -936,7 +955,10 @@ export class CotizacionesComponent implements OnInit {
 
           //Habilita botoneria
           this.bMuestraMenuFlotante = true;
-          
+
+        } else {
+          this.dataSource.data = [];
+          this.bMuestraMenuFlotante = false;
         }
         this.SpinnerService.hide();
       },
@@ -945,7 +967,7 @@ export class CotizacionesComponent implements OnInit {
         this.SpinnerService.hide();
       }
     });
-  }  
+  }
 
   /********************** SWAL ALERT MOSTRAR CARGANDO ********************************* */
   private MostrarCargando(titulo: string = 'Cargando...', texto: string = 'Por favor espere.') {
@@ -1119,12 +1141,93 @@ export class CotizacionesComponent implements OnInit {
 
 
 
-  seleccionarVersion(v: any) {
+  seleccionarVersion(v: VersionPrecio) {
+    // Si veníamos del borrador, se guarda snapshot antes de abandonarlo (conserva ajustes).
+    if (this.borradorActivo) { this.snapshotBorrador(); }
+    this.borradorActivo = false;
     this.versionSeleccionada = v;
+
+    this.global_PrecioTinto      = v.precioTinto;
+    this.global_Tiempo           = v.tiempo;
+    this.global_SDC              = v.sdc;
+    this.global_idCotizacion_Cab = v.id;
+
+    const f = this.ultimaBusqueda;
+    if (!f) { return; }
+
+    this.getListarProcesosExportacion(
+      f.unidad, f.tipo, f.cliente, f.tela, f.ruta, f.color,
+      this.global_PrecioTinto, this.global_Tiempo, this.global_idCotizacion_Cab
+    );
   }
 
+  /* --- Nueva Cotización: crea el borrador si no existe, o reselecciona el existente ---
+     Solo puede existir un borrador a la vez; el botón nunca crea un segundo. */
   nuevaCotizacionUI() {
-    this.toastr.info('Función en desarrollo', '', { timeOut: 2000 });
+    if (this.borrador) {
+      this.seleccionarBorrador();
+      return;
+    }
+
+    const f = this.ultimaBusqueda;
+    if (!f) {
+      this.toastr.info('Primero realiza una búsqueda', '', { timeOut: 2000 });
+      return;
+    }
+
+    this.borrador = { planos: [], planosBackup: [], recetaCod: '' };
+    this.global_CodReceta = '';
+    this.formulario_Precio.get('ctrl_receta').setValue('');
+
+    this.seleccionarBorrador();
+  }
+
+  /* --- Activa el borrador: restaura desde memoria si ya tiene snapshot, o lo pide al backend ---
+     con precio/tiempo/IdCotizacion_Cab en cero. El backend responde existeCotizacion = '0',
+     lo que desbloquea la columna Ajuste y habilita Guardar (ver getListarProcesosExportacion). */
+  seleccionarBorrador() {
+    if (!this.borrador) { return; }
+
+    this.borradorActivo      = true;
+    this.versionSeleccionada = null;
+
+    this.global_PrecioTinto = 0;
+    this.global_Tiempo      = 0;
+    this.global_SDC         = '';
+    this.global_idCotizacion_Cab = 0;
+
+    if (this.borrador.planos.length) {
+      this.restaurarBorrador();
+      return;
+    }
+
+    const f = this.ultimaBusqueda;
+    if (!f) { return; }
+    this.getListarProcesosExportacion(f.unidad, f.tipo, f.cliente, f.tela, f.ruta, f.color, 0, 0, 0);
+  }
+
+  private snapshotBorrador() {
+    if (!this.borrador) { return; }
+    this.borrador.planos       = JSON.parse(JSON.stringify(this.dataSource.data));
+    this.borrador.planosBackup = JSON.parse(JSON.stringify(this.planosBackup));
+    this.borrador.recetaCod    = this.global_CodReceta;
+  }
+
+  private restaurarBorrador() {
+    this.planos       = JSON.parse(JSON.stringify(this.borrador!.planos));
+    this.planosBackup = JSON.parse(JSON.stringify(this.borrador!.planosBackup));
+    this.dataSource.data = this.planos;
+    this.dataSource.sort = this.sort;
+
+    this.global_CodReceta = this.borrador!.recetaCod;
+    this.formulario_Precio.get('ctrl_receta').setValue(this.borrador!.recetaCod);
+
+    // Mismo estado que deja getListarProcesosExportacion con existeCotizacion = '0'.
+    this.isAjusteBloqueado    = false;
+    this.isDisabledBtnSave    = true;
+    this.isDisabledBtnEdit    = false;
+    this.isDisabledBtnDelete  = false;
+    this.bMuestraMenuFlotante = true;
   }
 
   get resumenCriterios(): { label: string, value: string, icon: string }[] {
@@ -1356,6 +1459,15 @@ export class CotizacionesComponent implements OnInit {
     
     this.RutaXCodTela = [];
     this.ColoresFiltrada = [];
+
+    //Limpia panel de Cotizaciones
+    this.historialVersiones   = [];
+    this.versionSeleccionada  = null;
+    this.busquedaRealizada    = false;
+    this.borrador             = null;
+    this.borradorActivo       = false;
+    this.ultimaBusqueda       = null;
+    this.dataSource_Precios   = null;
   }
 
    

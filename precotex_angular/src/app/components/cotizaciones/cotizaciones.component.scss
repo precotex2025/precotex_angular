@@ -942,6 +942,12 @@ Alineación y tamaño del dropdown
     border-color: var(--color-brand);
     background: rgba(99, 102, 241, 0.03);
   }
+
+  &--nueva {
+    border-style: dashed;
+    border-color: var(--c-orange-500);
+    background: var(--c-orange-050);
+  }
 }
 
 .cot-history-dot {
@@ -997,6 +1003,8 @@ Alineación y tamaño del dropdown
   display: flex;
   align-items: center;
   gap: 4px;
+  flex-wrap: wrap;
+  row-gap: 2px;
   font-size: var(--fs-xs);
   color: var(--color-text-muted);
 
@@ -1004,6 +1012,26 @@ Alineación y tamaño del dropdown
 }
 
 .cot-history-sep { color: var(--c-neutral-300); margin: 0 2px; }
+
+.cot-history-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-2);
+  padding: var(--sp-6) var(--sp-4);
+  color: var(--color-text-muted);
+
+  mat-icon { font-size: 32px; width: 32px; height: 32px; color: var(--color-text-disabled); }
+  p { margin: 0; font-size: var(--fs-xs); }
+}
+
+.cot-history-panel__receta {
+  border-top: 1px solid var(--c-neutral-100);
+  padding-top: var(--sp-3);
+
+  mat-form-field { width: 100%; }
+}
 
 /* Barra "Versión consultada" */
 .cot-version-bar {
