@@ -810,8 +810,6 @@ export class CotizacionesComponent implements OnInit {
 
             });        
             
-            
-            this.SpinnerService.hide();
           }
           else if (response.totalElements === 1){
 
@@ -846,6 +844,7 @@ export class CotizacionesComponent implements OnInit {
         }else{
           this.dataSource_Precios = null;
         }
+        this.SpinnerService.hide();
       },
       error: (error: any) => {
         this.SpinnerService.hide();
