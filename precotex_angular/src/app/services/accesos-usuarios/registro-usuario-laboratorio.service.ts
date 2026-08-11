@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GlobalVariable } from '../../VarGlobals';
 
 @Injectable({
@@ -22,6 +22,16 @@ export class RegistroUsuarioLaboratorioService {
   putAsignarPerfilUsuarioLab(data: any) {
     const headers = this.Header;
     return this.http.put(this.baseUrlTinto + 'AccesoUsuario/putAsignarPerfilUsuarioLab', data, { headers });
+  }
+  
+  postMantenimientoUsuarioLab(postData: any) {
+    const headers = this.Header;
+    return this.http.post(this.baseUrlTinto + 'AccesoUsuario/postMantenimientoUsuarioLab', postData, { headers });
   }   
+
+  putMantenimientoUsuarioLab(postData: any) {
+    const headers = this.Header;
+    return this.http.put(this.baseUrlTinto + 'AccesoUsuario/putMantenimientoUsuarioLab', postData, { headers });
+  }
 
 }

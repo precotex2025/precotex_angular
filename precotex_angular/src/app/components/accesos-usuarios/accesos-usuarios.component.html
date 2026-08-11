@@ -87,9 +87,17 @@
                                 <mat-icon color="success">create</mat-icon>
                             </a>
 
-                            <a mat-icon-button matTooltip="Asignar Perfil Lab" (click)="openDialogLaboratorio(data_det)">
-                                <mat-icon color="accent">science</mat-icon>
+                            <a mat-icon-button *ngIf="!tienePerfilLab(data_det); else btnLabAsignado"
+                                matTooltip="Sin perfil de laboratorio" (click)="openDialogLaboratorio(data_det)">
+                                <mat-icon class="icono-lab-sin-perfil">science</mat-icon>
                             </a>
+                            <ng-template #btnLabAsignado>
+                                <a mat-icon-button matTooltip="Perfil de laboratorio asignado"
+                                    (click)="openDialogLaboratorio(data_det)">
+                                    <mat-icon color="primary" matBadge="&#10003;" matBadgeColor="primary"
+                                        matBadgeSize="small" matBadgeOverlap="true">science</mat-icon>
+                                </a>
+                            </ng-template>
 <!-- 
                             <a mat-icon-button (click)="EliminarRegistro(data_det.Cod_Usuario,data_det.Trabajador)">
                                 <mat-icon color="warn">delete</mat-icon>

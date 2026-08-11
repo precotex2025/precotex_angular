@@ -283,12 +283,16 @@ export class AccesosUsuariosComponent implements OnInit {
     
   }
 
+  tienePerfilLab(row: any): boolean {
+    const cod = row?.Cod_PerfilUsuarioLab;
+    return cod !== null && cod !== undefined && String(cod).trim() !== '';
+  }
+
   openDialogLaboratorio(data) {
     console.log(data);
     let dialogRef = this.dialog.open(RegistroUsuarioLaboratorioComponent, {
       disableClose: true,
       minWidth:600,
-      minHeight:400,
       data: {
         data:data
       }

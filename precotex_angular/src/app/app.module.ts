@@ -209,6 +209,7 @@ import { DialogMostrarImgComponent } from './components/comercial-carga-imagenes
 import { ComercialImgHuachipaComponent } from './components/comercial-img-huachipa/comercial-img-huachipa.component';
 import { NgxImageZoomModule } from 'ngx-image-zoom';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatBadgeModule } from '@angular/material/badge';
 import { DialogCrearImagenesComponent } from './components/comercial-carga-imagenes/dialog-crear-imagenes/dialog-crear-imagenes.component';
 import { DialogTransferirImagenesComponent } from './components/comercial-carga-imagenes/dialog-transferir-imagenes/dialog-transferir-imagenes.component';
 import { FormatoCheckListComponent } from './components/formato-check-list/formato-check-list.component';
@@ -1205,6 +1206,7 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     NgSelectModule,
     AgGridModule,
     MatTooltipModule,
+    MatBadgeModule,
     NgxSpinnerModule,
     NgxChartsModule,
     MatSlideToggleModule,
