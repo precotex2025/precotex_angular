@@ -17,6 +17,7 @@ import { ModificarUsuarioWebComponent } from './modificar-usuario-web/modificar-
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 import { GlobalVariable } from 'src/app/VarGlobals';
+import { RegistroUsuarioLaboratorioComponent } from './registro-usuario-laboratorio/registro-usuario-laboratorio.component';
 
 interface data_det {
   Id_Usuario:      string, 
@@ -280,6 +281,24 @@ export class AccesosUsuariosComponent implements OnInit {
   AsignarNumAuditoriaModificar(Nro_DocIde: string, Cod_Conductor: string) {
     
   }
+
+  openDialogLaboratorio(data) {
+    console.log(data);
+    let dialogRef = this.dialog.open(RegistroUsuarioLaboratorioComponent, {
+      disableClose: true,
+      minWidth:600,
+      minHeight:400,
+      data: {
+        data:data
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.MostrarCabeceraUsuarios();
+    })
+  } 
+
+
 
 
 }

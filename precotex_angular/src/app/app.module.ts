@@ -176,6 +176,7 @@ import { AsignarRolesUsuarioComponent } from './components/accesos-usuarios/asig
 import { ReportesInspeccionPrendaComponent } from './components/inspeccion/reportes-inspeccion-prenda/reportes-inspeccion-prenda.component';
 import { CrearNuevoRolUsuarioComponent } from './components/accesos-usuarios/asignar-roles-usuario/crear-nuevo-rol-usuario/crear-nuevo-rol-usuario.component';
 import { ModificarUsuarioWebComponent } from './components/accesos-usuarios/modificar-usuario-web/modificar-usuario-web.component';
+import { RegistroUsuarioLaboratorioComponent } from './components/accesos-usuarios/registro-usuario-laboratorio/registro-usuario-laboratorio.component';
 import { MantenimientosCorreosComponent } from './components/comedor/mantenimientos-correos/mantenimientos-correos.component';
 import { ReporteInspeccionAuditoriaComponent } from './components/inspeccion/reporte-inspeccion-auditoria/reporte-inspeccion-auditoria.component';
 import { ProgramacionVacacionesComponent } from './components/vacaciones/programacion-vacaciones/programacion-vacaciones.component';
@@ -785,6 +786,7 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     ReportesInspeccionPrendaComponent,
     CrearNuevoRolUsuarioComponent,
     ModificarUsuarioWebComponent,
+    RegistroUsuarioLaboratorioComponent,
     MantenimientosCorreosComponent,
     ReporteInspeccionAuditoriaComponent,
     ProgramacionVacacionesComponent,
