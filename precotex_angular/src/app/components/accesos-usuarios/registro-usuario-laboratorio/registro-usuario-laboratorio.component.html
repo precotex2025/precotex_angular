@@ -45,11 +45,12 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Perfil / Rol en Laboratorio (*)</mat-label>
           <mat-select name="perfil" [(ngModel)]="perfilSeleccionado" required placeholder="Seleccione un Perfil">
-            <mat-option *ngFor="let perfil of perfiles" [value]="perfil.id">
-              {{ perfil.nombre }}
+            <mat-option *ngFor="let perfil of perfiles" [value]="codPerfil(perfil)">
+              {{ desPerfil(perfil) }}
             </mat-option>
           </mat-select>
           <mat-hint *ngIf="!perfilSeleccionado">El perfil de laboratorio es obligatorio</mat-hint>
+          <mat-hint *ngIf="perfiles.length === 0">No hay perfiles de laboratorio disponibles</mat-hint>
         </mat-form-field>
 
         <!-- Campo de Observaciones -->
@@ -77,7 +78,7 @@
     <button 
       mat-raised-button 
       color="primary" 
-      [disabled]="!perfilSeleccionado" 
+      [disabled]="!perfilSeleccionado || guardando"
       (click)="guardar()">
       <mat-icon>save</mat-icon> Guardar en Lab
     </button>

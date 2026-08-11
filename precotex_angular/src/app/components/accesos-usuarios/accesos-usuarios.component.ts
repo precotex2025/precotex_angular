@@ -28,7 +28,8 @@ interface data_det {
   Empresa: string,
   Flg_Activo:   string,
   Fecha_Registro:         string,
-  Password: string
+  Password: string,
+  Cod_PerfilUsuarioLab: string
 }
  
 interface Conductor {
