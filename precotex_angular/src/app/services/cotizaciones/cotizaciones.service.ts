@@ -95,11 +95,11 @@ export class CotizacionesService {
   }
 
   // Devuelve el siguiente correlativo/versión para un borrador nuevo (elements[0] = { correlativo, version })
-  getObtieneNuevaVersionCotizacion(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string) {
+  getObtieneNuevaVersionCotizacion(Id_Unidad_NegocioKey: number, Cod_Tipo_Orden_tinto: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string) {
     const headers = this.Header;
     let params = new HttpParams();
-    params = params.append("Pro_Cen_Cos", Pro_Cen_Cos);
-    params = params.append("Tipo", Tipo);
+    params = params.append("Id_Unidad_NegocioKey", Id_Unidad_NegocioKey);
+    params = params.append("Cod_Tipo_Orden_tinto", Cod_Tipo_Orden_tinto);
     params = params.append("Cod_Cliente_Tex", Cod_Cliente_Tex);
     params = params.append("Cod_Tela", Cod_Tela);
     params = params.append("Cod_Ruta", Cod_Ruta);
