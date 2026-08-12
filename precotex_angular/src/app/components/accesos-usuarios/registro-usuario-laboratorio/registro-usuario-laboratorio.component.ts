@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { RegistroUsuarioLaboratorioService } from 'src/app/services/accesos-usuarios/registro-usuario-laboratorio.service';
+import { RegistroUsuarioLaboratorioService } from 'src/app/services/accesos-usuarios/registro-usuario-laboratorio/registro-usuario-laboratorio.service';
 
 interface data {
   data: any
