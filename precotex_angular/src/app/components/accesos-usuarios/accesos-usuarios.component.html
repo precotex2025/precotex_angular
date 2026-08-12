@@ -81,27 +81,31 @@
                     <ng-container matColumnDef="acciones">
                         <th mat-header-cell *matHeaderCellDef>Acciones</th>
                         <td class="mat-header-cell" mat-cell *matCellDef="let data_det">
+                            <div class="acciones-grupo">
 
-                            <a mat-icon-button style="margin-right:5px;"
-                                (click)="openDialogModificar(data_det)">
-                                <mat-icon color="success">create</mat-icon>
-                            </a>
+                                <button type="button" class="card-accion card-editar"
+                                    matTooltip="Editar"
+                                    (click)="openDialogModificar(data_det)">
+                                    <mat-icon>create</mat-icon>
+                                </button>
 
-                            <a mat-icon-button *ngIf="!tienePerfilLab(data_det); else btnLabAsignado"
-                                matTooltip="Sin perfil de laboratorio" (click)="openDialogLaboratorio(data_det)">
-                                <mat-icon class="icono-lab-sin-perfil">science</mat-icon>
-                            </a>
-                            <ng-template #btnLabAsignado>
-                                <a mat-icon-button matTooltip="Perfil de laboratorio asignado"
+                                <button type="button" class="card-accion card-lab"
+                                    [class.asignado]="tienePerfilLab(data_det)"
+                                    [class.pendiente]="!tienePerfilLab(data_det)"
+                                    [matTooltip]="tienePerfilLab(data_det)
+                                        ? 'Perfil de laboratorio asignado'
+                                        : 'Sin perfil de laboratorio'"
                                     (click)="openDialogLaboratorio(data_det)">
-                                    <mat-icon color="primary" matBadge="&#10003;" matBadgeColor="primary"
-                                        matBadgeSize="small" matBadgeOverlap="true">science</mat-icon>
-                                </a>
-                            </ng-template>
-<!-- 
-                            <a mat-icon-button (click)="EliminarRegistro(data_det.Cod_Usuario,data_det.Trabajador)">
-                                <mat-icon color="warn">delete</mat-icon>
-                            </a> -->
+                                    <mat-icon>science</mat-icon>
+                                </button>
+
+                                <button type="button" class="card-accion card-password"
+                                    matTooltip="Cambiar contraseña"
+                                    (click)="openDialogCambiarPassword(data_det)">
+                                    <mat-icon>vpn_key</mat-icon>
+                                </button>
+
+                            </div>
                         </td>
                     </ng-container>
 

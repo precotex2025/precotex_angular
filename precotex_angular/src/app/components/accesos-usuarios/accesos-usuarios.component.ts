@@ -301,7 +301,13 @@ export class AccesosUsuariosComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.MostrarCabeceraUsuarios();
     })
-  } 
+  }
+
+  openDialogCambiarPassword(data) {
+    this.matSnackBar.open('Cambiar contraseña: opción en desarrollo', 'Cerrar', {
+      duration: 2500,
+    });
+  }
 
 
 

@@ -182,12 +182,92 @@ mat-form-field {
 .mat-column-Fecha_Registro {width: 80px !important;text-align: center}
 .mat-column-Flg_Activo {width: 80px !important;text-align: center;}
 .mat-column-Des_Rol {width: 80px !important;text-align: center;}
-.mat-column-acciones {width: 30px !important;text-align: center}
+.mat-column-acciones {width: 140px !important;text-align: center}
 //.mat-column-eliminar {width: 30px !important;text-align: center}
 .mat-header-cell {text-align: center; }
 
-.icono-lab-sin-perfil {
-    color: rgba(0, 0, 0, 0.45);
+/* ------------------------- */
+/* ACCIONES DE TABLA         */
+/* ------------------------- */
+
+.acciones-grupo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-accion {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow .18s ease, transform .18s ease,
+                background-color .18s ease, border-color .18s ease;
+
+    .mat-icon {
+        font-size: 19px;
+        width: 19px;
+        height: 19px;
+        line-height: 19px;
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, .18);
+    }
+
+    &:active {
+        transform: translateY(0);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .14);
+    }
+
+    &:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: 2px;
+    }
+}
+
+.card-editar {
+    color: #3f51b5;
+    &:hover { background: #e8eaf6; border-color: #3f51b5; }
+}
+
+.card-lab {
+    &.asignado  { color: #2e7d32; &:hover { background: #e8f5e9; border-color: #2e7d32; } }
+    &.pendiente { color: #b45309; &:hover { background: #fff8e1; border-color: #f59e0b; } }
+
+    &::after {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        font-size: 9px;
+        font-weight: 700;
+        line-height: 13px;
+        text-align: center;
+        color: #ffffff;
+        border: 1.5px solid #ffffff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+    }
+
+    &.asignado::after  { content: '\2713'; background: #2e7d32; }
+    &.pendiente::after { content: '!';     background: #f59e0b; }
+}
+
+.card-password {
+    color: #337ab7;
+    &:hover { background: #e1f0f8; border-color: #337ab7; }
 }
 
 /* ------------------------- */

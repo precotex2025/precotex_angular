@@ -85,10 +85,11 @@
       <span>Cancelar</span>
     </button>
     <button
+      *ngIf="!bloqueado"
       mat-raised-button
       color="primary"
       class="btn-asignar"
-      [disabled]="bloqueado || !perfilSeleccionado || guardando"
+      [disabled]="!perfilSeleccionado || guardando"
       (click)="guardar()">
       <mat-icon>{{ estaAsignado ? 'how_to_reg' : 'save' }}</mat-icon>
       <span>{{ guardando ? 'Guardando...' : (estaAsignado ? 'Actualizar Perfil' : 'Asignar Perfil') }}</span>
