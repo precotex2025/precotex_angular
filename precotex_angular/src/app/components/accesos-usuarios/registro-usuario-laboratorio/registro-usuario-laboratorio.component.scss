@@ -73,6 +73,27 @@
   background-color: #f5f6fa;
 }
 
+.alerta-inactivo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  background-color: rgba(244, 67, 54, 0.08);
+  border: 1px solid rgba(244, 67, 54, 0.35);
+  border-radius: 4px;
+  color: #c62828;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.alerta-inactivo mat-icon {
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+  color: #c62828;
+}
+
 .section-container {
   margin-bottom: 16px;
   background-color: #ffffff;
