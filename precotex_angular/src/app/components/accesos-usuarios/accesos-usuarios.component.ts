@@ -303,11 +303,11 @@ export class AccesosUsuariosComponent implements OnInit {
     })
   }
 
-  openDialogCambiarPassword(data) {
-    this.matSnackBar.open('Cambiar contraseña: opción en desarrollo', 'Cerrar', {
-      duration: 2500,
-    });
-  }
+  // openDialogCambiarPassword(data) {
+  //   this.matSnackBar.open('Cambiar contraseña: opción en desarrollo', 'Cerrar', {
+  //     duration: 2500,
+  //   });
+  // }
 
 
 
