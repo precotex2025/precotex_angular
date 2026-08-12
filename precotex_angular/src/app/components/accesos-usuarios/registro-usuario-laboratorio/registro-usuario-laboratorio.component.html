@@ -1,0 +1,98 @@
+<div class="modal-container"> 
+  <!-- Encabezado del Modal -->
+  <div class="modal-header">
+    <div class="modal-header-text">
+      <h2 mat-dialog-title class="modal-title">
+        <mat-icon>science</mat-icon>
+        <span>Perfil de Laboratorio</span>
+      </h2>
+      <span class="status-chip" [class.asignado]="estaAsignado">
+        <span class="status-dot"></span>
+        <ng-container *ngIf="estaAsignado; else sinAsignar">
+          Asignado: {{ perfilAsignadoDescripcion }}
+        </ng-container>
+        <ng-template #sinAsignar>Sin perfil asignado</ng-template>
+      </span>
+    </div>
+    <button mat-icon-button [disabled]="guardando" (click)="cancelar()" class="btn-close" aria-label="Cerrar modal">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Cuerpo del Modal -->
+  <mat-dialog-content class="modal-body">
+    <!-- AVISO: usuario inactivo, modo solo-consulta -->
+    <div class="alerta-inactivo" *ngIf="bloqueado">
+      <mat-icon>lock</mat-icon>
+      <span>Usuario inactivo: solo consulta. No se pueden realizar cambios.</span>
+    </div>
+
+    <!-- SECCIÓN 1: DATOS DEL USUARIO -->
+    <div class="section-container">
+      <h3 class="section-title"><mat-icon>person</mat-icon> Datos del Usuario</h3>
+
+      <div class="user-card">
+        <div class="user-avatar">{{ iniciales }}</div>
+        <div class="user-info">
+          <div class="user-name-row">
+            <span class="user-name">{{ nomUsuario || 'N/A' }}</span>
+            <span class="estado-chip" [class.activo]="esActivo" [class.inactivo]="!esActivo">
+              {{ esActivo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </div>
+          <span class="user-sub">Usuario: {{ codUsuario || 'N/A' }}</span>
+        </div>
+      </div>
+
+      <div class="user-meta-grid">
+        <div class="detail-item">
+          <span class="detail-label">Código Trabajador</span>
+          <span class="detail-value">{{ codTrabajador || 'N/A' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Empresa</span>
+          <span class="detail-value">{{ empresa || 'N/A' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 2: CONFIGURACIÓN DE LABORATORIO -->
+    <div class="section-container">
+      <h3 class="section-title"><mat-icon>settings</mat-icon> Configuración de Laboratorio</h3>
+
+      <div class="form-container">
+        <!-- Selector de Perfil -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Perfil / Rol en Laboratorio (*)</mat-label>
+          <mat-select name="perfil" [(ngModel)]="perfilSeleccionado" [disabled]="bloqueado" required placeholder="Seleccione un Perfil">
+            <mat-option *ngFor="let perfil of perfiles" [value]="perfil.codigo">
+              {{ perfil.descripcion }}
+            </mat-option>
+          </mat-select>
+          <mat-hint *ngIf="perfiles.length === 0; else hintObligatorio">No hay perfiles de laboratorio disponibles</mat-hint>
+          <ng-template #hintObligatorio>
+            <mat-hint *ngIf="!perfilSeleccionado">El perfil de laboratorio es obligatorio</mat-hint>
+          </ng-template>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <!-- Pie del Modal / Botones de Acción -->
+  <mat-dialog-actions align="end" class="modal-actions">
+    <button mat-stroked-button [disabled]="guardando" class="btn-cancelar" (click)="cancelar()">
+      <mat-icon>close</mat-icon>
+      <span>Cancelar</span>
+    </button>
+    <button
+      *ngIf="!bloqueado"
+      mat-raised-button
+      color="primary"
+      class="btn-asignar"
+      [disabled]="!perfilSeleccionado || guardando"
+      (click)="guardar()">
+      <mat-icon>{{ estaAsignado ? 'how_to_reg' : 'save' }}</mat-icon>
+      <span>{{ guardando ? 'Guardando...' : (estaAsignado ? 'Actualizar Perfil' : 'Asignar Perfil') }}</span>
+    </button>
+  </mat-dialog-actions>
+</div>

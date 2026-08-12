@@ -7,10 +7,6 @@
   font-family: corbel, arial;
 }
 
-/* ==============================
-   HEADER
-   ============================== */
-
 .modal-header {
   display: flex;
   align-items: center;
@@ -62,13 +58,12 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background-color: #4caf50;
+  background-color: #bdbdbd;
 }
 
-
-/* ==============================
-   BODY
-   ============================== */
+.status-chip.asignado .status-dot {
+  background-color: #4caf50;
+}
 
 .modal-body {
   margin: 0 !important;
@@ -78,10 +73,26 @@
   background-color: #f5f6fa;
 }
 
+.alerta-inactivo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  background-color: rgba(244, 67, 54, 0.08);
+  border: 1px solid rgba(244, 67, 54, 0.35);
+  border-radius: 4px;
+  color: #c62828;
+  font-size: 13px;
+  font-weight: 600;
+}
 
-/* ==============================
-   SECCIONES
-   ============================== */
+.alerta-inactivo mat-icon {
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+  color: #c62828;
+}
 
 .section-container {
   margin-bottom: 16px;
@@ -89,10 +100,6 @@
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   padding: 12px 14px;
-}
-
-.section-container:last-child {
-  margin-bottom: 0;
 }
 
 .section-title {
@@ -114,11 +121,6 @@
   color: #3f51b5;
 }
 
-
-/* ==============================
-   DATOS DEL USUARIO
-   ============================== */
-
 .user-card {
   display: flex;
   align-items: center;
@@ -132,13 +134,11 @@
   border-radius: 50%;
   background-color: #3f51b5;
   color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.user-avatar mat-icon {
-  color: #ffffff;
 }
 
 .user-info {
@@ -168,11 +168,6 @@
   color: rgba(0, 0, 0, 0.6);
 }
 
-
-/* ==============================
-   ESTADO
-   ============================== */
-
 .estado-chip {
   flex-shrink: 0;
   padding: 1px 8px;
@@ -190,11 +185,6 @@
 .estado-chip.inactivo {
   background-color: #f44336;
 }
-
-
-/* ==============================
-   INFORMACIÓN ADICIONAL
-   ============================== */
 
 .user-meta-grid {
   display: grid;
@@ -224,35 +214,15 @@
   color: #3f51b5;
 }
 
-
-/* ==============================
-   FORMULARIO
-   ============================== */
-
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  align-items: start;
-  gap: 12px;
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.form-grid mat-form-field {
+.full-width {
   width: 100%;
 }
-
-
-/*
- * IMPORTANTE:
- * No modificar internamente el input[type="date"].
- *
- * Angular Material se encarga de la altura,
- * alineación y calendario del campo.
- */
-
-
-/* ==============================
-   BOTONES
-   ============================== */
 
 .modal-actions {
   margin: 0 !important;
@@ -267,11 +237,6 @@
   background-color: #3f51b5;
   color: #ffffff;
 }
-
-
-/* ==============================
-   BOTÓN CANCELAR
-   ============================== */
 
 .btn-cancelar {
   height: 42px;
@@ -296,11 +261,6 @@
   width: 18px;
 }
 
-
-/* ==============================
-   BOTÓN GUARDAR
-   ============================== */
-
 .btn-asignar {
   min-width: 190px;
   height: 42px;
@@ -320,22 +280,12 @@
   transform: translateY(-1px);
 }
 
-
-/* ==============================
-   RESPONSIVE
-   ============================== */
-
 @media screen and (max-width: 600px) {
-
   .modal-container {
     min-width: 0;
   }
 
   .user-meta-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .form-grid {
     grid-template-columns: 1fr;
   }
 }

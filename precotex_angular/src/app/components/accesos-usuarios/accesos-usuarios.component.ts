@@ -17,6 +17,7 @@ import { ModificarUsuarioWebComponent } from './modificar-usuario-web/modificar-
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 import { GlobalVariable } from 'src/app/VarGlobals';
+import { RegistroUsuarioLaboratorioComponent } from './registro-usuario-laboratorio/registro-usuario-laboratorio.component';
 
 interface data_det {
   Id_Usuario:      string, 
@@ -27,7 +28,8 @@ interface data_det {
   Empresa: string,
   Flg_Activo:   string,
   Fecha_Registro:         string,
-  Password: string
+  Password: string,
+  Cod_PerfilUsuarioLab: string
 }
  
 interface Conductor {
@@ -280,6 +282,34 @@ export class AccesosUsuariosComponent implements OnInit {
   AsignarNumAuditoriaModificar(Nro_DocIde: string, Cod_Conductor: string) {
     
   }
+
+  tienePerfilLab(row: any): boolean {
+    const cod = row?.Cod_PerfilUsuarioLab;
+    return cod !== null && cod !== undefined && String(cod).trim() !== '';
+  }
+
+  openDialogLaboratorio(data) {
+    console.log(data);
+    let dialogRef = this.dialog.open(RegistroUsuarioLaboratorioComponent, {
+      disableClose: true,
+      minWidth:600,
+      data: {
+        data:data
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.MostrarCabeceraUsuarios();
+    })
+  }
+
+  // openDialogCambiarPassword(data) {
+  //   this.matSnackBar.open('Cambiar contraseña: opción en desarrollo', 'Cerrar', {
+  //     duration: 2500,
+  //   });
+  // }
+
+
 
 
 }
