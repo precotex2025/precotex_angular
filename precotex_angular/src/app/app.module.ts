@@ -575,6 +575,7 @@ import { DialogEvidenciaEmpaqueCajaComponent } from './components/auditoria-cali
 import { DialogMemorandumLineaTiempoComponent } from './components/memorandum-gral/dialog-memorandum-linea-tiempo/dialog-memorandum-linea-tiempo.component';
 import { DialogEvidenciaPackingCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-evidencia-packing-caja/dialog-evidencia-packing-caja.component';
 import { ConsultaValesComponent } from './components/rrhh/consulta-vales/consulta-vales.component';
+import { ContratosComponent } from './components/rrhh/contratos/contratos.component';
 
 //RETIRO DE REPUESTOS
 import { RetiroRepuestosComponent } from './components/retiro-repuestos/retiro-repuestos.component';
@@ -1108,7 +1109,7 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     TiemposImproductivosv2Component,
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent,
     EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ModalEditarDesgloseComponent, ConfirmDialogComponent,
-    GenerarQrComponent, ConsultaValesComponent,
+    GenerarQrComponent, ConsultaValesComponent, ContratosComponent,
     
     //Memorandum en GRAL
     MemorandumGralComponent,

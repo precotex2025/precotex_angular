@@ -302,6 +302,7 @@ import { ConsultaValesComponent } from './components/rrhh/consulta-vales/consult
 import { RegistroRondasComponent } from './components/seguridad/registro-rondas/registro-rondas.component';
 import { MemorandumGralComponent } from './components/memorandum-gral/memorandum-gral.component';
 import { ComiteEmergenciaComponent } from './components/actas/comite-emergencia/comite-emergencia.component';
+import { ContratosComponent } from './components/rrhh/contratos/contratos.component';
 
 import { ValidaCorteDespachoComponent } from './components/auditoria-corte/valida-corte-despacho/valida-corte-despacho.component';
 import { LiberaOpColorComponent } from './components/auditoria-corte/libera-op-color/libera-op-color.component';
