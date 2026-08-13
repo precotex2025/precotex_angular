@@ -665,6 +665,8 @@ const routes: Routes = [
   { path:"RegistroEventos", component: RegistroEventosComponent },
   { path:"LecturaEntregaEventos", component: EntregaEventosComponent},
   { path:"ConsultaVales", component: ConsultaValesComponent},
+  { path:"GestioPO", component: ContratosComponent},
+  
   //ESTATUS CONTROL TEÑIDO - 03122024 - HMEDINA
   { path: "EstatusControlTenido", component: EstatusControlTenidoComponent },
 
