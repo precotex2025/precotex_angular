@@ -573,6 +573,7 @@ import { EvidenciaEmpaqueCajaComponent } from './components/auditoria-calidad/au
 import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/reporte-vehiculo-inmovilizado/reporte-vehiculo-inmovilizado.component';
 import { GenerarQrComponent } from './components/control-activos-fijo/generar-qr/generar-qr.component';
 import { ConsultaValesComponent } from './components/rrhh/consulta-vales/consulta-vales.component';
+import { ContratosComponent } from './components/rrhh/contratos/contratos.component';
 
 @NgModule({
   declarations: [
@@ -1064,7 +1065,7 @@ import { ConsultaValesComponent } from './components/rrhh/consulta-vales/consult
     DialogPendienteEmpaqueCajasComponent, 
     EncogimientoPrendaComponent, 
     DialogEncogimientoPrendaRegistroComponent, 
-    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent, DialogCapturarFotoCajaComponent, EvidenciaEmpaqueCajaComponent, ReporteVehiculoInmovilizadoComponent, GenerarQrComponent, ConsultaValesComponent 
+    DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent, EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent, LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent, DialogCapturarFotoCajaComponent, EvidenciaEmpaqueCajaComponent, ReporteVehiculoInmovilizadoComponent, GenerarQrComponent, ConsultaValesComponent, ContratosComponent 
   ],
   entryComponents: [DialogJabaComponent],
   imports: [

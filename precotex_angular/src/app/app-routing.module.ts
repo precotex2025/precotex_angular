@@ -307,6 +307,7 @@ import { ValidaCorteDespachoComponent } from './components/auditoria-corte/valid
 import { LiberaOpColorComponent } from './components/auditoria-corte/libera-op-color/libera-op-color.component';
 import { SalidaTiendaComponent } from './components/seguridad/salida-tienda/salida-tienda.component';
 import { ReporteVehiculoInmovilizadoComponent } from './components/seguridad/reporte-vehiculo-inmovilizado/reporte-vehiculo-inmovilizado.component';
+import { ContratosComponent } from './components/rrhh/contratos/contratos.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -640,6 +641,8 @@ const routes: Routes = [
   { path:"RegistroEventos", component: RegistroEventosComponent },
   { path:"LecturaEntregaEventos", component: EntregaEventosComponent},
   { path:"ConsultaVales", component: ConsultaValesComponent},
+  { path:"GestioPO", component: ContratosComponent},
+  
   //ESTATUS CONTROL TEÑIDO - 03122024 - HMEDINA
   { path: "EstatusControlTenido", component: EstatusControlTenidoComponent },
 
