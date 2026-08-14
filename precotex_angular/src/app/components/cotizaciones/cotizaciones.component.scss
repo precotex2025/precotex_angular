@@ -1,388 +1,1896 @@
-.cotizacion-header-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  padding: 16px;
-  background-color: #FFF;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+/* ============================================================
+   TEMA - COTIZACIONES
+   Cambiar --cot-primary para modificar el color principal
+   de todo el módulo.
+   ============================================================ */
+
+:host {
+
+  /* ==========================================================
+     COLOR PRINCIPAL DEL MÓDULO
+     CAMBIA SOLO ESTA LÍNEA PARA MODIFICAR EL TEMA
+     (declarado también en :root más abajo, ver [6.0], porque el
+     desplegable de ng-select cuelga de <body> vía appendTo y no
+     alcanza las variables de :host).
+  ========================================================== */
+  --cot-primary: #514f6b;
+
+  /* ==========================================================
+     COLORES DERIVADOS AUTOMÁTICAMENTE
+  ========================================================== */
+
+  --color-brand: var(--cot-primary);
+
+  --color-brand-subtle: color-mix(
+    in srgb,
+    var(--cot-primary) 10%,
+    white
+  );
+
+  --color-focus-ring: color-mix(
+    in srgb,
+    var(--cot-primary) 22%,
+    transparent
+  );
+
+  --gradient-brand: linear-gradient(
+    135deg,
+    var(--cot-primary),
+    color-mix(in srgb, var(--cot-primary) 70%, #ffffff)
+  );
+
+  --gradient-top-border: linear-gradient(
+    90deg,
+    var(--cot-primary),
+    color-mix(in srgb, var(--cot-primary) 55%, #ffffff)
+  );
+
+  /* ==========================================================
+     COLORES BASE DEL FORMULARIO
+  ========================================================== */
+
+  --color-surface: #ffffff;
+  --color-surface-sunken: #f8fafc;
+
+  --color-border: #d9dee7;
+
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+  --color-text-disabled: #94a3b8;
+
+  /* ==========================================================
+     [6.0] GEOMETRÍA DE CAMPO DE FILTRO
+     Fuente única de verdad para mat-form-field y ng-select.
+     Cambiar --cot-filter-height reajusta el resto por calc().
+  ========================================================== */
+
+  --cot-filter-height: 48px;
+  --cot-filter-radius: 10px;
+  --cot-filter-border: var(--color-border);
+  --cot-filter-border-w: 1px;
+
+  /* Sangría horizontal: borde -> icono -> texto */
+  --cot-filter-pad-x: 12px;
+  --cot-filter-icon-size: 18px;
+  --cot-filter-icon-gap: 8px;
+  --cot-filter-text-indent: calc(
+    var(--cot-filter-pad-x) +
+    var(--cot-filter-icon-size) +
+    var(--cot-filter-icon-gap)
+  );
+
+  /* Tipografía del valor */
+  --cot-filter-font-size: 14px;
+  --cot-filter-line-h: 18px;
+
+  /* 0.84375em: espacio que Material reserva dentro del infix
+     para el label flotante. Se replica en ng-select para que el
+     texto caiga a la misma altura en ambos controles. */
+  --cot-filter-label-space: 13.5px;
+  --cot-filter-label-size: 10.5px; /* = 14px * 0.75 (scale de Material) */
+
+  /* Relleno vertical derivado: centra el bloque label+texto */
+  --cot-filter-pad-y: calc(
+    (var(--cot-filter-height) -
+      var(--cot-filter-label-space) -
+      var(--cot-filter-line-h)) / 2
+  );
+
+  display: block;
+  height: 100%;
+
+  font-family: var(--font-ui);
+  color: var(--color-text);
+
 }
 
-.select-field {
-  flex: 1 1 200px;
-  min-width: 180px;
+/* El desplegable de ng-select (Cliente/Color) se monta en <body>
+   vía appendTo="body", fuera del alcance de :host. Se publican
+   aquí los tokens que usa el panel en [6.7] — mismo valor que su
+   contraparte en :host — para poder estilarlo desde este mismo
+   archivo en vez de tocar styles.scss global. */
+::ng-deep :root {
+  --cot-primary: #514f6b;
+  --color-border: #d9dee7;
+  --color-text: #1e293b;
+  --color-text-disabled: #94a3b8;
+  --color-brand-subtle: color-mix(in srgb, var(--cot-primary) 10%, white);
 }
 
-.botones {
-  grid-column: span 2;       /* ocupa dos columnas */
-  display: flex;
-  justify-content: flex-start; /* alinea a la derecha */
-  gap: 1rem;                 /* espacio entre botones */
+.cot-workspace.densidad-comoda {
+  --row-h: var(--row-h-comoda);
 }
 
-.cuadro-verde {
-  flex: 1 1 100%;
-  background-color: #e0f7e9;
-  border-left: 6px solid #4caf50;
-  padding: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  margin-top: 12px;
-  overflow-x: auto;
-}
+/* ============================================================
+   SECCIÓN 4 — LAYOUT DE PÁGINA
+   ============================================================ */
 
-.cuadro-rojo {
-  flex: 1 1 100%;
-  background-color: #e0f7e9;
-  border-left: 6px solid #c21f40;
-  padding: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  margin-top: 12px;
-  overflow-x: auto;
-}
-
-.cuadro-naranja {
-  flex: 1 1 100%;
-  background-color: #e0f7e9;
-  border-left: 6px solid #fb6f24;
-  padding: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  margin-top: 12px;
-  overflow-x: auto;
-}
-
-.cuadro-naranja {
-  flex: 1 1 100%;
-  background-color: #e0f7e9;
-  border-left: 6px solid #fb6f24;
-  padding: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  margin-top: 12px;
-  overflow-x: auto;
-}
-
-.cuadro-azul {
-  flex: 1 1 100%;
-  background-color: #e0f7e9;
-  border-left: 6px solid #2f2bad;
-  padding: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  margin-top: 12px;
-  overflow-x: auto;
-}
-
-.cuadro-amarillo {
-  flex: 1 1 100%;
-  background-color: #e0f7e9;
-  border-left: 6px solid #f7db15;
-  padding: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  margin-top: 12px;
-  overflow-x: auto;
-}
-
-.cuadro-morado {
-  flex: 1 1 100%;
-  background-color: #e0f7e9;
-  border-left: 6px solid #a351a2;
-  padding: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  margin-top: 12px;
-  overflow-x: auto;
-}
-
-.form-grid {
+.cot-workspace {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem; /* espacio mínimo entre filas */
-
+  gap: var(--sp-3);
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: var(--sp-4) var(--sp-5);
+  padding-bottom: 88px; /* espacio para action bar flotante */
 }
 
-.row-grid {
+/* ============================================================
+   SECCIÓN 5 — TOOLBAR
+   ============================================================ */
+
+.cot-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  padding: 0;
+}
+
+.cot-toolbar__title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--sp-2);
+  text-align: center;
+
+  h1 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: var(--fw-bold);
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+  }
+}
+
+.cot-toolbar__icon-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-lg);
+  background: var(--gradient-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.28);
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* ============================================================
+   SECCIÓN 6 — PANEL DE CRITERIOS (card con borde superior degradado)
+   ============================================================ */
+
+.cot-criterios {
+  flex: 0 0 auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--sp-4);
+  position: relative;
+  overflow: hidden;
+  transition: padding 0.15s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gradient-top-border);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+}
+
+.cot-criterios--colapsado {
+  padding: var(--sp-2) var(--sp-4);
+}
+
+/* --- Estado colapsado --- */
+.cot-criterios__resumen {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.cot-criterios-cards {
   display: grid;
-  grid-template-columns: 1.5fr 1.3fr 2fr 1fr 2fr;
-  column-gap: 1rem;   /* espacio horizontal entre columnas */
-  height: 58px !important;
-
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--sp-2);
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
-.select-field, .codigo-field, .descripcion-field {
+.cot-criterio-card {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 8px 12px;
+  min-width: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-brand);
+  border-radius: var(--radius-lg);
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+.cot-criterio-card__icon {
+  // display: flex;
+  // flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: 28px;
+  height: 28px;
+
+  cursor: help;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: var(--color-brand);
+  }
+}
+
+.cot-criterio-card__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* habilita el ellipsis del valor */
+}
+
+.cot-criterio-card__label {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.cot-criterio-card__value {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cot-criterios__resumen-actions {
+  display: flex;
+  gap: var(--sp-2);
+  flex: 0 0 auto;
+}
+
+.cot-btn-editar {
+  flex: 0 0 auto;
+  border-radius: var(--radius-pill) !important;
+  transition: all 0.2s !important;
+
+  &:hover {
+    border-color: var(--color-brand) !important;
+    color: var(--color-brand) !important;
+    background: var(--color-brand-subtle) !important;
+  }
+}
+
+/* ============================================================
+   [6.3] GRID DEL FORMULARIO DE FILTROS
+   4 columnas; Cliente ocupa doble ancho (.cot-field--span2).
+   ============================================================ */
+.cot-form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-4);
+  align-items: start; /* todos los campos miden lo mismo: ya no
+                          hace falta anclar por abajo */
+}
+
+/* ============================================================
+   [6.4] BASE COMÚN — se aplica a los 7 campos del filtro
+   ============================================================ */
+.cot-field {
   width: 100%;
+  /* Sin 'height' fija: la altura la produce el propio control
+     (mat-form-field en [6.5], ng-select en [6.6]). */
 }
 
-/* Cliente más ancho en fila 1 */
-.cliente-field {
-  grid-column: 3;
+.cot-field--span2 {
+  grid-column: span 2;
 }
 
-.tabla-procesos {
+/* ============================================================
+   [6.5] CAMPOS MATERIAL (mat-form-field appearance="outline")
+   Und. Negocio · Tipo Und. Negocio · Código de tela ·
+   Descripción · Ruta
+   ============================================================ */
+.cot-criterios,
+.cot-drawer__body {
+
+  /* [6.5.1] Wrapper/subscript: el legacy reserva espacio para
+     hint/error que este formulario no usa. */
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+    margin: 0;
+  }
+
+  ::ng-deep .mat-form-field-subscript-wrapper {
+    display: none;
+  }
+
+  /* [6.5.2] Caja del campo: el legacy trae margin-top:-0.25em
+     en el flex y align-items:baseline (descuadra icono/flecha
+     respecto al texto); se anulan para que la altura sea exacta
+     y el contenido quede centrado, igual que el ng-select. */
+  ::ng-deep .mat-form-field-flex {
+    margin-top: 0;
+    align-items: center;
+    padding: 0 var(--cot-filter-pad-x);
+    background: var(--color-surface);
+    transition:
+      box-shadow 0.2s ease,
+      background 0.2s ease;
+  }
+
+  /* Corrige el desfase de ~1px entre campos <input> y campos
+     <mat-select> que trae el tema legacy en .mat-input-element. */
+  ::ng-deep .mat-input-element {
+    margin-top: 0;
+  }
+
+  /* El trigger del mat-select tiene una altura fija en em que no
+     sigue --cot-filter-line-h; se iguala al alto de línea. */
+  ::ng-deep .mat-select-trigger {
+    height: var(--cot-filter-line-h);
+  }
+
+  /* La flecha del mat-select se desplaza -25% para compensar el
+     padding asimétrico del tema stock; con el contenido ya
+     centrado (align-items:center arriba) esa compensación sobra
+     y la descuadraría respecto al icono/flecha del ng-select. */
+  ::ng-deep .mat-select-arrow-wrapper {
+    transform: none;
+  }
+
+  /* [6.5.3] Infix: altura = border-top (hueco del label) +
+     2×pad-y + line-height. Con --cot-filter-height:48px suma
+     exactamente 48px, igual que el ng-select de [6.6]. */
+  ::ng-deep .mat-form-field-infix {
+    width: auto; /* el legacy fuerza 180px de ancho mínimo */
+    padding: var(--cot-filter-pad-y) 0;
+    border-top: var(--cot-filter-label-space) solid transparent;
+    font-size: var(--cot-filter-font-size);
+    line-height: calc(var(--cot-filter-line-h) / var(--cot-filter-font-size));
+  }
+
+  /* [6.5.4] Borde y radio: el outline legacy lo pintan 3 divs
+     (start/gap/end); border-radius en .mat-form-field-flex no
+     los afecta, por eso se ataca start/end directamente para
+     igualar el radio del ng-select. */
+  ::ng-deep .mat-form-field-outline {
+    color: var(--cot-filter-border);
+  }
+
+  ::ng-deep .mat-form-field-outline-start {
+    border-radius: var(--cot-filter-radius) 0 0 var(--cot-filter-radius) !important;
+    min-width: var(--cot-filter-radius) !important;
+  }
+
+  ::ng-deep .mat-form-field-outline-end {
+    border-radius: 0 var(--cot-filter-radius) var(--cot-filter-radius) 0 !important;
+  }
+
+  /* [6.5.5] Hover / focus: el grosor del outline-thick baja de
+     2px a 1px para no saltar frente al borde fijo del ng-select;
+     el realce visual lo aporta el ring de foco. */
+  ::ng-deep .mat-form-field-outline-thick {
+    color: var(--c-neutral-300);
+  }
+
+  ::ng-deep .mat-form-field-outline-thick > div {
+    border-width: var(--cot-filter-border-w) !important;
+  }
+
+  ::ng-deep .mat-focused .mat-form-field-outline-thick {
+    color: var(--color-brand);
+  }
+
+  ::ng-deep .mat-focused .mat-form-field-flex {
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
+  }
+
+  /* [6.5.6] Label — queda siempre arriba por floatLabel="always"
+     en el HTML, igual que el label fijo de Cliente/Color. */
+  ::ng-deep .mat-form-field-label {
+    color: var(--color-text-muted);
+  }
+
+  ::ng-deep .mat-focused .mat-form-field-label {
+    color: var(--color-brand) !important;
+  }
+
+  /* [6.5.7] Campo de solo lectura (Descripción): superficie
+     hundida para distinguirlo de los campos editables */
+  ::ng-deep .mat-form-field-disabled .mat-form-field-flex {
+    background: var(--color-surface-sunken);
+  }
+}
+
+/* Campo readonly (Descripción): marcado desde el template con
+   .cot-field--readonly ya que CSS no puede seleccionar el
+   ancestro .mat-form-field-flex desde el input[readonly] interno */
+.cot-field--readonly ::ng-deep .mat-form-field-flex {
+  background: var(--color-surface-sunken) !important;
+}
+
+/* ============================================================
+[6.5.9] PANEL MAT-SELECT
+Alineación y tamaño del dropdown
+============================================================ */
+
+::ng-deep .cot-select-panel {
+  min-width: 100% !important;
+  max-width: min(100vw - 32px, 500px) !important;
+
+  border-radius: var(--cot-filter-radius) !important;
+
+  box-sizing: border-box;
+
+  margin-top: 4px;
+}
+
+
+/* [6.5.8] Icono matPrefix — misma métrica que el icono del
+   ng-select ([6.6.3]) para que ambos queden a la misma altura. */
+.cot-field-icon {
+  font-size: var(--cot-filter-icon-size) !important;
+  width: var(--cot-filter-icon-size) !important;
+  height: var(--cot-filter-icon-size) !important;
+  margin-right: var(--cot-filter-icon-gap);
+  color: var(--color-text-disabled) !important;
+  transition: color 0.2s ease;
+}
+
+.mat-focused .cot-field-icon {
+  color: var(--color-brand) !important;
+}
+
+/* ============================================================
+   [6.6] CAMPOS NG-SELECT — Cliente · Color
+   El proyecto carga material.theme.css de ng-select
+   (angular.json). Ese tema impone métricas propias que deben
+   neutralizarse una por una antes de aplicar las nuestras; cada
+   anulación va comentada con su motivo.
+   ============================================================ */
+
+/* [6.6.1] Wrapper: contiene el label fijo y el control */
+.cot-filter-select {
+  position: relative;
+  height: var(--cot-filter-height);
+  box-sizing: border-box;
+}
+
+/* [6.6.2] Label fijo sobre el borde — equivalente al notch de
+   Material con floatLabel="always" ([6.5.6]) */
+.cot-filter-select__label {
+  position: absolute;
+
+  // top: calc(var(--cot-filter-label-size) / -2 - 1px);
+  top: 0;
+  transform: translateY(-50%);
+  left: var(--cot-filter-pad-x);
+
+  z-index: 5;
+
+  padding: 0 4px;
+
+  background: var(--color-surface);
+
+  color: var(--color-text-muted);
+
+  font-size: var(--cot-filter-label-size);
+  font-weight: 500;
+
+  line-height: 1;
+
+  pointer-events: none;
+  cursor: default;
+
+  transition: color 0.2s ease;
+}
+
+.cot-filter-select:focus-within .cot-filter-select__label {
+  color: var(--color-brand);
+}
+
+.cot-filter-select__control {
+  position: relative;
+
   width: 100%;
- // border-collapse: collapse;
+  height: 100%;
+
+  background: var(--color-surface);
+  border-radius: var(--cot-filter-radius);
 }
 
-/* Reducir altura de filas */
-.tabla-procesos .mat-row,
-.tabla-procesos .mat-header-row {
-  min-height: 35px !important; /* antes ~52px */
-  height: 35px !important;
+/* [6.6.3] Icono — misma sangría que el matPrefix de Material */
+.cot-filter-select__icon {
+  position: absolute;
+
+  top: 50%;
+  left: var(--cot-filter-pad-x);
+
+  transform: translateY(-50%);
+
+  z-index: 4;
+
+  width: var(--cot-filter-icon-size);
+  height: var(--cot-filter-icon-size);
+
+  font-size: var(--cot-filter-icon-size);
+
+  color: var(--color-text-disabled);
+
+  pointer-events: auto;
+  cursor: default;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
-/* Reducir padding de celdas */
-.tabla-procesos .mat-cell,
-.tabla-procesos .mat-header-cell {
-  padding: 2px 6px !important;
-  line-height: 1.2 !important;
-  font-size: 12px; /* opcional: fuente más pequeña */
+.cot-filter-select:focus-within .cot-filter-select__icon {
+  color: var(--cot-primary);
+
+  transform:
+    translateY(-50%)
+    scale(1.05);
 }
 
-/* Compactar los mat-form-field dentro de la tabla */
-.tabla-procesos .mat-form-field {
-  margin: 0 !important;
-  padding: 0 !important;
-  line-height: 1.2 !important;
+/* [6.6.4] Host del control: material.theme.css añade
+   padding-bottom:1.25em (20px) — causa principal de que
+   Cliente/Color se vieran más altos que el resto de campos. */
+.cot-ng-select {
+  display: block;
+  width: 100%;
+  height: var(--cot-filter-height);
+  padding-bottom: 0 !important;
 }
 
-.tabla-procesos .mat-form-field-infix {
+/* [6.6.5] Contenedor: caja, borde y radio equivalentes al
+   mat-form-field de [6.5]. align-items pasa de 'baseline'
+   (valor del tema) a 'stretch' para centrar el contenido. */
+.cot-ng-select ::ng-deep .ng-select-container {
+  height: var(--cot-filter-height) !important;
+  min-height: var(--cot-filter-height) !important;
+
+  align-items: stretch !important;
+
+  padding: 0 var(--cot-filter-pad-x) 0 var(--cot-filter-text-indent);
+
+  //background: var(--color-surface) !important;
+  background: transparent !important;
+
+  border: var(--cot-filter-border-w) solid var(--cot-filter-border) !important;
+
+  border-radius: var(--cot-filter-radius) !important;
+
+  box-shadow: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* El tema dibuja una línea inferior con ::after encima de
+   nuestro borde de 1px (línea fantasma): se elimina. */
+.cot-ng-select ::ng-deep .ng-select-container::after {
+  display: none !important;
+}
+
+/* [6.6.6] Valor: mismo reparto vertical que el
+   .mat-form-field-infix de [6.5.3], así el texto cae a la misma
+   altura en ambos tipos de control. */
+.cot-ng-select ::ng-deep .ng-value-container {
   padding: 0 !important;
   border-top: 0 !important;
-}
-.mat-header-cell {
-  font-size: 18px;
-  font-weight: 600;
-  color: #000000;
+  align-items: center;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  height: 100%;
 }
 
-.mat-cell {
-  color: #333;
+.cot-ng-select ::ng-deep .ng-value-label,
+.cot-ng-select ::ng-deep .ng-input > input {
+  color: var(--color-text) !important;
+
+  font-family: inherit;
+  font-size: var(--cot-filter-font-size);
+  line-height: var(--cot-filter-line-h);
+}
+
+/* [6.6.7] Placeholder: el tema lo hace flotar con
+   translateY(-1.28125em) al haber valor, chocando con el label
+   fijo de [6.6.2]. Se deja estático dentro del campo. */
+.cot-ng-select ::ng-deep .ng-placeholder {
+  position: static !important;
+  transform: none !important;
+  padding: 0 !important;
+  background: none !important;
+
+  color: var(--color-text-disabled) !important;
+  font-size: var(--cot-filter-font-size);
+  line-height: var(--cot-filter-line-h);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cot-ng-select ::ng-deep .ng-has-value .ng-placeholder,
+.cot-ng-select ::ng-deep.ng-select-opened .ng-placeholder {
+  transform: none !important;
+}
+
+/* Con valor seleccionado el tema reactiva el placeholder
+   (.ng-has-value .ng-placeholder{display:initial}) y quedaría
+   flotando encima del valor ya elegido; se oculta. */
+.cot-ng-select ::ng-deep .ng-has-value .ng-placeholder {
+  display: none !important;
+}
+
+/* Input de búsqueda: estructuralmente es position:absolute;
+   left:0;width:100% (no del tema, del propio componente), y su
+   bloque contenedor es la caja de padding de .ng-select-container
+   ([6.6.5]) — con left:0 el texto tecleado caía a la izquierda
+   del icono, bajo .ng-select-container__icon. Se ancla al mismo
+   carril horizontal que el valor/placeholder. */
+.cot-ng-select ::ng-deep .ng-input {
+  top: 0 !important;
+  bottom: 0 !important;
+  left: var(--cot-filter-text-indent) !important;
+  right: var(--cot-filter-pad-x) !important;
+  width: auto !important;
+  display: flex;
+  align-items: center;
+}
+
+/* [6.6.8] Flecha y botón limpiar: el tema los ancla abajo con
+   align-self:flex-end + bottom. Se centran verticalmente. */
+.cot-ng-select ::ng-deep .ng-arrow-wrapper,
+.cot-ng-select ::ng-deep .ng-clear-wrapper {
+  align-self: center !important;
+  bottom: auto !important;
+  top: auto !important;
+  display: flex;
+  align-items: center;
+}
+
+.cot-ng-select ::ng-deep .ng-arrow-wrapper {
+  padding-right: 0;
+}
+
+.cot-ng-select ::ng-deep .ng-arrow {
+  color: var(--color-text-muted);
+}
+
+.cot-ng-select ::ng-deep .ng-clear-wrapper {
+  color: var(--color-text-muted);
+}
+
+.cot-ng-select ::ng-deep .ng-clear-wrapper:hover {
+  color: var(--cot-primary);
+}
+
+/* [6.6.9] Hover / focus — mismo tratamiento que [6.5.5]. El tema
+   pinta el focus en #3f51b5 (indigo hardcode) sobre el ::after
+   ya anulado en [6.6.5], así que basta con borde + ring de marca. */
+.cot-ng-select:hover ::ng-deep .ng-select-container {
+  border-color: var(--cot-primary) !important;
+}
+
+.cot-ng-select ::ng-deep.ng-select-focused .ng-select-container,
+.cot-ng-select ::ng-deep .ng-select-focused .ng-select-container {
+  border-color: var(--cot-primary) !important;
+
+  box-shadow:
+    0 0 0 3px var(--color-focus-ring) !important;
+}
+
+/* ============================================================
+   [6.7] PANEL DESPLEGABLE DE NG-SELECT (Cliente · Color)
+   Con appendTo="body" el panel se monta fuera del componente,
+   así que ::ng-deep sin prefijo de host es la única vía para
+   alcanzarlo. ng-select copia el atributo class del <ng-select>
+   al panel cuando hay appendTo, por eso se acota el selector con
+   .cot-ng-select--filter y no afecta a los ng-select de otros
+   módulos. Los tokens --cot-* usados aquí se publican en :root
+   (ver [6.0] / bloque ::ng-deep :root al inicio del archivo).
+   ============================================================ */
+::ng-deep .ng-dropdown-panel.cot-ng-select--filter {
+  border: 1px solid var(--color-border);
+  border-radius: var(--cot-filter-radius);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  margin-top: 4px;
+  width: auto !important;
+  min-width: 100%;
+  max-width: 500px;
+
+  /* El tema compensa con top:calc(100% - 1.25em) el
+     padding-bottom eliminado en [6.6.4]; sin esta corrección el
+     panel se solapa 20px sobre el campo. */
+  &.ng-select-bottom {
+    top: 100%;
+  }
+
+  &.ng-select-top {
+    bottom: 100%;
+  }
+
+  .ng-dropdown-panel-items {
+    max-height: 260px;
+    padding: 6px 0;
+  }
+
+  .ng-option {
+    padding: 6px 16px;
+    line-height: 24px;
+    min-height: 36px;
+    font-size: var(--cot-filter-font-size);
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    // padding: 0 var(--cot-filter-pad-x);
+    // line-height: 36px;
+    // min-height: 36px;
+    // font-size: var(--cot-filter-font-size);
+    // color: var(--color-text);
+  }
+
+  .ng-option.ng-option-marked {
+    background: var(--color-brand-subtle);
+    color: var(--color-text);
+  }
+
+  .ng-option.ng-option-selected {
+    background: var(--color-brand-subtle);
+    color: var(--cot-primary);
+    font-weight: 600;
+  }
+
+  .ng-option.ng-option-disabled {
+    color: var(--color-text-disabled);
+  }
+}
+
+/* ============================================================
+   [6.8] FOOTER DE ACCIONES DEL FORMULARIO
+   ============================================================ */
+.cot-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--sp-4);
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.cot-form-actions {
+  display: flex;
+  gap: var(--sp-3);
+}
+
+.cot-btn-pin-filtro mat-icon {
+  transition: transform 0.2s;
+}
+
+.cot-btn-pin-filtro--activo {
+  color: var(--color-brand);
+  border-color: var(--color-brand);
+
+  mat-icon { transform: rotate(-45deg); }
+}
+
+/* ============================================================
+   SECCIÓN 6B — LAYOUT HISTORIAL + COSTEO
+   ============================================================ */
+
+.cot-workspace-content {
+  display: flex;
+  gap: var(--sp-4);
+  flex: 1 1 auto;
+  min-height: 0;
+  align-items: stretch;
+}
+
+/* Panel de Historial (UI estática) */
+.cot-history-panel {
+  width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.cot-history-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--c-neutral-100);
+}
+
+.cot-history-panel__title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+
+  h2 { margin: 0; font-size: var(--fs-md); font-weight: var(--fw-bold); }
+  p  { margin: 0; font-size: var(--fs-xs); color: var(--color-text-muted); }
+}
+
+.cot-history-panel__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: var(--gradient-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 3px 8px rgba(79, 70, 229, 0.25);
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: var(--c-white); }
+}
+
+.cot-btn-pin {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-disabled);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+
+  &:hover { background: var(--color-brand-subtle); color: var(--color-brand); }
+
+  &--activo {
+    color: var(--color-brand);
+    background: var(--color-brand-subtle);
+    transform: rotate(-45deg);
+  }
+}
+
+.cot-history-panel__nuevo {
+  width: 100%;
+  justify-content: center !important;
+  font-size: var(--fs-sm) !important;
+}
+
+.cot-history-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cot-history-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover { border-color: var(--color-brand); background: var(--color-brand-subtle); }
+
+  &--activa {
+    border-color: var(--color-brand);
+    background: rgba(99, 102, 241, 0.03);
+  }
+
+  &--nueva {
+    border-style: dashed;
+    border-color: var(--c-orange-500);
+    background: var(--c-orange-050);
+  }
+}
+
+.cot-history-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  background: var(--color-brand);
+
+  &.cot-dot--vigente  { background: var(--c-success-600); }
+  &.cot-dot--aprobada { background: var(--color-brand); }
+  &.cot-dot--borrador { background: var(--c-orange-500); }
+}
+
+.cot-history-body { flex: 1; min-width: 0; }
+
+.cot-history-card__acciones {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.15s;
+
+  .mat-icon-button {
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+
+    .mat-icon { font-size: 18px; width: 18px; height: 18px; line-height: 18px; }
+  }
+}
+
+.cot-history-card:hover .cot-history-card__acciones,
+.cot-history-card:focus-within .cot-history-card__acciones {
+  opacity: 1;
+}
+
+.cot-history-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.cot-history-version { font-size: var(--fs-sm); font-weight: var(--fw-bold); color: var(--color-text); }
+
+.cot-history-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+
+  &.cot-badge--vigente  { background: var(--c-success-050); color: var(--c-success-700); }
+  &.cot-badge--aprobada { background: var(--color-brand-subtle); color: var(--color-brand); }
+  &.cot-badge--borrador { background: var(--c-orange-050); color: var(--c-orange-500); }
+}
+
+.cot-history-recent-tag {
+  font-size: 9px;
+  font-weight: var(--fw-bold);
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+  background: var(--c-teal-400);
+  color: var(--c-white);
+  margin-left: auto;
+}
+
+.cot-history-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  row-gap: 2px;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+
+  mat-icon { font-size: 13px; width: 13px; height: 13px; color: var(--color-text-disabled); }
+}
+
+.cot-history-sep { color: var(--c-neutral-300); margin: 0 2px; }
+
+.cot-history-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-2);
+  padding: var(--sp-6) var(--sp-4);
+  color: var(--color-text-muted);
+
+  mat-icon { font-size: 32px; width: 32px; height: 32px; color: var(--color-text-disabled); }
+  p { margin: 0; font-size: var(--fs-xs); }
+}
+
+.cot-history-panel__receta {
+  border-top: 1px solid var(--c-neutral-100);
+  padding-top: var(--sp-3);
+
+  mat-form-field { width: 100%; }
+}
+
+/* Barra "Versión consultada" */
+.cot-version-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--c-indigo-100);
+  background: var(--c-indigo-050);
+  flex-wrap: wrap;
+}
+
+.cot-version-bar__info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: var(--color-brand); flex-shrink: 0; }
+}
+
+.cot-version-bar__label { font-size: var(--fs-sm); color: var(--color-text-muted); font-weight: var(--fw-medium); }
+.cot-version-bar__value {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-brand);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Badge contador de hijos en fila grupo */
+.cot-group-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--c-indigo-600);
+  margin-left: 6px;
+}
+
+/* Ícono de comentario en celda Ajuste */
+.cot-ajuste-comment-icon {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  color: var(--color-brand);
+  cursor: help;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* ============================================================
+   SECCIÓN 7 — TABLA DE COSTEO (card con borde superior degradado)
+   ============================================================ */
+
+.cot-costeo {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gradient-top-border);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    z-index: 5;
+  }
+}
+
+.cot-tabla-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  margin-top: 3px; /* compensa el borde degradado ::before */
+}
+
+.cot-tabla {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Encabezado fijo */
+.cot-tabla ::ng-deep .mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+.cot-tabla ::ng-deep .mat-header-cell {
+  background: var(--c-indigo-050);
+  color: var(--c-neutral-600);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-align: center;
+  justify-content: center;
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 2px solid var(--c-indigo-100);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Filas: densidad + hover con acento izquierdo */
+.cot-tabla ::ng-deep .mat-row {
+  height: var(--row-h);
+  min-height: var(--row-h);
+  transition: background-color 0.1s ease, border-left-color 0.1s ease;
+  border-left: 4px solid transparent;
+}
+
+.cot-tabla ::ng-deep .mat-row:nth-child(even) {
+  background: var(--row-zebra-bg);
+}
+
+.cot-tabla ::ng-deep .mat-row:hover {
+  background: var(--row-hover-bg);
+  border-left-color: var(--color-brand);
+}
+
+.cot-tabla ::ng-deep .mat-cell {
+  padding: var(--sp-1) var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  border-bottom: 1px solid var(--c-neutral-100);
+  white-space: nowrap;
+}
+
+/* Columna Descripción */
+.col-descripcion {
+  width: 260px;
+  min-width: 260px;
+  text-align: left !important;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: inherit;
+}
+
+th.col-descripcion {
+  z-index: 4;
+}
+
+/* Columna expandir/colapsar */
+.col-hover {
+  width: 40px;
+  min-width: 40px;
+  text-align: center !important;
+  cursor: pointer;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: inherit;
+}
+
+.col-hover mat-icon {
+  font-size: var(--fs-md);
+  vertical-align: middle;
+  color: var(--color-text-muted);
+}
+
+/* Número de sección sin hijos (atenuado, sin chevron que expandir) */
+.cot-row-num {
+  color: var(--color-text-disabled);
+  font-size: var(--fs-xs);
+}
+
+/* Indentación de filas hijo */
+.row-child .col-descripcion {
+  padding-left: var(--sp-6);
+}
+
+/* Icono identificador de sección / fila de resumen, antes del nombre */
+.cot-row-icon {
+  font-size: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+  vertical-align: middle;
+  margin-right: 6px;
+  color: var(--color-brand);
+  flex-shrink: 0;
+}
+
+.cot-row-icon--resumen {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  color: var(--color-text-muted);
+}
+
+.cot-row-icon--total {
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  color: var(--color-brand-hover);
+}
+
+/* Celda editable (abre el drawer) */
+.cot-cell-editable {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  padding: 3px var(--sp-2);
+  border: 1.5px dashed var(--cell-editable-bd);
+  border-radius: var(--radius-sm);
+  background: var(--cell-editable-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  min-width: 70px;
+  justify-content: flex-end;
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    color: var(--color-text-disabled);
+    opacity: 0;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    transform: scale(0.5);
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-brand);
+    border-style: solid;
+    background: var(--color-brand-subtle);
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
+
+    mat-icon {
+      opacity: 1;
+      color: var(--color-brand);
+      transform: scale(1);
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    border-style: solid;
+  }
+}
+
+.cot-cell-editable--activa {
+  border-color: var(--color-brand);
+  border-style: solid;
+  background: var(--color-brand-subtle);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+
+  mat-icon { opacity: 1; color: var(--color-brand); transform: scale(1); }
+}
+
+.cot-cell-editable--total {
+  font-weight: var(--fw-bold);
+}
+
+/* Fila con edición abierta */
+.row--seleccionada {
+  background: var(--color-brand-subtle) !important;
+  border-left-color: var(--color-brand) !important;
+}
+
+/* Filas semánticas */
+
+/* Aspecto de sección (toda fila padre de proceso, tenga o no hijos) */
+.row--seccion {
+  td {
+    background: var(--row-group-bg);
+    font-weight: var(--fw-bold);
+    color: var(--c-neutral-900);
+    border-bottom: 1px solid var(--c-neutral-200);
+    font-size: 14px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+}
+
+/* Solo las secciones con hijos son expandibles/colapsables */
+.row--group {
+  cursor: pointer;
+  user-select: none;
+
+  &:hover td {
+    background: var(--c-indigo-050);
+  }
+}
+
+.row--child {
+  font-weight: var(--fw-regular);
+}
+
+.row--subtotal {
+  td {
+    background: var(--row-subtotal-bg);
+    color: var(--c-warning-800);
+    font-weight: var(--fw-bold);
+    border-top: 2px solid var(--c-neutral-200);
+    border-bottom: 2px solid var(--c-neutral-200);
+    font-size: 14px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+.cell-total {
+  background: var(--row-total-bg) !important;
+  color: var(--color-brand-hover);
+  font-weight: var(--fw-bold);
+  border-top: 2px solid var(--c-indigo-200) !important;
+  font-size: 14px;
+}
+
+.row-hidden {
+  display: none;
+}
+
+/* Estado vacío */
+.cot-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-7) var(--sp-4);
+  color: var(--color-text-muted);
+
+  mat-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    color: var(--color-text-disabled);
+  }
+
+  p {
+    margin: 0;
+    font-size: var(--fs-md);
+  }
+}
+
+/* ============================================================
+   SECCIÓN 8 — CONTENIDO DEL MODAL DE EDICIÓN
+   (nombres "cot-drawer__*" se conservan por compatibilidad de
+   estructura interna, aunque ahora viven dentro de un MatDialog)
+   ============================================================ */
+
+.cot-drawer__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  max-height: calc(88vh - 150px);
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.cot-drawer__field {
+  width: 100%;
+}
+
+.cot-drawer__footer {
+  padding: var(--sp-3) var(--sp-4);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-3);
+}
+
+/* Panel del diálogo: misma card que .cot-criterios/.cot-costeo
+   (borde superior degradado, radio y sombra del módulo). El
+   mat-dialog-container es de Angular Material, no vive dentro de
+   nuestro template, por eso requiere ::ng-deep para alcanzarlo. */
+::ng-deep .cot-modal-panel .mat-dialog-container {
+  padding: 0;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+}
+
+::ng-deep .cot-modal-panel {
+  max-width: 480px !important;
+}
+
+.cot-modal {
+  display: flex;
+  flex-direction: column;
+  max-height: 88vh;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gradient-top-border);
+    z-index: 2;
+  }
+}
+
+.cot-modal__close {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.cot-modal__header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  text-align: left;
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--color-border);
+
+  h3 {
+    margin: 0;
+    font-size: var(--fs-lg);
+    line-height: 1.2;
+    font-weight: var(--fw-bold);
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.cot-modal__header-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-width: 0;
+}
+
+.cot-modal__icon-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-lg);
+  background: var(--color-brand-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-brand);
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Card "Datos Generales" colapsable */
+.cot-modal__datos-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: var(--sp-3);
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.cot-modal__accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: none;
+  background: transparent;
+  padding: 0 0 8px;
+  margin: 0 0 4px;
+  border-bottom: 1px solid var(--c-indigo-100);
+  font: inherit;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-brand);
+  cursor: pointer;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+}
+
+.cot-modal__accordion-icon {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  color: var(--color-brand);
+}
+
+.cot-modal__chevron {
+  font-size: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+  transition: transform 0.2s ease;
+}
+
+.cot-modal__chevron--colapsado {
+  transform: rotate(-90deg);
+}
+
+.cot-modal__datos-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cot-modal__datos-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--c-neutral-200);
+
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  span {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  strong {
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-bold);
+    color: var(--color-text);
+    text-align: right;
+    word-break: break-word;
+  }
+}
+
+/* Campo Observación (modal de ajuste) */
+.cot-drawer__observacion {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cot-drawer__observacion-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text);
+}
+
+.cot-drawer__observacion-icon {
+  font-size: 15px !important;
+  width: 15px !important;
+  height: 15px !important;
+  color: var(--color-text-muted);
+}
+
+.cot-drawer__required {
+  color: var(--c-danger-600);
+}
+
+.cot-drawer__observacion-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+  outline: none;
+  resize: none;
+  transition: all 0.2s;
+
+  &:focus {
+    border-color: var(--color-brand);
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
+  }
+}
+
+/* ============================================================
+   SECCIÓN 9 — DIÁLOGOS
+   ============================================================ */
+
+.cot-dialog-precio-select {
+  margin-top: var(--sp-4);
+}
+
+.cot-tabla-precios th.centrado,
+.cot-tabla-precios td.centrado {
   text-align: center;
 }
 
-@media screen and (max-width: 768px) {
-  .cotizacion-header-container {
+/* ============================================================
+   SECCIÓN 10 — BOTONES: pill + variantes de color
+   ============================================================ */
+
+.btn-azul {
+  background: var(--gradient-brand) !important;
+  color: var(--c-white) !important;
+  border-radius: var(--radius-pill) !important;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3) !important;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s !important;
+
+  &:hover:not([disabled]) {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(79, 70, 229, 0.35) !important;
+  }
+}
+
+.btn-danger {
+  color: var(--c-danger-600) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  border-radius: var(--radius-pill) !important;
+  transition: all 0.2s !important;
+
+  &:hover:not([disabled]) {
+    background: var(--c-danger-050) !important;
+    border-color: var(--c-danger-600) !important;
+  }
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--c-success-600), var(--c-success-700)) !important;
+  color: var(--c-white) !important;
+  border-radius: var(--radius-pill) !important;
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3) !important;
+  transition: transform 0.25s, box-shadow 0.25s !important;
+
+  &:hover:not([disabled]) {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.35) !important;
+  }
+}
+
+.btn-ghost {
+  border-radius: var(--radius-pill) !important;
+  transition: all 0.2s !important;
+
+  &:hover:not([disabled]) {
+    background: var(--c-neutral-050) !important;
+    border-color: var(--c-neutral-300) !important;
+  }
+}
+
+/* stroked buttons: pill por defecto */
+button[mat-stroked-button] {
+  border-radius: var(--radius-pill) !important;
+}
+
+/* ============================================================
+   SECCIÓN 11 — ACTION BAR FLOTANTE (glassmorphism)
+   ============================================================ */
+
+.cot-actionbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-xl);
+  z-index: 100;
+  animation: cotActionbarIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes cotActionbarIn {
+  from { transform: translateX(-50%) translateY(30px); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0);    opacity: 1; }
+}
+
+.cot-actionbar button[disabled] {
+  opacity: 0.45;
+}
+
+/* ============================================================
+   SECCIÓN 12 — RESPONSIVE
+   ============================================================ */
+
+@media screen and (max-width: 1199px) {
+  .cot-workspace {
+    padding: var(--sp-3) var(--sp-4);
+    padding-bottom: 88px;
+  }
+
+  .cot-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cot-field--span2 {
+    grid-column: span 2;
+  }
+}
+
+@media screen and (max-width: 899px) {
+  .cot-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .cot-workspace-content {
     flex-direction: column;
   }
 
-  .select-field {
+  .cot-history-panel {
     width: 100%;
+    max-height: 240px;
   }
 
-  .tabla-procesos {
-    font-size: 14px;
+  // Sin hover en touch: los botones de acción quedan siempre visibles.
+  .cot-history-card__acciones {
+    opacity: 1;
+  }
+
+  .cot-version-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cot-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cot-field--span2 {
+    grid-column: span 1;
+  }
+
+  .cot-form-footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .cot-form-actions {
+    flex-direction: column-reverse;
+
+    button { width: 100%; }
+  }
+
+  .cot-criterios__resumen {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cot-criterios-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .cot-criterios__resumen-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .cot-actionbar {
+    left: var(--sp-4);
+    right: var(--sp-4);
+    transform: none;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-radius: var(--radius-lg);
+
+    &.ng-animating { transform: none; }
   }
 }
 
-.codigo-field, .descripcion-field {
-  flex: 1 1 200px;
-  min-width: 180px;
+@media screen and (max-width: 599px) {
+  ::ng-deep .cot-modal-panel {
+    max-width: calc(100vw - 32px) !important;
+  }
 }
 
-.descripcion-field input {
-  font-weight: 500;
-}
+/* ============================================================
+   SECCIÓN 13 — SPINNER
+   ============================================================ */
 
 .spinner-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
   height: 100vh;
 }
 
 .spinner-text {
-  color: white;
+  color: var(--c-white);
   font-size: 1.2rem;
-  margin-bottom: 30px;
+  margin-bottom: var(--sp-6);
   text-align: center;
 }
-
 
 .loader {
-    position: relative;
-    width: 85px;
-    height: 50px;
-    background-repeat: no-repeat;
-    background-image: linear-gradient(#FFF 50px, transparent 0),
-                      linear-gradient(#FFF 50px, transparent 0),
-                      linear-gradient(#FFF 50px, transparent 0),
-                      linear-gradient(#FFF 50px, transparent 0),
-                      linear-gradient(#FFF 50px, transparent 0),
-                      linear-gradient(#FFF 50px, transparent 0);
-    background-position: 0px center, 15px center, 30px center, 45px center, 60px center, 75px center, 90px center;
-    animation: rikSpikeRoll 0.65s linear infinite alternate;
-  }
+  position: relative;
+  width: 85px;
+  height: 50px;
+  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(#FFF 50px, transparent 0),
+    linear-gradient(#FFF 50px, transparent 0),
+    linear-gradient(#FFF 50px, transparent 0),
+    linear-gradient(#FFF 50px, transparent 0),
+    linear-gradient(#FFF 50px, transparent 0),
+    linear-gradient(#FFF 50px, transparent 0);
+  background-position:
+    0px center, 15px center, 30px center,
+    45px center, 60px center, 75px center, 90px center;
+  animation: rikSpikeRoll 0.65s linear infinite alternate;
+}
+
 @keyframes rikSpikeRoll {
-  0% { background-size: 10px 3px;}
-  16% { background-size: 10px 50px, 10px 3px, 10px 3px, 10px 3px, 10px 3px, 10px 3px}
-  33% { background-size: 10px 30px, 10px 50px, 10px 3px, 10px 3px, 10px 3px, 10px 3px}
-  50% { background-size: 10px 10px, 10px 30px, 10px 50px, 10px 3px, 10px 3px, 10px 3px}
-  66% { background-size: 10px 3px, 10px 10px, 10px 30px, 10px 50px, 10px 3px, 10px 3px}
-  83% { background-size: 10px 3px, 10px 3px,  10px 10px, 10px 30px, 10px 50px, 10px 3px}
-  100% { background-size: 10px 3px, 10px 3px, 10px 3px,  10px 10px, 10px 30px, 10px 50px}
-}
-    
-
-.ajuste-cell {
-  text-align: center;   
-  color: red;         
-}
-
-.ajuste-cell input {
-  text-align: center;   
-  color: red;       
-  font-weight: 600;  
-}
-
-.mat-header-cell {
-  text-align: center;
-  justify-content: center; 
-  font-weight: 600;       
-}
-
-.subgrupo-row {
-  background-color: #f1f8e9;
-}
-
-.subgrupo-row td:first-child {
-  padding-left: 24px;
-  font-weight: 600;
-  color: #388e3c;
-}
-.hidden {
-  display: none;
-}
-
-
-.expandible-row {
-  background-color: #eff2f3;
-  cursor: pointer;
-}
-
-.col-achi{
-  width: 250px;
-  text-align: left;
-}
-
-.fila-r td {
-  background-color: #fad7a3;
-  font-weight: bold;
-  color: #000000; 
-}
-
-.fila-r td span {
-  display: block;
-  // text-align: left;
-}
-
-.cotizacion-cell {
-  background-color: #fad7a3;
-  font-weight: bold;
-  color: #000000;
-}
-
-.cotizacion-cell span {
-  display: block;
-  text-align: center;
-}
-
-.descripcion-f {
-  background-color: #eff2f3;
-  font-weight: bold;
-  color: #424242;
-}
-
-/* Color Botones */
-.btn-azul {
-    background-color: #3f51b5;
-    color: #fff;
-    width: 150px;
-    height: 45px;
-}
-
-.btn-amarillo {
-  background-color: #ffeb3b; /* amarillo Material */
-  color: #000;   
-    width: 150px;
-    height: 45px;             /* texto negro para contraste */
-}
-
-.btn-verde {
-    background-color: #4caf50;
-    color: #fff;
-    width: 150px;
-    height: 45px;
-}
-
-
-.opciones {
-  position: fixed; 
-  bottom: 60px;      
-  right: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  animation: fadeIn 0.3s forwards;
-  z-index: 1000; 
-}
-
-.boton-flotante {
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-
-  mat-icon { font-size: 24px; }
-}
-
-.boton-flotante.save { background-color:  #4caf50; }
-.boton-flotante.edit { background-color: #1565c0; }
-.boton-flotante.delete { background-color:  #d32f2f; }
-
-button:disabled {
-  background-color: #ccc !important;   /* Fondo gris */
-  color: #666 !important;              /* Texto/ícono gris */
-  cursor: not-allowed;                 /* Cursor de prohibido */
-  opacity: 0.7;                        /* Un poco más tenue */
-}
-
-.tabla-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  padding: 1rem;
-  box-sizing: border-box;
-}
-
-.fila-seleccionada {
-  background-color: rgba(63, 81, 181, 0.1); /* azul suave */
-}
-
-::ng-deep .mat-select-panel .sticky-option {
-  position: sticky;
-  top: 0;
-  background: #fff;   /* fondo sólido para que no se mezcle */
-  z-index: 2;         /* asegura que quede encima */
-}
-
-.bloque-historial {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #f9f9f9;
-
-  mat-checkbox {
-    font-weight: 600;
-    color: #333;
-  }
+  0%   { background-size: 10px 3px; }
+  16%  { background-size: 10px 50px, 10px 3px,  10px 3px,  10px 3px,  10px 3px,  10px 3px; }
+  33%  { background-size: 10px 30px, 10px 50px, 10px 3px,  10px 3px,  10px 3px,  10px 3px; }
+  50%  { background-size: 10px 10px, 10px 30px, 10px 50px, 10px 3px,  10px 3px,  10px 3px; }
+  66%  { background-size: 10px 3px,  10px 10px, 10px 30px, 10px 50px, 10px 3px,  10px 3px; }
+  83%  { background-size: 10px 3px,  10px 3px,  10px 10px, 10px 30px, 10px 50px, 10px 3px; }
+  100% { background-size: 10px 3px,  10px 3px,  10px 3px,  10px 10px, 10px 30px, 10px 50px; }
 }

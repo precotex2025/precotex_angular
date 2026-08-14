@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cotizaciones — Mockup Interactivo v2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <style>
+    /* ============================================================
+       RESET & TOKENS
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --indigo-50: #EEF2FF; --indigo-100: #E0E7FF; --indigo-200: #C7D2FE;
+      --indigo-400: #818CF8; --indigo-500: #6366F1; --indigo-600: #4F46E5;
+      --indigo-700: #4338CA; --indigo-900: #312E81;
+      --violet-500: #8B5CF6; --violet-600: #7C3AED;
+      --teal-400: #2DD4BF; --teal-500: #14B8A6;
+      --slate-50: #F8FAFC; --slate-100: #F1F5F9; --slate-200: #E2E8F0;
+      --slate-300: #CBD5E1; --slate-400: #94A3B8; --slate-500: #64748B;
+      --slate-600: #475569; --slate-700: #334155; --slate-800: #1E293B; --slate-900: #0F172A;
+      --amber-50: #FFFBEB; --amber-100: #FEF3C7; --amber-500: #F59E0B; --amber-700: #B45309;
+      --red-50: #FEF2F2; --red-500: #EF4444; --red-600: #DC2626;
+      --green-50: #F0FDF4; --green-500: #22C55E; --green-600: #16A34A;
+      --orange-50: #FFF7ED; --orange-500: #F97316;
+      --white: #FFFFFF;
+
+      --brand: var(--indigo-600); --brand-hover: var(--indigo-700);
+      --brand-light: var(--indigo-50); --brand-ring: rgba(99,102,241,0.3);
+      --gradient-brand: linear-gradient(135deg, var(--indigo-600), var(--violet-600));
+      --gradient-top-border: linear-gradient(90deg, var(--indigo-500), var(--teal-400));
+      --surface: var(--white); --surface-sunken: var(--slate-50);
+      --text: var(--slate-900); --text-muted: var(--slate-500); --text-disabled: var(--slate-400);
+      --border: var(--slate-200);
+
+      --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+      --sp-5: 20px; --sp-6: 24px; --sp-7: 32px; --sp-8: 40px;
+      --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px; --radius-xl: 18px; --radius-pill: 999px;
+      --shadow-sm: 0 1px 3px rgba(15,23,42,0.04), 0 1px 2px rgba(15,23,42,0.06);
+      --shadow-md: 0 4px 12px rgba(15,23,42,0.07), 0 2px 4px rgba(15,23,42,0.04);
+      --shadow-lg: 0 8px 32px rgba(15,23,42,0.10), 0 4px 8px rgba(15,23,42,0.05);
+      --shadow-xl: 0 16px 48px rgba(15,23,42,0.12);
+      --row-h: 42px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--surface-sunken);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .workspace {
+      display: flex; flex-direction: column; gap: var(--sp-5);
+      max-width: 1400px; margin: 0 auto;
+      padding: var(--sp-6) var(--sp-7); min-height: 100vh;
+      padding-bottom: 100px;
+    }
+
+    /* ============================================================
+       TOOLBAR
+       ============================================================ */
+    .toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: var(--sp-4);
+    }
+    .toolbar__left { display: flex; align-items: center; gap: var(--sp-4); }
+    .toolbar__title { display: flex; align-items: center; gap: var(--sp-3); }
+    .toolbar__title .icon-circle {
+      width: 42px; height: 42px; border-radius: var(--radius-md);
+      background: var(--gradient-brand); display: flex; align-items: center; justify-content: center;
+      color: white; box-shadow: 0 4px 12px rgba(79,70,229,0.3);
+    }
+    .toolbar__title .icon-circle .material-icons-round { font-size: 22px; }
+    .toolbar__title h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+    .toolbar__badge {
+      display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px;
+      border-radius: var(--radius-pill); background: var(--gradient-brand);
+      color: white; font-size: 12px; font-weight: 600;
+      box-shadow: 0 2px 8px rgba(79,70,229,0.25);
+    }
+    .toolbar__badge .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #A5B4FC;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    .density-toggle {
+      display: flex; background: var(--slate-100); border-radius: var(--radius-pill);
+      padding: 3px; gap: 2px; border: 1px solid var(--border);
+    }
+    .density-btn {
+      display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px;
+      border: none; background: transparent; border-radius: var(--radius-pill);
+      font-family: inherit; font-size: 12px; font-weight: 500; color: var(--text-muted);
+      cursor: pointer; transition: all 0.25s;
+    }
+    .density-btn .material-icons-round { font-size: 16px; }
+    .density-btn.active {
+      background: var(--white); color: var(--brand); box-shadow: var(--shadow-sm); font-weight: 600;
+    }
+    .density-btn:hover:not(.active) { color: var(--slate-700); background: rgba(255,255,255,0.5); }
+
+    /* ============================================================
+       CARD
+       ============================================================ */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); box-shadow: var(--shadow-md);
+      position: relative; overflow: hidden;
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--gradient-top-border); border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    }
+
+    /* ============================================================
+       CRITERIOS
+       ============================================================ */
+    .criterios { padding: var(--sp-5); }
+    .criterios--collapsed .criterios__form { display: none; }
+    .criterios--expanded .criterios__summary { display: none; }
+
+    .criterios__summary {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: var(--sp-3); flex-wrap: wrap;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px;
+      border-radius: var(--radius-pill); background: var(--brand-light);
+      font-size: 12px; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .chip:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+    .chip__icon { font-size: 14px; color: var(--brand); }
+    .chip__label { color: var(--text-muted); font-weight: 500; }
+    .chip__value { color: var(--text); font-weight: 600; }
+
+    .btn-edit-criteria {
+      display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px;
+      border: 1px solid var(--border); border-radius: var(--radius-pill);
+      background: var(--white); font-family: inherit; font-size: 13px;
+      font-weight: 500; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+    }
+    .btn-edit-criteria .material-icons-round { font-size: 16px; }
+    .btn-edit-criteria:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-light); }
+
+    /* Form */
+    .form-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4);
+    }
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-field--span2 { grid-column: span 2; }
+    .form-field label {
+      font-size: 12px; font-weight: 600; color: var(--text-muted);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .form-field label .material-icons-round { font-size: 14px; color: var(--slate-400); }
+    .input-wrap { position: relative; display: flex; align-items: center; }
+    .input-wrap .input-icon {
+      position: absolute; left: 12px; font-size: 18px; color: var(--slate-400);
+      pointer-events: none; transition: color 0.2s; z-index: 1;
+    }
+    .input-wrap input, .input-wrap select {
+      width: 100%; height: 44px; padding: 0 14px 0 40px;
+      border: 1.5px solid var(--border); border-radius: var(--radius-md);
+      background: var(--white); font-family: inherit; font-size: 13px; color: var(--text);
+      transition: all 0.2s; outline: none; appearance: none; -webkit-appearance: none;
+    }
+    .input-wrap input:focus, .input-wrap select:focus {
+      border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-ring);
+    }
+    .input-wrap input:focus ~ .input-icon { color: var(--brand); }
+    .input-wrap input[readonly] { background: var(--slate-50); color: var(--text-muted); }
+    .input-wrap .select-arrow {
+      position: absolute; right: 12px; font-size: 18px; color: var(--slate-400); pointer-events: none;
+    }
+
+    .form-footer {
+      display: flex; align-items: center; justify-content: flex-end;
+      margin-top: var(--sp-5); padding-top: var(--sp-4);
+      border-top: 1px solid var(--slate-100); flex-wrap: wrap; gap: var(--sp-4);
+    }
+    .toggle-wrap {
+      display: flex; align-items: center; gap: var(--sp-3); cursor: pointer;
+    }
+    .toggle-wrap .label-text { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+    .toggle-track {
+      width: 44px; height: 24px; border-radius: 12px; background: var(--slate-300);
+      position: relative; transition: background 0.25s; flex-shrink: 0;
+    }
+    .toggle-track::after {
+      content: ''; position: absolute; top: 3px; left: 3px;
+      width: 18px; height: 18px; border-radius: 50%; background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    .toggle-wrap.active .toggle-track { background: var(--brand); }
+    .toggle-wrap.active .toggle-track::after { transform: translateX(20px); }
+
+    .form-actions { display: flex; gap: var(--sp-3); }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px;
+      border: none; border-radius: var(--radius-pill); font-family: inherit;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1); white-space: nowrap;
+    }
+    .btn .material-icons-round { font-size: 18px; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
+
+    .btn--ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+    .btn--ghost:hover:not(:disabled) { background: var(--slate-50); color: var(--text); border-color: var(--slate-300); }
+
+    .btn--primary { background: var(--gradient-brand); color: white; box-shadow: 0 4px 14px rgba(79,70,229,0.3); }
+    .btn--primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(79,70,229,0.35); }
+
+    .btn--danger { background: transparent; color: var(--red-500); border: 1px solid rgba(239,68,68,0.25); }
+    .btn--danger:hover:not(:disabled) { background: var(--red-50); border-color: var(--red-500); }
+
+    .btn--danger-fill { background: linear-gradient(135deg, var(--red-500), var(--red-600)); color: white; box-shadow: 0 4px 14px rgba(239,68,68,0.3); }
+    .btn--danger-fill:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(239,68,68,0.35); }
+
+    .btn--outline { background: transparent; color: var(--brand); border: 1px solid rgba(99,102,241,0.3); }
+    .btn--outline:hover:not(:disabled) { background: var(--brand-light); border-color: var(--brand); }
+
+    .btn--success { background: linear-gradient(135deg, var(--green-500), var(--green-600)); color: white; box-shadow: 0 4px 14px rgba(34,197,94,0.3); }
+    .btn--success:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(34,197,94,0.35); }
+
+    .btn--warning { background: transparent; color: var(--orange-500); border: 1px solid rgba(249,115,22,0.3); }
+    .btn--warning:hover:not(:disabled) { background: var(--orange-50); border-color: var(--orange-500); }
+
+    /* ============================================================
+       TABLE
+       ============================================================ */
+    .costeo-card { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+    .table-scroll { overflow: auto; flex: 1; }
+
+    .tabla { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+    .tabla thead th {
+      position: sticky; top: 0; z-index: 3; padding: 12px 16px;
+      background: var(--indigo-50); color: var(--slate-600);
+      font-size: 14px; font-weight: 700; text-align: center;
+      border-bottom: 2px solid var(--indigo-100); white-space: nowrap;
+    }
+    .tabla thead th:nth-child(1), .tabla thead th:nth-child(2) { text-align: left; }
+
+    .tabla tbody tr {
+      height: var(--row-h); transition: all 0.15s ease; border-left: 4px solid transparent;
+    }
+    .tabla tbody tr:hover:not(.row-group-header) { background: var(--indigo-50); border-left-color: var(--brand); }
+    .tabla td {
+      padding: 8px 16px; color: var(--text); text-align: right;
+      font-variant-numeric: tabular-nums; border-bottom: 1px solid var(--slate-100); white-space: nowrap;
+    }
+    .tabla td:nth-child(1), .tabla td:nth-child(2) { text-align: left; }
+
+    /* ── Group header row (always visible, acts as accordion) ── */
+    .row-group-header {
+      cursor: pointer;
+      user-select: none;
+    }
+    .row-group-header td {
+      background: var(--slate-100);
+      font-weight: 700;
+      color: var(--slate-800);
+      border-bottom: 1px solid var(--slate-200);
+      padding-top: 10px;
+      padding-bottom: 10px;
+      font-size: 14px;
+    }
+    .row-group-header:hover td {
+      background: var(--indigo-50);
+    }
+
+    .group-toggle {
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .group-toggle .chevron {
+      font-size: 24px; color: var(--slate-400);
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), color 0.2s;
+      display: inline-block;
+    }
+    .row-group-header.expanded .chevron {
+      transform: rotate(180deg); color: var(--brand);
+    }
+    .row-group-header:hover .chevron { color: var(--brand); }
+
+    .group-badge {
+      font-size: 10px; font-weight: 600; padding: 2px 8px;
+      border-radius: var(--radius-pill); background: rgba(99,102,241,0.1);
+      color: var(--indigo-600); margin-left: 4px;
+    }
+
+    /* ── Child rows ── */
+    .row-child .col-desc {
+      padding-left: 48px; font-weight: 400; color: var(--slate-600);
+    }
+    .row-child.hidden { display: none; }
+    .row-child td { background: var(--white); }
+    .row-child:nth-child(even) td { background: var(--slate-50); }
+
+    /* ── Summary rows (clean, no heavy borders) ── */
+    .row-summary td {
+      background: var(--slate-50);
+      font-weight: 600;
+      color: var(--slate-700);
+      border-bottom: 1px solid var(--slate-200);
+      font-size: 12px;
+    }
+    .row-summary .col-desc {
+      color: var(--slate-500);
+      font-style: italic;
+    }
+
+    /* ── Grand total row ── */
+    .row-grand-total td {
+      background: var(--indigo-50);
+      font-weight: 700;
+      color: var(--indigo-700);
+      border-top: 2px solid var(--indigo-200);
+      border-bottom: 2px solid var(--indigo-200);
+      font-size: 14px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+
+    /* ── Subtotal rows (Merma, Costo sin Utilidad, Utilidad) ── */
+    .row-subtotal td {
+      background: var(--slate-100);
+      font-weight: 700;
+      color: var(--slate-700);
+      border-top: 2px solid var(--slate-200);
+      border-bottom: 2px solid var(--slate-200);
+      font-size: 14px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+
+    /* ── Row when editing is active ── */
+    tr.row-editing { background: var(--indigo-50) !important; border-left: 4px solid var(--brand) !important; }
+    tr.row-editing td { background: transparent; }
+
+    /* ============================================================
+       AJUSTE Y MODAL
+       ============================================================ */
+    .cell-ajuste-wrap { display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end; }
+    .cell-ajuste__display { display: inline-flex; align-items: center; justify-content: flex-end; min-width: 40px; }
+    
+    .btn-add-ajuste {
+      display: none; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--brand-light); color: var(--brand); border: none;
+      cursor: pointer; transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    .btn-add-ajuste .material-icons-round { font-size: 16px; margin: 0; }
+    .btn-add-ajuste:hover { background: var(--brand); color: white; }
+    .edit-mode .btn-add-ajuste { display: inline-flex; }
+
+    .adjustment-comment-icon {
+      font-size: 16px; color: var(--brand); cursor: help;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(15,23,42,0.4); backdrop-filter: blur(4px);
+      justify-content: center; align-items: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-card {
+      background: var(--white); border-radius: var(--radius-xl);
+      width: 90%; max-width: 480px; box-shadow: var(--shadow-xl);
+      animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      display: flex; flex-direction: column;
+    }
+    .modal-header {
+      padding: var(--sp-5); border-bottom: 1px solid var(--slate-100);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-header h3 { font-size: 18px; font-weight: 700; color: var(--text); }
+    .btn-icon {
+      background: transparent; border: none; font-size: 20px; color: var(--slate-400);
+      cursor: pointer; transition: color 0.2s; padding: 4px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .btn-icon:hover { color: var(--slate-700); background: var(--slate-100); }
+    .modal-body { padding: var(--sp-5); }
+    .modal-footer {
+      padding: var(--sp-4) var(--sp-5); border-top: 1px solid var(--slate-100);
+      display: flex; justify-content: flex-end; gap: var(--sp-3);
+    }
+    .row-data-box {
+      background: var(--slate-50); border: 1px solid var(--slate-200);
+      border-radius: var(--radius-lg); padding: var(--sp-4);
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .modal-accordion-header {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; font-weight: 700; color: var(--indigo-600);
+      cursor: pointer; user-select: none;
+      border-bottom: 1px solid var(--indigo-100);
+      padding-bottom: 8px; margin-bottom: 4px;
+    }
+    .modal-accordion-header .chevron { font-size: 20px; transition: transform 0.2s; }
+    .modal-accordion-header.collapsed .chevron { transform: rotate(-90deg); }
+    .modal-accordion-details { display: flex; flex-direction: column; gap: 12px; }
+    .modal-accordion-details.collapsed { display: none; }
+    
+    .data-item { 
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+      padding-bottom: 10px; border-bottom: 1px dashed var(--slate-200);
+    }
+    .data-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .data-item label { font-size: 12px; font-weight: 500; color: var(--slate-500); white-space: nowrap; }
+    .data-item span { font-size: 13px; font-weight: 600; color: var(--slate-900); text-align: right; word-break: break-word; }
+    .modal-body textarea:focus, .modal-body input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-ring); }
+
+    /* ============================================================
+       EMPTY STATE
+       ============================================================ */
+    .empty-state {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 64px var(--sp-5); gap: var(--sp-3);
+    }
+    .empty-state .icon-wrap {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: var(--indigo-50); display: flex; align-items: center; justify-content: center;
+      margin-bottom: var(--sp-2);
+    }
+    .empty-state .icon-wrap .material-icons-round { font-size: 32px; color: var(--indigo-200); }
+    .empty-state h3 { font-size: 16px; font-weight: 600; }
+    .empty-state p { font-size: 13px; color: var(--text-muted); text-align: center; max-width: 320px; }
+
+    /* ============================================================
+       FLOATING ACTION BAR — DYNAMIC CRUD STATES
+       ============================================================ */
+    .actionbar {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      display: none; align-items: center; gap: var(--sp-2);
+      padding: 10px 16px;
+      background: rgba(255,255,255,0.92); backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(226,232,240,0.6); border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-xl); z-index: 100;
+      animation: actionbarIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes actionbarIn {
+      from{transform:translateX(-50%) translateY(30px);opacity:0}
+      to{transform:translateX(-50%) translateY(0);opacity:1}
+    }
+    .actionbar .divider { width: 1px; height: 24px; background: var(--slate-200); }
+
+    /* State indicator badge in action bar */
+    .state-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: var(--radius-pill);
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.04em; margin-right: 4px;
+    }
+    .state-badge--read {
+      background: var(--slate-100); color: var(--slate-500);
+    }
+    .state-badge--read .material-icons-round { font-size: 14px; }
+    .state-badge--edit {
+      background: rgba(99,102,241,0.1); color: var(--indigo-600);
+      animation: badgePulse 2s infinite;
+    }
+    .state-badge--edit .material-icons-round { font-size: 14px; }
+    @keyframes badgePulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.2); }
+      50% { box-shadow: 0 0 0 6px rgba(99,102,241,0); }
+    }
+
+    /* Delete confirmation overlay */
+    .delete-confirm {
+      display: none;
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(15,23,42,0.4); backdrop-filter: blur(4px);
+      justify-content: center; align-items: center;
+    }
+    .delete-confirm.show { display: flex; }
+    .delete-confirm__card {
+      background: white; border-radius: var(--radius-xl); padding: var(--sp-7);
+      box-shadow: var(--shadow-xl); max-width: 400px; width: 90%;
+      text-align: center; animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes modalIn { from{transform:scale(0.9);opacity:0} to{transform:scale(1);opacity:1} }
+    .delete-confirm__card .icon-danger {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--red-50); display: flex; align-items: center; justify-content: center;
+      margin: 0 auto var(--sp-4);
+    }
+    .delete-confirm__card .icon-danger .material-icons-round { font-size: 28px; color: var(--red-500); }
+    .delete-confirm__card h3 { font-size: 18px; font-weight: 700; margin-bottom: var(--sp-2); }
+    .delete-confirm__card p { font-size: 13px; color: var(--text-muted); margin-bottom: var(--sp-5); line-height: 1.5; }
+    .delete-confirm__actions { display: flex; gap: var(--sp-3); justify-content: center; }
+
+    /* ============================================================
+       TOAST
+       ============================================================ */
+    .toast {
+      position: fixed; top: 24px; right: 24px;
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 22px; background: var(--white);
+      border: 1px solid var(--border); border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg); z-index: 999;
+      font-size: 13px; font-weight: 500;
+      opacity: 0; pointer-events: none; transform: translateX(20px);
+      transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .toast.show { opacity: 1; pointer-events: auto; transform: translateX(0); }
+    .toast .material-icons-round { font-size: 20px; }
+    .toast.toast--success { border-left: 4px solid var(--green-500); }
+    .toast.toast--success .material-icons-round { color: var(--green-500); }
+    .toast.toast--warning { border-left: 4px solid var(--orange-500); }
+    .toast.toast--warning .material-icons-round { color: var(--orange-500); }
+    .toast.toast--danger { border-left: 4px solid var(--red-500); }
+    .toast.toast--danger .material-icons-round { color: var(--red-500); }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1100px) {
+      .form-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .workspace { padding: var(--sp-4); }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-field--span2 { grid-column: span 1; }
+      .toolbar { flex-direction: column; align-items: flex-start; }
+      .form-footer { flex-direction: column; align-items: stretch; }
+      .form-actions { flex-direction: column; }
+      .form-actions .btn { width: 100%; justify-content: center; }
+      .actionbar { left: var(--sp-4); right: var(--sp-4); transform: none; justify-content: center; flex-wrap: wrap; }
+    }
+
+    .fade-in { animation: fadeIn 0.35s cubic-bezier(0.4,0,0.2,1); }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ── History panel ── */
+    .history-card {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 14px; border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border); background: var(--white);
+      cursor: pointer; transition: all 0.2s; margin-bottom: 10px;
+    }
+    .history-card:last-child { margin-bottom: 0; }
+    .history-card:hover { border-color: var(--brand); background: var(--brand-light); box-shadow: var(--shadow-sm); }
+    .history-card--active { border-color: var(--brand); background: rgba(99,102,241,0.03); }
+    .history-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+    }
+    .history-body { flex: 1; min-width: 0; }
+    .history-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+    .history-version { font-size: 13px; font-weight: 700; color: var(--text); }
+    .history-badge {
+      display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+      border-radius: var(--radius-pill); font-size: 10px; font-weight: 600;
+    }
+    .history-recent-tag {
+      font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: var(--radius-pill);
+      background: var(--teal-400); color: white; margin-left: auto;
+    }
+    .history-meta {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 11px; color: var(--text-muted);
+    }
+    .history-meta .material-icons-round { font-size: 13px; color: var(--slate-400); }
+    .history-sep { color: var(--slate-300); margin: 0 2px; }
+    .version-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 20px; border-bottom: 1px solid var(--indigo-100);
+      background: var(--indigo-50);
+    }
+    .version-bar__info { display: flex; align-items: center; gap: 8px; }
+    .version-bar__label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+    .version-bar__value { font-size: 13px; font-weight: 700; color: var(--brand); }
+
+    /* ── Side panel layout ── */
+    .workspace-content {
+      display: flex; gap: var(--sp-4); position: relative; align-items: stretch;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1); width: 100%; min-height: 0;
+    }
+    .history-panel {
+      width: 300px; flex-shrink: 0; display: flex; flex-direction: column;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1); box-sizing: border-box;
+    }
+    .history-panel__inner {
+      padding: var(--sp-4) var(--sp-4) var(--sp-5);
+      display: flex; flex-direction: column; height: 100%; box-sizing: border-box;
+    }
+    #historyList {
+      flex: 1; overflow-y: auto; padding-right: 2px; max-height: 520px;
+    }
+    .workspace-content.history-unpinned .history-panel {
+      position: absolute; left: 0; top: 0; bottom: 0; z-index: 20;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15), 0 8px 10px -6px rgba(0,0,0,0.1);
+      border: 1px solid var(--indigo-100); height: 100%; background: var(--white);
+    }
+    .workspace-content.history-pinned .history-panel {
+      position: relative; box-shadow: var(--shadow-sm); height: auto;
+    }
+    .costeo-card {
+      flex: 1; min-width: 0; display: flex; flex-direction: column;
+    }
+    .btn-pin-history {
+      background: transparent; border: none; cursor: pointer; padding: 6px; border-radius: var(--radius-md);
+      color: var(--slate-400); display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+    }
+    .btn-pin-history:hover { background: var(--indigo-50); color: var(--brand); }
+    .btn-pin-history.pinned { color: var(--brand); background: var(--indigo-50); transform: rotate(-45deg); }
+
+    [data-tooltip] { position: relative; }
+    [data-tooltip]::after {
+      content: attr(data-tooltip); position: absolute; bottom: calc(100% + 8px);
+      left: 50%; transform: translateX(-50%) scale(0.9);
+      padding: 6px 12px; border-radius: var(--radius-sm);
+      background: var(--slate-800); color: #FFFFFF; font-size: 11px; font-weight: 500;
+      font-family: 'Inter', -apple-system, sans-serif; letter-spacing: normal;
+      white-space: normal; width: max-content; max-width: 240px; text-align: center;
+      opacity: 0; pointer-events: none; transition: all 0.2s; z-index: 50; line-height: 1.4;
+    }
+    [data-tooltip]:hover::after { opacity: 1; transform: translateX(-50%) scale(1); }
+
+    /* Tooltips en la tabla de ajustes se muestran a la izquierda para evitar cortes por scroll */
+    .cell-ajuste-wrap [data-tooltip]::after {
+      bottom: auto; left: auto;
+      right: calc(100% + 8px); top: 50%;
+      transform: translateY(-50%) scale(0.9);
+    }
+    .cell-ajuste-wrap [data-tooltip]:hover::after {
+      transform: translateY(-50%) scale(1);
+    }
+  </style>
+</head>
+<body>
+
+<div class="workspace">
+
+  <!-- ═══════════ TOOLBAR ═══════════ -->
+  <header class="toolbar">
+    <div class="toolbar__left">
+      <div class="toolbar__title">
+        <div class="icon-circle">
+          <span class="material-icons-round">receipt_long</span>
+        </div>
+        <h1>Cotizaciones</h1>
+      </div>
+      <div class="toolbar__badge">
+        <span class="dot"></span>
+        <span id="processCount">—</span>
+      </div>
+    </div>
+    <div class="density-toggle">
+      <button class="density-btn active" onclick="setDensity(this,'compacta')" data-tooltip="Filas compactas">
+        <span class="material-icons-round">density_small</span> Compacta
+      </button>
+      <button class="density-btn" onclick="setDensity(this,'comoda')" data-tooltip="Filas espaciadas">
+        <span class="material-icons-round">density_medium</span> Cómoda
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══════════ CRITERIOS ═══════════ -->
+  <section class="card criterios criterios--expanded" id="criteriosSection">
+    <div class="criterios__summary">
+      <div class="chips" id="chipsContainer">
+        <div class="chip"><span class="material-icons-round chip__icon">business</span><span class="chip__label">Und. Negocio:</span><span class="chip__value">Textil</span></div>
+        <div class="chip"><span class="material-icons-round chip__icon">category</span><span class="chip__label">Tipo:</span><span class="chip__value">Regular</span></div>
+        <div class="chip"><span class="material-icons-round chip__icon">person</span><span class="chip__label">Cliente:</span><span class="chip__value">ABC Textiles S.A.C.</span></div>
+        <div class="chip"><span class="material-icons-round chip__icon">qr_code</span><span class="chip__label">Tela:</span><span class="chip__value">AL001234</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button class="btn-edit-criteria" onclick="toggleHistoryPin()" id="summaryPinBtn">
+          <span class="material-icons-round">push_pin</span> Desanclar Historial
+        </button>
+        <button class="btn-edit-criteria" onclick="toggleCriterios()">
+          <span class="material-icons-round">tune</span> Editar criterios
+        </button>
+      </div>
+    </div>
+    <div class="criterios__form fade-in">
+      <div class="form-grid">
+        <div class="form-field">
+          <label><span class="material-icons-round">business</span> Und. Negocio</label>
+          <div class="input-wrap">
+            <span class="material-icons-round input-icon">domain</span>
+            <select id="filter_und"><option selected>Textil</option><option>Confección</option></select>
+            <span class="material-icons-round select-arrow">expand_more</span>
+          </div>
+        </div>
+        <div class="form-field">
+          <label><span class="material-icons-round">category</span> Tipo Und. Negocio</label>
+          <div class="input-wrap">
+            <span class="material-icons-round input-icon">label</span>
+            <select id="filter_tipo"><option value="">Seleccionar...</option><option selected>Regular</option><option>Urgente</option><option>Muestra</option></select>
+            <span class="material-icons-round select-arrow">expand_more</span>
+          </div>
+        </div>
+        <div class="form-field form-field--span2">
+          <label><span class="material-icons-round">person_search</span> Cliente</label>
+          <div class="input-wrap">
+            <span class="material-icons-round input-icon">person</span>
+            <input type="text" id="filter_cliente" placeholder="Buscar cliente..." value="ABC Textiles S.A.C.">
+          </div>
+        </div>
+        <div class="form-field">
+          <label><span class="material-icons-round">qr_code_2</span> Código de tela</label>
+          <div class="input-wrap">
+            <span class="material-icons-round input-icon">qr_code</span>
+            <input type="text" id="filter_tela" placeholder="AA000000" value="AL001234">
+          </div>
+        </div>
+        <div class="form-field">
+          <label><span class="material-icons-round">description</span> Descripción</label>
+          <div class="input-wrap">
+            <span class="material-icons-round input-icon">article</span>
+            <input type="text" readonly value="Jersey 30/1 PIM" tabindex="-1">
+          </div>
+        </div>
+        <div class="form-field">
+          <label><span class="material-icons-round">route</span> Ruta</label>
+          <div class="input-wrap">
+            <span class="material-icons-round input-icon">alt_route</span>
+            <select><option value="">Seleccionar...</option><option selected>Ruta 1 - Estándar</option><option>Ruta 2 - Express</option></select>
+            <span class="material-icons-round select-arrow">expand_more</span>
+          </div>
+        </div>
+        <div class="form-field">
+          <label><span class="material-icons-round">palette</span> Color</label>
+          <div class="input-wrap">
+            <span class="material-icons-round input-icon">palette</span>
+            <input type="text" placeholder="Buscar color...">
+          </div>
+        </div>
+      </div>
+      <div class="form-footer">
+        <div class="form-actions">
+          <button class="btn btn--ghost" onclick="showToast('Filtros limpiados','success')">
+            <span class="material-icons-round">refresh</span> Limpiar filtros
+          </button>
+          <button class="btn btn--primary" onclick="doSearch()">
+            <span class="material-icons-round">search</span> Buscar
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ MAIN CONTENT WORKSPACE ═══════════ -->
+  <div class="workspace-content history-pinned" id="workspaceContent">
+    <!-- ═══════════ HISTORY PANEL ═══════════ -->
+    <section class="card history-panel" id="historySection" style="display:none;">
+      <div class="history-panel__inner">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-3);padding-bottom:var(--sp-3);border-bottom:1px solid var(--slate-100);">
+          <div style="display:flex;align-items:center;gap:var(--sp-2);">
+            <div style="width:32px;height:32px;border-radius:var(--radius-md);background:var(--gradient-brand);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(79,70,229,0.25);flex-shrink:0;">
+              <span class="material-icons-round" style="font-size:18px;color:white;">history</span>
+            </div>
+            <div>
+              <h2 style="font-size:14px;font-weight:700;color:var(--text);margin:0;">Historial</h2>
+              <p style="font-size:11px;color:var(--text-muted);margin:0;">Versiones registradas</p>
+            </div>
+          </div>
+          <button class="btn-pin-history pinned" id="btnPinHistory" onclick="toggleHistoryPin()" data-tooltip="Desanclar panel">
+            <span class="material-icons-round" id="iconPinHistory" style="font-size:18px">push_pin</span>
+          </button>
+        </div>
+        <button class="btn btn--primary" id="btnNewQuotation" onclick="addNewQuotation()" style="width:100%; margin-bottom: var(--sp-3); justify-content:center; padding: 8px 14px; font-size:12px;">
+          <span class="material-icons-round" style="font-size:16px;">add_circle</span> Nueva Cotización
+        </button>
+        <div id="historyList"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════ TABLE ═══════════ -->
+    <section class="card costeo-card" id="costeoSection" style="display:none;">
+      <div id="versionBar" class="version-bar" style="display:none;">
+        <div class="version-bar__info">
+          <span class="material-icons-round" style="font-size:18px;color:var(--brand)">history</span>
+          <span class="version-bar__label">Versión consultada:</span>
+          <span class="version-bar__value" id="versionLabel">—</span>
+        </div>
+        <button class="btn btn--outline" onclick="addNewQuotation()" style="padding: 5px 12px; font-size: 12px;" data-tooltip="Agregar nueva versión de cotización">
+          <span class="material-icons-round" style="font-size: 16px;">add</span> Nueva Cotización
+        </button>
+      </div>
+
+      <!-- Detail empty state (when no history versions exist) -->
+      <div class="empty-state" id="detailEmptyState" style="display:none;">
+        <div class="icon-wrap" style="background:var(--amber-50);">
+          <span class="material-icons-round" style="color:var(--amber-500); font-size:36px;">post_add</span>
+        </div>
+        <h3>Sin historial de cotizaciones</h3>
+        <p>No existen cotizaciones previas para los criterios seleccionados. Puedes agregar una nueva cotización ahora.</p>
+        <button class="btn btn--primary" onclick="addNewQuotation()" style="margin-top:8px;">
+          <span class="material-icons-round">add_circle</span> Agregar Cotización
+        </button>
+      </div>
+
+      <div class="table-scroll" id="tableScroll">
+        <table class="tabla" id="mainTable">
+          <thead>
+            <tr>
+              <th style="width:44px; text-align:center; cursor:pointer;" onclick="toggleAllGroups()" data-tooltip="Expandir/Contraer Todo">
+                <span class="material-icons-round" id="toggleAllIcon" style="font-size:24px; color:var(--brand); transition:transform 0.3s;">unfold_less</span>
+              </th>
+              <th style="text-align:left;min-width:220px">
+                <span class="material-icons-round" style="font-size:24px;vertical-align:middle;margin-right:6px">list_alt</span> Descripción
+              </th>
+              <th>Factor</th>
+              <th>Costo Kg</th>
+              <th>Total</th>
+              <th>Total Comercial</th>
+              <th>Ajuste</th>
+              <th><span class="material-icons-round" style="font-size:24px;vertical-align:middle;margin-right:6px">request_quote</span> Cotización</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══════════ EMPTY STATE ═══════════ -->
+  <section class="card" id="emptyState">
+    <div class="empty-state">
+      <div class="icon-wrap"><span class="material-icons-round">inventory_2</span></div>
+      <h3>Sin procesos para mostrar</h3>
+      <p>Configura los criterios de búsqueda y presiona <strong>Buscar</strong> para cargar los procesos de costeo.</p>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════ ACTIONBAR ═══════════ -->
+<div class="actionbar" id="actionbar">
+  <!-- READ MODE buttons -->
+  <div id="actionRead">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="state-badge state-badge--read">
+        <span class="material-icons-round">visibility</span> Solo lectura
+      </span>
+      <div class="divider"></div>
+      <button class="btn btn--danger" onclick="showDeleteConfirm()" data-tooltip="Eliminar cotización">
+        <span class="material-icons-round">delete_outline</span> Eliminar
+      </button>
+      <button class="btn btn--primary" onclick="enterEditMode()" data-tooltip="Activar edición">
+        <span class="material-icons-round">edit_note</span> Modificar
+      </button>
+    </div>
+  </div>
+  <!-- EDIT MODE buttons -->
+  <div id="actionEdit" style="display:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="state-badge state-badge--edit">
+        <span class="material-icons-round">edit</span> Editando
+      </span>
+      <div class="divider"></div>
+      <button class="btn btn--warning" onclick="exitEditMode()" data-tooltip="Descartar cambios">
+        <span class="material-icons-round">undo</span> Cancelar
+      </button>
+      <button class="btn btn--success" onclick="doSave()" data-tooltip="Guardar cambios">
+        <span class="material-icons-round">save</span> Guardar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ DELETE CONFIRM ═══════════ -->
+<div class="delete-confirm" id="deleteConfirm">
+  <div class="delete-confirm__card">
+    <div class="icon-danger"><span class="material-icons-round">warning</span></div>
+    <h3>¿Eliminar esta cotización?</h3>
+    <p>Esta acción no se puede deshacer. Se eliminará la cotización y todos sus procesos asociados.</p>
+    <div class="delete-confirm__actions">
+      <button class="btn btn--ghost" onclick="hideDeleteConfirm()">
+        <span class="material-icons-round">close</span> Cancelar
+      </button>
+      <button class="btn btn--danger-fill" onclick="doDelete()">
+        <span class="material-icons-round">delete_forever</span> Sí, eliminar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TOAST ═══════════ -->
+<div class="toast" id="toast">
+  <span class="material-icons-round" id="toastIcon">check_circle</span>
+  <span id="toastText"></span>
+</div>
+
+<script>
+  // ─── State ───
+  let appMode = 'read'; // 'read' | 'edit'
+  const expanded = new Set(['MAT','TEJ','TIN','ACA']);
+
+  // ─── Data ───
+  let groups = [
+    { key:'MAT', desc:'MATERIALES', icon:'inventory_2', total:8.52, totCom:8.52, ajuste:0.15, cotizacion:8.67, children:[
+      {desc:'Algodón Pima 30/1', factor:0.85, cosKg:7.20, total:6.12, totCom:6.12},
+      {desc:'Lycra 20D', factor:0.15, cosKg:16.00, total:2.40, totCom:2.40},
+    ]},
+    { key:'TEJ', desc:'TEJEDURÍA', icon:'precision_manufacturing', total:1.45, totCom:1.45, ajuste:0.00, cotizacion:1.45, children:[
+      {desc:'Tejido circular', factor:1.00, cosKg:1.45, total:1.45, totCom:1.45},
+    ]},
+    { key:'TIN', desc:'TINTORERÍA', icon:'color_lens', total:2.80, totCom:2.90, ajuste:0.10, cotizacion:3.00, children:[
+      {desc:'Pre-tratamiento', factor:1.00, cosKg:0.80, total:0.80, totCom:0.80},
+      {desc:'Teñido reactivo', factor:1.00, cosKg:1.50, total:1.50, totCom:1.60},
+      {desc:'Fijado / Lavado', factor:1.00, cosKg:0.50, total:0.50, totCom:0.50},
+    ]},
+    { key:'ACA', desc:'ACABADOS', icon:'auto_fix_high', total:1.20, totCom:1.25, ajuste:0.05, cotizacion:1.30, children:[
+      {desc:'Compactado', factor:1.00, cosKg:0.70, total:0.70, totCom:0.70},
+      {desc:'Sanforizado', factor:1.00, cosKg:0.50, total:0.50, totCom:0.55},
+    ]},
+  ];
+
+  let summaryRows = [
+    { desc:'Merma (5%)', value: 0.70, cotVal: 0.72 },
+    { desc:'Costo sin Utilidad', value: 14.67, cotVal: 15.14 },
+  ];
+
+  let utilidad = { pct: 15, total: 2.20, totCom: 2.22, cotizacion: 2.27 };
+  let precioFinal = { total: 16.87, totCom: 17.04, ajuste: 0.30, cotizacion: 17.41 };
+  let rentabilidad = '2.17';
+
+  // ─── Math Calculation ───
+  function recalculateData() {
+    groups.forEach(g => {
+      let sumTotal = 0, sumTotCom = 0, sumAjuste = 0;
+      g.children.forEach(c => {
+        // Suma horizontal del sub-ítem
+        c.total = c.factor * c.cosKg;
+        if (c.totCom === undefined) c.totCom = c.total;
+        c.ajuste = c.ajuste || 0;
+        c.cotizacion = c.totCom + c.ajuste;
+        
+        // Acumulación vertical para la sección padre
+        sumTotal += c.total;
+        sumTotCom += c.totCom;
+        sumAjuste += c.ajuste;
+      });
+      g.total = sumTotal;
+      g.totCom = sumTotCom;
+      
+      // El ajuste del padre es la suma de los ajustes de los hijos + cualquier ajuste global propio
+      g.ajusteGlobal = g.ajusteGlobal || 0;
+      g.ajuste = sumAjuste + g.ajusteGlobal;
+      g.cotizacion = g.totCom + g.ajuste;
+    });
+  }
+
+  // ─── Render ───
+  function renderTable() {
+    recalculateData();
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+    const modeClass = appMode === 'edit' ? 'edit-mode' : 'read-mode';
+    document.getElementById('mainTable').className = 'tabla ' + modeClass;
+
+    const allKeys = groups.map(g => g.key);
+    const toggleIcon = document.getElementById('toggleAllIcon');
+    if (toggleIcon) {
+      toggleIcon.textContent = expanded.size === allKeys.length ? 'unfold_less' : 'unfold_more';
+    }
+
+    groups.forEach(g => {
+      const isExp = expanded.has(g.key);
+      const childCount = g.children.length;
+
+      // Group header
+      const htr = tr(`row-group-header ${isExp ? 'expanded' : ''}`, `
+        <td class="col-expand"><span class="material-icons-round chevron">expand_more</span></td>
+        <td class="col-desc">
+          <span class="group-toggle">
+            <span class="material-icons-round" style="font-size:24px;color:var(--brand);margin-right:6px">${g.icon}</span>
+            ${g.desc}
+            <span class="group-badge">${childCount}</span>
+          </span>
+        </td>
+        <td></td><td></td>
+        <td>${fmt(g.total)}</td><td>${fmt(g.totCom)}</td>
+        <td>${renderAjusteCell(fmt(g.ajuste), g.ajusteGlobal || 0, 'aju-'+g.key, g.comentarioAjuste)}</td>
+        <td>${fmt(g.cotizacion)}</td>
+      `);
+      htr.onclick = (e) => { if(!e.target.closest('.cell-editable')) toggleGroup(g.key); };
+      tbody.appendChild(htr);
+
+      // Children
+      g.children.forEach((c,i) => {
+        const c_ajuste = c.ajuste || 0;
+        const c_cot = c.cotizacion || c.totCom || c.total;
+        
+        const ctr = tr(`row-child ${isExp ? '' : 'hidden'}`, `
+          <td></td>
+          <td class="col-desc">
+            <span class="material-icons-round" style="font-size:14px;vertical-align:middle;margin-right:6px;color:var(--slate-400)">subdirectory_arrow_right</span>
+            ${c.desc}
+          </td>
+          <td>${c.factor}</td><td>${fmt(c.cosKg)}</td>
+          <td>${fmt(c.total)}</td><td>${fmt(c.totCom)}</td>
+          <td>${renderAjusteCell(fmt(c_ajuste), c_ajuste, 'child-'+g.key+'-'+i, c.comentarioAjuste)}</td>
+          <td>${fmt(c_cot)}</td>
+        `);
+        tbody.appendChild(ctr);
+      });
+    });
+
+    // Summary rows (clean)
+    summaryRows.forEach(s => {
+      tbody.appendChild(tr('row-subtotal', `
+        <td></td>
+        <td class="col-desc"><span class="material-icons-round" style="font-size:14px;vertical-align:middle;margin-right:6px;color:var(--slate-500)">functions</span>${s.desc}</td>
+        <td></td><td></td>
+        <td>${fmt(s.value)}</td><td>${fmt(s.value)}</td>
+        <td></td><td>${fmt(s.cotVal)}</td>
+      `));
+    });
+
+    // Utilidad
+    tbody.appendChild(tr('row-subtotal', `
+      <td></td>
+      <td class="col-desc"><span class="material-icons-round" style="font-size:14px;vertical-align:middle;margin-right:6px;color:var(--slate-500)">trending_up</span>Utilidad</td>
+      <td></td>
+      <td>${renderAjusteCell(utilidad.pct+'%', utilidad.pct, 'util-pct', utilidad.comentario)}</td>
+      <td>${fmt(utilidad.total)}</td><td>${fmt(utilidad.totCom)}</td>
+      <td></td><td>${fmt(utilidad.cotizacion)}</td>
+    `));
+
+    // Grand total
+    tbody.appendChild(tr('row-grand-total', `
+      <td></td>
+      <td class="col-desc"><span class="material-icons-round" style="font-size:18px;vertical-align:middle;margin-right:6px;color:var(--brand)">paid</span><strong>PRECIO FINAL CLIENTE</strong></td>
+      <td></td><td></td>
+      <td>${fmt(precioFinal.total)}</td><td>${fmt(precioFinal.totCom)}</td>
+      <td>${fmt(precioFinal.ajuste)}</td>
+      <td><strong>${renderAjusteCell(fmt(precioFinal.cotizacion), precioFinal.cotizacion, 'cot-final', precioFinal.comentario)}</strong></td>
+    `));
+
+    // Rentabilidad
+    tbody.appendChild(tr('row-grand-total', `
+      <td></td>
+      <td class="col-desc"><span class="material-icons-round" style="font-size:18px;vertical-align:middle;margin-right:6px;color:var(--green-500)">show_chart</span><strong>RENTABILIDAD</strong></td>
+      <td></td><td></td><td></td><td></td><td></td>
+      <td><strong>${rentabilidad} %</strong></td>
+    `));
+
+    document.getElementById('processCount').textContent = groups.length + ' procesos';
+  }
+
+  function tr(cls, html) {
+    const el = document.createElement('tr');
+    el.className = cls;
+    el.innerHTML = html;
+    return el;
+  }
+
+  function fmt(v) {
+    if (v === '' || v === undefined || v === null) return '';
+    if (typeof v === 'string' && v.includes('%')) return v;
+    return Number(v).toFixed(2);
+  }
+
+  function renderAjusteCell(displayVal, rawVal, id, currentComment) {
+    const hasComment = currentComment && currentComment.trim() !== '';
+    const alertBadge = hasComment 
+      ? `<span class="material-icons-round adjustment-comment-icon" data-tooltip="${currentComment}">chat</span>` 
+      : '';
+
+    return `
+      <div class="cell-ajuste-wrap">
+        <span class="cell-ajuste__display">
+          ${displayVal}
+        </span>
+        <button class="btn-add-ajuste" onclick="openAjusteModal('${id}', ${rawVal})" data-tooltip="Agregar ajuste">
+          <span class="material-icons-round">edit</span>
+        </button>
+        ${alertBadge}
+      </div>`;
+  }
+
+  // ─── Inline editing ───
+  let currentAjusteId = null;
+
+  function openAjusteModal(id, currentVal) {
+    if (appMode !== 'edit') return;
+    currentAjusteId = id;
+    
+    let desc = '', iconStr = '', htmlData = '', currentObs = '';
+    
+    if (id.startsWith('aju-')) {
+      const key = id.replace('aju-', '');
+      const g = groups.find(x => x.key === key);
+      desc = g.desc;
+      iconStr = g.icon;
+      htmlData = `
+        <div class="data-item"><label>Total</label><span>${fmt(g.total)}</span></div>
+        <div class="data-item"><label>Total Comercial</label><span>${fmt(g.totCom)}</span></div>
+        <div class="data-item"><label>Cotización Actual</label><span>${fmt(g.cotizacion)}</span></div>
+      `;
+      currentObs = g.comentarioAjuste || '';
+      currentVal = g.ajuste;
+    } else if (id.startsWith('child-')) {
+      const parts = id.split('-');
+      const key = parts[1];
+      const idx = parseInt(parts[2]);
+      const g = groups.find(x => x.key === key);
+      const c = g.children[idx];
+      desc = c.desc;
+      iconStr = 'subdirectory_arrow_right';
+      htmlData = `
+        <div class="data-item"><label>Costo Kg</label><span>${fmt(c.cosKg)}</span></div>
+        <div class="data-item"><label>Total</label><span>${fmt(c.total)}</span></div>
+        <div class="data-item"><label>Total Comercial</label><span>${fmt(c.totCom || c.total)}</span></div>
+        <div class="data-item"><label>Cotización Actual</label><span>${fmt(c.cotizacion || c.totCom || c.total)}</span></div>
+      `;
+      currentObs = c.comentarioAjuste || '';
+      currentVal = c.ajuste || 0;
+    } else if (id === 'util-pct') {
+      desc = 'Utilidad';
+      iconStr = 'trending_up';
+      htmlData = `
+        <div class="data-item"><label>Total</label><span>${fmt(utilidad.total)}</span></div>
+        <div class="data-item"><label>Total Comercial</label><span>${fmt(utilidad.totCom)}</span></div>
+        <div class="data-item"><label>Cotización Actual</label><span>${fmt(utilidad.cotizacion)}</span></div>
+      `;
+      currentObs = utilidad.comentario || '';
+      currentVal = utilidad.pct;
+    } else if (id === 'cot-final') {
+      desc = 'Precio Final Cliente';
+      iconStr = 'paid';
+      htmlData = `
+        <div class="data-item"><label>Total</label><span>${fmt(precioFinal.total)}</span></div>
+        <div class="data-item"><label>Total Comercial</label><span>${fmt(precioFinal.totCom)}</span></div>
+        <div class="data-item"><label>Cotización Actual</label><span>${fmt(precioFinal.cotizacion)}</span></div>
+      `;
+      currentObs = precioFinal.comentario || '';
+      currentVal = precioFinal.cotizacion;
+    }
+    
+    document.getElementById('modalAjusteTitle').innerHTML = '<span class="material-icons-round" style="margin-right:8px;vertical-align:middle;">' + iconStr + '</span> Ajuste: ' + desc;
+    
+    document.getElementById('modalRowData').innerHTML = `
+      <div class="modal-accordion-header" onclick="toggleModalData(this)">
+        <span>Datos Generales</span>
+        <span class="material-icons-round chevron">expand_more</span>
+      </div>
+      <div class="data-item"><label>Concepto</label><span>${desc}</span></div>
+      <div class="modal-accordion-details" id="modalDataDetails">
+        ${htmlData}
+      </div>
+    `;
+    
+    document.getElementById('modalAjusteVal').value = currentVal || 0;
+    document.getElementById('modalAjusteObs').value = currentObs;
+    document.getElementById('modalAjusteError').style.display = 'none';
+    
+    document.getElementById('ajusteModal').classList.add('show');
+    document.getElementById('modalAjusteVal').focus();
+  }
+
+  function toggleModalData(headerEl) {
+    headerEl.classList.toggle('collapsed');
+    const details = document.getElementById('modalDataDetails');
+    if (details) {
+      details.classList.toggle('collapsed');
+    }
+  }
+
+  function closeAjusteModal() {
+    document.getElementById('ajusteModal').classList.remove('show');
+    currentAjusteId = null;
+  }
+
+  function confirmAjusteModal() {
+    const valStr = document.getElementById('modalAjusteVal').value;
+    const val = valStr ? parseFloat(valStr) : 0;
+    const obs = document.getElementById('modalAjusteObs').value.trim();
+    
+    if (obs === '') {
+      document.getElementById('modalAjusteError').style.display = 'block';
+      return;
+    }
+    
+    if (currentAjusteId.startsWith('aju-')) {
+      const key = currentAjusteId.replace('aju-', '');
+      const g = groups.find(x => x.key === key);
+      if (g) { 
+        g.ajusteGlobal = val; 
+        g.comentarioAjuste = obs; 
+      }
+    } else if (currentAjusteId.startsWith('child-')) {
+      const parts = currentAjusteId.split('-');
+      const key = parts[1];
+      const idx = parseInt(parts[2]);
+      const g = groups.find(x => x.key === key);
+      if (g && g.children[idx]) {
+        const c = g.children[idx];
+        c.ajuste = val;
+        c.comentarioAjuste = obs;
+      }
+    } else if (currentAjusteId === 'util-pct') {
+      utilidad.pct = val; utilidad.comentario = obs;
+    } else if (currentAjusteId === 'cot-final') {
+      precioFinal.cotizacion = val; precioFinal.comentario = obs;
+    }
+    
+    closeAjusteModal();
+    renderTable();
+    showToast('Ajuste aplicado con observación', 'success');
+  }
+
+  // ─── Group expand/collapse (only body, header stays) ───
+  function toggleGroup(key) {
+    if (expanded.has(key)) expanded.delete(key);
+    else expanded.add(key);
+    renderTable();
+  }
+
+  function toggleAllGroups() {
+    const allKeys = groups.map(g => g.key);
+    if (expanded.size === allKeys.length) {
+      expanded.clear();
+    } else {
+      allKeys.forEach(k => expanded.add(k));
+    }
+    renderTable();
+  }
+
+  // ─── CRUD State Machine ───
+  function enterEditMode() {
+    appMode = 'edit';
+    document.getElementById('actionRead').style.display = 'none';
+    document.getElementById('actionEdit').style.display = 'block';
+    document.getElementById('mainTable').className = 'tabla edit-mode';
+    showToast('Modo edición activado — haz clic en las celdas editables', 'warning');
+  }
+
+  function exitEditMode() {
+    appMode = 'read';
+    document.getElementById('actionRead').style.display = 'block';
+    document.getElementById('actionEdit').style.display = 'none';
+    document.getElementById('mainTable').className = 'tabla read-mode';
+    showToast('Edición cancelada', 'warning');
+  }
+
+  function doSave() {
+    appMode = 'read';
+    document.getElementById('actionRead').style.display = 'block';
+    document.getElementById('actionEdit').style.display = 'none';
+    document.getElementById('mainTable').className = 'tabla read-mode';
+
+    // Promote previous "Vigente" to "Aprobada"
+    historialData.forEach(h => {
+      if (h.estado === 'Vigente') {
+        h.estado = 'Aprobada'; h.icon = 'verified';
+        h.bg = 'rgba(99,102,241,0.1)'; h.color = 'var(--indigo-600)';
+      }
+    });
+
+    // Create new version
+    const maxVer = historialData.reduce((m, h) => Math.max(m, h.version), 0);
+    const newVer = maxVer + 1;
+    const d = new Date();
+    const fecha = String(d.getDate()).padStart(2,'0') + '/' +
+                  String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
+    historialData.unshift({
+      version: newVer, estado: 'Vigente', user: 'J. Calles', fecha,
+      icon: 'check_circle', bg: 'var(--green-50)', color: 'var(--green-600)'
+    });
+
+    saveToStorage();
+    renderTable();
+    showToast('¡Versión ' + newVer + ' guardada correctamente!', 'success');
+  }
+
+  // ─── Storage ───
+  function saveToStorage() {
+    try {
+      localStorage.setItem('pcx_groups', JSON.stringify(groups));
+      localStorage.setItem('pcx_historial', JSON.stringify(historialData));
+      localStorage.setItem('pcx_utilidad', JSON.stringify(utilidad));
+      localStorage.setItem('pcx_precioFinal', JSON.stringify(precioFinal));
+      localStorage.setItem('pcx_rentabilidad', rentabilidad);
+    } catch(e) {}
+  }
+
+  function loadFromStorage() {
+    try {
+      const g = localStorage.getItem('pcx_groups');
+      const h = localStorage.getItem('pcx_historial');
+      const u = localStorage.getItem('pcx_utilidad');
+      const p = localStorage.getItem('pcx_precioFinal');
+      const r = localStorage.getItem('pcx_rentabilidad');
+      if (g) { groups = JSON.parse(g); }
+      if (h) { historialData = JSON.parse(h); }
+      if (u) { utilidad = JSON.parse(u); }
+      if (p) { precioFinal = JSON.parse(p); }
+      if (r) { rentabilidad = r; }
+    } catch(e) {}
+  }
+
+  // ─── Delete ───
+  function showDeleteConfirm() {
+    document.getElementById('deleteConfirm').classList.add('show');
+  }
+  function hideDeleteConfirm() {
+    document.getElementById('deleteConfirm').classList.remove('show');
+  }
+  function doDelete() {
+    hideDeleteConfirm();
+    if (currentVersion) {
+      const idx = historialData.findIndex(h => h.version === currentVersion.version);
+      if (idx !== -1) {
+        historialData.splice(idx, 1);
+        saveToStorage();
+      }
+    } else if (historialData.length > 0) {
+      historialData.shift();
+      saveToStorage();
+    }
+
+    renderHistory();
+
+    if (historialData.length > 0) {
+      selectVersion(0);
+      showToast('Versión eliminada. Mostrando última versión v' + historialData[0].version, 'warning');
+    } else {
+      currentVersion = null;
+      showDetailEmptyState();
+      showToast('Cotización eliminada. No quedan más versiones.', 'danger');
+    }
+  }
+
+  // ─── Criterios toggle ───
+  function toggleCriterios() {
+    const s = document.getElementById('criteriosSection');
+    s.classList.toggle('criterios--expanded');
+    s.classList.toggle('criterios--collapsed');
+  }
+
+  // ─── Density ───
+  function setDensity(btn, mode) {
+    document.querySelectorAll('.density-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.documentElement.style.setProperty('--row-h', mode === 'comoda' ? '52px' : '42px');
+  }
+
+  // ─── Historial data & Pin State ───
+  let historialData = [
+    { version:3, estado:'Vigente',  user:'J. Calles', fecha:'04/08/2026', icon:'check_circle', bg:'var(--green-50)',       color:'var(--green-600)'  },
+    { version:2, estado:'Aprobada', user:'M. López',  fecha:'28/07/2026', icon:'verified',     bg:'rgba(99,102,241,0.1)', color:'var(--indigo-600)' },
+    { version:1, estado:'Borrador', user:'J. Calles', fecha:'25/07/2026', icon:'edit_note',    bg:'var(--amber-50)',       color:'var(--amber-700)'  },
+  ];
+  let viewingFromHistory = false;
+  let currentVersion = null;
+  let isHistoryPinned = true;
+
+  function toggleHistoryPin() {
+    isHistoryPinned = !isHistoryPinned;
+    applyHistoryPanelState();
+  }
+
+  function applyHistoryPanelState() {
+    const wc = document.getElementById('workspaceContent');
+    const hs = document.getElementById('historySection');
+    const btnPin = document.getElementById('btnPinHistory');
+    const summaryBtn = document.getElementById('summaryPinBtn');
+
+    if (isHistoryPinned) {
+      hs.style.display = 'block';
+      wc.classList.remove('history-unpinned');
+      wc.classList.add('history-pinned');
+      if (btnPin) {
+        btnPin.classList.add('pinned');
+        btnPin.setAttribute('data-tooltip', 'Desanclar / Ocultar historial');
+      }
+      if (summaryBtn) {
+        summaryBtn.innerHTML = '<span class="material-icons-round">push_pin</span> Desanclar Historial';
+      }
+    } else {
+      hs.style.display = 'none';
+      wc.classList.remove('history-pinned', 'history-unpinned');
+      if (btnPin) {
+        btnPin.classList.remove('pinned');
+        btnPin.setAttribute('data-tooltip', 'Anclar historial');
+      }
+      if (summaryBtn) {
+        summaryBtn.innerHTML = '<span class="material-icons-round">push_pin</span> Anclar Historial';
+      }
+    }
+  }
+
+  // ─── Search ───
+  function doSearch() {
+    // Actualizar los chips (resumen) con los valores ingresados
+    const vUnd = document.getElementById('filter_und').value || 'Textil';
+    const vTipo = document.getElementById('filter_tipo').value || 'Regular';
+    const vCliente = document.getElementById('filter_cliente').value || 'No especificado';
+    const vTela = document.getElementById('filter_tela').value || '-';
+    
+    document.getElementById('chipsContainer').innerHTML = `
+      <div class="chip"><span class="material-icons-round chip__icon">business</span><span class="chip__label">Und. Negocio:</span><span class="chip__value">${vUnd}</span></div>
+      <div class="chip"><span class="material-icons-round chip__icon">category</span><span class="chip__label">Tipo:</span><span class="chip__value">${vTipo}</span></div>
+      <div class="chip"><span class="material-icons-round chip__icon">person</span><span class="chip__label">Cliente:</span><span class="chip__value">${vCliente}</span></div>
+      <div class="chip"><span class="material-icons-round chip__icon">qr_code</span><span class="chip__label">Tela:</span><span class="chip__value">${vTela}</span></div>
+    `;
+
+    document.getElementById('emptyState').style.display = 'none';
+    
+    // Al buscar, siempre se muestra el historial anclado a la izquierda
+    isHistoryPinned = true;
+    applyHistoryPanelState();
+    renderHistory();
+
+    if (historialData && historialData.length > 0) {
+      selectVersion(0);
+      showToast('Historial cargado: mostrando última versión v' + historialData[0].version, 'success');
+    } else {
+      showDetailEmptyState();
+      showToast('Sin historial registrado para este filtro', 'warning');
+    }
+
+    toggleCriterios();
+  }
+
+  function showDetailEmptyState() {
+    const cs = document.getElementById('costeoSection');
+    cs.style.display = 'flex';
+    cs.classList.add('fade-in');
+    
+    document.getElementById('versionBar').style.display = 'none';
+    document.getElementById('tableScroll').style.display = 'none';
+    document.getElementById('detailEmptyState').style.display = 'flex';
+    document.getElementById('actionbar').style.display = 'none';
+  }
+
+  function showCosteoTable() {
+    const cs = document.getElementById('costeoSection');
+    cs.style.display = 'flex';
+    cs.classList.add('fade-in');
+    
+    document.getElementById('detailEmptyState').style.display = 'none';
+    document.getElementById('tableScroll').style.display = 'block';
+    document.getElementById('mainTable').style.display = 'table';
+    document.getElementById('actionbar').style.display = 'flex';
+    appMode = 'read';
+    document.getElementById('actionRead').style.display = 'block';
+    document.getElementById('actionEdit').style.display = 'none';
+    renderTable();
+  }
+
+  function addNewQuotation() {
+    const maxVer = historialData.reduce((m, h) => Math.max(m, h.version), 0);
+    const newVer = maxVer + 1;
+    const d = new Date();
+    const fecha = String(d.getDate()).padStart(2,'0') + '/' +
+                  String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
+    
+    const newQuotation = {
+      version: newVer,
+      estado: 'Borrador',
+      user: 'J. Calles',
+      fecha: fecha,
+      icon: 'edit_note',
+      bg: 'var(--amber-50)',
+      color: 'var(--amber-700)'
+    };
+
+    historialData.unshift(newQuotation);
+    saveToStorage();
+    
+    selectVersion(0);
+    enterEditMode();
+    showToast('¡Nueva cotización v' + newVer + ' creada! Puedes modificar los valores.', 'success');
+  }
+
+  function renderHistory() {
+    const list = document.getElementById('historyList');
+    list.innerHTML = '';
+
+    if (!historialData || historialData.length === 0) {
+      list.innerHTML = `
+        <div style="text-align:center; padding: 24px 12px; color: var(--text-muted);">
+          <span class="material-icons-round" style="font-size:36px; color: var(--slate-300); margin-bottom:8px;">history_toggle_off</span>
+          <p style="font-size:12px; font-weight:500; margin-bottom:12px;">Sin versiones registradas</p>
+          <button class="btn btn--outline" onclick="addNewQuotation()" style="width:100%; justify-content:center; font-size:12px;">
+            <span class="material-icons-round" style="font-size:16px;">add</span> Crear primera cotización
+          </button>
+        </div>
+      `;
+      return;
+    }
+
+    historialData.forEach((item, idx) => {
+      const card = document.createElement('div');
+      card.className = 'history-card' + (currentVersion && item.version === currentVersion.version ? ' history-card--active' : (!currentVersion && idx === 0 ? ' history-card--active' : ''));
+      card.onclick = () => selectVersion(idx);
+      card.innerHTML = `
+        <div class="history-dot" style="background:${item.color}"></div>
+        <div class="history-body">
+          <div class="history-header">
+            <span class="history-version">Versión ${item.version}</span>
+            <span class="history-badge" style="background:${item.bg};color:${item.color}">
+              <span class="material-icons-round" style="font-size:12px">${item.icon}</span>
+              ${item.estado}
+            </span>
+            ${idx === 0 ? '<span class="history-recent-tag">Más reciente</span>' : ''}
+          </div>
+          <div class="history-meta">
+            <span class="material-icons-round">person</span>
+            ${item.user}
+            <span class="history-sep">•</span>
+            <span class="material-icons-round">calendar_today</span>
+            ${item.fecha}
+          </div>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  function selectVersion(idx) {
+    if (!historialData || !historialData[idx]) return;
+    viewingFromHistory = true;
+    currentVersion = historialData[idx];
+    document.getElementById('versionLabel').textContent =
+      'v' + currentVersion.version + ' — ' + currentVersion.estado + ' · ' + currentVersion.user + ' · ' + currentVersion.fecha;
+    document.getElementById('versionBar').style.display = 'flex';
+    showCosteoTable();
+    renderHistory();
+    showToast('Versión ' + currentVersion.version + ' cargada', 'success');
+  }
+
+  function backToHistory() {
+    document.getElementById('costeoSection').style.display = 'none';
+    document.getElementById('actionbar').style.display = 'none';
+    document.getElementById('versionBar').style.display = 'none';
+    const hs = document.getElementById('historySection');
+    hs.style.display = 'block';
+    viewingFromHistory = false;
+    currentVersion = null;
+  }
+
+  // ─── Toast ───
+  function showToast(msg, type) {
+    const toast = document.getElementById('toast');
+    const icon = document.getElementById('toastIcon');
+    document.getElementById('toastText').textContent = msg;
+    toast.className = 'toast toast--' + (type || 'success');
+    icon.textContent = type === 'danger' ? 'error' : type === 'warning' ? 'info' : 'check_circle';
+    toast.classList.add('show');
+    clearTimeout(window._tt);
+    window._tt = setTimeout(() => toast.classList.remove('show'), 2800);
+  }
+
+  // ─── Init ───
+  loadFromStorage();
+
+  // Close modal on escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && document.getElementById('ajusteModal').classList.contains('show')) {
+      closeAjusteModal();
+    }
+  });
+</script>
+
+<!-- ═══════════ MODAL AJUSTE ═══════════ -->
+<div class="modal-overlay" id="ajusteModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div style="display:flex; align-items:center; gap:var(--sp-3);">
+        <h3 id="modalAjusteTitle" style="display:flex; align-items:center; margin:0;">Agregar Ajuste</h3>
+      </div>
+      <button class="btn-icon" onclick="closeAjusteModal()"><span class="material-icons-round">close</span></button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="row-data-box" id="modalRowData">
+      </div>
+      
+      <div class="form-field" style="margin-top: var(--sp-4);">
+        <label>Cantidad de Ajuste</label>
+        <div class="input-wrap">
+          <input type="number" step="0.01" id="modalAjusteVal" placeholder="0.00" style="padding-left:14px;">
+        </div>
+      </div>
+      
+      <div class="form-field" style="margin-top: var(--sp-3);">
+        <label>Observación <span style="color:var(--red-500)">*</span></label>
+        <textarea id="modalAjusteObs" placeholder="Escribe el motivo del ajuste..." style="width:100%; height:80px; padding:10px 14px; border:1.5px solid var(--border); border-radius:var(--radius-md); font-family:inherit; font-size:13px; outline:none; resize:none; transition:all 0.2s;"></textarea>
+      </div>
+      <p id="modalAjusteError" style="color:var(--red-500); font-size:12px; margin-top:6px; display:none;">
+        <span class="material-icons-round" style="font-size:14px; vertical-align:middle; margin-right:4px;">error</span>
+        La observación es obligatoria para guardar un ajuste.
+      </p>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn btn--ghost" onclick="closeAjusteModal()">Cancelar</button>
+      <button class="btn btn--primary" onclick="confirmAjusteModal()">Guardar Ajuste</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
