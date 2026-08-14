@@ -4,25 +4,15 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
-import { ListaUnidadNegocioResponse } from 'src/app/interfaces/cotizaciones/response/lista-unidad-negocio.response';
-import { ListaUnidadNegocioTipoResponse } from 'src/app/interfaces/cotizaciones/response/lista-unidad-negocio-tipo.response';
-import { ListaRecetasAntipillingResponse } from 'src/app/interfaces/cotizaciones/response/lista-recetas-antipilling.response';
-import { ValidaColorExisteResponse } from 'src/app/interfaces/cotizaciones/response/valida-color-existe.response';
-import { ListaTelasResponse } from 'src/app/interfaces/cotizaciones/response/lista-telas.response';
-import { RutaXCodTelaResponse } from 'src/app/interfaces/cotizaciones/response/ruta-x-cod-tela.response';
-import { ListaColoresXClienteResponse } from 'src/app/interfaces/cotizaciones/response/lista-colores-x-cliente.response';
-import { ListaPrecioXColorResponse } from 'src/app/interfaces/cotizaciones/response/lista-precio-x-color.response';
-import { ListarProcesosExportacionResponse } from 'src/app/interfaces/cotizaciones/response/listar-procesos-exportacion.response';
-import { ProcesoCotizacionResponse } from 'src/app/interfaces/cotizaciones/response/proceso-cotizacion.response';
-import { ObtenerNuevoCorrelativoVersionResponse } from 'src/app/interfaces/cotizaciones/response/obtener-nuevo-correlativo-version.response';
-import { ListaCentroCostoResponse } from 'src/app/interfaces/cotizaciones/response/lista-centro-costo.response';
-import { ListaIntensidadResponse } from 'src/app/interfaces/cotizaciones/response/lista-intensidad.response';
-import { ListaHiladoXTelaResponse } from 'src/app/interfaces/cotizaciones/response/lista-hilado-x-tela.response';
-
-import { ListaPrecioXColorRequest } from 'src/app/interfaces/cotizaciones/request/lista-precio-x-color.request';
-import { ListarProcesosExportacionRequest } from 'src/app/interfaces/cotizaciones/request/listar-procesos-exportacion.request';
-import { ObtenerNuevoCorrelativoVersionRequest } from 'src/app/interfaces/cotizaciones/request/obtener-nuevo-correlativo-version.request';
-import { ProcesoCotizacionRequest } from 'src/app/interfaces/cotizaciones/request/proceso-cotizacion.request';
+import {
+  ListaUnidadNegocioResponse, ListaUnidadNegocioTipoResponse, ListaRecetasAntipillingResponse,
+  ValidaColorExisteResponse, ListaTelasResponse, RutaXCodTelaResponse, ListaColoresXClienteResponse,
+  ListaPrecioXColorResponse, ListarProcesosExportacionResponse, ProcesoCotizacionResponse,
+  ObtenerNuevoCorrelativoVersionResponse, ListaCentroCostoResponse, ListaIntensidadResponse,
+  ListaHiladoXTelaResponse,
+  ListaPrecioXColorRequest, ListarProcesosExportacionRequest, ObtenerNuevoCorrelativoVersionRequest,
+  ProcesoCotizacionRequest
+} from 'src/app/interfaces/cotizaciones';
 
 @Injectable({
   providedIn: 'root'

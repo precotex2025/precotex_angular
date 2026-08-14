@@ -1,5 +1,4 @@
 export * from './lista-centro-costo.response';
-export * from './lista-unidad-negocio.response';
 export * from './lista-colores-x-cliente.response';
 export * from './lista-hilado-x-tela.response';
 export * from './lista-intensidad.response';
@@ -13,4 +12,3 @@ export * from './obtener-nuevo-correlativo-version.response';
 export * from './proceso-cotizacion.response';
 export * from './ruta-x-cod-tela.response';
 export * from './valida-color-existe.response';
-
