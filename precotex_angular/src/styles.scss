@@ -10,36 +10,36 @@
    variables para no perder el lenguaje visual de las cards.
    ============================================================ */
 :root {
-  /* 1. TOKENS: PRIMITIVAS */
+  /* 1. TOKENS: PRIMITIVAS — paleta estándar del ERP (Material Indigo + #337ab7) */
   --c-indigo-900: #1a237e;
-  --c-indigo-700: #4338CA;
-  --c-indigo-600: #4F46E5;
-  --c-indigo-500: #6366F1;
-  --c-indigo-200: #C7D2FE;
-  --c-indigo-100: #E0E7FF;
-  --c-indigo-050: #EEF2FF;
-  --c-violet-600: #7C3AED;
-  --c-teal-400: #2DD4BF;
+  --c-indigo-700: #303f9f;
+  --c-indigo-600: #3f51b5;
+  --c-indigo-500: #3949ab;
+  --c-indigo-200: #9fa8da;
+  --c-indigo-100: #c5cae9;
+  --c-indigo-050: #e8eaf6;
+  --c-violet-600: #337ab7;
+  --c-teal-400: #4caf50;
 
-  --c-neutral-900: #0f172a;
-  --c-neutral-600: #475569;
-  --c-neutral-400: #94a3b8;
-  --c-neutral-300: #CBD5E1;
-  --c-neutral-200: #e2e8f0;
-  --c-neutral-100: #f1f5f9;
-  --c-neutral-050: #f8fafc;
+  --c-neutral-900: #212121;
+  --c-neutral-600: rgba(0, 0, 0, 0.6);
+  --c-neutral-400: #9e9e9e;
+  --c-neutral-300: #bdbdbd;
+  --c-neutral-200: #e0e0e0;
+  --c-neutral-100: #e6e6e6;
+  --c-neutral-050: #f5f6fa;
   --c-white: #ffffff;
 
-  --c-success-700: #16A34A;
-  --c-success-600: #22C55E;
-  --c-success-050: #F0FDF4;
-  --c-warning-800: #8a4b00;
-  --c-warning-050: #fff4e5;
-  --c-danger-700: #DC2626;
-  --c-danger-600: #EF4444;
-  --c-danger-050: #FEF2F2;
-  --c-orange-500: #F97316;
-  --c-orange-050: #FFF7ED;
+  --c-success-700: #2e7d32;
+  --c-success-600: #4caf50;
+  --c-success-050: #e8f5e9;
+  --c-warning-800: #b45309;
+  --c-warning-050: #fff8e1;
+  --c-danger-700: #c62828;
+  --c-danger-600: #d32f2f;
+  --c-danger-050: rgba(211, 47, 47, 0.08);
+  --c-orange-500: #f59e0b;
+  --c-orange-050: #fff8e1;
 
   /* 2. TOKENS: SEMÁNTICOS */
   --color-brand:          var(--c-indigo-600);
@@ -52,16 +52,16 @@
   --color-surface:        var(--c-white);
   --color-surface-sunken: var(--c-neutral-050);
   --color-surface-alt:    var(--c-neutral-100);
-  --color-focus-ring:     rgba(99, 102, 241, 0.3);
+  --color-focus-ring:     rgba(63, 81, 181, 0.22);
 
-  --gradient-brand:      linear-gradient(135deg, var(--c-indigo-600), var(--c-violet-600));
-  --gradient-top-border: linear-gradient(90deg, var(--c-indigo-500), var(--c-teal-400));
+  --gradient-brand:      linear-gradient(135deg, var(--c-indigo-600), #5c6bc0);
+  --gradient-top-border: var(--c-violet-600);
 
   /* Roles de fila */
   --row-group-bg:    var(--c-neutral-100);
   --row-subtotal-bg: var(--c-warning-050);
   --row-total-bg:    var(--c-indigo-050);
-  --row-hover-bg:    #eef2ff;
+  --row-hover-bg:    #e1e1e1;
   --row-zebra-bg:    var(--c-neutral-050);
   --cell-editable-bg: var(--c-white);
   --cell-editable-bd: var(--c-neutral-400);
@@ -333,12 +333,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
   height: 4px;
 
-  background: linear-gradient(
-    90deg,
-    #514f6b,
-    #817d9b,
-    #514f6b
-  );
+  background: #337ab7;
 }
 
 
@@ -362,7 +357,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 /* Título */
 
 .cot-swal-title {
-  color: #1e293b !important;
+  color: #212121 !important;
 
   font-size: 21px !important;
 
@@ -375,7 +370,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 /* Texto */
 
 .cot-swal-text {
-  color: #64748b !important;
+  color: rgba(0, 0, 0, 0.6) !important;
 
   font-size: 14px !important;
 
@@ -386,13 +381,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 /* Botón */
 
 .cot-swal-confirm {
-  background: #514f6b !important;
+  background: #3f51b5 !important;
 
   color: #ffffff !important;
 
   border: none !important;
 
-  border-radius: 12px !important;
+  border-radius: 6px !important;
 
   padding: 10px 26px !important;
 
@@ -409,12 +404,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .cot-swal-confirm:hover {
-  background: #5d5a78 !important;
+  background: #303f9f !important;
 
   transform: translateY(-2px);
 
   box-shadow:
-    0 8px 18px rgba(81, 79, 107, 0.30) !important;
+    0 8px 18px rgba(63, 81, 181, 0.30) !important;
 }
 
 .cot-swal-confirm:active {
@@ -425,7 +420,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 /* Barra del timer */
 
 .cot-swal-popup .swal2-timer-progress-bar {
-  background: #514f6b !important;
+  background: #3f51b5 !important;
 }
 
 

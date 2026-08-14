@@ -7,56 +7,46 @@
 :host {
 
   /* ==========================================================
-     COLOR PRINCIPAL DEL MÓDULO
-     CAMBIA SOLO ESTA LÍNEA PARA MODIFICAR EL TEMA
+     COLOR PRINCIPAL DEL MÓDULO — paleta estándar del ERP
      (declarado también en :root más abajo, ver [6.0], porque el
      desplegable de ng-select cuelga de <body> vía appendTo y no
      alcanza las variables de :host).
   ========================================================== */
-  --cot-primary: #514f6b;
+  --cot-primary: #3f51b5;
+  --cot-primary-dark: #303f9f;
+  --cot-primary-line: #337ab7;
+  --cot-primary-subtle: #e8eaf6;
+  --cot-primary-ring: rgba(63, 81, 181, 0.22);
+  --cot-primary-shadow: rgba(63, 81, 181, 0.35);
 
   /* ==========================================================
-     COLORES DERIVADOS AUTOMÁTICAMENTE
+     COLORES DERIVADOS
   ========================================================== */
 
   --color-brand: var(--cot-primary);
+  --color-brand-subtle: var(--cot-primary-subtle);
+  --color-focus-ring: var(--cot-primary-ring);
 
-  --color-brand-subtle: color-mix(
-    in srgb,
-    var(--cot-primary) 10%,
-    white
-  );
-
-  --color-focus-ring: color-mix(
-    in srgb,
-    var(--cot-primary) 22%,
-    transparent
-  );
-
-  --gradient-brand: linear-gradient(
-    135deg,
-    var(--cot-primary),
-    color-mix(in srgb, var(--cot-primary) 70%, #ffffff)
-  );
-
-  --gradient-top-border: linear-gradient(
-    90deg,
-    var(--cot-primary),
-    color-mix(in srgb, var(--cot-primary) 55%, #ffffff)
-  );
+  --gradient-brand: linear-gradient(135deg, var(--cot-primary), #5c6bc0);
+  --gradient-top-border: var(--cot-primary-line);
 
   /* ==========================================================
      COLORES BASE DEL FORMULARIO
   ========================================================== */
 
   --color-surface: #ffffff;
-  --color-surface-sunken: #f8fafc;
+  --color-surface-sunken: #f5f6fa;
 
-  --color-border: #d9dee7;
+  --color-border: #e0e0e0;
 
-  --color-text: #1e293b;
-  --color-text-muted: #64748b;
-  --color-text-disabled: #94a3b8;
+  --color-text: #212121;
+  --color-text-muted: rgba(0, 0, 0, 0.6);
+  --color-text-disabled: #9e9e9e;
+
+  --color-danger: #d32f2f;
+  --color-danger-subtle: rgba(211, 47, 47, 0.08);
+  --color-success: #4caf50;
+  --color-warning: #b45309;
 
   /* ==========================================================
      [6.0] GEOMETRÍA DE CAMPO DE FILTRO
@@ -64,8 +54,8 @@
      Cambiar --cot-filter-height reajusta el resto por calc().
   ========================================================== */
 
-  --cot-filter-height: 48px;
-  --cot-filter-radius: 10px;
+  --cot-filter-height: 44px;
+  --cot-filter-radius: 4px;
   --cot-filter-border: var(--color-border);
   --cot-filter-border-w: 1px;
 
@@ -110,11 +100,11 @@
    contraparte en :host — para poder estilarlo desde este mismo
    archivo en vez de tocar styles.scss global. */
 ::ng-deep :root {
-  --cot-primary: #514f6b;
-  --color-border: #d9dee7;
-  --color-text: #1e293b;
-  --color-text-disabled: #94a3b8;
-  --color-brand-subtle: color-mix(in srgb, var(--cot-primary) 10%, white);
+  --cot-primary: #3f51b5;
+  --color-border: #e0e0e0;
+  --color-text: #212121;
+  --color-text-disabled: #9e9e9e;
+  --color-brand-subtle: #e8eaf6;
 }
 
 .cot-workspace.densidad-comoda {
@@ -144,8 +134,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--sp-4);
-  padding: 0;
+  padding: 8px 10px 10px;
+  background-color: var(--cot-primary);
+  border-bottom: 1px solid var(--cot-primary-line);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
 .cot-toolbar__title {
@@ -157,59 +149,60 @@
 
   h1 {
     margin: 0;
-    font-size: 17px;
+    font-size: var(--fs-lg);
     font-weight: var(--fw-bold);
-    color: var(--color-text);
-    letter-spacing: -0.02em;
+    color: #ffffff;
+    letter-spacing: normal;
   }
 }
 
-.cot-toolbar__icon-circle {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-lg);
-  background: var(--gradient-brand);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.28);
+.cot-toolbar__icon {
+  color: #ffffff;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
-
-  mat-icon {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
-  }
 }
 
 /* ============================================================
-   SECCIÓN 6 — PANEL DE CRITERIOS (card con borde superior degradado)
+   SECCIÓN 6 — PANEL DE CRITERIOS
    ============================================================ */
 
 .cot-criterios {
   flex: 0 0 auto;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-sm);
   padding: var(--sp-4);
   position: relative;
-  overflow: hidden;
   transition: padding 0.15s ease;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--gradient-top-border);
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  }
 }
 
 .cot-criterios--colapsado {
   padding: var(--sp-2) var(--sp-4);
+}
+
+.cot-section-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px 0;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--cot-primary);
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: var(--cot-primary);
+  }
+}
+
+.cot-criterios--colapsado .cot-section-title {
+  display: none;
 }
 
 /* --- Estado colapsado --- */
@@ -233,18 +226,11 @@
   display: flex;
   align-items: center;
   gap: var(--sp-2);
-  padding: 8px 12px;
+  padding: 6px 10px;
   min-width: 0;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-brand);
-  border-radius: var(--radius-lg);
-  transition: transform 0.2s, box-shadow 0.2s;
-
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
-  }
+  background: var(--color-surface-sunken);
+  border: 1px solid #e6e6e6;
+  border-radius: var(--radius-sm);
 }
 
 .cot-criterio-card__icon {
@@ -285,7 +271,7 @@
 .cot-criterio-card__value {
   font-size: var(--fs-sm);
   font-weight: var(--fw-bold);
-  color: var(--color-text);
+  color: var(--cot-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -299,7 +285,7 @@
 
 .cot-btn-editar {
   flex: 0 0 auto;
-  border-radius: var(--radius-pill) !important;
+  border-radius: 6px !important;
   transition: all 0.2s !important;
 
   &:hover {
@@ -854,7 +840,7 @@ Alineación y tamaño del dropdown
   padding: var(--sp-4);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-sm);
 }
 
@@ -885,7 +871,7 @@ Alineación y tamaño del dropdown
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 3px 8px rgba(79, 70, 229, 0.25);
+  box-shadow: 0 3px 8px var(--cot-primary-ring);
 
   mat-icon { font-size: 18px; width: 18px; height: 18px; color: var(--c-white); }
 }
@@ -930,8 +916,8 @@ Alineación y tamaño del dropdown
   align-items: flex-start;
   gap: 12px;
   padding: 12px 14px;
-  border-radius: var(--radius-lg);
-  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
   background: var(--color-surface);
   cursor: pointer;
   transition: all 0.2s;
@@ -940,7 +926,7 @@ Alineación y tamaño del dropdown
 
   &--activa {
     border-color: var(--color-brand);
-    background: rgba(99, 102, 241, 0.03);
+    background: var(--color-brand-subtle);
   }
 
   &--nueva {
@@ -956,7 +942,7 @@ Alineación y tamaño del dropdown
   border-radius: 50%;
   flex-shrink: 0;
   margin-top: 5px;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 0 0 3px var(--cot-primary-ring);
   background: var(--color-brand);
 
   &.cot-dot--vigente  { background: var(--c-success-600); }
@@ -1016,7 +1002,7 @@ Alineación y tamaño del dropdown
   font-weight: var(--fw-bold);
   padding: 2px 6px;
   border-radius: var(--radius-pill);
-  background: var(--c-teal-400);
+  background: var(--color-success);
   color: var(--c-white);
   margin-left: auto;
 }
@@ -1062,8 +1048,8 @@ Alineación y tamaño del dropdown
   justify-content: space-between;
   gap: var(--sp-3);
   padding: 10px 20px;
-  border-bottom: 1px solid var(--c-indigo-100);
-  background: var(--c-indigo-050);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface-sunken);
   flex-wrap: wrap;
 }
 
@@ -1094,8 +1080,8 @@ Alineación y tamaño del dropdown
   font-weight: var(--fw-bold);
   padding: 2px 8px;
   border-radius: var(--radius-pill);
-  background: rgba(99, 102, 241, 0.1);
-  color: var(--c-indigo-600);
+  background: var(--cot-primary-subtle);
+  color: var(--cot-primary);
   margin-left: 6px;
 }
 
@@ -1121,7 +1107,7 @@ Alineación y tamaño del dropdown
   flex-direction: column;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-md);
   overflow: hidden;
   position: relative;
@@ -1132,7 +1118,6 @@ Alineación y tamaño del dropdown
     top: 0; left: 0; right: 0;
     height: 3px;
     background: var(--gradient-top-border);
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     z-index: 5;
   }
 }
@@ -1158,14 +1143,14 @@ Alineación y tamaño del dropdown
 }
 
 .cot-tabla ::ng-deep .mat-header-cell {
-  background: var(--c-indigo-050);
-  color: var(--c-neutral-600);
+  background: var(--cot-primary-subtle);
+  color: var(--cot-primary);
   font-size: var(--fs-xs);
   font-weight: 700;
   text-align: center;
   justify-content: center;
   padding: var(--sp-2) var(--sp-3);
-  border-bottom: 2px solid var(--c-indigo-100);
+  border-bottom: 2px solid var(--cot-primary-line);
   white-space: nowrap;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -1444,7 +1429,7 @@ th.col-descripcion {
    nuestro template, por eso requiere ::ng-deep para alcanzarlo. */
 ::ng-deep .cot-modal-panel .mat-dialog-container {
   padding: 0;
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-sm);
   overflow: hidden;
   box-shadow: var(--shadow-xl);
 }
@@ -1457,20 +1442,10 @@ th.col-descripcion {
   display: flex;
   flex-direction: column;
   max-height: 88vh;
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--gradient-top-border);
-    z-index: 2;
-  }
 }
 
 .cot-modal__close {
-  color: var(--color-text-muted);
+  color: #ffffff;
   flex-shrink: 0;
 }
 
@@ -1481,15 +1456,16 @@ th.col-descripcion {
   justify-content: space-between;
   gap: var(--sp-3);
   text-align: left;
-  padding: var(--sp-3) var(--sp-4);
-  border-bottom: 1px solid var(--color-border);
+  padding: 12px 16px;
+  background-color: var(--cot-primary);
+  border-bottom: 1px solid var(--cot-primary-line);
 
   h3 {
     margin: 0;
     font-size: var(--fs-lg);
     line-height: 1.2;
     font-weight: var(--fw-bold);
-    color: var(--color-text);
+    color: #ffffff;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1506,12 +1482,12 @@ th.col-descripcion {
 .cot-modal__icon-circle {
   width: 36px;
   height: 36px;
-  border-radius: var(--radius-lg);
-  background: var(--color-brand-subtle);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-brand);
+  color: #ffffff;
   flex-shrink: 0;
 
   mat-icon {
@@ -1529,7 +1505,7 @@ th.col-descripcion {
   padding: var(--sp-3);
   background: var(--color-surface-sunken);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-sm);
 }
 
 .cot-modal__accordion-header {
@@ -1540,7 +1516,7 @@ th.col-descripcion {
   background: transparent;
   padding: 0 0 8px;
   margin: 0 0 4px;
-  border-bottom: 1px solid var(--c-indigo-100);
+  border-bottom: 1px solid var(--color-border);
   font: inherit;
   font-size: var(--fs-sm);
   font-weight: var(--fw-bold);
@@ -1669,57 +1645,60 @@ th.col-descripcion {
    SECCIÓN 10 — BOTONES: pill + variantes de color
    ============================================================ */
 
+.btn-azul,
+.btn-danger,
+.btn-success,
+.btn-ghost {
+  height: 42px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: var(--fw-bold) !important;
+  letter-spacing: 0.3px;
+  border-radius: 6px !important;
+  transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease !important;
+}
+
 .btn-azul {
-  background: var(--gradient-brand) !important;
+  background: var(--cot-primary) !important;
   color: var(--c-white) !important;
-  border-radius: var(--radius-pill) !important;
-  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3) !important;
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s !important;
+  box-shadow: 0 2px 6px var(--cot-primary-shadow) !important;
 
   &:hover:not([disabled]) {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 24px rgba(79, 70, 229, 0.35) !important;
+    box-shadow: 0 4px 10px var(--cot-primary-shadow) !important;
+    transform: translateY(-1px) !important;
   }
 }
 
 .btn-danger {
-  color: var(--c-danger-600) !important;
-  border-color: rgba(239, 68, 68, 0.3) !important;
-  border-radius: var(--radius-pill) !important;
-  transition: all 0.2s !important;
+  color: var(--color-danger) !important;
+  border-color: rgba(211, 47, 47, 0.5) !important;
 
   &:hover:not([disabled]) {
-    background: var(--c-danger-050) !important;
-    border-color: var(--c-danger-600) !important;
+    background: var(--color-danger-subtle) !important;
+    border-color: var(--color-danger) !important;
   }
 }
 
 .btn-success {
-  background: linear-gradient(135deg, var(--c-success-600), var(--c-success-700)) !important;
+  background: var(--color-success) !important;
   color: var(--c-white) !important;
-  border-radius: var(--radius-pill) !important;
-  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3) !important;
-  transition: transform 0.25s, box-shadow 0.25s !important;
+  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.35) !important;
 
   &:hover:not([disabled]) {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.35) !important;
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.45) !important;
   }
 }
 
 .btn-ghost {
-  border-radius: var(--radius-pill) !important;
-  transition: all 0.2s !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
 
   &:hover:not([disabled]) {
-    background: var(--c-neutral-050) !important;
-    border-color: var(--c-neutral-300) !important;
+    background: var(--color-surface-sunken) !important;
+    border-color: var(--color-text-disabled) !important;
   }
-}
-
-/* stroked buttons: pill por defecto */
-button[mat-stroked-button] {
-  border-radius: var(--radius-pill) !important;
 }
 
 /* ============================================================
@@ -1735,11 +1714,9 @@ button[mat-stroked-button] {
   align-items: center;
   gap: var(--sp-2);
   padding: 10px 16px;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(226, 232, 240, 0.6);
-  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
   box-shadow: var(--shadow-xl);
   z-index: 100;
   animation: cotActionbarIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);

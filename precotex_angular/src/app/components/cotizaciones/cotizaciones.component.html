@@ -2,15 +2,18 @@
 
   <header class="cot-toolbar">
     <div class="cot-toolbar__title">
-      <div class="cot-toolbar__icon-circle">
-        <mat-icon>receipt_long</mat-icon>
-      </div>
+      <mat-icon class="cot-toolbar__icon">receipt_long</mat-icon>
       <h1>Cotizaciones</h1>
     </div>
   </header>
 
   <!-- Zona de criterios: colapsa a resumen luego de Buscar -->
   <section class="cot-criterios" [class.cot-criterios--colapsado]="!panelCriteriosAbierto">
+
+    <h3 class="cot-section-title">
+      <mat-icon>tune</mat-icon>
+      Criterios de búsqueda
+    </h3>
 
     <!-- Botón de anclaje del panel de Historial (reutilizado en criterios expandidos y colapsados) -->
     <ng-template #tplPinHistorial>
