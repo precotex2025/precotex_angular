@@ -1,188 +1,149 @@
 import { Injectable } from '@angular/core';
 import { GlobalVariable } from 'src/app/VarGlobals';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
+
+import { ListaUnidadNegocioResponse } from 'src/app/interfaces/cotizaciones/response/lista-unidad-negocio.response';
+import { ListaUnidadNegocioTipoResponse } from 'src/app/interfaces/cotizaciones/response/lista-unidad-negocio-tipo.response';
+import { ListaRecetasAntipillingResponse } from 'src/app/interfaces/cotizaciones/response/lista-recetas-antipilling.response';
+import { ValidaColorExisteResponse } from 'src/app/interfaces/cotizaciones/response/valida-color-existe.response';
+import { ListaTelasResponse } from 'src/app/interfaces/cotizaciones/response/lista-telas.response';
+import { RutaXCodTelaResponse } from 'src/app/interfaces/cotizaciones/response/ruta-x-cod-tela.response';
+import { ListaColoresXClienteResponse } from 'src/app/interfaces/cotizaciones/response/lista-colores-x-cliente.response';
+import { ListaPrecioXColorResponse } from 'src/app/interfaces/cotizaciones/response/lista-precio-x-color.response';
+import { ListarProcesosExportacionResponse } from 'src/app/interfaces/cotizaciones/response/listar-procesos-exportacion.response';
+import { ProcesoCotizacionResponse } from 'src/app/interfaces/cotizaciones/response/proceso-cotizacion.response';
+import { ObtenerNuevoCorrelativoVersionResponse } from 'src/app/interfaces/cotizaciones/response/obtener-nuevo-correlativo-version.response';
+import { ListaCentroCostoResponse } from 'src/app/interfaces/cotizaciones/response/lista-centro-costo.response';
+import { ListaIntensidadResponse } from 'src/app/interfaces/cotizaciones/response/lista-intensidad.response';
+import { ListaHiladoXTelaResponse } from 'src/app/interfaces/cotizaciones/response/lista-hilado-x-tela.response';
+
+import { ListaPrecioXColorRequest } from 'src/app/interfaces/cotizaciones/request/lista-precio-x-color.request';
+import { ListarProcesosExportacionRequest } from 'src/app/interfaces/cotizaciones/request/listar-procesos-exportacion.request';
+import { ObtenerNuevoCorrelativoVersionRequest } from 'src/app/interfaces/cotizaciones/request/obtener-nuevo-correlativo-version.request';
+import { ProcesoCotizacionRequest } from 'src/app/interfaces/cotizaciones/request/proceso-cotizacion.request';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CotizacionesService {
 
-  baseUrlTinto = GlobalVariable.baseUrlProcesoTenido;
-    Header = new HttpHeaders({
-      'Content-type': 'application/json'
-    });
-    constructor(private http: HttpClient) { }
-  
-  getListaUnidadNegocio() {
-    const headers = this.Header;
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaUnidadNegocio', { headers });
-  }  
+  private readonly baseUrlTinto = GlobalVariable.baseUrlProcesoTenido;
+  private readonly endpoint = 'txCotizaciones';
+  private readonly headers = new HttpHeaders({
+    'Content-type': 'application/json'
+  });
 
-  getListaRecetasAntipilling() {
-    const headers = this.Header;
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaRecetasAntipilling', { headers });
-  }    
+  constructor(private readonly http: HttpClient) { }
 
-  getValidaColorExiste(Cod_Color: string) {
-    const headers = this.Header;
+  private readonly handleError = (error: HttpErrorResponse): Observable<never> =>
+    throwError(() => new Error(
+      error?.error?.message ?? error.message ?? 'Error de comunicación con el servidor'
+    ));
+
+  private buildParams(request: Record<string, string | number | boolean>): HttpParams {
     let params = new HttpParams();
-    params = params.append("Cod_Color", Cod_Color);
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getValidaColorExiste', { headers, params });
-  }  
-
-  getListaTelas(Cod_Tela: string) {
-    const headers = this.Header;
-    let params = new HttpParams();
-    params = params.append("Cod_Tela", Cod_Tela);
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaTelas', { headers, params });
+    Object.entries(request).forEach(([key, value]) => { params = params.append(key, value); });
+    return params;
   }
 
-  getRutaXCodTela(Cod_Tela: string) {
-    const headers = this.Header;
-    let params = new HttpParams();
-    params = params.append("cod_tela", Cod_Tela);
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getRutaXCodTela', { headers, params });
+  getListaUnidadNegocio(): Observable<ListaUnidadNegocioResponse> {
+    return this.http
+      .get<ListaUnidadNegocioResponse>(`${this.baseUrlTinto}${this.endpoint}/getListaUnidadNegocio`, { headers: this.headers })
+      .pipe(retry(1), catchError(this.handleError));
   }
 
-  getListaColoresXCliente(Cod_Cliente: string) {
-    const headers = this.Header;
-    let params = new HttpParams();
-    params = params.append("Cod_Cliente", Cod_Cliente);
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaColoresXCliente', { headers, params });
+  getListaRecetasAntipilling(): Observable<ListaRecetasAntipillingResponse> {
+    return this.http
+      .get<ListaRecetasAntipillingResponse>(`${this.baseUrlTinto}${this.endpoint}/getListaRecetasAntipilling`, { headers: this.headers })
+      .pipe(retry(1), catchError(this.handleError));
   }
 
-  getListaUnidadNegocioTipo(Id_Unidad_NegocioKey: number) {
-    const headers = this.Header;
-    let params = new HttpParams();
-    params = params.append("Id_Unidad_NegocioKey", Id_Unidad_NegocioKey);
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaUnidadNegocioTipo', { headers, params });
-  }   
-
-  //Nuevos
-  getListaPrecioXColor( Tipo_Busqueda: string, Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string) {
-    const headers = this.Header;
-    let params = new HttpParams();
-
-    params = params.append("Tipo_Busqueda", Tipo_Busqueda);
-    params = params.append("Pro_Cen_Cos", Pro_Cen_Cos);
-    params = params.append("Tipo", Tipo);
-    params = params.append("Cod_Cliente_Tex", Cod_Cliente_Tex);
-    params = params.append("Cod_Tela", Cod_Tela);
-    params = params.append("Cod_Ruta", Cod_Ruta);
-    params = params.append("Cod_Color", Cod_Color);
-
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaPrecioXColor', { headers, params });
-  } 
-
-  getListarProcesosExportacion(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string, precio: number, tiempo: number, IdCotizacion_Cab: number) {
-    const headers = this.Header;
-    let params = new HttpParams();
-    params = params.append("Pro_Cen_Cos", Pro_Cen_Cos);
-    params = params.append("Tipo", Tipo);
-    params = params.append("Cod_Cliente_Tex", Cod_Cliente_Tex);
-    params = params.append("Cod_Tela", Cod_Tela);
-    params = params.append("Cod_Ruta", Cod_Ruta);
-    params = params.append("Cod_Color", Cod_Color);
-    params = params.append("precio", precio);
-    params = params.append("tiempo", tiempo);
-    params = params.append("IdCotizacion_Cab", IdCotizacion_Cab);
-    return this.http.get(this.baseUrlTinto + 'TxCotizaciones/getListarProcesosExportacion', { headers, params });
+  getValidaColorExiste(Cod_Color: string): Observable<ValidaColorExisteResponse> {
+    const params = this.buildParams({ Cod_Color });
+    return this.http
+      .get<ValidaColorExisteResponse>(`${this.baseUrlTinto}${this.endpoint}/getValidaColorExiste`, { headers: this.headers, params })
+      .pipe(retry(1), catchError(this.handleError));
   }
 
-  postProcesoCotizacion(data: any){
-    const headers = this.Header;
-    return this.http.post(this.baseUrlTinto + 'txCotizaciones/postProcesoCotizacion', data, { headers })
+  getListaTelas(Cod_Tela: string): Observable<ListaTelasResponse> {
+    const params = this.buildParams({ Cod_Tela });
+    return this.http
+      .get<ListaTelasResponse>(`${this.baseUrlTinto}${this.endpoint}/getListaTelas`, { headers: this.headers, params })
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  getRutaXCodTela(Cod_Tela: string): Observable<RutaXCodTelaResponse> {
+    // NOTA: el backend espera el param en minúscula ("cod_tela"), a diferencia del resto de
+    // endpoints. Se mantiene así hasta confirmar con backend que puede unificarse.
+    const params = this.buildParams({ cod_tela: Cod_Tela });
+    return this.http
+      .get<RutaXCodTelaResponse>(`${this.baseUrlTinto}${this.endpoint}/getRutaXCodTela`, { headers: this.headers, params })
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  getListaColoresXCliente(Cod_Cliente: string): Observable<ListaColoresXClienteResponse> {
+    const params = this.buildParams({ Cod_Cliente });
+    return this.http
+      .get<ListaColoresXClienteResponse>(`${this.baseUrlTinto}${this.endpoint}/getListaColoresXCliente`, { headers: this.headers, params })
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  getListaUnidadNegocioTipo(Id_Unidad_NegocioKey: number): Observable<ListaUnidadNegocioTipoResponse> {
+    const params = this.buildParams({ Id_Unidad_NegocioKey });
+    return this.http
+      .get<ListaUnidadNegocioTipoResponse>(`${this.baseUrlTinto}${this.endpoint}/getListaUnidadNegocioTipo`, { headers: this.headers, params })
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  getListaPrecioXColor(request: ListaPrecioXColorRequest): Observable<ListaPrecioXColorResponse> {
+    const params = this.buildParams({ ...request });
+    return this.http
+      .get<ListaPrecioXColorResponse>(`${this.baseUrlTinto}${this.endpoint}/getListaPrecioXColor`, { headers: this.headers, params })
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  getListarProcesosExportacion(request: ListarProcesosExportacionRequest): Observable<ListarProcesosExportacionResponse> {
+    const params = this.buildParams({ ...request });
+    // NOTA: prefijo con "T" mayúscula, distinto del resto (this.endpoint = 'txCotizaciones').
+    // Se mantiene el literal original hasta confirmar con backend si la ruta es case-insensitive.
+    return this.http
+      .get<ListarProcesosExportacionResponse>(`${this.baseUrlTinto}TxCotizaciones/getListarProcesosExportacion`, { headers: this.headers, params })
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  postProcesoCotizacion(data: ProcesoCotizacionRequest): Observable<ProcesoCotizacionResponse> {
+    return this.http
+      .post<ProcesoCotizacionResponse>(`${this.baseUrlTinto}${this.endpoint}/postProcesoCotizacion`, data, { headers: this.headers })
+      .pipe(catchError(this.handleError));
   }
 
   // Devuelve el siguiente correlativo/versión para un borrador nuevo (elements[0] = { correlativo, version })
-  getObtieneNuevaVersionCotizacion(Id_Unidad_NegocioKey: number, Cod_Tipo_Orden_tinto: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string) {
-    const headers = this.Header;
-    let params = new HttpParams();
-    params = params.append("Id_Unidad_NegocioKey", Id_Unidad_NegocioKey);
-    params = params.append("Cod_Tipo_Orden_tinto", Cod_Tipo_Orden_tinto);
-    params = params.append("Cod_Cliente_Tex", Cod_Cliente_Tex);
-    params = params.append("Cod_Tela", Cod_Tela);
-    params = params.append("Cod_Ruta", Cod_Ruta);
-    params = params.append("Cod_Color", Cod_Color);
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getObtieneNuevaVersionCotizacion', { headers, params });
+  getObtenerNuevoCorrelativoVersion(request: ObtenerNuevoCorrelativoVersionRequest): Observable<ObtenerNuevoCorrelativoVersionResponse> {
+    const params = this.buildParams({ ...request });
+    return this.http
+      .get<ObtenerNuevoCorrelativoVersionResponse>(`${this.baseUrlTinto}${this.endpoint}/getObtenerNuevoCorrelativoVersion`, { headers: this.headers, params })
+      .pipe(retry(1), catchError(this.handleError));
   }
 
-
-
-
-
-
-
-
-
-
-  
-
-  getListarProcesosExportacionFooter(Pro_Cen_Cos: number){
-    const headers = this.Header;
-    let params = new HttpParams();
-    params = params.append("Pro_Cen_Cos", Pro_Cen_Cos);
-    return this.http.get(this.baseUrlTinto + 'TxCotizaciones/getListarProcesosExportacionFooter', { headers, params });
+  getListaCentroCosto(): Observable<ListaCentroCostoResponse> {
+    return this.http
+      .get<ListaCentroCostoResponse>(`${this.baseUrlTinto}${this.endpoint}/getListaCentroCosto`, { headers: this.headers })
+      .pipe(retry(1), catchError(this.handleError));
   }
 
-
-
-  getRutaXCodTelaDetalle(Cod_Tela: string, Cod_Ruta: string){
-    const headers = this.Header;
-    let params = new HttpParams();
-    params = params.append("Cod_Tela", Cod_Tela);
-    params = params.append("Cod_Ruta", Cod_Ruta);
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getRutaXCodTelaDetalle', { headers, params });
+  getListaIntensidad(Id_Unidad_NegocioKey: number): Observable<ListaIntensidadResponse> {
+    const params = this.buildParams({ Id_Unidad_NegocioKey });
+    return this.http
+      .get<ListaIntensidadResponse>(`${this.baseUrlTinto}${this.endpoint}/getListaIntensidad`, { headers: this.headers, params })
+      .pipe(retry(1), catchError(this.handleError));
   }
 
-
-
-  getListaCentroCosto() {
-    const headers = this.Header;
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaCentroCosto', { headers });
+  getListaHiladoxTela(Cod_Tela: string): Observable<ListaHiladoXTelaResponse> {
+    const params = this.buildParams({ Cod_Tela });
+    return this.http
+      .get<ListaHiladoXTelaResponse>(`${this.baseUrlTinto}${this.endpoint}/getListaHiladoxTela`, { headers: this.headers, params })
+      .pipe(retry(1), catchError(this.handleError));
   }
-
-   
-
-
-
-
-
-  getListaIntensidad(Id_Unidad_NegocioKey: number) {
-    const headers = this.Header;
-    let params = new HttpParams();
-    params = params.append("Id_Unidad_NegocioKey", Id_Unidad_NegocioKey);
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaIntensidad', { headers, params });
-  }  
-
-  getListaHiladoxTela(Cod_Tela: string) {
-    const headers = this.Header;
-    let params = new HttpParams();
-    params = params.append("Cod_Tela", Cod_Tela);
-    return this.http.get(this.baseUrlTinto + 'txCotizaciones/getListaHiladoxTela', { headers, params });
-  }    
-
-  
-
-     
-
-    
-    
-
-
-  getValidaExistenciaHistorialxColor(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string, Cod_Receta: string){
-    const headers = this.Header;
-    let params = new HttpParams();
-    params = params.append("Pro_Cen_Cos", Pro_Cen_Cos);
-    params = params.append("Tipo", Tipo);
-    params = params.append("Cod_Cliente_Tex", Cod_Cliente_Tex);
-    params = params.append("Cod_Tela", Cod_Tela);
-    params = params.append("Cod_Ruta", Cod_Ruta);
-    params = params.append("Cod_Color", Cod_Color);
-    params = params.append("Cod_Receta", Cod_Receta);
-    return this.http.get(this.baseUrlTinto + 'TxCotizaciones/getValidaExistenciaHistorialxColor', { headers, params });
-  }  
-
-
-  
 }

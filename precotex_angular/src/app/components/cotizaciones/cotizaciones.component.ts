@@ -1,144 +1,33 @@
 import { Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { CotizacionesService } from 'src/app/services/cotizaciones/cotizaciones.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { Console } from 'console';
 import { MatSort } from '@angular/material/sort';
 import { ProcesoColgadoresService } from 'src/app/services/proceso-colgadores.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 import { GlobalVariable } from 'src/app/VarGlobals';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { color } from 'html2canvas/dist/types/css/types/color';
 import { COTIZACIONES_FIELDS } from 'src/app/shared/constants/cotizaciones-fields';
 
-interface Costeo {
-    unidadNegocio: string;
-    tipo: string;
-    cliente: string;
-    codigoTela: string;
-    idRuta: string;
-    color: string;
+import { ComboItem } from 'src/app/models/cotizaciones/combo-item.model';
+import { VersionPrecio } from 'src/app/models/cotizaciones/version-precio.model';
+import { RutaTela } from 'src/app/models/cotizaciones/ruta-tela.model';
+import { CentroCosto } from 'src/app/models/cotizaciones/centro-costo.model';
+import { BorradorCotizacion } from 'src/app/models/cotizaciones/borrador-cotizacion.model';
+import { FiltrosBusqueda } from 'src/app/models/cotizaciones/filtros-busqueda.model';
 
-    materiales: {
-      codigoHilo: string;
-      descripcion: string;
-      porcentaje: number;
-      precioKg: number;
-      subtotal: number;
-    }[];
+import { ProcesoExportacionItem } from 'src/app/interfaces/cotizaciones/response/listar-procesos-exportacion.response';
+import { RecetaAntipillingItem } from 'src/app/interfaces/cotizaciones/response/lista-recetas-antipilling.response';
+import { PrecioXColorItem } from 'src/app/interfaces/cotizaciones/response/lista-precio-x-color.response';
+import { HiladoTelaItem } from 'src/app/interfaces/cotizaciones/response/lista-hilado-x-tela.response';
 
-    procesos: {
-      nombre: string;
-      receta?: string;
-      proceso?: string;
-      factor: number;
-      costoKg: number;
-      ajuste?: number;
-      cotizacion: number;
-    }[];
-
-    precioMateriales: number;
-    precioMaterialesAjustado: number;
-    merma: number;
-    costoSinUtilidad: number;
-    utilidadPorcentaje: number;
-    utilidadValor: number;
-    gastosPorcentaje: number;
-    gastosValor: number;
-    total: number;
-    totalAjustado: number;
-    precioFinalCliente: number;
-    rentabilidad: number;
-    //Verificamos si tiene Historial
-    bTieneHistorialPrecios: number;
-  }
-
-  interface dataDetalle {
-    //Pro_Cen_Cos   : number;
-    //Pro_Des       : string;
-    Pro_Hover     : string; 
-    Pro_Factor    : number; 
-    Pro_Cos_Kg    : number; 
-    Pro_Tot       : number; 
-    Pro_Tot_Com   : number; 
-    Pro_Aju       : number; 
-    Pro_Cotizacion: number; 
-    Pro_Por       : number; 
-    Pro_Tip       : string; 
-    //Nuevos Campos
-    Observacion   : string; 
-    Nivel : number; 
-    cod_Subtotal : number; 
-    parteEntera : number; 
-    parteDecimal : number; 
-    isParent : boolean,
-    isChild : boolean,
-    tieneHijos : boolean,
-    cod_ProcesoPadre : string; 
-    cod_Proceso_Tex : string;  
-    Cod_SubProceso : string;
-      
-    //Flg_Estatus   : string; 
-    //Usu_Registro  : string; 
-  }
-
-  interface dataHilo {
-    porcentaje    : number,	
-    precio_Final  : number,	
-    total         : number,
-    des_hiltel    : string,	
-    cod_Hilado_Estructurado: string,
-  }
-
-  interface dataCombo {
-    codigo : string,
-    descripcion: string
-  }
-
-  interface dataPrecio {
-    corR_CARTA  : string,
-    tiempo      : number,
-    preC_TINTO  : number,
-    preC_ACABADO: number,
-    idCotizacion_Cab: number,
-    idrecetalabprod: string
-  }
-
-  // Item del panel de Cotizaciones: una fila por cotización existente para los filtros
-  // buscados. Alimentado por getListaPrecioXColor (ver mapPreciosAVersiones / onBuscar).
-  interface VersionPrecio {
-    id            : number;   // idcotizacioN_CAB
-    titulo        : string;   // 'Opción 1', 'Opción 2', ... (correlativo local)
-    sdc           : string;   // corR_CARTA
-    precioTinto   : number;   // preC_TINTO
-    precioAcabado : number;   // preC_ACABADO
-    tiempo        : number;   // tiempo
-    receta        : string;   // idrecetalabprod
-    reciente      : boolean;  // true solo en el primer elemento
-    raw           : any;      // elemento crudo, por si se necesita otro campo
-
-    // --- Fase 2: pendientes de que el backend agregue estos campos a getListaPrecioXColor ---
-    usuario?: string;  // usu_Registro
-    fecha?  : string;  // fec_Registro
-    estado? : 'Vigente' | 'Aprobada' | 'Borrador';  // estado
-
-    // Solo presentes cuando la "versión" es en realidad el borrador nuevo (ver crearBorradorNuevo)
-    correlativo?: string;
-    version?    : number;
-  }
-
-//   interface Proceso {
-//   proceso: string;
-//   factor: number;
-//   costoKg: number;
-//   totalTeorico: number;
-//   totalComercial: number;
-//   ajuste: number;
-//   cotizacion: number;
-// }
+import { ProcesoCotizacionDetalle, ProcesoCotizacionRequest } from 'src/app/interfaces/cotizaciones/request/proceso-cotizacion.request';
+import { ListaPrecioXColorRequest } from 'src/app/interfaces/cotizaciones/request/lista-precio-x-color.request';
+import { ListarProcesosExportacionRequest } from 'src/app/interfaces/cotizaciones/request/listar-procesos-exportacion.request';
+import { ObtenerNuevoCorrelativoVersionRequest } from 'src/app/interfaces/cotizaciones/request/obtener-nuevo-correlativo-version.request';
 
 @Component({
   selector: 'app-cotizaciones',
@@ -172,22 +61,22 @@ export class CotizacionesComponent implements OnInit {
   descripcionTela = '';
   //rutaSeleccionada = '';
   codigoRutaTela = '';
-  RutaXCodTela: {codigo: string, nombre: string}[] = [];
+  RutaXCodTela: RutaTela[] = [];
   RutaXCodTelaDetalle = [];
   codigoColor = '';
   descripcionColor = '';
-  centroCosto: {codigo: number, nombre: string}[] = [];
+  centroCosto: CentroCosto[] = [];
 
   bMuestraMenuFlotante: boolean = false;
   dataClientes    : any[] = [];
   ClientesFiltrada: any[] = [];
-  ColoresFiltrada: any[] = [];
-  planos          : any[] = [];
-  planosBackup : any[] = [];
-  dataRecetas     : any[] = [];
+  ColoresFiltrada: ComboItem[] = [];
+  planos          : ProcesoExportacionItem[] = [];
+  planosBackup : ProcesoExportacionItem[] = [];
+  dataRecetas     : RecetaAntipillingItem[] = [];
   sUsuario        = GlobalVariable.vusu;
 
-  dataDetalles: dataDetalle[] = [];
+  dataDetalles: ProcesoCotizacionDetalle[] = [];
   isAjusteBloqueado   = true;
   dialogAbierto       = false;
   bBuscarTela         = false;
@@ -218,10 +107,10 @@ export class CotizacionesComponent implements OnInit {
 
   dataSource = new MatTableDataSource<any>();
   dataSourceFooter = new MatTableDataSource<any>();
-  unidadesNegocio : dataCombo[] =[]; // ['Textil', 'Confección', 'Exportación'];
-  tipoUnidadesNegocio : dataCombo[] =[];
-  intensidad: dataCombo[] =[];
-  listaCodigoColor: dataCombo[] = [];
+  unidadesNegocio : ComboItem[] =[]; // ['Textil', 'Confección', 'Exportación'];
+  tipoUnidadesNegocio : ComboItem[] =[];
+  intensidad: ComboItem[] =[];
+  listaCodigoColor: ComboItem[] = [];
   expandedRows: Set<string> = new Set(); // usamos el pro_Hover como clave
   isDisabledBtnSave   = false;
   isDisabledBtnEdit   = false;
@@ -246,15 +135,12 @@ export class CotizacionesComponent implements OnInit {
   // Borrador en curso: sobrevive a la navegación entre versiones (conserva ajustes escritos).
   // onBuscar lo crea automáticamente cuando no hay cotizaciones para los filtros
   // (ver crearBorradorNuevo). Se destruye tras guardar (ver reiniciaControles). Uno solo a la vez.
-  borrador: { planos: any[], planosBackup: any[], recetaCod: string, correlativo: string, version: number } | null = null;
+  borrador: BorradorCotizacion | null = null;
   borradorActivo = false;   // true = la grilla está mostrando el borrador
 
   // Filtros de la última búsqueda, para poder re-disparar getListarProcesosExportacion
   // cuando el usuario elige otra card del historial sin volver a leer el formulario.
-  private ultimaBusqueda: {
-    unidad: number; tipo: string; cliente: string;
-    tela: string; ruta: string; color: string;
-  } | null = null;
+  private ultimaBusqueda: FiltrosBusqueda | null = null;
 
   displayedColumns: string[] = [
     'hover',
@@ -296,7 +182,7 @@ export class CotizacionesComponent implements OnInit {
     'Precio_Final'            ,
     'Total'
   ];  
-  dataSource_Hilos: MatTableDataSource<dataHilo> = new MatTableDataSource();
+  dataSource_Hilos: MatTableDataSource<HiladoTelaItem> = new MatTableDataSource();
 
   displayedColumns_Precio: string[] = [
       'opcion'        , 
@@ -441,7 +327,7 @@ export class CotizacionesComponent implements OnInit {
 
     // Asigna el valor al mat-select si encuentra coincidencia
     if (clienteExacto) {
-      this.formulario.get('ctrol_cliente')?.setValue(clienteExacto.cod_Cliente_Tex);
+      this.formulario.get('cliente')?.setValue(clienteExacto.cod_Cliente_Tex);
     }    
   } 
 
@@ -788,8 +674,17 @@ export class CotizacionesComponent implements OnInit {
     const f = this.ultimaBusqueda;
     if (!f) { return; }
 
+    const request: ObtenerNuevoCorrelativoVersionRequest = {
+      Id_Unidad_NegocioKey: f.unidad,
+      Cod_Tipo_Orden_tinto: f.tipo,
+      Cod_Cliente_Tex: f.cliente,
+      Cod_Tela: f.tela,
+      Cod_Ruta: f.ruta,
+      Cod_Color: f.color
+    };
+
     this.SpinnerService.show();
-    this.service.getObtieneNuevaVersionCotizacion(f.unidad, f.tipo, f.cliente, f.tela, f.ruta, f.color).subscribe({
+    this.service.getObtenerNuevoCorrelativoVersion(request).subscribe({
       next: (response: any) => {
         const e = response?.elements?.[0] ?? {};
         this.borrador = {
@@ -833,7 +728,7 @@ export class CotizacionesComponent implements OnInit {
   }
 
   /* --- Selección de precio en el combo Precio/SDC --- */
-  onChangePrecio(p: any){
+  onChangePrecio(p: PrecioXColorItem){
     this.precioSeleccionado = p;
     this.global_PrecioTinto      = Number(p.preC_TINTO);
     this.global_Tiempo           = Number(p.tiempo);
@@ -845,7 +740,12 @@ export class CotizacionesComponent implements OnInit {
   onBuscaPreciosxColor(Tipo_Busqueda: string, Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string){
     this.dataSource_Precios = null;
     this.SpinnerService.show();
-    this.service.getListaPrecioXColor(Tipo_Busqueda, Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color).subscribe({
+
+    const request: ListaPrecioXColorRequest = {
+      Tipo_Busqueda, Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color
+    };
+
+    this.service.getListaPrecioXColor(request).subscribe({
       next: (response: any) => {
         if(response.success){
           console.log(':::::::::::::RESULTADO DE PRECIO', response);
@@ -870,34 +770,18 @@ export class CotizacionesComponent implements OnInit {
     });
   }
 
-  // Pendiente: sin llamador. dataSource_Precios (precios por color) NO es lo mismo que
-  // "cotizaciones guardadas por criterios" — no reusar esto para historialVersiones (ver
-  // TODO en onBuscar). Queda listo para cuando exista un endpoint real de listado.
-  private mapPreciosAVersiones(elements: any[]): VersionPrecio[] {
-    return (elements ?? []).map((e, i) => ({
-      id            : Number(e.idcotizacioN_CAB) || 0,
-      titulo        : `Opción ${i + 1}`,
-      sdc           : String(e.corR_CARTA ?? ''),
-      precioTinto   : Number(e.preC_TINTO) || 0,
-      precioAcabado : Number(e.preC_ACABADO) || 0,
-      tiempo        : Number(e.tiempo) || 0,
-      receta        : String(e.idrecetalabprod ?? ''),
-      reciente      : i === 0,
-      raw           : e,
-      // Fase 2 — hoy llegan undefined, la card los omite con *ngIf
-      usuario : e.usu_Registro,
-      fecha   : e.fec_Registro,
-      estado  : e.estado
-    }));
-  }
-
   getListarProcesosExportacion(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string, precio: number, tiempo: number, IdCotizacion_Cab: number): void {
     //limpia
     this.planos = []
     this.planosBackup = [];
     
     this.SpinnerService.show();
-    this.service.getListarProcesosExportacion(Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color, precio, tiempo, IdCotizacion_Cab).subscribe({
+
+    const request: ListarProcesosExportacionRequest = {
+      Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color, precio, tiempo, IdCotizacion_Cab
+    };
+
+    this.service.getListarProcesosExportacion(request).subscribe({
       next: (response: any) => {
         if (response.success && response.totalElements > 0) {
           //const planos = response.elements;
@@ -920,33 +804,10 @@ export class CotizacionesComponent implements OnInit {
           });
 
           if(Pro_Cen_Cos === 1){
-            console.log('marca 1');
             this.dataSource.data = [];
             this.dataSource.data = planosConFlags;
             this.dataSource.sort = this.sort;
-            console.log('marca 1 - FIN');
           }
-          // else if(Pro_Cen_Cos === 2){
-          //   console.log('marca 2');
-          //   this.dataSource_VT.data = [];
-          //   this.dataSource_VT.data = planosConFlags;
-          //   this.dataSource_VT.sort = this.sort;          
-          // }else if(Pro_Cen_Cos === 3){
-          //   console.log('marca 3');
-          //   this.dataSource_Servicio.data = [];
-          //   this.dataSource_Servicio.data = planosConFlags;
-          //   this.dataSource_Servicio.sort = this.sort;
-          // }else if(Pro_Cen_Cos === 4){
-          //   console.log('marca 4');
-          //   this.dataSource_VT_Estampado.data = [];
-          //   this.dataSource_VT_Estampado.data = planosConFlags;
-          //   this.dataSource_VT_Estampado.sort = this.sort;
-          // }else if(Pro_Cen_Cos === 5){
-          //   console.log('marca 5');
-          //   this.dataSource_VT_Servicio.data = [];
-          //   this.dataSource_VT_Servicio.data = planosConFlags;
-          //   this.dataSource_VT_Servicio.sort = this.sort;
-          // }
 
           //Existe Cotizacion
           if (planosConFlags[0].existeCotizacion === '1'){
@@ -968,11 +829,6 @@ export class CotizacionesComponent implements OnInit {
               // recién cargados (no hace falta volver a pedirlos) y pide su correlativo/versión.
               this.activarBorradorConPlanosActuales(Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color);
           }
-
-          //Busca color solo si no tiene regitros de historial
-          //if (response.elements[0].existeCotizacion == "0"){
-          //  this.onBuscaPreciosxColor(Cod_Color);    
-          //}
 
           //Habilita botoneria
           this.bMuestraMenuFlotante = true;
@@ -1009,7 +865,16 @@ export class CotizacionesComponent implements OnInit {
       version: 0
     };
 
-    this.service.getObtieneNuevaVersionCotizacion(Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color).subscribe({
+    const request: ObtenerNuevoCorrelativoVersionRequest = {
+      Id_Unidad_NegocioKey: Pro_Cen_Cos,
+      Cod_Tipo_Orden_tinto: Tipo,
+      Cod_Cliente_Tex,
+      Cod_Tela,
+      Cod_Ruta,
+      Cod_Color
+    };
+
+    this.service.getObtenerNuevoCorrelativoVersion(request).subscribe({
       next: (response: any) => {
         const e = response?.elements?.[0] ?? {};
         if (this.borrador) {
@@ -1137,7 +1002,7 @@ export class CotizacionesComponent implements OnInit {
     const nombre = (row.pro_Des || '')
       .toUpperCase()
       .normalize('NFD')
-      .replace(/[̀-ͯ]/g, '');
+      .replace(/[̀-ͯ]/g, ''); // rango Unicode de marcas diacríticas combinantes
 
     for (const grupo of CotizacionesComponent.ICONOS_SECCION) {
       if (grupo.claves.some(clave => nombre.includes(clave))) {
@@ -1607,44 +1472,28 @@ export class CotizacionesComponent implements OnInit {
         //PASO 1 - OBTENEMOS EL DETALLE
         if (Number(this.unidadNegocio) === 1){
             this.dataDetalles = this.dataSource.data.map(item => this.mapToDetalle(item));
-            console.log('SERVICIO PRIMERA CARGA', this.dataDetalles);
         }
-        /*
-        else if(Number(this.unidadNegocio) === 2){
-          console.log('VENTA DE TELA',this.dataSource);
-            this.dataDetalles = this.dataSource_VT.data.map(item => this.mapToDetalle(item));
-        }else if(Number(this.unidadNegocio) === 3){
-          console.log('SERVICIO',this.dataSource);
-            this.dataDetalles = this.dataSource_Servicio.data.map(item => this.mapToDetalle(item));          
-        }else if(Number(this.unidadNegocio) === 3){
-          console.log('ESTAMPADO',this.dataSource);
-            this.dataDetalles = this.dataSource_VT_Estampado.data.map(item => this.mapToDetalle(item));             
-        }else if(Number(this.unidadNegocio) === 3){
-          console.log('ESTAMPADO SERVICIO',this.dataSource);
-            this.dataDetalles = this.dataSource_VT_Servicio.data.map(item => this.mapToDetalle(item));             
-        }
-        */
 
         //PASO 2 - OBTENEMOS LA CABECERA
-        let data: any = {
-            "idCotizacion_Cab": 0,
-            "pro_Id"          : 0,
-            "cen_Cos_Cod"     : Number(_UndNego),
-            "cod_Tipo"        : _tipo,
-            "cod_Cliente_Tex" : _cliente,
-            "cod_Tela"        : _tela,
-            "cod_Ruta"        : _ruta,
-            "cod_Color"       : _color,
-            "cod_RecetaAcabado" : this.global_CodReceta,
-            "tiempo_Referencia" : Number(this.global_Tiempo),
-            "precio_Referencia" : Number(this.global_PrecioTinto),
-            "sDC_Referencia"    : this.global_SDC,
-            "correlativo"     : this.borrador?.correlativo ?? '',
-            "version"         : this.borrador?.version ?? 0,
-            "flg_Estatus"     : "A",
-            "usu_Registro"    : this.sUsuario,
-            "accion"          : "I",
-            "detalles"        : this.dataDetalles
+        const data: ProcesoCotizacionRequest = {
+            idCotizacion_Cab: 0,
+            pro_Id          : 0,
+            cen_Cos_Cod     : Number(_UndNego),
+            cod_Tipo        : _tipo,
+            cod_Cliente_Tex : _cliente,
+            cod_Tela        : _tela,
+            cod_Ruta        : _ruta,
+            cod_Color       : _color,
+            cod_RecetaAcabado : this.global_CodReceta,
+            tiempo_Referencia : Number(this.global_Tiempo),
+            precio_Referencia : Number(this.global_PrecioTinto),
+            sDC_Referencia    : this.global_SDC,
+            correlativo     : this.borrador?.correlativo ?? '',
+            version         : this.borrador?.version ?? 0,
+            flg_Estatus     : "A",
+            usu_Registro    : this.sUsuario,
+            accion          : "I",
+            detalles        : this.dataDetalles
         };
 
         console.log('Data registro', data);
@@ -1884,15 +1733,8 @@ onRecetaChange(event: any) {
 
 
 
-//onChangeColor(){
-  //this.validaCodigoColor();
-//}
-
-private mapToDetalle(item: any): dataDetalle {
-    console.log('MAPDETALLE', item);
+private mapToDetalle(item: any): ProcesoCotizacionDetalle {
   return {
-      //Pro_Cen_Cos   : item.pro_Cen_Cos,
-      //Pro_Des       : item.pro_Des,
       Pro_Hover     : item.pro_Hover,
       Pro_Factor    : item.pro_Factor,
       Pro_Cos_Kg    : item.pro_Cos_Kg,
@@ -1914,9 +1756,6 @@ private mapToDetalle(item: any): dataDetalle {
       cod_ProcesoPadre  : item.cod_ProcesoPadre,
       cod_Proceso_Tex   : item.cod_Proceso_Tex,
       Cod_SubProceso : item.cod_SubProceso
-      
-      //Flg_Estatus   : 'A',
-      //Usu_Registro  : this.sUsuario
     };
   }
 }

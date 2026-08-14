@@ -12,8 +12,6 @@ Se utiliza Angular Material.
 
 No utilizar Bootstrap.
 
-Los formularios usan ReactiveForms.
-
 No modificar componentes compartidos sin aprobación.
 
 Mantener la apariencia del ERP.
