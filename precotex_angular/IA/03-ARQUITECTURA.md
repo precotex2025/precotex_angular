@@ -25,7 +25,27 @@ src/app/
 
 **Naming:** `<endpoint-kebab>.request.ts`, `<endpoint-kebab>.response.ts`, `<nombre>.model.ts`.
 
-**Sin barriles.** El proyecto no usa ningún `index.ts`. No los introduzcas.
+## Barriles (index.ts)
+
+Cada módulo usa barriles para agrupar sus interfaces y models — evita imports profundos
+repetidos en cada componente/service que consume el módulo.
+
+- Un `index.ts` por carpeta hoja (`interfaces/<modulo>/request/`, `interfaces/<modulo>/response/`,
+  `models/<modulo>/`) con `export * from './archivo'`, uno por archivo, orden alfabético.
+- Un `index.ts` combinado en `interfaces/<modulo>/` que reexporta `request` + `response`, para
+  que el consumidor pida ambos con un solo import.
+- `services/<modulo>/` y `components/<modulo>/` **no** llevan barril — normalmente es un solo
+  archivo por módulo, un `index.ts` ahí no agrupa nada.
+
+Import correcto: `from 'src/app/interfaces/<modulo>'` (la carpeta resuelve el `index.ts` sola).
+**Nunca** escribas el sufijo `/index` explícito en el import — es ruido, y si el barril cambia
+de nombre de archivo, ese import no lo notaría de la misma forma.
+
+Antes de fusionar dos barriles con `export *`, confirma que no hay nombres de tipo repetidos
+entre ambas carpetas — con `export *` una colisión no es error de compilación, es un tipo que
+gana silenciosamente sobre el otro.
+
+Referencia viva: `src/app/interfaces/cotizaciones/` y `src/app/models/cotizaciones/`.
 
 **Sin alias de rutas.** `tsconfig.json` tiene `baseUrl: "./"` y ningún `paths`.
 Los imports van absolutos desde la raíz: `import { X } from 'src/app/...'`.

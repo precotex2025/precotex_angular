@@ -15,6 +15,13 @@ Lee siempre, en este orden:
 
 No asumas el contenido de estos archivos: léelos. Cambian.
 
+## Barriles
+
+Los módulos con varias interfaces o models se agrupan con `index.ts` (`export * from`).
+Antes de importar algo de `interfaces/<modulo>/` o `models/<modulo>/`, revisa si ya existe
+un barril e impórtalo desde la carpeta, no archivo por archivo. Detalle completo y ejemplo
+en `IA/03-ARQUITECTURA.md`.
+
 ## Requerimientos
 
 Cada requerimiento vive en:
