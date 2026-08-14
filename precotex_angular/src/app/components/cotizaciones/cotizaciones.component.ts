@@ -11,7 +11,6 @@ import Swal from 'sweetalert2';
 import { GlobalVariable } from 'src/app/VarGlobals';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { COTIZACIONES_FIELDS } from 'src/app/shared/constants/cotizaciones-fields';
-
 import { ComboItem } from 'src/app/models/cotizaciones/combo-item.model';
 import { VersionPrecio } from 'src/app/models/cotizaciones/version-precio.model';
 import { RutaTela } from 'src/app/models/cotizaciones/ruta-tela.model';
@@ -19,10 +18,7 @@ import { CentroCosto } from 'src/app/models/cotizaciones/centro-costo.model';
 import { BorradorCotizacion } from 'src/app/models/cotizaciones/borrador-cotizacion.model';
 import { FiltrosBusqueda } from 'src/app/models/cotizaciones/filtros-busqueda.model';
 
-import { ProcesoExportacionItem } from 'src/app/interfaces/cotizaciones/response/listar-procesos-exportacion.response';
-import { RecetaAntipillingItem } from 'src/app/interfaces/cotizaciones/response/lista-recetas-antipilling.response';
-import { PrecioXColorItem } from 'src/app/interfaces/cotizaciones/response/lista-precio-x-color.response';
-import { HiladoTelaItem } from 'src/app/interfaces/cotizaciones/response/lista-hilado-x-tela.response';
+import { ProcesoExportacionItem, RecetaAntipillingItem, PrecioXColorItem, HiladoTelaItem } from 'src/app/interfaces/cotizaciones/response/index';
 
 import { ProcesoCotizacionDetalle, ProcesoCotizacionRequest } from 'src/app/interfaces/cotizaciones/request/proceso-cotizacion.request';
 import { ListaPrecioXColorRequest } from 'src/app/interfaces/cotizaciones/request/lista-precio-x-color.request';
