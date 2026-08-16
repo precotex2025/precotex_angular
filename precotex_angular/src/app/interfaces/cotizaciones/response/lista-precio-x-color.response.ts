@@ -11,10 +11,3 @@ export interface PrecioXColorItem {
   fec_Registro?: string;
   estado?: string;
 }
-
-export interface ListaPrecioXColorResponse {
-  success: boolean;
-  message?: string;
-  totalElements: number;
-  elements: PrecioXColorItem[];
-}

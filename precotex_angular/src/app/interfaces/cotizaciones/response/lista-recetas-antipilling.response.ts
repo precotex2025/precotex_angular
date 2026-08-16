@@ -6,10 +6,3 @@ export interface RecetaAntipillingItem {
   descripcion?: string;
   des_Receta?: string;
 }
-
-export interface ListaRecetasAntipillingResponse {
-  success: boolean;
-  message?: string;
-  totalElements: number;
-  elements: RecetaAntipillingItem[];
-}

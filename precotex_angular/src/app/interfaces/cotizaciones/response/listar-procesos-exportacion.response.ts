@@ -28,10 +28,3 @@ export interface ProcesoExportacionItem {
   childCount?: number;
   padreKey?: string;
 }
-
-export interface ListarProcesosExportacionResponse {
-  success: boolean;
-  message?: string;
-  totalElements: number;
-  elements: ProcesoExportacionItem[];
-}

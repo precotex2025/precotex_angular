@@ -17,8 +17,10 @@ import {
   ProcesoExportacionItem, RecetaAntipillingItem, PrecioXColorItem, HiladoTelaItem,
   ProcesoCotizacionDetalle, ProcesoCotizacionRequest,
   ListaPrecioXColorRequest, ListarProcesosExportacionRequest, ObtenerNuevoCorrelativoVersionRequest,
-  ObtieneInformacionClienteColgadorResponse
+  UnidadNegocioItem, UnidadNegocioTipoItem, ClienteColgadorItem, TelaItem, RutaTelaRawItem,
+  CorrelativoVersionItem, CentroCostoRawItem
 } from 'src/app/interfaces/cotizaciones';
+import { ServiceResponse, ServiceResponseList } from 'src/app/interfaces/shared';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -174,7 +176,7 @@ export class CotizacionesComponent implements OnInit {
       'idrecetalabprod',
   ];
   // Lista de precios por color (array crudo del backend, ver onBuscaPreciosxColor)
-  dataSource_Precios: any[] | null = null;
+  dataSource_Precios: PrecioXColorItem[] | null = null;
 
 
   formulario = this.formBuilder.group({
@@ -198,7 +200,7 @@ export class CotizacionesComponent implements OnInit {
   ngOnInit(): void {
     this.loadUnidadNeg();
     this.LoadClientes();
-    this.loadRecetas();//PORQUE LAS RECETAS SON UNICAS NO DEPENDEN DE NADIE
+    this.loadRecetas();
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -216,18 +218,8 @@ export class CotizacionesComponent implements OnInit {
         }) 
       )
       .subscribe({
-        next: (response: any) => {
-          if(response.success){
-            if (response.totalElements > 0){
-              this.unidadesNegocio = response.elements;
-            }
-            else{
-              this.unidadesNegocio = [];
-            };
-          }
-          else {
-            this.unidadesNegocio = [];
-          }
+        next: (response: ServiceResponseList<UnidadNegocioItem>) => {
+          this.unidadesNegocio = response.success ? (response.elements ?? []) : [];
         },
         error: (error: any) => {
           const errorMessage = error?.error?.message || 'Error al cargar unidades de negocio';
@@ -254,17 +246,8 @@ export class CotizacionesComponent implements OnInit {
         }) 
       )
       .subscribe({
-        next: (response: any) => {
-          if(response.success){
-            if (response.totalElements > 0){
-              this.tipoUnidadesNegocio = response.elements;
-            }
-            else{
-              this.tipoUnidadesNegocio = [];
-            };
-          }else{
-            this.tipoUnidadesNegocio = [];
-          }
+        next: (response: ServiceResponseList<UnidadNegocioTipoItem>) => {
+          this.tipoUnidadesNegocio = response.success ? (response.elements ?? []) : [];
         },
         error: (error: any) => {
           const errorMessage = error?.error?.message || 'Error al cargar tipo de unidades de negocio';
@@ -288,17 +271,13 @@ export class CotizacionesComponent implements OnInit {
       }))
       .subscribe({
         next: (response: any) => {
-          const data = response as ObtieneInformacionClienteColgadorResponse;
-          if(data.success && data.totalElements > 0 ){
-            // "label" es el texto que muestra el <ng-select> (bindLabel="label")
-            this.dataClientes = data.elements.map(c => ({
-                  ...c,
-                  label: c.abr_Cliente + ' - ' + c.nom_Cliente
-                }));
-          }
-          else {
-            this.dataClientes = [];
-          }
+          const data = response as ServiceResponseList<ClienteColgadorItem>;
+          const elementos = data.success ? (data.elements ?? []) : [];
+          // "label" es el texto que muestra el <ng-select> (bindLabel="label")
+          this.dataClientes = elementos.map(c => ({
+                ...c,
+                label: c.abr_Cliente + ' - ' + c.nom_Cliente
+              }));
         },
         error: (error) => {
           const errorMessage = error?.error?.message || 'Error al cargar clientes';
@@ -334,13 +313,8 @@ export class CotizacionesComponent implements OnInit {
       this.SpinnerService.hide();
     }))
     .subscribe({
-      next: (response: any) => {
-        if(response.success && response.totalElements > 0){
-          this.listaCodigoColor = response.elements;
-        }
-        else{
-          this.listaCodigoColor = [];
-        }
+      next: (response: ServiceResponseList<ComboItem>) => {
+        this.listaCodigoColor = response.success ? (response.elements ?? []) : [];
       },
       error: (error: any) => {
         const errorMessage = error?.error?.message || 'Error al cargar colores por cliente';
@@ -363,8 +337,8 @@ export class CotizacionesComponent implements OnInit {
       this.SpinnerService.hide();
     }))
     .subscribe({
-      next: (response: any) => {
-        if(response.success && response.totalElements > 0){
+      next: (response: ServiceResponseList<RecetaAntipillingItem>) => {
+        if(response.success && response.elements?.length){
           this.dataRecetas = response.elements;
         }
         else{
@@ -435,12 +409,13 @@ export class CotizacionesComponent implements OnInit {
       this.SpinnerService.hide()
      }))
     .subscribe({
-      next: (response: any) => {
+      next: (response: ServiceResponseList<PrecioXColorItem>) => {
         if(response.success){
-          this.dataSource_Precios = response.elements;
+          const elementos = response.elements ?? [];
+          this.dataSource_Precios = elementos;
           // Con un solo resultado, se autoselecciona para no obligar a abrir el combo.
-          if (response.totalElements === 1){
-            this.onChangePrecio(response.elements[0]);
+          if (elementos.length === 1){
+            this.onChangePrecio(elementos[0]);
           }
         }else{
           this.dataSource_Precios = null;
@@ -493,41 +468,30 @@ export class CotizacionesComponent implements OnInit {
 
     if (articleNumber) {
       this.SpinnerService.show();
-      this.service.getListaTelas(articleNumber).subscribe({
-        next: (response: any) => {
-          if (response.success){
-            if (response.totalElements > 0){
-              this.descripcionTela = response.elements[0].des_Tela;
-              this.formulario.get('descripcionTela')?.setValue(response.elements[0].des_Tela);
-              if (this.descripcionTela != null || this.descripcionTela != ''){
-                this.getRutaXCodTela(articleNumber);
-              }
-              this.SpinnerService.hide();
-            }
-            else {
-              // Tela NO encontrada
-              this.descripcionTela = '';
-              this.formulario.get('descripcionTela')?.setValue('');
-              document.getElementById('codigoTela')?.focus();
-              this.bBuscarTela = false;
-              this.SpinnerService.hide();
+      this.service.getListaTelas(articleNumber)
+      .pipe( finalize(() => { 
+        this.SpinnerService.hide()
+       }))
+      .subscribe({
+        next: (response: ServiceResponseList<TelaItem>) => {
+          if (response.success && response.elements?.length){
+            this.descripcionTela = response.elements[0].des_Tela;
+            this.formulario.get('descripcionTela')?.setValue(response.elements[0].des_Tela);
+            if (this.descripcionTela != null || this.descripcionTela != ''){
+              this.getRutaXCodTela(articleNumber);
             }
           }
           else {
+            // Tela NO encontrada
             this.descripcionTela = '';
             this.formulario.get('descripcionTela')?.setValue('');
             document.getElementById('codigoTela')?.focus();
             this.bBuscarTela = false;
-            this.SpinnerService.hide();
           }
         },
         error: (error: any) => {
-          this.toastr.error(error.message, 'Cerrar', {
-            timeOut: 2500
-          });
-          this.SpinnerService.hide();
           const errorMessage = error?.error?.message || 'Error al cargar descripción de tela';
-          console.log(errorMessage, 'Cerrar', { timeout: 2500 });
+          this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
         }
       });
 
@@ -538,17 +502,18 @@ export class CotizacionesComponent implements OnInit {
   getRutaXCodTela(Cod_Tela: string): void {
     this.SpinnerService.show();
 
-    this.service.getRutaXCodTela(Cod_Tela).subscribe({
-      next: (response: any) => {
-        if(response.success){
-          if(response.totalElements > 0){
-            this.RutaXCodTela = response.elements.map((r: any) => ({
-              codigo: r.cod_Ruta,
-              nombre: r.descripcion
-            }));
-          }
+    this.service.getRutaXCodTela(Cod_Tela)
+    .pipe( finalize(() => { 
+      this.SpinnerService.hide()
+     }))
+    .subscribe({
+      next: (response: ServiceResponseList<RutaTelaRawItem>) => {
+        if(response.success && response.elements?.length){
+          this.RutaXCodTela = response.elements.map(r => ({
+            codigo: r.cod_Ruta,
+            nombre: r.descripcion
+          }));
         }
-        this.SpinnerService.hide();
         // Pasar foco al siguiente campo
         setTimeout(() => {
           document.getElementById('codigoRutaTela')?.focus();
@@ -559,12 +524,8 @@ export class CotizacionesComponent implements OnInit {
       },
       error: (error: any) => {
         this.bBuscarTela = false;
-        this.toastr.error(error.message, 'Cerrar', {
-          timeOut: 2500
-        });
-        this.SpinnerService.hide();
         const errorMessage = error?.error?.message || 'Error al cargar rutas por código de tela';
-        console.log(errorMessage, 'Cerrar', { timeout: 2500 });
+        this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
       }
     });
   }
@@ -662,12 +623,12 @@ export class CotizacionesComponent implements OnInit {
 
     this.SpinnerService.show();
     this.service.getObtenerNuevoCorrelativoVersion(request).subscribe({
-      next: (response: any) => {
-        const e = response?.elements?.[0] ?? {};
+      next: (response: ServiceResponseList<CorrelativoVersionItem>) => {
+        const e = response?.elements?.[0];
         this.borrador = {
           planos: [], planosBackup: [], recetaCod: '',
-          correlativo: String(e.correlativo ?? ''),
-          version: Number(e.version) || 1
+          correlativo: String(e?.correlativo ?? ''),
+          version: Number(e?.version) || 1
         };
         this.global_CodReceta = '';
         this.formulario_Precio.get('ctrl_receta').setValue('');
@@ -693,8 +654,8 @@ export class CotizacionesComponent implements OnInit {
     };
 
     this.service.getListarProcesosExportacion(request).subscribe({
-      next: (response: any) => {
-        if (response.success && response.totalElements > 0) {
+      next: (response: ServiceResponseList<ProcesoExportacionItem>) => {
+        if (response.success && response.elements?.length) {
           //const planos = response.elements;
           this.planos = response.elements;
           this.planosBackup = JSON.parse(JSON.stringify(response.elements));
@@ -786,11 +747,11 @@ export class CotizacionesComponent implements OnInit {
     };
 
     this.service.getObtenerNuevoCorrelativoVersion(request).subscribe({
-      next: (response: any) => {
-        const e = response?.elements?.[0] ?? {};
+      next: (response: ServiceResponseList<CorrelativoVersionItem>) => {
+        const e = response?.elements?.[0];
         if (this.borrador) {
-          this.borrador.correlativo = String(e.correlativo ?? '');
-          this.borrador.version = Number(e.version) || 1;
+          this.borrador.correlativo = String(e?.correlativo ?? '');
+          this.borrador.version = Number(e?.version) || 1;
         }
       },
       error: (error: any) => {
@@ -1210,14 +1171,12 @@ export class CotizacionesComponent implements OnInit {
 
   getListaCentroCosto(): void {
     this.service.getListaCentroCosto().subscribe({
-      next: (response: any) => {
-        if(response.success){
-          if(response.totalElements > 0){
-            this.centroCosto = response.elements.map((c: any) => ({
-              codigo: c.cen_Cos_Cod,
-              nombre: c.cen_Cos_Des
-            }));
-          }
+      next: (response: ServiceResponseList<CentroCostoRawItem>) => {
+        if(response.success && response.elements?.length){
+          this.centroCosto = response.elements.map(c => ({
+            codigo: c.cen_Cos_Cod,
+            nombre: c.cen_Cos_Des
+          }));
         }
       },
       error: (error: any) => {}
@@ -1227,11 +1186,9 @@ export class CotizacionesComponent implements OnInit {
   getLoadIntensidad(Id_Unidad_NegocioKey: number){
     this.intensidad = [];
     this.service.getListaIntensidad(Id_Unidad_NegocioKey).subscribe({
-      next: (response: any) => {
-        if(response.success){
-          if(response.totalElements > 0){
-            this.intensidad = response.elements;
-          }
+      next: (response: ServiceResponseList<ComboItem>) => {
+        if(response.success && response.elements?.length){
+          this.intensidad = response.elements;
         }
       },
       error: (error: any) => {}
@@ -1268,19 +1225,9 @@ export class CotizacionesComponent implements OnInit {
   loadHilo(sCodTela: string){
     this.SpinnerService.show();
     this.service.getListaHiladoxTela(sCodTela).subscribe({
-      next: (response: any) => {
-        if(response.success){
-          if (response.totalElements > 0){
-            this.dataSource_Hilos.data = response.elements;
-            this.SpinnerService.hide();
-          }
-          else{
-            this.dataSource_Hilos.data = [];
-            this.SpinnerService.hide();
-          };
-        }else{
-          this.dataSource_Hilos.data = [];
-        }
+      next: (response: ServiceResponseList<HiladoTelaItem>) => {
+        this.dataSource_Hilos.data = (response.success && response.elements) ? response.elements : [];
+        this.SpinnerService.hide();
       },
       error: (error: any) => {
         this.SpinnerService.hide();
@@ -1343,7 +1290,7 @@ export class CotizacionesComponent implements OnInit {
 
         this.SpinnerService.show();
         this.service.postProcesoCotizacion(data).subscribe({
-          next: (response: any)=> {
+          next: (response: ServiceResponse<null>)=> {
               if(response.success){
                 if (response.codeResult == 200){
                   this.toastr.success(response.message, '', {
