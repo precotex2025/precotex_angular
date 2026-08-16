@@ -182,8 +182,14 @@
   padding: var(--sp-2) var(--sp-4);
 }
 
-.cot-section-title {
+.cot-criterios__header {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cot-section-title {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
   margin: 0 0 10px 0;
@@ -192,17 +198,37 @@
   letter-spacing: 0.3px;
   text-transform: uppercase;
   color: var(--cot-primary);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--cot-primary-dark);
+
+    mat-icon {
+      color: var(--cot-primary-dark);
+    }
+
+    .cot-section-title__chevron {
+      transform: scale(1.2);
+    }
+  }
 
   mat-icon {
     font-size: 18px;
     width: 18px;
     height: 18px;
     color: var(--cot-primary);
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  .cot-section-title__chevron {
+    margin-left: 2px;
   }
 }
 
 .cot-criterios--colapsado .cot-section-title {
-  display: none;
+  margin-bottom: 6px;
 }
 
 /* --- Estado colapsado --- */

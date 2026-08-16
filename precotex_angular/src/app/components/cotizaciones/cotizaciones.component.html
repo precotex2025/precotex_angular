@@ -7,13 +7,18 @@
     </div>
   </header>
 
-  <!-- Zona de criterios: colapsa a resumen luego de Buscar -->
+  <!-- Zona de criterios: colapsa a resumen luego de Buscar o mediante el icono/título -->
   <section class="cot-criterios" [class.cot-criterios--colapsado]="!panelCriteriosAbierto">
 
-    <h3 class="cot-section-title">
-      <mat-icon>tune</mat-icon>
-      Criterios de búsqueda
-    </h3>
+    <div class="cot-criterios__header">
+      <h3 class="cot-section-title" (click)="toggleCriterios()" [matTooltip]="panelCriteriosAbierto ? 'Contraer criterios' : 'Expandir criterios'">
+        <mat-icon class="cot-section-title__icon">tune</mat-icon>
+        <span>Criterios de búsqueda</span>
+        <mat-icon class="cot-section-title__chevron">
+          {{ panelCriteriosAbierto ? 'expand_less' : 'expand_more' }}
+        </mat-icon>
+      </h3>
+    </div>
 
     <!-- Botón de anclaje del panel de Historial (reutilizado en criterios expandidos y colapsados) -->
     <ng-template #tplPinHistorial>
