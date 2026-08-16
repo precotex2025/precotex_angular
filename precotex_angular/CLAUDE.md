@@ -2,6 +2,10 @@
 
 ERP textil. Angular 13. La carpeta `IA/` contiene el contexto de trabajo obligatorio.
 
+# Configuración Global de Respuesta
+
+- **Idioma:** Responder SIEMPRE en Español.
+
 ## Antes de responder cualquier requerimiento
 
 Lee siempre, en este orden:

@@ -19,6 +19,7 @@ import {
   ListaPrecioXColorRequest, ListarProcesosExportacionRequest, ObtenerNuevoCorrelativoVersionRequest,
   ObtieneInformacionClienteColgadorResponse
 } from 'src/app/interfaces/cotizaciones';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-cotizaciones',
@@ -183,8 +184,6 @@ export class CotizacionesComponent implements OnInit {
     codigoTela      :[''],
     descripcionTela :[''],
     codigoRutaTela  :[''],
-    codigoColor     :[''],
-    descripcionColor:[''],
     intensidad      :[''],
     color           :['']
   });
@@ -200,12 +199,6 @@ export class CotizacionesComponent implements OnInit {
     this.loadUnidadNeg();
     this.LoadClientes();
     this.loadRecetas();//PORQUE LAS RECETAS SON UNICAS NO DEPENDEN DE NADIE
-
-    this.formulario.get('codigoColor')?.valueChanges.subscribe((valor: any) => {
-      if (valor && valor.length === 5) {
-        this.validaCodigoColor();
-      }
-    });
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -217,28 +210,29 @@ export class CotizacionesComponent implements OnInit {
     this.unidadesNegocio = [];
     this.SpinnerService.show();
 
-    this.service.getListaUnidadNegocio().subscribe({
-      next: (response: any) => {
-        if(response.success){
-          if (response.totalElements > 0){
-            this.unidadesNegocio = response.elements;
-            this.SpinnerService.hide();
+    this.service.getListaUnidadNegocio()
+      .pipe( finalize(() => {
+        this.SpinnerService.hide()
+        }) 
+      )
+      .subscribe({
+        next: (response: any) => {
+          if(response.success){
+            if (response.totalElements > 0){
+              this.unidadesNegocio = response.elements;
+            }
+            else{
+              this.unidadesNegocio = [];
+            };
           }
-          else{
+          else {
             this.unidadesNegocio = [];
-            this.SpinnerService.hide();
-          };
+          }
+        },
+        error: (error: any) => {
+          const errorMessage = error?.error?.message || 'Error al cargar unidades de negocio';
+          this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
         }
-        else {
-          this.unidadesNegocio = [];
-          this.SpinnerService.hide();
-        }
-      },
-      error: (error: any) => {
-        this.SpinnerService.hide();
-        const errorMessage = error?.error?.message || 'Error al cargar unidades de negocio';
-        this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
-      }
     });
   }
 
@@ -254,27 +248,28 @@ export class CotizacionesComponent implements OnInit {
     this.tipoUnidadesNegocio = [];
     this.SpinnerService.show();
 
-    this.service.getListaUnidadNegocioTipo(Number(Id_Unidad_NegocioKey)).subscribe({
-      next: (response: any) => {
-        if(response.success){
-          if (response.totalElements > 0){
-            this.tipoUnidadesNegocio = response.elements;
-            this.SpinnerService.hide();
-          }
-          else{
+    this.service.getListaUnidadNegocioTipo(Number(Id_Unidad_NegocioKey))
+      .pipe( finalize(() => {
+          this.SpinnerService.hide()
+        }) 
+      )
+      .subscribe({
+        next: (response: any) => {
+          if(response.success){
+            if (response.totalElements > 0){
+              this.tipoUnidadesNegocio = response.elements;
+            }
+            else{
+              this.tipoUnidadesNegocio = [];
+            };
+          }else{
             this.tipoUnidadesNegocio = [];
-            this.SpinnerService.hide();
-          };
-        }else{
-          this.tipoUnidadesNegocio = [];
-          this.SpinnerService.hide();
+          }
+        },
+        error: (error: any) => {
+          const errorMessage = error?.error?.message || 'Error al cargar tipo de unidades de negocio';
+          this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
         }
-      },
-      error: (error: any) => {
-        this.SpinnerService.hide();
-        const errorMessage = error?.error?.message || 'Error al cargar tipo de unidades de negocio';
-        this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
-      }
     });
   }
 
@@ -287,33 +282,28 @@ export class CotizacionesComponent implements OnInit {
     this.dataClientes = [];
     this.SpinnerService.show();
 
-    this.serviceColgadores.getObtieneInformacionClienteColgador().subscribe({
-      next: (response: any) => {
-        const data = response as ObtieneInformacionClienteColgadorResponse;
-        if(data.success){
-          if (data.totalElements > 0){
-              // "label" es el texto que muestra el <ng-select> (bindLabel="label")
-              this.dataClientes = data.elements.map(c => ({
-                ...c,
-                label: c.abr_Cliente + ' - ' + c.nom_Cliente
-              }));
-              this.SpinnerService.hide();
-          }
-          else{
-            this.dataClientes = [];
-            this.SpinnerService.hide();
-          };
-        }
-        else {
-          this.dataClientes = [];
-          this.SpinnerService.hide();
-        }
-      },
-      error: (error) => {
+    this.serviceColgadores.getObtieneInformacionClienteColgador()
+      .pipe( finalize(() => {
         this.SpinnerService.hide();
-        const errorMessage = error?.error?.message || 'Error al cargar clientes';
-        this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
-      }
+      }))
+      .subscribe({
+        next: (response: any) => {
+          const data = response as ObtieneInformacionClienteColgadorResponse;
+          if(data.success && data.totalElements > 0 ){
+            // "label" es el texto que muestra el <ng-select> (bindLabel="label")
+            this.dataClientes = data.elements.map(c => ({
+                  ...c,
+                  label: c.abr_Cliente + ' - ' + c.nom_Cliente
+                }));
+          }
+          else {
+            this.dataClientes = [];
+          }
+        },
+        error: (error) => {
+          const errorMessage = error?.error?.message || 'Error al cargar clientes';
+          this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
+        }
     });
   }
 
@@ -331,32 +321,28 @@ export class CotizacionesComponent implements OnInit {
       return;
     }
 
-    this.loadListaCodigoColor(_cliente);
+    this.loadColoresXCliente(_cliente);
   }
 
   /* --- Lista Colores Por Clientes --- */
-  loadListaCodigoColor(Cod_Cliente: string) {
+  loadColoresXCliente(Cod_Cliente: string) {
     this.listaCodigoColor = [];
     this.SpinnerService.show();
 
-    this.service.getListaColoresXCliente(Cod_Cliente).subscribe({
+    this.service.getListaColoresXCliente(Cod_Cliente)
+    .pipe( finalize(() => {
+      this.SpinnerService.hide();
+    }))
+    .subscribe({
       next: (response: any) => {
-        if(response.success){
-          if (response.totalElements > 0){
-            this.listaCodigoColor = response.elements;
-            this.SpinnerService.hide();
-          }
-          else{
-            this.listaCodigoColor = [];
-            this.SpinnerService.hide();
-          };
-        }else{
+        if(response.success && response.totalElements > 0){
+          this.listaCodigoColor = response.elements;
+        }
+        else{
           this.listaCodigoColor = [];
-          this.SpinnerService.hide();
         }
       },
       error: (error: any) => {
-        this.SpinnerService.hide();
         const errorMessage = error?.error?.message || 'Error al cargar colores por cliente';
         this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
       }
@@ -372,25 +358,20 @@ export class CotizacionesComponent implements OnInit {
     this.dataRecetas = [];
     this.SpinnerService.show();
 
-    this.service.getListaRecetasAntipilling().subscribe({
+    this.service.getListaRecetasAntipilling()
+    .pipe( finalize(() => {
+      this.SpinnerService.hide();
+    }))
+    .subscribe({
       next: (response: any) => {
-        if(response.success){
-          if (response.totalElements > 0){
-            this.dataRecetas = response.elements;
-            this.SpinnerService.hide();
-          }
-          else{
-            this.dataSource_Hilos.data = [];
-            this.SpinnerService.hide();
-          };
+        if(response.success && response.totalElements > 0){
+          this.dataRecetas = response.elements;
         }
         else{
           this.dataSource_Hilos.data = [];
-          this.SpinnerService.hide();
         }
       },
       error: (error: any) => {
-        this.SpinnerService.hide();
         const errorMessage = error?.error?.message || 'Error al cargar recetas antipilling';
         this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
       }
@@ -400,49 +381,6 @@ export class CotizacionesComponent implements OnInit {
   ///////////////////////////////////////////////////////////////////////////
   //                                 COLOR                                  //
   ///////////////////////////////////////////////////////////////////////////
-
-  /* --- Cargar Colores --- */
-  validaCodigoColor() {
-    const sCodColor = this.formulario.get('color')?.value! || '';
-
-    if (!sCodColor || sCodColor.trim() === ''){
-      this.MostrarAdvertencia('Código de color', 'Ingrese código de color.', 1500);
-      return;
-    }
-
-    //Ejecuta cuando es longitud 5
-    if (sCodColor && sCodColor.length === 6) {
-      this.SpinnerService.show();
-      this.service.getValidaColorExiste(sCodColor).subscribe({
-        next: (response: any) => {
-          if (response.success) {
-            if (response.totalElements == 0) {
-
-              this.toastr.info(response.message, '', {
-                timeOut: 2500,
-              });
-
-              this.formulario.get('codigoColor')?.setValue('');
-
-            }
-            else{
-              this.formulario.get('descripcionColor')?.setValue(response.elements[0].descripcion);
-            }
-          }
-          this.SpinnerService.hide();
-        },
-        error: (error: any) => {
-          this.SpinnerService.hide();
-          const errorMessage = error?.error?.message || 'Error al cargar colores';
-          console.log(errorMessage, 'Cerrar', { timeout: 2500 });
-        }
-      });
-    }
-    else {
-      //this.formulario.get('codigoColor')?.setValue('');
-    }
-
-  }
 
   /** Limpia el precio/SDC elegido en el combo Precio/SDC. Se usa al cambiar Color (ver
    *  onChangeColor) y al cambiar/limpiar Cliente (ver onChangeCliente), porque un cliente
@@ -492,13 +430,14 @@ export class CotizacionesComponent implements OnInit {
       Tipo_Busqueda, Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color
     };
 
-    this.service.getListaPrecioXColor(request).subscribe({
+    this.service.getListaPrecioXColor(request)
+    .pipe( finalize(() => {
+      this.SpinnerService.hide()
+     }))
+    .subscribe({
       next: (response: any) => {
         if(response.success){
-          console.log(':::::::::::::RESULTADO DE PRECIO', response);
-
           this.dataSource_Precios = response.elements;
-
           // Con un solo resultado, se autoselecciona para no obligar a abrir el combo.
           if (response.totalElements === 1){
             this.onChangePrecio(response.elements[0]);
@@ -506,13 +445,10 @@ export class CotizacionesComponent implements OnInit {
         }else{
           this.dataSource_Precios = null;
         }
-        this.SpinnerService.hide();
       },
       error: (error: any) => {
-        this.SpinnerService.hide();
-        console.log(error.error.message, 'Cerrar', {
-          timeout: 2500
-        })
+        const errorMessage = error?.error?.message || 'Error al cargar recetas antipilling';
+        this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
       }
     });
   }
@@ -1310,7 +1246,6 @@ export class CotizacionesComponent implements OnInit {
     this.formulario.get('descripcionTela')?.setValue('');
     this.formulario.get('descripcionTela')?.disable();
     this.formulario.get('codigoRutaTela')?.setValue('');
-    this.formulario.get('codigoColor')?.setValue('');
     this.formulario.get('color')?.setValue('');
     //DesHabilita botoneria
     this.bMuestraMenuFlotante = false;
