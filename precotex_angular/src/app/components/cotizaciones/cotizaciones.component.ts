@@ -11,12 +11,13 @@ import Swal from 'sweetalert2';
 import { GlobalVariable } from 'src/app/VarGlobals';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { COTIZACIONES_FIELDS } from 'src/app/shared/constants/cotizaciones-fields';
-import { ComboItem, VersionPrecio, RutaTela, CentroCosto, BorradorCotizacion, FiltrosBusqueda } from 'src/app/models/cotizaciones';
+import { ComboItem, VersionPrecio, RutaTela, CentroCosto, BorradorCotizacion, FiltrosBusqueda, ClienteComboItem } from 'src/app/models/cotizaciones';
 
 import {
   ProcesoExportacionItem, RecetaAntipillingItem, PrecioXColorItem, HiladoTelaItem,
   ProcesoCotizacionDetalle, ProcesoCotizacionRequest,
-  ListaPrecioXColorRequest, ListarProcesosExportacionRequest, ObtenerNuevoCorrelativoVersionRequest
+  ListaPrecioXColorRequest, ListarProcesosExportacionRequest, ObtenerNuevoCorrelativoVersionRequest,
+  ObtieneInformacionClienteColgadorResponse
 } from 'src/app/interfaces/cotizaciones';
 
 @Component({
@@ -42,30 +43,20 @@ export class CotizacionesComponent implements OnInit {
     /\d/,    // Cuarto número
     /\d/,    // Quinto número
     /\d/     // Sexto número
-  ];  
-  
+  ];
+
   unidadNegocio = '';
-  tipo = '';
-  cliente = '';
-  codigoTela = '';
   descripcionTela = '';
-  //rutaSeleccionada = '';
   codigoRutaTela = '';
   RutaXCodTela: RutaTela[] = [];
   RutaXCodTelaDetalle = [];
-  codigoColor = '';
-  descripcionColor = '';
   centroCosto: CentroCosto[] = [];
-
   bMuestraMenuFlotante: boolean = false;
-  dataClientes    : any[] = [];
-  ClientesFiltrada: any[] = [];
-  ColoresFiltrada: ComboItem[] = [];
+  dataClientes    : ClienteComboItem[] = [];
   planos          : ProcesoExportacionItem[] = [];
   planosBackup : ProcesoExportacionItem[] = [];
   dataRecetas     : RecetaAntipillingItem[] = [];
   sUsuario        = GlobalVariable.vusu;
-
   dataDetalles: ProcesoCotizacionDetalle[] = [];
   isAjusteBloqueado   = true;
   dialogAbierto       = false;
@@ -74,7 +65,6 @@ export class CotizacionesComponent implements OnInit {
   bValidaHistorial    = false;
 
   filaSeleccionada: any = null;
-
   global_Tiempo       : number = 0;
   global_PrecioTinto  : number = 0;
   global_SDC          : string = "";
@@ -159,7 +149,7 @@ export class CotizacionesComponent implements OnInit {
     'descripcion',
     'factor',
     'cosKg',
-    'totalComercial',    
+    'totalComercial',
     'total',
     'ajuste',
     'cotizacion'
@@ -171,16 +161,16 @@ export class CotizacionesComponent implements OnInit {
     'Porcentaje'              ,
     'Precio_Final'            ,
     'Total'
-  ];  
+  ];
   dataSource_Hilos: MatTableDataSource<HiladoTelaItem> = new MatTableDataSource();
 
   displayedColumns_Precio: string[] = [
-      'opcion'        , 
+      'opcion'        ,
       'corR_CARTA'    ,
       'tiempo'        ,
       'preC_TINTO'    ,
       //'preC_ACABADO'  ,
-      'idrecetalabprod',  
+      'idrecetalabprod',
   ];
   // Lista de precios por color (array crudo del backend, ver onBuscaPreciosxColor)
   dataSource_Precios: any[] | null = null;
@@ -195,50 +185,36 @@ export class CotizacionesComponent implements OnInit {
     codigoRutaTela  :[''],
     codigoColor     :[''],
     descripcionColor:[''],
-    filtro          :[''],
     intensidad      :[''],
-    color           :[''],
-    //ctrl_receta     :[''],
-    filtroColores   :['']
+    color           :['']
   });
 
   formulario_Precio = this.formBuilder.group({
     ctrl_receta: ['']
   });
 
-  //procesos: Proceso[] = [];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   COTIZACIONES_FIELDS = COTIZACIONES_FIELDS;
 
   //INICIALIZACION DE COMPONENTE
   ngOnInit(): void {
     this.loadUnidadNeg();
-    this.LoadClientes(null);
+    this.LoadClientes();
     this.loadRecetas();//PORQUE LAS RECETAS SON UNICAS NO DEPENDEN DE NADIE
 
     this.formulario.get('codigoColor')?.valueChanges.subscribe((valor: any) => {
       if (valor && valor.length === 5) {
         this.validaCodigoColor();
       }
-    });     
+    });
   }
+
+  ///////////////////////////////////////////////////////////////////////////
+  //                          UNIDAD DE NEGOCIO                             //
+  ///////////////////////////////////////////////////////////////////////////
 
   /* --- Cargar Unidad de Negocio --- */
   loadUnidadNeg(){
-    this.unidadesNegocio = [];   
+    this.unidadesNegocio = [];
     this.SpinnerService.show();
 
     this.service.getListaUnidadNegocio().subscribe({
@@ -249,7 +225,7 @@ export class CotizacionesComponent implements OnInit {
             this.SpinnerService.hide();
           }
           else{
-            this.unidadesNegocio = [];            
+            this.unidadesNegocio = [];
             this.SpinnerService.hide();
           };
         }
@@ -261,30 +237,67 @@ export class CotizacionesComponent implements OnInit {
       error: (error: any) => {
         this.SpinnerService.hide();
         const errorMessage = error?.error?.message || 'Error al cargar unidades de negocio';
-        console.log(errorMessage, 'Cerrar', { timeout: 2500 });
+        this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
       }
-    });       
+    });
   }
 
+  /* --- Evento de Change Unidad de Negocio --- */
+  chgUnidadNegocio(){
+    this.reiniciaControles();
+    this.unidadNegocio = this.formulario.get('unidadNegocio')?.value! || '';
+    this.loadTipoUnidadesNegocio(Number(this.unidadNegocio));
+  }
+
+  /* --- Cargar Tipo Unidad de Negocio --- */
+  loadTipoUnidadesNegocio(Id_Unidad_NegocioKey: Number) {
+    this.tipoUnidadesNegocio = [];
+    this.SpinnerService.show();
+
+    this.service.getListaUnidadNegocioTipo(Number(Id_Unidad_NegocioKey)).subscribe({
+      next: (response: any) => {
+        if(response.success){
+          if (response.totalElements > 0){
+            this.tipoUnidadesNegocio = response.elements;
+            this.SpinnerService.hide();
+          }
+          else{
+            this.tipoUnidadesNegocio = [];
+            this.SpinnerService.hide();
+          };
+        }else{
+          this.tipoUnidadesNegocio = [];
+          this.SpinnerService.hide();
+        }
+      },
+      error: (error: any) => {
+        this.SpinnerService.hide();
+        const errorMessage = error?.error?.message || 'Error al cargar tipo de unidades de negocio';
+        this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
+      }
+    });
+  }
+
+  ///////////////////////////////////////////////////////////////////////////
+  //                               CLIENTE                                  //
+  ///////////////////////////////////////////////////////////////////////////
+
   /* --- Cargar Clientes --- */
-  LoadClientes(codigoCliente: string){
+  LoadClientes(){
     this.dataClientes = [];
     this.SpinnerService.show();
 
     this.serviceColgadores.getObtieneInformacionClienteColgador().subscribe({
       next: (response: any) => {
-        if(response.success){
-          if (response.totalElements > 0){
+        const data = response as ObtieneInformacionClienteColgadorResponse;
+        if(data.success){
+          if (data.totalElements > 0){
               // "label" es el texto que muestra el <ng-select> (bindLabel="label")
-              this.dataClientes = response.elements.map((c: any) => ({
+              this.dataClientes = data.elements.map(c => ({
                 ...c,
                 label: c.abr_Cliente + ' - ' + c.nom_Cliente
               }));
               this.SpinnerService.hide();
-
-              if (codigoCliente && codigoCliente.trim() !== ''){
-                this.usarClientes(codigoCliente);
-              }
           }
           else{
             this.dataClientes = [];
@@ -299,27 +312,60 @@ export class CotizacionesComponent implements OnInit {
       error: (error) => {
         this.SpinnerService.hide();
         const errorMessage = error?.error?.message || 'Error al cargar clientes';
-        console.log(errorMessage, 'Cerrar', { timeout: 2500 });
+        this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
       }
-    });   
-  } 
+    });
+  }
 
-  /* --- Usar Clientes --- */
-  usarClientes(codigoCliente: string) {
-    this.ClientesFiltrada = this.dataClientes.filter(item =>
-      item.cod_Cliente_Tex.toLowerCase().includes(codigoCliente)
-    );
+  /* --- Evento change clientes: recarga los colores del nuevo cliente y limpia todo lo que
+     dependía del cliente anterior (color elegido, lista de colores y precio/SDC), para que
+     no se pueda buscar ni guardar con un color que ya no pertenece al cliente vigente. --- */
+  onChangeCliente(){
+    this.formulario.get('color')?.setValue('');
+    this.listaCodigoColor = [];
+    this.limpiarSeleccionPrecio();
 
-    // Busca si hay coincidencia exacta (opcional)
-    const clienteExacto = this.dataClientes.find(item =>
-      item.cod_Cliente_Tex.toLowerCase() === codigoCliente
-    );
+    const _cliente = this.formulario.get('cliente')?.value || '';
 
-    // Asigna el valor al mat-select si encuentra coincidencia
-    if (clienteExacto) {
-      this.formulario.get('cliente')?.setValue(clienteExacto.cod_Cliente_Tex);
-    }    
-  } 
+    if (_cliente === null || _cliente === undefined || _cliente === '') {
+      return;
+    }
+
+    this.loadListaCodigoColor(_cliente);
+  }
+
+  /* --- Lista Colores Por Clientes --- */
+  loadListaCodigoColor(Cod_Cliente: string) {
+    this.listaCodigoColor = [];
+    this.SpinnerService.show();
+
+    this.service.getListaColoresXCliente(Cod_Cliente).subscribe({
+      next: (response: any) => {
+        if(response.success){
+          if (response.totalElements > 0){
+            this.listaCodigoColor = response.elements;
+            this.SpinnerService.hide();
+          }
+          else{
+            this.listaCodigoColor = [];
+            this.SpinnerService.hide();
+          };
+        }else{
+          this.listaCodigoColor = [];
+          this.SpinnerService.hide();
+        }
+      },
+      error: (error: any) => {
+        this.SpinnerService.hide();
+        const errorMessage = error?.error?.message || 'Error al cargar colores por cliente';
+        this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
+      }
+    });
+  }
+
+  ///////////////////////////////////////////////////////////////////////////
+  //                        RECETAS ANTIPILLING                             //
+  ///////////////////////////////////////////////////////////////////////////
 
   /* --- Cargar Recetas Antipilling --- */
   loadRecetas(){
@@ -334,7 +380,7 @@ export class CotizacionesComponent implements OnInit {
             this.SpinnerService.hide();
           }
           else{
-            this.dataSource_Hilos.data = [];            
+            this.dataSource_Hilos.data = [];
             this.SpinnerService.hide();
           };
         }
@@ -346,24 +392,24 @@ export class CotizacionesComponent implements OnInit {
       error: (error: any) => {
         this.SpinnerService.hide();
         const errorMessage = error?.error?.message || 'Error al cargar recetas antipilling';
-        console.log(errorMessage, 'Cerrar', { timeout: 2500 });
+        this.matSnackBar.open(errorMessage, 'Cerrar', { duration: 2500 });
       }
-    });      
+    });
   }
+
+  ///////////////////////////////////////////////////////////////////////////
+  //                                 COLOR                                  //
+  ///////////////////////////////////////////////////////////////////////////
 
   /* --- Cargar Colores --- */
   validaCodigoColor() {
     const sCodColor = this.formulario.get('color')?.value! || '';
 
     if (!sCodColor || sCodColor.trim() === ''){
-      this.matSnackBar.open("¡Ingrese codigo de color...!", 'Cerrar', {
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-        duration: 1500,
-      });
+      this.MostrarAdvertencia('Código de color', 'Ingrese código de color.', 1500);
       return;
-    }  
-    
+    }
+
     //Ejecuta cuando es longitud 5
     if (sCodColor && sCodColor.length === 6) {
       this.SpinnerService.show();
@@ -374,13 +420,13 @@ export class CotizacionesComponent implements OnInit {
 
               this.toastr.info(response.message, '', {
                 timeOut: 2500,
-              });                 
+              });
 
-              this.formulario.get('codigoColor')?.setValue('');  
+              this.formulario.get('codigoColor')?.setValue('');
 
             }
             else{
-              this.formulario.get('descripcionColor')?.setValue(response.elements[0].descripcion); 
+              this.formulario.get('descripcionColor')?.setValue(response.elements[0].descripcion);
             }
           }
           this.SpinnerService.hide();
@@ -390,53 +436,86 @@ export class CotizacionesComponent implements OnInit {
           const errorMessage = error?.error?.message || 'Error al cargar colores';
           console.log(errorMessage, 'Cerrar', { timeout: 2500 });
         }
-      });      
+      });
     }
     else {
-      //this.formulario.get('codigoColor')?.setValue(''); 
+      //this.formulario.get('codigoColor')?.setValue('');
     }
 
-  }  
-
-  /* --- Evento change clientes --- */
-  onChangeCliente(){
-    const _cliente = this.formulario.get('cliente')?.value || '';
-
-    if (_cliente === null || _cliente === undefined || _cliente === '') {
-      return;
-    }
-
-    this.loadListaCodigoColor(_cliente);
   }
-  
-  /* --- Lista Colores Por Clientes --- */
-  loadListaCodigoColor(Cod_Cliente: string) {
-    this.listaCodigoColor = [];
+
+  /** Limpia el precio/SDC elegido en el combo Precio/SDC. Se usa al cambiar Color (ver
+   *  onChangeColor) y al cambiar/limpiar Cliente (ver onChangeCliente), porque un cliente
+   *  o color distinto invalida el precio que estaba seleccionado. */
+  private limpiarSeleccionPrecio(): void {
+    this.precioSeleccionado = null;
+    this.dataSource_Precios = null;
+    this.global_PrecioTinto = 0;
+    this.global_Tiempo      = 0;
+    this.global_SDC         = "";
+    this.global_idCotizacion_Cab = 0;
+  }
+
+  /* --- Cambio de Color: solo trae la lista de precios por color para el combo Precio/SDC.
+     No toca la tabla de costeo; eso lo dispara únicamente onBuscar. --- */
+  onChangeColor(){
+    this.limpiarSeleccionPrecio();
+
+    const _color = this.formulario.get('color')?.value || '';
+    if (!_color) { return; }
+
+    const _unidad    = Number(this.unidadNegocio);
+    const _tipo      = this.formulario.get('tipo')?.value || '';
+    const _cliente   = this.formulario.get('cliente')?.value || '';
+    const _tela      = this.formulario.get('codigoTela')?.value || '';
+    const _ruta      = this.formulario.get('codigoRutaTela')?.value || '';
+    const bHistorial = this.bValidaHistorial ? "1" : "0";
+
+    this.onBuscaPreciosxColor(String(bHistorial), _unidad, _tipo, _cliente, _tela, _ruta, _color);
+  }
+
+  /* --- Selección de precio en el combo Precio/SDC --- */
+  onChangePrecio(p: PrecioXColorItem){
+    this.precioSeleccionado = p;
+    this.global_PrecioTinto      = Number(p.preC_TINTO);
+    this.global_Tiempo           = Number(p.tiempo);
+    this.global_SDC              = String(p.corR_CARTA);
+    this.global_idCotizacion_Cab = Number(p.idcotizacioN_CAB);
+  }
+
+  /** Trae la lista de precios por color (catálogo). No dispara getListarProcesosExportacion. */
+  onBuscaPreciosxColor(Tipo_Busqueda: string, Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string){
+    this.dataSource_Precios = null;
     this.SpinnerService.show();
 
-    this.service.getListaColoresXCliente(Cod_Cliente).subscribe({
+    const request: ListaPrecioXColorRequest = {
+      Tipo_Busqueda, Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color
+    };
+
+    this.service.getListaPrecioXColor(request).subscribe({
       next: (response: any) => {
         if(response.success){
-          if (response.totalElements > 0){
-            this.listaCodigoColor = response.elements;
-            this.SpinnerService.hide();
+          console.log(':::::::::::::RESULTADO DE PRECIO', response);
+
+          this.dataSource_Precios = response.elements;
+
+          // Con un solo resultado, se autoselecciona para no obligar a abrir el combo.
+          if (response.totalElements === 1){
+            this.onChangePrecio(response.elements[0]);
           }
-          else{
-            this.listaCodigoColor = [];            
-            this.SpinnerService.hide();
-          };
         }else{
-          this.listaCodigoColor = [];
-          this.SpinnerService.hide();
+          this.dataSource_Precios = null;
         }
+        this.SpinnerService.hide();
       },
       error: (error: any) => {
         this.SpinnerService.hide();
-        const errorMessage = error?.error?.message || 'Error al cargar colores por cliente';
-        console.log(errorMessage, 'Cerrar', { timeout: 2500 });
+        console.log(error.error.message, 'Cerrar', {
+          timeout: 2500
+        })
       }
-    });    
-  }  
+    });
+  }
 
   /* --- Buscar Tela --- */
   buscarDescripcionTela(event?: KeyboardEvent) {
@@ -456,7 +535,7 @@ export class CotizacionesComponent implements OnInit {
       this.bBuscarTela = false;
       return;
     }
-    
+
     articleNumber = articleNumber.toUpperCase(); // Asegura letras en mayúscula
     const letras = articleNumber.substring(0, 2);
     const numeros = articleNumber.substring(2).replace(/\D/g, ''); // Solo dígitos
@@ -471,19 +550,19 @@ export class CotizacionesComponent implements OnInit {
     // Completar con ceros si faltan dígitos
     const numerosCompletos = numeros.padStart(6, '0');
     const nuevoValor = letras + numerosCompletos;
-    
+
     // Asignar el valor corregido al control
     this.formulario.get('codigoTela')?.setValue(nuevoValor);
-    articleNumber = nuevoValor;    
+    articleNumber = nuevoValor;
 
-    if (articleNumber) { 
+    if (articleNumber) {
       this.SpinnerService.show();
       this.service.getListaTelas(articleNumber).subscribe({
         next: (response: any) => {
           if (response.success){
             if (response.totalElements > 0){
               this.descripcionTela = response.elements[0].des_Tela;
-              this.formulario.get('descripcionTela')?.setValue(response.elements[0].des_Tela); 
+              this.formulario.get('descripcionTela')?.setValue(response.elements[0].des_Tela);
               if (this.descripcionTela != null || this.descripcionTela != ''){
                 this.getRutaXCodTela(articleNumber);
               }
@@ -515,8 +594,8 @@ export class CotizacionesComponent implements OnInit {
           console.log(errorMessage, 'Cerrar', { timeout: 2500 });
         }
       });
-      
-    } 
+
+    }
   }
 
   /* --- Buscar Ruta por Código de Tela --- */
@@ -554,42 +633,6 @@ export class CotizacionesComponent implements OnInit {
     });
   }
 
-  /* --- Evento de Change Unidad de Negocio --- */
-  chgUnidadNegocio(){
-    this.reiniciaControles();
-    this.unidadNegocio = this.formulario.get('unidadNegocio')?.value! || '';
-    this.loadTipoUnidadesNegocio(Number(this.unidadNegocio));
-  }
-
-  /* --- Cargar Tipo Unidad de Negocio --- */
-  loadTipoUnidadesNegocio(Id_Unidad_NegocioKey: Number) {
-    this.tipoUnidadesNegocio = [];
-    this.SpinnerService.show();
-
-    this.service.getListaUnidadNegocioTipo(Number(Id_Unidad_NegocioKey)).subscribe({
-      next: (response: any) => {
-        if(response.success){
-          if (response.totalElements > 0){
-            this.tipoUnidadesNegocio = response.elements;
-            this.SpinnerService.hide();
-          }
-          else{
-            this.tipoUnidadesNegocio = [];            
-            this.SpinnerService.hide();
-          };
-        }else{
-          this.tipoUnidadesNegocio = [];
-          this.SpinnerService.hide();
-        }
-      },
-      error: (error: any) => {
-        this.SpinnerService.hide();
-        const errorMessage = error?.error?.message || 'Error al cargar tipo de unidades de negocio';
-        console.log(errorMessage, 'Cerrar', { timeout: 2500 });
-      }
-    });    
-  }
-
   /* --- Limpiar Seccion de Filtros --- */
   onLimpiarFiltros(){
     this.reiniciaControles();
@@ -623,6 +666,14 @@ export class CotizacionesComponent implements OnInit {
     const _tela    = this.formulario.get('codigoTela')?.value || '';
     const _ruta    = this.formulario.get('codigoRutaTela')?.value || '';
     const _color   = this.formulario.get('color')?.value || '';
+
+    if (!_unidad || !_tipo || !_cliente || !_tela || !_ruta || !_color) {
+      this.MostrarAdvertencia(
+        'Criterios incompletos',
+        `Complete ${COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.label}, ${COTIZACIONES_FIELDS.TIPO_UNIDAD.label}, ${COTIZACIONES_FIELDS.CLIENTE.label}, ${COTIZACIONES_FIELDS.TELA.label}, ${COTIZACIONES_FIELDS.RUTA.label} y ${COTIZACIONES_FIELDS.COLOR.label} antes de buscar.`
+      );
+      return;
+    }
 
     this.codigoRutaTela = _ruta;
 
@@ -694,77 +745,11 @@ export class CotizacionesComponent implements OnInit {
     });
   }
 
-  /* --- Cambio de Color: solo trae la lista de precios por color para el combo Precio/SDC.
-     No toca la tabla de costeo; eso lo dispara únicamente onBuscar. --- */
-  onChangeColor(){
-    this.precioSeleccionado = null;
-    this.dataSource_Precios = null;
-    this.global_PrecioTinto = 0;
-    this.global_Tiempo      = 0;
-    this.global_SDC         = "";
-    this.global_idCotizacion_Cab = 0;
-
-    const _color = this.formulario.get('color')?.value || '';
-    if (!_color) { return; }
-
-    const _unidad    = Number(this.unidadNegocio);
-    const _tipo      = this.formulario.get('tipo')?.value || '';
-    const _cliente   = this.formulario.get('cliente')?.value || '';
-    const _tela      = this.formulario.get('codigoTela')?.value || '';
-    const _ruta      = this.formulario.get('codigoRutaTela')?.value || '';
-    const bHistorial = this.bValidaHistorial ? "1" : "0";
-
-    this.onBuscaPreciosxColor(String(bHistorial), _unidad, _tipo, _cliente, _tela, _ruta, _color);
-  }
-
-  /* --- Selección de precio en el combo Precio/SDC --- */
-  onChangePrecio(p: PrecioXColorItem){
-    this.precioSeleccionado = p;
-    this.global_PrecioTinto      = Number(p.preC_TINTO);
-    this.global_Tiempo           = Number(p.tiempo);
-    this.global_SDC              = String(p.corR_CARTA);
-    this.global_idCotizacion_Cab = Number(p.idcotizacioN_CAB);
-  }
-
-  /** Trae la lista de precios por color (catálogo). No dispara getListarProcesosExportacion. */
-  onBuscaPreciosxColor(Tipo_Busqueda: string, Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string){
-    this.dataSource_Precios = null;
-    this.SpinnerService.show();
-
-    const request: ListaPrecioXColorRequest = {
-      Tipo_Busqueda, Pro_Cen_Cos, Tipo, Cod_Cliente_Tex, Cod_Tela, Cod_Ruta, Cod_Color
-    };
-
-    this.service.getListaPrecioXColor(request).subscribe({
-      next: (response: any) => {
-        if(response.success){
-          console.log(':::::::::::::RESULTADO DE PRECIO', response);
-
-          this.dataSource_Precios = response.elements;
-
-          // Con un solo resultado, se autoselecciona para no obligar a abrir el combo.
-          if (response.totalElements === 1){
-            this.onChangePrecio(response.elements[0]);
-          }
-        }else{
-          this.dataSource_Precios = null;
-        }
-        this.SpinnerService.hide();
-      },
-      error: (error: any) => {
-        this.SpinnerService.hide();
-        console.log(error.error.message, 'Cerrar', {
-          timeout: 2500
-        })
-      }
-    });
-  }
-
   getListarProcesosExportacion(Pro_Cen_Cos: number, Tipo: string, Cod_Cliente_Tex: string, Cod_Tela: string, Cod_Ruta: string, Cod_Color: string, precio: number, tiempo: number, IdCotizacion_Cab: number): void {
     //limpia
     this.planos = []
     this.planosBackup = [];
-    
+
     this.SpinnerService.show();
 
     const request: ListarProcesosExportacionRequest = {
@@ -892,7 +877,7 @@ export class CotizacionesComponent implements OnInit {
         }
     });
   }
-  
+
   /********************** SWAL ALERT CERRAR CARGANDO ********************************* */
   private CerrarCargando() {
     Swal.close();
@@ -958,9 +943,6 @@ export class CotizacionesComponent implements OnInit {
 
 
 
-
-
-
 //#Region EVENTOS DEL FORMULARIO
 
   toggleExpand(row: any) {
@@ -974,9 +956,6 @@ export class CotizacionesComponent implements OnInit {
   }
 
 //#endregion
-
-
-  
 
   private static readonly ICONOS_SECCION: { claves: string[]; icono: string }[] = [
     { claves: ['MATERIA', 'HILADO', 'ALGODON', 'INSUMO'], icono: 'inventory_2' },
@@ -1003,8 +982,6 @@ export class CotizacionesComponent implements OnInit {
   }
 
   // --- Estado de presentación (rediseño UX) ---
-
-  
 
   onDensidadChange(valor: 'compacta' | 'comoda') {
     this.densidad = valor;
@@ -1042,13 +1019,6 @@ export class CotizacionesComponent implements OnInit {
       this.cerrarEdicion();
     }
   }
-
-  
-
-
-
-
-
 
   // Activa una versión guardada: la selecciona en el panel y carga su grilla de costeo.
   seleccionarVersion(v: VersionPrecio) {
@@ -1150,7 +1120,7 @@ export class CotizacionesComponent implements OnInit {
     if (cliente) chips.push({ label: COTIZACIONES_FIELDS.CLIENTE.label, value: cliente.abr_Cliente, icon: COTIZACIONES_FIELDS.CLIENTE.icon });
 
     if (v.codigoTela) chips.push({ label: COTIZACIONES_FIELDS.TELA.label, value: v.codigoTela, icon: COTIZACIONES_FIELDS.TELA.icon });
-    
+
     if (v.descripcionTela) chips.push({ label: COTIZACIONES_FIELDS.DESCRIPCION_TELA.label, value: v.descripcionTela, icon: COTIZACIONES_FIELDS.DESCRIPCION_TELA.icon });
 
     const ruta = this.RutaXCodTela.find(r => r.codigo === v.codigoRutaTela);
@@ -1164,14 +1134,6 @@ export class CotizacionesComponent implements OnInit {
 
   ///////////////////////////////////////////////////////////////////////////
 
-  
-
-
-
-
-
-
-
   recalcular(row: any) {
 
     //Actualiza el Campos pro_Cotizacion con el nuevo Valor
@@ -1179,30 +1141,30 @@ export class CotizacionesComponent implements OnInit {
       row.pro_Cotizacion = row.pro_Tot;
     } else {
       row.pro_Cotizacion = row.pro_Aju;
-    }    
+    }
 
     const sumaColCotizacion = this.planos
       .filter(fila => fila.nivel === 1)
-      .reduce((acum, fila) => acum + (fila.pro_Cotizacion || 0), 0);   
-      
+      .reduce((acum, fila) => acum + (fila.pro_Cotizacion || 0), 0);
+
     this.planos.forEach(fila => {
       if (fila.cod_Subtotal === 1 && fila.nivel === 3) {
         fila.pro_Cotizacion = sumaColCotizacion;   // asignamos la suma calculada
       }
-    });  
-    
+    });
+
     //Obtener Datos de la Fila Utilidad y Total US$
     const fila_Utilidad = this.planos.find(f => f.nivel === 3 && f.cod_Subtotal === 2);
     const utilidad = fila_Utilidad ? fila_Utilidad.pro_Cos_Kg : 0;
-    
+
     //FILA(UTILIDAD) y setea Valor - COLUMNA COTIZACIÓN
     const _Valor_UtiProCotizacion: number = parseFloat(Number((sumaColCotizacion * utilidad)/100).toFixed(2));
     this.planos.forEach(fila => {
       if (fila.cod_Subtotal === 2 && fila.nivel === 3) {
         fila.pro_Cotizacion = _Valor_UtiProCotizacion;
       }
-    });    
-    
+    });
+
     const _Valor_TotalUSProCotizacion = parseFloat(Number(sumaColCotizacion + _Valor_UtiProCotizacion).toFixed(2));
 
     //FILA(TOTAL US$)  (SUM(PRECIO KG) + SUM(UTILIDAD)) -  COLUMNA COTIZACIÓN
@@ -1210,16 +1172,16 @@ export class CotizacionesComponent implements OnInit {
       if (fila.cod_Subtotal === 3 && fila.nivel === 3) {
         fila.pro_Cotizacion = _Valor_TotalUSProCotizacion;
       }
-    });    
-    
+    });
+
     //FILA (PRECIO FINAL CLIENTE) - COLUMNA COTIZACIÓN
     this.planos.forEach(fila => {
       if (fila.cod_Subtotal === 4 && fila.nivel === 3) {
         fila.pro_Cotizacion = _Valor_TotalUSProCotizacion;
       }
-    });       
-    
- 
+    });
+
+
   }
 
   recalcularUtilidad(row: any) {
@@ -1230,7 +1192,7 @@ export class CotizacionesComponent implements OnInit {
     const fila_PrecioKG       = this.planos.find(f => f.nivel === 3 && f.cod_Subtotal === 1);
     const valorProTot         = fila_PrecioKG ? fila_PrecioKG.pro_Tot         : 0;
     const valorProTotCom      = fila_PrecioKG ? fila_PrecioKG.pro_Tot_Com     : 0;
-    const valorpro_Cotizacion = fila_PrecioKG ? fila_PrecioKG.pro_Cotizacion  : 0;    
+    const valorpro_Cotizacion = fila_PrecioKG ? fila_PrecioKG.pro_Cotizacion  : 0;
 
     /****************************************************/
     /************ CALCULO FILA DE UTILIDAD **************/
@@ -1245,22 +1207,22 @@ export class CotizacionesComponent implements OnInit {
       if (fila.cod_Subtotal === 2 && fila.nivel === 3) {
         fila.pro_Tot = _Valor_UtiProTot;
       }
-    });   
+    });
     this.planos.forEach(fila => {
       if (fila.cod_Subtotal === 2 && fila.nivel === 3) {
         fila.pro_Tot_Com = _Valor_UtiProTotCom;
       }
-    });   
+    });
     this.planos.forEach(fila => {
       if (fila.cod_Subtotal === 2 && fila.nivel === 3) {
         fila.pro_Cotizacion = _Valor_UtiProCotizacion;
       }
-    });   
+    });
 
     /*****************************************************/
     /************ CALCULO FILA DE TOTAL US$ **************/
-    /*****************************************************/  
-    //CALCULA LOS VALORES  
+    /*****************************************************/
+    //CALCULA LOS VALORES
     const _Valor_TotalUSProTot: number = parseFloat(Number(valorProTot + _Valor_UtiProTot).toFixed(2));
     const _Valor_TotalUSProTotCom: number = parseFloat(Number(valorProTotCom + _Valor_UtiProTotCom).toFixed(2));
     const _Valor_TotalUSProCotizacion: number = parseFloat(Number(valorpro_Cotizacion + _Valor_UtiProCotizacion).toFixed(2));
@@ -1270,30 +1232,30 @@ export class CotizacionesComponent implements OnInit {
       if (fila.cod_Subtotal === 3 && fila.nivel === 3) {
         fila.pro_Tot = _Valor_TotalUSProTot;
       }
-    });     
+    });
     this.planos.forEach(fila => {
       if (fila.cod_Subtotal === 3 && fila.nivel === 3) {
         fila.pro_Tot_Com = _Valor_TotalUSProTotCom;
       }
-    }); 
+    });
     this.planos.forEach(fila => {
       if (fila.cod_Subtotal === 3 && fila.nivel === 3) {
         fila.pro_Cotizacion = _Valor_TotalUSProCotizacion;
       }
-    });     
+    });
 
     //Elmismo valor calculado se debe de mostrar al mismo PRECIO VALOR DEL CLIENTE
     this.planos.forEach(fila => {
       if (fila.cod_Subtotal === 4 && fila.nivel === 3) {
         fila.pro_Cotizacion = _Valor_TotalUSProCotizacion;
       }
-    });  
+    });
 
   }
 
   recalcularPrecioFinal(row: any) {
     console.log('recalcula precio');
-    
+
     const fila_PrecioKG = this.planos.find(f => f.nivel === 3 && f.cod_Subtotal === 1);
     const valorProTotCom = fila_PrecioKG ? fila_PrecioKG.pro_Tot_Com : 0;
     const ValorPrecioFinalCliente: number = Number(row.pro_Cotizacion);
@@ -1306,7 +1268,7 @@ export class CotizacionesComponent implements OnInit {
       if (fila.cod_Subtotal === 5 && fila.nivel === 3) {
         fila.pro_Por = parseFloat(Number(ValorRentabilidad * 100).toFixed(2));
       }
-    });      
+    });
 
   }
 
@@ -1326,10 +1288,6 @@ export class CotizacionesComponent implements OnInit {
     });
   }
 
-  
-
-  
-
   getLoadIntensidad(Id_Unidad_NegocioKey: number){
     this.intensidad = [];
     this.service.getListaIntensidad(Id_Unidad_NegocioKey).subscribe({
@@ -1346,25 +1304,21 @@ export class CotizacionesComponent implements OnInit {
 
   reiniciaControles(){
     this.codigoRutaTela = '';
-    this.formulario.get('tipo')?.setValue(''); 
-    this.formulario.get('cliente')?.setValue(''); 
-    this.formulario.get('filtro')?.setValue('');
-    this.formulario.get('codigoTela')?.setValue(''); 
-    this.formulario.get('descripcionTela')?.setValue(''); 
+    this.formulario.get('tipo')?.setValue('');
+    this.formulario.get('cliente')?.setValue('');
+    this.formulario.get('codigoTela')?.setValue('');
+    this.formulario.get('descripcionTela')?.setValue('');
     this.formulario.get('descripcionTela')?.disable();
-    this.formulario.get('codigoRutaTela')?.setValue(''); 
-    this.formulario.get('codigoColor')?.setValue(''); 
+    this.formulario.get('codigoRutaTela')?.setValue('');
+    this.formulario.get('codigoColor')?.setValue('');
     this.formulario.get('color')?.setValue('');
     //DesHabilita botoneria
     this.bMuestraMenuFlotante = false;
     this.isDisabledBtnFind    = false;
     this.panelCriteriosAbierto = true; // vuelve a mostrar el formulario completo
 
-    this.formulario.get('filtro')?.setValue(''); 
-    this.formulario.get('filtroColores')?.setValue(''); 
-    
     this.RutaXCodTela = [];
-    this.ColoresFiltrada = [];
+    this.listaCodigoColor = [];
 
     //Limpia panel de Cotizaciones
     this.historialVersiones   = [];
@@ -1373,39 +1327,8 @@ export class CotizacionesComponent implements OnInit {
     this.borrador             = null;
     this.borradorActivo       = false;
     this.ultimaBusqueda       = null;
-    this.dataSource_Precios   = null;
-    this.precioSeleccionado   = null;
-    this.global_PrecioTinto   = 0;
-    this.global_Tiempo        = 0;
-    this.global_SDC           = "";
-    this.global_idCotizacion_Cab = 0;
+    this.limpiarSeleccionPrecio();
   }
-
-   
-
-  
-
-  // NOTA: filtrarClientes()/filtrarColores() y los controles filtro/filtroColores
-  // quedaron sin uso en el template tras migrar Cliente/Color a <ng-select>, que
-  // filtra por su cuenta. Se dejan declarados para no tocar el payload del form.
-  filtrarClientes() {
-    //this.tipoFallaFiltrada = [];
-    const filtroTexto = this.formulario.get('filtro')?.value?.toLowerCase();
-    this.ClientesFiltrada = this.dataClientes.filter(item =>
-      item.nom_Cliente.toLowerCase().includes(filtroTexto) ||
-      item.abr_Cliente.toLowerCase().includes(filtroTexto)
-    );
-  }    
-
-  filtrarColores() {
-    const filtroTexto = this.formulario.get('filtroColores')?.value?.toLowerCase();
-    this.ColoresFiltrada = this.listaCodigoColor.filter(item =>
-      item.codigo.toLowerCase().includes(filtroTexto) ||
-      item.descripcion.toLowerCase().includes(filtroTexto)      
-    );
-  }
-
-  
 
   loadHilo(sCodTela: string){
     this.SpinnerService.show();
@@ -1417,7 +1340,7 @@ export class CotizacionesComponent implements OnInit {
             this.SpinnerService.hide();
           }
           else{
-            this.dataSource_Hilos.data = [];            
+            this.dataSource_Hilos.data = [];
             this.SpinnerService.hide();
           };
         }else{
@@ -1430,14 +1353,8 @@ export class CotizacionesComponent implements OnInit {
           timeout: 2500
         })
       }
-    });      
+    });
   }
-
-  
-
-  
-
-  
 
   onGuardar(){
     //Bloque 1 --> Validaciones
@@ -1457,8 +1374,8 @@ export class CotizacionesComponent implements OnInit {
         const _cliente  = this.formulario.get('cliente')?.value         || '';
         const _tela     = this.formulario.get('codigoTela')?.value      || '';
         const _ruta     = this.formulario.get('codigoRutaTela')?.value  || '';
-        const _color    = this.formulario.get('color')?.value     || '';        
-        
+        const _color    = this.formulario.get('color')?.value     || '';
+
         //PASO 1 - OBTENEMOS EL DETALLE
         if (Number(this.unidadNegocio) === 1){
             this.dataDetalles = this.dataSource.data.map(item => this.mapToDetalle(item));
@@ -1498,7 +1415,7 @@ export class CotizacionesComponent implements OnInit {
                     timeOut: 2500,
                   });
 
-                  //Aqui limpia todo el contenido para una nueva consulta 
+                  //Aqui limpia todo el contenido para una nueva consulta
                   this.chgUnidadNegocio();
                 }else if(response.codeResult == 201){
                   this.toastr.info(response.message, '', {
@@ -1511,14 +1428,14 @@ export class CotizacionesComponent implements OnInit {
                   timeOut: 2500,
                 });
                 this.SpinnerService.hide();
-              }            
+              }
           },
           error: (error) => {
             this.SpinnerService.hide();
             this.toastr.error(error.message, 'Cerrar', {
             timeOut: 2500,
             });
-          }          
+          }
         });
 
       };
@@ -1566,8 +1483,6 @@ export class CotizacionesComponent implements OnInit {
     });
   }
 
-
-
   guardarObservacion(row: any){
     //console.log('observacion', data);
     //data.row.observacion = data.observacion;
@@ -1575,7 +1490,7 @@ export class CotizacionesComponent implements OnInit {
     console.log('guardarObservacion', row);
     this.dialog.closeAll(); ;
 
-  } 
+  }
 
   abrirDialog(row: any) {
 
@@ -1585,13 +1500,13 @@ export class CotizacionesComponent implements OnInit {
 
 
   console.log('proAjuActual', proAjuActual);
-  console.log('proAjuActual', proAjuBackup);    
+  console.log('proAjuActual', proAjuBackup);
 
   //Solo se ejecuta cuando es diferente
   if (proAjuBackup !== undefined && proAjuActual !== Number(proAjuBackup)) {
 
     // Limpia la observación del row (pero el backup mantiene la original)
-    row.observacion = '';    
+    row.observacion = '';
 
     //if (row.pro_Aju != null && row.pro_Aju !== '' && row.pro_Aju !== 0) {
       if (!this.dialogAbierto) {
@@ -1599,7 +1514,7 @@ export class CotizacionesComponent implements OnInit {
         const ref = this.dialog.open(this.dialogObservacion, {
           width: '600px',
           data: { observacion: row.observacion ?? '', row }
-        }); 
+        });
         // Cuando se cierra el diálogo, resetea la bandera
         ref.afterClosed().subscribe(() => {
           this.dialogAbierto = false;
@@ -1617,11 +1532,11 @@ export class CotizacionesComponent implements OnInit {
               backupItem.observacion = this.global_Observacion;
               backupItem.pro_Aju = proAjuActual;
             }
-          }  
-          
-        });         
+          }
+
+        });
       //}
-    }    
+    }
 
   }
 
@@ -1631,7 +1546,7 @@ export class CotizacionesComponent implements OnInit {
 
 validarObservacion(row: any, event: FocusEvent) {
   if (row.pro_Aju == null || row.pro_Aju === '' || row.pro_Aju === 0) {
-    row.observacion = '';   
+    row.observacion = '';
     return;
   }
 
@@ -1639,7 +1554,7 @@ validarObservacion(row: any, event: FocusEvent) {
   const proAjuBackup = this.planosBackup.filter(p => p.cod_Proceso_Tex == row.cod_Proceso_Tex).map(p => p.pro_Aju);
 
   console.log('proAjuActual', proAjuActual);
-  console.log('proAjuActual', proAjuBackup);  
+  console.log('proAjuActual', proAjuBackup);
 
   if (proAjuBackup !== undefined && proAjuActual !== Number(proAjuBackup)) {
 
@@ -1656,7 +1571,7 @@ validarObservacion(row: any, event: FocusEvent) {
         const ref = this.dialog.open(this.dialogObservacion, {
           width: '600px',
           data: { observacion: row.observacion ?? '', row }
-        });        
+        });
 
         // Cuando se cierra el diálogo, resetea la bandera
         ref.afterClosed().subscribe(()=>{
@@ -1675,11 +1590,11 @@ validarObservacion(row: any, event: FocusEvent) {
               backupItem.observacion = this.global_Observacion;
               backupItem.pro_Aju = proAjuActual;
             }
-          }          
+          }
 
 
 
-        });        
+        });
       }
     //}
 
@@ -1696,32 +1611,23 @@ validarObservacion(row: any, event: FocusEvent) {
         const ref = this.dialog.open(this.dialogObservacion, {
           width: '600px',
           data: { observacion: row.observacion ?? '', row }
-        });        
+        });
 
         // Cuando se cierra el diálogo, resetea la bandera
         ref.afterClosed().subscribe(() => {
           this.dialogAbierto = false;
-        });        
+        });
       }
     }
-  }  
+  }
     */
 }
-
-
-
-
-
-
-
 
 onRecetaChange(event: any) {
   console.log('Receta seleccionada:', event.value);
   // Capturamos
   this.global_CodReceta = event.value || '';
 }
-
-
 
 private mapToDetalle(item: any): ProcesoCotizacionDetalle {
   return {

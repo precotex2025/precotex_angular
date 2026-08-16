@@ -8,6 +8,7 @@ export * from './lista-telas.response';
 export * from './lista-unidad-negocio.response';
 export * from './lista-unidad-negocio-tipo.response';
 export * from './listar-procesos-exportacion.response';
+export * from './obtiene-informacion-cliente-colgador.response';
 export * from './obtener-nuevo-correlativo-version.response';
 export * from './proceso-cotizacion.response';
 export * from './ruta-x-cod-tela.response';

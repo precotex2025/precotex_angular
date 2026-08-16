@@ -30,3 +30,50 @@
 - `npx ng build --configuration production` — limpio (exit code 0).
 - Pendiente: revisión visual en navegador (filtros, tabla, historial, diálogo de ajuste,
   SweetAlert, responsive) — no se hizo `ng serve` en esta sesión.
+
+## 16/08/2026 — Buscador de Clientes: limpieza, tipado y coherencia Cliente→Color
+
+Rama `feature-jcalle-cotizaciones-buscador-clientes`.
+
+### Archivos modificados
+
+- `src/app/components/cotizaciones/cotizaciones.component.ts` — reordenado en bloques por
+  concepto (Unidad de Negocio, Cliente, Recetas Antipilling, Color, todos debajo de
+  `ngOnInit`); código muerto eliminado (`ClientesFiltrada`, `ColoresFiltrada`,
+  `usarClientes()`, `filtrarClientes()`, `filtrarColores()`, controles `filtro`/
+  `filtroColores`, propiedades sueltas sin uso); `dataClientes` tipado con
+  `ClienteComboItem[]`; nuevo helper `limpiarSeleccionPrecio()` reutilizado por
+  `onChangeColor()` y `reiniciaControles()`; `onChangeCliente()` ahora limpia Color,
+  `listaCodigoColor` y el precio/SDC seleccionado al cambiar o limpiar el cliente;
+  `reiniciaControles()` también limpia `listaCodigoColor`; `onBuscar()` valida los 6
+  criterios con `Swal` antes de consultar; `validaCodigoColor()` pasa de `MatSnackBar` a
+  `Swal` (`MostrarAdvertencia`); errores de precarga de Unidad, Tipo, Cliente, Recetas y
+  Colores-por-cliente pasan de `console.log` a `MatSnackBar`.
+
+### Archivos nuevos
+
+- `src/app/interfaces/cotizaciones/response/obtiene-informacion-cliente-colgador.response.ts`
+  — envelope tipado del endpoint `getObtieneInformacionClienteColgador`.
+- `src/app/models/cotizaciones/cliente-combo.model.ts` — forma del item del `<ng-select>`
+  Cliente (incluye `label`).
+- Alta de ambos en `interfaces/cotizaciones/response/index.ts` y
+  `models/cotizaciones/index.ts`.
+
+### Qué quedó fuera
+
+- `ProcesoColgadoresService` no se tocó (decisión del usuario: es compartido con
+  `cnf-registro-colgadores`); el tipado del response se hace del lado del componente con
+  `as ObtieneInformacionClienteColgadorResponse`.
+- `getListaCentroCosto()`, `getLoadIntensidad()` y el combo de receta (`dataRecetas`) quedan
+  igual — están reportados como posible código muerto en `Notas.md`, pendientes de confirmar
+  con el usuario, no se tocaron en este cierre.
+- `cotizaciones.component.html` no se modificó — el `<ng-select>` de Cliente ya estaba
+  correcto.
+
+### Verificación
+
+- `npx tsc --noEmit -p tsconfig.app.json` — limpio.
+- `npx ng build` — limpio (exit code 0; warnings preexistentes de SCSS de otro módulo y
+  dependencias CommonJS de `canvg`, ajenos a este cambio).
+- Pendiente: prueba manual en navegador (buscar con criterios incompletos, cambiar/limpiar
+  Cliente y verificar que Color/precio se limpian, guardar con `cod_Cliente_Tex` correcto).

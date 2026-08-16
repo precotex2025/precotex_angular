@@ -46,3 +46,43 @@ Los tokens de la paleta viven solo en `cotizaciones.component.scss` (`:host`), n
 paleta global nueva — se mantuvieron los nombres de los tokens compartidos
 (`--c-indigo-*`, `--row-*`, etc.) en `src/styles.scss` pero con los valores de la paleta
 azul, para no romper los ~1800 usos existentes en el SCSS del módulo.
+
+## 16/08/2026
+
+Análisis del buscador de Cliente a pedido del usuario: se revisó `LoadClientes` (precarga
+en `ngOnInit`, endpoint `getObtieneInformacionClienteColgador` de `ProcesoColgadoresService`,
+no de `CotizacionesService`) y cómo `dataClientes` se reutiliza en todo el componente
+(`<ng-select>`, `resumenCriterios`, guardado). Se detectaron tres defectos y bastante código
+muerto heredado de una implementación previa con `mat-select` + filtro manual, migrada a
+`<ng-select>` sin limpiar los restos.
+
+Decisiones confirmadas con el usuario antes de tocar código:
+
+- No se toca `ProcesoColgadoresService` (es compartido con `cnf-registro-colgadores`); el
+  tipado del combo Cliente se hace del lado del componente con una interface/model nuevos.
+- Al cambiar o limpiar el Cliente se limpian sus dependencias: Color, `listaCodigoColor` y
+  el precio/SDC elegido (antes quedaban con datos del cliente anterior).
+- `onBuscar()` ahora valida los 6 criterios (unidad, tipo, cliente, tela, ruta, color) antes
+  de consultar; antes buscaba con el formulario vacío.
+- Validaciones de formulario van con `Swal` (`MostrarAdvertencia`, ya existente). Los
+  fallos de precarga de los combos del `ngOnInit` (Unidad, Tipo, Cliente, Recetas, Colores
+  por cliente) van con `MatSnackBar`, para no interrumpir el arranque de la pantalla con un
+  modal. El `Swal` de comunicación con el service en Buscar/Guardar no se tocó.
+- El usuario pidió reordenar `cotizaciones.component.ts` en bloques por concepto, empezando
+  por los 4 combos que se precargan en `ngOnInit`: cada bloque agrupa el método que precarga
+  seguido de sus eventos/dependencias, con una cabecera de separador. Orden final:
+  **UNIDAD DE NEGOCIO** → **CLIENTE** → **RECETAS ANTIPILLING** → **COLOR**, todo pegado
+  debajo de `ngOnInit`. El resto del archivo (búsqueda, borrador, grilla, cálculo, guardado,
+  helpers Swal) no se reordenó.
+
+Código muerto eliminado: `ClientesFiltrada`, `ColoresFiltrada`, `usarClientes()`,
+`filtrarClientes()`, `filtrarColores()`, controles `filtro`/`filtroColores` del `FormGroup`,
+propiedades sueltas nunca leídas (`cliente`, `tipo`, `codigoTela`, `codigoColor`,
+`descripcionColor`), y el parámetro `codigoCliente` de `LoadClientes` (nunca se invocaba con
+valor).
+
+**No se tocó** (reportado, no confirmado como pendiente real): `getListaCentroCosto()` y
+`getLoadIntensidad()` no los llama nadie y no están en el HTML; `loadRecetas()` sí se llama
+en `ngOnInit` pero `dataRecetas` tampoco se pinta en el HTML — el combo de receta no existe
+hoy en la pantalla, aunque `global_CodReceta` sí viaja al guardar. Queda para una
+conversación aparte con el usuario sobre si es funcionalidad pendiente o resto muerto.
