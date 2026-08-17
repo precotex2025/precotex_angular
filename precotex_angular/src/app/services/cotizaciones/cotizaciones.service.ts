@@ -138,4 +138,11 @@ export class CotizacionesService {
       .get<ServiceResponseList<HiladoTelaItem>>(`${this.baseUrlTinto}${this.endpoint}/getListaHiladoxTela`, { headers: this.headers, params })
       .pipe(retry(1), catchError(this.handleError));
   }
+
+  getListarVersionesCotizacion(correlativo: string): Observable<ServiceResponseList<PrecioXColorItem>> {
+    const params = this.buildParams({ correlativo });
+    return this.http
+      .get<ServiceResponseList<PrecioXColorItem>>(`${this.baseUrlTinto}${this.endpoint}/getListarVersionesCotizacion`, { headers: this.headers, params })
+      .pipe(retry(1), catchError(this.handleError));
+  }
 }

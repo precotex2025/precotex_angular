@@ -278,6 +278,9 @@
             </div>
           </div>
           <div class="cot-history-card__acciones">
+            <button mat-icon-button matTooltip="Crear nueva versión a partir de esta" (click)="onCrearNuevaVersion(v); $event.stopPropagation()">
+              <mat-icon>post_add</mat-icon>
+            </button>
             <button mat-icon-button matTooltip="Modificar" (click)="onEditar(v); $event.stopPropagation()">
               <mat-icon>edit</mat-icon>
             </button>
@@ -478,15 +481,36 @@
     <!-- Footer de acciones fijado al pie de la tabla de costeo -->
     <div class="cot-costeo__footer" *ngIf="bMuestraMenuFlotante && dataSource.data?.length">
       <div class="cot-costeo__footer-info">
-        <mat-icon *ngIf="borradorActivo" class="cot-costeo__footer-info-icon">edit_note</mat-icon>
-        <span *ngIf="borradorActivo">Nueva cotización pendiente de guardar</span>
+        <mat-icon class="cot-costeo__footer-info-icon">
+          {{ borradorActivo ? 'edit_note' : 'history_toggle_off' }}
+        </mat-icon>
+        <span *ngIf="borradorActivo">
+          {{ borrador?.version && borrador?.version! > 1 ? ('Nueva Versión ' + borrador?.version + ' en edición') : 'Nueva cotización pendiente de guardar' }}
+        </span>
+        <span *ngIf="!borradorActivo">
+          {{ versionSeleccionada ? (versionSeleccionada.titulo + ' (ID: ' + versionSeleccionada.id + ')') : 'Cotización existente' }}
+        </span>
       </div>
       <div class="cot-costeo__footer-actions">
         <button mat-stroked-button type="button" class="btn-ghost" (click)="onCancelar()">
           <mat-icon>close</mat-icon> Cancelar
         </button>
-        <button mat-flat-button type="button" class="btn-azul" [disabled]="!isDisabledBtnSave" (click)="onGuardar()">
-          <mat-icon>save</mat-icon> Guardar Cotización
+
+        <!-- Opción para crear y guardar como NUEVA versión cuando se está sobre una existente -->
+        <button mat-stroked-button type="button" class="btn-ghost"
+                *ngIf="esModificacionCotizacion"
+                [disabled]="!isDisabledBtnSave"
+                (click)="onGuardar(true)"
+                matTooltip="Crea una nueva versión con los ajustes actuales sin sobrescribir la existente">
+          <mat-icon>post_add</mat-icon> Guardar como Nueva Versión
+        </button>
+
+        <!-- Botón de guardado principal (actualiza con U si es existente, o inserta con I si es borrador nuevo) -->
+        <button mat-flat-button type="button" class="btn-azul"
+                [disabled]="!isDisabledBtnSave"
+                (click)="onGuardar(false)">
+          <mat-icon>save</mat-icon>
+          {{ esModificacionCotizacion ? 'Actualizar Cambios' : 'Guardar Cotización' }}
         </button>
       </div>
     </div>

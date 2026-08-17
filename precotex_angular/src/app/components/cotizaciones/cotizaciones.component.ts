@@ -418,12 +418,27 @@ export class CotizacionesComponent implements OnInit {
         if(response.success){
           const elementos = response.elements ?? [];
           this.dataSource_Precios = elementos;
+          this.historialVersiones = elementos.map((p, idx) => ({
+            id: p.idcotizacioN_CAB,
+            titulo: `Versión ${idx + 1}`,
+            sdc: p.corR_CARTA,
+            precioTinto: p.preC_TINTO,
+            precioAcabado: p.preC_ACABADO,
+            tiempo: p.tiempo,
+            receta: p.idrecetalabprod,
+            reciente: idx === 0,
+            raw: p,
+            correlativo: p.corR_CARTA,
+            version: idx + 1,
+            estado: idx === 0 ? 'Vigente' : undefined
+          }));
           // Con un solo resultado, se autoselecciona para no obligar a abrir el combo.
           if (elementos.length === 1){
             this.onChangePrecio(elementos[0]);
           }
         }else{
           this.dataSource_Precios = null;
+          this.historialVersiones = [];
         }
       },
       error: (error: any) => {
@@ -1308,16 +1323,27 @@ export class CotizacionesComponent implements OnInit {
     });
   }
 
-  onGuardar(){
-    //Bloque 1 --> Validaciones
+  onGuardar(guardarComoNuevaVersion: boolean = false){
+    let confirmTitle = '¿Desea registrar esta cotización?';
+    let confirmText = 'Se guardará la cotización inicial en el sistema.';
+
+    if (guardarComoNuevaVersion) {
+      confirmTitle = '¿Crear nueva versión de cotización?';
+      confirmText = 'Se registrará una nueva versión conservando el historial previo.';
+    } else if (this.esModificacionCotizacion) {
+      confirmTitle = '¿Actualizar cotización existente?';
+      confirmText = 'Se sobrescribirán los cambios sobre la cotización seleccionada.';
+    }
+
     Swal.fire({
-      title: '¿Desea registrar ajustes de cotización?, Confirme',
+      title: confirmTitle,
+      text: confirmText,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'No'
+      confirmButtonText: 'Sí, continuar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
 
@@ -1326,16 +1352,39 @@ export class CotizacionesComponent implements OnInit {
         const _cliente  = this.formulario.get('cliente')?.value         || '';
         const _tela     = this.formulario.get('codigoTela')?.value      || '';
         const _ruta     = this.formulario.get('codigoRutaTela')?.value  || '';
-        const _color    = this.formulario.get('color')?.value     || '';
+        const _color    = this.formulario.get('color')?.value           || '';
 
-        //PASO 1 - OBTENEMOS EL DETALLE
+        // PASO 1 - OBTENEMOS EL DETALLE
         if (Number(this.unidadNegocio) === 1){
             this.dataDetalles = this.dataSource.data.map(item => this.mapToDetalle(item));
         }
 
-        //PASO 2 - OBTENEMOS LA CABECERA
+        // PASO 2 - DETERMINACIÓN DINÁMICA DE ACCIÓN (I vs U) Y VERSIONADO
+        let accion: 'I' | 'U';
+        let idCotizacionCab: number;
+        let correlativo: string;
+        let version: number;
+
+        if (guardarComoNuevaVersion) {
+          accion = 'I';
+          idCotizacionCab = 0;
+          correlativo = this.versionSeleccionada?.correlativo || this.global_SDC || (this.borrador?.correlativo ?? '');
+          version = (this.versionSeleccionada?.version ? this.versionSeleccionada.version + 1 : (this.borrador?.version ? this.borrador.version + 1 : 2));
+        } else if (this.esModificacionCotizacion) {
+          accion = 'U';
+          idCotizacionCab = this.global_idCotizacion_Cab || this.versionSeleccionada?.id || 0;
+          correlativo = this.versionSeleccionada?.correlativo || this.global_SDC || '';
+          version = this.versionSeleccionada?.version || 1;
+        } else {
+          accion = 'I';
+          idCotizacionCab = 0;
+          correlativo = this.borrador?.correlativo ?? '';
+          version = this.borrador?.version ?? 1;
+        }
+
+        // PASO 3 - OBTENEMOS LA CABECERA
         const data: ProcesoCotizacionRequest = {
-            idCotizacion_Cab: 0,
+            idCotizacion_Cab: idCotizacionCab,
             pro_Id          : 0,
             cen_Cos_Cod     : Number(_UndNego),
             cod_Tipo        : _tipo,
@@ -1347,45 +1396,51 @@ export class CotizacionesComponent implements OnInit {
             tiempo_Referencia : Number(this.global_Tiempo),
             precio_Referencia : Number(this.global_PrecioTinto),
             sDC_Referencia    : this.global_SDC,
-            correlativo     : this.borrador?.correlativo ?? '',
-            version         : this.borrador?.version ?? 0,
+            correlativo     : correlativo,
+            version         : version,
             flg_Estatus     : "A",
             usu_Registro    : this.sUsuario,
-            accion          : "I",
+            accion          : accion,
             detalles        : this.dataDetalles
         };
 
         console.log('Data registro', data);
-        //return;
 
         this.SpinnerService.show();
-        this.service.postProcesoCotizacion(data).subscribe({
+        this.service.postProcesoCotizacion(data)
+        .pipe(finalize(() => {
+          this.SpinnerService.hide();
+        }))
+        .subscribe({
           next: (response: ServiceResponse<null>)=> {
               if(response.success){
-                if (response.codeResult == 200){
-                  this.toastr.success(response.message, '', {
-                    timeOut: 2500,
-                  });
-
-                  //Aqui limpia todo el contenido para una nueva consulta
-                  this.chgUnidadNegocio();
-                }else if(response.codeResult == 201){
-                  this.toastr.info(response.message, '', {
-                    timeOut: 2500,
-                  });
-                }
-                this.SpinnerService.hide();
-              }else{
-                this.toastr.error(response.message, 'Cerrar', {
-                  timeOut: 2500,
+                Swal.fire({
+                  icon: 'success',
+                  title: '¡Operación Exitosa!',
+                  text: response.message || 'La cotización se guardó correctamente.',
+                  timer: 2500,
+                  showConfirmButton: false
                 });
-                this.SpinnerService.hide();
+
+                // Si hay una búsqueda activa, refrescamos la consulta para ver el nuevo estado
+                if (this.ultimaBusqueda) {
+                  this.onBuscar();
+                } else {
+                  this.chgUnidadNegocio();
+                }
+              }else{
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error al registrar',
+                  text: response.message || 'Ocurrió un error en el servidor.'
+                });
               }
           },
           error: (error) => {
-            this.SpinnerService.hide();
-            this.toastr.error(error.message, 'Cerrar', {
-            timeOut: 2500,
+            Swal.fire({
+              icon: 'error',
+              title: 'Error de comunicación',
+              text: error?.message || 'No se pudo completar la operación.'
             });
           }
         });
@@ -1614,5 +1669,45 @@ private mapToDetalle(item: any): ProcesoCotizacionDetalle {
     } else {
       this.reiniciaControles();
     }
+  }
+
+  /* --- Indica si la vista actual corresponde a una cotización ya existente en BD --- */
+  get esModificacionCotizacion(): boolean {
+    return !this.borradorActivo && (this.global_idCotizacion_Cab > 0 || (this.versionSeleccionada != null && this.versionSeleccionada.id > 0));
+  }
+
+  /* --- Crear una nueva versión a partir de una cotización existente --- */
+  onCrearNuevaVersion(v?: VersionPrecio): void {
+    const versionBase = v || this.versionSeleccionada;
+    if (!versionBase && !this.historialVersiones.length) {
+      Swal.fire('Atención', 'No hay una cotización base para crear una nueva versión.', 'info');
+      return;
+    }
+
+    const base = versionBase || this.historialVersiones[0];
+    const siguienteVersion = (base.version || 1) + 1;
+    const correlativoBase = base.correlativo || base.sdc || '';
+
+    this.borrador = {
+      planos: JSON.parse(JSON.stringify(this.dataSource.data?.length ? this.dataSource.data : this.planos)),
+      planosBackup: JSON.parse(JSON.stringify(this.planosBackup)),
+      recetaCod: this.global_CodReceta || base.receta || '',
+      correlativo: correlativoBase,
+      version: siguienteVersion
+    };
+
+    this.borradorActivo = true;
+    this.versionSeleccionada = null;
+    this.global_idCotizacion_Cab = 0;
+    this.isAjusteBloqueado = false;
+    this.isDisabledBtnSave = true;
+    this.isDisabledBtnEdit = false;
+
+    Swal.fire({
+      icon: 'info',
+      title: `Borrador: Versión ${siguienteVersion}`,
+      text: `Se ha preparado la Versión ${siguienteVersion} a partir del correlativo ${correlativoBase}. Realice los ajustes necesarios y presione Guardar.`,
+      confirmButtonText: 'Entendido'
+    });
   }
 }
