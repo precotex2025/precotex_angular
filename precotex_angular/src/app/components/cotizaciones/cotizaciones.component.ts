@@ -1591,4 +1591,13 @@ private mapToDetalle(item: any): ProcesoCotizacionDetalle {
       Cod_SubProceso : item.cod_SubProceso
     };
   }
+
+  /* --- Cancelar / Descartar cambios actuales --- */
+  onCancelar(): void {
+    if (this.borradorActivo && this.historialVersiones.length) {
+      this.seleccionarVersion(this.historialVersiones[0]);
+    } else {
+      this.reiniciaControles();
+    }
+  }
 }

@@ -119,11 +119,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--sp-3);
-  height: 100%;
-  min-height: 0;
+  min-height: 100%;
   box-sizing: border-box;
-  padding: var(--sp-4) var(--sp-5);
-  padding-bottom: 88px; /* espacio para action bar flotante */
+  padding: var(--sp-3) var(--sp-4) var(--sp-5) var(--sp-4);
 }
 
 /* ============================================================
@@ -175,7 +173,24 @@
   border-radius: var(--radius-sm);
   padding: var(--sp-4);
   position: relative;
-  transition: padding 0.15s ease;
+  transition: padding 0.15s ease, all 0.2s ease;
+}
+
+.cot-criterios--compacto {
+  padding: 10px var(--sp-4);
+
+  .cot-criterios__header {
+    margin-bottom: 8px;
+  }
+
+  .cot-criterios-cards {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 6px;
+  }
+
+  .cot-criterio-card {
+    padding: 4px 8px;
+  }
 }
 
 .cot-criterios--colapsado {
@@ -186,13 +201,24 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--sp-3);
   margin-bottom: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.cot-criterios__header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
 }
 
 .cot-criterios__header-actions {
   display: flex;
   align-items: center;
   gap: var(--sp-2);
+  flex-wrap: wrap;
+  margin-left: auto;
 }
 
 .cot-switch-btn {
@@ -931,6 +957,28 @@ Alineación y tamaño del dropdown
   gap: var(--sp-3);
 }
 
+.cot-btn-sm {
+  height: 32px !important;
+  line-height: 32px !important;
+  padding: 0 12px !important;
+  font-size: 13px !important;
+  border-radius: 20px !important;
+
+  mat-icon {
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    line-height: 18px !important;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+}
+
+.cot-btn-label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
 .cot-btn-pin-filtro mat-icon {
   transition: transform 0.2s;
 }
@@ -950,13 +998,13 @@ Alineación y tamaño del dropdown
   display: flex;
   gap: var(--sp-4);
   flex: 1 1 auto;
-  min-height: 0;
+  min-height: 560px;
   align-items: stretch;
 }
 
 /* Panel de Historial (UI estática) */
 .cot-history-panel {
-  width: 280px;
+  width: 290px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -966,6 +1014,7 @@ Alineación y tamaño del dropdown
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-sm);
+  min-height: 560px;
 }
 
 .cot-history-panel__header {
@@ -1028,11 +1077,13 @@ Alineación y tamaño del dropdown
 }
 
 .cot-history-list {
-  flex: 1;
+  flex: 1 1 auto;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-height: 420px;
+  max-height: calc(100vh - 280px);
 }
 
 .cot-history-card {
@@ -1226,7 +1277,7 @@ Alineación y tamaño del dropdown
 
 .cot-costeo {
   flex: 1 1 auto;
-  min-height: 0;
+  min-height: 560px;
   display: flex;
   flex-direction: column;
   background: var(--color-surface);
@@ -1248,9 +1299,47 @@ Alineación y tamaño del dropdown
 
 .cot-tabla-scroll {
   flex: 1 1 auto;
-  min-height: 0;
+  min-height: 480px;
+  max-height: calc(100vh - 250px);
   overflow: auto;
   margin-top: 3px; /* compensa el borde degradado ::before */
+}
+
+/* Footer de acciones fijado al pie de la tabla de costeo */
+.cot-costeo__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: 12px 16px;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+  z-index: 4;
+}
+
+.cot-costeo__footer-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  font-weight: var(--fw-medium);
+
+  .cot-costeo__footer-info-icon {
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    line-height: 18px !important;
+    color: var(--c-orange-500);
+  }
+}
+
+.cot-costeo__footer-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-left: auto;
 }
 
 .cot-tabla {
@@ -1826,43 +1915,12 @@ th.col-descripcion {
 }
 
 /* ============================================================
-   SECCIÓN 11 — ACTION BAR FLOTANTE (glassmorphism)
-   ============================================================ */
-
-.cot-actionbar {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
-  padding: 10px 16px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  box-shadow: var(--shadow-xl);
-  z-index: 100;
-  animation: cotActionbarIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes cotActionbarIn {
-  from { transform: translateX(-50%) translateY(30px); opacity: 0; }
-  to   { transform: translateX(-50%) translateY(0);    opacity: 1; }
-}
-
-.cot-actionbar button[disabled] {
-  opacity: 0.45;
-}
-
-/* ============================================================
-   SECCIÓN 12 — RESPONSIVE
+   SECCIÓN 11 — RESPONSIVE
    ============================================================ */
 
 @media screen and (max-width: 1199px) {
   .cot-workspace {
     padding: var(--sp-3) var(--sp-4);
-    padding-bottom: 88px;
   }
 
   .cot-form-grid {
@@ -1878,7 +1936,6 @@ th.col-descripcion {
   .cot-workspace {
     overflow-y: auto;
     padding: var(--sp-3);
-    padding-bottom: 96px;
   }
 
   .cot-toolbar {
@@ -1902,6 +1959,18 @@ th.col-descripcion {
   .cot-version-bar {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .cot-costeo__footer {
+    flex-direction: column;
+    align-items: stretch;
+
+    .cot-costeo__footer-actions {
+      width: 100%;
+      flex-direction: column-reverse;
+
+      button { width: 100%; }
+    }
   }
 
   .cot-form-grid {
@@ -1954,17 +2023,6 @@ th.col-descripcion {
   .cot-criterios__resumen-actions {
     flex-direction: column-reverse;
     align-items: stretch;
-  }
-
-  .cot-actionbar {
-    left: var(--sp-4);
-    right: var(--sp-4);
-    transform: none;
-    justify-content: center;
-    flex-wrap: wrap;
-    border-radius: var(--radius-lg);
-
-    &.ng-animating { transform: none; }
   }
 }
 

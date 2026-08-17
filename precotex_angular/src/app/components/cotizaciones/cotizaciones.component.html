@@ -8,19 +8,20 @@
   </header>
 
   <!-- Zona de criterios: colapsa sección completa o alterna modo resumen (cartas vs formulario) -->
-  <section class="cot-criterios" [class.cot-criterios--colapsado]="seccionTotalmenteColapsada">
+  <section class="cot-criterios" [class.cot-criterios--colapsado]="seccionTotalmenteColapsada" [class.cot-criterios--compacto]="modoResumen">
 
     <div class="cot-criterios__header">
-      <div class="cot-section-title" (click)="toggleSeccionColapsada()"
-           [matTooltip]="seccionTotalmenteColapsada ? 'Desplegar sección de criterios' : 'Contraer toda la sección de criterios'">
-        <button mat-icon-button type="button" class="cot-section-title__chevron" (click)="$event.stopPropagation(); toggleSeccionColapsada()">
-          <mat-icon>{{ seccionTotalmenteColapsada ? 'expand_more' : 'expand_less' }}</mat-icon>
-        </button>
-        <mat-icon class="cot-section-title__icon">tune</mat-icon>
-        <span>Criterios de Búsqueda</span>
-      </div>
+      <div class="cot-criterios__header-left">
+        <div class="cot-section-title" (click)="toggleSeccionColapsada()"
+             [matTooltip]="seccionTotalmenteColapsada ? 'Desplegar sección de criterios' : 'Contraer toda la sección de criterios'">
+          <button mat-icon-button type="button" class="cot-section-title__chevron" (click)="$event.stopPropagation(); toggleSeccionColapsada()">
+            <mat-icon>{{ seccionTotalmenteColapsada ? 'expand_more' : 'expand_less' }}</mat-icon>
+          </button>
+          <mat-icon class="cot-section-title__icon">tune</mat-icon>
+          <span>Criterios de Búsqueda</span>
+        </div>
 
-      <div class="cot-criterios__header-actions">
+        <!-- Switch Vista Compacta al costado del título -->
         <button mat-button type="button"
                 class="cot-switch-btn"
                 [class.cot-switch-btn--active]="modoResumen"
@@ -30,17 +31,30 @@
           <span class="cot-switch-btn__label">Vista Compacta</span>
         </button>
       </div>
+
+      <div class="cot-criterios__header-actions">
+        <!-- Acciones en el extremo derecho cuando está en modo Vista Compacta -->
+        <ng-container *ngIf="modoResumen && !seccionTotalmenteColapsada">
+          <ng-container *ngTemplateOutlet="tplPinHistorial"></ng-container>
+          <button mat-stroked-button type="button" class="btn-ghost cot-btn-sm" (click)="onLimpiarFiltros()" matTooltip="Limpiar filtros">
+            <mat-icon>refresh</mat-icon> <span class="cot-btn-label">Limpiar</span>
+          </button>
+          <button mat-flat-button type="button" class="btn-azul cot-btn-sm" (click)="onBuscar()" matTooltip="Buscar cotización">
+            <mat-icon>search</mat-icon> <span class="cot-btn-label">Buscar</span>
+          </button>
+        </ng-container>
+      </div>
     </div>
 
     <!-- Botón de anclaje del panel de Historial -->
     <ng-template #tplPinHistorial>
       <button mat-stroked-button type="button"
-              class="btn-ghost cot-btn-pin-filtro"
+              class="btn-ghost cot-btn-pin-filtro cot-btn-sm"
               [class.cot-btn-pin-filtro--activo]="historialPineado"
               *ngIf="puedeAnclarHistorial"
               (click)="toggleHistorialPin()"
               [matTooltip]="historialPineado ? 'Ocultar panel de historial' : 'Mostrar panel de historial'">
-        <mat-icon>push_pin</mat-icon> Historial
+        <mat-icon>push_pin</mat-icon> <span class="cot-btn-label">Historial</span>
       </button>
     </ng-template>
 
@@ -203,8 +217,8 @@
         </div>
       </form>
 
-      <!-- FOOTER ESTRUCTURADO ÚNICO DE LA SECCIÓN DE CRITERIOS -->
-      <div class="cot-criterios-footer">
+      <!-- FOOTER ESTRUCTURADO ÚNICO DE LA SECCIÓN DE CRITERIOS (solo en modo expandido) -->
+      <div class="cot-criterios-footer" *ngIf="!modoResumen">
         <div class="cot-criterios-footer__left">
           <ng-container *ngTemplateOutlet="tplPinHistorial"></ng-container>
         </div>
@@ -455,6 +469,22 @@
         <p>No hay procesos para mostrar. Ajusta los criterios de búsqueda.</p>
       </div>
     </div>
+
+    <!-- Footer de acciones fijado al pie de la tabla de costeo -->
+    <div class="cot-costeo__footer" *ngIf="bMuestraMenuFlotante && dataSource.data?.length">
+      <div class="cot-costeo__footer-info">
+        <mat-icon *ngIf="borradorActivo" class="cot-costeo__footer-info-icon">edit_note</mat-icon>
+        <span *ngIf="borradorActivo">Nueva cotización pendiente de guardar</span>
+      </div>
+      <div class="cot-costeo__footer-actions">
+        <button mat-stroked-button type="button" class="btn-ghost" (click)="onCancelar()">
+          <mat-icon>close</mat-icon> Cancelar
+        </button>
+        <button mat-flat-button type="button" class="btn-azul" [disabled]="!isDisabledBtnSave" (click)="onGuardar()">
+          <mat-icon>save</mat-icon> Guardar Cotización
+        </button>
+      </div>
+    </div>
     </section>
   </div>
 
@@ -550,14 +580,6 @@
     </mat-dialog-actions>
    </div>
   </ng-template>
-
-  <!-- Barra de acciones -->
-  <!-- Eliminar/Modificar se movieron a las cards del panel de Cotizaciones (ver onEditar/onEliminar) -->
-  <footer class="cot-actionbar" *ngIf="bMuestraMenuFlotante">
-    <button mat-flat-button class="btn-azul" [disabled]="!isDisabledBtnSave" (click)="onGuardar()">
-      <mat-icon>save</mat-icon> Guardar
-    </button>
-  </footer>
 </div>
 
 
