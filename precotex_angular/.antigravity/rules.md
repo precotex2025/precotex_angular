@@ -2,6 +2,10 @@
 
 ## 1. Directivas Generales y Restricciones
 - Idioma: Responde siempre en español, con explicaciones breves, técnicas y directas.
+- Flujo de Trabajo y Ramas Git:
+  * Toda mejora, refactorización, nueva funcionalidad o corrección debe implementarse obligatoriamente en una rama diferente a la rama actual.
+  * Usar ramas dedicadas con nomenclatura semántica: [rama_base]-[nombre_trabajo] o feature-[nombre_funcionalidad].
+  * Prohibido realizar commits o cambios directos sobre la rama base o ramas principales.
 - Restricción de Alcance (No tocar globales):
   * Prohibido modificar estilos globales (styles.scss), VarGlobals.ts, o componentes/servicios compartidos por otros módulos.
   * Todo cambio de estilo debe pertenecer exclusivamente al .scss del componente o formulario en edición.
