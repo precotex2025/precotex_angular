@@ -7,20 +7,32 @@
     </div>
   </header>
 
-  <!-- Zona de criterios: colapsa a resumen luego de Buscar o mediante el icono/título -->
-  <section class="cot-criterios" [class.cot-criterios--colapsado]="!panelCriteriosAbierto">
+  <!-- Zona de criterios: colapsa sección completa o alterna modo resumen (cartas vs formulario) -->
+  <section class="cot-criterios" [class.cot-criterios--colapsado]="seccionTotalmenteColapsada">
 
     <div class="cot-criterios__header">
-      <h3 class="cot-section-title" (click)="toggleCriterios()" [matTooltip]="panelCriteriosAbierto ? 'Contraer criterios' : 'Expandir criterios'">
+      <div class="cot-section-title" (click)="toggleSeccionColapsada()"
+           [matTooltip]="seccionTotalmenteColapsada ? 'Desplegar sección de criterios' : 'Contraer toda la sección de criterios'">
+        <button mat-icon-button type="button" class="cot-section-title__chevron" (click)="$event.stopPropagation(); toggleSeccionColapsada()">
+          <mat-icon>{{ seccionTotalmenteColapsada ? 'expand_more' : 'expand_less' }}</mat-icon>
+        </button>
         <mat-icon class="cot-section-title__icon">tune</mat-icon>
-        <span>Criterios de búsqueda</span>
-        <mat-icon class="cot-section-title__chevron">
-          {{ panelCriteriosAbierto ? 'expand_less' : 'expand_more' }}
-        </mat-icon>
-      </h3>
+        <span>Criterios de Búsqueda</span>
+      </div>
+
+      <div class="cot-criterios__header-actions">
+        <button mat-button type="button"
+                class="cot-switch-btn"
+                [class.cot-switch-btn--active]="modoResumen"
+                (click)="toggleModoResumen()"
+                [matTooltip]="modoResumen ? 'Desactivar vista compacta (expandir formulario)' : 'Activar vista compacta (mostrar tarjetas de resumen)'">
+          <mat-icon class="cot-switch-btn__icon">{{ modoResumen ? 'toggle_on' : 'toggle_off' }}</mat-icon>
+          <span class="cot-switch-btn__label">Vista Compacta</span>
+        </button>
+      </div>
     </div>
 
-    <!-- Botón de anclaje del panel de Historial (reutilizado en criterios expandidos y colapsados) -->
+    <!-- Botón de anclaje del panel de Historial -->
     <ng-template #tplPinHistorial>
       <button mat-stroked-button type="button"
               class="btn-ghost cot-btn-pin-filtro"
@@ -32,176 +44,182 @@
       </button>
     </ng-template>
 
-    <div class="cot-criterios__resumen" *ngIf="!panelCriteriosAbierto">
+    <!-- CUERPO DE LA SECCIÓN DE CRITERIOS (Visible solo si la sección NO está colapsada) -->
+    <div class="cot-criterios__body" *ngIf="!seccionTotalmenteColapsada">
+
       <!-- Resumen de criterios en cartas -->
-      <div class="cot-criterios-cards">
-        <article class="cot-criterio-card" *ngFor="let c of resumenCriterios">
-          <div class="cot-criterio-card__icon" [matTooltip]="c.label"><mat-icon>{{ c.icon }}</mat-icon></div>
-          <div class="cot-criterio-card__body">
-            <span class="cot-criterio-card__label">{{ c.label }}</span>
-            <span class="cot-criterio-card__value" [matTooltip]="c.value">{{ c.value }}</span>
-          </div>
-        </article>
+      <div class="cot-criterios__resumen" *ngIf="modoResumen">
+        <div class="cot-criterios-cards">
+          <article class="cot-criterio-card"
+                   [class.cot-criterio-card--vacio]="c.value === '—'"
+                   *ngFor="let c of resumenCriterios">
+            <div class="cot-criterio-card__icon" [matTooltip]="c.label"><mat-icon>{{ c.icon }}</mat-icon></div>
+            <div class="cot-criterio-card__body">
+              <span class="cot-criterio-card__label">{{ c.label }}</span>
+              <span class="cot-criterio-card__value" [class.cot-criterio-card__value--vacio]="c.value === '—'" [matTooltip]="c.value">{{ c.value }}</span>
+            </div>
+          </article>
+        </div>
       </div>
-      <div class="cot-criterios__resumen-actions">
-        <ng-container *ngTemplateOutlet="tplPinHistorial"></ng-container>
-        <button mat-stroked-button class="cot-btn-editar" (click)="toggleCriterios()">
-          <mat-icon>edit</mat-icon> Editar criterios
-        </button>
-      </div>
-    </div>
 
-    <form [formGroup]="formulario" #formDirective="ngForm" *ngIf="panelCriteriosAbierto">
-      <div class="cot-form-grid">
+      <!-- Formulario Completo -->
+      <form [formGroup]="formulario" #formDirective="ngForm" *ngIf="!modoResumen">
+        <div class="cot-form-grid">
 
-        <!-- ********************** UNIDAD DE NEGOCIO ********************************* -->
-        <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
-          <mat-label>{{ COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.label }}</mat-label>
-          <mat-icon 
-            matPrefix class="cot-field-icon"
-            [matTooltip]="COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.label">
+          <!-- ********************** UNIDAD DE NEGOCIO ********************************* -->
+          <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
+            <mat-label>{{ COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.label }}</mat-label>
+            <mat-icon 
+              matPrefix class="cot-field-icon"
+              [matTooltip]="COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.label">
               {{ COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.icon }}
             </mat-icon>
-          <mat-select 
-            formControlName="unidadNegocio" 
-            placeholder="Seleccione..."
-            panelClass="cot-select-panel"
-            (selectionChange)="chgUnidadNegocio()">
-            <mat-option 
-              *ngFor="let unidad of unidadesNegocio" 
-              [value]="unidad.codigo">
-                {{ unidad.descripcion }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+            <mat-select 
+              formControlName="unidadNegocio" 
+              placeholder="Seleccione..."
+              panelClass="cot-select-panel"
+              (selectionChange)="chgUnidadNegocio()">
+              <mat-option 
+                *ngFor="let unidad of unidadesNegocio" 
+                [value]="unidad.codigo">
+                  {{ unidad.descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <!-- ********************** TIPO UNIDAD DE NEGOCIO ********************************* -->
-        <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
-          <mat-label>{{ COTIZACIONES_FIELDS.TIPO_UNIDAD.label }}</mat-label>
-          <mat-icon matPrefix class="cot-field-icon"
-            [matTooltip]="COTIZACIONES_FIELDS.TIPO_UNIDAD.label">
-              {{ COTIZACIONES_FIELDS.TIPO_UNIDAD.icon }}
-          </mat-icon>
-          <mat-select 
-            formControlName="tipo" 
-            placeholder="Seleccione...">
-            <mat-option 
-              *ngFor="let t of tipoUnidadesNegocio" 
-              [value]="t.codigo">
-                {{ t.descripcion }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <!-- ********************** CLIENTE ********************************* -->
-        <div class="cot-field cot-filter-select cot-field--span2">
-          <label class="cot-filter-select__label">
-            {{ COTIZACIONES_FIELDS.CLIENTE.label }}
-          </label>
-          <div class="cot-filter-select__control">
-            <mat-icon 
-              class="cot-filter-select__icon"
-              [matTooltip]="COTIZACIONES_FIELDS.CLIENTE.label" >
-                {{ COTIZACIONES_FIELDS.CLIENTE.icon }}
+          <!-- ********************** TIPO UNIDAD DE NEGOCIO ********************************* -->
+          <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
+            <mat-label>{{ COTIZACIONES_FIELDS.TIPO_UNIDAD.label }}</mat-label>
+            <mat-icon matPrefix class="cot-field-icon"
+              [matTooltip]="COTIZACIONES_FIELDS.TIPO_UNIDAD.label">
+                {{ COTIZACIONES_FIELDS.TIPO_UNIDAD.icon }}
             </mat-icon>
-            <ng-select
-              formControlName="cliente"
-              class="cot-ng-select cot-ng-select--filter"
-              bindLabel="label"
-              bindValue="cod_Cliente_Tex"
-              [items]="dataClientes"
-              [searchable]="true"
-              [clearable]="true"
-              appendTo="body"
-              placeholder="Buscar cliente..."
-              (change)="onChangeCliente()">
-            </ng-select>
+            <mat-select 
+              formControlName="tipo" 
+              placeholder="Seleccione...">
+              <mat-option 
+                *ngFor="let t of tipoUnidadesNegocio" 
+                [value]="t.codigo">
+                  {{ t.descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- ********************** CLIENTE ********************************* -->
+          <div class="cot-field cot-filter-select cot-field--span2">
+            <label class="cot-filter-select__label">
+              {{ COTIZACIONES_FIELDS.CLIENTE.label }}
+            </label>
+            <div class="cot-filter-select__control">
+              <mat-icon 
+                class="cot-filter-select__icon"
+                [matTooltip]="COTIZACIONES_FIELDS.CLIENTE.label" >
+                  {{ COTIZACIONES_FIELDS.CLIENTE.icon }}
+              </mat-icon>
+              <ng-select
+                formControlName="cliente"
+                class="cot-ng-select cot-ng-select--filter"
+                bindLabel="label"
+                bindValue="cod_Cliente_Tex"
+                [items]="dataClientes"
+                [searchable]="true"
+                [clearable]="true"
+                appendTo="body"
+                placeholder="Buscar cliente..."
+                (change)="onChangeCliente()">
+              </ng-select>
+            </div>
           </div>
-        </div>
 
-        <!-- ********************** CODIGO DE TELA ********************************* -->
-        <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
-          <mat-label>{{ COTIZACIONES_FIELDS.TELA.label }}</mat-label>
-          <mat-icon matPrefix class="cot-field-icon">{{ COTIZACIONES_FIELDS.TELA.icon }}</mat-icon>
-          <input 
-            [textMask]="{mask: maskCodigo}" 
-            matInput 
-            formControlName="codigoTela"
-            (keyup.enter)="buscarDescripcionTela()" 
-            placeholder="AA000000"
-            (blur)="buscarDescripcionTela()"  />
-        </mat-form-field>
+          <!-- ********************** CODIGO DE TELA ********************************* -->
+          <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
+            <mat-label>{{ COTIZACIONES_FIELDS.TELA.label }}</mat-label>
+            <mat-icon matPrefix class="cot-field-icon">{{ COTIZACIONES_FIELDS.TELA.icon }}</mat-icon>
+            <input 
+              [textMask]="{mask: maskCodigo}" 
+              matInput 
+              formControlName="codigoTela"
+              (keyup.enter)="buscarDescripcionTela()" 
+              placeholder="AA000000"
+              (blur)="buscarDescripcionTela()"  />
+          </mat-form-field>
 
-        <!-- ********************** DESCRIPCION DE TELA ********************************* -->
-        <mat-form-field appearance="outline" floatLabel="always" class="cot-field cot-field--readonly">
-          <mat-label>{{ COTIZACIONES_FIELDS.DESCRIPCION_TELA.label }}</mat-label>
-          <mat-icon matPrefix class="cot-field-icon">{{ COTIZACIONES_FIELDS.DESCRIPCION_TELA.icon }}</mat-icon>
-          <input matInput formControlName="descripcionTela" readonly placeholder="—" />
-        </mat-form-field>
+          <!-- ********************** DESCRIPCION DE TELA ********************************* -->
+          <mat-form-field appearance="outline" floatLabel="always" class="cot-field cot-field--readonly">
+            <mat-label>{{ COTIZACIONES_FIELDS.DESCRIPCION_TELA.label }}</mat-label>
+            <mat-icon matPrefix class="cot-field-icon">{{ COTIZACIONES_FIELDS.DESCRIPCION_TELA.icon }}</mat-icon>
+            <input matInput formControlName="descripcionTela" readonly placeholder="—" />
+          </mat-form-field>
 
-        <!-- ********************** RUTA ********************************* -->
-        <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
-          <mat-label>{{ COTIZACIONES_FIELDS.RUTA.label }}</mat-label>
-          <mat-icon matPrefix class="cot-field-icon">{{ COTIZACIONES_FIELDS.RUTA.icon }}</mat-icon>
-          <mat-select id="codigoRutaTela" formControlName="codigoRutaTela" placeholder="Seleccione...">
-            <mat-option *ngFor="let ruta of RutaXCodTela" [value]="ruta.codigo">
-              {{ ruta.nombre }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+          <!-- ********************** RUTA ********************************* -->
+          <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
+            <mat-label>{{ COTIZACIONES_FIELDS.RUTA.label }}</mat-label>
+            <mat-icon matPrefix class="cot-field-icon">{{ COTIZACIONES_FIELDS.RUTA.icon }}</mat-icon>
+            <mat-select id="codigoRutaTela" formControlName="codigoRutaTela" placeholder="Seleccione...">
+              <mat-option *ngFor="let ruta of RutaXCodTela" [value]="ruta.codigo">
+                {{ ruta.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <!-- ********************** COLOR ********************************* -->
-        <div class="cot-field cot-filter-select">
-          <label class="cot-filter-select__label" #labelColor>
-            {{ COTIZACIONES_FIELDS.COLOR.label }}
-          </label>
-          <div class="cot-filter-select__control">
-            <mat-icon class="cot-filter-select__icon"
-              [matTooltip]="labelColor.textContent.trim()" >
-              {{ COTIZACIONES_FIELDS.COLOR.icon }}
-            </mat-icon>
-            <ng-select
-              formControlName="color"
-              class="cot-ng-select cot-ng-select--filter"
-              bindLabel="descripcion"
-              bindValue="codigo"
-              [items]="listaCodigoColor"
-              [searchable]="true"
-              [clearable]="true"
-              appendTo="body"
-              (change)="onChangeColor()"
-              placeholder="Buscar color...">
-            </ng-select>
+          <!-- ********************** COLOR ********************************* -->
+          <div class="cot-field cot-filter-select">
+            <label class="cot-filter-select__label" #labelColor>
+              {{ COTIZACIONES_FIELDS.COLOR.label }}
+            </label>
+            <div class="cot-filter-select__control">
+              <mat-icon class="cot-filter-select__icon"
+                [matTooltip]="labelColor.textContent.trim()" >
+                {{ COTIZACIONES_FIELDS.COLOR.icon }}
+              </mat-icon>
+              <ng-select
+                formControlName="color"
+                class="cot-ng-select cot-ng-select--filter"
+                bindLabel="descripcion"
+                bindValue="codigo"
+                [items]="listaCodigoColor"
+                [searchable]="true"
+                [clearable]="true"
+                appendTo="body"
+                (change)="onChangeColor()"
+                placeholder="Buscar color...">
+              </ng-select>
+            </div>
           </div>
+
+          <!-- ********************** PRECIO / SDC ********************************* -->
+          <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
+            <mat-label>Precio / SDC</mat-label>
+            <mat-icon matPrefix class="cot-field-icon">payments</mat-icon>
+            <mat-select [value]="precioSeleccionado"
+                        [disabled]="!dataSource_Precios?.length"
+                        (selectionChange)="onChangePrecio($event.value)"
+                        placeholder="Elegir precio...">
+              <mat-option *ngFor="let p of dataSource_Precios" [value]="p">
+                {{ p.corR_CARTA }} — Tiempo {{ p.tiempo }} — {{ p.preC_TINTO }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
+      </form>
 
-        <!-- ********************** PRECIO / SDC ********************************* -->
-        <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
-          <mat-label>Precio / SDC</mat-label>
-          <mat-icon matPrefix class="cot-field-icon">payments</mat-icon>
-          <mat-select [value]="precioSeleccionado"
-                      [disabled]="!dataSource_Precios?.length"
-                      (selectionChange)="onChangePrecio($event.value)"
-                      placeholder="Elegir precio...">
-            <mat-option *ngFor="let p of dataSource_Precios" [value]="p">
-              {{ p.corR_CARTA }} — Tiempo {{ p.tiempo }} — {{ p.preC_TINTO }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <div class="cot-form-footer">
-        <div class="cot-form-actions">
+      <!-- FOOTER ESTRUCTURADO ÚNICO DE LA SECCIÓN DE CRITERIOS -->
+      <div class="cot-criterios-footer">
+        <div class="cot-criterios-footer__left">
           <ng-container *ngTemplateOutlet="tplPinHistorial"></ng-container>
+        </div>
+        <div class="cot-criterios-footer__actions">
           <button mat-stroked-button type="button" class="btn-ghost" (click)="onLimpiarFiltros()">
-            <mat-icon>refresh</mat-icon> Limpiar filtro
+            <mat-icon>refresh</mat-icon> Limpiar filtros
           </button>
           <button mat-flat-button type="button" class="btn-azul" (click)="onBuscar()">
             <mat-icon>search</mat-icon> Buscar
           </button>
         </div>
       </div>
-    </form>
+
+    </div>
+
   </section>
 
   <!-- Zona de costeo: recibe toda la altura restante -->

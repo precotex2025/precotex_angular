@@ -186,13 +186,68 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: var(--sp-2);
+}
+
+.cot-criterios__header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.cot-switch-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  height: 32px !important;
+  line-height: 32px !important;
+  padding: 0 12px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  border-radius: 20px !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-muted) !important;
+  background-color: var(--color-surface) !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  user-select: none !important;
+
+  &:hover {
+    border-color: var(--cot-primary) !important;
+    color: var(--cot-primary) !important;
+    background-color: var(--color-brand-subtle) !important;
+  }
+
+  &.cot-switch-btn--active {
+    border-color: var(--cot-primary) !important;
+    background-color: var(--color-brand-subtle) !important;
+    color: var(--cot-primary) !important;
+    box-shadow: 0 2px 6px rgba(63, 81, 181, 0.15) !important;
+
+    .cot-switch-btn__icon {
+      color: var(--cot-primary) !important;
+    }
+  }
+
+  .cot-switch-btn__icon {
+    font-size: 22px !important;
+    width: 22px !important;
+    height: 22px !important;
+    color: var(--color-text-disabled);
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  .cot-switch-btn__label {
+    font-size: 13px;
+    letter-spacing: 0.2px;
+  }
 }
 
 .cot-section-title {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin: 0 0 10px 0;
+  margin: 0;
   font-size: var(--fs-sm);
   font-weight: var(--fw-bold);
   letter-spacing: 0.3px;
@@ -208,10 +263,6 @@
     mat-icon {
       color: var(--cot-primary-dark);
     }
-
-    .cot-section-title__chevron {
-      transform: scale(1.2);
-    }
   }
 
   mat-icon {
@@ -223,12 +274,21 @@
   }
 
   .cot-section-title__chevron {
-    margin-left: 2px;
+    width: 28px !important;
+    height: 28px !important;
+    line-height: 28px !important;
+    margin-right: 2px !important;
+
+    mat-icon {
+      font-size: 20px !important;
+      width: 20px !important;
+      height: 20px !important;
+    }
   }
 }
 
 .cot-criterios--colapsado .cot-section-title {
-  margin-bottom: 6px;
+  margin-bottom: 0;
 }
 
 /* --- Estado colapsado --- */
@@ -257,6 +317,15 @@
   background: var(--color-surface-sunken);
   border: 1px solid #e6e6e6;
   border-radius: var(--radius-sm);
+
+  &.cot-criterio-card--vacio {
+    opacity: 0.75;
+    border-style: dashed;
+
+    .cot-criterio-card__icon mat-icon {
+      color: var(--color-text-muted);
+    }
+  }
 }
 
 .cot-criterio-card__icon {
@@ -301,6 +370,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  &.cot-criterio-card__value--vacio {
+    color: var(--color-text-muted);
+    font-weight: var(--fw-regular);
+  }
 }
 
 .cot-criterios__resumen-actions {
@@ -815,8 +889,32 @@ Alineación y tamaño del dropdown
 }
 
 /* ============================================================
-   [6.8] FOOTER DE ACCIONES DEL FORMULARIO
+   [6.8] FOOTER DE ACCIONES DE LA SECCIÓN DE CRITERIOS
    ============================================================ */
+.cot-criterios-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+
+  .cot-criterios-footer__left {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+  }
+
+  .cot-criterios-footer__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    margin-left: auto;
+  }
+}
+
 .cot-form-footer {
   display: flex;
   align-items: center;
@@ -1777,6 +1875,12 @@ th.col-descripcion {
 }
 
 @media screen and (max-width: 899px) {
+  .cot-workspace {
+    overflow-y: auto;
+    padding: var(--sp-3);
+    padding-bottom: 96px;
+  }
+
   .cot-toolbar {
     flex-wrap: wrap;
   }
@@ -1808,6 +1912,25 @@ th.col-descripcion {
     grid-column: span 1;
   }
 
+  .cot-criterios-footer {
+    flex-direction: column;
+    align-items: stretch;
+
+    .cot-criterios-footer__left {
+      justify-content: flex-start;
+    }
+
+    .cot-criterios-footer__actions {
+      width: 100%;
+      flex-direction: column-reverse;
+      align-items: stretch;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+
   .cot-form-footer {
     flex-direction: column-reverse;
     align-items: stretch;
@@ -1825,7 +1948,7 @@ th.col-descripcion {
   }
 
   .cot-criterios-cards {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
 
   .cot-criterios__resumen-actions {

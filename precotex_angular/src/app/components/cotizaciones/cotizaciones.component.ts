@@ -101,8 +101,13 @@ export class CotizacionesComponent implements OnInit {
   isDisabledBtnFind   = false;
 
   // --- Estado de presentación (rediseño UX) ---
-  panelCriteriosAbierto = true;
+  seccionTotalmenteColapsada = false;
+  modoResumen = false;
   densidad: 'compacta' | 'comoda' = 'compacta';
+
+  get panelCriteriosAbierto(): boolean {
+    return !this.seccionTotalmenteColapsada && !this.modoResumen;
+  }
 
   // Tabla de solo lectura + modal de edición
   filaEnEdicion: any = null;
@@ -535,9 +540,22 @@ export class CotizacionesComponent implements OnInit {
     this.reiniciaControles();
   }
 
-  /* --- Expandir/Contraer Seccion de Filtros --- */
+  /* --- Expandir/Contraer Seccion de Filtros Entera --- */
+  toggleSeccionColapsada() {
+    this.seccionTotalmenteColapsada = !this.seccionTotalmenteColapsada;
+  }
+
+  /* --- Alternar Modo Resumen (Switch ON/OFF) --- */
+  toggleModoResumen() {
+    this.modoResumen = !this.modoResumen;
+    if (this.seccionTotalmenteColapsada) {
+      this.seccionTotalmenteColapsada = false;
+    }
+  }
+
+  /* --- Legacy toggle for fallback --- */
   toggleCriterios() {
-    this.panelCriteriosAbierto = !this.panelCriteriosAbierto;
+    this.toggleSeccionColapsada();
   }
 
   // --- Panel de Historial (UI estática) ---
@@ -600,7 +618,8 @@ export class CotizacionesComponent implements OnInit {
       this.global_PrecioTinto, this.global_Tiempo, this.global_idCotizacion_Cab
     );
 
-    this.panelCriteriosAbierto = false; // colapsa criterios y deja toda la altura a la tabla
+    this.modoResumen = true;
+    this.seccionTotalmenteColapsada = false;
   }
 
   /* --- Crea un borrador nuevo pidiendo correlativo/versión al backend y lo preselecciona.
@@ -1008,23 +1027,58 @@ export class CotizacionesComponent implements OnInit {
     const chips: { label: string, value: string, icon: string }[] = [];
 
     const undNeg = this.unidadesNegocio.find(u => u.codigo === v.unidadNegocio);
-    if (undNeg) chips.push({ label: COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.label, value: undNeg.descripcion, icon: COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.icon });
+    chips.push({
+      label: COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.label,
+      value: undNeg ? undNeg.descripcion : '—',
+      icon: COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.icon
+    });
 
     const tipo = this.tipoUnidadesNegocio.find(t => t.codigo === v.tipo);
-    if (tipo) chips.push({ label: COTIZACIONES_FIELDS.TIPO_UNIDAD.label, value: tipo.descripcion, icon: COTIZACIONES_FIELDS.TIPO_UNIDAD.icon });
+    chips.push({
+      label: COTIZACIONES_FIELDS.TIPO_UNIDAD.label,
+      value: tipo ? tipo.descripcion : '—',
+      icon: COTIZACIONES_FIELDS.TIPO_UNIDAD.icon
+    });
 
     const cliente = this.dataClientes.find(c => c.cod_Cliente_Tex === v.cliente);
-    if (cliente) chips.push({ label: COTIZACIONES_FIELDS.CLIENTE.label, value: cliente.abr_Cliente, icon: COTIZACIONES_FIELDS.CLIENTE.icon });
+    chips.push({
+      label: COTIZACIONES_FIELDS.CLIENTE.label,
+      value: cliente ? cliente.abr_Cliente : '—',
+      icon: COTIZACIONES_FIELDS.CLIENTE.icon
+    });
 
-    if (v.codigoTela) chips.push({ label: COTIZACIONES_FIELDS.TELA.label, value: v.codigoTela, icon: COTIZACIONES_FIELDS.TELA.icon });
+    chips.push({
+      label: COTIZACIONES_FIELDS.TELA.label,
+      value: v.codigoTela ? v.codigoTela : '—',
+      icon: COTIZACIONES_FIELDS.TELA.icon
+    });
 
-    if (v.descripcionTela) chips.push({ label: COTIZACIONES_FIELDS.DESCRIPCION_TELA.label, value: v.descripcionTela, icon: COTIZACIONES_FIELDS.DESCRIPCION_TELA.icon });
+    chips.push({
+      label: COTIZACIONES_FIELDS.DESCRIPCION_TELA.label,
+      value: v.descripcionTela ? v.descripcionTela : '—',
+      icon: COTIZACIONES_FIELDS.DESCRIPCION_TELA.icon
+    });
 
     const ruta = this.RutaXCodTela.find(r => r.codigo === v.codigoRutaTela);
-    if (ruta) chips.push({ label: COTIZACIONES_FIELDS.RUTA.label, value: ruta.nombre, icon: COTIZACIONES_FIELDS.RUTA.icon });
+    chips.push({
+      label: COTIZACIONES_FIELDS.RUTA.label,
+      value: ruta ? ruta.nombre : '—',
+      icon: COTIZACIONES_FIELDS.RUTA.icon
+    });
 
     const color = this.listaCodigoColor.find(c => c.codigo === v.color);
-    if (color) chips.push({ label: COTIZACIONES_FIELDS.COLOR.label, value: color.descripcion, icon: COTIZACIONES_FIELDS.COLOR.icon });
+    chips.push({
+      label: COTIZACIONES_FIELDS.COLOR.label,
+      value: color ? color.descripcion : '—',
+      icon: COTIZACIONES_FIELDS.COLOR.icon
+    });
+
+    const precio = this.precioSeleccionado;
+    chips.push({
+      label: 'Precio / SDC',
+      value: precio ? `${precio.corR_CARTA} — ${precio.preC_TINTO}` : '—',
+      icon: 'payments'
+    });
 
     return chips;
   }
@@ -1207,7 +1261,8 @@ export class CotizacionesComponent implements OnInit {
     //DesHabilita botoneria
     this.bMuestraMenuFlotante = false;
     this.isDisabledBtnFind    = false;
-    this.panelCriteriosAbierto = true; // vuelve a mostrar el formulario completo
+    this.modoResumen = false;
+    this.seccionTotalmenteColapsada = false;
 
     this.RutaXCodTela = [];
     this.listaCodigoColor = [];
