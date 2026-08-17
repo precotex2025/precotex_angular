@@ -21,14 +21,14 @@
           <span>Criterios de Búsqueda</span>
         </div>
 
-        <!-- Switch Vista Compacta al costado del título -->
-        <button mat-button type="button"
+        <!-- Botón Solo Ícono Modo Vista / Modo Edición con Tooltip -->
+        <button mat-icon-button type="button"
                 class="cot-switch-btn"
                 [class.cot-switch-btn--active]="modoResumen"
                 (click)="toggleModoResumen()"
-                [matTooltip]="modoResumen ? 'Desactivar vista compacta (expandir formulario)' : 'Activar vista compacta (mostrar tarjetas de resumen)'">
-          <mat-icon class="cot-switch-btn__icon">{{ modoResumen ? 'toggle_on' : 'toggle_off' }}</mat-icon>
-          <span class="cot-switch-btn__label">Vista Compacta</span>
+                [matTooltip]="modoResumen ? 'Modo Vista (clic para cambiar a Modo Edición)' : 'Modo Edición (clic para cambiar a Modo Vista)'"
+                matTooltipPosition="above">
+          <mat-icon class="cot-switch-btn__icon">{{ modoResumen ? 'visibility' : 'edit' }}</mat-icon>
         </button>
       </div>
 
@@ -36,10 +36,10 @@
         <!-- Acciones en el extremo derecho cuando está en modo Vista Compacta -->
         <ng-container *ngIf="modoResumen && !seccionTotalmenteColapsada">
           <ng-container *ngTemplateOutlet="tplPinHistorial"></ng-container>
-          <button mat-stroked-button type="button" class="btn-ghost cot-btn-sm" (click)="onLimpiarFiltros()" matTooltip="Limpiar filtros">
+          <button mat-stroked-button type="button" class="btn-ghost cot-btn-sm" (click)="onLimpiarFiltros()" matTooltip="Limpiar filtros" matTooltipPosition="above">
             <mat-icon>refresh</mat-icon> <span class="cot-btn-label">Limpiar</span>
           </button>
-          <button mat-flat-button type="button" class="btn-azul cot-btn-sm" (click)="onBuscar()" matTooltip="Buscar cotización">
+          <button mat-flat-button type="button" class="btn-azul cot-btn-sm" (click)="onBuscar()" matTooltip="Buscar cotización" matTooltipPosition="above">
             <mat-icon>search</mat-icon> <span class="cot-btn-label">Buscar</span>
           </button>
         </ng-container>
@@ -53,7 +53,8 @@
               [class.cot-btn-pin-filtro--activo]="historialPineado"
               *ngIf="puedeAnclarHistorial"
               (click)="toggleHistorialPin()"
-              [matTooltip]="historialPineado ? 'Ocultar panel de historial' : 'Mostrar panel de historial'">
+              [matTooltip]="historialPineado ? 'Ocultar panel de historial' : 'Mostrar panel de historial'"
+              matTooltipPosition="above">
         <mat-icon>push_pin</mat-icon> <span class="cot-btn-label">Historial</span>
       </button>
     </ng-template>
@@ -64,15 +65,19 @@
       <!-- Resumen de criterios en cartas -->
       <div class="cot-criterios__resumen" *ngIf="modoResumen">
         <div class="cot-criterios-cards">
-          <article class="cot-criterio-card"
-                   [class.cot-criterio-card--vacio]="c.value === '—'"
-                   *ngFor="let c of resumenCriterios">
-            <div class="cot-criterio-card__icon" [matTooltip]="c.label"><mat-icon>{{ c.icon }}</mat-icon></div>
+          <div class="cot-criterio-card"
+               [class.cot-criterio-card--vacio]="c.value === '—'"
+               *ngFor="let c of resumenCriterios"
+               [matTooltip]="c.label + ': ' + (c.value !== '—' ? c.value : 'Sin seleccionar')"
+               matTooltipPosition="above">
+            <div class="cot-criterio-card__icon">
+              <mat-icon>{{ c.icon }}</mat-icon>
+            </div>
             <div class="cot-criterio-card__body">
               <span class="cot-criterio-card__label">{{ c.label }}</span>
-              <span class="cot-criterio-card__value" [class.cot-criterio-card__value--vacio]="c.value === '—'" [matTooltip]="c.value">{{ c.value }}</span>
+              <span class="cot-criterio-card__value" [class.cot-criterio-card__value--vacio]="c.value === '—'">{{ c.value }}</span>
             </div>
-          </article>
+          </div>
         </div>
       </div>
 

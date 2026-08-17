@@ -1023,55 +1023,70 @@ export class CotizacionesComponent implements OnInit {
   }
 
   get resumenCriterios(): { label: string, value: string, icon: string }[] {
-    const v = this.formulario.value;
+    const v = this.formulario.getRawValue();
     const chips: { label: string, value: string, icon: string }[] = [];
 
-    const undNeg = this.unidadesNegocio.find(u => u.codigo === v.unidadNegocio);
-    chips.push({
-      label: COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.label,
-      value: undNeg ? undNeg.descripcion : '—',
-      icon: COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.icon
-    });
+    if (!this.formulario.get('unidadNegocio')?.disabled) {
+      const undNeg = this.unidadesNegocio.find(u => String(u.codigo) === String(v.unidadNegocio));
+      chips.push({
+        label: COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.label,
+        value: undNeg ? undNeg.descripcion : (v.unidadNegocio || '—'),
+        icon: COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.icon
+      });
+    }
 
-    const tipo = this.tipoUnidadesNegocio.find(t => t.codigo === v.tipo);
-    chips.push({
-      label: COTIZACIONES_FIELDS.TIPO_UNIDAD.label,
-      value: tipo ? tipo.descripcion : '—',
-      icon: COTIZACIONES_FIELDS.TIPO_UNIDAD.icon
-    });
+    if (!this.formulario.get('tipo')?.disabled) {
+      const tipo = this.tipoUnidadesNegocio.find(t => String(t.codigo) === String(v.tipo));
+      chips.push({
+        label: COTIZACIONES_FIELDS.TIPO_UNIDAD.label,
+        value: tipo ? tipo.descripcion : (v.tipo || '—'),
+        icon: COTIZACIONES_FIELDS.TIPO_UNIDAD.icon
+      });
+    }
 
-    const cliente = this.dataClientes.find(c => c.cod_Cliente_Tex === v.cliente);
-    chips.push({
-      label: COTIZACIONES_FIELDS.CLIENTE.label,
-      value: cliente ? cliente.abr_Cliente : '—',
-      icon: COTIZACIONES_FIELDS.CLIENTE.icon
-    });
+    if (!this.formulario.get('cliente')?.disabled) {
+      const cliente = this.dataClientes.find(c => String(c.cod_Cliente_Tex) === String(v.cliente));
+      chips.push({
+        label: COTIZACIONES_FIELDS.CLIENTE.label,
+        value: cliente ? (cliente.label || cliente.nom_Cliente || cliente.abr_Cliente) : (v.cliente || '—'),
+        icon: COTIZACIONES_FIELDS.CLIENTE.icon
+      });
+    }
 
-    chips.push({
-      label: COTIZACIONES_FIELDS.TELA.label,
-      value: v.codigoTela ? v.codigoTela : '—',
-      icon: COTIZACIONES_FIELDS.TELA.icon
-    });
+    if (!this.formulario.get('codigoTela')?.disabled) {
+      chips.push({
+        label: COTIZACIONES_FIELDS.TELA.label,
+        value: v.codigoTela ? String(v.codigoTela) : '—',
+        icon: COTIZACIONES_FIELDS.TELA.icon
+      });
+    }
 
-    chips.push({
-      label: COTIZACIONES_FIELDS.DESCRIPCION_TELA.label,
-      value: v.descripcionTela ? v.descripcionTela : '—',
-      icon: COTIZACIONES_FIELDS.DESCRIPCION_TELA.icon
-    });
+    // Campos deshabilitados (como descripcionTela) se excluyen del resumen compacto
+    if (!this.formulario.get('descripcionTela')?.disabled) {
+      chips.push({
+        label: COTIZACIONES_FIELDS.DESCRIPCION_TELA.label,
+        value: v.descripcionTela ? String(v.descripcionTela) : '—',
+        icon: COTIZACIONES_FIELDS.DESCRIPCION_TELA.icon
+      });
+    }
 
-    const ruta = this.RutaXCodTela.find(r => r.codigo === v.codigoRutaTela);
-    chips.push({
-      label: COTIZACIONES_FIELDS.RUTA.label,
-      value: ruta ? ruta.nombre : '—',
-      icon: COTIZACIONES_FIELDS.RUTA.icon
-    });
+    if (!this.formulario.get('codigoRutaTela')?.disabled) {
+      const ruta = this.RutaXCodTela.find(r => String(r.codigo) === String(v.codigoRutaTela));
+      chips.push({
+        label: COTIZACIONES_FIELDS.RUTA.label,
+        value: ruta ? (ruta.nombre || String(ruta.codigo)) : (v.codigoRutaTela || '—'),
+        icon: COTIZACIONES_FIELDS.RUTA.icon
+      });
+    }
 
-    const color = this.listaCodigoColor.find(c => c.codigo === v.color);
-    chips.push({
-      label: COTIZACIONES_FIELDS.COLOR.label,
-      value: color ? color.descripcion : '—',
-      icon: COTIZACIONES_FIELDS.COLOR.icon
-    });
+    if (!this.formulario.get('color')?.disabled) {
+      const color = this.listaCodigoColor.find(c => String(c.codigo) === String(v.color));
+      chips.push({
+        label: COTIZACIONES_FIELDS.COLOR.label,
+        value: color ? (color.descripcion || String(color.codigo)) : (v.color || '—'),
+        icon: COTIZACIONES_FIELDS.COLOR.icon
+      });
+    }
 
     const precio = this.precioSeleccionado;
     chips.push({
