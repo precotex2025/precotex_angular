@@ -94,17 +94,50 @@
 
 }
 
-/* El desplegable de ng-select (Cliente/Color) se monta en <body>
-   vía appendTo="body", fuera del alcance de :host. Se publican
-   aquí los tokens que usa el panel en [6.7] — mismo valor que su
-   contraparte en :host — para poder estilarlo desde este mismo
-   archivo en vez de tocar styles.scss global. */
+/* Dos partes de este módulo se montan colgadas de <body>, fuera
+   del alcance de :host: el desplegable de ng-select (Cliente/Color)
+   por appendTo="body", y el modal de edición, que MatDialog inserta
+   en cdk-overlay-container. Las custom properties se heredan por el
+   árbol DOM, así que allí las de :host no existen y toda declaración
+   que las use se descarta. Se publican aquí los tokens que necesitan
+   el panel de [6.7] y los campos del modal ([6.5], SECCIÓN 8) — mismo
+   valor que su contraparte en :host — para poder estilarlos desde
+   este mismo archivo en vez de tocar styles.scss global. */
 ::ng-deep :root {
   --cot-primary: #3f51b5;
+  --cot-primary-line: #337ab7;
+  --cot-primary-ring: rgba(63, 81, 181, 0.22);
   --color-border: #e0e0e0;
   --color-text: #212121;
   --color-text-disabled: #9e9e9e;
   --color-brand-subtle: #e8eaf6;
+
+  /* Geometría de campo: copia literal de [6.0] en :host. */
+  --cot-filter-height: 44px;
+  --cot-filter-radius: 4px;
+  --cot-filter-border: var(--color-border);
+  --cot-filter-border-w: 1px;
+
+  --cot-filter-pad-x: 12px;
+  --cot-filter-icon-size: 18px;
+  --cot-filter-icon-gap: 8px;
+  --cot-filter-text-indent: calc(
+    var(--cot-filter-pad-x) +
+    var(--cot-filter-icon-size) +
+    var(--cot-filter-icon-gap)
+  );
+
+  --cot-filter-font-size: 14px;
+  --cot-filter-line-h: 18px;
+
+  --cot-filter-label-space: 13.5px;
+  --cot-filter-label-size: 10.5px;
+
+  --cot-filter-pad-y: calc(
+    (var(--cot-filter-height) -
+      var(--cot-filter-label-space) -
+      var(--cot-filter-line-h)) / 2
+  );
 }
 
 .cot-workspace.densidad-comoda {
@@ -1799,49 +1832,24 @@ th.col-descripcion {
   }
 }
 
-/* Campo Observación (modal de ajuste) */
-.cot-drawer__observacion {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.cot-drawer__observacion-label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: var(--fs-sm);
-  font-weight: var(--fw-medium);
-  color: var(--color-text);
-}
-
-.cot-drawer__observacion-icon {
-  font-size: 15px !important;
-  width: 15px !important;
-  height: 15px !important;
-  color: var(--color-text-muted);
-}
-
+/* Asterisco de campo obligatorio dentro del mat-label (Observación del ajuste) */
 .cot-drawer__required {
   color: var(--c-danger-600);
 }
 
-.cot-drawer__observacion-input {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font: inherit;
-  font-size: var(--fs-sm);
-  color: var(--color-text);
-  outline: none;
+/* El textarea del modal comparte la geometría de [6.5], pensada para un control de una
+   sola línea. Necesita alto propio para sus tres filas y sin resize manual, que rompería
+   la caja del outline. El infix pierde la altura fija por el mismo motivo. */
+.cot-drawer__field ::ng-deep textarea.mat-input-element {
   resize: none;
-  transition: all 0.2s;
+  line-height: 1.4;
+  min-height: calc(var(--cot-filter-line-h) * 3);
+}
 
-  &:focus {
-    border-color: var(--color-brand);
-    box-shadow: 0 0 0 3px var(--color-focus-ring);
-  }
+/* Se marca desde el template (no con :has(), sin soporte garantizado en Angular 13):
+   con varias líneas el contenido debe alinearse arriba, no al centro como en [6.5.2]. */
+.cot-drawer__field--area ::ng-deep .mat-form-field-flex {
+  align-items: flex-start;
 }
 
 /* ============================================================

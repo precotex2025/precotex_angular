@@ -11,7 +11,9 @@ import {
   CorrelativoVersionItem, CentroCostoRawItem,
   HiladoTelaItem,
   ListaPrecioXColorRequest, ListarProcesosExportacionRequest, ObtenerNuevoCorrelativoVersionRequest,
-  ProcesoCotizacionRequest
+  ProcesoCotizacionRequest,
+  ListaCabecerasCotizacionRequest, CabeceraCotizacionItem,
+  ListaDetalleCotizacionXFiltrosRequest, ListaDetalleCotizacionXVersionRequest
 } from 'src/app/interfaces/cotizaciones';
 import { ComboItem } from 'src/app/models/cotizaciones';
 import { ServiceResponse, ServiceResponseList } from 'src/app/interfaces/shared';
@@ -143,6 +145,35 @@ export class CotizacionesService {
     const params = this.buildParams({ correlativo });
     return this.http
       .get<ServiceResponseList<PrecioXColorItem>>(`${this.baseUrlTinto}${this.endpoint}/getListarVersionesCotizacion`, { headers: this.headers, params })
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  // Historial de versiones: una fila por cabecera guardada para los criterios de amarre.
+  // elements vacío = no hay cotización previa (ver cargarHistorialCotizaciones).
+  getListaCabecerasCotizacion(request: ListaCabecerasCotizacionRequest): Observable<ServiceResponseList<CabeceraCotizacionItem>> {
+    const params = this.buildParams({ ...request });
+    return this.http
+      .get<ServiceResponseList<CabeceraCotizacionItem>>(`${this.baseUrlTinto}${this.endpoint}/getListaCabecerasCotizacion`, { headers: this.headers, params })
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  // Detalle de costeo desde cero: no existe cabecera para estos criterios, así que la
+  // grilla se calcula con los filtros más el precio y el tiempo de la carta elegida.
+  // Devuelve el costeo base, sin ajustes (ver cargarDetalleXFiltros).
+  getListaDetalleCotizacionXFiltros(request: ListaDetalleCotizacionXFiltrosRequest): Observable<ServiceResponseList<ProcesoExportacionItem>> {
+    const params = this.buildParams({ ...request });
+    return this.http
+      .get<ServiceResponseList<ProcesoExportacionItem>>(`${this.baseUrlTinto}${this.endpoint}/getListaDetalleCotizacionXFiltros`, { headers: this.headers, params })
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  // Detalle de costeo de una versión ya guardada. La cabecera identifica la cotización,
+  // por eso no viajan los filtros. Llega con los ajustes grabados ya aplicados
+  // (ver cargarDetalleXVersion).
+  getListaDetalleCotizacionXVersion(request: ListaDetalleCotizacionXVersionRequest): Observable<ServiceResponseList<ProcesoExportacionItem>> {
+    const params = this.buildParams({ ...request });
+    return this.http
+      .get<ServiceResponseList<ProcesoExportacionItem>>(`${this.baseUrlTinto}${this.endpoint}/getListaDetalleCotizacionXVersion`, { headers: this.headers, params })
       .pipe(retry(1), catchError(this.handleError));
   }
 }

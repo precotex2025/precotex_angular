@@ -18,7 +18,9 @@ import {
   ProcesoCotizacionDetalle, ProcesoCotizacionRequest,
   ListaPrecioXColorRequest, ListarProcesosExportacionRequest, ObtenerNuevoCorrelativoVersionRequest,
   UnidadNegocioItem, UnidadNegocioTipoItem, ClienteColgadorItem, TelaItem, RutaTelaRawItem,
-  CorrelativoVersionItem, CentroCostoRawItem
+  CorrelativoVersionItem, CentroCostoRawItem,
+  ListaCabecerasCotizacionRequest, ListaDetalleCotizacionXFiltrosRequest,
+  ListaDetalleCotizacionXVersionRequest, CabeceraCotizacionItem
 } from 'src/app/interfaces/cotizaciones';
 import { ServiceResponse, ServiceResponseList } from 'src/app/interfaces/shared';
 import { finalize } from 'rxjs';
@@ -31,7 +33,6 @@ import { finalize } from 'rxjs';
 
 export class CotizacionesComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild('dialogObservacion') dialogObservacion!: TemplateRef<any>;
   @ViewChild('dialogAjuste') dialogAjuste!: TemplateRef<any>;
   observacion: string = '';
 
@@ -62,7 +63,6 @@ export class CotizacionesComponent implements OnInit {
   sUsuario        = GlobalVariable.vusu;
   dataDetalles: ProcesoCotizacionDetalle[] = [];
   isAjusteBloqueado   = true;
-  dialogAbierto       = false;
   bBuscarTela         = false;
   // --- Historial: sin control en UI, se envía siempre en false ---
   bValidaHistorial    = false;
@@ -72,7 +72,6 @@ export class CotizacionesComponent implements OnInit {
   global_PrecioTinto  : number = 0;
   global_SDC          : string = "";
   global_CodReceta    : string = "";
-  global_Observacion  : string = "";
   global_idCotizacion_Cab : number = 0;
 
   // Precio elegido en el combo "Precio / SDC" (se puebla al elegir Color, ver onChangeColor/onChangePrecio)
@@ -95,7 +94,7 @@ export class CotizacionesComponent implements OnInit {
   intensidad: ComboItem[] =[];
   listaCodigoColor: ComboItem[] = [];
   expandedRows: Set<string> = new Set(); // usamos el pro_Hover como clave
-  isDisabledBtnSave   = false;
+  habilitadoBtnGuardar   = false;
   isDisabledBtnEdit   = false;
   isDisabledBtnDelete = false;
   isDisabledBtnFind   = false;
@@ -418,27 +417,16 @@ export class CotizacionesComponent implements OnInit {
         if(response.success){
           const elementos = response.elements ?? [];
           this.dataSource_Precios = elementos;
-          this.historialVersiones = elementos.map((p, idx) => ({
-            id: p.idcotizacioN_CAB,
-            titulo: `Versión ${idx + 1}`,
-            sdc: p.corR_CARTA,
-            precioTinto: p.preC_TINTO,
-            precioAcabado: p.preC_ACABADO,
-            tiempo: p.tiempo,
-            receta: p.idrecetalabprod,
-            reciente: idx === 0,
-            raw: p,
-            correlativo: p.corR_CARTA,
-            version: idx + 1,
-            estado: idx === 0 ? 'Vigente' : undefined
-          }));
+          // El historial de versiones ya no se arma aquí: lo alimenta
+          // getListaCabecerasCotizacion con el num_Version real de BD
+          // (ver cargarHistorialCotizaciones). Este método solo llena el combo Precio/SDC.
+
           // Con un solo resultado, se autoselecciona para no obligar a abrir el combo.
           if (elementos.length === 1){
             this.onChangePrecio(elementos[0]);
           }
         }else{
           this.dataSource_Precios = null;
-          this.historialVersiones = [];
         }
       },
       error: (error: any) => {
@@ -584,11 +572,10 @@ export class CotizacionesComponent implements OnInit {
     return !!this.dataSource.data?.length;
   }
 
-  /* --- Buscar Cotización: consulta directa a getListarProcesosExportacion con los filtros
-     del formulario + el precio elegido en el combo Precio/SDC (ver onChangeColor). El propio
-     backend informa vía existeCotizacion si esos filtros+precio ya tienen cotización guardada;
-     si no la tienen, getListarProcesosExportacion activa el borrador automáticamente
-     (ver el bloque "no existe cotización" más abajo). --- */
+  /* --- Buscar Cotización: primero carga el historial de cabeceras con los siete criterios
+     (getListaCabecerasCotizacion). Si hay cabeceras, autoselecciona la más reciente y trae su
+     detalle por cabecera+versión; si no hay ninguna, arma la grilla desde cero con los filtros
+     y activa el borrador. Ver cargarHistorialCotizaciones al final del archivo. --- */
   onBuscar() {
     const _unidad  = Number(this.unidadNegocio);
     const _tipo    = this.formulario.get('tipo')?.value || '';
@@ -608,30 +595,32 @@ export class CotizacionesComponent implements OnInit {
     this.codigoRutaTela = _ruta;
 
     // Filtros de esta búsqueda: seleccionarVersion()/seleccionarBorrador()/nuevaCotizacionUI() los reutilizan.
-    this.ultimaBusqueda = {
+    const filtrosNuevos: FiltrosBusqueda = {
       unidad: _unidad,
       tipo: _tipo,
       cliente: _cliente,
       tela: _tela,
       ruta: _ruta,
-      color: _color
+      color: _color,
+      sdcReferencia: String(this.global_SDC ?? '')
     };
+
+    // El borrador solo se descarta si cambian los criterios: así una versión nueva a medio
+    // escribir sobrevive a un Buscar sobre los mismos filtros (ver mismosCriterios).
+    if (!this.mismosCriterios(this.ultimaBusqueda, filtrosNuevos)) {
+      this.borrador = null;
+    }
+
+    this.ultimaBusqueda = filtrosNuevos;
 
     this.busquedaRealizada = true;
     this.historialPineado = true;
-    this.borrador = null;
     this.borradorActivo = false;
     this.versionSeleccionada = null;
 
-    // TODO(backend): cuando exista un endpoint real de listado de cotizaciones guardadas
-    // por criterios, llenar historialVersiones aquí. Hoy el panel solo muestra la card del
-    // borrador (si getListarProcesosExportacion determina que no hay cotización) o su empty state.
-    this.historialVersiones = [];
-
-    this.getListarProcesosExportacion(
-      _unidad, _tipo, _cliente, _tela, _ruta, _color,
-      this.global_PrecioTinto, this.global_Tiempo, this.global_idCotizacion_Cab
-    );
+    // Paso 1: el historial manda. Él decide si se carga el detalle de una versión
+    // existente (API por cabecera+versión) o la grilla desde cero (API por filtros).
+    this.cargarHistorialCotizaciones();
 
     this.modoResumen = true;
     this.seccionTotalmenteColapsada = false;
@@ -662,7 +651,8 @@ export class CotizacionesComponent implements OnInit {
         this.borrador = {
           planos: [], planosBackup: [], recetaCod: '',
           correlativo: String(e?.correlativo ?? ''),
-          version: Number(e?.version) || 1
+          version: Number(e?.version) || 1,
+          baseIdCotizacionCab: 0
         };
         this.global_CodReceta = '';
         this.formulario_Precio.get('ctrl_receta').setValue('');
@@ -720,14 +710,14 @@ export class CotizacionesComponent implements OnInit {
               //Columna Ajuste Bloqueado
               this.isAjusteBloqueado = true;
 
-              this.isDisabledBtnSave    = false;
+              this.habilitadoBtnGuardar    = false;
               this.isDisabledBtnEdit    = true;
               this.isDisabledBtnDelete  = true;
           }else{
               //Columna Ajuste Bloqueado
               this.isAjusteBloqueado = false;
 
-              this.isDisabledBtnSave    = true;
+              this.habilitadoBtnGuardar    = true;
               this.isDisabledBtnEdit    = false;
               this.isDisabledBtnDelete  = false;
 
@@ -768,7 +758,8 @@ export class CotizacionesComponent implements OnInit {
       planosBackup: JSON.parse(JSON.stringify(this.planosBackup)),
       recetaCod: this.global_CodReceta,
       correlativo: '',
-      version: 0
+      version: 0,
+      baseIdCotizacionCab: 0
     };
 
     const request: ObtenerNuevoCorrelativoVersionRequest = {
@@ -958,18 +949,15 @@ export class CotizacionesComponent implements OnInit {
     this.borradorActivo = false;
     this.versionSeleccionada = v;
 
-    this.global_PrecioTinto      = v.precioTinto;
-    this.global_Tiempo           = v.tiempo;
-    this.global_SDC              = v.sdc;
     this.global_idCotizacion_Cab = v.id;
+    this.global_PrecioTinto      = v.precioReferencia;
 
-    const f = this.ultimaBusqueda;
-    if (!f) { return; }
+    // La receta puede cambiar entre versiones: se restaura la de esta versión.
+    this.global_CodReceta = v.receta;
+    this.formulario_Precio.get('ctrl_receta')?.setValue(v.receta);
 
-    this.getListarProcesosExportacion(
-      f.unidad, f.tipo, f.cliente, f.tela, f.ruta, f.color,
-      this.global_PrecioTinto, this.global_Tiempo, this.global_idCotizacion_Cab
-    );
+    // El detalle de una versión guardada se pide por cabecera + versión, sin filtros.
+    this.cargarDetalleXVersion(v);
   }
 
   /* --- Nueva Cotización: crea el borrador si no existe, o reselecciona el existente ---
@@ -989,18 +977,15 @@ export class CotizacionesComponent implements OnInit {
     this.crearBorradorNuevo();
   }
 
-  /* --- Activa el borrador: restaura desde memoria si ya tiene snapshot, o lo pide al backend ---
-     con precio/tiempo/IdCotizacion_Cab en cero. El backend responde existeCotizacion = '0',
-     lo que desbloquea la columna Ajuste y habilita Guardar (ver getListarProcesosExportacion). */
+  /* --- Activa el borrador: restaura desde memoria si ya tiene snapshot, o pide la grilla
+     desde cero con los filtros (getListaDetalleCotizacionXFiltros). No se envía cabecera ni
+     versión porque el borrador aún no existe en BD. */
   seleccionarBorrador() {
     if (!this.borrador) { return; }
 
     this.borradorActivo      = true;
     this.versionSeleccionada = null;
 
-    this.global_PrecioTinto = 0;
-    this.global_Tiempo      = 0;
-    this.global_SDC         = '';
     this.global_idCotizacion_Cab = 0;
 
     if (this.borrador.planos.length) {
@@ -1008,9 +993,7 @@ export class CotizacionesComponent implements OnInit {
       return;
     }
 
-    const f = this.ultimaBusqueda;
-    if (!f) { return; }
-    this.getListarProcesosExportacion(f.unidad, f.tipo, f.cliente, f.tela, f.ruta, f.color, 0, 0, 0);
+    this.cargarDetalleXFiltros();
   }
 
   private snapshotBorrador() {
@@ -1031,7 +1014,7 @@ export class CotizacionesComponent implements OnInit {
 
     // Mismo estado que deja getListarProcesosExportacion con existeCotizacion = '0'.
     this.isAjusteBloqueado    = false;
-    this.isDisabledBtnSave    = true;
+    this.habilitadoBtnGuardar    = true;
     this.isDisabledBtnEdit    = false;
     this.isDisabledBtnDelete  = false;
     this.bMuestraMenuFlotante = true;
@@ -1117,12 +1100,12 @@ export class CotizacionesComponent implements OnInit {
 
   recalcular(row: any) {
 
-    //Actualiza el Campos pro_Cotizacion con el nuevo Valor
-    if (row.pro_Aju == null || row.pro_Aju === 0) {
-      row.pro_Cotizacion = row.pro_Tot;
-    } else {
-      row.pro_Cotizacion = row.pro_Aju;
-    }
+    //Actualiza el Campos pro_Cotizacion con el nuevo Valor.
+    //El ajuste ADICIONA sobre el Total de la fila, no lo reemplaza: así la sección
+    //conserva su propio valor y el de sus subsecciones.
+    row.pro_Cotizacion = parseFloat(
+      (Number(row.pro_Tot || 0) + Number(row.pro_Aju || 0)).toFixed(2)
+    );
 
     const sumaColCotizacion = this.planos
       .filter(fila => fila.nivel === 1)
@@ -1323,17 +1306,18 @@ export class CotizacionesComponent implements OnInit {
     });
   }
 
-  onGuardar(guardarComoNuevaVersion: boolean = false){
-    let confirmTitle = '¿Desea registrar esta cotización?';
-    let confirmText = 'Se guardará la cotización inicial en el sistema.';
+  /* --- Guardado único: toda cotización guardada es inmutable, así que cualquier movimiento
+     se registra siempre con accion 'I' e idCotizacion_Cab = 0. El backend asigna el
+     Num_Version que corresponde a los siete criterios. --- */
+  onGuardar(){
+    const versionAGuardar = this.borrador?.version ?? 1;
 
-    if (guardarComoNuevaVersion) {
-      confirmTitle = '¿Crear nueva versión de cotización?';
-      confirmText = 'Se registrará una nueva versión conservando el historial previo.';
-    } else if (this.esModificacionCotizacion) {
-      confirmTitle = '¿Actualizar cotización existente?';
-      confirmText = 'Se sobrescribirán los cambios sobre la cotización seleccionada.';
-    }
+    const confirmTitle = versionAGuardar > 1
+      ? `¿Registrar la Versión ${versionAGuardar} de esta cotización?`
+      : '¿Desea registrar esta cotización?';
+    const confirmText = versionAGuardar > 1
+      ? 'Se registrará una nueva versión conservando el historial previo.'
+      : 'Se guardará la cotización inicial en el sistema.';
 
     Swal.fire({
       title: confirmTitle,
@@ -1359,28 +1343,12 @@ export class CotizacionesComponent implements OnInit {
             this.dataDetalles = this.dataSource.data.map(item => this.mapToDetalle(item));
         }
 
-        // PASO 2 - DETERMINACIÓN DINÁMICA DE ACCIÓN (I vs U) Y VERSIONADO
-        let accion: 'I' | 'U';
-        let idCotizacionCab: number;
-        let correlativo: string;
-        let version: number;
-
-        if (guardarComoNuevaVersion) {
-          accion = 'I';
-          idCotizacionCab = 0;
-          correlativo = this.versionSeleccionada?.correlativo || this.global_SDC || (this.borrador?.correlativo ?? '');
-          version = (this.versionSeleccionada?.version ? this.versionSeleccionada.version + 1 : (this.borrador?.version ? this.borrador.version + 1 : 2));
-        } else if (this.esModificacionCotizacion) {
-          accion = 'U';
-          idCotizacionCab = this.global_idCotizacion_Cab || this.versionSeleccionada?.id || 0;
-          correlativo = this.versionSeleccionada?.correlativo || this.global_SDC || '';
-          version = this.versionSeleccionada?.version || 1;
-        } else {
-          accion = 'I';
-          idCotizacionCab = 0;
-          correlativo = this.borrador?.correlativo ?? '';
-          version = this.borrador?.version ?? 1;
-        }
+        // PASO 2 - VERSIONADO: siempre alta ('I'). El correlativo y el número de versión
+        // salen del borrador, que los obtuvo de getObtenerNuevoCorrelativoVersion.
+        const accion: 'I' = 'I';
+        const idCotizacionCab = 0;
+        const correlativo = this.borrador?.correlativo ?? '';
+        const version = versionAGuardar;
 
         // PASO 3 - OBTENEMOS LA CABECERA
         const data: ProcesoCotizacionRequest = {
@@ -1422,9 +1390,12 @@ export class CotizacionesComponent implements OnInit {
                   showConfirmButton: false
                 });
 
-                // Si hay una búsqueda activa, refrescamos la consulta para ver el nuevo estado
+                // La versión recién guardada ya existe en cabecera: se recarga el historial
+                // para que aparezca en el panel sin volver a pasar por el formulario.
                 if (this.ultimaBusqueda) {
-                  this.onBuscar();
+                  this.borrador = null;
+                  this.borradorActivo = false;
+                  this.cargarHistorialCotizaciones();
                 } else {
                   this.chgUnidadNegocio();
                 }
@@ -1449,17 +1420,20 @@ export class CotizacionesComponent implements OnInit {
     });
   }
 
-  /** Modificar una card del panel. Sin argumento = la card de borrador; con VersionPrecio =
-   *  una cotización guardada. Solo UI por ahora: no hay endpoint de actualización —
-   *  desbloquea Ajuste/Guardar sobre la card indicada. */
+  /** Modificar una card del panel. Sin argumento = la card de borrador, que sí es editable.
+   *  Con VersionPrecio = una cotización ya guardada: es inmutable, así que modificarla
+   *  significa derivar una versión nueva a partir de ella (ver onCrearNuevaVersion). */
   onEditar(v?: VersionPrecio){
     if (v) {
-      if (this.versionSeleccionada !== v) { this.seleccionarVersion(v); }
-    } else if (this.borrador && !this.borradorActivo) {
+      this.onCrearNuevaVersion(v);
+      return;
+    }
+
+    if (this.borrador && !this.borradorActivo) {
       this.seleccionarBorrador();
     }
     this.isAjusteBloqueado = false;
-    this.isDisabledBtnSave = true;
+    this.habilitadoBtnGuardar = true;
     this.isDisabledBtnEdit = false;
   }
 
@@ -1490,145 +1464,6 @@ export class CotizacionesComponent implements OnInit {
     });
   }
 
-  guardarObservacion(row: any){
-    //console.log('observacion', data);
-    //data.row.observacion = data.observacion;
-    this.global_Observacion = row.observacion;
-    console.log('guardarObservacion', row);
-    this.dialog.closeAll(); ;
-
-  }
-
-  abrirDialog(row: any) {
-
-  console.log('abtrir dialog', row);
-  const proAjuActual = Number(row.pro_Aju);
-  const proAjuBackup = this.planosBackup.filter(p => p.cod_Proceso_Tex == row.cod_Proceso_Tex).map(p => p.pro_Aju);
-
-
-  console.log('proAjuActual', proAjuActual);
-  console.log('proAjuActual', proAjuBackup);
-
-  //Solo se ejecuta cuando es diferente
-  if (proAjuBackup !== undefined && proAjuActual !== Number(proAjuBackup)) {
-
-    // Limpia la observación del row (pero el backup mantiene la original)
-    row.observacion = '';
-
-    //if (row.pro_Aju != null && row.pro_Aju !== '' && row.pro_Aju !== 0) {
-      if (!this.dialogAbierto) {
-        this.dialogAbierto = true;
-        const ref = this.dialog.open(this.dialogObservacion, {
-          width: '600px',
-          data: { observacion: row.observacion ?? '', row }
-        });
-        // Cuando se cierra el diálogo, resetea la bandera
-        ref.afterClosed().subscribe(() => {
-          this.dialogAbierto = false;
-
-          if (this.global_Observacion && this.global_Observacion.trim() !== '') {
-            // Actualiza la fila
-            row.observacion = this.global_Observacion;
-
-            // Actualiza también el backup
-            const backupItem = this.planosBackup.find(
-              p => p.cod_Proceso_Tex === row.cod_Proceso_Tex
-            );
-            if (backupItem) {
-              console.log('Actualizando backup con observacion:', this.global_Observacion);
-              backupItem.observacion = this.global_Observacion;
-              backupItem.pro_Aju = proAjuActual;
-            }
-          }
-
-        });
-      //}
-    }
-
-  }
-
-  //console.log('proAjuActual', proAjuActual);
-  //console.log('proAjuActual', proAjuBackup);
-}
-
-validarObservacion(row: any, event: FocusEvent) {
-  if (row.pro_Aju == null || row.pro_Aju === '' || row.pro_Aju === 0) {
-    row.observacion = '';
-    return;
-  }
-
-  const proAjuActual = Number(row.pro_Aju);
-  const proAjuBackup = this.planosBackup.filter(p => p.cod_Proceso_Tex == row.cod_Proceso_Tex).map(p => p.pro_Aju);
-
-  console.log('proAjuActual', proAjuActual);
-  console.log('proAjuActual', proAjuBackup);
-
-  if (proAjuBackup !== undefined && proAjuActual !== Number(proAjuBackup)) {
-
-    // Limpia la observación del row (pero el backup mantiene la original)
-    row.observacion = '';
-
-    console.log('entro aquí');
-    //if (!row.observacion || row.observacion.trim() === '') {
-      console.log('entro aquí observacion');
-      if (!this.dialogAbierto) {
-        this.dialogAbierto = true;
-        // Evita que el foco se pierda y abre el diálogo
-        (event.target as HTMLInputElement).focus();
-        const ref = this.dialog.open(this.dialogObservacion, {
-          width: '600px',
-          data: { observacion: row.observacion ?? '', row }
-        });
-
-        // Cuando se cierra el diálogo, resetea la bandera
-        ref.afterClosed().subscribe(()=>{
-          this.dialogAbierto = false;
-
-          if (this.global_Observacion && this.global_Observacion.trim() !== '') {
-            // Actualiza la fila
-            row.observacion = this.global_Observacion;
-
-            // Actualiza también el backup
-            const backupItem = this.planosBackup.find(
-              p => p.cod_Proceso_Tex === row.cod_Proceso_Tex
-            );
-            if (backupItem) {
-              console.log('Actualizando backup con observacion:', this.global_Observacion);
-              backupItem.observacion = this.global_Observacion;
-              backupItem.pro_Aju = proAjuActual;
-            }
-          }
-
-
-
-        });
-      }
-    //}
-
-  }
-
-  // Si el ajuste es distinto al Total Comercial
-  /*
-  if (row.pro_Aju != row.pro_Tot_Com) {
-    if (!row.observacion || row.observacion.trim() === '') {
-      if (!this.dialogAbierto) {
-        this.dialogAbierto = true;
-        // Evita que el foco se pierda y abre el diálogo
-        (event.target as HTMLInputElement).focus();
-        const ref = this.dialog.open(this.dialogObservacion, {
-          width: '600px',
-          data: { observacion: row.observacion ?? '', row }
-        });
-
-        // Cuando se cierra el diálogo, resetea la bandera
-        ref.afterClosed().subscribe(() => {
-          this.dialogAbierto = false;
-        });
-      }
-    }
-  }
-    */
-}
 
 onRecetaChange(event: any) {
   console.log('Receta seleccionada:', event.value);
@@ -1676,7 +1511,9 @@ private mapToDetalle(item: any): ProcesoCotizacionDetalle {
     return !this.borradorActivo && (this.global_idCotizacion_Cab > 0 || (this.versionSeleccionada != null && this.versionSeleccionada.id > 0));
   }
 
-  /* --- Crear una nueva versión a partir de una cotización existente --- */
+  /* --- Crear una nueva versión a partir de una cotización existente. La grilla de la versión
+     base se clona como punto de partida, pero el número de versión lo asigna el backend
+     (getObtenerNuevoCorrelativoVersion), nunca un cálculo en cliente. --- */
   onCrearNuevaVersion(v?: VersionPrecio): void {
     const versionBase = v || this.versionSeleccionada;
     if (!versionBase && !this.historialVersiones.length) {
@@ -1684,30 +1521,295 @@ private mapToDetalle(item: any): ProcesoCotizacionDetalle {
       return;
     }
 
+    const f = this.ultimaBusqueda;
+    if (!f) {
+      this.toastr.info('Primero realiza una búsqueda', '', { timeOut: 2000 });
+      return;
+    }
+
     const base = versionBase || this.historialVersiones[0];
-    const siguienteVersion = (base.version || 1) + 1;
-    const correlativoBase = base.correlativo || base.sdc || '';
 
     this.borrador = {
       planos: JSON.parse(JSON.stringify(this.dataSource.data?.length ? this.dataSource.data : this.planos)),
       planosBackup: JSON.parse(JSON.stringify(this.planosBackup)),
       recetaCod: this.global_CodReceta || base.receta || '',
-      correlativo: correlativoBase,
-      version: siguienteVersion
+      // Correlativo y número de versión los asigna getObtenerNuevoCorrelativoVersion.
+      correlativo: '',
+      version: 0,
+      baseIdCotizacionCab: base.id
     };
 
     this.borradorActivo = true;
     this.versionSeleccionada = null;
     this.global_idCotizacion_Cab = 0;
     this.isAjusteBloqueado = false;
-    this.isDisabledBtnSave = true;
+    this.habilitadoBtnGuardar = true;
     this.isDisabledBtnEdit = false;
 
-    Swal.fire({
-      icon: 'info',
-      title: `Borrador: Versión ${siguienteVersion}`,
-      text: `Se ha preparado la Versión ${siguienteVersion} a partir del correlativo ${correlativoBase}. Realice los ajustes necesarios y presione Guardar.`,
-      confirmButtonText: 'Entendido'
+    const request: ObtenerNuevoCorrelativoVersionRequest = {
+      Id_Unidad_NegocioKey: f.unidad,
+      Cod_Tipo_Orden_tinto: f.tipo,
+      Cod_Cliente_Tex: f.cliente,
+      Cod_Tela: f.tela,
+      Cod_Ruta: f.ruta,
+      Cod_Color: f.color
+    };
+
+    this.service.getObtenerNuevoCorrelativoVersion(request).subscribe({
+      next: (response: ServiceResponseList<CorrelativoVersionItem>) => {
+        const e = response?.elements?.[0];
+        if (!this.borrador) { return; }
+
+        this.borrador.correlativo = String(e?.correlativo ?? this.borrador.correlativo);
+        this.borrador.version     = Number(e?.version) || ((base.numVersion || 1) + 1);
+
+        Swal.fire({
+          icon: 'info',
+          title: `Borrador: Versión ${this.borrador.version}`,
+          text: `Se ha preparado la Versión ${this.borrador.version} a partir del correlativo ${this.borrador.correlativo}. Realice los ajustes necesarios y presione Guardar.`,
+          confirmButtonText: 'Entendido'
+        });
+      },
+      error: (error: any) => {
+        this.toastr.error(error.message, 'Cerrar', { timeOut: 2500 });
+      }
     });
+  }
+
+  /* ================================================================================
+     VERSIONADO DE COTIZACIONES — 3 APIs nuevas
+     Los métodos de CotizacionesService todavía no existen: se crean aparte con
+     exactamente estos nombres (getListaCabecerasCotizacion,
+     getListaDetalleCotizacionXFiltros, getListaDetalleCotizacionXVersion).
+     ================================================================================ */
+
+  /** Los siete criterios que amarran una cotización, tomados de la última búsqueda.
+   *  Los comparten la API de cabeceras y la de detalle por filtros. */
+  private construirFiltrosRequest(): ListaCabecerasCotizacionRequest | null {
+    const f = this.ultimaBusqueda;
+    if (!f) { return null; }
+
+    return {
+      Id_Unidad_NegocioKey: f.unidad,
+      Cod_Tipo_Orden_tinto: f.tipo,
+      Cod_Cliente_Tex     : f.cliente,
+      Cod_Tela            : f.tela,
+      Cod_Ruta            : f.ruta,
+      Cod_Color           : f.color,
+      SDC_Referencia      : f.sdcReferencia
+    };
+  }
+
+  /** Compara los criterios de dos búsquedas. Si son iguales, el borrador en curso se
+   *  conserva al volver a buscar; si difieren, se descarta (ver onBuscar). */
+  private mismosCriterios(a: FiltrosBusqueda | null, b: FiltrosBusqueda): boolean {
+    if (!a) { return false; }
+    return a.unidad === b.unidad
+        && a.tipo === b.tipo
+        && a.cliente === b.cliente
+        && a.tela === b.tela
+        && a.ruta === b.ruta
+        && a.color === b.color
+        && a.sdcReferencia === b.sdcReferencia;
+  }
+
+  /** API 1 — Historial de versiones: select a la cabecera de cotizaciones por los siete
+   *  criterios. Con elementos, autoselecciona la versión más reciente y carga su detalle;
+   *  sin elementos, arma la grilla desde cero con los filtros. */
+  private cargarHistorialCotizaciones(): void {
+    const request = this.construirFiltrosRequest();
+    if (!request) { return; }
+
+    this.SpinnerService.show();
+
+    this.service.getListaCabecerasCotizacion(request)
+    .subscribe({
+      next: (response: ServiceResponseList<CabeceraCotizacionItem>) => {
+        // elements puede llegar null cuando el backend responde success con
+        // "No existe información": se normaliza a arreglo vacío.
+        const elementos = (response.success && response.elements) ? response.elements : [];
+
+        // Más reciente primero: el backend puede devolver en cualquier orden.
+        const ordenados = [...elementos].sort((a, b) => Number(b.num_Version) - Number(a.num_Version));
+
+        this.historialVersiones = ordenados.map((c, idx) => this.mapCabeceraAVersion(c, idx));
+
+        // El spinner no se apaga aquí: las dos ramas encadenan otra petición que lo
+        // reutiliza y lo apaga en su propio finalize.
+        if (this.historialVersiones.length) {
+          this.seleccionarVersion(this.historialVersiones[0]);
+        } else {
+          // Sin cabeceras: es la primera cotización para estos criterios.
+          this.cargarDetalleXFiltros();
+        }
+      },
+      error: (error: any) => {
+        this.SpinnerService.hide();
+        this.historialVersiones = [];
+        this.toastr.error(error.message, 'Cerrar', { timeOut: 2500 });
+      }
+    });
+  }
+
+  /** Traduce una fila de cabecera a la card del panel de historial. */
+  private mapCabeceraAVersion(c: CabeceraCotizacionItem, idx: number): VersionPrecio {
+    const numVersion = Number(c.num_Version) || 1;
+    const anulada    = String(c.flg_Estatus ?? '').toUpperCase() !== 'A';
+
+    return {
+      id               : Number(c.idCotizacion_Cab) || 0,
+      titulo           : `Versión ${numVersion}`,
+      numVersion       : numVersion,
+      precioReferencia : Number(c.precio_Referencia) || 0,
+      receta           : String(c.idrecetalabprod ?? ''),
+      estado           : anulada ? 'Anulada' : (idx === 0 ? 'Vigente' : 'Histórica'),
+      usuario          : String(c.usu_Registro ?? ''),
+      fecha            : String(c.fec_Registro ?? ''),
+      reciente         : idx === 0,
+      raw              : c
+    };
+  }
+
+  /** API 2 — Grilla desde cero: no hay ninguna cabecera para estos criterios, así que el
+   *  detalle se arma solo con los filtros. Deja la grilla editable y activa el borrador. */
+  private cargarDetalleXFiltros(): void {
+    const f = this.ultimaBusqueda;
+    // Puede venir encadenado desde cargarHistorialCotizaciones, que dejó el spinner
+    // encendido para esta llamada: si no hay filtros hay que apagarlo aquí.
+    if (!f) { this.SpinnerService.hide(); return; }
+
+    // Precio y tiempo sí son insumo del cálculo del costeo, no un filtro: se toman de la
+    // carta elegida en el combo Precio/SDC (ver onChangePrecio). El resto son los criterios
+    // de amarre de la última búsqueda, SDC_Referencia incluido: se toma de ultimaBusqueda y
+    // no de global_SDC para que sea el mismo valor con el que se consultó el historial.
+    const request: ListaDetalleCotizacionXFiltrosRequest = {
+      Id_Unidad_NegocioKey: f.unidad,
+      Cod_Tipo_Orden_tinto: f.tipo,
+      Cod_Cliente_Tex     : f.cliente,
+      Cod_Tela            : f.tela,
+      Cod_Ruta            : f.ruta,
+      Cod_Color           : f.color,
+      Precio_Referencia   : Number(this.global_PrecioTinto) || 0,
+      Tiempo_Referencia   : Number(this.global_Tiempo) || 0,
+      SDC_Referencia      : f.sdcReferencia
+    };
+
+    this.planos = [];
+    this.planosBackup = [];
+    this.SpinnerService.show();
+
+    this.service.getListaDetalleCotizacionXFiltros(request)
+    .pipe(finalize(() => { this.SpinnerService.hide(); }))
+    .subscribe({
+      next: (response: ServiceResponseList<ProcesoExportacionItem>) => {
+        const elementos = (response.success && response.elements) ? response.elements : [];
+
+        if (!elementos.length) {
+          this.dataSource.data = [];
+          this.bMuestraMenuFlotante = false;
+          return;
+        }
+
+        this.volcarPlanosEnGrilla(elementos, false);
+        this.activarBorradorConPlanosActuales(f.unidad, f.tipo, f.cliente, f.tela, f.ruta, f.color);
+      },
+      error: (error: any) => {
+        this.dataSource.data = [];
+        this.bMuestraMenuFlotante = false;
+        this.toastr.error(error.message, 'Cerrar', { timeOut: 2500 });
+      }
+    });
+  }
+
+  /** API 3 — Detalle de una versión guardada. Solo viajan cabecera y número de versión:
+   *  la cabecera ya identifica la cotización. Grilla en solo lectura. */
+  private cargarDetalleXVersion(v: VersionPrecio): void {
+    const request: ListaDetalleCotizacionXVersionRequest = {
+      IdCotizacion_Cab: v.id,
+      Num_Version     : v.numVersion
+    };
+
+    this.planos = [];
+    this.planosBackup = [];
+    this.SpinnerService.show();
+
+    this.service.getListaDetalleCotizacionXVersion(request)
+    .pipe(finalize(() => { this.SpinnerService.hide(); }))
+    .subscribe({
+      next: (response: ServiceResponseList<ProcesoExportacionItem>) => {
+        const elementos = (response.success && response.elements) ? response.elements : [];
+
+        if (!elementos.length) {
+          this.dataSource.data = [];
+          this.bMuestraMenuFlotante = false;
+          return;
+        }
+
+        this.volcarPlanosEnGrilla(elementos, true);
+      },
+      error: (error: any) => {
+        this.dataSource.data = [];
+        this.bMuestraMenuFlotante = false;
+        this.toastr.error(error.message, 'Cerrar', { timeOut: 2500 });
+      }
+    });
+  }
+
+  /** Marca la jerarquía padre/hijo de los procesos y los publica en la grilla.
+   *  soloLectura = true bloquea la columna Ajuste y el guardado (versión ya registrada). */
+  private volcarPlanosEnGrilla(elementos: ProcesoExportacionItem[], soloLectura: boolean): void {
+    this.planos       = this.marcarJerarquiaPlanos(elementos);
+    this.planosBackup = JSON.parse(JSON.stringify(elementos));
+
+    this.dataSource.data = this.planos;
+    this.dataSource.sort = this.sort;
+
+    this.isAjusteBloqueado    = soloLectura;
+    this.habilitadoBtnGuardar = !soloLectura;
+    this.isDisabledBtnEdit    = false;
+    this.isDisabledBtnDelete  = false;
+    this.bMuestraMenuFlotante = true;
+  }
+
+  /** isParent/isChild/tieneHijos/childCount/padreKey no vienen del backend: se derivan de
+   *  pro_Hover ('1' padre, '1.2' hijo). Misma lógica que usaba getListarProcesosExportacion. */
+  private marcarJerarquiaPlanos(elementos: ProcesoExportacionItem[]): ProcesoExportacionItem[] {
+    return elementos.map((p: ProcesoExportacionItem) => {
+      if (!p.pro_Hover.includes('.')) {
+        p.isParent   = true;
+        p.isChild    = false;
+        p.tieneHijos = elementos.some(x => x.pro_Hover.startsWith(p.pro_Hover + '.'));
+        p.childCount = elementos.filter(x => x.pro_Hover.startsWith(p.pro_Hover + '.')).length;
+      } else {
+        p.isChild  = true;
+        p.isParent = false;
+        p.padreKey = p.pro_Hover.split('.')[0];
+      }
+      return p;
+    });
+  }
+
+  /** Guarda el ajuste desde el modal de edición. Absorbe lo que antes hacía el segundo
+   *  diálogo de observación (ya eliminado): sincroniza el valor y su motivo contra
+   *  planosBackup, que es la copia que se usa para comparar y para armar el guardado.
+   *  Sin ajuste no hay motivo que registrar, así que la observación se limpia. */
+  guardarAjuste(row: any): void {
+    const ajuste = Number(row.pro_Aju || 0);
+
+    if (!ajuste) {
+      row.observacion = '';
+    }
+
+    const backupItem = this.planosBackup.find(
+      p => p.cod_Proceso_Tex === row.cod_Proceso_Tex
+    );
+    if (backupItem) {
+      backupItem.pro_Aju     = ajuste;
+      backupItem.observacion = row.observacion;
+    }
+
+    if (this.dialogRefAjuste) {
+      this.dialogRefAjuste.close();
+    }
   }
 }

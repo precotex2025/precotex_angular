@@ -10,3 +10,4 @@ export * from './obtiene-informacion-cliente-colgador.response';
 export * from './obtener-nuevo-correlativo-version.response';
 export * from './ruta-x-cod-tela.response';
 export * from './valida-color-existe.response';
+export * from './lista-cabeceras-cotizacion.response';

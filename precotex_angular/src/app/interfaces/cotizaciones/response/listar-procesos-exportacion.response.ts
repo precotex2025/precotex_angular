@@ -3,6 +3,7 @@
  *  mismo objeto (ver getListarProcesosExportacion → planosConFlags), por eso quedan opcionales. */
 export interface ProcesoExportacionItem {
   pro_Hover: string;
+  pro_Des: string;
   pro_Factor: number;
   pro_Cos_Kg: number;
   pro_Tot: number;
@@ -19,7 +20,9 @@ export interface ProcesoExportacionItem {
   cod_ProcesoPadre: string;
   cod_Proceso_Tex: string;
   cod_SubProceso: string;
-  existeCotizacion: string;
+  // Flag heredado de getListarProcesosExportacion. El flujo nuevo decide si hay
+  // cotizacion por elements.length de getListaCabecerasCotizacion, no por este campo.
+  existeCotizacion?: string;
 
   // --- Agregadas en el cliente (ver getListarProcesosExportacion) ---
   isParent?: boolean;

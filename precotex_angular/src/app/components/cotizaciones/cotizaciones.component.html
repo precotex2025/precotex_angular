@@ -274,15 +274,15 @@
               <span class="cot-history-badge cot-badge--vigente" *ngIf="v.estado">{{ v.estado }}</span>
             </div>
             <div class="cot-history-meta">
-              <mat-icon>sell</mat-icon>SDC {{ v.sdc }} · Precio {{ v.precioTinto | number:'1.2-2' }} · Tiempo {{ v.tiempo }}
+              <mat-icon>sell</mat-icon>Precio {{ v.precioReferencia | number:'1.2-2' }}
+            </div>
+            <div class="cot-history-meta" *ngIf="v.usuario || v.fecha">
+              <mat-icon>person</mat-icon>{{ v.usuario }}<span *ngIf="v.fecha"> · {{ v.fecha }}</span>
             </div>
           </div>
           <div class="cot-history-card__acciones">
             <button mat-icon-button matTooltip="Crear nueva versión a partir de esta" (click)="onCrearNuevaVersion(v); $event.stopPropagation()">
               <mat-icon>post_add</mat-icon>
-            </button>
-            <button mat-icon-button matTooltip="Modificar" (click)="onEditar(v); $event.stopPropagation()">
-              <mat-icon>edit</mat-icon>
             </button>
             <button mat-icon-button matTooltip="Eliminar" (click)="onEliminar(v); $event.stopPropagation()">
               <mat-icon>delete_outline</mat-icon>
@@ -496,21 +496,21 @@
           <mat-icon>close</mat-icon> Cancelar
         </button>
 
-        <!-- Opción para crear y guardar como NUEVA versión cuando se está sobre una existente -->
-        <button mat-stroked-button type="button" class="btn-ghost"
+        <!-- Sobre una versión guardada (inmutable) el botón deriva una versión nueva -->
+        <button mat-flat-button type="button" class="btn-azul"
                 *ngIf="esModificacionCotizacion"
-                [disabled]="!isDisabledBtnSave"
-                (click)="onGuardar(true)"
-                matTooltip="Crea una nueva versión con los ajustes actuales sin sobrescribir la existente">
-          <mat-icon>post_add</mat-icon> Guardar como Nueva Versión
+                (click)="onCrearNuevaVersion()"
+                matTooltip="Las cotizaciones guardadas no se modifican: se crea una versión nueva a partir de ésta">
+          <mat-icon>post_add</mat-icon> Crear nueva versión
         </button>
 
-        <!-- Botón de guardado principal (actualiza con U si es existente, o inserta con I si es borrador nuevo) -->
+        <!-- Sobre el borrador: registra la versión con accion 'I' -->
         <button mat-flat-button type="button" class="btn-azul"
-                [disabled]="!isDisabledBtnSave"
-                (click)="onGuardar(false)">
+                *ngIf="!esModificacionCotizacion"
+                [disabled]="!habilitadoBtnGuardar"
+                (click)="onGuardar()">
           <mat-icon>save</mat-icon>
-          {{ esModificacionCotizacion ? 'Actualizar Cambios' : 'Guardar Cotización' }}
+          {{ borrador?.version ? 'Guardar Versión ' + borrador?.version : 'Guardar Cotización' }}
         </button>
       </div>
     </div>
@@ -559,7 +559,7 @@
         </div>
       </div>
 
-      <mat-form-field appearance="outline" class="cot-drawer__field" *ngIf="data.tipo === 'utilidad'">
+      <mat-form-field appearance="outline" floatLabel="always" class="cot-drawer__field" *ngIf="data.tipo === 'utilidad'">
         <mat-label>% Utilidad</mat-label>
         <mat-icon matPrefix class="cot-field-icon">percent</mat-icon>
         <input matInput type="number" [(ngModel)]="data.row.pro_Cos_Kg"
@@ -569,28 +569,23 @@
       </mat-form-field>
 
       <ng-container *ngIf="data.tipo === 'ajuste'">
-        <mat-form-field appearance="outline" class="cot-drawer__field">
+        <mat-form-field appearance="outline" floatLabel="always" class="cot-drawer__field">
           <mat-label>Cantidad de Ajuste</mat-label>
           <mat-icon matPrefix class="cot-field-icon">tune</mat-icon>
           <input matInput type="number" [(ngModel)]="data.row.pro_Aju"
             [ngModelOptions]="{standalone: true}"
-            (ngModelChange)="recalcular(data.row)"
-            (keydown.enter)="abrirDialog(data.row)"
-            (blur)="validarObservacion(data.row, $event)" />
+            (ngModelChange)="recalcular(data.row)" />
         </mat-form-field>
 
-        <div class="cot-drawer__observacion">
-          <label class="cot-drawer__observacion-label">
-            <mat-icon class="cot-drawer__observacion-icon">chat</mat-icon>
-            Observación <span class="cot-drawer__required">*</span>
-          </label>
-          <textarea class="cot-drawer__observacion-input" rows="3"
+        <mat-form-field appearance="outline" floatLabel="always" class="cot-drawer__field cot-drawer__field--area">
+          <mat-label>Observación <span class="cot-drawer__required">*</span></mat-label>
+          <textarea matInput rows="3"
             [(ngModel)]="data.row.observacion" [ngModelOptions]="{standalone: true}"
             placeholder="Escribe el motivo del ajuste..."></textarea>
-        </div>
+        </mat-form-field>
       </ng-container>
 
-      <mat-form-field appearance="outline" class="cot-drawer__field" *ngIf="data.tipo === 'cotizacion'">
+      <mat-form-field appearance="outline" floatLabel="always" class="cot-drawer__field" *ngIf="data.tipo === 'cotizacion'">
         <mat-label>Precio Final Cliente</mat-label>
         <mat-icon matPrefix class="cot-field-icon">sell</mat-icon>
         <input matInput type="number" [(ngModel)]="data.row.pro_Cotizacion"
@@ -603,29 +598,19 @@
       <button mat-stroked-button class="btn-ghost" mat-dialog-close>
         Cancelar
       </button>
-      <button mat-flat-button class="btn-azul" mat-dialog-close>
+      <button mat-flat-button class="btn-azul"
+        *ngIf="data.tipo === 'ajuste'"
+        [disabled]="!!data.row.pro_Aju && !data.row.observacion?.trim()"
+        (click)="guardarAjuste(data.row)">
         <mat-icon>save</mat-icon> Guardar Ajuste
+      </button>
+      <button mat-flat-button class="btn-azul" *ngIf="data.tipo !== 'ajuste'" mat-dialog-close>
+        <mat-icon>save</mat-icon> Guardar
       </button>
     </mat-dialog-actions>
    </div>
   </ng-template>
 </div>
-
-
-<!-- Template del diálogo -->
-<ng-template #dialogObservacion let-data>
-  <h2 mat-dialog-title>Ingresar Razón / Observación del ajuste</h2>
-  <mat-dialog-content>
-    <mat-form-field appearance="outline" style="width:100%">
-      <mat-label>Observación</mat-label>
-      <textarea matInput [(ngModel)]="data.observacion"></textarea>
-    </mat-form-field>
-  </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cancelar</button>
-    <button mat-button (click)="guardarObservacion(data)">Guardar</button>
-  </mat-dialog-actions>
-</ng-template>
 
 
 <!-- Spinner global -->
