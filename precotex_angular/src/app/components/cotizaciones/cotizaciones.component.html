@@ -519,96 +519,107 @@
 
   <!-- Modal de edición: la tabla es solo lectura, editar abre este modal -->
   <ng-template #dialogAjuste let-data>
-   <div class="cot-modal">
-    <div class="cot-modal__header">
-      <div class="cot-modal__header-title">
-        <div class="cot-modal__icon-circle">
-          <mat-icon>palette</mat-icon>
+    <div class="cot-modal">
+      <div class="cot-modal__header">
+        <div class="cot-modal__header-title">
+          <div class="cot-modal__icon-circle">
+            <mat-icon>{{ data.tipo === 'utilidad' ? 'percent' : data.tipo === 'cotizacion' ? 'sell' : 'tune' }}</mat-icon>
+          </div>
+          <div class="cot-modal__header-texts">
+            <span class="cot-modal__header-badge">{{ data.tipo === 'utilidad' ? 'Utilidad' : data.tipo === 'cotizacion' ? 'Precio Final' : 'Ajuste de Costo' }}</span>
+            <h3 mat-dialog-title>{{ data.row.pro_Des }}</h3>
+          </div>
         </div>
-        <h3 mat-dialog-title>Ajuste: {{ data.row.pro_Des }}</h3>
-      </div>
-      <button mat-icon-button mat-dialog-close class="cot-modal__close" aria-label="Cerrar modal">
-        <mat-icon>close</mat-icon>
-      </button>
-    </div>
-
-    <mat-dialog-content class="cot-drawer__body">
-      <div class="cot-modal__datos-box">
-        <button type="button" class="cot-modal__accordion-header"
-          (click)="datosGeneralesAbierto = !datosGeneralesAbierto">
-          <span><mat-icon class="cot-modal__accordion-icon">info</mat-icon> Datos Generales</span>
-          <mat-icon class="cot-modal__chevron" [class.cot-modal__chevron--colapsado]="!datosGeneralesAbierto">expand_more</mat-icon>
+        <button mat-icon-button mat-dialog-close class="cot-modal__close" aria-label="Cerrar modal">
+          <mat-icon>close</mat-icon>
         </button>
-        <div class="cot-modal__datos-item">
-          <span>Concepto</span>
-          <strong>{{ data.row.pro_Des }}</strong>
-        </div>
-        <div class="cot-modal__datos-details" *ngIf="datosGeneralesAbierto">
-          <div class="cot-modal__datos-item">
-            <span>Total</span>
-            <strong>{{ data.row.pro_Tot }}</strong>
-          </div>
-          <div class="cot-modal__datos-item">
-            <span>Total Comercial</span>
-            <strong>{{ data.row.pro_Tot_Com }}</strong>
-          </div>
-          <div class="cot-modal__datos-item">
-            <span>Cotización Actual</span>
-            <strong>{{ data.row.pro_Cotizacion | number:'1.2-2' }}</strong>
-          </div>
-        </div>
       </div>
 
-      <mat-form-field appearance="outline" floatLabel="always" class="cot-drawer__field" *ngIf="data.tipo === 'utilidad'">
-        <mat-label>% Utilidad</mat-label>
-        <mat-icon matPrefix class="cot-field-icon">percent</mat-icon>
-        <input matInput type="number" [(ngModel)]="data.row.pro_Cos_Kg"
-          [ngModelOptions]="{standalone: true}"
-          (ngModelChange)="recalcularUtilidad(data.row)" />
-        <span matSuffix>%</span>
-      </mat-form-field>
+      <mat-dialog-content class="cot-modal__body">
+        <div class="cot-modal__datos-box">
+          <button type="button" class="cot-modal__accordion-header"
+            (click)="datosGeneralesAbierto = !datosGeneralesAbierto">
+            <span><mat-icon class="cot-modal__accordion-icon">info</mat-icon> Datos Generales</span>
+            <mat-icon class="cot-modal__chevron" [class.cot-modal__chevron--colapsado]="!datosGeneralesAbierto">expand_more</mat-icon>
+          </button>
+          
+          <div class="cot-modal__datos-item cot-modal__datos-item--primary" *ngIf="!datosGeneralesAbierto">
+            <span class="cot-modal__datos-label">Concepto</span>
+            <strong class="cot-modal__datos-val">{{ data.row.pro_Des }}</strong>
+          </div>
 
-      <ng-container *ngIf="data.tipo === 'ajuste'">
-        <mat-form-field appearance="outline" floatLabel="always" class="cot-drawer__field">
-          <mat-label>Cantidad de Ajuste</mat-label>
-          <mat-icon matPrefix class="cot-field-icon">tune</mat-icon>
-          <input matInput type="number" [(ngModel)]="data.row.pro_Aju"
-            [ngModelOptions]="{standalone: true}"
-            (ngModelChange)="recalcular(data.row)" />
-        </mat-form-field>
+          <div class="cot-modal__datos-grid" *ngIf="datosGeneralesAbierto">
+            <div class="cot-modal__datos-item">
+              <span class="cot-modal__datos-label">Concepto</span>
+              <strong class="cot-modal__datos-val">{{ data.row.pro_Des }}</strong>
+            </div>
+            <div class="cot-modal__datos-item">
+              <span class="cot-modal__datos-label">Total</span>
+              <strong class="cot-modal__datos-val">{{ data.row.pro_Tot }}</strong>
+            </div>
+            <div class="cot-modal__datos-item">
+              <span class="cot-modal__datos-label">Total Comercial</span>
+              <strong class="cot-modal__datos-val">{{ data.row.pro_Tot_Com }}</strong>
+            </div>
+            <div class="cot-modal__datos-item">
+              <span class="cot-modal__datos-label">Cotización Actual</span>
+              <strong class="cot-modal__datos-val">{{ data.row.pro_Cotizacion | number:'1.2-2' }}</strong>
+            </div>
+          </div>
+        </div>
 
-        <mat-form-field appearance="outline" floatLabel="always" class="cot-drawer__field cot-drawer__field--area">
-          <mat-label>Observación <span class="cot-drawer__required">*</span></mat-label>
-          <textarea matInput rows="3"
-            [(ngModel)]="data.row.observacion" [ngModelOptions]="{standalone: true}"
-            placeholder="Escribe el motivo del ajuste..."></textarea>
-        </mat-form-field>
-      </ng-container>
+        <div class="cot-modal__form">
+          <mat-form-field appearance="outline" floatLabel="always" class="cot-modal__field" *ngIf="data.tipo === 'utilidad'">
+            <mat-label>% Utilidad</mat-label>
+            <mat-icon matPrefix class="cot-modal__field-icon">percent</mat-icon>
+            <input matInput type="number" [(ngModel)]="data.row.pro_Cos_Kg"
+              [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="recalcularUtilidad(data.row)" />
+            <span matSuffix class="cot-modal__suffix">%</span>
+          </mat-form-field>
 
-      <mat-form-field appearance="outline" floatLabel="always" class="cot-drawer__field" *ngIf="data.tipo === 'cotizacion'">
-        <mat-label>Precio Final Cliente</mat-label>
-        <mat-icon matPrefix class="cot-field-icon">sell</mat-icon>
-        <input matInput type="number" [(ngModel)]="data.row.pro_Cotizacion"
-          [ngModelOptions]="{standalone: true}"
-          (ngModelChange)="recalcularPrecioFinal(data.row)" />
-      </mat-form-field>
-    </mat-dialog-content>
+          <ng-container *ngIf="data.tipo === 'ajuste'">
+            <mat-form-field appearance="outline" floatLabel="always" class="cot-modal__field">
+              <mat-label>Cantidad de Ajuste</mat-label>
+              <mat-icon matPrefix class="cot-modal__field-icon">tune</mat-icon>
+              <input matInput type="number" [(ngModel)]="data.row.pro_Aju"
+                [ngModelOptions]="{standalone: true}"
+                (ngModelChange)="recalcular(data.row)" />
+            </mat-form-field>
 
-    <mat-dialog-actions align="end" class="cot-drawer__footer">
-      <button mat-stroked-button class="btn-ghost" mat-dialog-close>
-        Cancelar
-      </button>
-      <button mat-flat-button class="btn-azul"
-        *ngIf="data.tipo === 'ajuste'"
-        [disabled]="!!data.row.pro_Aju && !data.row.observacion?.trim()"
-        (click)="guardarAjuste(data.row)">
-        <mat-icon>save</mat-icon> Guardar Ajuste
-      </button>
-      <button mat-flat-button class="btn-azul" *ngIf="data.tipo !== 'ajuste'" mat-dialog-close>
-        <mat-icon>save</mat-icon> Guardar
-      </button>
-    </mat-dialog-actions>
-   </div>
+            <mat-form-field appearance="outline" floatLabel="always" class="cot-modal__field cot-modal__field--area">
+              <mat-label>Observación <span class="cot-modal__required">*</span></mat-label>
+              <textarea matInput rows="3"
+                [(ngModel)]="data.row.observacion" [ngModelOptions]="{standalone: true}"
+                placeholder="Escribe el motivo del ajuste..."></textarea>
+            </mat-form-field>
+          </ng-container>
+
+          <mat-form-field appearance="outline" floatLabel="always" class="cot-modal__field" *ngIf="data.tipo === 'cotizacion'">
+            <mat-label>Precio Final Cliente</mat-label>
+            <mat-icon matPrefix class="cot-modal__field-icon">sell</mat-icon>
+            <input matInput type="number" [(ngModel)]="data.row.pro_Cotizacion"
+              [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="recalcularPrecioFinal(data.row)" />
+          </mat-form-field>
+        </div>
+      </mat-dialog-content>
+
+      <mat-dialog-actions align="end" class="cot-modal__footer">
+        <button mat-stroked-button class="btn-ghost" mat-dialog-close>
+          Cancelar
+        </button>
+        <button mat-flat-button class="btn-azul"
+          *ngIf="data.tipo === 'ajuste'"
+          [disabled]="!!data.row.pro_Aju && !data.row.observacion?.trim()"
+          (click)="guardarAjuste(data.row)">
+          <mat-icon>save</mat-icon> Guardar Ajuste
+        </button>
+        <button mat-flat-button class="btn-azul" *ngIf="data.tipo !== 'ajuste'" mat-dialog-close>
+          <mat-icon>save</mat-icon> Guardar
+        </button>
+      </mat-dialog-actions>
+    </div>
   </ng-template>
 </div>
 

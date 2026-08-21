@@ -917,8 +917,8 @@ export class CotizacionesComponent implements OnInit {
     this.tipoEdicion = tipo;
     this.datosGeneralesAbierto = true;
     this.dialogRefAjuste = this.dialog.open(this.dialogAjuste, {
-      width: '460px',
-      maxWidth: '92vw',
+      width: '520px',
+      maxWidth: '95vw',
       autoFocus: false,
       panelClass: 'cot-modal-panel',
       data: { row, tipo }
