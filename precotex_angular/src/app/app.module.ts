@@ -176,6 +176,7 @@ import { AsignarRolesUsuarioComponent } from './components/accesos-usuarios/asig
 import { ReportesInspeccionPrendaComponent } from './components/inspeccion/reportes-inspeccion-prenda/reportes-inspeccion-prenda.component';
 import { CrearNuevoRolUsuarioComponent } from './components/accesos-usuarios/asignar-roles-usuario/crear-nuevo-rol-usuario/crear-nuevo-rol-usuario.component';
 import { ModificarUsuarioWebComponent } from './components/accesos-usuarios/modificar-usuario-web/modificar-usuario-web.component';
+import { RegistroUsuarioLaboratorioComponent } from './components/accesos-usuarios/registro-usuario-laboratorio/registro-usuario-laboratorio.component';
 import { MantenimientosCorreosComponent } from './components/comedor/mantenimientos-correos/mantenimientos-correos.component';
 import { ReporteInspeccionAuditoriaComponent } from './components/inspeccion/reporte-inspeccion-auditoria/reporte-inspeccion-auditoria.component';
 import { ProgramacionVacacionesComponent } from './components/vacaciones/programacion-vacaciones/programacion-vacaciones.component';
@@ -208,6 +209,7 @@ import { DialogMostrarImgComponent } from './components/comercial-carga-imagenes
 import { ComercialImgHuachipaComponent } from './components/comercial-img-huachipa/comercial-img-huachipa.component';
 import { NgxImageZoomModule } from 'ngx-image-zoom';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatBadgeModule } from '@angular/material/badge';
 import { DialogCrearImagenesComponent } from './components/comercial-carga-imagenes/dialog-crear-imagenes/dialog-crear-imagenes.component';
 import { DialogTransferirImagenesComponent } from './components/comercial-carga-imagenes/dialog-transferir-imagenes/dialog-transferir-imagenes.component';
 import { FormatoCheckListComponent } from './components/formato-check-list/formato-check-list.component';
@@ -573,6 +575,7 @@ import { DialogEvidenciaEmpaqueCajaComponent } from './components/auditoria-cali
 import { DialogMemorandumLineaTiempoComponent } from './components/memorandum-gral/dialog-memorandum-linea-tiempo/dialog-memorandum-linea-tiempo.component';
 import { DialogEvidenciaPackingCajaComponent } from './components/auditoria-calidad/auditoria-empaque-cajas/dialog-evidencia-packing-caja/dialog-evidencia-packing-caja.component';
 import { ConsultaValesComponent } from './components/rrhh/consulta-vales/consulta-vales.component';
+import { ContratosComponent } from './components/rrhh/contratos/contratos.component';
 
 //RETIRO DE REPUESTOS
 import { RetiroRepuestosComponent } from './components/retiro-repuestos/retiro-repuestos.component';
@@ -785,6 +788,7 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     ReportesInspeccionPrendaComponent,
     CrearNuevoRolUsuarioComponent,
     ModificarUsuarioWebComponent,
+    RegistroUsuarioLaboratorioComponent,
     MantenimientosCorreosComponent,
     ReporteInspeccionAuditoriaComponent,
     ProgramacionVacacionesComponent,
@@ -1105,7 +1109,7 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     TiemposImproductivosv2Component,
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent,
     EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ModalEditarDesgloseComponent, ConfirmDialogComponent,
-    GenerarQrComponent, ConsultaValesComponent,
+    GenerarQrComponent, ConsultaValesComponent, ContratosComponent,
     
     //Memorandum en GRAL
     MemorandumGralComponent,
@@ -1203,6 +1207,7 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     NgSelectModule,
     AgGridModule,
     MatTooltipModule,
+    MatBadgeModule,
     NgxSpinnerModule,
     NgxChartsModule,
     MatSlideToggleModule,

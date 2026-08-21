@@ -1,25 +1,85 @@
-<mat-card>
-    <mat-card-header style="display: flex; justify-content: space-around;">
-        <strong>Modificar Acceso Especial</strong>
-        <span aria-label="Close" class="cerrar" (click)="closeModal()" aria-hidden="true">&times;</span>
-    </mat-card-header>
-    <mat-card-content>
-        <div class="row">
-            <div class="columna">
-                <mat-form-field>
-                    <mat-label>Fecha de Inicio</mat-label>
-                    <input matInput type="date" [(ngModel)]="Fec_Inicio_Acceso_Especial">
-                </mat-form-field>
-            </div>
-            <div class="columna">
-                <mat-form-field>
-                    <mat-label>Días de Acceso especial</mat-label>
-                    <input matInput type="number" placeholder="Ingrese días" [(ngModel)]="Dias_Acceso_Especial">
-                </mat-form-field>
-            </div>
+<div class="modal-container">
+  <!-- Encabezado del Modal -->
+  <div class="modal-header">
+    <div class="modal-header-text">
+      <h2 mat-dialog-title class="modal-title">
+        <mat-icon>event_available</mat-icon>
+        <span>Modificar Acceso Especial</span>
+      </h2>
+      <span class="status-chip">
+        <span class="status-dot"></span>
+        Usuario: {{ data.data.Cod_Usuario || 'N/A' }}
+      </span>
+    </div>
+    <button mat-icon-button (click)="closeModal()" class="btn-close" aria-label="Cerrar modal">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Cuerpo del Modal -->
+  <mat-dialog-content class="modal-body">
+    <!-- SECCIÓN 1: DATOS DEL USUARIO -->
+    <div class="section-container">
+      <h3 class="section-title"><mat-icon>person</mat-icon> Datos del Usuario</h3>
+
+      <div class="user-card">
+        <div class="user-avatar"><mat-icon>person</mat-icon></div>
+        <div class="user-info">
+          <div class="user-name-row">
+            <span class="user-name">{{ data.data.Nom_usuario || 'N/A' }}</span>
+            <span class="estado-chip" [class.activo]="data.data.Flg_Activo == 1" [class.inactivo]="data.data.Flg_Activo != 1">
+              {{ data.data.Flg_Activo == 1 ? 'Activo' : 'Inactivo' }}
+            </span>
+          </div>
+          <span class="user-sub">Usuario: {{ data.data.Cod_Usuario || 'N/A' }}</span>
         </div>
-        <div class="row">
-            <button mat-flat-button color="primary" (click)="guardarRol()"><mat-icon>save</mat-icon> GUARDAR</button>
+      </div>
+
+      <div class="user-meta-grid">
+        <div class="detail-item">
+          <span class="detail-label">Código Trabajador</span>
+          <span class="detail-value">{{ data.data.Cod_Trabajador || 'N/A' }}</span>
         </div>
-    </mat-card-content>
-</mat-card>
+        <div class="detail-item">
+          <span class="detail-label">Empresa</span>
+          <span class="detail-value">{{ data.data.Empresa || 'N/A' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 2: CONFIGURACIÓN DE ACCESO ESPECIAL -->
+    <div class="section-container">
+      <h3 class="section-title"><mat-icon>settings</mat-icon> Configuración de Acceso Especial</h3>
+
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de Inicio</mat-label>
+          <input matInput type="date" [(ngModel)]="Fec_Inicio_Acceso_Especial">
+          <mat-hint>La fecha de inicio es obligatoria</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Días de Acceso Especial</mat-label>
+          <input matInput type="number" placeholder="Ingrese días" [(ngModel)]="Dias_Acceso_Especial">
+          <mat-hint>Los días de acceso son obligatorios</mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <!-- Pie del Modal / Botones de Acción -->
+  <mat-dialog-actions align="end" class="modal-actions">
+    <button mat-stroked-button class="btn-cancelar" (click)="closeModal()">
+      <mat-icon>close</mat-icon>
+      <span>Cancelar</span>
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      class="btn-asignar"
+      [disabled]="!Fec_Inicio_Acceso_Especial || !Dias_Acceso_Especial"
+      (click)="guardarRol()">
+      <mat-icon>save</mat-icon>
+      <span>Guardar Cambios</span>
+    </button>
+  </mat-dialog-actions>
+</div>

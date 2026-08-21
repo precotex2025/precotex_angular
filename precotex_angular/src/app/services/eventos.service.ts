@@ -40,4 +40,8 @@ export class EventosService {
     return this.httpClient.get<any[]>(`${this.baseUrl}/app_Get_RH_ConsultaVales.php?tipo=${tipo}&numAno=${numAno}&numDni=${numDni}&estado=${estado}`);
   }
 
+  listaOPContratos(numeroOp: string): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${this.baseUrl}/spring/app_Usp_ConsultarPOGestion.php?numeroOp=${numeroOp}`);
+  }
+
 }
