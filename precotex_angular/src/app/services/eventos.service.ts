@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GlobalVariable } from '../VarGlobals';
 
@@ -40,8 +40,58 @@ export class EventosService {
     return this.httpClient.get<any[]>(`${this.baseUrl}/app_Get_RH_ConsultaVales.php?tipo=${tipo}&numAno=${numAno}&numDni=${numDni}&estado=${estado}`);
   }
 
-  listaOPContratos(numeroOp: string): Observable<any[]> {
-    return this.httpClient.get<any[]>(`${this.baseUrl}/spring/app_Usp_ConsultarPOGestion.php?numeroOp=${numeroOp}`);
+  // listaOPContratos(numeroOp: string): Observable<any[]> {
+  //   return this.httpClient.get<any[]>(`${this.baseUrl}/spring/app_Usp_ConsultarPOGestion.php?numeroOp=${numeroOp}`);
+  // }
+
+  listaEmpleados(): Observable<any[]> {
+    return this.httpClient.get<any[]>(
+      `${this.baseUrl}/spring/app_Usp_ListarEmpleados.php`
+    );
+  }
+
+  listaOPContratos(
+    empleado: string |number | null,
+    fechaDesde: string | null,
+    fechaHasta: string | null
+  ): Observable<any[]> {
+
+    let params = new HttpParams();
+
+      // Empleado es opcional
+  if (
+    empleado !== null &&
+    empleado !== undefined &&
+    empleado !== ''
+  ) {
+    params = params.set(
+      'empleado',
+      empleado.toString()
+    );
+  }
+
+  // Fecha desde es opcional
+  if (fechaDesde) {
+    params = params.set(
+      'fechaDesde',
+      fechaDesde
+    );
+  }
+
+  // Fecha hasta es opcional
+  if (fechaHasta) {
+    params = params.set(
+      'fechaHasta',
+      fechaHasta
+    );
+  }
+
+  console.log('Parámetros enviados:', params.toString());
+
+    return this.httpClient.get<any[]>(
+      `${this.baseUrl}/spring/app_Usp_ConsultarPOGestion.php`,
+      { params }
+    );
   }
 
 }
