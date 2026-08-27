@@ -648,10 +648,16 @@ export class CotizacionesComponent implements OnInit {
     this.service.getObtenerNuevoCorrelativoVersion(request).subscribe({
       next: (response: ServiceResponseList<CorrelativoVersionItem>) => {
         const e = response?.elements?.[0];
+        const maxVersion = this.historialVersiones.reduce((max, v) => Math.max(max, v.numVersion || 0), 0);
+        const backendVersion = Number(e?.version);
+        const siguienteVersion = (backendVersion && backendVersion > maxVersion)
+          ? backendVersion
+          : (maxVersion ? maxVersion + 1 : 1);
+
         this.borrador = {
           planos: [], planosBackup: [], recetaCod: '',
           correlativo: String(e?.correlativo ?? ''),
-          version: Number(e?.version) || 1,
+          version: siguienteVersion,
           baseIdCotizacionCab: 0
         };
         this.global_CodReceta = '';
@@ -974,6 +980,12 @@ export class CotizacionesComponent implements OnInit {
       return;
     }
 
+    // Si ya existen versiones en el historial, crear una nueva versión derivada
+    if (this.historialVersiones && this.historialVersiones.length > 0) {
+      this.onCrearNuevaVersion(this.versionSeleccionada || this.historialVersiones[0]);
+      return;
+    }
+
     this.crearBorradorNuevo();
   }
 
@@ -1098,7 +1110,25 @@ export class CotizacionesComponent implements OnInit {
 
   ///////////////////////////////////////////////////////////////////////////
 
+  limitarDecimales(event: any, row: any, campo: string): void {
+    const input = event.target as HTMLInputElement;
+    if (!input || input.value === '' || input.value === null || input.value === undefined) { return; }
+
+    const valor = input.value;
+    if (valor.includes('.')) {
+      const partes = valor.split('.');
+      if (partes[1] && partes[1].length > 2) {
+        const formateado = `${partes[0]}.${partes[1].substring(0, 2)}`;
+        input.value = formateado;
+        row[campo] = parseFloat(formateado);
+      }
+    }
+  }
+
   recalcular(row: any) {
+    if (row.pro_Aju != null && row.pro_Aju !== '') {
+      row.pro_Aju = parseFloat(Number(row.pro_Aju).toFixed(2));
+    }
 
     //Actualiza el Campos pro_Cotizacion con el nuevo Valor.
     //El ajuste ADICIONA sobre el Total de la fila, no lo reemplaza: así la sección
@@ -1643,17 +1673,27 @@ private mapToDetalle(item: any): ProcesoCotizacionDetalle {
         const e = response?.elements?.[0];
         if (!this.borrador) { return; }
 
+        const maxVersion = this.historialVersiones.reduce((max, item) => Math.max(max, item.numVersion || 0), 0);
+        const backendVersion = Number(e?.version);
+        const siguienteVersion = (backendVersion && backendVersion > maxVersion)
+          ? backendVersion
+          : (maxVersion ? maxVersion + 1 : (base.numVersion || 1) + 1);
+
         this.borrador.correlativo = String(e?.correlativo ?? this.borrador.correlativo);
-        this.borrador.version     = Number(e?.version) || ((base.numVersion || 1) + 1);
+        this.borrador.version     = siguienteVersion;
 
         Swal.fire({
           icon: 'info',
           title: `Borrador: Versión ${this.borrador.version}`,
-          text: `Se ha preparado la Versión ${this.borrador.version} a partir del correlativo ${this.borrador.correlativo}. Realice los ajustes necesarios y presione Guardar.`,
+          text: `Se ha preparado la Versión ${this.borrador.version} a partir del correlativo ${this.borrador.correlativo || this.global_SDC}. Realice los ajustes necesarios y presione Guardar.`,
           confirmButtonText: 'Entendido'
         });
       },
       error: (error: any) => {
+        const maxVersion = this.historialVersiones.reduce((max, item) => Math.max(max, item.numVersion || 0), 0);
+        if (this.borrador) {
+          this.borrador.version = maxVersion ? maxVersion + 1 : (base.numVersion || 1) + 1;
+        }
         this.toastr.error(error.message, 'Cerrar', { timeOut: 2500 });
       }
     });
