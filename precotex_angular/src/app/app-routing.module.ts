@@ -323,6 +323,7 @@ import { SolicitudMantenimientoMaquinaVisorComponent } from './components/solici
 import { TiemposImproductivosv3Component } from './components/tiempos-improductivosv3/tiempos-improductivosv3.component';
 import { ReporteNcCierreComponent } from './components/reporte-nc/reporte-nc-cierre/reporte-nc-cierre.component';
 import { CotizacionesComponent } from './components/cotizaciones/cotizaciones.component';
+import { NoConformidadesComponent } from './components/no-conformidades/no-conformidades.component';
 import { AprobacionDesarrolloTelasComponent } from './components/aprobacion-desarrollo-telas/aprobacion-desarrollo-telas.component';
 import { RecoFacialComponent } from './components/reconocimientofacial/reco-facial/reco-facial.component';
 import { TomaFotoPersonasComponent } from './components/toma-foto-personas/toma-foto-personas.component';
@@ -723,6 +724,10 @@ const routes: Routes = [
   { path: "ReconocimientoFacial", component: RecoFacialComponent},
   //COTIZACIONES
   {path: "Cotizaciones", component:CotizacionesComponent},
+
+  //NO CONFORMIDADES (CONTROL DE CALIDAD)
+  { path: "NoConformidades", component: NoConformidadesComponent },
+  { path: "no-conformidades", component: NoConformidadesComponent },
 
   //Status Req Almacen
   {path: "StatusReqAlmacen", component:StatusReqAlmacenComponent},  

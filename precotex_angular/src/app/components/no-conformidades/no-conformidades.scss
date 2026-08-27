@@ -1,0 +1,1951 @@
+// Variables de diseño
+$primary: #2962ff;
+$primary-dark: #1f4fd6;
+$accent: #00897b;
+$dark: #1c1f24;
+$bg-soft: #f6f7f9;
+$border: #d9dce1;
+$green: #2e7d32;
+$red: #c0392b;
+$amber: #d97706;
+$teal: #0f766e;
+
+.nc-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: $dark;
+}
+
+.nc-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+// Encabezado de Vistas con Acciones
+.nc-header-bar {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  button[mat-icon-button] {
+    margin-top: -4px;
+  }
+
+  .nc-header-titles {
+    flex: 1;
+
+    h2 {
+      margin: 0 0 2px;
+      font-size: 16.5px;
+      font-weight: 800;
+      color: $dark;
+      line-height: 1.25;
+    }
+
+    p {
+      margin: 0;
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 500;
+    }
+  }
+
+  &.nc-detalle-header-bar {
+    align-items: flex-start;
+  }
+
+  .nc-detalle-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+
+    button {
+      flex: 1;
+      height: 36px;
+      padding: 0 16px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      line-height: 36px;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    .nc-btn-modificar {
+      border: 1.5px solid #2563eb;
+      color: #2563eb;
+      background: #ffffff;
+
+      &:hover {
+        background: #eff6ff;
+      }
+    }
+
+    .nc-btn-anular {
+      border: 1.5px solid #ef4444;
+      color: #dc2626;
+      background: #ffffff;
+
+      &:hover {
+        background: #fef2f2;
+      }
+    }
+  }
+
+  .nc-header-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: stretch;
+    flex: none;
+
+    button {
+      height: 32px;
+      padding: 0 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      line-height: 32px;
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .nc-btn-modificar {
+      border-color: #2563eb;
+      color: #2563eb;
+
+      &:hover {
+        background: #eff6ff;
+      }
+    }
+
+    .nc-btn-anular {
+      border-color: #ef4444;
+      color: #dc2626;
+
+      &:hover {
+        background: #fef2f2;
+      }
+    }
+  }
+}
+
+// Banner de Estado
+.nc-status-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f1f5f9;
+  border-radius: 8px;
+  font-size: 12.5px;
+
+  .nc-sb-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .nc-sb-status {
+      font-weight: 800;
+      color: #1e293b;
+    }
+
+    .nc-sb-sep {
+      color: #94a3b8;
+      font-weight: bold;
+    }
+
+    .nc-sb-date {
+      color: #64748b;
+      font-weight: 500;
+    }
+  }
+
+  .nc-sb-user {
+    color: #475569;
+    font-size: 12px;
+
+    b {
+      color: #0f172a;
+    }
+  }
+
+  &.rejected {
+    background: #fef2f2;
+    border: 1px solid #fee2e2;
+
+    .nc-sb-status {
+      color: #dc2626;
+    }
+  }
+
+  &.cancelled {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+
+    .nc-sb-status {
+      color: #64748b;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Botones Hero & Acciones principales
+.nc-main-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .nc-btn-hero {
+    padding: 12px 18px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 10px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: $primary !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(41, 98, 255, 0.25);
+  }
+
+  .nc-action-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+
+    button {
+      height: 42px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .nc-btn-amber {
+      background-color: $amber !important;
+      color: #fff !important;
+    }
+
+    .nc-btn-teal {
+      background-color: $teal !important;
+      color: #fff !important;
+    }
+  }
+}
+
+// Cards
+.nc-card {
+  background: #ffffff;
+  border: 1px solid $border;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+// Filtros
+.nc-filter-card {
+  .nc-filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+
+    .nc-filter-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 14px;
+      color: $dark;
+
+      mat-icon { font-size: 18px; width: 18px; height: 18px; color: $primary; }
+    }
+  }
+
+  .nc-filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .nc-filter-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid $border;
+    padding-top: 12px;
+  }
+}
+
+// Inputs y Formularios
+.nc-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+
+  label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #4b5563;
+    margin-bottom: 4px;
+
+    .req { color: $red; }
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid $border;
+    border-radius: 8px;
+    font-size: 13.5px;
+    background: #fff;
+    color: $dark;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+
+    &:focus {
+      border-color: $primary;
+      box-shadow: 0 0 0 2px rgba(41, 98, 255, 0.15);
+    }
+  }
+
+  &.error {
+    input, select, textarea {
+      border-color: $red;
+      background: #fff6f6;
+    }
+  }
+}
+
+.nc-field-error {
+  color: $red;
+  font-size: 11px;
+  margin-top: 3px;
+  font-weight: 600;
+}
+
+.nc-hint {
+  color: #6b7280;
+  font-size: 11.5px;
+  margin: 4px 0 8px;
+}
+
+.nc-autofill-box {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 8px;
+
+  .nc-hint { color: $green; font-weight: 600; margin-top: 6px; }
+}
+
+.nc-kv {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+  font-size: 13px;
+
+  .k { color: #6b7280; }
+  .v { font-weight: 600; text-align: right; }
+}
+
+// Filtros Card (Exacto al diseño)
+.nc-filtros-card {
+  background: #ffffff;
+  border: 1px solid $border;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 10px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  .nc-filtros-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #111827;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .nc-filtros-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .nc-filtros-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+
+      .nc-filtros-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        label {
+          font-size: 11px;
+          font-weight: 600;
+          color: #374151;
+          margin-bottom: 4px;
+        }
+
+        input, select {
+          width: 100%;
+          padding: 8px 10px;
+          font-size: 13px;
+          border: 1px solid #d1d5db;
+          border-radius: 6px;
+          background: #ffffff;
+          color: #111827;
+          box-sizing: border-box;
+          outline: none;
+          height: 38px;
+          transition: border-color 0.15s, box-shadow 0.15s;
+
+          &:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+          }
+
+          &::placeholder {
+            color: #9ca3af;
+          }
+        }
+
+        &.nc-filtros-col-btn {
+          display: flex;
+          justify-content: flex-end;
+
+          .nc-btn-buscar {
+            width: 100%;
+            height: 38px;
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.15s;
+
+            &:hover {
+              background: #1d4ed8;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Lista de Cards
+.nc-list-section {
+  .nc-list-header {
+    h3 {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: $dark;
+      margin: 0 0 10px;
+    }
+  }
+
+  .nc-list-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nc-item-card {
+    background: #fff;
+    border: 1px solid $border;
+    border-radius: 10px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.07);
+      border-color: $primary;
+    }
+
+    .nc-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+
+      .nc-item-id {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+    }
+
+    .nc-item-info {
+      font-size: 12.5px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+
+      .nc-info-row {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-wrap: wrap;
+
+        .lbl { color: #6b7280; }
+        .sep { color: $border; }
+        .text-area { color: $teal; font-weight: 600; }
+      }
+    }
+
+    .nc-item-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px solid #f3f4f6;
+      font-size: 11.5px;
+
+      .nc-author { color: #9ca3af; }
+      .nc-link {
+        color: $primary;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        mat-icon { font-size: 16px; width: 16px; height: 16px; }
+      }
+    }
+  }
+}
+
+.nc-id-badge {
+  background: #eff6ff;
+  color: $primary;
+  border: 1px solid #bfdbfe;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 12px;
+
+  &.large {
+    font-size: 15px;
+    padding: 4px 12px;
+  }
+}
+
+.nc-status-badge {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+
+  &.rejected {
+    background: #fee2e2;
+    color: $red;
+  }
+
+  &.cancelled {
+    background: #f3f4f6;
+    color: #6b7280;
+  }
+}
+
+// Stepper Progress
+.nc-stepper {
+  margin-bottom: 12px;
+
+  .nc-stepper-bar {
+    height: 6px;
+    background: $border;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .nc-stepper-fill {
+    height: 100%;
+    background: $primary;
+    transition: width 0.3s ease;
+  }
+
+  .nc-stepper-label {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 600;
+    margin-top: 4px;
+    text-align: right;
+  }
+}
+
+// Header Bar
+.nc-header-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid $border;
+  padding-bottom: 10px;
+
+  .nc-header-titles {
+    flex: 1;
+    h2 { font-size: 17px; margin: 0; font-weight: 700; color: $dark; }
+    p { font-size: 12px; margin: 2px 0 0; color: #6b7280; }
+  }
+
+  .nc-header-actions {
+    display: flex;
+    gap: 8px;
+  }
+}
+
+// Artículos en Wizard
+.nc-art-item {
+  border: 1.5px solid $border;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: #fff;
+  transition: border-color 0.2s;
+
+  &.checked {
+    border-color: $primary;
+    background: #f8faff;
+  }
+
+  .nc-art-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .nc-art-name {
+      font-weight: 700;
+      font-size: 13.5px;
+      flex: 1;
+      cursor: pointer;
+    }
+  }
+
+  .nc-art-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 8px 0 8px 36px;
+    font-size: 12px;
+
+    .lbl { color: #6b7280; font-size: 10.5px; display: block; }
+    .val { font-weight: 600; }
+  }
+
+  .nc-qty-box {
+    margin-left: 36px;
+    max-width: 200px;
+  }
+}
+
+.nc-badge-tipo {
+  font-size: 10px;
+  border: 1px solid $primary;
+  color: $primary;
+  border-radius: 6px;
+  padding: 1px 6px;
+}
+
+// Asignación rápida grupal
+.nc-group-card {
+  border: 1.5px dashed $primary;
+  background: #fafcff;
+
+  .nc-group-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+
+    .nc-check-pill {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: 8px;
+      border: 1px solid $border;
+      background: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+
+      mat-icon { font-size: 16px; width: 16px; height: 16px; color: #9ca3af; }
+
+      &.active {
+        border-color: $primary;
+        background: #eff6ff;
+        color: $primary;
+        mat-icon { color: $primary; }
+      }
+    }
+  }
+
+  .nc-btn-apply {
+    width: 100%;
+    margin-top: 10px;
+    height: 40px;
+    font-weight: 700;
+  }
+}
+
+// Uploader de Fotos
+.nc-photo-uploader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+
+  .nc-photo-btn {
+    width: 70px;
+    height: 70px;
+    border: 1.5px dashed $primary;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: $primary;
+    cursor: pointer;
+    background: #fff;
+
+    input { display: none; }
+    mat-icon { font-size: 22px; width: 22px; height: 22px; margin-bottom: 2px; }
+  }
+
+  .nc-photo-preview {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    border: 1px solid $border;
+    position: relative;
+    overflow: hidden;
+    background: #f3f4f6;
+
+    img { width: 100%; height: 100%; object-fit: cover; }
+
+    .nc-photo-del {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      mat-icon { font-size: 12px; width: 12px; height: 12px; }
+    }
+  }
+}
+
+// Detalle de defectos por artículo en Wizard
+.nc-card-article-def {
+  border: 1px solid $border;
+  border-radius: 10px;
+  padding: 12px;
+  background: #fff;
+  margin-bottom: 10px;
+
+  .nc-art-def-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    margin-bottom: 8px;
+
+    .nc-badge-qty {
+      font-size: 11px;
+      color: #6b7280;
+      font-weight: 600;
+    }
+  }
+
+  .nc-def-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    background: $bg-soft;
+    border-radius: 6px;
+    margin-bottom: 6px;
+
+    .nc-def-info {
+      font-size: 12px;
+      .nc-def-label { display: block; font-weight: 700; color: $dark; }
+      .nc-def-sub { color: #6b7280; font-size: 11px; }
+    }
+  }
+
+  .nc-btn-add-def {
+    width: 100%;
+    margin-top: 6px;
+    font-size: 12px;
+  }
+}
+
+// Tablas
+.nc-table-wrap {
+  overflow-x: auto;
+}
+
+.nc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+
+  th {
+    background: #f8fafc;
+    color: #4b5563;
+    font-weight: 700;
+    padding: 8px 10px;
+    border-bottom: 1.5px solid $border;
+    text-align: left;
+  }
+
+  td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+}
+
+// Mensajes Generados
+.nc-msg-box {
+  background: $bg-soft;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+
+  .nc-msg-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 6px;
+
+    mat-icon { font-size: 18px; width: 18px; height: 18px; }
+  }
+
+  .nc-msg-pre {
+    margin: 0;
+    white-space: pre-wrap;
+    font-family: inherit;
+    font-size: 12px;
+    background: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    color: #374151;
+  }
+}
+
+.nc-banner-warn {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; flex: none; }
+}
+
+// Acordeones Detalle
+.nc-accordion {
+  padding: 0 !important;
+  overflow: hidden;
+  margin-bottom: 12px;
+
+  .nc-acc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    cursor: pointer;
+    background: #fff;
+    user-select: none;
+
+    .nc-acc-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 13.5px;
+
+      mat-icon { font-size: 18px; width: 18px; height: 18px; color: $primary; }
+    }
+  }
+
+  .nc-acc-body {
+    padding: 12px 16px;
+    border-top: 1px solid #f3f4f6;
+    background: #fafafa;
+  }
+}
+
+.nc-evidencia-galeria {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+
+  .nc-ev-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    border: 1px solid $border;
+    overflow: hidden;
+    cursor: pointer;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img { width: 100%; height: 100%; object-fit: cover; }
+    mat-icon { color: #9ca3af; }
+  }
+}
+
+.nc-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .nc-tl-item {
+    display: flex;
+    gap: 10px;
+
+    .nc-tl-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: $primary;
+      margin-top: 4px;
+      flex: none;
+    }
+
+    .nc-tl-content {
+      font-size: 12px;
+      .nc-tl-date { color: #6b7280; font-size: 11px; font-weight: 600; }
+      p { margin: 2px 0 0; font-weight: 600; color: $dark; }
+    }
+  }
+}
+
+// Footer Bar
+.nc-footer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid $border;
+  margin-top: 10px;
+
+  .nc-btn-save {
+    background-color: $green !important;
+    color: #fff !important;
+  }
+}
+
+// Modales
+.nc-photo-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .nc-pm-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+  }
+
+  .nc-pm-content {
+    position: relative;
+    z-index: 10;
+    max-width: 90vw;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .nc-pm-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      color: #fff;
+    }
+
+    .nc-pm-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #fff;
+      background: rgba(0,0,0,0.4);
+
+      &.left { left: -50px; }
+      &.right { right: -50px; }
+    }
+
+    .nc-pm-img-wrap {
+      img {
+        max-width: 80vw;
+        max-height: 70vh;
+        border-radius: 8px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+      }
+
+      .nc-pm-placeholder {
+        background: #fff;
+        padding: 40px;
+        border-radius: 8px;
+        text-align: center;
+        mat-icon { font-size: 48px; width: 48px; height: 48px; color: #9ca3af; }
+      }
+    }
+
+    .nc-pm-counter {
+      color: #fff;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+  }
+
+  .nc-modal-box {
+    position: relative;
+    z-index: 10;
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    width: 90%;
+    max-width: 440px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+
+    &.large {
+      max-width: 550px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .nc-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 16px;
+    }
+  }
+}
+
+// Evolutivo KPIs
+.nc-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+
+  .nc-kpi-card {
+    background: #fff;
+    border: 1px solid $border;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+
+    .nc-kpi-num {
+      font-size: 24px;
+      font-weight: 800;
+      color: $primary;
+      display: block;
+    }
+
+    .nc-kpi-lbl {
+      font-size: 11.5px;
+      color: #6b7280;
+      font-weight: 600;
+    }
+  }
+}
+
+// Evolutivo Styles
+.nc-evo-period-section {
+  margin-top: 14px;
+  margin-bottom: 10px;
+
+  .nc-evo-period-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .nc-period-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    .nc-chip {
+      display: inline-block;
+      padding: 5px 16px;
+      font-size: 12.5px;
+      font-weight: 600;
+      border-radius: 20px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #475569;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s;
+
+      &:hover {
+        border-color: #94a3b8;
+      }
+
+      &.active {
+        background: #64748b;
+        color: #ffffff;
+        border-color: #64748b;
+      }
+    }
+  }
+}
+
+.nc-evo-card {
+  background: #ffffff;
+  border: 1px solid $border;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+  .nc-evo-card-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #111827;
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .nc-barchart-container {
+    padding: 10px 0 4px;
+
+    .nc-barchart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      height: 140px;
+      padding-bottom: 4px;
+
+      .nc-barchart-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        justify-content: flex-end;
+
+        .nc-bar-val {
+          font-size: 11px;
+          font-weight: 700;
+          color: #2563eb;
+          margin-bottom: 4px;
+        }
+
+        .nc-bar-fill {
+          width: 100%;
+          min-height: 4px;
+          background: #dbeafe;
+          border: 1.5px solid #2563eb;
+          border-radius: 4px;
+          box-sizing: border-box;
+          transition: height 0.3s ease;
+
+          &.area-fill {
+            background: #ccfbf1;
+            border-color: #0d9488;
+          }
+        }
+
+        .nc-bar-lbl {
+          margin-top: 8px;
+          font-size: 11px;
+          color: #64748b;
+          font-weight: 600;
+          text-align: center;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.nc-small-note {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.4;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.font-bold { font-weight: 700; }
+.text-amber { color: $amber; }
+
+// Estilos para Enlace Reporte y Modal Sheet
+.nc-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+
+  h3 {
+    margin: 0 !important;
+    font-size: 14.5px;
+    font-weight: 700;
+  }
+
+  .nc-report-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: $primary;
+    font-weight: 700;
+    font-size: 13.5px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.15s;
+
+    &:hover {
+      background: #eff6ff;
+    }
+
+    .nc-report-icon {
+      font-size: 16px;
+    }
+  }
+}
+
+.nc-modal-sheet {
+  position: relative;
+  z-index: 10;
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+  padding: 16px 20px 24px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+
+  @media (min-width: 500px) {
+    border-radius: 18px;
+    margin-bottom: 30px;
+  }
+
+  .nc-sheet-grabber {
+    width: 44px;
+    height: 4px;
+    background: #cbd5e1;
+    border-radius: 2px;
+    margin: 0 auto 14px;
+  }
+
+  .nc-sheet-title {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 800;
+    color: #111827;
+  }
+
+  .nc-sheet-sub {
+    margin: 0 0 14px;
+    font-size: 12px;
+    color: #6b7280;
+
+    b { color: #1f2937; }
+  }
+
+  .nc-sheet-options {
+    display: flex;
+    flex-direction: column;
+
+    .nc-sheet-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+      cursor: pointer;
+      user-select: none;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .nc-custom-chk {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        border: 2px solid #cbd5e1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+        flex: none;
+
+        mat-icon {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+          color: #fff;
+          font-weight: 900;
+        }
+
+        &.on {
+          background: #2563eb;
+          border-color: #2563eb;
+        }
+      }
+
+      .nc-sheet-lbl {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1f2937;
+      }
+    }
+  }
+
+  .nc-sheet-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+
+    .nc-sheet-btn-cancel {
+      flex: 1;
+      border: 1.5px solid #d1d5db;
+      background: #ffffff;
+      color: #1f2937;
+      border-radius: 9px;
+      padding: 11px 14px;
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+      transition: background 0.15s;
+
+      &:hover { background: #f9fafb; }
+    }
+
+    .nc-sheet-btn-primary {
+      flex: 1.6;
+      border: none;
+      background: #2563eb;
+      color: #ffffff;
+      border-radius: 9px;
+      padding: 11px 14px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.15s;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+
+      &:hover { background: #1d4ed8; }
+    }
+  }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+// Banner de Simulación (Ámbar)
+.nc-banner-sim {
+  background: #fffbeb;
+  border: 1.5px solid #d97706;
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: #92400e;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-top: 12px;
+  margin-bottom: 16px;
+
+  b {
+    color: #78350f;
+    font-weight: 700;
+  }
+}
+
+// Sección de Defectos Pendientes
+.nc-pendientes-section {
+  .nc-pendientes-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: #111827;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .nc-pend-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: transform 0.15s, box-shadow 0.15s;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .nc-pend-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+
+      .nc-pend-id {
+        font-size: 14px;
+        font-weight: 800;
+        color: #111827;
+      }
+
+      .nc-pend-fecha {
+        font-size: 12px;
+        color: #64748b;
+        font-weight: 500;
+      }
+    }
+
+    .nc-pend-desc {
+      font-size: 13px;
+      color: #475569;
+      margin-bottom: 4px;
+
+      b {
+        font-weight: 700;
+      }
+    }
+
+    .nc-pend-meta {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 10px;
+    }
+
+    .nc-pend-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 4px;
+
+      .nc-link {
+        font-size: 13px;
+        font-weight: 700;
+        color: #2563eb;
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.15s;
+
+        &:hover {
+          color: #1d4ed8;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+// Bloque de Defectos en Detalle
+.nc-art-def-block {
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f1f5f9;
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .nc-art-name {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 8px;
+  }
+
+  .nc-def-detail-row {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 3.5px solid #2563eb;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+
+    .nc-def-title {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 6px;
+
+      .nc-def-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 8px;
+        font-size: 11px;
+        font-weight: 700;
+        border-radius: 5px;
+        background: #e2e8f0;
+        color: #475569;
+        white-space: nowrap;
+
+        &.new {
+          background: #fef3c7;
+          color: #92400e;
+          border: 1px solid #fcd34d;
+        }
+      }
+
+      .nc-def-name {
+        font-size: 13px;
+        color: #1e293b;
+        font-weight: 700;
+      }
+    }
+
+    .nc-def-sub {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 6px;
+
+      .text-area {
+        color: #0f766e;
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+// Pantalla: Grabar Motivo
+.nc-grabar-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+  .nc-grabar-kv {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    font-size: 13.5px;
+
+    .lbl {
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .val {
+      color: #0f172a;
+      font-weight: 700;
+      text-align: right;
+    }
+  }
+
+  &.nc-grabar-def-card {
+    .nc-grabar-def-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+
+      .nc-badge-new {
+        background: #0284c7;
+        color: #ffffff;
+        font-size: 9px;
+        font-weight: 900;
+        padding: 2px 5px;
+        border-radius: 4px;
+        letter-spacing: 0.5px;
+      }
+
+      .nc-grabar-def-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #b45309;
+      }
+    }
+
+    .nc-grabar-def-desc {
+      font-size: 13.5px;
+      color: #1e293b;
+      margin: 0;
+      line-height: 1.4;
+    }
+  }
+}
+
+.nc-grabar-form {
+  background: transparent;
+  margin-top: 6px;
+
+  .nc-field {
+    margin-bottom: 14px;
+
+    label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 6px;
+      display: block;
+
+      .req {
+        color: #ef4444;
+      }
+    }
+
+    select, input {
+      width: 100%;
+      height: 42px;
+      padding: 8px 12px;
+      font-size: 13.5px;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #111827;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+
+      &:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+      }
+    }
+  }
+
+  .nc-grabar-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+
+    .nc-grabar-btn-cancel {
+      flex: 1;
+      height: 44px;
+      border: 1.5px solid #d1d5db;
+      background: #ffffff;
+      color: #111827;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+
+      &:hover {
+        background: #f9fafb;
+      }
+    }
+
+    .nc-grabar-btn-save {
+      flex: 1;
+      height: 44px;
+      border: none;
+      background: #2563eb;
+      color: #ffffff;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+
+      &:hover {
+        background: #1d4ed8;
+      }
+    }
+  }
+}
+
+// Paso 1: Registro de No Conformidad
+.nc-stepper-bar-top {
+  width: 100%;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 12px;
+
+  .nc-stepper-fill-top {
+    height: 100%;
+    background: #2563eb;
+    transition: width 0.3s ease;
+  }
+}
+
+.nc-step-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+  .nc-step-kv {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    font-size: 13.5px;
+
+    .lbl {
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .val {
+      color: #0f172a;
+      font-weight: 700;
+      text-align: right;
+
+      &.text-blue {
+        color: #2563eb !important;
+      }
+    }
+  }
+}
+
+.nc-hint-gray {
+  font-size: 11.5px;
+  color: #64748b;
+  margin-top: 4px;
+  margin-bottom: 12px;
+}
+
+.nc-instruction-text {
+  font-size: 12px;
+  color: #334155;
+  margin: 12px 0 10px;
+  line-height: 1.4;
+  font-weight: 500;
+
+  .req {
+    color: #ef4444;
+  }
+}
+
+.nc-articulos-container {
+  margin-top: 4px;
+
+  .nc-article-card {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s, background-color 0.2s;
+
+    &.active {
+      background: #eff6ff;
+      border-color: #2563eb;
+    }
+
+    .nc-art-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+      margin-bottom: 12px;
+
+      .nc-art-chk {
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        border: 1.5px solid #cbd5e1;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+
+        &.on {
+          background: #2563eb;
+          border-color: #2563eb;
+          color: #ffffff;
+        }
+
+        mat-icon {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+          line-height: 16px;
+          font-weight: 900;
+        }
+      }
+
+      .nc-art-title {
+        font-size: 14.5px;
+        font-weight: 800;
+        color: #0f172a;
+      }
+    }
+
+    .nc-art-info-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+
+      .nc-art-info-col {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        .lbl {
+          color: #64748b;
+          font-size: 11px;
+          font-weight: 500;
+        }
+
+        .val {
+          color: #0f172a;
+          font-weight: 700;
+          font-size: 13px;
+        }
+      }
+    }
+
+    .nc-art-qty-section {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(37, 99, 235, 0.2);
+
+      label {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: #0f172a;
+        display: block;
+        margin-bottom: 6px;
+
+        .req {
+          color: #ef4444;
+        }
+      }
+
+      input {
+        width: 140px;
+        height: 38px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 8px;
+        background: #ffffff;
+        padding: 6px 12px;
+        font-size: 14px;
+        font-weight: 600;
+        outline: none;
+        box-sizing: border-box;
+
+        &:focus {
+          border-color: #2563eb;
+          box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+        }
+      }
+    }
+  }
+
+  .nc-footer-hint {
+    font-size: 11.5px;
+    color: #64748b;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+}
+
+.nc-wizard-footer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+
+  .nc-btn-next {
+    height: 44px;
+    padding: 0 24px;
+    border: none;
+    background: #2563eb;
+    color: #ffffff;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    transition: background 0.15s;
+
+    &:hover {
+      background: #1d4ed8;
+    }
+  }
+}
+
+
+
+

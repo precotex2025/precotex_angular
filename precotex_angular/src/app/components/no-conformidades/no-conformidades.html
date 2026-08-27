@@ -1,0 +1,944 @@
+<div class="nc-container">
+
+  <!-- ==========================================
+       VISTA 1: INICIO / DASHBOARD PRINCIPAL
+  =========================================== -->
+  <div class="nc-view" *ngIf="currentScreen === 'inicio'">
+    <!-- Top Action Buttons -->
+    <div class="nc-main-actions">
+      <button mat-raised-button color="primary" class="nc-btn-hero" (click)="startNuevaNC()">
+        <mat-icon>add_circle_outline</mat-icon>
+        Registrar nueva No Conformidad
+      </button>
+
+      <div class="nc-action-row">
+        <button mat-flat-button class="nc-btn-amber" (click)="goTo('defectosPendientes')">
+          <mat-icon>new_releases</mat-icon>
+          Defectos por catalogar ({{ defectosPendientesCatalogo.length }})
+        </button>
+        <button mat-flat-button class="nc-btn-teal" (click)="goTo('evolutivo')">
+          <mat-icon>trending_up</mat-icon>
+          Evolutivo de NC
+        </button>
+      </div>
+    </div>
+
+    <!-- Filtros de búsqueda -->
+    <div class="nc-filtros-card">
+      <b class="nc-filtros-title">Filtros</b>
+      <div class="nc-filtros-body">
+        <div class="nc-filtros-row">
+          <div class="nc-filtros-col">
+            <label>N° de NC / Partida</label>
+            <input type="text" [(ngModel)]="inicioFilters.nc" (keyup.enter)="inicioBuscar()">
+          </div>
+          <div class="nc-filtros-col">
+            <label>Área</label>
+            <select [(ngModel)]="inicioFilters.area" (change)="inicioBuscar()">
+              <option value="">Todas</option>
+              <option *ngFor="let a of AREAS" [value]="a">{{ a }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="nc-filtros-row">
+          <div class="nc-filtros-col">
+            <label>Fecha inicio</label>
+            <input type="text" [(ngModel)]="inicioFilters.ini" placeholder="dd/mm/aaaa" (keyup.enter)="inicioBuscar()">
+          </div>
+          <div class="nc-filtros-col">
+            <label>Fecha fin</label>
+            <input type="text" [(ngModel)]="inicioFilters.fin" placeholder="dd/mm/aaaa" (keyup.enter)="inicioBuscar()">
+          </div>
+        </div>
+
+        <div class="nc-filtros-row">
+          <div class="nc-filtros-col">
+            <label>Responsable</label>
+            <input type="text" [(ngModel)]="inicioFilters.resp" placeholder="Ej. Ramirez" (keyup.enter)="inicioBuscar()">
+          </div>
+          <div class="nc-filtros-col nc-filtros-col-btn">
+            <button class="nc-btn-buscar" (click)="inicioBuscar()">Buscar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de No Conformidades -->
+    <div class="nc-list-section">
+      <div class="nc-list-header">
+        <h3>{{ inicioResults !== null ? ('Resultados (' + inicioResults.length + ')') : 'Últimas NC registradas' }}</h3>
+        <div class="nc-report-link" (click)="openReporteModal()">
+          <span class="nc-report-icon">📊</span>
+          <span class="nc-report-text">Reporte</span>
+        </div>
+      </div>
+
+      <div class="nc-list-grid">
+        <div class="nc-item-card" *ngFor="let nc of (inicioResults !== null ? inicioResults : ncs)" (click)="openDetalle(nc.id)">
+          <div class="nc-item-top">
+            <div class="nc-item-id">
+              <span class="nc-id-badge">{{ nc.id }}</span>
+              <span class="nc-date">{{ nc.fecha }}</span>
+            </div>
+            <span class="nc-status-badge" [ngClass]="{'rejected': nc.status === 'Rechazado', 'cancelled': nc.status === 'Anulado'}">
+              {{ nc.status }}
+            </span>
+          </div>
+
+          <div class="nc-item-info">
+            <div class="nc-info-row">
+              <span class="lbl">Partida:</span>
+              <span class="val font-bold">{{ nc.partida }}</span>
+              <span class="sep">•</span>
+              <span class="lbl">Cliente:</span>
+              <span class="val">{{ nc.cliente }}</span>
+            </div>
+            <div class="nc-info-row">
+              <span class="lbl">Color:</span>
+              <span class="val">{{ nc.color }}</span>
+            </div>
+            <div class="nc-info-row">
+              <span class="lbl">Área(s):</span>
+              <span class="val text-area">{{ ncAreasResumen(nc) }}</span>
+            </div>
+          </div>
+
+          <div class="nc-item-bottom">
+            <span class="nc-author">Reg: {{ nc.registradoPor }}</span>
+            <span class="nc-link">Ver detalle <mat-icon>chevron_right</mat-icon></span>
+          </div>
+        </div>
+
+        <div class="nc-empty" *ngIf="(inicioResults !== null ? inicioResults : ncs).length === 0">
+          <mat-icon>search_off</mat-icon>
+          <p>No se encontraron No Conformidades registradas con estos criterios.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       VISTA 2: WIZARD PASO 1 (Partida y Artículos)
+  =========================================== -->
+  <div class="nc-view" *ngIf="currentScreen === 'paso1' && draft">
+    <!-- Stepper Progress Bar (Top) -->
+    <div class="nc-stepper-bar-top">
+      <div class="nc-stepper-fill-top" style="width: 33%"></div>
+    </div>
+
+    <!-- Encabezado de la NC -->
+    <div class="nc-step-card">
+      <div class="nc-step-kv">
+        <span class="lbl">N° de No Conformidad</span>
+        <span class="val text-blue font-bold">{{ editingId || draft.ncPreview }}</span>
+      </div>
+      <div class="nc-step-kv">
+        <span class="lbl">Fecha y hora de registro</span>
+        <span class="val font-bold">{{ draft.fechaRegistro }}</span>
+      </div>
+    </div>
+
+    <!-- Formulario Partida -->
+    <div class="nc-field" [ngClass]="{'error': errors['partida']}">
+      <label>Partida <span class="req">*</span></label>
+      <input type="text" [ngModel]="draft.partida" (ngModelChange)="onPartidaInput($event)" placeholder="">
+      <div class="nc-field-error" *ngIf="errors['partida']">{{ errors['partida'] }}</div>
+    </div>
+
+    <!-- Datos autocompletados -->
+    <div class="nc-step-card" *ngIf="draft.cliente">
+      <div class="nc-step-kv">
+        <span class="lbl">Cliente</span>
+        <span class="val font-bold">{{ draft.cliente }}</span>
+      </div>
+      <div class="nc-step-kv">
+        <span class="lbl">Color</span>
+        <span class="val font-bold">{{ draft.color }}</span>
+      </div>
+    </div>
+    <div class="nc-hint-gray" *ngIf="draft.cliente">
+      Datos autocompletados desde la partida — no requieren digitación.
+    </div>
+
+    <!-- Artículos disponibles -->
+    <div class="nc-articulos-container" *ngIf="draft.articulosDisponibles.length">
+      <p class="nc-instruction-text">
+        Marque él/los artículos e indique la cantidad afectada. Toque un artículo ya completo para colapsarlo. <span class="req">*</span>
+      </p>
+
+      <div class="nc-field-error" *ngIf="errors['articulos']" style="margin-bottom: 8px;">{{ errors['articulos'] }}</div>
+
+      <div class="nc-article-card" *ngFor="let a of draft.articulosDisponibles; let i = index" [ngClass]="{'active': draft.seleccion[i]?.checked}">
+        <div class="nc-art-header" (click)="toggleArticulo(i)">
+          <div class="nc-art-chk" [ngClass]="{'on': draft.seleccion[i]?.checked}">
+            <mat-icon *ngIf="draft.seleccion[i]?.checked">check</mat-icon>
+          </div>
+          <span class="nc-art-title">{{ a.nombre }}</span>
+        </div>
+
+        <div class="nc-art-info-grid">
+          <div class="nc-art-info-col">
+            <span class="lbl">Cód. Tela</span>
+            <span class="val font-bold">{{ a.codTela }}</span>
+          </div>
+          <div class="nc-art-info-col">
+            <span class="lbl">Talla</span>
+            <span class="val font-bold">{{ a.talla }}</span>
+          </div>
+          <div class="nc-art-info-col">
+            <span class="lbl">Kg. Crudo</span>
+            <span class="val font-bold">{{ a.kgCrudo }}</span>
+          </div>
+          <div class="nc-art-info-col">
+            <span class="lbl">Rollos</span>
+            <span class="val font-bold">{{ a.rollos }}</span>
+          </div>
+        </div>
+
+        <!-- Cantidad afectada si está seleccionado -->
+        <div class="nc-art-qty-section" *ngIf="draft.seleccion[i]?.checked" [ngClass]="{'error': errors['art_' + i]}">
+          <label>Cantidad afectada <span class="req">*</span></label>
+          <input type="number" min="1" [max]="a.rollos" [(ngModel)]="draft.seleccion[i].cantidad">
+          <div class="nc-field-error" *ngIf="errors['art_' + i]">{{ errors['art_' + i] }}</div>
+        </div>
+      </div>
+
+      <p class="nc-footer-hint">
+        Puede seleccionar más de un artículo; la cantidad no puede superar el total de cada uno.
+      </p>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="nc-wizard-footer">
+      <button class="nc-btn-next" (click)="validatePaso1()">Siguiente paso ›</button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       VISTA 3: WIZARD PASO 2 (Clasificación & Evidencias)
+  =========================================== -->
+  <div class="nc-view" *ngIf="currentScreen === 'paso2' && draft">
+    <div class="nc-header-bar">
+      <button mat-icon-button (click)="goTo('paso1')"><mat-icon>arrow_back</mat-icon></button>
+      <div class="nc-header-titles">
+        <h2>Clasificación y Evidencias</h2>
+        <p>Paso 2 de 3: Motivo, Área responsable y Fotos</p>
+      </div>
+    </div>
+
+    <div class="nc-stepper">
+      <div class="nc-stepper-bar"><div class="nc-stepper-fill" style="width: 66%"></div></div>
+      <div class="nc-stepper-label">Paso 2 de 3</div>
+    </div>
+
+    <!-- Asignación Rápida Grupal -->
+    <mat-card class="nc-card nc-group-card">
+      <div class="nc-section-title">
+        <mat-icon>group_work</mat-icon>
+        <span>Asignación Rápida de Defecto</span>
+      </div>
+      <p class="nc-hint">Seleccione los artículos que comparten el mismo defecto para aplicarlo a todos:</p>
+
+      <!-- Checkboxes de artículos -->
+      <div class="nc-group-checks">
+        <ng-container *ngFor="let a of draft.articulosDisponibles; let i = index">
+          <div class="nc-check-pill" *ngIf="draft.seleccion[i]?.checked" (click)="toggleGrupoArticulo(i)" [ngClass]="{'active': draft.grupoDefecto.seleccion[i]}">
+            <mat-icon>{{ draft.grupoDefecto.seleccion[i] ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+            <span>{{ a.nombre }}</span>
+          </div>
+        </ng-container>
+      </div>
+      <div class="nc-field-error" *ngIf="draft.grupoDefecto.errors['seleccion']">{{ draft.grupoDefecto.errors['seleccion'] }}</div>
+
+      <!-- Motivo de rechazo -->
+      <div class="nc-field" [ngClass]="{'error': draft.grupoDefecto.errors['motivo']}">
+        <label>Motivo de Rechazo <span class="req">*</span></label>
+        <select [ngModel]="draft.grupoDefecto.isOtro ? DEFECTO_NUEVO : draft.grupoDefecto.motivo" (ngModelChange)="onGrupoMotivoChange($event)">
+          <option value="">Seleccione motivo...</option>
+          <option [value]="DEFECTO_NUEVO">🆕 {{ DEFECTO_NUEVO }}</option>
+          <option *ngFor="let m of MOTIVOS" [value]="m">{{ m }}</option>
+        </select>
+        <div class="nc-field-error" *ngIf="draft.grupoDefecto.errors['motivo']">{{ draft.grupoDefecto.errors['motivo'] }}</div>
+      </div>
+
+      <!-- Si es defecto nuevo -->
+      <div class="nc-field" *ngIf="draft.grupoDefecto.isOtro" [ngClass]="{'error': draft.grupoDefecto.errors['desc']}">
+        <label>Descripción del Defecto Nuevo <span class="req">*</span></label>
+        <input type="text" [(ngModel)]="draft.grupoDefecto.descripcionOtro" placeholder="Describa el defecto encontrado...">
+        <div class="nc-field-error" *ngIf="draft.grupoDefecto.errors['desc']">{{ draft.grupoDefecto.errors['desc'] }}</div>
+      </div>
+
+      <!-- Área responsable -->
+      <div class="nc-field" [ngClass]="{'error': draft.grupoDefecto.errors['area']}">
+        <label>Área Responsable <span class="req">*</span></label>
+        <select [(ngModel)]="draft.grupoDefecto.area">
+          <option value="">Seleccione área...</option>
+          <option *ngFor="let ar of AREAS" [value]="ar">{{ ar }}</option>
+          <option [value]="OTRA_AREA">{{ OTRA_AREA }}</option>
+        </select>
+        <div class="nc-field-error" *ngIf="draft.grupoDefecto.errors['area']">{{ draft.grupoDefecto.errors['area'] }}</div>
+      </div>
+
+      <div class="nc-field" *ngIf="draft.grupoDefecto.area === OTRA_AREA" [ngClass]="{'error': draft.grupoDefecto.errors['areaOtro']}">
+        <label>Especifique Área Responsable <span class="req">*</span></label>
+        <input type="text" [(ngModel)]="draft.grupoDefecto.areaOtro" placeholder="Especifique el área...">
+        <div class="nc-field-error" *ngIf="draft.grupoDefecto.errors['areaOtro']">{{ draft.grupoDefecto.errors['areaOtro'] }}</div>
+      </div>
+
+      <!-- Evidencia fotográfica -->
+      <div class="nc-field">
+        <label>Evidencia Fotográfica</label>
+        <div class="nc-photo-uploader">
+          <label class="nc-photo-btn" title="Tomar foto / Subir">
+            <mat-icon>add_a_photo</mat-icon>
+            <span>Subir Fotos</span>
+            <input type="file" accept="image/*" multiple (change)="handleGrupoFiles($any($event.target).files)">
+          </label>
+
+          <div class="nc-photo-preview" *ngFor="let p of draft.grupoDefecto.evidencia; let pi = index">
+            <img [src]="p.dataUrl" *ngIf="p.dataUrl">
+            <span class="nc-photo-del" (click)="removeGrupoEvidencia(pi)"><mat-icon>close</mat-icon></span>
+          </div>
+        </div>
+      </div>
+
+      <button mat-raised-button color="accent" class="nc-btn-apply" (click)="aplicarGrupoDefecto()">
+        <mat-icon>done_all</mat-icon> Aplicar a artículos seleccionados
+      </button>
+    </mat-card>
+
+    <!-- Resumen de defectos por artículo -->
+    <div class="nc-def-review-section">
+      <div class="nc-section-title">
+        <mat-icon>checklist</mat-icon>
+        <span>Detalle de Defectos por Artículo</span>
+      </div>
+
+      <div class="nc-field-error" *ngIf="errors['summary']">{{ errors['summary'] }}</div>
+
+      <div class="nc-card-article-def" *ngFor="let a of draft.articulosDisponibles; let i = index">
+        <div *ngIf="draft.seleccion[i]?.checked">
+          <div class="nc-art-def-header">
+            <b>{{ a.nombre }}</b>
+            <span class="nc-badge-qty">{{ draft.seleccion[i].cantidad }} rollos</span>
+          </div>
+
+          <div class="nc-def-row" *ngFor="let def of draft.seleccion[i].defectos; let j = index">
+            <div class="nc-def-info">
+              <span class="nc-def-label">{{ defectoLabel(def) }}</span>
+              <span class="nc-def-sub">Área: <b>{{ defectoAreaFinal(def) }}</b> • {{ def.evidencia.length }} fotos</span>
+            </div>
+            <div class="nc-def-actions">
+              <button mat-icon-button color="primary" (click)="openDraftDefectoModal(i, j)"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button color="warn" (click)="removeDefecto(i, j)" *ngIf="draft.seleccion[i].defectos.length > 1"><mat-icon>delete</mat-icon></button>
+            </div>
+          </div>
+
+          <button mat-stroked-button color="primary" class="nc-btn-add-def" (click)="openDraftDefectoModal(i, null)">
+            <mat-icon>add</mat-icon> Agregar otro defecto
+          </button>
+        </div>
+      </div>
+
+      <!-- Comentario General -->
+      <mat-card class="nc-card" style="margin-top: 15px;">
+        <div class="nc-field">
+          <label>Observaciones / Comentario Adicional</label>
+          <textarea rows="3" [(ngModel)]="draft.comentario" placeholder="Detalle adicional sobre la No Conformidad..."></textarea>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="nc-footer-bar">
+      <button mat-button (click)="goTo('paso1')">‹ Anterior</button>
+      <button mat-raised-button color="primary" (click)="validatePaso2()">
+        Siguiente <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       VISTA 4: WIZARD PASO 3 (Confirmación)
+  =========================================== -->
+  <div class="nc-view" *ngIf="currentScreen === 'paso3' && draft">
+    <div class="nc-header-bar">
+      <button mat-icon-button (click)="goTo('paso2')"><mat-icon>arrow_back</mat-icon></button>
+      <div class="nc-header-titles">
+        <h2>Confirmación de No Conformidad</h2>
+        <p>Paso 3 de 3: Verifique los datos antes de guardar</p>
+      </div>
+    </div>
+
+    <div class="nc-stepper">
+      <div class="nc-stepper-bar"><div class="nc-stepper-fill" style="width: 100%"></div></div>
+      <div class="nc-stepper-label">Paso 3 de 3</div>
+    </div>
+
+    <!-- Resumen General -->
+    <mat-card class="nc-card nc-summary-card">
+      <div class="nc-summary-header">
+        <span class="nc-id-badge large">{{ editingId || draft.ncPreview }}</span>
+        <span class="nc-date">{{ draft.fechaRegistro }}</span>
+      </div>
+
+      <div class="nc-summary-grid">
+        <div class="nc-kv"><span class="k">Partida:</span><span class="v font-bold">{{ draft.partida }}</span></div>
+        <div class="nc-kv"><span class="k">Cliente:</span><span class="v">{{ draft.cliente }}</span></div>
+        <div class="nc-kv"><span class="k">Color:</span><span class="v">{{ draft.color }}</span></div>
+        <div class="nc-kv"><span class="k">Peso total:</span><span class="v">{{ draft.peso }}</span></div>
+        <div class="nc-kv"><span class="k">Registrado por:</span><span class="v">{{ sUsuario }}</span></div>
+      </div>
+    </mat-card>
+
+    <!-- Artículos y Defectos Resumen -->
+    <mat-card class="nc-card">
+      <div class="nc-section-title">
+        <mat-icon>inventory</mat-icon>
+        <span>Detalle por Artículo</span>
+      </div>
+
+      <div class="nc-table-wrap">
+        <table class="nc-table">
+          <thead>
+            <tr>
+              <th>Artículo</th>
+              <th>Rollos Afectados</th>
+              <th>Kg Afectados (Estimado)</th>
+              <th>Defectos y Área</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of getArticulosResumenDraft()">
+              <td><b>{{ a.nombre }}</b> ({{ a.codTela }})</td>
+              <td>{{ a.cantidad }} de {{ a.rollos }} rollos</td>
+              <td>{{ calcularKgAfectados(a) }} kg</td>
+              <td>
+                <div *ngFor="let d of a.defectos">
+                  • <b>{{ defectoLabel(d) }}</b> <span class="text-area">({{ defectoAreaFinal(d) }})</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </mat-card>
+
+    <!-- Mensajes Generados -->
+    <mat-card class="nc-card">
+      <div class="nc-section-title">
+        <mat-icon>forum</mat-icon>
+        <span>Mensajes Generados Automáticamente</span>
+      </div>
+
+      <div class="nc-msg-box">
+        <div class="nc-msg-title"><mat-icon color="primary">chat</mat-icon> Mensaje para WhatsApp</div>
+        <pre class="nc-msg-pre">{{ buildMensajeWhatsApp() }}</pre>
+      </div>
+
+      <div class="nc-msg-box" *ngIf="buildMensajeSIGE()">
+        <div class="nc-msg-title"><mat-icon color="accent">sync</mat-icon> Registro para SIGE</div>
+        <pre class="nc-msg-pre">{{ buildMensajeSIGE() }}</pre>
+      </div>
+
+      <div class="nc-banner-warn" *ngIf="tieneDefectoNuevoDraft()">
+        <mat-icon>warning</mat-icon>
+        <span>No se sincronizará con SIGE hasta que Gerencia de Calidad revise y asigne código al defecto nuevo.</span>
+      </div>
+    </mat-card>
+
+    <!-- Footer Actions -->
+    <div class="nc-footer-bar">
+      <button mat-button (click)="goTo('paso2')">‹ Modificar</button>
+      <button mat-raised-button color="primary" class="nc-btn-save" (click)="confirmarRegistroNC()">
+        <mat-icon>save</mat-icon> Confirmar y Registrar
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       VISTA 5: DETALLE DE NO CONFORMIDAD
+  =========================================== -->
+  <div class="nc-view" *ngIf="currentScreen === 'detalle' && detalleNC">
+    <div class="nc-header-bar nc-detalle-header-bar">
+      <button mat-icon-button (click)="goTo('inicio')"><mat-icon>arrow_back</mat-icon></button>
+      <div class="nc-header-titles">
+        <h2>Detalle de No Conformidad: {{ detalleNC.id }}</h2>
+        <div class="nc-detalle-actions" *ngIf="detalleNC.status !== 'Anulado'">
+          <button mat-stroked-button color="primary" class="nc-btn-modificar" (click)="editarNC(detalleNC)">
+            <mat-icon>edit</mat-icon> Modificar
+          </button>
+          <button mat-stroked-button color="warn" class="nc-btn-anular" (click)="abrirAnularModal(detalleNC.id)">
+            <mat-icon>block</mat-icon> Anular
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anulación info si está anulada -->
+    <div class="nc-banner-warn" *ngIf="detalleNC.anulacion">
+      <mat-icon>error</mat-icon>
+      <div>
+        <b>NO CONFORMIDAD ANULADA</b>
+        <p>Motivo: {{ detalleNC.anulacion.motivo }} • Por: {{ detalleNC.anulacion.usuario }} ({{ detalleNC.anulacion.fecha }})</p>
+      </div>
+    </div>
+
+    <!-- Acordeones -->
+    <mat-card class="nc-card nc-accordion">
+      <div class="nc-acc-header" (click)="detalleOpen.general = !detalleOpen.general">
+        <div class="nc-acc-title">
+          <mat-icon>info</mat-icon>
+          <span>Datos Generales</span>
+        </div>
+        <mat-icon>{{ detalleOpen.general ? 'expand_less' : 'expand_more' }}</mat-icon>
+      </div>
+      <div class="nc-acc-body" *ngIf="detalleOpen.general">
+        <div class="nc-summary-grid">
+          <div class="nc-kv"><span class="k">Partida:</span><span class="v font-bold">{{ detalleNC.partida }}</span></div>
+          <div class="nc-kv"><span class="k">Cliente:</span><span class="v">{{ detalleNC.cliente }}</span></div>
+          <div class="nc-kv"><span class="k">Color:</span><span class="v">{{ detalleNC.color }}</span></div>
+          <div class="nc-kv"><span class="k">Peso Partida:</span><span class="v">{{ detalleNC.peso }}</span></div>
+          <div class="nc-kv"><span class="k">Proceso:</span><span class="v">{{ detalleNC.proceso }}</span></div>
+        </div>
+        <div class="nc-comentario-box" *ngIf="detalleNC.comentario">
+          <span class="lbl">Comentario / Observación:</span>
+          <p>{{ detalleNC.comentario }}</p>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="nc-card nc-accordion">
+      <div class="nc-acc-header" (click)="detalleOpen.articulos = !detalleOpen.articulos">
+        <div class="nc-acc-title">
+          <mat-icon>inventory_2</mat-icon>
+          <span>Artículos Afectados ({{ detalleNC.articulos.length }})</span>
+        </div>
+        <mat-icon>{{ detalleOpen.articulos ? 'expand_less' : 'expand_more' }}</mat-icon>
+      </div>
+      <div class="nc-acc-body" *ngIf="detalleOpen.articulos">
+        <table class="nc-table">
+          <thead>
+            <tr>
+              <th>Artículo</th>
+              <th>Cód. Tela</th>
+              <th>Talla</th>
+              <th>Rollos Afectados</th>
+              <th>Kg Afectados</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of detalleNC.articulos">
+              <td><b>{{ a.nombre }}</b></td>
+              <td>{{ a.codTela }}</td>
+              <td>{{ a.talla }}</td>
+              <td>{{ a.cantidad }} de {{ a.rollos }} rollos</td>
+              <td>{{ calcularKgAfectados(a) }} kg</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </mat-card>
+
+    <mat-card class="nc-card nc-accordion">
+      <div class="nc-acc-header" (click)="detalleOpen.defectos = !detalleOpen.defectos">
+        <div class="nc-acc-title">
+          <mat-icon>report_problem</mat-icon>
+          <span>Defectos y Evidencias Fotográficas</span>
+        </div>
+        <mat-icon>{{ detalleOpen.defectos ? 'expand_less' : 'expand_more' }}</mat-icon>
+      </div>
+      <div class="nc-acc-body" *ngIf="detalleOpen.defectos">
+        <div *ngFor="let a of detalleNC.articulos" class="nc-art-def-block">
+          <h4 class="nc-art-name">{{ a.nombre }}</h4>
+          <div *ngFor="let d of a.defectos" class="nc-def-detail-row">
+            <div class="nc-def-title">
+              <span class="nc-def-badge" [ngClass]="{'new': d.isOtro}">
+                {{ d.isOtro ? 'DEFECTO NUEVO' : 'CATALOGADO' }}
+              </span>
+              <span class="nc-def-name font-bold">{{ defectoLabel(d) }}</span>
+            </div>
+            <div class="nc-def-sub">
+              <span>Área responsable: </span>
+              <span class="text-area font-bold">{{ defectoAreaFinal(d) }}</span>
+            </div>
+
+            <!-- Galería de fotos -->
+            <div class="nc-evidencia-galeria" *ngIf="d.evidencia && d.evidencia.length">
+              <div class="nc-ev-thumb" *ngFor="let f of d.evidencia; let fi = index" (click)="viewPhotos(d.evidencia, fi)">
+                <img [src]="f.dataUrl" *ngIf="f.dataUrl">
+                <mat-icon *ngIf="!f.dataUrl">image</mat-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="nc-card nc-accordion">
+      <div class="nc-acc-header" (click)="detalleOpen.historial = !detalleOpen.historial">
+        <div class="nc-acc-title">
+          <mat-icon>history</mat-icon>
+          <span>Historial de Eventos</span>
+        </div>
+        <mat-icon>{{ detalleOpen.historial ? 'expand_less' : 'expand_more' }}</mat-icon>
+      </div>
+      <div class="nc-acc-body" *ngIf="detalleOpen.historial">
+        <div class="nc-timeline">
+          <div class="nc-tl-item" *ngFor="let h of detalleNC.historial">
+            <div class="nc-tl-dot"></div>
+            <div class="nc-tl-content">
+              <span class="nc-tl-date">{{ h.fecha }} • {{ h.usuario }}</span>
+              <p class="nc-tl-action">{{ h.accion }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- ==========================================
+       VISTA 6: DEFECTOS PENDIENTES POR CATALOGAR
+  =========================================== -->
+  <div class="nc-view" *ngIf="currentScreen === 'defectosPendientes'">
+    <div class="nc-header-bar">
+      <button mat-icon-button (click)="goTo('inicio')"><mat-icon>arrow_back</mat-icon></button>
+      <div class="nc-header-titles">
+        <h2>Defectos nuevos por catalogar</h2>
+        <p>Pendientes de incorporar al catálogo</p>
+      </div>
+    </div>
+
+    <!-- Banner de Información -->
+    <div class="nc-banner-sim">
+      Cuando un supervisor registra un defecto como "DEFECTO NUEVO / NO REGISTRADO", queda listado aquí para que <b>Calidad</b> revise la descripción y decida si debe agregarse como un nuevo código al catálogo de Motivos de rechazo. Simulación – la incorporación definitiva al catálogo debe implementarse con TI; esta pantalla solo evita que el mismo defecto se pierda o se vuelva a registrar como "nuevo" sin ser revisado.
+    </div>
+
+    <div class="nc-pendientes-section">
+      <b class="nc-pendientes-title">Pendientes ({{ defectosPendientesCatalogo.length }})</b>
+
+      <div class="nc-pend-card" *ngFor="let it of defectosPendientesCatalogo; let i = index">
+        <div class="nc-pend-top">
+          <span class="nc-pend-id">{{ it.ncId }}</span>
+          <span class="nc-pend-fecha">{{ it.fecha }}</span>
+        </div>
+        <div class="nc-pend-desc">
+          <b>{{ it.descripcion }}</b>
+        </div>
+        <div class="nc-pend-meta">
+          Partida {{ it.partida }} · {{ it.articulo }} · {{ it.usuario }}
+        </div>
+        <div class="nc-pend-bottom">
+          <span class="nc-link" (click)="abrirRevisarDefecto(i)">Grabar motivo</span>
+          <span class="nc-link" (click)="openDetalle(it.ncId)">Ver ›</span>
+        </div>
+      </div>
+
+      <div class="nc-empty" *ngIf="defectosPendientesCatalogo.length === 0">
+        <mat-icon>verified</mat-icon>
+        <p>No hay defectos nuevos pendientes de catalogar.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       VISTA 7: GRABAR MOTIVO
+  =========================================== -->
+  <div class="nc-view" *ngIf="(currentScreen === 'grabarMotivo' || currentScreen === 'revisarDefectoNuevo') && (defectosPendientesCatalogo[grabarMotivo.pendIndex] || { partida: '07825', ncId: 'NC-000001', articulo: 'Jersey Solido 20/1', descripcion: 'Olor extraño no catalogado en producto terminado' }) as it">
+    <div class="nc-header-bar">
+      <button mat-icon-button (click)="goTo('defectosPendientes')"><mat-icon>arrow_back</mat-icon></button>
+      <div class="nc-header-titles">
+        <h2>Grabar motivo</h2>
+        <p>Asignar motivo del catálogo oficial</p>
+      </div>
+    </div>
+
+    <!-- Card 1: Identificación -->
+    <div class="nc-grabar-card">
+      <div class="nc-grabar-kv">
+        <span class="lbl">Partida</span>
+        <span class="val font-bold">{{ it.partida }}</span>
+      </div>
+      <div class="nc-grabar-kv">
+        <span class="lbl">N° de NC</span>
+        <span class="val font-bold">{{ it.ncId }}</span>
+      </div>
+      <div class="nc-grabar-kv">
+        <span class="lbl">Artículo</span>
+        <span class="val font-bold">{{ it.articulo }}</span>
+      </div>
+    </div>
+
+    <!-- Card 2: Defecto nuevo registrado -->
+    <div class="nc-grabar-card nc-grabar-def-card">
+      <div class="nc-grabar-def-header">
+        <span class="nc-badge-new">NEW</span>
+        <b class="nc-grabar-def-title">Defecto nuevo registrado</b>
+      </div>
+      <p class="nc-grabar-def-desc">{{ it.descripcion }}</p>
+    </div>
+
+    <!-- Formulario -->
+    <div class="nc-grabar-form">
+      <div class="nc-field" [ngClass]="{'error': grabarMotivo.errors['motivo']}">
+        <label>Motivo de rechazo <span class="req">*</span></label>
+        <select [(ngModel)]="grabarMotivo.motivo">
+          <option value="">Escriba para buscar o seleccione...</option>
+          <option *ngFor="let m of MOTIVOS" [value]="m">{{ m }}</option>
+        </select>
+        <div class="nc-field-error" *ngIf="grabarMotivo.errors['motivo']">{{ grabarMotivo.errors['motivo'] }}</div>
+      </div>
+
+      <div class="nc-field" [ngClass]="{'error': grabarMotivo.errors['area']}">
+        <label>Área responsable <span class="req">*</span></label>
+        <select [(ngModel)]="grabarMotivo.area">
+          <option value="">Seleccione área...</option>
+          <option *ngFor="let ar of AREAS" [value]="ar">{{ ar }}</option>
+        </select>
+        <div class="nc-field-error" *ngIf="grabarMotivo.errors['area']">{{ grabarMotivo.errors['area'] }}</div>
+      </div>
+
+      <div class="nc-grabar-actions">
+        <button class="nc-grabar-btn-cancel" (click)="goTo('defectosPendientes')">Cancelar</button>
+        <button class="nc-grabar-btn-save" (click)="guardarGrabarMotivo()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       VISTA 8: EVOLUTIVO DE NO CONFORMIDADES
+  =========================================== -->
+  <div class="nc-view" *ngIf="currentScreen === 'evolutivo'">
+    <div class="nc-header-bar">
+      <button mat-icon-button (click)="goTo('inicio')"><mat-icon>arrow_back</mat-icon></button>
+      <div class="nc-header-titles">
+        <h2>Evolutivo de No Conformidades</h2>
+        <p>Estadísticas y Reportes de Gestión</p>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="nc-kpi-grid">
+      <div class="nc-kpi-card">
+        <span class="nc-kpi-num">{{ ncs.length }}</span>
+        <span class="nc-kpi-lbl">Total No Conformidades</span>
+      </div>
+      <div class="nc-kpi-card">
+        <span class="nc-kpi-num">{{ getTotalRollosAfectados() }}</span>
+        <span class="nc-kpi-lbl">Rollos Rechazados</span>
+      </div>
+      <div class="nc-kpi-card">
+        <span class="nc-kpi-num">{{ getTotalKgAfectados() }}</span>
+        <span class="nc-kpi-lbl">Kg Afectados Estimados</span>
+      </div>
+    </div>
+
+    <!-- Selector de Periodo -->
+    <div class="nc-evo-period-section">
+      <b class="nc-evo-period-title">Periodo</b>
+      <div class="nc-period-chips">
+        <span class="nc-chip" *ngFor="let p of evoPeriodos" [ngClass]="{'active': p === evoPeriod}" (click)="setEvoPeriod(p)">
+          {{ p }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Gráfica 1: NC registradas por Periodo -->
+    <div class="nc-evo-card">
+      <b class="nc-evo-card-title">NC registradas — {{ evoPeriod }}</b>
+      
+      <div class="nc-barchart-container" *ngIf="getEvoData().length > 0">
+        <div class="nc-barchart-bars">
+          <div class="nc-barchart-col" *ngFor="let item of getEvoData()">
+            <span class="nc-bar-val">{{ item[1] }}</span>
+            <div class="nc-bar-fill" [style.height.%]="(item[1] / getEvoMax()) * 100"></div>
+            <span class="nc-bar-lbl">{{ item[0] }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="nc-empty" *ngIf="getEvoData().length === 0">
+        Aún no hay No Conformidades registradas en este periodo.
+      </div>
+    </div>
+
+    <!-- Gráfica 2: Defectos por Área -->
+    <div class="nc-evo-card" *ngIf="getEvoAreaData().length > 0">
+      <b class="nc-evo-card-title">Defectos por área — total registrado</b>
+      
+      <div class="nc-barchart-container">
+        <div class="nc-barchart-bars">
+          <div class="nc-barchart-col" *ngFor="let item of getEvoAreaData()">
+            <span class="nc-bar-val">{{ item[1] }}</span>
+            <div class="nc-bar-fill area-fill" [style.height.%]="(item[1] / getEvoAreaMax()) * 100"></div>
+            <span class="nc-bar-lbl" [title]="item[0]">{{ item[0].length > 8 ? (item[0].slice(0, 7) + '.') : item[0] }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nc-small-note">
+      La gráfica se calcula automáticamente a partir de todas las No Conformidades registradas en el aplicativo (incluye anuladas) y se actualiza con cada nuevo registro.
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL: VISOR DE FOTOS
+  =========================================== -->
+  <div class="nc-photo-modal" *ngIf="photoViewModal.open">
+    <div class="nc-pm-backdrop" (click)="photoViewModal.open = false"></div>
+    <div class="nc-pm-content">
+      <button mat-icon-button class="nc-pm-close" (click)="photoViewModal.open = false"><mat-icon>close</mat-icon></button>
+      <button mat-icon-button class="nc-pm-nav left" (click)="photoPrev()" *ngIf="photoViewModal.photos.length > 1"><mat-icon>chevron_left</mat-icon></button>
+      
+      <div class="nc-pm-img-wrap">
+        <img [src]="photoViewModal.photos[photoViewModal.index]?.dataUrl" *ngIf="photoViewModal.photos[photoViewModal.index]?.dataUrl">
+        <div class="nc-pm-placeholder" *ngIf="!photoViewModal.photos[photoViewModal.index]?.dataUrl">
+          <mat-icon>image</mat-icon>
+          <p>Evidencia fotográfica de muestra (Simulación)</p>
+        </div>
+      </div>
+
+      <button mat-icon-button class="nc-pm-nav right" (click)="photoNext()" *ngIf="photoViewModal.photos.length > 1"><mat-icon>chevron_right</mat-icon></button>
+      <div class="nc-pm-counter" *ngIf="photoViewModal.photos.length > 1">
+        Foto {{ photoViewModal.index + 1 }} de {{ photoViewModal.photos.length }}
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL: ANULAR NO CONFORMIDAD
+  =========================================== -->
+  <div class="nc-photo-modal" *ngIf="anularModal.open">
+    <div class="nc-pm-backdrop" (click)="anularModal.open = false"></div>
+    <div class="nc-modal-box">
+      <h3>¿Anular No Conformidad?</h3>
+      <p>Indique el motivo por el cual se anula la <b>{{ anularModal.ncId }}</b>:</p>
+
+      <div class="nc-field" [ngClass]="{'error': anularModal.error}">
+        <select [(ngModel)]="anularModal.motivo">
+          <option value="">Seleccione motivo...</option>
+          <option *ngFor="let m of MOTIVOS_ANULACION" [value]="m">{{ m }}</option>
+        </select>
+        <div class="nc-field-error" *ngIf="anularModal.error">{{ anularModal.error }}</div>
+      </div>
+
+      <div class="nc-field" *ngIf="anularModal.motivo === 'Otros'">
+        <label>Especifique motivo</label>
+        <input type="text" [(ngModel)]="anularModal.otro" placeholder="Detalle el motivo...">
+      </div>
+
+      <div class="nc-modal-actions">
+        <button mat-button (click)="anularModal.open = false">Cancelar</button>
+        <button mat-raised-button color="warn" (click)="confirmarAnulacion()">Anular Definitivamente</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL: EDITAR / REGISTRAR DEFECTO INDIVIDUAL
+  =========================================== -->
+  <div class="nc-photo-modal" *ngIf="draftDefModal.open">
+    <div class="nc-pm-backdrop" (click)="draftDefModal.open = false"></div>
+    <div class="nc-modal-box large">
+      <h3>{{ draftDefModal.defIdx === null ? 'Agregar Defecto' : 'Editar Defecto' }}</h3>
+
+      <div class="nc-field" [ngClass]="{'error': draftDefModal.errors['motivo']}">
+        <label>Motivo de Rechazo <span class="req">*</span></label>
+        <select [ngModel]="draftDefModal.isOtro ? DEFECTO_NUEVO : draftDefModal.motivo" (ngModelChange)="draftDefModal.isOtro = ($event === DEFECTO_NUEVO); draftDefModal.motivo = $event">
+          <option value="">Seleccione motivo...</option>
+          <option [value]="DEFECTO_NUEVO">🆕 {{ DEFECTO_NUEVO }}</option>
+          <option *ngFor="let m of MOTIVOS" [value]="m">{{ m }}</option>
+        </select>
+        <div class="nc-field-error" *ngIf="draftDefModal.errors['motivo']">{{ draftDefModal.errors['motivo'] }}</div>
+      </div>
+
+      <div class="nc-field" *ngIf="draftDefModal.isOtro" [ngClass]="{'error': draftDefModal.errors['desc']}">
+        <label>Descripción del Defecto Nuevo <span class="req">*</span></label>
+        <input type="text" [(ngModel)]="draftDefModal.descripcionOtro" placeholder="Describa el defecto...">
+        <div class="nc-field-error" *ngIf="draftDefModal.errors['desc']">{{ draftDefModal.errors['desc'] }}</div>
+      </div>
+
+      <div class="nc-field" [ngClass]="{'error': draftDefModal.errors['area']}">
+        <label>Área Responsable <span class="req">*</span></label>
+        <select [(ngModel)]="draftDefModal.area">
+          <option value="">Seleccione área...</option>
+          <option *ngFor="let ar of AREAS" [value]="ar">{{ ar }}</option>
+          <option [value]="OTRA_AREA">{{ OTRA_AREA }}</option>
+        </select>
+        <div class="nc-field-error" *ngIf="draftDefModal.errors['area']">{{ draftDefModal.errors['area'] }}</div>
+      </div>
+
+      <div class="nc-field" *ngIf="draftDefModal.area === OTRA_AREA" [ngClass]="{'error': draftDefModal.errors['areaOtro']}">
+        <label>Especifique Área Responsable <span class="req">*</span></label>
+        <input type="text" [(ngModel)]="draftDefModal.areaOtro" placeholder="Especifique...">
+        <div class="nc-field-error" *ngIf="draftDefModal.errors['areaOtro']">{{ draftDefModal.errors['areaOtro'] }}</div>
+      </div>
+
+      <div class="nc-field">
+        <label>Evidencia Fotográfica</label>
+        <div class="nc-photo-uploader">
+          <label class="nc-photo-btn">
+            <mat-icon>add_a_photo</mat-icon>
+            <span>Subir Fotos</span>
+            <input type="file" accept="image/*" multiple (change)="handleModalFiles($any($event.target).files)">
+          </label>
+          <div class="nc-photo-preview" *ngFor="let p of draftDefModal.evidencia; let pi = index">
+            <img [src]="p.dataUrl" *ngIf="p.dataUrl">
+            <span class="nc-photo-del" (click)="removeModalEvidencia(pi)"><mat-icon>close</mat-icon></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="nc-modal-actions">
+        <button mat-button (click)="draftDefModal.open = false">Cancelar</button>
+        <button mat-raised-button color="primary" (click)="saveDraftDefectoModal()">Guardar Defecto</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL SHEET: DESCARGAR REPORTES
+  =========================================== -->
+  <div class="nc-photo-modal" *ngIf="reporteModal.open">
+    <div class="nc-pm-backdrop" (click)="closeReporteModal()"></div>
+    <div class="nc-modal-sheet">
+      <div class="nc-sheet-grabber"></div>
+      <h3 class="nc-sheet-title">Descargar reportes</h3>
+      <p class="nc-sheet-sub">Periodo: <b>Año</b>. Seleccione uno o varios reportes.</p>
+
+      <div class="nc-sheet-options">
+        <div class="nc-sheet-row" (click)="toggleReporteSel('nc1')">
+          <div class="nc-custom-chk" [ngClass]="{'on': reporteModal.sel.nc1}">
+            <mat-icon *ngIf="reporteModal.sel.nc1">check</mat-icon>
+          </div>
+          <span class="nc-sheet-lbl">No Conforme 1</span>
+        </div>
+
+        <div class="nc-sheet-row" (click)="toggleReporteSel('nc2')">
+          <div class="nc-custom-chk" [ngClass]="{'on': reporteModal.sel.nc2}">
+            <mat-icon *ngIf="reporteModal.sel.nc2">check</mat-icon>
+          </div>
+          <span class="nc-sheet-lbl">No Conforme 2</span>
+        </div>
+
+        <div class="nc-sheet-row" (click)="toggleReporteSel('informeCalidad')">
+          <div class="nc-custom-chk" [ngClass]="{'on': reporteModal.sel.informeCalidad}">
+            <mat-icon *ngIf="reporteModal.sel.informeCalidad">check</mat-icon>
+          </div>
+          <span class="nc-sheet-lbl">Informe Calidad</span>
+        </div>
+      </div>
+
+      <div class="nc-field-error" *ngIf="reporteModal.error" style="margin-top: 8px;">
+        {{ reporteModal.error }}
+      </div>
+
+      <div class="nc-sheet-actions">
+        <button class="nc-sheet-btn-cancel" (click)="closeReporteModal()">Cancelar</button>
+        <button class="nc-sheet-btn-primary" (click)="confirmDescargarReportes()">Descargar reportes seleccionados</button>
+      </div>
+    </div>
+  </div>
+
+</div>

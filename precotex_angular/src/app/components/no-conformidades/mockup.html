@@ -1,0 +1,2959 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prototipo — Gestión de No Conformidades</title>
+<style>
+  :root{
+    --dark:#1c1f24; --panel:#20242b; --accent:#2962ff; --accent-dark:#1f4fd6;
+    --accent-light:#e4ebff; --teal:#125a66; --grey:#757575; --grey-light:#9aa0a8;
+    --border:#d9dce1; --green:#2e7d32; --red:#c0392b; --amber:#b36b00;
+    --bg-page:#e9ebee; --bg-app:#ffffff; --bg-soft:#f6f7f9;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg-page); color:var(--dark); -webkit-tap-highlight-color:transparent;
+  }
+  .phone{
+    max-width:430px; margin:22px auto; background:var(--bg-app);
+    border-radius:22px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,.18);
+    min-height:800px; display:flex; flex-direction:column; position:relative;
+  }
+  @media (max-width:480px){
+    .phone{ margin:0; border-radius:0; min-height:100vh; box-shadow:none; }
+    body{ background:var(--bg-app); }
+  }
+  .status{ display:flex; justify-content:space-between; padding:8px 16px 4px; font-size:12px; font-weight:600; color:var(--dark); }
+  .topbar{ background:var(--dark); color:#fff; padding:10px 16px 14px; display:flex; align-items:center; gap:8px; }
+  .topbar .back{ font-size:22px; cursor:pointer; padding:0 4px; line-height:1; user-select:none; }
+  .topbar .titles{ flex:1; }
+  .topbar h1{ font-size:17px; margin:0; font-weight:700; }
+  .topbar p{ font-size:11px; margin:2px 0 0; color:#b9bfc9; }
+  .content{ flex:1; overflow-y:auto; padding:16px; padding-bottom:14px; }
+  .bottombar{ padding:12px 16px; border-top:1px solid var(--border); display:flex; gap:10px; background:#fff; }
+  h2.section{ font-size:15px; font-weight:700; margin:18px 0 8px; color:var(--dark); }
+  h2.section:first-child{ margin-top:0; }
+  .card{ background:var(--bg-soft); border:1px solid var(--border); border-radius:10px; padding:12px 14px; margin-bottom:12px; }
+  .card-white{ background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px; margin-bottom:12px; }
+  .row{ display:flex; gap:10px; }
+  .row > div{ flex:1; min-width:0; }
+  label{ font-size:11px; font-weight:700; color:var(--dark); display:flex; justify-content:space-between; margin-bottom:4px; }
+  label .tag{ font-size:9px; font-weight:700; color:var(--green); letter-spacing:.03em; }
+  label .req{ color:var(--red); }
+  input[type=text],input[type=date],input[type=number],input[type=password],select,textarea{
+    width:100%; padding:9px 10px; border:1px solid var(--border); border-radius:7px;
+    font-size:14px; background:#fff; color:var(--dark); font-family:inherit;
+    -webkit-appearance:none; appearance:none; letter-spacing:normal; box-sizing:border-box;
+  }
+  input[type=password]::-webkit-credentials-auto-fill-button,
+  input[type=password]::-webkit-caps-lock-indicator,
+  input[type=password]::-webkit-contacts-auto-fill-button{
+    visibility:hidden; display:none !important; pointer-events:none; position:absolute; right:0;
+  }
+  input[readonly]{ background:var(--bg-soft); color:#666; }
+  textarea{ resize:vertical; min-height:56px; }
+  .field{ margin-bottom:12px; }
+  .field.error input, .field.error select, .field.error textarea{ border-color:var(--red); background:#fff6f6; }
+  .field-err{ color:var(--red); font-size:11px; margin-top:3px; }
+  .hint{ color:var(--grey); font-size:11px; margin:2px 0 10px; }
+  .banner-error{ background:#fdecea; border:1px solid var(--red); color:var(--red); padding:10px 12px; border-radius:8px; font-size:12.5px; margin-bottom:14px; }
+  .banner-sim{ background:#fff8e6; border:1px solid var(--amber); color:var(--amber); padding:8px 10px; border-radius:8px; font-size:11px; margin-bottom:12px; }
+  button{ font-family:inherit; cursor:pointer; }
+  .btn{ border-radius:8px; border:2px solid var(--accent); padding:11px 14px; font-weight:700; font-size:13.5px; background:#fff; color:var(--accent); flex:1; text-align:center; }
+  .btn-primary{ background:var(--accent); color:#fff; }
+  .btn-primary:active{ background:var(--accent-dark); }
+  .btn-secondary{ background:#fff; color:var(--dark); border-color:var(--border); }
+  .btn-danger{ background:#fff; color:var(--red); border-color:var(--red); }
+  .btn-danger-solid{ background:var(--red); color:#fff; border-color:var(--red); }
+  .btn-amber-solid{ background:var(--amber); color:#fff; border-color:var(--amber); }
+  .btn-teal{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .btn-block{ width:100%; }
+  .btn-sm{ padding:7px 10px; font-size:12px; flex:none; }
+  .btn:disabled{ opacity:.45; cursor:default; }
+  .stepper{ margin-bottom:14px; }
+  .stepper .steplabel{ font-size:11px; color:var(--grey); margin-bottom:6px; }
+  .stepper .bar{ height:5px; background:var(--border); border-radius:3px; overflow:hidden; }
+  .stepper .bar > div{ height:100%; background:var(--accent); transition:width .2s; }
+  .stepper .curstep{ font-weight:700; font-size:13.5px; margin-top:6px; }
+  .art-card{ border:2px solid var(--border); border-radius:10px; padding:10px 12px; margin-bottom:10px; background:#fff; }
+  .art-card.checked{ border-color:var(--accent); background:var(--accent-light); }
+  .art-top{ display:flex; align-items:flex-start; gap:10px; }
+  .chk{ width:20px; height:20px; border-radius:5px; border:2px solid var(--border); flex:none; display:flex; align-items:center; justify-content:center; margin-top:1px; }
+  .chk.on{ background:var(--accent); border-color:var(--accent); color:#fff; font-size:13px; font-weight:700; }
+  .art-name{ font-weight:700; font-size:13.5px; flex:1; }
+  .art-badge{ font-size:10px; border:1px solid var(--accent); color:var(--accent); border-radius:8px; padding:2px 8px; white-space:nowrap; }
+  .art-grid{ display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:6px; margin:8px 0 8px 30px; }
+  .art-grid div span{ display:block; }
+  .art-grid .lbl{ font-size:9px; color:var(--grey); }
+  .art-grid .val{ font-size:12px; font-weight:600; }
+  .qty-wrap{ margin-left:30px; }
+  .qty-wrap input{ max-width:120px; }
+  .list-card{ background:#fff; border:1px solid var(--border); border-radius:10px; padding:11px 12px; margin-bottom:9px; }
+  .list-top{ display:flex; justify-content:space-between; font-size:12.5px; font-weight:700; }
+  .list-sub{ font-size:11px; color:var(--grey); margin-top:3px; }
+  .list-bottom{ display:flex; justify-content:space-between; align-items:center; margin-top:6px; }
+  .linklike{ color:var(--accent); font-size:12px; font-weight:600; cursor:pointer; }
+  .chip{ display:inline-block; padding:4px 12px; border-radius:12px; font-size:11px; font-weight:700; border:1.5px solid; margin-right:6px; cursor:pointer; }
+  .chip-crit{ color:var(--red); border-color:var(--red); }
+  .chip-grave{ color:var(--amber); border-color:var(--amber); }
+  .chip-leve{ color:var(--green); border-color:var(--green); }
+  .chip-all{ color:var(--grey); border-color:var(--grey-light); }
+  .chip.active.chip-crit{ background:var(--red); color:#fff; }
+  .chip.active.chip-grave{ background:var(--amber); color:#fff; }
+  .chip.active.chip-leve{ background:var(--green); color:#fff; }
+  .chip.active.chip-all{ background:var(--grey-light); color:#fff; }
+  .badge{ display:inline-block; padding:3px 10px; border-radius:10px; font-size:10.5px; font-weight:700; color:#fff; }
+  .badge-blue{ background:var(--accent); }
+  .badge-red{ background:var(--red); }
+  .kv{ display:flex; justify-content:space-between; font-size:12.5px; padding:3px 0; gap:10px; }
+  .kv .k{ color:var(--grey); flex:none; }
+  .kv .v{ font-weight:600; text-align:right; }
+  .card-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .card-head b{ font-size:13px; }
+  .center-screen{ text-align:center; padding-top:60px; }
+  .check-circle{ width:74px; height:74px; border-radius:50%; background:var(--green); color:#fff; font-size:34px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; }
+  .photo-box{ width:78px; height:78px; border:1px solid var(--border); border-radius:8px; display:inline-flex; flex-direction:column; align-items:center; justify-content:center; font-size:10px; color:var(--grey); position:relative; overflow:hidden; margin-right:8px; margin-bottom:8px; background:#eee; }
+  .photo-box img{ width:100%; height:100%; object-fit:cover; }
+  .photo-add{ background:#fff; color:var(--accent); font-weight:700; font-size:20px; border:1.5px dashed var(--accent); cursor:pointer; }
+  .photo-x{ position:absolute; top:2px; right:2px; background:rgba(0,0,0,.55); color:#fff; border-radius:50%; width:16px; height:16px; font-size:11px; display:flex; align-items:center; justify-content:center; }
+  .overlay{ position:absolute; inset:0; background:rgba(0,0,0,.45); display:flex; align-items:flex-end; z-index:50; }
+  .sheet{ background:#fff; width:100%; border-radius:16px 16px 0 0; padding:18px; }
+  .sheet .grabber{ width:40px; height:4px; background:var(--border); border-radius:2px; margin:0 auto 12px; }
+  .empty{ text-align:center; color:var(--grey); font-size:12.5px; padding:24px 0; }
+  .search-row{ display:flex; gap:8px; margin-bottom:10px; }
+  .small-note{ font-size:10.5px; color:var(--amber); margin-top:8px; }
+  .barchart{ display:flex; align-items:flex-end; gap:8px; height:110px; margin:10px 0 4px; }
+  .barchart .bar{ flex:1; background:var(--accent-light); border:1px solid var(--accent); border-radius:4px 4px 0 0; position:relative; }
+  .barchart .bar span{ position:absolute; top:-16px; left:0; right:0; text-align:center; font-size:10px; color:var(--accent); font-weight:700; }
+  .barlabels{ display:flex; gap:8px; }
+  .barlabels div{ flex:1; text-align:center; font-size:9.5px; color:var(--grey); }
+    .accordion-header{ display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:1px 0; }
+  .accordion-chevron{ transition:transform .15s; font-size:15px; color:var(--grey); display:inline-block; }
+  .accordion-chevron.open{ transform:rotate(90deg); }
+  .file-input-wrap{ display:inline-block; }
+  .file-input-wrap input[type=file]{ display:none; }
+  .top-actions{ display:flex; gap:10px; margin-bottom:14px; }
+  .user-avatar{ width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.18); color:#fff; display:flex;align-items:center;justify-content:center; font-weight:700; font-size:13px; cursor:pointer; flex:none; }
+  .user-menu{ position:absolute; top:56px; right:16px; background:#fff; border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.28); min-width:180px; z-index:70; overflow:hidden; border:1px solid var(--border); }
+  .user-menu .um-header{ padding:11px 14px; border-bottom:1px solid var(--border); font-size:12px; color:var(--grey); }
+  .user-menu .um-header b{ display:block; font-size:13px; color:var(--dark); margin-top:2px; }
+  .user-menu .um-item{ padding:12px 14px; font-size:13px; color:var(--red); cursor:pointer; display:flex; align-items:center; gap:8px; font-weight:600; }
+  .user-menu .um-item:active{ background:var(--bg-soft); }
+</style>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<body>
+<div class="phone" id="phone">
+  <div id="app"></div>
+</div>
+
+<script>
+/* =========================================================
+   MOCK DATA (Simulación – validar con TI para integración real)
+========================================================= */
+const USER_DB = {
+  "jramirez": { pass:"1234", nombre:"J. Ramirez", rol:"supervisor" },
+  "aperez":   { pass:"1234", nombre:"A. Perez", rol:"supervisor" },
+  "mrios":    { pass:"1234", nombre:"M. Rios", rol:"supervisor" },
+  "lgcalidad":{ pass:"1234", nombre:"L. Torres (Gerente de Calidad)", rol:"gerente_calidad" },
+};
+
+const PARTIDAS_DB = {
+  "07825": { cliente:"TEXTIL DORITEX", color:"CELESTE MEGO II", peso:"199.2 kg", fecha:"11/08/2026",
+    articulos:[
+      { id:1, tipo:"Cuerpo", nombre:"Jersey Solido 20/1", codTela:"JE003285", talla:"-", kgCrudo:"191.1", rollos:9 },
+      { id:2, tipo:"Complemento", nombre:"Rib 1x1 20/1", codTela:"RI001815", talla:"-", kgCrudo:"8.1", rollos:1 },
+    ]},
+  "05796": { cliente:"Psyco Bunny", color:"BARITONE BLUE RECT", peso:"141.8 kg", fecha:"10/08/2026",
+    articulos:[
+      { id:1, tipo:"Cuerpo", nombre:"Pique Lacoste PY ME", codTela:"PI000361", talla:"-", kgCrudo:"141.77", rollos:8 },
+    ]},
+  "03181": { cliente:"VELASQUEZ TEXTILES", color:"DIVINO", peso:"120.0 kg", fecha:"10/08/2026",
+    articulos:[
+      { id:1, tipo:"Cuerpo", nombre:"Algodon Pima 30/1", codTela:"AP004521", talla:"-", kgCrudo:"120.0", rollos:6 },
+    ]},
+};
+
+const SAMPLE_PHOTOS = [
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAADcCAIAAABF+guPAAAP3klEQVR4nO3deVRTd97H8V+CECAQNhFEEUQWNxRxH1uqWLW0FCtYWn181FZFqTo6nnGrDwWOHeujVUfFx2Ws7VQc7Cloy7gitkUrVbGIgqigQlX2JRBAlkDy/HGdNAUSCVm+8fB5nf5xudzc+7v0vE8gmC88uVzOAIAOn3oBAD0dIgQg1kuxNe+1zYTrAOhp4tOiuA08EwIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxBAhADFECEAMEQIQQ4QAxHpp+XiXAb23HY1U9VmZTD5/yqdaXkKHRLaWI8Z7jpro5TtukKVQwO2MiTzyILeIdmHQk2kboT7Ep0VxGye+unTiyzQdnnll7Owhfm46PCGA9nQZ4Q/JmUd2nNbhCXWurubZlZTsrKv55haCRWvfol4OAGPG+UyoP3uiE7mNcZOH0K4EQMGgEfr4ur4+a4z3cFeRvZWsTVZZWpNzo+Bc4rWKkhrugI075w0bPVBxfOjCgNCFAdz2n2fvrq6QdOUkAC8Xw0UYvmRKyLxXfv/Y1KSfu2M/d8fJwaP2xZ7ITM8z2EkAjIouIwwM8Q8M8Vfe89Ppm4e3nWKMTZrmq4jn3LfXko9dsRQKlqx/22fEAIG56YqYsPXz91eU1ny2Jp6pfmGmiyfR4R0BGICBfk/41pyJ3EZZUfWxfSkScUPp0+qDnyXLZXLGmJmg1/SwsYY5CYCxMcSroxZCwYBBTtz2ncxCufz5/vJicWV5raOzLWPMe7ir+pPr5CQARsgQz4RCK3PFdn1to/Kn6mqePT9GZGGAkwAYIUNE2FDfpNi2svlDJ9Y2ls+PkfyhKz2dBMAIGSLCxobmJ4/Kue2ho9x5vOf7Hfva9nay4bbzcp4ojld8q8nn87p9EoCXhYFemDmd8Au34dzffu5H00S2lk797CM2hPD4PMaYtKU15USG4mBJTQO34TNigKXSd6EanQTgZWGg3xP+nHLb1aMP9/JmUPiEoPAJik+1NEn3bT6p/Kv2zCv3pwT7M8aG+LkdOr2WMVZwvyQq4rBGJ+nUiujQCYHD2u2M2f8ht3Hmm6v/+r8L3b9JgG4x3C/rEw6kZl3NnzpztNdwVxs7oaxNVllem3Oj4Py318qKxcpHHtt3oa1V5j/J29bBWvk7Uo1OAvCy4Mn/8xPYvNc20y4FoEdR/KMUvKkXgBgiBCCGCAGIIUIAYogQgBgiBCCGCAGIIUIAYogQgBgiBCCGCAGIIUIAYsYSoY29VXxalOI98oZn0ou/7OOZh8+t3/rVMqo1KPD5vCXr3/7i/AZjWAzom6EjjN3/4eTgUUZ4odGv+HgMdvlz2N83LDygv1V1kd9EL69h/VeG7tqw8MBAn75fpn5MvSLQI23fT7hu+9wR4wYp79m6Jj7n1wJVx0dHHtHyil2k6YXcPJ0f5BY9a2hWc8zmQ4svnMy4dPaWdkt7MQ8fF8ViCu6XfPD6Fn1fEQjp4E295xOvH917Xvvz0LIUClqlbdSreE5obW48iwF908s766eFjp38lt+mRf/gPnTsa7vzXyvWzImrKK2J3f/hj6dv/nTqJmPM1sFq8drgwSPdqiskF07+Ph7G3MLs3SVTxrziY2Flnnf78Ve7zlaW1TLGtnwRkZme5+3r6uHjUlNV98/d57IzHjHGLISC2Ysm+0/yFlqZX/0x91hcSnOTVPlCf936vt9EL7mcVZbVpJ3O+v7oZcUsKQ53AGMsMMT/+6M/n0+6/t8rpw8b7cHk8tvXH8bHpdRLGldEhw706RuxISRiQ8jD3KLoyCMiO2HHwxhjdr2tF68L9vEdUF0hSf3uxvxVb0SG7KirfcbdQtbVfK/hrgN9+n6x/dSkab4dF6a8GG55Umkb92TY6Z2+8O7AyOklwvQL2XM/mubm6fzbg1LGWEDQyLtZv3UcUL8yJkwiblgzN87CwmxFTJhi/7JNM03Nen266ut6SeOsBQGr/xYeFXGYG7P96owRe6ITnxRUBL07PnLTO8tn7ZTLWeSmd4Qii8/XHxdX1k2YMnSov/vN9HzlC32+4ThjjM/nDRjktDI2rLxYnJ6a0+6ABauDTEz43PDiTbvnNzdJNy06xOfzln48c9mmdz5fnxAXe8Kpn73yt6MrY8I6HsbtryqXrJmz19xSsPyT0HZ3/dqbfn+P+vZhbpFMJv/l4p2OC2u3mIE+fT/Z9wH32E7v9IV3B0ZOBy/MzJg9Lj4tSvGftY1lQ11T5s/3A94cyRjj8dirb4xMO5PV7lFOLnY+IwZ8ueusRNxQViw+fvAit9/eUTTm1cGHt52qKKlpbGhOOJDq5GLX392R++y5xOsP7xa3NElTv7shshPaOlg7ONn4T/I+9FlyUWHFs/qmH/6d2a5ABZlMXphfmpKU4T/JW83t9HGxG+Ln9s9dZ8WVdVXlkq93n/eb4GnrYNXFw5z62Xv7un69+5yk5ll5sfibQxfbPTDlREZ+zlOZ7Pdnqy4uTP2ddvEkYIT09TNh2pmsj6JmJexP5cYWZly62+4A+z6i5iapRPx8umF50fMxTY59bRlje5NWKx/s6GzLDR1VTENsaW5ljJkJTO16W8lk8vLiajUrHD956NvzJvV1dRCYmzLG8rLVjSd16CNqa5MpnrfLiqq5nTVV9V05zExg2tTYwn3zyRirKK5pd/6qMkn3FubobNPpnWp0EjBC+pq2ln3jkbSlddRErzGvDr568Q7XjLLqconA3FRkJ+Q6dHSx5fZXltXKZfLImTvquzZOu6K0ls/n9XGx5zLoyMZOuDw6dPcn3975taC5sWXG7PETO0w9VFZVLjEx4Ts42VSV1TLGnPrZczsZY3KlH7ZUHSYwNzO3MLO2seQ6VNyXgpzJu7ewTu9U05OAEdLX7wnlMvnlc7enh40bGzA47czNjgeUFYvzsp8sWP2GyNayj4vdexFTuf1VZbWZV/KWbpzp7OpgZm7qMdjlL5+Gm5qaqLpQVVntzfT8iA1vu7j1thQKpgT7j/qTl/IBZgJTHo/XWN/cJm3zHNo/6N3x6ldeXiy+d+vxwtVBtg5WDn1E81fNuHXtAfc0WFNV7+rhZGLCV3NYWVF1/p2n81e1v6+ONF1Yp3eq6UnACOngmXDG7HEzZo9TfHhoazL30sWls1kh8yY9Lah4eLe40wfujUlavC54Z8JK7tXRQUNcuP37t3w3a0HAum1zbOytnj4qTz52Rar29fr9n54Mjwhc//l/CcxNr/9099i+bOXPVpTWHD+Qujw6VGhlXphfmnHpntew/urvaG9M0rwV0z/7cqlczrKvP4yPS+H2n0pIX7wueHrY2ML7JdGRR1QdFheTtGht8M6EldWVkrTTWYOGuLS2drL+biys4502N0k1PQkYG8wd1S+/CZ6R/zNrafB26oWA0VHMHTXo36zvISYEDmtrk2VnPOzjYvf+sqm//HCHekVg1BCh7uXceLTwL0GL1wY3N7VkXLr3zcH2v6UAUIYIda9e0hgXe4J6FfDSMJa3MgH0WIgQgBgiBCCGCAGIIUIAYjqIcOgo99j//MXplwj5VBudW7ttzrjJQ6hXARrTQYTvRQQmH7vCbRtshAx0lBx/JXzxFB7vxUeCUdE2QncvZ6f+9llXn7+xLTryCPdmdtDG5kOLA4JGavqo+7cfm5iaDBvtoY8lgf5oG+GYgMF3fi1oa5XpZDWgpeyMR2MDBlOvAjSj7b+Y8RzWPzfz99lqypNdtnwRcSez0GOIi7uXc1VZ7cGtyT6+rkHhE8wtzK7+eOfIjjNymVzVfBQ1Y1o0nUCjTNOpNsq6cjuMsb1Jqw9u+Z6bN2fvKNqTuCrire3P6ptUXWJG2Lg3wsfb2AoL8kuP7jlfmFfScZhNVybTcArzSqbOHK3l/1MwMG0jtO9tLal5puqzYwJ89nySWPK4av6qGRt3zPvlh5yNHxy0EllE7V2Qk1Fw7adcVfNR1Ixp0XQCjbJuTLXR6HbUfKE6vYRTP/u5H0372+qvC+6XuHk6TZw6rDCvpOMwG9aFyTTcYRLxMzsHazXLACOk319RpCRdL7hf0tTYcvncbYGFWfzelHpJY+nT6pxfC9y9nRWHtZuPomZMi6YTaJQX072pNt24nY5UXaKtta21ta2xoVna0vogtyhhf6rKr2R3J9OA8dP2mVBcWSeyVfkqv+JJUtrS2tIsbW6SKj40E5gyFfNR7B2tVY1p0XQCjfJh3Ztqo9HtqKLqEpnpeftiT8yJfN3axvLJo7JzidcfPyjr9AxdnEwjsrMUV9WpWQkYIW0jfJBb5Oap7klADVXzUaor6lSNadF0Ao0yXU21Ua+lWaoIUmQnfOElMtPzMtPzeHzen14fHrVnwfLQXS1NUnmHyaFdnEzj7t33YW7ncwzAaGn77eiNy/eG+rtzY1c0pWo+ipoxLZpOoFGmq6k26v2WXxbw5khLK/PeTjbvL3vBJYaP8QhfEujUz76XCZ/P55sJTPk8HvvjMJsuftE4vmM8Og62AyOn7TNhwf2S8iLxyAmemVfyNH2smiErasa0aDqBRpmuptqocfzgxaUbQ+KSVpeXiFNP3hg+eqCaS9y79Zu7l/O67XPseotKn1TtiUlsamxhHYbZdPGL5uPr2tYmU/OHQMA46WDGzFB/9/eWBOrvL71gTEsX/fV/51w+e0v9i7RgPHQ5YyY3s1DnBWJMSzdwQ/jhpWOk4y0wpgV6DiONEGNaoOfA+wkBiCFCAGKIEIAYIgQghggBiCFCAGKIEIAYIgQghggBiCFCAGKIEIAYIgQghggBiCFCAGKIEIAYIgQghggBiCFCAGKIEIAYIgQghggBiCFCAGKIEIAYIgQghggBiCFCAGKIEIAYIgQghggBiCFCAGKIEIAYIgQghggBiCFCAGKIEIAYIgQghggBiCFCAGKIEIAYIgQghggBiCFCAGKIEIAYIgQghggBiCFCAGKIEIAYIgQghggBiCFCAGKIEIAYIgQghggBiCFCAGKIEIAYIgQghggBiCFCAGKIEIAYIgQgxpPL5dRrAOjR8EwIQAwRAhD7fzffwC2sYhL+AAAAAElFTkSuQmCC",
+  "data:image/png;base64,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",
+  "data:image/png;base64,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",
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAADcCAIAAABF+guPAAAQQElEQVR4nO3deVhTd77H8V8CIYQAYQt7BVFERFCRat1QRKlFrdZRuOro6FwF91vuvaPWYtXePvZ27NRxGZdp64q2jlWvtYv7WtRWRSsoLigooISASAhrILl/HJpGIJGQhG98+Lye/hHCyTm/Y5/3c0JCvvA0Gg0DADp86gUAdHSIEICYrfbWkKmbCdcB0NFc2DOXu4ErIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhADBECEEOEAMQQIQAxRAhAzNbExwf4uqStmazvu2q1Zui0LSYewkL+a2b0+BFh3O1yZc2Y5O2064EOy9QILeHCnrncje0Hr247cMUSh4js4TcuNswSewYwljkjPHzq9qfbzplxhxYishe8lxTD41GvA4Ax1jF/Jpw3eYC31IkxViSvoF4LQPs+HY0I8XlnRFh4iI+bs6hBrS4qUV7JzN9/NPOpXMFt8PdlY/uG+Wu3nzkhauaEKO72hIW75c+UrdmJYZFhjU9ET13KaVBruBoBCLVfhEkJ/aeNi9R+KWA2gX6ugX6uY2NCV248mZ6R1w47EdkL3psdw+Oxyqq69Wnp86cMbMuZAJiVOSMcF9tjXGwP3Xu+O5v9yednGWNxg4K18fzr6M20wxliB7ulSTG9QnzshYJVC0f+cfHXRfKKd1cfYfpfmGnlTgyscN6UxieiW//187PnVeY6cQBTtNPPhFPG9OFuFMjKN6allymqC4rKV285rdZoGGNCO9uJceGW3knfMP9xw8MYY9kPig+fvGXiGQGYS3u8OioW2XXp5M7dzrhVqNE03v+kWFFcouQuTeHdvA3v3MSdCAQ2S5OG8XhMrdas+fKcWvt4AGrtcSV0Egu1t8uVNbrfKquo5m44O9pbdCdOYqG3hxNj7JvjmfcflbRq3QDtoj1emKmorNXelrzYiYtT45eKF7uy0E4YYwmjIhJGRTS5U+Joz/0gOmTq5pfuAcC82uNKWFld9zC/lLsd2cNP+y65j9TZy6PxHYLMe0Xa7bVPFfl8Xpt3AvCqaKe3KPZ+dyN1bixjzN9bMn/KwLQj1x1FdktmD+PzeIyxOlXDgeNZ2o3LFNVuEhFjLCLEx9FBqKyqbcNOmnj2vKr5VW75vBFxg4IZfncUSLVThMd+utflNffJY3ozxhLjeyXG99J+q6auftXGk7pvtadn5I6N6cEY6xPq++Pnf2aM3c2Vz0r9xqidALwq2u/N+k1fXbp449H4EWHhwd6uEocGtVpWoryamb//2M1C2QvxbEy7WF+vHtw30N1FrPuM1KidALwqeJrffgLDaxIA7Un7Sykd8Re4AawKIgQghggBiCFCAGKIEIAYIgQghggBiCFCAGKIEIAYIgQghggBiCFCAGLWEqGbi8OFPXMlTi8ZcmE5tjb89+cMP/7lrF2fJFKtQYvP5y1NijmxzSoWA5bW3hFuXTVhTEyoFR5ocN/OoUGe7yzcNX3JPsutqpUG9g7o2dVr/IJd05fs6x4kPb0jiXpFYEGmfp7wb0vG9It4TfeelI+PXM0q0Ld98oqDJh6xlYw9UHCA++0HssqqOgPbfPHRxAPHs348f8e0pb1cSJCndjF3HsqHz/inpY8IhMzwod79R2+u351u+n5oiR2EdSo19SoaOYmtaDFgaRb5ZP0f4nqOHhb652X7uS99pM5fr52SmLKnSF6xddWEI2ezvzuTzRhzd3FYMmtYr1Bfeany4Infx8OI7AVJCf2HRHV2FNndvPv0sx0XikoqGGPbP05Iz8gL7+bdPciztKzy7zt/+iUznzEmFtnNmtRvcGSgo9ju9OUHG9Iu1tSqdA/01/+OH9AnQKNhspKK785m7zp8rcnYUW4Dxti42B67/u/aN8cyF00bFNXTX8PYz78+3pCWrlDWrlw4MqSzdFlyzLLkmNs5suQVB12dRc03Y4xJXcWLZw+LCPGRlyoPnbr17vTBY+ZsL6+o4U7h0vVH4d28QzpLP/ni7JuDujVfmO5iuOWpVA3cxbDFM33p2YGVs0iEx9Pvz58yMDjAg5vwGR8dcuP2k+YD6lctinteXv1vKXscRIKVC+K096fOjbUT2Cz8n8MKZc2MCVGrU0bNSv2GG9c7akjI8nXHcvOfJcT3Sp0XO27eDo2Gpc6LdRYL/7Lm+5KyquFvdIns4Xvx+iPdAy3+9AfGGJ/P69LJ/cNFcU+KFScu3m+yQcqMITZ8Pje8eEPquOra+pnL9vP5vPfnDE+dO2Lxmu9Xbjjh7yXRfTr64aK45ptx51VcqkxM2eNgL1i5YGSTsx49tPv7647dzpGp1ZpTl3KaL6zJYroHSTd98E7jv0xLZ/rSswMrZ4YXZiaNiriwZ672P4mTfUVl7YVrefFDuzPGeDw2Kjrk+3PZTR7l5+XcK8Tnb9vPlymqC2WKLV9f5u6XujlGR3X+5POzT+WKyuq6zXsv+Xo5B/q7cd/df/Rm9oPimrr6QyeyXJ1FHi5iL3fHwZGBH289k1dYpqyq/fb07SYFaqnVmvt5JQeOZQ7qG2jgdHw9nXuH+n6243xJWWVxqXLdzp8G9O7k7uLQys38vSTh3bzX7rzwXFH9pFixZd/lJg88cCIr616RWv371aqVCzN8pq3cCVghS/1M+MP5O8vnxW7aezEixNfJQXjuSm6TDaRujjW1qjJF4/DswuJy7oav1IkxdmjjdN2NfaRO3NBR7fa1dfWMMaGdrburWK3WaB/eopj+Xaa9Hfmaj8ReKGAvG0/q6e7Y0KDWXrcLZOXcnaUv/gEZfZsJ7Wyra1Tck0/G2JPipuOnZCW/PyMwamHeUucWz9SonYAVstS0tSs38+tUDQP7BEZHdT55KYdrRpf8mdJeKHB1FnFd+Xo6c/cXlVSoNZq35+wob8U4bcZYkVzB5/P8PCVcBs25SUQrF4xMXXfsWlZBda1q0psRsQO6GthhcanSxobv5e4oK1Uyxvy9JNydjDHdv2ChbzORUCCyF0ic7LkOteelpd2FsQtr8UyN3QlYIUu9T6jWaI5euDvxzfDofkHNn4syxgplisx7RSkzhrg4i3w9neckvsHdLytVpl/LWzZn+Gs+LvZ2tqFBnqtTRgkENvoOJCtVXrz+aGlyTICfq9jBbmxMj4F9AnQ3sLOz5fF4lVV1qgZ1WFevBJ1ppS16Uqz49c6T/5wZ7e7i4Onu+B9/Gnz518fcZbD0eVXXTm42NnwDmxXIyrPuy1L+1PS8mjN2YS2eqbE7AStkhivhpFERk3T+usPqrWe4ly5+OHdn2tuRuQXPsh8Ut/jAFeuPL549bN/aqdyro6FdPLn7P9p8asaEqE8Xj3aTiB7mP9v97XWVqsHAAj7cdDI5of9nS8bYCwVnfn6wcc8LL0sUySs2f3VpxYKRTmLhvTz5uSsPe3b1MnxGH2w4seiPg3b+b6JGo/nlZv76tMYn23uPXF8yO+YPceF3c+XJKw7q22zFhuOL/33ovrVT5c8qvz+bHdrFs76+hfcb2rCw5mdaU6sydidgbTB31LIG9O60fN6I+KRt1AsBq6OdO9quf7O+g4h9o2u9Wn3lZr6vp/OcyQO49yEA9EGE5nc1qyBl5pAls4bV1KrOXcnVvvsC0CJEaH7lypqVG05QrwJeGdbyUSaADgsRAhBDhADEECEAMUQIQMwMEUb28Nu6aoLp+2ln5FNtzG7N4tHD+nWhXgUYzQwRJif23/3tde52u42QgebSDmckJfTj8V6+JVgVUyMMDvTw85ZcvtH4wbbkFQe5D7ODKb74aOJb0d2NfdSvd58KbG2ievpbYklgOaZGOPT1oGtZhfUNGIhiFX7JzI9+PYh6FWAcU39jJqyrV8atQu2XupNdtn+ckHGroHuQZ7dAD1mJcvU/z0R0806I7+VgLzh9OefTL8+rNRp981EMjGkxdgKNLmOn2uhqzekwxg5unL56y2lu3pzUzfHghmlvzd6mrKrVd4iJb4YnvtXLRSK6lytftyv9Xp68+TCb1kym4dzLk4+LDTPx/ym0M1MjlLqKyyqq9X03Oioodd2xx0+fvzt98Nr3xp66dH/G0n3Ojvb/WD7+Sr+CMz8/0DcfxcCYFmMn0Ohqw1Qbo07HwD9Ui4fw85bMnzpw0UeH7+bKgwM8Rgzsei9P3nyYDWvFZBpus7Lyag9XsYFlgBWy7FsU+49l3s2VV9eojl64KxIK1u++qFDWFhSVX71V2C1Qqt2syXwUA2NajJ1Ao7uYtk21acPpNKfvEPX16vr6hspqVZ2q4VaObNPeS/r20ObJNGD9TL0SljyvdHUS6fvu898uknWqhto6VU2t6rcv64V2NkzPfBQPN7G+MS3GTqDR3axtU22MOh199B0iPSNv5caT86cMkDjZP3hcuv/ozZzHTQ/KaeVkGleJqKSs0sBKwAqZGuGt+7KuAR5te6y++Sglzyr1jWkxdgKNLnNNtTGstq5eG7+rs+ilh0jPyEvPyOPzeCMGBW/8YPz4eTtr6uqbPxNu5WSaboHS2zktzzEAq2Xq09HzV3P7hvlxY1eMpW8+ioExLcZOoNFlrqk2huU8Kokf2t3RQejt4TR38ksO8Xq4f1Jif38viY0t34bHE9rZ8vg89uIwm1b+o3FeD/c/f+Vh21YOVEy9Et7NlRfKygf06vRTRp6xjzUwZMXAmBZjJ9DoMtdUGwM2f3V52Zzhh/4x/Umx4tCJLO27di0e4kb2k+AA6Zolo6Wu4vyi8g/WH6+uUbFmw2xa+Y8WEeLT0KAx8IdAwDqZYcZMZJhfckJ/y/2lF4xpaaW//mX0j+fvGH6RFqyHOWfMZNwqNHuBGNPSBtwQfnjlWOl4C4xpgY7DSiPEmBboOPB5QgBiiBCAGCIEIIYIAYghQgBiiBCAGCIEIIYIAYghQgBiiBCAGCIEIIYIAYghQgBiiBCAGCIEIIYIAYghQgBiiBCAGCIEIIYIAYghQgBiiBCAGCIEIIYIAYghQgBiiBCAGCIEIIYIAYghQgBiiBCAGCIEIIYIAYghQgBiiBCAGCIEIIYIAYghQgBiiBCAGCIEIIYIAYghQgBiiBCAGCIEIIYIAYghQgBiiBCAGCIEIIYIAYghQgBiiBCAGCIEIIYIAYghQgBiiBCAGCIEIIYIAYghQgBiiBCAGCIEIIYIAYjxNBoN9RoAOjRcCQGIIUIAYv8PkRTuPBxbS5sAAAAASUVORK5CYII="
+];
+const MOTIVOS = [
+  "HI001 - ANILLADO POR HILO GRUESO/DELGADO","HI002 - ANILLOSPOR LOTES DE HILO (UV)","HI003 - BARRADO POR HILO TEÑIDO",
+  "HI004 - BAJA RESISTENCIA","HI005 - CONTAMINACIÓN DE POLP.","HI006 - CONTAMINACIÓN DE CASCARILLA",
+  "HI007 - CONTAMINACIÓN DE FIBRAS MUERTAS","HI008 - CONT. MALA MEZCLA DE MELANGE","HI009 - HILO VETADO",
+  "HI010 - IRREGULARIDAD DE HILO","HI011 - MEZCLA DE LOTES Y/O BARRADO","HI012 - NEPS NOTORIO",
+  "HI013 - TRAMO GRUESO / DELGADO","HI014 - TORSIÓN ELEVADA","HI015 - VARIACIÓN DE TÍTULO",
+  "HI016 - % DE FIBRA F/HILO","HI017 - MOTAS DE HILADO","HI018 - METAMERIA","HI019 - BARRADO",
+  "HI020 - CONT. AMBIENTE","HI023 - MIGRACIÓN DE HILO","HI024 - MALA SOLIDEZ",
+  "TEJ021 - AGUJEROS MENORES A 1CM","TEJ022 - ANILLOS POR MEZCLA DE TÍTULOS","TEJ023 - ANILLOS POR TENSIÓN DE MÁQUINA",
+  "TEJ024 - CORDONES DE HILO DOBLES","TEJ025 - CONT. FIBRILLA HILO COLOR","TEJ026 - CONTAMINACIÓN DE COLITAS",
+  "TEJ027 - CONTAMINACIÓN DE AMBIENTE","TEJ028 - CAÍDAS DE TEJIDO","TEJ029 - DISEÑO DE RAPPORT EQUIVOCADO",
+  "TEJ030 - ESCAPE DE LYCRA","TEJ031 - FUGAS DE PUNTO","TEJ032 - FALLA DE AGUJA ROTA",
+  "TEJ033 - FLOTANTES SUELTOS","TEJ034 - LYCRA ROTA","TEJ035 - LÍNEAS DE ACEITE",
+  "TEJ036 - LÍNEAS VERTICALES DE PLATINA","TEJ037 - LONGITUD DE MALLA / STP","TEJ038 - MANCHAS EN GOTAS DE ACEITE",
+  "TEJ039 - MARCA DE DOBLES DE CHUCO","TEJ040 - MANCHAS DE GRASA","TEJ041 - PATA DE GALLO (AGUJA FORZADA)",
+  "TEJ042 - RAPPORT F/STO","TEJ043 - TRASPASO O ANILLOS DE HILO ROTO","TEJ044 - MOTAS DE TEJIDO",
+  "TEJ045 - CAPOTE DIRECTO","TEJ046 - MARCA DE AGUJA","TEJ047 - ARAÑONES","TEJ048 - ANILLADO POR LYCRA ROTA",
+  "TEJ049 - LYCRA NO YANIZADA (TALONES)","TEJ050 - PARADA DE MÁQUINA","TEJ051 - SEGUNDA DE TELA",
+  "TEJ052 - MANCHAS DE MARCADOR DE TELA","TEJ053 - CABO FALTANTE","TEJ054 - BARRADO DE MÁQUINA",
+  "TEJ055 - AGLOMERADO","TEJ056 - QUEBRADURAS","TEJ058 - DISEÑO DE TEJIDO INCORRECTO",
+  "TEJ059 - DESPACHO DE TELA INCORRECTA","TEJ060 - ERROR DE DESPACHO DE TELA CRUDA",
+  "TIN051 - BAJA RESISTENCIA","TIN052 - DEGRADE","TIN053 - FUERA DE TONO","TIN054 - FUERA DE MATCHING",
+  "TIN055 - HUECOS POR PROCESO","TIN056 - JALADURAS","TIN057 - MANCHAS DE COLORANTE","TIN058 - MANCHAS DE SUCIEDAD",
+  "TIN059 - MALA SOLIDEZ AL LAVADO","TIN060 - MALA SOLIDEZ AL AGUA","TIN061 - MALA SOLIDEZ A LA TRANSPIRACIÓN",
+  "TIN062 - MALA SOLIDEZ AL FROTE SECO","TIN063 - MALA SOLIDEZ AL FROTE HÚMEDO","TIN064 - MALA IGUALACIÓN",
+  "TIN065 - MAL DESMONTADO","TIN066 - MANCHAS BLANCAS","TIN067 - MANCHAS DE ÓPTICO","TIN068 - ÓXIDO METÁLICO",
+  "TIN069 - PH FUERA DE STD","TIN070 - PUNTOS DE SILICONA","TIN071 - PILLING ELEVADO","TIN072 - QUEBRADURAS",
+  "TIN073 - RASPADURAS","TIN074 - REMALLES","TIN075 - TENIDO VETEADO","TIN076 - LÍNEAS GIRATORIAS",
+  "TIN077 - PICADURAS","TIN078 - PUNTOS DE COLORANTE","TIN079 - MANCHAS DE PRODUCTO","TIN080 - LÍNEA VERTICAL",
+  "TIN081 - MIGRACIÓN","TIN082 - BORDES REVENTADOS","TIN083 - RECT. DEFORMADOS","TIN084 - INCREMENTO DE PEDIDO",
+  "TIN085 - MAL ANÁLISIS TEXTIL","TIN087 - COMBINACIÓN NO APROBADA POR CLIENTE","TIN088 - RECETA INCORRECTA",
+  "TIN089 - COOLOR INCORRECTO","TIN090 - NO DESCARGA / DISCHARGE",
+  "ACA081 - ANCHO F/SIO","ACA082 - APARIENCIA F/SIO","ACA083 - BAJA RESISTENCIA","ACA084 - CALAMINADO",
+  "ACA085 - DENSIDAD F/SIO","ACA086 - ENCOGIMIENTO F/SIO","ACA087 - EMPALMES","ACA088 - HUECOS POR PROCESO",
+  "ACA089 - JALADURAS","ACA090 - TINEAS VERTICALES DE ESTIRADO","ACA091 - LYCRA QUEMADA","ACA092 - MAL OLOR",
+  "ACA093 - MANCHAS DE SUAVIZANTE","ACA094 - MAL ESTAMPADO","ACA095 - MALA HIDROFILIDAD","ACA096 - MAL CORTE DE ORILLOS",
+  "ACA097 - MAL ENROLLADO","ACA098 - MARCAS DE AGUJA DE RAMA","ACA099 - MIGRACIÓN","ACA100 - MAL PERCHADO",
+  "ACA101 - MAL ASERTO","ACA102 - MANCHAS DE GRASA","ACA103 - MAL ESTAMPADO (SERVICIO)","ACA104 - MORDEDURAS",
+  "ACA105 - OXIDO","ACA106 - PUNTOS DE SILICONA","ACA107 - PARADA DE MÁQUINA","ACA108 - MAL SECADO",
+  "ACA109 - REVENTADO F/SIO","ACA110 - RAPPORT F/SIO","ACA111 - REMALLE","ACA112 - TACTO ÁSPERO",
+  "ACA113 - TRAMA DESCORRIDA","ACA114 - TELA ONDEADA","ACA115 - VARIACIÓN DE ANCHO","ACA116 - MANCHAS DE CONDENSADO",
+  "ACA117 - MANCHAS DE ÓPTICO","ACA118 - MANCHAS DE SUDOR","ACA119 - MANCHAS PLANAS",
+  "ACA120 - LÍNEA SECCIONADA EN (DOBLECES)","ACA121 - MARCA DE PLATINA","ACA122 - ATRIBUCIÓN",
+  "ACA123 - DESALINEACIÓN DE MÁQUINA","ACA124 - MANCHAS DE HUMEDAD","ACA125 - MANCHAS DE PRODUCTO QUÍMICO",
+  "ACA126 - POROSIDAD DE TEJIDO","ACA127 - MALA REGULACIÓN","ACA128 - CONTAMINACIÓN DE CORROSIVOS",
+  "ACA129 - RECHAZO","ACA130 - MANCHAS DE PERÓXIDO","ACA131 - MANCHAS DE PASO","ACA132 - MANCHAS DE ACEITE",
+  "ACA133 - PANTY ROTO","ACA134 - DOBLADO / DOBLEZ DE TELA","ACA135 - DOBLEZ DE TELA","ACA136 - DEFECTO DE PLANCHADO",
+  "ACA137 - MARCA DE ESTAMPADO","ACA138 - MAL ACABADO","ACA139 - MANCHA DE TINTA"
+];
+const AREAS = [
+  "ACABADOS","BORDADO","CALIDAD MANUFACTURA","CALIDAD TEXTIL","COMERCIAL","CORTE",
+  "ESTAMPADO DIGITAL","LAVANDERÍA","PCP ACABADO","PCP ESTAMPADO DIGITAL","PCP MANUFACTURA",
+  "PCP TEJEDURÍA","PCP TINTORERÍA","PLANEAMIENTO TEXTIL","TEJEDURÍA","TINTORERÍA"
+];
+const OTRA_AREA = "OTRA / ESPECIFICAR";
+const DEFECTO_NUEVO = "DEFECTO NUEVO / NO REGISTRADO";
+const MOTIVOS_EDICION = ["Defecto incorrecto","Cantidad de rollos incorrecta","Artículo incorrecto (Cuerpo/Complemento/Otro)","Error de digitación","Área responsable incorrecta","Otros"];
+const MOTIVOS_ANULACION = ["Partida incorrecta","NC duplicada","Otros"];
+function ncTotalDefectos(nc){
+  return (nc.articulos||[]).reduce((s,a) => s + (a.defectos?a.defectos.length:0), 0);
+}
+function ncTotalEvidencia(nc){
+  let c = 0;
+  (nc.articulos||[]).forEach(a => (a.defectos||[]).forEach(d => c += (d.evidencia?d.evidencia.length:0)));
+  return c;
+}
+function ncTieneDefectoNuevo(nc){
+  return (nc.articulos||[]).some(a => (a.defectos||[]).some(d => d.isOtro));
+}
+function ncCriticidad(nc){
+  return { label:"Grave", color:"var(--amber)" };
+}
+function ncMotivoResumen(nc){
+  const all = [];
+  (nc.articulos||[]).forEach(a => (a.defectos||[]).forEach(d => {
+    all.push(d.isOtro ? `Nuevo: ${d.descripcionOtro||"(sin descripción)"}` : d.motivo);
+  }));
+  if(all.length===0) return "-";
+  if(all.length===1) return all[0];
+  return `${all[0]} (+${all.length-1} más)`;
+}
+function defectoLabel(d){
+  return d.isOtro ? `Nuevo: ${d.descripcionOtro||"(sin descripción)"}` : (d.motivo||"(sin motivo)");
+}
+function ncAreasCompleto(nc){
+  const areas = [];
+  (nc.articulos||[]).forEach(a => (a.defectos||[]).forEach(d => {
+    const ar = defectoAreaFinal(d);
+    if(ar && !areas.includes(ar)) areas.push(ar);
+  }));
+  return areas.length ? areas.join(", ") : "-";
+}
+function ncMotivosCompleto(nc){
+  const all = [];
+  (nc.articulos||[]).forEach(a => (a.defectos||[]).forEach(d => {
+    all.push(defectoLabel(d));
+  }));
+  return all.length ? all.join("; ") : "-";
+}
+function ncDetalleDefectosTexto(nc){
+  const lineas = [];
+  nc.articulos.forEach(a => a.defectos.forEach(d => {
+    lineas.push(`  • ${a.nombre} (Talla ${a.talla||'-'}, ${a.cantidad} de ${a.rollos} rollos): ${defectoLabel(d)} — Área: ${defectoAreaFinal(d)}`);
+  }));
+  return lineas.join("\n");
+}
+function buildMensajes(nc, tipo, extra){
+  extra = extra || {};
+  const tieneNuevo = ncTieneDefectoNuevo(nc);
+  const areas = ncAreasCompleto(nc);
+  const motivo = ncMotivosCompleto(nc);
+  const detalle = ncDetalleDefectosTexto(nc);
+  let whatsapp = "", sige = null;
+  if(tipo === "nueva"){
+    whatsapp = `🔴 *NUEVA NO CONFORMIDAD*\nN° NC: ${nc.id}\nPartida: ${nc.partida} | Cliente: ${nc.cliente}\nColor: ${nc.color}\nÁrea(s): ${areas}\nMotivo(s): ${motivo}\nRegistrado por: ${nc.registradoPor}\nFecha: ${nc.fecha}`;
+    if(!tieneNuevo){
+      sige = `REGISTRO SIGE\nNC: ${nc.id} | ESTADO: ${nc.status} | PROCESO: ${nc.proceso}\nPARTIDA: ${nc.partida} | CLIENTE: ${nc.cliente}\nCOLOR: ${nc.color} | PESO: ${nc.peso}\nÁREA(S): ${areas}\nDETALLE POR ARTÍCULO:\n${detalle}\nFECHA: ${nc.fecha}`;
+    } else {
+      whatsapp += `\n\n⚠️ *ALERTA:* Contiene defecto nuevo pendiente de validación por Calidad. No se envía a SIGE hasta su revisión.`;
+    }
+  } else if(tipo === "editada"){
+    whatsapp = `✏️ *NC EDITADA*\nN° NC: ${nc.id}\nÁrea(s): ${areas}\nMotivo(s): ${motivo}\nMotivo de edición: ${extra.motivoEdicion||"-"}\nModificado por: ${state.user.nombre}\nFecha: ${nowStr()}`;
+    if(!tieneNuevo){
+      sige = `ACTUALIZACIÓN SIGE\nNC: ${nc.id} | ESTADO: ${nc.status}\nÁREA(S): ${areas}\nDETALLE POR ARTÍCULO:\n${detalle}\nMOTIVO DE EDICIÓN: ${extra.motivoEdicion||"-"}\nFECHA: ${nowStr()}`;
+    } else {
+      whatsapp += `\n\n⚠️ *ALERTA:* Esta NC contiene un defecto nuevo pendiente de validación por Calidad. No se sincroniza con SIGE.`;
+    }
+  } else if(tipo === "anulada"){
+    whatsapp = `❌ *NC ANULADA*\nN° NC: ${nc.id}\nPartida: ${nc.partida}\nMotivo: ${extra.motivoAnulacion||"-"}\nAnulado por: ${state.user.nombre}\nFecha: ${nowStr()}`;
+    sige = `ANULACIÓN SIGE\nNC: ${nc.id} | ESTADO: ANULADA\nMOTIVO: ${extra.motivoAnulacion||"-"}\nFECHA: ${nowStr()}`;
+  } else if(tipo === "catalogado"){
+    whatsapp = `✅ *DEFECTO CATALOGADO*\nN° NC: ${nc.id}\nSe registró el código "${extra.codigo}" para el defecto reportado como nuevo.\nRevisado por: ${state.user.nombre}\nFecha: ${nowStr()}`;
+    if(!tieneNuevo){
+      whatsapp += `\n\n✔️ Esta NC ya no tiene defectos pendientes de catalogar; se sincroniza con SIGE.`;
+      sige = `REGISTRO SIGE\nNC: ${nc.id} | ESTADO: ${nc.status} | PROCESO: ${nc.proceso}\nPARTIDA: ${nc.partida} | CLIENTE: ${nc.cliente}\nÁREA(S): ${areas}\nDETALLE POR ARTÍCULO:\n${detalle}\nFECHA: ${nc.fecha}`;
+    } else {
+      whatsapp += `\n\n⚠️ Esta NC aún tiene otro(s) defecto(s) nuevo(s) pendiente(s) de validación. Sigue sin enviarse a SIGE.`;
+    }
+  }
+  return { whatsapp, sige, bloqueado: tieneNuevo && tipo!=="anulada" };
+}
+function mensajesPreviewHTML(nc, tipo, extra){
+  const m = buildMensajes(nc, tipo, extra);
+  return `
+    <h2 class="section">Mensajes generados (simulado)</h2>
+    <div class="card-white">
+      <b style="font-size:12.5px;">📲 Mensaje a WhatsApp</b>
+      <pre style="white-space:pre-wrap;font-family:inherit;font-size:11px;background:var(--bg-soft);padding:8px;border-radius:6px;margin:6px 0 0;">${esc(m.whatsapp)}</pre>
+    </div>
+    <div class="card-white">
+      <b style="font-size:12.5px;">💻 Mensaje a SIGE</b>
+      ${m.sige ? `<pre style="white-space:pre-wrap;font-family:inherit;font-size:11px;background:var(--bg-soft);padding:8px;border-radius:6px;margin:6px 0 0;">${esc(m.sige)}</pre>` : `<div class="banner-error" style="margin-top:6px;">No enviado a SIGE — contiene defecto nuevo pendiente de validación por Calidad.</div>`}
+    </div>
+    <div class="small-note">Simulación – validar con TI la integración real con SIGE y el envío al grupo de WhatsApp.</div>
+  `;
+}
+function defectoAreaFinal(d){
+  return d.area===OTRA_AREA ? (d.areaOtro||"(sin especificar)") : (d.area||"(sin área)");
+}
+function articulosPesoHTML(articulosDisponibles){
+  return (articulosDisponibles||[]).map(a => `
+    <div class="kv"><span class="k">${esc(a.nombre)}</span><span class="v">${esc(a.kgCrudo)} kg</span></div>
+  `).join("");
+}
+function ncAreasResumen(nc){
+  const areas = [];
+  (nc.articulos||[]).forEach(a => (a.defectos||[]).forEach(d => {
+    const ar = defectoAreaFinal(d);
+    if(ar && !areas.includes(ar)) areas.push(ar);
+  }));
+  if(areas.length===0) return "-";
+  if(areas.length===1) return areas[0];
+  return `${areas[0]} (+${areas.length-1} más)`;
+}
+function ncHasArea(nc, area){
+  return (nc.articulos||[]).some(a => (a.defectos||[]).some(d => defectoAreaFinal(d)===area));
+}
+function registrarDefectosNuevosPendientes(nc){
+  nc.articulos.forEach(a => a.defectos.forEach(d => {
+    if(d.isOtro){
+      const yaExiste = state.defectosPendientesCatalogo.some(p => p.ncId===nc.id && p.articulo===a.nombre && p.descripcion===d.descripcionOtro);
+      if(!yaExiste){
+        state.defectosPendientesCatalogo.unshift({
+          descripcion: d.descripcionOtro, ncId: nc.id, partida: nc.partida,
+          articulo: a.nombre, fecha: nowStr(), usuario: state.user.nombre,
+        });
+      }
+    }
+  }));
+}
+function findDefectoNuevo(it){
+  const nc = state.ncs.find(x=>x.id===it.ncId);
+  if(!nc) return null;
+  for(const a of nc.articulos){
+    for(const d of a.defectos){
+      if(d.isOtro && d.descripcionOtro===it.descripcion) return { nc, articulo:a, defecto:d };
+    }
+  }
+  return null;
+}
+
+/* =========================================================
+   STATE
+========================================================= */
+function ncId(n){ return "NC-" + String(n).padStart(6, "0"); }
+let nextNum = 5;
+function seedNC(id, over){
+  return Object.assign({
+    id, estado:"Registrada", status:"Rechazado", proceso:"PRODUCCIÓN",
+    fecha:"11/08/2026 10:32", registradoPor:"J. Ramirez",
+    partida:"07825", cliente:"TEXTIL DORITEX", color:"CELESTE MEGO II", peso:"199.2 kg", fechaPartida:"11/08/2026",
+    articulos:[
+      { tipo:"Cuerpo", nombre:"Jersey Solido 20/1", codTela:"JE003285", talla:"-", kgCrudo:"191.1", rollos:9, cantidad:9,
+        defectos:[
+          { motivo:"TIN072 - QUEBRADURAS", isOtro:false, descripcionOtro:"", area:"TINTORERÍA", areaOtro:"", evidencia:[{name:"foto1.jpg", dataUrl:SAMPLE_PHOTOS[0]}] },
+          { motivo:"TIN057 - MANCHAS DE COLORANTE", isOtro:false, descripcionOtro:"", area:"TINTORERÍA", areaOtro:"", evidencia:[{name:"foto2.jpg", dataUrl:SAMPLE_PHOTOS[1]}] },
+        ]},
+      { tipo:"Complemento", nombre:"Rib 1x1 20/1", codTela:"RI001815", talla:"-", kgCrudo:"8.1", rollos:1, cantidad:1,
+        defectos:[
+          { motivo:"TEJ056 - QUEBRADURAS", isOtro:false, descripcionOtro:"", area:"TEJEDURÍA", areaOtro:"", evidencia:[] },
+        ]},
+    ],
+    comentario:"Manchas de tintura irregulares en el lote, turno noche.",
+    historial:[{fecha:"11/08/2026 10:32", usuario:"J. Ramirez", accion:"Creación de NC"}],
+    anulacion:null
+  }, over);
+}
+
+const state = {
+  screen: "login",
+  user: null,
+  ncs: [
+    seedNC(ncId(4), {}),
+    seedNC(ncId(3), { fecha:"10/08/2026 09:10", registradoPor:"A. Perez", partida:"05796", cliente:"Psyco Bunny",
+      color:"BARITONE BLUE RECT", peso:"141.8 kg", fechaPartida:"10/08/2026",
+      articulos:[{tipo:"Cuerpo", nombre:"Pique Lacoste PY ME", codTela:"PI000361", talla:"-", kgCrudo:"141.77", rollos:8, cantidad:3,
+        defectos:[{ motivo:"TEJ043 - TRASPASO O ANILLOS DE HILO ROTO", isOtro:false, descripcionOtro:"", area:"TEJEDURÍA", areaOtro:"", evidencia:[{name:"foto1.jpg", dataUrl:SAMPLE_PHOTOS[2]}] }]}],
+      comentario:"Rotura de hilo en telar 3.",
+      historial:[{fecha:"10/08/2026 09:10", usuario:"A. Perez", accion:"Creación de NC"}] }),
+    seedNC(ncId(2), { fecha:"10/08/2026 08:40", registradoPor:"A. Perez", partida:"03181", cliente:"VELASQUEZ TEXTILES",
+      color:"DIVINO", peso:"120.0 kg", fechaPartida:"10/08/2026",
+      articulos:[{tipo:"Cuerpo", nombre:"Algodon Pima 30/1", codTela:"AP004521", talla:"-", kgCrudo:"120.0", rollos:6, cantidad:5,
+        defectos:[{ motivo:"ACA086 - ENCOGIMIENTO F/SIO", isOtro:false, descripcionOtro:"", area:"ACABADOS", areaOtro:"", evidencia:[{name:"foto1.jpg", dataUrl:SAMPLE_PHOTOS[3]}] }]}],
+      comentario:"Encogimiento fuera de rango.",
+      historial:[{fecha:"10/08/2026 08:40", usuario:"A. Perez", accion:"Creación de NC"}] }),
+    seedNC(ncId(1), { fecha:"09/08/2026 16:05", registradoPor:"M. Rios", partida:"07825", cliente:"TEXTIL DORITEX",
+      color:"CELESTE MEGO II", peso:"199.2 kg", fechaPartida:"09/08/2026",
+      articulos:[{tipo:"Cuerpo", nombre:"Jersey Solido 20/1", codTela:"JE003285", talla:"-", kgCrudo:"191.1", rollos:9, cantidad:2,
+        defectos:[
+          { motivo:"", isOtro:true, descripcionOtro:"Olor extraño no catalogado en producto terminado", area:"TINTORERÍA", areaOtro:"", evidencia:[{name:"foto1.jpg", dataUrl:SAMPLE_PHOTOS[0]}] }
+        ]}],
+      comentario:"Tono levemente distinto al estándar.",
+      historial:[{fecha:"09/08/2026 16:05", usuario:"M. Rios", accion:"Creación de NC"}] }),
+  ],
+  draft: null,
+  editingId: null,
+  lastRegisteredId: null,
+  detailId: null,
+  seguimientoFilter: "Todas",
+  evoPeriod: "Año",
+  consultaResults: null,
+  consultaFilters: { nc:"", ini:"", fin:"", area:"", resp:"" },
+  inicioFilters: { nc:"", ini:"", fin:"", area:"", resp:"" },
+  inicioResults: null,
+  inicioFiltrosOpen: false,
+  loginUser: "",
+  wizardEditMode: false,
+  successMessage: null,
+  loginPass: "",
+  confirmDlg: { open:false, message:"" },
+  photoView: { open:false, photos:[], index:0 },
+  detalleOpen: { general:true, articulos:false, defectos:false, historial:false },
+  userMenuOpen: false,
+  editForm: null,
+  lastMensajesInfo: null,
+  defectosPendientesCatalogo: [],
+  revisarDefecto: { pendIndex:null, editing:false, codigo:"", error:"" },
+  grabarMotivo: { pendIndex:null, motivo:"", isOtro:false, descripcionOtro:"", area:"", areaOtro:"", errors:{} },
+  editDefectoModal: { open:false, artIdx:null, defIdx:null, motivo:"", isOtro:false, descripcionOtro:"", area:"", areaOtro:"", evidencia:[], errors:{} },
+  draftDefModal: { open:false, artIdx:null, defIdx:null, motivo:"", isOtro:false, descripcionOtro:"", area:"", areaOtro:"", evidencia:[], errors:{} },
+  editMotivo: { open:false, sel:"", otro:"", error:"" },
+  anular: { open:false, ncId:null, step:1, sel:"", otro:"", error:"" },
+  reporteModal: { open:false, sel:{ nc1:false, nc2:false, informeCalidad:false }, error:"" },
+  errors: {},
+};
+// Sembrar el registro de "defectos nuevos por catalogar" a partir de los datos de ejemplo existentes
+state.ncs.forEach(nc => {
+  nc.articulos.forEach(a => a.defectos.forEach(d => {
+    if(d.isOtro){
+      state.defectosPendientesCatalogo.push({
+        descripcion: d.descripcionOtro, ncId: nc.id, partida: nc.partida,
+        articulo: a.nombre, fecha: nc.fecha, usuario: nc.registradoPor,
+      });
+    }
+  }));
+});
+
+function emptyDraft(){
+  return {
+    partida:"", cliente:"", color:"", peso:"", fechaPartida:"",
+    articulosDisponibles: [],
+    seleccion: {}, // {articuloIndex: {checked, cantidad, defectos:[{motivo,isOtro,descripcionOtro,area,areaOtro,evidencia:[],open}]}}
+    comentario:"",
+    grupoDefecto: emptyGrupoDefecto(),
+  };
+}
+function emptyGrupoDefecto(){
+  return { seleccion:{}, motivo:"", isOtro:false, descripcionOtro:"", area:"", areaOtro:"", evidencia:[], errors:{} };
+}
+function emptyDefecto(){
+  return { motivo:"", isOtro:false, descripcionOtro:"", area:"", areaOtro:"", evidencia:[], comentario:"", open:true };
+}
+
+/* =========================================================
+   UTIL
+========================================================= */
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function $(id){ return document.getElementById(id); }
+function nowStr(){
+  const d = new Date();
+  const p = n => String(n).padStart(2,"0");
+  return `${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+function goTo(screen){ state.screen = screen; state.errors = {}; state.userMenuOpen = false; render(); document.querySelector(".content") && document.querySelector(".content").scrollTo(0,0); }
+function setErr(key, msg){ state.errors[key] = msg; }
+function clearErrs(){ state.errors = {}; }
+function errHTML(key){ return state.errors[key] ? `<div class="field-err">${esc(state.errors[key])}</div>` : ""; }
+function fieldClass(key){ return state.errors[key] ? "field error" : "field"; }
+let __dlCounter = 0;
+function searchInput(id, options, currentValue, silentSetterExpr, commitFnCall, placeholder){
+  const listId = `dl_${id}_${(__dlCounter++)}`;
+  return `
+    <input type="text" id="${id}" list="${listId}" value="${esc(currentValue)}" placeholder="${esc(placeholder||'Escriba para buscar o seleccione...')}" autocomplete="off"
+      oninput="${silentSetterExpr}" onchange="${commitFnCall}">
+    <datalist id="${listId}">${options.map(o=>`<option value="${esc(o)}">`).join("")}</datalist>
+  `;
+}
+
+/* =========================================================
+   TOPBAR / SHELL
+========================================================= */
+function shell(title, subtitle, back, bodyHTML, bottomHTML){
+  return `
+    <div class="status"><span>9:41</span><span>●●● 100%</span></div>
+    <div class="topbar">
+      ${back ? `<div class="back" onclick="${back}">&lsaquo;</div>` : ""}
+      <div class="titles">
+        <h1>${esc(title)}</h1>
+        ${subtitle ? `<p>${esc(subtitle)}</p>` : ""}
+      </div>
+      ${userAvatarHTML()}
+    </div>
+    ${userMenuHTML()}
+    <div class="content">${bodyHTML}</div>
+    ${bottomHTML ? `<div class="bottombar">${bottomHTML}</div>` : ""}
+  `;
+}
+function userAvatarHTML(){
+  if(!state.user) return "";
+  const initial = state.user.nombre.trim().charAt(0).toUpperCase();
+  return `<div class="user-avatar" onclick="toggleUserMenu()">${esc(initial)}</div>`;
+}
+function userMenuHTML(){
+  if(!state.userMenuOpen || !state.user) return "";
+  return `
+    <div class="user-menu">
+      <div class="um-header">Sesión iniciada como<b>${esc(state.user.nombre)}</b></div>
+      <div class="um-item" onclick="confirmLogout()">🚪 Cerrar sesión</div>
+    </div>
+  `;
+}
+function toggleUserMenu(){ state.userMenuOpen = !state.userMenuOpen; render(); }
+function confirmLogout(){
+  state.userMenuOpen = false;
+  askConfirm("¿Está seguro de que desea cerrar sesión?", doLogout, "Cerrar sesión", "Cancelar");
+}
+function doLogout(){
+  state.user = null;
+  state.draft = null;
+  state.editingId = null;
+  state.loginUser = ""; state.loginPass = "";
+  state.inicioResults = null;
+  state.inicioFilters = { nc:"", ini:"", fin:"", area:"", resp:"" };
+  state.screen = "login";
+  render();
+}
+
+/* =========================================================
+   RENDER ROUTER
+========================================================= */
+function render(){
+  let html = "";
+  switch(state.screen){
+    case "login": html = screenLogin(); break;
+    case "inicio": html = screenInicio(); break;
+    case "evolutivo": html = screenEvolutivo(); break;
+    case "defectosPendientes": html = screenDefectosPendientes(); break;
+    case "revisarDefectoNuevo": html = screenRevisarDefectoNuevo(); break;
+    case "grabarMotivo": html = screenGrabarMotivo(); break;
+    case "paso1": html = screenPaso1(); break;
+    case "paso2": html = screenPaso2(); break;
+    case "paso3": html = screenPaso3(); break;
+    case "confirm": html = screenConfirm(); break;
+    case "consulta": html = screenConsulta(); break;
+    case "detalle": html = screenDetalle(); break;
+    case "editNC": html = screenEditarNC(); break;
+    case "seguimiento": html = screenSeguimiento(); break;
+    default: html = screenLogin();
+  }
+  $("app").innerHTML = html;
+  // modal overlay (anular)
+  if(state.anular.open){
+    $("app").insertAdjacentHTML("beforeend", anularModalHTML());
+  }
+  // generic confirm dialog (replaces native confirm() so it always works, even inside embedded previews)
+  if(state.confirmDlg.open){
+    $("app").insertAdjacentHTML("beforeend", confirmDlgHTML());
+  }
+  // full-screen photo viewer
+  if(state.photoView.open){
+    $("app").insertAdjacentHTML("beforeend", photoViewHTML());
+  }
+  // motivo de edición
+  if(state.editMotivo.open){
+    $("app").insertAdjacentHTML("beforeend", editMotivoHTML());
+  }
+  // edición de un defecto específico (ventana enfocada)
+  if(state.editDefectoModal.open){
+    $("app").insertAdjacentHTML("beforeend", editDefectoModalHTML());
+  }
+  // registro/edición de un defecto durante el asistente de registro
+  if(state.draftDefModal.open){
+    $("app").insertAdjacentHTML("beforeend", draftDefectoModalHTML());
+  }
+  // selección de reportes descargables (Evolutivo)
+  if(state.reporteModal.open){
+    $("app").insertAdjacentHTML("beforeend", reporteModalHTML());
+  }
+}
+
+/* =========================================================
+   GENERIC CONFIRM DIALOG (custom, not window.confirm)
+========================================================= */
+let pendingConfirmCb = null;
+function askConfirm(message, cb, yesLabel, noLabel){
+  pendingConfirmCb = cb;
+  state.confirmDlg = { open:true, message, yesLabel: yesLabel||"Sí, salir", noLabel: noLabel||"Cancelar" };
+  render();
+}
+function confirmDlgHTML(){
+  const c = state.confirmDlg;
+  return `
+    <div class="overlay">
+      <div class="sheet">
+        <div class="grabber"></div>
+        <p style="font-size:13.5px;margin:0 0 16px;">${esc(c.message)}</p>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-secondary" onclick="confirmDlgNo()">${esc(c.noLabel)}</button>
+          <button class="btn btn-danger-solid" onclick="confirmDlgYes()">${esc(c.yesLabel)}</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function confirmDlgYes(){
+  const cb = pendingConfirmCb;
+  state.confirmDlg = { open:false, message:"" };
+  pendingConfirmCb = null;
+  if(cb) cb();
+  else render();
+}
+function confirmDlgNo(){
+  state.confirmDlg = { open:false, message:"" };
+  pendingConfirmCb = null;
+  render();
+}
+
+/* =========================================================
+   FULL-SCREEN PHOTO VIEWER
+========================================================= */
+function viewPhoto(photos, index){
+  state.photoView = { open:true, photos, index };
+  render();
+}
+function closePhotoView(){ state.photoView = { open:false, photos:[], index:0 }; render(); }
+function photoPrev(){
+  const pv = state.photoView;
+  pv.index = (pv.index - 1 + pv.photos.length) % pv.photos.length;
+  render();
+}
+function photoNext(){
+  const pv = state.photoView;
+  pv.index = (pv.index + 1) % pv.photos.length;
+  render();
+}
+function photoViewHTML(){
+  const pv = state.photoView;
+  const photo = pv.photos[pv.index];
+  const src = photo ? photo.dataUrl : null;
+  const multiple = pv.photos.length > 1;
+  return `
+    <div class="overlay" style="align-items:center;background:rgba(0,0,0,.94);">
+      <div style="position:absolute;top:16px;right:16px;color:#fff;font-size:26px;z-index:3;cursor:pointer;" onclick="closePhotoView()">✕</div>
+      ${multiple ? `<div style="position:absolute;top:18px;left:0;right:0;text-align:center;color:#fff;font-size:12.5px;z-index:2;">Foto ${pv.index+1} de ${pv.photos.length}</div>` : ""}
+      ${multiple ? `<div style="position:absolute;left:6px;top:50%;transform:translateY(-50%);color:#fff;font-size:34px;z-index:3;cursor:pointer;padding:6px 10px;" onclick="photoPrev()">&#8249;</div>` : ""}
+      <div style="width:100%;text-align:center;">
+        ${src ? `<img src="${src}" style="max-width:88%;max-height:76vh;border-radius:8px;">` : `<div style="color:#fff;font-size:13px;padding:0 30px;">Sin imagen de muestra para esta evidencia (Simulación).</div>`}
+      </div>
+      ${multiple ? `<div style="position:absolute;right:6px;top:50%;transform:translateY(-50%);color:#fff;font-size:34px;z-index:3;cursor:pointer;padding:6px 10px;" onclick="photoNext()">&#8250;</div>` : ""}
+      ${multiple ? `<div style="position:absolute;bottom:22px;left:0;right:0;text-align:center;">
+        ${pv.photos.map((_,i)=>`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${i===pv.index?'#fff':'rgba(255,255,255,.4)'};margin:0 3px;"></span>`).join("")}
+      </div>` : ""}
+    </div>
+  `;
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+function screenLogin(){
+  return `
+    <div class="status"><span>9:41</span><span>●●● 100%</span></div>
+    <div class="topbar"><div class="titles"><h1>Gestión de No Conformidades</h1></div></div>
+    <div class="content">
+      <div style="padding-top:50px;">
+        <h2 style="margin:0 0 4px;font-size:20px;">Iniciar sesión</h2>
+        <p style="color:var(--grey);font-size:12.5px;margin:0 0 20px;">Ingrese su usuario y contraseña</p>
+        ${state.errors.login ? `<div class="banner-error">${esc(state.errors.login)}</div>` : ""}
+        <div class="${fieldClass('user')}">
+          <label>Usuario <span class="req">*</span></label>
+          <input type="text" id="loginUser" autocomplete="username" value="${esc(state.loginUser||'')}" placeholder="Ej. jramirez" oninput="state.loginUser=this.value" onkeydown="if(event.key==='Enter')document.getElementById('loginPass').focus()">
+          ${errHTML('user')}
+        </div>
+        <div class="${fieldClass('pass')}">
+          <label>Contraseña <span class="req">*</span></label>
+          <input type="text" id="loginPass" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" style="-webkit-text-security:disc;text-security:disc;" value="${esc(state.loginPass||'')}" placeholder="Ingrese su contraseña" oninput="state.loginPass=this.value" onkeydown="if(event.key==='Enter')attemptLogin()">
+          ${errHTML('pass')}
+        </div>
+        <button class="btn btn-primary btn-block" onclick="attemptLogin()">Ingresar</button>
+        <div class="banner-sim">Simulación – validar con TI. Usuario/contraseña de prueba: <b>jramirez</b> / <b>1234</b> (también: aperez, mrios / 1234). Gerente de Calidad: <b>lgcalidad</b> / <b>1234</b>.</div>
+      </div>
+    </div>
+  `;
+}
+function attemptLogin(){
+  const u = ($("loginUser") ? $("loginUser").value : state.loginUser || "").trim();
+  const p = ($("loginPass") ? $("loginPass").value : state.loginPass || "").trim();
+  state.loginUser = u; state.loginPass = p;
+  clearErrs();
+  let ok = true;
+  if(!u){ setErr('user','Ingrese su usuario.'); ok = false; }
+  if(!p){ setErr('pass','Ingrese su contraseña.'); ok = false; }
+  if(!ok){ render(); return; }
+  const rec = USER_DB[u.toLowerCase()];
+  if(!rec || rec.pass !== p){
+    setErr('login','Usuario o contraseña no válidos. Verifique sus credenciales. (Simulación – prueba: jramirez / 1234).');
+    render(); return;
+  }
+  state.user = { id:u, nombre: rec.nombre, rol: rec.rol||"supervisor" };
+  state.loginUser = ""; state.loginPass = "";
+  goTo("inicio");
+}
+
+/* =========================================================
+   INICIO
+========================================================= */
+function screenInicio(){
+  const usingFilter = state.inicioResults !== null;
+  const list = usingFilter ? state.inicioResults : state.ncs.slice(0,5);
+  const f = state.inicioFilters;
+  const items = list.map(nc => `
+    <div class="list-card" style="padding:9px 12px;" onclick="openDetalle('${nc.id}')">
+      <div class="list-top"><span>${nc.id}</span><span style="font-weight:400;color:var(--grey);font-size:11px;">${nc.fecha.split(' ')[0]}</span></div>
+      <div class="list-bottom" style="margin-top:2px;"><span class="list-sub">Partida ${esc(nc.partida)} · ${esc(ncAreasResumen(nc))}</span><span class="linklike">Ver ›</span></div>
+    </div>
+  `).join("") || `<div class="empty">Sin resultados para estos filtros.</div>`;
+
+  const pendCount = state.defectosPendientesCatalogo.length;
+
+  return shell(`Inicio`, `${esc(state.user.nombre)}`, null, `
+    ${successBannerHTML()}
+    <button class="btn btn-primary btn-block" onclick="startNuevaNC()">Registrar nueva No Conformidad</button>
+    <div class="row" style="margin-top:8px;">
+      <button class="btn btn-amber-solid btn-block" style="font-size:12px;" onclick="goTo('defectosPendientes')">🆕 Defectos por catalogar (${pendCount})</button>
+      <button class="btn btn-teal btn-block" style="font-size:12px;" onclick="goTo('evolutivo')">📈 Evolutivo de NC</button>
+    </div>
+
+    <div class="card-white" style="padding:9px 12px;margin-top:10px;">
+      <b style="font-size:12.5px;">Filtros</b>
+      <div style="margin-top:8px;">
+        <div class="row">
+          <div class="field" style="margin-bottom:8px;"><label style="font-size:10px;">N° de NC / Partida</label><input type="text" id="fNC2" value="${esc(f.nc)}" oninput="state.inicioFilters.nc=this.value" style="padding:7px 8px;font-size:12.5px;"></div>
+          <div class="field" style="margin-bottom:8px;"><label style="font-size:10px;">Área</label><select id="fArea2" onchange="state.inicioFilters.area=this.value" style="padding:7px 8px;font-size:12.5px;"><option value="">Todas</option>${AREAS.map(a=>`<option ${f.area===a?'selected':''}>${a}</option>`).join("")}</select></div>
+        </div>
+        <div class="row">
+          <div class="field" style="margin-bottom:8px;"><label style="font-size:10px;">Fecha inicio</label><input type="text" id="fIni2" value="${esc(f.ini)}" oninput="state.inicioFilters.ini=this.value" placeholder="dd/mm/aaaa" style="padding:7px 8px;font-size:12.5px;"></div>
+          <div class="field" style="margin-bottom:8px;"><label style="font-size:10px;">Fecha fin</label><input type="text" id="fFin2" value="${esc(f.fin)}" oninput="state.inicioFilters.fin=this.value" placeholder="dd/mm/aaaa" style="padding:7px 8px;font-size:12.5px;"></div>
+        </div>
+        <div class="row">
+          <div class="field" style="margin-bottom:0;"><label style="font-size:10px;">Responsable</label><input type="text" id="fResp2" value="${esc(f.resp)}" oninput="state.inicioFilters.resp=this.value" placeholder="Ej. Ramirez" style="padding:7px 8px;font-size:12.5px;"></div>
+          <div class="field" style="margin-bottom:0;display:flex;align-items:flex-end;">
+            <button class="btn btn-primary btn-block" style="padding:7px 8px;font-size:12.5px;" onclick="inicioBuscar()">Buscar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 6px;">
+      <b style="font-size:13px;">${usingFilter ? `Resultados (${list.length})` : 'Últimas NC registradas'}</b>
+      <div>
+        ${usingFilter ? `<span class="linklike" onclick="inicioLimpiarFiltros()">Limpiar</span>` : ""}
+        <span class="linklike" style="margin-left:10px;" onclick="openReporteModal()">📊 Reporte</span>
+      </div>
+    </div>
+    ${items}
+  `, null);
+}
+function parseDMY(s){
+  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec((s||"").trim());
+  if(!m) return null;
+  return new Date(+m[3], +m[2]-1, +m[1]);
+}
+function inicioBuscar(){
+  const f = state.inicioFilters;
+  const nc = (f.nc||"").toLowerCase();
+  const area = f.area;
+  const resp = (f.resp||"").toLowerCase();
+  const iniD = parseDMY(f.ini);
+  const finD = parseDMY(f.fin);
+  state.inicioResults = state.ncs.filter(x => {
+    if(nc && !x.id.toLowerCase().includes(nc) && !x.partida.includes(nc)) return false;
+    if(area && !ncHasArea(x, area)) return false;
+    if(resp && !x.registradoPor.toLowerCase().includes(resp)) return false;
+    const d = parseDMY(x.fecha.split(' ')[0]);
+    if(iniD && d && d<iniD) return false;
+    if(finD && d && d>finD) return false;
+    return true;
+  });
+  render();
+}
+function inicioLimpiarFiltros(){
+  state.inicioResults = null;
+  state.inicioFilters = { nc:"", ini:"", fin:"", area:"", resp:"" };
+  render();
+}
+function startNuevaNC(){
+  state.draft = emptyDraft();
+  state.draft.ncPreview = ncId(nextNum);
+  state.draft.fechaRegistro = nowStr();
+  state.editingId = null;
+  state.wizardEditMode = false;
+  goTo("paso1");
+}
+function goToWizardEdit(screen){
+  state.wizardEditMode = true;
+  goTo(screen);
+}
+
+/* =========================================================
+   EVOLUTIVO DE NC (simple, con periodo interactivo)
+========================================================= */
+function parseFechaHora(s){
+  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})/.exec((s||"").trim());
+  if(!m) return null;
+  return new Date(+m[3], +m[2]-1, +m[1], +m[4], +m[5]);
+}
+function excelKgAfectado(a){
+  const kg = parseFloat(a.kgCrudo), rollos = parseFloat(a.rollos), cant = parseFloat(a.cantidad);
+  if(!kg || !rollos || isNaN(cant)) return "";
+  return (kg * (cant/rollos)).toFixed(2);
+}
+function buildReporteRows(){
+  const rows = [];
+  rows.push(["NO CONFORME"]);
+  const fechas = state.ncs.map(nc=>parseFechaHora(nc.fecha)).filter(Boolean).sort((a,b)=>a-b);
+  const fmt = d => `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+  rows.push(["Fecha actual:", nowStr()]);
+  rows.push(["Fecha inicial:", fechas.length ? fmt(fechas[0]) : "-"]);
+  rows.push(["Fecha final:", fechas.length ? fmt(fechas[fechas.length-1]) : "-"]);
+  rows.push([]);
+  const headers = ["Número de No Conformidad","Fecha de Teñido","Fecha Informe","Fecha Entrega Tela Fin","Días en Planta","Tipo Partida","Partida","Cliente","Cod Color","Color","Cod Tela","Artículo","Rollos Asignado","KG","Rollos Rechazados","KG Afectados","Motivo de Rechazo","Situación","Área","Responsable","Asunto Técnico","Proceso","Acción","Talla","Status Partida"];
+  rows.push(headers);
+  state.ncs.forEach(nc => {
+    nc.articulos.forEach(a => {
+      a.defectos.forEach(d => {
+        rows.push([
+          nc.id, "", nc.fecha, "", "", "", nc.partida, nc.cliente, "", nc.color, a.codTela, a.nombre,
+          a.rollos, a.kgCrudo, a.cantidad, excelKgAfectado(a), defectoLabel(d), nc.estado, defectoAreaFinal(d),
+          nc.registradoPor, "", nc.proceso||"PRODUCCIÓN", "", a.talla, nc.status||"Rechazado",
+        ]);
+      });
+    });
+  });
+  return { rows, headers };
+}
+function csvEscape(v){
+  v = (v===undefined||v===null) ? "" : String(v);
+  if(v.indexOf(";")>-1 || v.indexOf('"')>-1 || v.indexOf("\n")>-1){
+    v = '"' + v.replace(/"/g,'""') + '"';
+  }
+  return v;
+}
+function downloadTextFile(content, filename, mime){
+  const blob = new Blob(["\ufeff"+content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+}
+function downloadBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+}
+// Genera el contenido del reporte (binario .xlsx si la librería XLSX está disponible,
+// o texto .csv como respaldo) sin descargarlo todavía — permite tanto la descarga
+// directa de un solo archivo como el empaquetado de varios reportes en un .zip.
+function buildExportContent(rows, headers, sheetName, notas){
+  if(typeof XLSX !== "undefined"){
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+    ws['!cols'] = (headers||[]).map(()=>({wch:17}));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, (sheetName||"Reporte").slice(0,31));
+    if(notas && notas.length){
+      const wsNotas = XLSX.utils.aoa_to_sheet(notas);
+      wsNotas['!cols'] = [{wch:100}];
+      XLSX.utils.book_append_sheet(wb, wsNotas, "Notas");
+    }
+    return { data: XLSX.write(wb, { bookType:"xlsx", type:"array" }), ext:"xlsx", isBinary:true };
+  }
+  const csv = rows.map(r => r.map(csvEscape).join(";")).join("\r\n");
+  return { data: "\ufeff"+csv, ext:"csv", isBinary:false };
+}
+// Mecanismo genérico de exportación (reutilizado por todos los reportes descargables:
+// el reporte histórico "NO CONFORME" de Inicio y los reportes de Evolutivo). Usa la
+// librería XLSX si está disponible; si no, cae automáticamente a un CSV compatible con Excel.
+function exportRowsToFile(rows, headers, sheetName, fileNameBase, notas){
+  const safeBase = fileNameBase.replace(/[\/: ]/g,'-');
+  const { data, ext, isBinary } = buildExportContent(rows, headers, sheetName, notas);
+  if(!isBinary){
+    downloadTextFile(data.replace(/^\ufeff/, ""), `${safeBase}.${ext}`, "text/csv;charset=utf-8;");
+    showSuccessMessage('Reporte generado en formato CSV (compatible con Excel) — no se pudo cargar la librería .xlsx en este momento (sin conexión a la librería externa).');
+    return;
+  }
+  const blob = new Blob([data], { type:"application/octet-stream" });
+  downloadBlob(blob, `${safeBase}.${ext}`);
+}
+function generarReporteExcel(){
+  const { rows, headers } = buildReporteRows();
+  const notas = [
+    ["Notas sobre este reporte (prototipo)"],
+    ["Cada fila representa un defecto individual (una NC con varios defectos genera varias filas)."],
+    ["Las columnas Fecha de Teñido, Fecha Entrega Tela Fin, Días en Planta, Tipo Partida, Cod Color, Asunto Técnico y Acción no se registran en este prototipo; requieren integración con el sistema real (SIGE / maestro de partidas)."],
+    ["KG Afectados es un valor estimado, calculado proporcionalmente: KG Crudo × (Rollos Rechazados / Rollos Asignados)."],
+    ["Proceso se asigna automáticamente como PRODUCCIÓN. Status Partida corresponde al campo Status de la NC (Rechazado)."],
+  ];
+  exportRowsToFile(rows, headers, "NO CONFORME", `Reporte_NO_CONFORME_${nowStr()}`, notas);
+}
+
+/* =========================================================
+   REPORTES DEL EVOLUTIVO (No Conforme 1 / No Conforme 2 / Informe Calidad)
+   Reutilizan el mismo mecanismo de exportación (exportRowsToFile) y respetan
+   el periodo seleccionado actualmente en la pantalla de Evolutivo.
+========================================================= */
+function buildReporteNoConforme1Rows(period){
+  const { start, end } = evoPeriodRange(period);
+  const rows = [];
+  rows.push(["NO CONFORME"]);
+  rows.push(["Fecha actual:", nowStr()]);
+  rows.push(["Fecha inicial:", fmtFecha(start)]);
+  rows.push(["Fecha final:", fmtFecha(end)]);
+  rows.push([]);
+  const headers = ["Número","Fecha de Teñido","Fecha Informe","Fecha Entrega Tela Fin","Días en Planta","Tipo Partida","Partida","Cliente","Cod Color","Color","Cod Tela","Artículo","Rollos Asignado","KG","Rollos Rechazados","KG Afectados","Motivo de Rechazo","Situación","Área Responsable","Asunto Técnico","Proceso","Acción","Talla","Status Partida"];
+  rows.push(headers);
+  ncsEnPeriodo(period).forEach(nc => {
+    nc.articulos.forEach(a => {
+      a.defectos.forEach(d => {
+        rows.push([
+          nc.id, "", nc.fecha, "", "", "", nc.partida, nc.cliente, "", nc.color, a.codTela, a.nombre,
+          a.rollos, a.kgCrudo, a.cantidad, excelKgAfectado(a), defectoLabel(d), nc.estado, defectoAreaFinal(d),
+          "", nc.proceso||"PRODUCCIÓN", "", a.talla, nc.status||"Rechazado",
+        ]);
+      });
+    });
+  });
+  return { rows, headers };
+}
+function buildReporteNoConforme2Rows(period){
+  const { start, end } = evoPeriodRange(period);
+  const rows = [];
+  rows.push(["NO CONFORME"]);
+  rows.push(["Fecha actual:", nowStr()]);
+  rows.push(["Fecha inicial:", fmtFecha(start)]);
+  rows.push(["Fecha final:", fmtFecha(end)]);
+  rows.push([]);
+  const headers = ["Fecha de Teñido","Fecha Informe","Fecha Entrega Tela Fin","Días en Planta","Tipo Partida","Partida","Cliente","Cod Color","Color","Cod Tela","Artículo","Rollos Asignado","KG","Rollos Rechazados","KG Afectados","Motivo de Rechazo","Situación","Área Responsable","Asunto Técnico","Proceso","Acción","Grupo Textil","Lote Hilado","OC"];
+  rows.push(headers);
+  ncsEnPeriodo(period).forEach(nc => {
+    nc.articulos.forEach(a => {
+      a.defectos.forEach(d => {
+        rows.push([
+          "", nc.fecha, "", "", "", nc.partida, nc.cliente, "", nc.color, a.codTela, a.nombre,
+          a.rollos, a.kgCrudo, a.cantidad, excelKgAfectado(a), defectoLabel(d), nc.estado, defectoAreaFinal(d),
+          "", nc.proceso||"PRODUCCIÓN", "", "", "", "",
+        ]);
+      });
+    });
+  });
+  return { rows, headers };
+}
+function buildReporteInformeCalidadRows(period){
+  const { start, end } = evoPeriodRange(period);
+  const rows = [];
+  rows.push(["REPORTE INFORME CALIDAD"]);
+  rows.push([`FECHA INICIO: ${fmtFecha(start)}`]);
+  rows.push([`FECHA FIN: ${fmtFecha(end)}`]);
+  rows.push([]);
+  const headers = ["Área Responsable","Orden","Fecha 1er Teñido","Fecha Informe","Fecha Entrega Tela Fin","Días en Planta","Tipo Partida","N° Partida","Cliente","Color","Artículo","Kilos","Motivo Rechazo","Situación","Acciones Correctivas","Proceso"];
+
+  const porArea = {};
+  ncsEnPeriodo(period).forEach(nc => {
+    nc.articulos.forEach(a => {
+      a.defectos.forEach(d => {
+        const area = defectoAreaFinal(d);
+        if(!porArea[area]) porArea[area] = [];
+        porArea[area].push({
+          fechaInforme: nc.fecha, partida: nc.partida, cliente: nc.cliente, color: nc.color,
+          articulo: a.nombre, kilos: excelKgAfectado(a), motivo: defectoLabel(d),
+          situacion: nc.estado, proceso: nc.proceso||"PRODUCCIÓN",
+        });
+      });
+    });
+  });
+
+  const areas = Object.keys(porArea).sort();
+  const resumen = [];
+  let totalGeneral = 0;
+  areas.forEach(area => {
+    rows.push([`/${area}/`]);
+    rows.push(headers);
+    let subtotal = 0;
+    porArea[area].forEach((r,i) => {
+      subtotal += parseFloat(r.kilos) || 0;
+      rows.push([
+        area, i+1, "", r.fechaInforme, "", "", "", r.partida, r.cliente, r.color, r.articulo,
+        r.kilos, r.motivo, r.situacion, "", r.proceso,
+      ]);
+    });
+    rows.push([]);
+    resumen.push([area, subtotal.toFixed(2)]);
+    totalGeneral += subtotal;
+  });
+
+  rows.push(["RESUMEN DE KILOS POR ÁREA RESPONSABLE"]);
+  rows.push(["Área Responsable","Kilos Partida"]);
+  resumen.forEach(r => rows.push(r));
+  rows.push(["TOTAL", totalGeneral.toFixed(2)]);
+
+  return { rows, headers };
+}
+function openReporteModal(){
+  state.reporteModal = { open:true, sel:{ nc1:false, nc2:false, informeCalidad:false }, error:"" };
+  render();
+}
+function closeReporteModal(){
+  state.reporteModal.open = false;
+  render();
+}
+function toggleReporteSel(key){
+  state.reporteModal.sel[key] = !state.reporteModal.sel[key];
+  state.reporteModal.error = "";
+  render();
+}
+function confirmDescargarReportes(){
+  const sel = state.reporteModal.sel;
+  const elegidos = Object.keys(sel).filter(k => sel[k]);
+  if(elegidos.length === 0){
+    state.reporteModal.error = "Seleccione al menos un reporte para descargar.";
+    render();
+    return;
+  }
+  const period = state.evoPeriod;
+  const items = [];
+  if(sel.nc1){
+    const { rows, headers } = buildReporteNoConforme1Rows(period);
+    items.push({ name:"Reporte_No_Conforme_1", sheetName:"NO CONFORME 1", rows, headers });
+  }
+  if(sel.nc2){
+    const { rows, headers } = buildReporteNoConforme2Rows(period);
+    items.push({ name:"Reporte_No_Conforme_2", sheetName:"NO CONFORME 2", rows, headers, notas:[
+      ["Los campos Grupo Textil, Lote Hilado y OC requieren integración con el sistema real (SIGE) y se muestran vacíos en este prototipo cuando no hay información disponible."],
+    ]});
+  }
+  if(sel.informeCalidad){
+    const { rows, headers } = buildReporteInformeCalidadRows(period);
+    items.push({ name:"Reporte_Informe_Calidad", sheetName:"INFORME CALIDAD", rows, headers });
+  }
+
+  const stamp = nowStr().replace(/[\/: ]/g,'-');
+  if(items.length === 1){
+    // Un solo reporte: descarga directa (mismo mecanismo de siempre).
+    const it = items[0];
+    exportRowsToFile(it.rows, it.headers, it.sheetName, `${it.name}_${stamp}`, it.notas);
+  } else if(typeof JSZip !== "undefined"){
+    // Varios reportes: se empaquetan en un único .zip para evitar que el navegador
+    // bloquee descargas múltiples simultáneas.
+    const zip = new JSZip();
+    items.forEach(it => {
+      const { data, ext } = buildExportContent(it.rows, it.headers, it.sheetName, it.notas);
+      zip.file(`${it.name}_${stamp}.${ext}`, data);
+    });
+    zip.generateAsync({ type:"blob" }).then(blob => {
+      downloadBlob(blob, `Reportes_NC_${stamp}.zip`);
+    });
+  } else {
+    // Respaldo si tampoco se pudo cargar la librería .zip: descarga individual escalonada.
+    items.forEach((it,i) => setTimeout(() => exportRowsToFile(it.rows, it.headers, it.sheetName, `${it.name}_${stamp}`, it.notas), i*400));
+  }
+  closeReporteModal();
+  showSuccessMessage(`Se ${elegidos.length>1?'generaron':'generó'} ${elegidos.length} reporte${elegidos.length>1?'s':''} correctamente.`);
+}
+function reporteModalHTML(){
+  const m = state.reporteModal;
+  const opciones = [
+    { key:"nc1", label:"No Conforme 1" },
+    { key:"nc2", label:"No Conforme 2" },
+    { key:"informeCalidad", label:"Informe Calidad" },
+  ];
+  return `
+    <div class="overlay">
+      <div class="sheet">
+        <div class="grabber"></div>
+        <h2 style="margin:0 0 4px;font-size:15px;">Descargar reportes</h2>
+        <p class="hint" style="margin:0 0 10px;">Periodo: <b>${esc(state.evoPeriod)}</b>. Seleccione uno o varios reportes.</p>
+        ${opciones.map(o => `
+          <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer;" onclick="toggleReporteSel('${o.key}')">
+            <div class="chk ${m.sel[o.key]?'on':''}">${m.sel[o.key]?'✓':''}</div>
+            <span style="font-size:13.5px;">${esc(o.label)}</span>
+          </div>
+        `).join("")}
+        ${m.error ? `<div class="field-err" style="margin-top:8px;">${esc(m.error)}</div>` : ""}
+        <div style="display:flex;gap:10px;margin-top:14px;">
+          <button class="btn btn-secondary" onclick="closeReporteModal()">Cancelar</button>
+          <button class="btn btn-primary" onclick="confirmDescargarReportes()">Descargar reportes seleccionados</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function startOfDay(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+function daysAgo(n){ const d = new Date(); d.setDate(d.getDate()-n); return startOfDay(d); }
+const DIAS_SEM = ["Do","Lu","Ma","Mi","Ju","Vi","Sa"];
+const MESES_ABR = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+function getISOWeek(d){
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dayNum = (date.getUTCDay() + 6) % 7;
+  date.setUTCDate(date.getUTCDate() - dayNum + 3);
+  const firstThursday = date.getTime();
+  date.setUTCMonth(0, 1);
+  if(date.getUTCDay() !== 4) date.setUTCMonth(0, 1 + ((4 - date.getUTCDay()) + 7) % 7);
+  return 1 + Math.round((firstThursday - date.getTime()) / (7*24*3600*1000));
+}
+
+function evoData7Dias(){
+  const fechas = state.ncs.map(nc => parseFechaHora(nc.fecha)).filter(Boolean);
+  const buckets = [];
+  for(let i=6;i>=0;i--){
+    const day = daysAgo(i);
+    const count = fechas.filter(d => startOfDay(d).getTime() === day.getTime()).length;
+    buckets.push([DIAS_SEM[day.getDay()], count]);
+  }
+  return buckets;
+}
+function evoData4Semanas(){
+  const fechas = state.ncs.map(nc => parseFechaHora(nc.fecha)).filter(Boolean);
+  const buckets = [];
+  for(let w=3;w>=0;w--){
+    const finDia = daysAgo(w*7);
+    const inicioDia = daysAgo(w*7+6);
+    const count = fechas.filter(d => {
+      const dd = startOfDay(d).getTime();
+      return dd >= inicioDia.getTime() && dd <= finDia.getTime();
+    }).length;
+    const label = `Sem ${getISOWeek(inicioDia)}`;
+    buckets.push([label, count]);
+  }
+  return buckets;
+}
+function evoDataMes(){
+  const now = new Date();
+  const year = now.getFullYear();
+  const fechas = state.ncs.map(nc => parseFechaHora(nc.fecha)).filter(Boolean);
+  const buckets = [];
+  for(let m=0; m<=now.getMonth(); m++){
+    const count = fechas.filter(d => d.getFullYear()===year && d.getMonth()===m).length;
+    buckets.push([MESES_ABR[m], count]);
+  }
+  return buckets;
+}
+function evoDataAnio(){
+  const fechas = state.ncs.map(nc => parseFechaHora(nc.fecha)).filter(Boolean);
+  const years = [...new Set(fechas.map(d=>d.getFullYear()))].sort();
+  if(years.length===0) years.push(new Date().getFullYear());
+  return years.map(y => [String(y), fechas.filter(d=>d.getFullYear()===y).length]);
+}
+function evoAreaData(){
+  const counts = {};
+  state.ncs.forEach(nc => {
+    (nc.articulos||[]).forEach(a => (a.defectos||[]).forEach(d => {
+      const ar = defectoAreaFinal(d);
+      counts[ar] = (counts[ar]||0) + 1;
+    }));
+  });
+  return Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,6);
+}
+function fmtFecha(d){ return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`; }
+// Calcula el rango de fechas (inicio/fin) correspondiente al periodo actualmente
+// seleccionado en la pantalla de Evolutivo ("Año","Mes","4 semanas","7 días").
+// Los reportes descargables deben respetar este mismo periodo.
+function evoPeriodRange(period){
+  const now = new Date();
+  if(period === "Año"){
+    return { start: new Date(now.getFullYear(), 0, 1), end: startOfDay(now) };
+  }
+  if(period === "Mes"){
+    return { start: new Date(now.getFullYear(), now.getMonth(), 1), end: startOfDay(now) };
+  }
+  if(period === "4 semanas"){
+    return { start: daysAgo(27), end: startOfDay(now) };
+  }
+  // "7 días"
+  return { start: daysAgo(6), end: startOfDay(now) };
+}
+function ncsEnPeriodo(period){
+  const { start, end } = evoPeriodRange(period);
+  return state.ncs.filter(nc => {
+    const d = parseFechaHora(nc.fecha);
+    if(!d) return false;
+    const dd = startOfDay(d).getTime();
+    return dd >= start.getTime() && dd <= end.getTime();
+  });
+}
+function screenEvolutivo(){
+  const periodMap = {
+    "Año": evoDataAnio, "Mes": evoDataMes,
+    "4 semanas": evoData4Semanas, "7 días": evoData7Dias,
+  };
+  const data = periodMap[state.evoPeriod]();
+  const hasData = data.some(d => d[1] > 0);
+  const max = Math.max(1, ...data.map(d=>d[1])) * 1.2;
+  const bars = data.map(([l,v]) => `<div class="bar" style="height:${(v/max*100).toFixed(0)}%"><span>${v}</span></div>`).join("");
+  const labels = data.map(([l]) => `<div>${esc(l)}</div>`).join("");
+
+  const areaData = evoAreaData();
+  const hasAreaData = areaData.length>0;
+  const amax = Math.max(1, ...areaData.map(d=>d[1]))*1.2;
+  const abars = areaData.map(([l,v])=>`<div class="bar" style="height:${(v/amax*100).toFixed(0)}%"><span>${v}</span></div>`).join("");
+  const alabels = areaData.map(([l])=>`<div>${esc(l.length>7?l.slice(0,6)+'.':l)}</div>`).join("");
+
+  return shell("Evolutivo de NC","Evolución en tiempo real — datos en vivo","goTo('inicio')", `
+    <h2 class="section" style="margin:0;">Periodo</h2>
+    <div style="margin-bottom:6px;">
+      ${["Año","Mes","4 semanas","7 días"].map(p=>`<span class="chip ${p===state.evoPeriod?'active chip-all':'chip-all'}" onclick="setEvoPeriod('${p}')">${p}</span>`).join("")}
+    </div>
+    <div class="card-white">
+      <b style="font-size:12.5px;">NC registradas — ${esc(state.evoPeriod)}</b>
+      ${hasData ? `<div class="barchart">${bars}</div><div class="barlabels">${labels}</div>` : `<div class="empty">Aún no hay No Conformidades registradas en este periodo.</div>`}
+    </div>
+    <div class="card-white">
+      <b style="font-size:12.5px;">Defectos por área — total registrado</b>
+      ${hasAreaData ? `<div class="barchart">${abars}</div><div class="barlabels">${alabels}</div>` : `<div class="empty">Aún no hay datos por área.</div>`}
+    </div>
+    <div class="small-note">La gráfica se calcula automáticamente a partir de todas las No Conformidades registradas en el aplicativo (incluye anuladas) y se actualiza con cada nuevo registro.</div>
+  `, null);
+}
+function setEvoPeriod(p){ state.evoPeriod = p; render(); }
+
+/* =========================================================
+   DEFECTOS NUEVOS POR CATALOGAR
+========================================================= */
+function screenDefectosPendientes(){
+  const items = state.defectosPendientesCatalogo;
+  const rows = items.map((it, i) => `
+    <div class="list-card">
+      <div class="list-top"><span>${esc(it.ncId)}</span><span style="font-weight:400;color:var(--grey);font-size:11px;">${esc(it.fecha)}</span></div>
+      <div class="list-sub"><b>${esc(it.descripcion)}</b></div>
+      <div class="list-sub">Partida ${esc(it.partida)} · ${esc(it.articulo)} · ${esc(it.usuario)}</div>
+      <div class="list-bottom">
+        <span class="linklike" onclick="goToGrabarMotivo(${i})">Grabar motivo</span>
+        <span class="linklike" onclick="openDetalle('${it.ncId}')">Ver ›</span>
+      </div>
+    </div>
+  `).join("") || `<div class="empty">No hay defectos nuevos pendientes de catalogar.</div>`;
+  return shell("Defectos nuevos por catalogar", "Pendientes de incorporar al catálogo", "goTo('inicio')", `
+    ${successBannerHTML()}
+    <div class="banner-sim">
+      Cuando un supervisor registra un defecto como "${esc(DEFECTO_NUEVO)}", queda listado aquí para que <b>Calidad</b> revise la descripción y decida si debe agregarse como un nuevo código al catálogo de Motivos de rechazo. Simulación – la incorporación definitiva al catálogo debe implementarse con TI; esta pantalla solo evita que el mismo defecto se pierda o se vuelva a registrar como "nuevo" sin ser revisado.
+    </div>
+    <h2 class="section" style="margin-top:0;">Pendientes (${items.length})</h2>
+    ${rows}
+  `, null);
+}
+function goToRevisarDefectoNuevo(i){
+  state.revisarDefecto = { pendIndex:i, editing:false, codigo:"", error:"" };
+  goTo("revisarDefectoNuevo");
+}
+function goToGrabarMotivo(i){
+  const it = state.defectosPendientesCatalogo[i];
+  const found = findDefectoNuevo(it);
+  const def = found ? found.defecto : null;
+  state.grabarMotivo = {
+    pendIndex:i,
+    motivo: def && !def.isOtro ? def.motivo : "",
+    area: def ? def.area : "",
+    areaOtro: def ? (def.areaOtro||"") : "",
+    errors:{},
+  };
+  goTo("grabarMotivo");
+}
+function updateGrabarMotivoMotivo(val){ state.grabarMotivo.motivo = val; render(); }
+function updateGrabarMotivoArea(val){ state.grabarMotivo.area = val; render(); }
+function screenGrabarMotivo(){
+  const gm = state.grabarMotivo;
+  const it = state.defectosPendientesCatalogo[gm.pendIndex];
+  if(!it) return shell("Grabar motivo","No encontrado","goTo('defectosPendientes')", `<div class="empty">Este defecto ya fue revisado o ya no existe.</div>`, null);
+  const isAreaOtra = gm.area === OTRA_AREA;
+  return shell("Grabar motivo", "Registrar motivo y área", "goTo('defectosPendientes')", `
+    <div class="card-white">
+      <div class="kv"><span class="k">Partida</span><span class="v">${esc(it.partida)}</span></div>
+      <div class="kv"><span class="k">N° de NC</span><span class="v">${esc(it.ncId)}</span></div>
+      <div class="kv"><span class="k">Artículo</span><span class="v">${esc(it.articulo)}</span></div>
+    </div>
+    <div class="card-white">
+      <b style="font-size:12.5px;color:var(--amber);">🆕 Defecto nuevo registrado</b>
+      <p style="font-size:12.5px;margin:8px 0 0;">${esc(it.descripcion)}</p>
+    </div>
+    <div class="${gm.errors.motivo?'field error':'field'}">
+      <label>Motivo de rechazo <span class="req">*</span></label>
+      ${searchInput('motivoGrabarInput', MOTIVOS, gm.motivo, `state.grabarMotivo.motivo=this.value`, `updateGrabarMotivoMotivo(this.value)`, "Escriba para buscar o seleccione...")}
+      ${gm.errors.motivo ? `<div class="field-err">${esc(gm.errors.motivo)}</div>` : ""}
+    </div>
+    <div class="${gm.errors.area?'field error':'field'}">
+      <label>Área responsable <span class="req">*</span></label>
+      ${searchInput('areaGrabarInput', [...AREAS, OTRA_AREA], gm.area, `state.grabarMotivo.area=this.value`, `updateGrabarMotivoArea(this.value)`, "Escriba para buscar el área...")}
+      ${gm.errors.area ? `<div class="field-err">${esc(gm.errors.area)}</div>` : ""}
+    </div>
+    ${isAreaOtra ? `
+    <div class="${gm.errors.areaOtro?'field error':'field'}">
+      <label>Especifique el área <span class="req">*</span></label>
+      <input type="text" value="${esc(gm.areaOtro)}" oninput="state.grabarMotivo.areaOtro=this.value">
+      ${gm.errors.areaOtro ? `<div class="field-err">${esc(gm.errors.areaOtro)}</div>` : ""}
+    </div>` : ""}
+  `, `
+    <button class="btn btn-secondary" onclick="goTo('defectosPendientes')">Cancelar</button>
+    <button class="btn btn-primary" onclick="confirmarGrabarMotivo()">Guardar</button>
+  `);
+}
+function confirmarGrabarMotivo(){
+  const gm = state.grabarMotivo;
+  gm.errors = {};
+  let ok = true;
+  if(!gm.motivo || !gm.motivo.trim()){ gm.errors.motivo = "Ingrese o seleccione el motivo de rechazo."; ok=false; }
+  if(!gm.area){ gm.errors.area = "Seleccione el área responsable."; ok=false; }
+  else if(gm.area===OTRA_AREA && !(gm.areaOtro||"").trim()){ gm.errors.areaOtro = "Especifique el área responsable."; ok=false; }
+  if(!ok){ render(); return; }
+  const it = state.defectosPendientesCatalogo[gm.pendIndex];
+  const found = findDefectoNuevo(it);
+  if(!found){ gm.errors.motivo = "No fue posible ubicar el defecto original."; render(); return; }
+  const { nc, defecto } = found;
+  if(!MOTIVOS.includes(gm.motivo)) MOTIVOS.push(gm.motivo);
+  defecto.isOtro = false;
+  defecto.motivo = gm.motivo;
+  defecto.area = gm.area;
+  defecto.areaOtro = gm.area===OTRA_AREA ? gm.areaOtro : "";
+  nc.historial.push({ fecha: nowStr(), usuario: state.user.nombre, accion: "Se registró el motivo" });
+  state.defectosPendientesCatalogo.splice(gm.pendIndex,1);
+  state.lastMensajesInfo = { ncId: nc.id, tipo:"catalogado", extra:{ codigo: gm.motivo } };
+  goTo("defectosPendientes");
+  showSuccessMessage("El motivo y área fueron registrados correctamente.");
+}
+function screenRevisarDefectoNuevo(){
+  const rd = state.revisarDefecto;
+  const it = state.defectosPendientesCatalogo[rd.pendIndex];
+  if(!it) return shell("Defecto nuevo","No encontrado","goTo('defectosPendientes')", `<div class="empty">Este defecto ya fue revisado o ya no existe.</div>`, null);
+  const found = findDefectoNuevo(it);
+  return shell("Defecto nuevo", "Revisión — Gerencia de Calidad", "goTo('defectosPendientes')", `
+    ${state.successMessage ? successBannerHTML() : ""}
+    <div class="card-white">
+      <div class="kv"><span class="k">Partida</span><span class="v">${esc(it.partida)}</span></div>
+      <div class="kv"><span class="k">N° de NC</span><span class="v">${esc(it.ncId)}</span></div>
+      <div class="kv"><span class="k">Artículo</span><span class="v">${esc(it.articulo)}</span></div>
+      <div class="kv"><span class="k">Registrado por</span><span class="v">${esc(it.usuario)}</span></div>
+      <div class="kv"><span class="k">Fecha</span><span class="v">${esc(it.fecha)}</span></div>
+      <div class="kv"><span class="k">Grado de criticidad</span><span class="v">Grave</span></div>
+    </div>
+    <div class="card-white">
+      <b style="font-size:13px;color:var(--amber);">🆕 Defecto nuevo registrado</b>
+      <p style="font-size:13px;margin:8px 0 0;">${esc(it.descripcion)}</p>
+    </div>
+    ${!found ? `<div class="banner-error">No fue posible ubicar el defecto original (pudo haber sido editado). Verifique en el Detalle de la NC.</div>` : rd.editing ? `
+    <div class="card-white">
+      <p class="hint" style="margin-top:0;color:var(--accent);font-weight:700;">Editar — asignar código de catálogo</p>
+      <div class="${rd.error?'field error':'field'}">
+        <label>Código y descripción de catálogo <span class="req">*</span></label>
+        <input type="text" id="codigoNuevoInput" value="${esc(rd.codigo)}" placeholder="Ej. TIN091 - OLOR QUÍMICO PERSISTENTE" oninput="state.revisarDefecto.codigo=this.value">
+        ${rd.error ? `<div class="field-err">${esc(rd.error)}</div>` : ""}
+        <p class="hint">Este código se incorporará al catálogo de Motivos y quedará asignado a este defecto, dejando de figurar como "nuevo".</p>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-secondary" onclick="cancelRevisarEdit()">Cancelar</button>
+        <button class="btn btn-primary" onclick="confirmarCodigoDefectoNuevo()">Guardar código</button>
+      </div>
+    </div>
+    ` : `
+    <button class="btn btn-primary btn-block" onclick="state.revisarDefecto.editing=true; render();">Editar</button>
+    `}
+  `, null);
+}
+function cancelRevisarEdit(){ state.revisarDefecto.editing=false; state.revisarDefecto.error=""; render(); }
+function confirmarCodigoDefectoNuevo(){
+  const rd = state.revisarDefecto;
+  const codigo = (rd.codigo||"").trim();
+  if(!codigo){ rd.error = "Ingrese el código y descripción a asignar."; render(); return; }
+  const it = state.defectosPendientesCatalogo[rd.pendIndex];
+  const found = findDefectoNuevo(it);
+  if(!found){ rd.error = "No fue posible ubicar el defecto original."; render(); return; }
+  const { nc, defecto } = found;
+  if(!MOTIVOS.includes(codigo)) MOTIVOS.push(codigo);
+  defecto.isOtro = false;
+  defecto.motivo = codigo;
+  nc.historial.push({ fecha: nowStr(), usuario: state.user.nombre, accion: `Gerencia de Calidad asignó el código "${codigo}" al defecto nuevo "${it.descripcion}" (incorporado al catálogo de Motivos).` });
+  state.defectosPendientesCatalogo.splice(rd.pendIndex,1);
+  state.lastMensajesInfo = { ncId: nc.id, tipo:"catalogado", extra:{ codigo } };
+  goTo("defectosPendientes");
+  showSuccessMessage("El código fue asignado y el catálogo actualizado correctamente.");
+}
+
+/* =========================================================
+   WIZARD — PASO 1: Partida y artículos
+========================================================= */
+function screenPaso1(){
+  const d = state.draft;
+  const found = !!d.partida && !!PARTIDAS_DB[d.partida];
+  const editing = !!state.editingId;
+  const ncNumero = editing ? state.editingId : d.ncPreview;
+
+  let articulosHTML = "";
+  if(found){
+    articulosHTML = d.articulosDisponibles.map((a, idx) => {
+      const sel = d.seleccion[idx] || { checked:false, cantidad:"", open:true };
+      const errKey = `art_${idx}`;
+      if(sel.checked && sel.open===false){
+        const summary = `${esc(a.nombre)} · ${sel.cantidad ? esc(sel.cantidad)+' rollos' : 'cantidad pendiente'}`;
+        return `
+          <div class="art-card checked" style="cursor:pointer;padding:10px 12px;" onclick="toggleArticuloOpen(${idx})">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div style="min-width:0;display:flex;align-items:center;gap:8px;">
+                <div class="chk on" style="flex:none;">✓</div>
+                <span style="font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${summary}</span>
+              </div>
+              <span style="font-size:16px;color:var(--grey);flex:none;">›</span>
+            </div>
+          </div>
+        `;
+      }
+      return `
+        <div class="art-card ${sel.checked?'checked':''}">
+          <div class="art-top">
+            <div class="chk ${sel.checked?'on':''}" onclick="toggleArticulo(${idx})">${sel.checked?'✓':''}</div>
+            <div class="art-name" onclick="${sel.checked ? `toggleArticuloOpen(${idx})` : `toggleArticulo(${idx})`}">${esc(a.nombre)}</div>
+          </div>
+          <div class="art-grid">
+            <div><span class="lbl">Cód. Tela</span><span class="val">${esc(a.codTela)}</span></div>
+            <div><span class="lbl">Talla</span><span class="val">${esc(a.talla)}</span></div>
+            <div><span class="lbl">Kg. Crudo</span><span class="val">${esc(a.kgCrudo)}</span></div>
+            <div><span class="lbl">Rollos</span><span class="val">${esc(a.rollos)}</span></div>
+          </div>
+          ${sel.checked ? `
+          <div class="qty-wrap ${fieldClass(errKey)}">
+            <label>Cantidad afectada <span class="req">*</span></label>
+            <input type="number" min="1" max="${a.rollos}" value="${esc(sel.cantidad)}" oninput="updateCantidad(${idx}, this.value)">
+            ${errHTML(errKey)}
+          </div>
+          ` : ""}
+        </div>
+      `;
+    }).join("");
+  }
+
+  return shell("Registrar No Conformidad", (state.wizardEditMode ? "Editar — " : "Nuevo registro — ") + "Paso 1 de 3", "cancelWizard()", `
+    <div class="stepper">
+      <div class="bar"><div style="width:33%"></div></div>
+    </div>
+    ${state.errors.summary ? `<div class="banner-error">${esc(state.errors.summary)}</div>` : ""}
+    <div class="card-white" style="padding:9px 12px;margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:11.5px;color:var(--grey);">N° de No Conformidad</span>
+        <b style="font-size:14px;color:var(--accent);">${esc(ncNumero)}</b>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+        <span style="font-size:11.5px;color:var(--grey);">Fecha y hora de registro</span>
+        <b style="font-size:12.5px;">${esc(d.fechaRegistro)}</b>
+      </div>
+    </div>
+    <div class="${fieldClass('partida')}">
+      <label>Partida <span class="req">*</span></label>
+      <input type="text" id="partidaInput" value="${esc(d.partida)}" placeholder="Ej. 07825" oninput="onPartidaInput(this.value)">
+      ${errHTML('partida')}
+    </div>
+    ${found ? `
+      <div class="card-white" style="padding:10px 12px;margin-top:4px;">
+        <div class="kv"><span class="k">Cliente</span><span class="v">${esc(d.cliente)}</span></div>
+        <div class="kv"><span class="k">Color</span><span class="v">${esc(d.color)}</span></div>
+      </div>
+      <p class="hint">Datos autocompletados desde la partida — no requieren digitación.</p>
+      ${state.errors.articulos ? `<div class="banner-error">${esc(state.errors.articulos)}</div>` : ""}
+      <p class="hint">Marque él/los artículos e indique la cantidad afectada. Toque un artículo ya completo para colapsarlo. *</p>
+      ${articulosHTML}
+      <p class="hint">Puede seleccionar más de un artículo; la cantidad no puede superar el total de cada uno.</p>
+    ` : `<div class="banner-sim">Simulación – partidas de prueba válidas: <b>07825</b>, <b>05796</b>, <b>03181</b>.</div>`}
+  `, `
+    <button class="btn btn-secondary" onclick="cancelWizard()">Cancelar</button>
+    <button class="btn btn-primary" onclick="validatePaso1Combinado()">Siguiente ›</button>
+  `);
+}
+function validatePaso1Combinado(){
+  clearErrs();
+  const d = state.draft;
+  if(!d.partida){ setErr('partida','Ingrese el número de partida.'); render(); return; }
+  if(!PARTIDAS_DB[d.partida]){ setErr('partida','Partida no encontrada. Verifique el número. (Simulación – prueba: 07825, 05796, 03181).'); render(); return; }
+  const checkedIdx = Object.keys(d.seleccion).filter(k => d.seleccion[k].checked);
+  if(checkedIdx.length===0){ setErr('articulos','Seleccione al menos un artículo afectado.'); render(); return; }
+  let ok = true;
+  checkedIdx.forEach(k => {
+    const sel = d.seleccion[k]; const a = d.articulosDisponibles[k];
+    const n = parseInt(sel.cantidad,10);
+    if(!sel.cantidad || isNaN(n) || n<=0){ setErr(`art_${k}`, "Ingrese la cantidad afectada."); ok = false; sel.open = true; }
+    else if(n > a.rollos){ setErr(`art_${k}`, `La cantidad no puede superar el total disponible (${a.rollos}).`); ok = false; sel.open = true; }
+  });
+  if(!ok){ setErr('articulos','Corrija la cantidad afectada en los artículos marcados en rojo.'); render(); return; }
+  goTo("paso2");
+}
+function toggleArticuloOpen(idx){
+  const sel = state.draft.seleccion[idx];
+  if(!sel) return;
+  sel.open = !sel.open;
+  render();
+}
+function onPartidaInput(val){
+  val = val.trim();
+  state.draft.partida = val;
+  clearErrs();
+  if(val && PARTIDAS_DB[val]){
+    const p = PARTIDAS_DB[val];
+    state.draft.cliente = p.cliente; state.draft.color = p.color; state.draft.peso = p.peso; state.draft.fechaPartida = p.fecha;
+    state.draft.articulosDisponibles = p.articulos;
+    if(Object.keys(state.draft.seleccion).length===0){
+      // preselect all with empty qty, matching mockup default behavior
+      p.articulos.forEach((a,idx)=>{ state.draft.seleccion[idx] = { checked:true, cantidad:"", open:true, defectos:[emptyDefecto()] }; });
+    }
+  } else {
+    state.draft.cliente = state.draft.color = state.draft.peso = state.draft.fechaPartida = "";
+    state.draft.articulosDisponibles = []; state.draft.seleccion = {};
+  }
+  render();
+  const el = $("partidaInput"); if(el){ el.focus(); el.setSelectionRange(val.length,val.length); }
+}
+function toggleArticulo(idx){
+  const cur = state.draft.seleccion[idx] || { checked:false, cantidad:"", open:true, defectos:[emptyDefecto()] };
+  cur.checked = !cur.checked;
+  cur.open = true;
+  if(cur.checked && (!cur.defectos || cur.defectos.length===0)) cur.defectos = [emptyDefecto()];
+  state.draft.seleccion[idx] = cur;
+  render();
+}
+function updateCantidad(idx, val){
+  state.draft.seleccion[idx].cantidad = val;
+  const a = state.draft.articulosDisponibles[idx];
+  const n = parseInt(val,10);
+  const key = `art_${idx}`;
+  if(val!=="" && (isNaN(n) || n<=0)){
+    setErr(key, "Ingrese una cantidad numérica válida.");
+  } else if(n > a.rollos){
+    setErr(key, `La cantidad no puede superar el total disponible (${a.rollos}).`);
+  } else {
+    delete state.errors[key];
+  }
+  // re-render only error area lightly: full render keeps caret position acceptable for a prototype
+  renderKeepFocus();
+}
+function renderKeepFocus(){
+  const active = document.activeElement;
+  const tag = active && active.tagName;
+  const idxMatch = active && active.closest && active.closest(".qty-wrap");
+  render();
+}
+function cancelWizard(){
+  if(draftHasData()){
+    askConfirm("¿Desea cancelar el registro? Se perderá la información ingresada.", proceedCancelWizard, "Sí, salir", "Cancelar");
+  } else {
+    proceedCancelWizard();
+  }
+}
+function draftHasData(){
+  const d = state.draft;
+  if(!d) return false;
+  const sel = d.seleccion || {};
+  const anyChecked = Object.values(sel).some(s=>s.checked);
+  const anyDefectoData = Object.values(sel).some(s => (s.defectos||[]).some(def =>
+    def.motivo || def.isOtro || def.descripcionOtro || def.area || (def.evidencia && def.evidencia.length)
+  ));
+  return !!(d.partida || d.comentario || anyChecked || anyDefectoData);
+}
+function proceedCancelWizard(){
+  if(state.editingId){
+    const id = state.editingId;
+    state.draft = null; state.editingId = null;
+    openDetalle(id);
+  } else {
+    state.draft = null;
+    goTo("inicio");
+  }
+}
+
+/* =========================================================
+   WIZARD — PASO 2: Clasificación y evidencia
+========================================================= */
+function screenPaso2(){
+  const d = state.draft;
+  const checkedIdx = Object.keys(d.seleccion).filter(k => d.seleccion[k].checked);
+  const grupo = d.grupoDefecto;
+
+  const articulosHTML = checkedIdx.map(idxStr => {
+    const idx = idxStr;
+    const a = d.articulosDisponibles[idx];
+    const sel = d.seleccion[idx];
+    const defectosHTML = sel.defectos.map((def, j) => defectoSummaryDraftRow(idx, j, def, sel.defectos.length>1)).join("");
+    return `
+      <div class="card-white" style="padding:10px 12px;margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <b style="font-size:13px;">${esc(a.nombre)}</b>
+        </div>
+        ${defectosHTML}
+      </div>
+    `;
+  }).join("");
+
+  const grupoHTML = `
+    <div class="card-white" style="padding:10px 12px;margin-bottom:14px;border:1px dashed var(--accent);">
+      <p class="hint" style="margin:0 0 8px;">Marque uno o varios artículos. Si comparten el mismo motivo y área, se registrarán en conjunto, evitando el registro repetitivo.</p>
+      ${checkedIdx.map(idx => {
+        const a = d.articulosDisponibles[idx];
+        const checked = !!grupo.seleccion[idx];
+        return `
+          <div style="display:flex;align-items:center;gap:8px;padding:4px 0;cursor:pointer;" onclick="toggleGrupoArticulo(${idx})">
+            <div class="chk ${checked?'on':''}">${checked?'✓':''}</div>
+            <span style="font-size:12.5px;">${esc(a.nombre)}</span>
+          </div>
+        `;
+      }).join("")}
+      <div class="${grupo.errors.motivo?'field error':'field'}" style="margin-top:8px;">
+        <label>Motivo de rechazo <span class="req">*</span></label>
+        ${searchInput('grupoMotivoInput', [...MOTIVOS, DEFECTO_NUEVO], grupo.isOtro?DEFECTO_NUEVO:grupo.motivo, `state.draft.grupoDefecto.motivo=this.value`, `updateGrupoMotivo(this.value)`, "Escriba para buscar o seleccione...")}
+        ${grupo.errors.motivo ? `<div class="field-err">${esc(grupo.errors.motivo)}</div>` : ""}
+      </div>
+      ${grupo.isOtro ? `
+      <div class="${grupo.errors.desc?'field error':'field'}">
+        <label>Descripción del defecto nuevo <span class="req">*</span></label>
+        <input type="text" value="${esc(grupo.descripcionOtro)}" oninput="updateGrupoDescOtro(this.value)">
+        ${grupo.errors.desc ? `<div class="field-err">${esc(grupo.errors.desc)}</div>` : ""}
+      </div>` : ""}
+      <div class="${grupo.errors.area?'field error':'field'}">
+        <label>Área responsable <span class="req">*</span></label>
+        ${searchInput('grupoAreaInput', [...AREAS, OTRA_AREA], grupo.area, `state.draft.grupoDefecto.area=this.value`, `updateGrupoArea(this.value)`, "Escriba para buscar el área...")}
+        ${grupo.errors.area ? `<div class="field-err">${esc(grupo.errors.area)}</div>` : ""}
+      </div>
+      ${grupo.area===OTRA_AREA ? `
+      <div class="${grupo.errors.areaOtro?'field error':'field'}">
+        <label>Especifique el área <span class="req">*</span></label>
+        <input type="text" value="${esc(grupo.areaOtro)}" oninput="updateGrupoAreaOtro(this.value)">
+        ${grupo.errors.areaOtro ? `<div class="field-err">${esc(grupo.errors.areaOtro)}</div>` : ""}
+      </div>` : ""}
+      <label>Evidencia fotográfica <span class="req">*</span></label>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;margin:4px 0 2px;">
+        <div class="file-input-wrap">
+          <label class="photo-box photo-add" style="width:56px;height:56px;font-size:18px;" for="grupoFileCamera" title="Tomar foto">📷</label>
+          <input type="file" id="grupoFileCamera" accept="image/*" capture="environment" onchange="handleGrupoFiles(this.files)">
+        </div>
+        <div class="file-input-wrap">
+          <label class="photo-box photo-add" style="width:56px;height:56px;font-size:14px;" for="grupoFile" title="Subir foto">+</label>
+          <input type="file" id="grupoFile" accept="image/*" multiple onchange="handleGrupoFiles(this.files)">
+        </div>
+        ${grupo.evidencia.map((f,pi)=>`
+          <div class="photo-box" style="width:56px;height:56px;">
+            ${f.dataUrl?`<img src="${f.dataUrl}">`:`<span style="font-size:8px;">foto</span>`}
+            <div class="photo-x" onclick="removeGrupoEvidencia(${pi})">✕</div>
+          </div>
+        `).join("")}
+      </div>
+      <p class="hint" style="margin:0 0 8px;">📷 Tomar foto · + Subir foto desde el dispositivo</p>
+      ${grupo.errors.evidencia ? `<div class="field-err" style="margin:-4px 0 8px;">${esc(grupo.errors.evidencia)}</div>` : ""}
+      <div class="field">
+        <label>Comentario / observación general</label>
+        <textarea id="comentarioInput" placeholder="Describa información adicional (opcional)..." oninput="state.draft.comentario=this.value">${esc(d.comentario)}</textarea>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="aplicarGrupoDefecto()">Aplicar</button>
+    </div>
+  `;
+
+  return shell("Registrar No Conformidad", (state.wizardEditMode ? "Editar — " : "Nuevo registro — ") + "Paso 2 de 3", "goTo('paso1')", `
+    <div class="stepper">
+      <div class="bar"><div style="width:66%"></div></div>
+      <div class="curstep">Defectos por artículo</div>
+    </div>
+    ${state.errors.summary ? `<div class="banner-error">${esc(state.errors.summary)}</div>` : ""}
+    ${grupoHTML}
+    ${articulosHTML}
+  `, `
+    <button class="btn btn-secondary" onclick="cancelWizard()">Cancelar</button>
+    <button class="btn btn-primary" onclick="validateDefectosStep()">Siguiente ›</button>
+  `);
+}
+function defectoSummaryDraftRow(artIdx, defIdx, def, canRemove){
+  const isComplete = (def.isOtro ? !!(def.descripcionOtro && def.descripcionOtro.trim()) : !!def.motivo) && !!def.area && def.evidencia.length>0;
+  const summary = `${esc(defectoLabel(def))} · ${def.area?esc(defectoAreaFinal(def)):'sin área'} · ${def.evidencia.length} foto(s)`;
+  return `
+    <div style="border:1px solid ${isComplete?'var(--border)':'var(--red)'};border-radius:8px;padding:8px 10px;margin-bottom:8px;background:var(--bg-soft);">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="min-width:0;">
+          <b style="font-size:11px;color:var(--grey);">Defecto ${Number(defIdx)+1}</b>
+          <div style="font-size:11.5px;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${isComplete?'✓ ':''}${summary}</div>
+        </div>
+        <div style="display:flex;gap:10px;flex:none;">
+          <span class="linklike" onclick="openDraftDefectoModal(${artIdx},${defIdx})">Editar</span>
+          ${canRemove ? `<span class="linklike" style="color:var(--red);" onclick="removeDefecto(${artIdx},${defIdx})">Quitar</span>` : ""}
+        </div>
+      </div>
+    </div>
+  `;
+}
+function openDraftDefectoModal(artIdx, defIdx){
+  if(defIdx===null || defIdx===undefined){
+    state.draftDefModal = { open:true, artIdx, defIdx:null, motivo:"", isOtro:false, descripcionOtro:"", area:"", areaOtro:"", evidencia:[], comentario:"", errors:{} };
+  } else {
+    const def = state.draft.seleccion[artIdx].defectos[defIdx];
+    state.draftDefModal = {
+      open:true, artIdx, defIdx,
+      motivo: def.motivo, isOtro: def.isOtro, descripcionOtro: def.descripcionOtro||"",
+      area: def.area||"", areaOtro: def.areaOtro||"",
+      evidencia: def.evidencia.map(f=>({...f})),
+      comentario: def.comentario||"",
+      errors: {},
+    };
+  }
+  render();
+}
+function closeDraftDefectoModal(){
+  state.draftDefModal.open = false;
+  render();
+}
+function updateDraftModalMotivo(val){
+  const m = state.draftDefModal;
+  if(val === DEFECTO_NUEVO){ m.motivo=""; m.isOtro=true; }
+  else { m.motivo=val; m.isOtro=false; }
+  render();
+}
+function updateDraftModalDescOtro(val){ state.draftDefModal.descripcionOtro = val; }
+function updateDraftModalArea(val){ state.draftDefModal.area = val; render(); }
+function updateDraftModalAreaOtro(val){ state.draftDefModal.areaOtro = val; }
+function updateDraftModalComentario(val){ state.draftDefModal.comentario = val; }
+function handleDraftModalFiles(files){
+  if(!files || !files.length) return;
+  Array.from(files).forEach(f => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      state.draftDefModal.evidencia.push({ name:f.name, dataUrl:e.target.result });
+      render();
+    };
+    reader.readAsDataURL(f);
+  });
+}
+function removeDraftModalEvidencia(pi){
+  state.draftDefModal.evidencia.splice(pi,1);
+  render();
+}
+function saveDraftDefectoModal(){
+  const m = state.draftDefModal;
+  m.errors = {};
+  let ok = true;
+  if(m.isOtro){
+    if(!m.descripcionOtro || !m.descripcionOtro.trim()){ m.errors.desc = "Describa el defecto encontrado."; ok=false; }
+  } else if(!m.motivo){ m.errors.motivo = "Seleccione el motivo de rechazo."; ok=false; }
+  if(!m.area){ m.errors.area = "Seleccione el área responsable."; ok=false; }
+  else if(m.area===OTRA_AREA && !(m.areaOtro||"").trim()){ m.errors.areaOtro = "Especifique el área responsable."; ok=false; }
+  if(!m.evidencia || m.evidencia.length===0){ m.errors.evidencia = "La evidencia fotográfica es obligatoria."; ok=false; }
+  if(!ok){ render(); return; }
+  const arr = state.draft.seleccion[m.artIdx].defectos;
+  const data = { motivo: m.isOtro?"":m.motivo, isOtro:m.isOtro, descripcionOtro:m.descripcionOtro, area:m.area, areaOtro:m.areaOtro, evidencia:m.evidencia, comentario:m.comentario||"", open:false };
+  if(m.defIdx===null) arr.push(data);
+  else arr[m.defIdx] = data;
+  state.draftDefModal.open = false;
+  render();
+}
+function draftDefectoModalHTML(){
+  const m = state.draftDefModal;
+  if(!m.open) return "";
+  const a = state.draft.articulosDisponibles[m.artIdx];
+  const isNew = m.defIdx===null;
+  const isAreaOtra = m.area === OTRA_AREA;
+  const photos = m.evidencia.map((f,pi) => `
+    <div class="photo-box" style="width:56px;height:56px;">
+      ${f.dataUrl ? `<img src="${f.dataUrl}">` : `<span style="font-size:8px;">foto</span>`}
+      <div class="photo-x" onclick="removeDraftModalEvidencia(${pi})">✕</div>
+    </div>
+  `).join("");
+  return `
+    <div class="overlay">
+      <div class="sheet">
+        <div class="grabber"></div>
+        <p class="hint" style="margin:0 0 2px;">${esc(a.nombre)}</p>
+        <h2 style="margin:0 0 10px;font-size:15px;">${isNew ? "Nuevo defecto" : "Editar defecto"}</h2>
+        <div class="${(m.errors.motivo||m.errors.desc)?'field error':'field'}">
+          <label>Motivo de rechazo <span class="req">*</span></label>
+          ${searchInput('modalDraftMotivo', [...MOTIVOS, DEFECTO_NUEVO], m.isOtro?DEFECTO_NUEVO:m.motivo, `state.draftDefModal.motivo=this.value`, `updateDraftModalMotivo(this.value)`, "Escriba para buscar o seleccione...")}
+          ${m.errors.motivo ? `<div class="field-err">${esc(m.errors.motivo)}</div>` : ""}
+        </div>
+        ${m.isOtro ? `
+        <div class="${m.errors.desc?'field error':'field'}">
+          <label>Descripción del defecto nuevo <span class="req">*</span></label>
+          <input type="text" value="${esc(m.descripcionOtro)}" oninput="updateDraftModalDescOtro(this.value)">
+          ${m.errors.desc ? `<div class="field-err">${esc(m.errors.desc)}</div>` : ""}
+        </div>` : ""}
+        <div class="${m.errors.area?'field error':'field'}">
+          <label>Área responsable <span class="req">*</span></label>
+          ${searchInput('modalDraftArea', [...AREAS, OTRA_AREA], m.area, `state.draftDefModal.area=this.value`, `updateDraftModalArea(this.value)`, "Escriba para buscar el área...")}
+          ${m.errors.area ? `<div class="field-err">${esc(m.errors.area)}</div>` : ""}
+        </div>
+        ${isAreaOtra ? `
+        <div class="${m.errors.areaOtro?'field error':'field'}">
+          <label>Especifique el área <span class="req">*</span></label>
+          <input type="text" value="${esc(m.areaOtro)}" oninput="updateDraftModalAreaOtro(this.value)">
+          ${m.errors.areaOtro ? `<div class="field-err">${esc(m.errors.areaOtro)}</div>` : ""}
+        </div>` : ""}
+        <label>Evidencia fotográfica <span class="req">*</span></label>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;margin:4px 0 2px;">
+          <div class="file-input-wrap">
+            <label class="photo-box photo-add" style="width:56px;height:56px;font-size:18px;" for="modalDraftFileCamera" title="Tomar foto">📷</label>
+            <input type="file" id="modalDraftFileCamera" accept="image/*" capture="environment" onchange="handleDraftModalFiles(this.files)">
+          </div>
+          <div class="file-input-wrap">
+            <label class="photo-box photo-add" style="width:56px;height:56px;font-size:14px;" for="modalDraftFile" title="Subir foto">+</label>
+            <input type="file" id="modalDraftFile" accept="image/*" multiple onchange="handleDraftModalFiles(this.files)">
+          </div>
+          ${photos}
+        </div>
+        <p class="hint" style="margin:0 0 4px;">📷 Tomar foto · + Subir foto desde el dispositivo</p>
+        ${m.errors.evidencia ? `<div class="field-err" style="margin:-2px 0 8px;">${esc(m.errors.evidencia)}</div>` : ""}
+        <div class="field">
+          <label>Comentario / observación</label>
+          <textarea placeholder="Describa información adicional (opcional)..." oninput="updateDraftModalComentario(this.value)">${esc(m.comentario)}</textarea>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-secondary" onclick="closeDraftDefectoModal()">Cancelar</button>
+          <button class="btn btn-primary" onclick="saveDraftDefectoModal()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function resetGrupoDefecto(){
+  state.draft.grupoDefecto = emptyGrupoDefecto();
+  render();
+}
+function toggleGrupoArticulo(idx){
+  const g = state.draft.grupoDefecto;
+  g.seleccion[idx] = !g.seleccion[idx];
+  render();
+}
+function updateGrupoMotivo(val){
+  const g = state.draft.grupoDefecto;
+  if(val === DEFECTO_NUEVO){ g.motivo=""; g.isOtro=true; }
+  else { g.motivo=val; g.isOtro=false; }
+  render();
+}
+function updateGrupoDescOtro(val){ state.draft.grupoDefecto.descripcionOtro = val; }
+function updateGrupoArea(val){ state.draft.grupoDefecto.area = val; render(); }
+function updateGrupoAreaOtro(val){ state.draft.grupoDefecto.areaOtro = val; }
+function handleGrupoFiles(files){
+  if(!files || !files.length) return;
+  Array.from(files).forEach(f => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      state.draft.grupoDefecto.evidencia.push({ name:f.name, dataUrl:e.target.result });
+      render();
+    };
+    reader.readAsDataURL(f);
+  });
+}
+function removeGrupoEvidencia(pi){
+  state.draft.grupoDefecto.evidencia.splice(pi,1);
+  render();
+}
+function aplicarGrupoDefecto(){
+  const g = state.draft.grupoDefecto;
+  g.errors = {};
+  let ok = true;
+  const seleccionados = Object.keys(g.seleccion).filter(k=>g.seleccion[k]);
+  if(seleccionados.length < 1){ g.errors.motivo = "Marque al menos un artículo."; render(); return; }
+  if(g.isOtro){
+    if(!g.descripcionOtro || !g.descripcionOtro.trim()){ g.errors.desc = "Describa el defecto encontrado."; ok=false; }
+  } else if(!g.motivo){ g.errors.motivo = "Seleccione el motivo de rechazo."; ok=false; }
+  if(!g.area){ g.errors.area = "Seleccione el área responsable."; ok=false; }
+  else if(g.area===OTRA_AREA && !(g.areaOtro||"").trim()){ g.errors.areaOtro = "Especifique el área responsable."; ok=false; }
+  if(!g.evidencia || g.evidencia.length===0){ g.errors.evidencia = "La evidencia fotográfica es obligatoria."; ok=false; }
+  if(!ok){ render(); return; }
+  const comentarioAplicado = (state.draft.comentario||"").trim();
+  seleccionados.forEach(idx => {
+    const sel = state.draft.seleccion[idx];
+    if(!sel) return;
+    const nuevo = { motivo: g.isOtro?"":g.motivo, isOtro:g.isOtro, descripcionOtro:g.descripcionOtro, area:g.area, areaOtro:g.areaOtro, evidencia: g.evidencia.map(f=>({...f})), comentario:comentarioAplicado, open:false };
+    const vacio = sel.defectos.length===1 && !sel.defectos[0].motivo && !sel.defectos[0].isOtro && !sel.defectos[0].area && sel.defectos[0].evidencia.length===0;
+    if(vacio) sel.defectos[0] = nuevo;
+    else sel.defectos.push(nuevo);
+  });
+  state.draft.grupoDefecto = emptyGrupoDefecto();
+  render();
+}
+function defectoCardHTML(artIdx, defIdx, def, canRemove){
+  const mKey = `mot_${artIdx}_${defIdx}`, dKey = `desc_${artIdx}_${defIdx}`, eKey = `evid_${artIdx}_${defIdx}`;
+  const aKey = `area_${artIdx}_${defIdx}`, aoKey = `areaOtro_${artIdx}_${defIdx}`;
+  const isAreaOtra = def.area === OTRA_AREA;
+  const isComplete = (def.isOtro ? !!(def.descripcionOtro && def.descripcionOtro.trim()) : !!def.motivo) && !!def.area && def.evidencia.length>0;
+  const summary = `${esc(defectoLabel(def))} · ${def.area?esc(defectoAreaFinal(def)):'sin área'} · ${def.evidencia.length} foto(s)`;
+  if(!def.open){
+    return `
+      <div style="border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:8px;background:var(--bg-soft);display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="toggleDefectoOpen(${artIdx},${defIdx})">
+        <div style="min-width:0;">
+          <b style="font-size:11px;color:var(--grey);">Defecto ${Number(defIdx)+1}</b>
+          <div style="font-size:11.5px;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${isComplete?'✓ ':''}${summary}</div>
+        </div>
+        <span style="font-size:16px;color:var(--grey);">›</span>
+      </div>
+    `;
+  }
+  const photos = def.evidencia.map((f,pi) => `
+    <div class="photo-box" style="width:60px;height:60px;">
+      ${f.dataUrl ? `<img src="${f.dataUrl}">` : `<span>${esc((f.name||"foto").slice(0,8))}</span>`}
+      <div class="photo-x" onclick="removeDefectoEvidencia(${artIdx},${defIdx},${pi})">✕</div>
+    </div>
+  `).join("");
+  return `
+    <div style="border:1px solid var(--accent);border-radius:8px;padding:10px;margin-bottom:8px;background:var(--bg-soft);">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <b style="font-size:11.5px;color:var(--grey);cursor:pointer;" onclick="toggleDefectoOpen(${artIdx},${defIdx})">Defecto ${Number(defIdx)+1}</b>
+        <div style="display:flex;gap:10px;">
+          ${canRemove ? `<span class="linklike" style="color:var(--red);" onclick="removeDefecto(${artIdx},${defIdx})">Quitar</span>` : ""}
+        </div>
+      </div>
+      <div class="${fieldClass(mKey)}" style="margin-top:6px;">
+        <label>Motivo de rechazo <span class="req">*</span></label>
+        ${searchInput(mKey, [...MOTIVOS, DEFECTO_NUEVO], def.isOtro ? DEFECTO_NUEVO : def.motivo,
+          `state.draft.seleccion[${artIdx}].defectos[${defIdx}].motivo=this.value`,
+          `updateDefectoMotivo(${artIdx},${defIdx},this.value)`,
+          "Escriba para buscar (ej. quebraduras, TIN072...)")}
+        ${errHTML(mKey)}
+      </div>
+      ${def.isOtro ? `
+        <div class="${fieldClass(dKey)}">
+          <label>Descripción del defecto nuevo <span class="req">*</span></label>
+          <input type="text" id="${dKey}" value="${esc(def.descripcionOtro)}" placeholder="Describa el defecto encontrado" oninput="updateDefectoDescripcionOtro(${artIdx},${defIdx},this.value)">
+          ${errHTML(dKey)}
+        </div>
+        <p class="hint" style="margin-top:-2px;">Este defecto quedará marcado como pendiente de incorporar al catálogo de motivos (ver sección "Defectos nuevos por catalogar" en Inicio).</p>
+      ` : ""}
+      <div class="${fieldClass(aKey)}">
+        <label>Área responsable <span class="req">*</span></label>
+        ${searchInput(aKey, [...AREAS, OTRA_AREA], def.area,
+          `state.draft.seleccion[${artIdx}].defectos[${defIdx}].area=this.value`,
+          `updateDefectoArea(${artIdx},${defIdx},this.value)`,
+          "Escriba para buscar el área...")}
+        ${errHTML(aKey)}
+      </div>
+      ${isAreaOtra ? `
+        <div class="${fieldClass(aoKey)}">
+          <label>Especifique el área <span class="req">*</span></label>
+          <input type="text" id="${aoKey}" value="${esc(def.areaOtro||'')}" placeholder="Ingrese el área responsable" oninput="updateDefectoAreaOtro(${artIdx},${defIdx},this.value)">
+          ${errHTML(aoKey)}
+        </div>
+      ` : ""}
+      <label>Evidencia fotográfica <span class="req">*</span></label>
+      <div class="${fieldClass(eKey)}" style="display:flex;flex-wrap:wrap;align-items:center;margin-top:4px;">
+        <div class="file-input-wrap">
+          <label class="photo-box photo-add" style="width:60px;height:60px;font-size:16px;" for="file_${artIdx}_${defIdx}">+</label>
+          <input type="file" id="file_${artIdx}_${defIdx}" accept="image/*" multiple onchange="handleDefectoFiles(${artIdx},${defIdx},this.files)">
+        </div>
+        ${photos}
+      </div>
+      ${errHTML(eKey)}
+    </div>
+  `;
+}
+function toggleDefectoOpen(artIdx, defIdx){
+  const def = state.draft.seleccion[artIdx].defectos[defIdx];
+  def.open = !def.open;
+  render();
+}
+function updateDefectoMotivo(artIdx, defIdx, val){
+  const def = state.draft.seleccion[artIdx].defectos[defIdx];
+  if(val === DEFECTO_NUEVO){ def.motivo=""; def.isOtro=true; }
+  else { def.motivo=val; def.isOtro=false; }
+  render();
+}
+function updateDefectoArea(artIdx, defIdx, val){
+  state.draft.seleccion[artIdx].defectos[defIdx].area = val;
+  render();
+}
+function updateDefectoAreaOtro(artIdx, defIdx, val){
+  state.draft.seleccion[artIdx].defectos[defIdx].areaOtro = val;
+}
+function updateDefectoDescripcionOtro(artIdx, defIdx, val){
+  state.draft.seleccion[artIdx].defectos[defIdx].descripcionOtro = val;
+}
+function addDefecto(artIdx){
+  const arr = state.draft.seleccion[artIdx].defectos;
+  arr.forEach(def => { def.open = false; });
+  arr.push(emptyDefecto());
+  render();
+}
+function removeDefecto(artIdx, defIdx){
+  const arr = state.draft.seleccion[artIdx].defectos;
+  if(arr.length<=1) return;
+  arr.splice(defIdx,1);
+  render();
+}
+function handleDefectoFiles(artIdx, defIdx, files){
+  if(!files || !files.length) return;
+  Array.from(files).forEach(f => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      state.draft.seleccion[artIdx].defectos[defIdx].evidencia.push({ name:f.name, dataUrl:e.target.result });
+      delete state.errors[`evid_${artIdx}_${defIdx}`];
+      render();
+    };
+    reader.readAsDataURL(f);
+  });
+}
+function removeDefectoEvidencia(artIdx, defIdx, photoIdx){
+  state.draft.seleccion[artIdx].defectos[defIdx].evidencia.splice(photoIdx,1);
+  render();
+}
+function validateDefectosStep(){
+  clearErrs();
+  const d = state.draft;
+  let ok = true;
+  const checkedIdx = Object.keys(d.seleccion).filter(k => d.seleccion[k].checked);
+  checkedIdx.forEach(idx => {
+    const sel = d.seleccion[idx];
+    sel.defectos.forEach((def, j) => {
+      if(def.isOtro){
+        if(!def.descripcionOtro || !def.descripcionOtro.trim()){ setErr(`desc_${idx}_${j}`, "Describa el defecto encontrado."); ok=false; def.open=true; }
+      } else {
+        if(!def.motivo){ setErr(`mot_${idx}_${j}`, "Seleccione el motivo de rechazo."); ok=false; def.open=true; }
+        else if(!MOTIVOS.includes(def.motivo)){ setErr(`mot_${idx}_${j}`, "Seleccione un motivo válido de la lista, o elija \"" + DEFECTO_NUEVO + "\"."); ok=false; def.open=true; }
+      }
+      if(!def.area){ setErr(`area_${idx}_${j}`, "Seleccione el área responsable."); ok=false; def.open=true; }
+      else if(def.area!==OTRA_AREA && !AREAS.includes(def.area)){ setErr(`area_${idx}_${j}`, "Seleccione un área válida de la lista, o elija \"" + OTRA_AREA + "\"."); ok=false; def.open=true; }
+      if(def.area===OTRA_AREA && (!def.areaOtro || !def.areaOtro.trim())){ setErr(`areaOtro_${idx}_${j}`, "Especifique el área responsable."); ok=false; def.open=true; }
+      if(!def.evidencia || def.evidencia.length===0){ setErr(`evid_${idx}_${j}`, "La evidencia fotográfica es obligatoria para este defecto."); ok=false; def.open=true; }
+    });
+  });
+  if(!ok){ setErr('summary','Complete los campos obligatorios marcados en rojo, incluyendo la evidencia fotográfica de cada defecto.'); render(); return; }
+  goTo("paso3");
+}
+
+/* =========================================================
+   WIZARD — PASO 3: Revisión
+========================================================= */
+function screenPaso3(){
+  const d = state.draft;
+  const editing = !!state.editingId;
+  state.wizardEditMode = false;
+  const checkedIdx = Object.keys(d.seleccion).filter(k=>d.seleccion[k].checked);
+  const checkedArts = checkedIdx.map(k=>{
+    const a = d.articulosDisponibles[k]; const sel = d.seleccion[k];
+    return `<div class="kv"><span class="k">${esc(a.nombre)}</span><span class="v">${esc(sel.cantidad)} rollos</span></div>`;
+  }).join("");
+  const defectosResumen = checkedIdx.map(k=>{
+    const a = d.articulosDisponibles[k]; const sel = d.seleccion[k];
+    const lista = sel.defectos.map(def => `
+      <div style="padding:3px 0;">
+        <div style="display:flex;justify-content:space-between;gap:8px;font-size:12.5px;">
+          <span style="color:var(--dark);min-width:0;">${esc(defectoLabel(def))} <span style="color:var(--grey);">· ${esc(defectoAreaFinal(def))}</span></span>
+          <span style="font-weight:600;flex:none;white-space:nowrap;">${def.evidencia.length} foto(s)</span>
+        </div>
+        <div class="hint" style="margin:1px 0 4px;">Comentario: ${esc(def.comentario||"(sin comentario)")}</div>
+      </div>
+    `).join("");
+    return `<p class="hint" style="margin:6px 0 2px;"><b>${esc(a.nombre)}</b></p>${lista}`;
+  }).join("");
+  const totalDefectos = checkedIdx.reduce((s,k)=>s+d.seleccion[k].defectos.length,0);
+  const totalFotos = checkedIdx.reduce((s,k)=>s+d.seleccion[k].defectos.reduce((s2,def)=>s2+def.evidencia.length,0),0);
+
+  return shell("Registrar No Conformidad", "Nuevo registro — Paso 3 de 3", "goTo('paso2')", `
+    <div class="stepper">
+      <div class="bar"><div style="width:100%"></div></div>
+      <div class="curstep">Revisión</div>
+    </div>
+    <p class="hint" style="margin-top:-6px;">Revise la información antes de registrar.</p>
+    <div class="card-head"><b>Resumen de la No Conformidad</b><span style="color:var(--amber);font-size:11px;">Sin guardar</span></div>
+
+    <div class="card">
+      <div class="card-head"><b>Identificación y partida</b><span class="linklike" onclick="goToWizardEdit('paso1')">Editar</span></div>
+      <div class="kv"><span class="k">Partida</span><span class="v">${esc(d.partida)}</span></div>
+      <div class="kv"><span class="k">Cliente</span><span class="v">${esc(d.cliente)}</span></div>
+      <div class="kv"><span class="k">Color</span><span class="v">${esc(d.color)}</span></div>
+      <div style="margin-top:4px;border-top:1px solid var(--border);padding-top:4px;">
+        <p class="hint" style="margin:0 0 4px;font-weight:700;">Peso por artículo</p>
+        ${articulosPesoHTML(d.articulosDisponibles)}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><b>Artículos afectados</b><span class="linklike" onclick="goToWizardEdit('paso1')">Editar</span></div>
+      ${checkedArts}
+    </div>
+
+    <div class="card">
+      <div class="card-head"><b>Defectos registrados (${totalDefectos})</b><span class="linklike" onclick="goToWizardEdit('paso2')">Editar</span></div>
+      ${defectosResumen}
+    </div>
+    <p class="hint">Evidencia total: ${totalFotos} foto(s) adjunta(s).</p>
+  `, `
+    <button class="btn btn-secondary" onclick="cancelWizard()">Cancelar</button>
+    <button class="btn btn-primary" onclick="registrarNC()">${editing ? "Guardar cambios" : "Registrar NC"}</button>
+  `);
+}
+function registrarNC(){
+  const d = state.draft;
+  const checkedIdx = Object.keys(d.seleccion).filter(k=>d.seleccion[k].checked);
+  const articulos = checkedIdx.map(k=>{
+    const a = d.articulosDisponibles[k]; const sel = d.seleccion[k];
+    return {
+      tipo:a.tipo, nombre:a.nombre, codTela:a.codTela, talla:a.talla, kgCrudo:a.kgCrudo, rollos:a.rollos,
+      cantidad:parseInt(sel.cantidad,10),
+      defectos: sel.defectos.map(def => ({
+        motivo: def.isOtro ? "" : def.motivo, isOtro: def.isOtro, descripcionOtro: def.descripcionOtro,
+        area: def.area, areaOtro: def.areaOtro,
+        evidencia: def.evidencia.slice(),
+        comentario: def.comentario||"",
+      })),
+    };
+  });
+  if(state.editingId){
+    const nc = state.ncs.find(x=>x.id===state.editingId);
+    Object.assign(nc, {
+      partida:d.partida, cliente:d.cliente, color:d.color, peso:d.peso, fechaPartida:d.fechaPartida,
+      articulos, comentario:d.comentario,
+    });
+    nc.historial.push({ fecha:nowStr(), usuario:state.user.nombre, accion:"Editó la No Conformidad" });
+    registrarDefectosNuevosPendientes(nc);
+    state.lastRegisteredId = nc.id;
+    state.lastAction = "updated";
+  } else {
+    const id = ncId(nextNum++);
+    const fechaFinal = d.fechaRegistro || nowStr();
+    const nc = {
+      id, estado:"Registrada", status:"Rechazado", proceso:"PRODUCCIÓN", fecha:fechaFinal, registradoPor:state.user.nombre,
+      partida:d.partida, cliente:d.cliente, color:d.color, peso:d.peso, fechaPartida:d.fechaPartida,
+      articulos, comentario:d.comentario,
+      historial:[{ fecha:fechaFinal, usuario:state.user.nombre, accion:"Creación de NC" }],
+      anulacion:null,
+    };
+    state.ncs.unshift(nc);
+    registrarDefectosNuevosPendientes(nc);
+    state.lastRegisteredId = id;
+    state.lastAction = "created";
+  }
+  state.draft = null; state.editingId = null;
+  goTo("confirm");
+}
+
+/* =========================================================
+   CONFIRMACION
+========================================================= */
+function screenConfirm(){
+  const nc = state.ncs.find(x=>x.id===state.lastRegisteredId);
+  const updated = state.lastAction === "updated";
+  return `
+    <div class="status"><span>9:41</span><span>●●● 100%</span></div>
+    <div class="topbar"><div class="titles"><h1>Gestión de No Conformidades</h1></div>${userAvatarHTML()}</div>
+    ${userMenuHTML()}
+    <div class="content">
+      <div class="center-screen">
+        <div class="check-circle">✓</div>
+        <h2 style="margin:0 0 4px;font-size:16px;">No Conformidad ${updated ? "actualizada" : "registrada"}<br>correctamente</h2>
+        <p style="color:var(--accent);font-weight:700;font-size:15px;margin:8px 0 2px;">N° ${esc(nc.id)}</p>
+        <p style="color:var(--grey);font-size:11px;margin:0 0 24px;">${esc(nowStr())} · ${esc(state.user.nombre)}</p>
+        <button class="btn btn-primary btn-block" onclick="startNuevaNC()">Registrar otra NC</button>
+        <div style="height:10px;"></div>
+        <button class="btn btn-secondary btn-block" onclick="goTo('inicio')">‹ Volver al inicio</button>
+      </div>
+    </div>
+  `;
+}
+
+/* =========================================================
+   CONSULTA Y BUSQUEDA
+========================================================= */
+function screenConsulta(){
+  const results = state.consultaResults || state.ncs;
+  const rows = results.map(nc => `
+    <div class="list-card" onclick="openDetalle('${nc.id}')">
+      <div class="list-top"><span>${nc.id}</span><span style="color:var(--amber);font-weight:400;font-size:11px;">Estado: -</span></div>
+      <div class="list-sub">Partida ${esc(nc.partida)} · ${esc(nc.cliente)}</div>
+      <div class="list-sub">${esc(ncAreasResumen(nc))} · ${esc(ncMotivoResumen(nc))} · ${esc(nc.registradoPor)}</div>
+      <div class="list-bottom"><span></span><span class="linklike">Ver detalle ›</span></div>
+    </div>
+  `).join("") || `<div class="empty">No se encontraron No Conformidades con esos filtros.</div>`;
+
+  return shell("Consulta y Búsqueda", null, "goTo('inicio')", `
+    <h2 class="section" style="margin-top:0;">Filtros</h2>
+    <div class="field"><label>N° de NC</label><input type="text" id="fNC" value="${esc(state.consultaFilters.nc)}" oninput="state.consultaFilters.nc=this.value"></div>
+    <div class="row">
+      <div class="field"><label>Fecha inicio</label><input type="text" id="fIni" value="${esc(state.consultaFilters.ini)}" oninput="state.consultaFilters.ini=this.value" placeholder="dd/mm/aaaa"></div>
+      <div class="field"><label>Fecha fin</label><input type="text" id="fFin" value="${esc(state.consultaFilters.fin)}" oninput="state.consultaFilters.fin=this.value" placeholder="dd/mm/aaaa"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Área</label><select id="fArea" onchange="state.consultaFilters.area=this.value"><option value="">Todas</option>${AREAS.map(a=>`<option ${state.consultaFilters.area===a?'selected':''}>${a}</option>`).join("")}</select></div>
+      <div class="field"><label>Responsable</label><input type="text" id="fResp" value="${esc(state.consultaFilters.resp)}" oninput="state.consultaFilters.resp=this.value" placeholder="Ej. Ramirez"></div>
+    </div>
+    <button class="btn btn-primary btn-block" onclick="buscarConsulta()">Buscar</button>
+    <h2 class="section">Resultados</h2>
+    ${rows}
+    <div class="small-note">Estado/Prioridad: columnas disponibles, pendientes de datos (fase 2, a validar con Usuario).</div>
+  `, null);
+}
+function buscarConsulta(){
+  const nc = (state.consultaFilters.nc||"").toLowerCase();
+  const area = state.consultaFilters.area;
+  const resp = (state.consultaFilters.resp||"").toLowerCase();
+  state.consultaResults = state.ncs.filter(x => {
+    if(nc && !x.id.toLowerCase().includes(nc) && !x.partida.includes(nc)) return false;
+    if(area && !ncHasArea(x, area)) return false;
+    if(resp && !x.registradoPor.toLowerCase().includes(resp)) return false;
+    return true;
+  });
+  render();
+}
+
+/* =========================================================
+   DETALLE
+========================================================= */
+function openDetalle(id){
+  if(state.lastMensajesInfo && state.lastMensajesInfo.ncId !== id) state.lastMensajesInfo = null;
+  state.detailId = id;
+  state.detalleOpen = { general:true, articulos:false, defectos:false, historial:false };
+  goTo("detalle");
+}
+let __successTimer = null;
+function showSuccessMessage(msg){
+  state.successMessage = msg;
+  if(__successTimer) clearTimeout(__successTimer);
+  __successTimer = setTimeout(() => { state.successMessage = null; render(); }, 3500);
+  render();
+}
+function dismissSuccessMessage(){
+  if(__successTimer) clearTimeout(__successTimer);
+  state.successMessage = null;
+  render();
+}
+function successBannerHTML(){
+  if(!state.successMessage) return "";
+  return `
+    <div style="background:#e9f8ef;border:1px solid var(--green);color:var(--green);padding:10px 12px;border-radius:8px;margin-bottom:12px;font-size:12.5px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:8px;">
+      <span>✓ ${esc(state.successMessage)}</span>
+      <span style="cursor:pointer;font-weight:400;color:var(--green);" onclick="dismissSuccessMessage()">✕</span>
+    </div>
+  `;
+}
+function toggleAccordion(key){ state.detalleOpen[key] = !state.detalleOpen[key]; render(); }
+function accSection(key, title, contentHtml){
+  const open = state.detalleOpen[key];
+  return `
+    <div class="card-white" style="padding:10px 12px;">
+      <div class="accordion-header" onclick="toggleAccordion('${key}')">
+        <b style="font-size:13px;">${title}</b>
+        <span class="accordion-chevron ${open?'open':''}">›</span>
+      </div>
+      ${open ? `<div style="margin-top:8px;">${contentHtml}</div>` : ""}
+    </div>
+  `;
+}
+function screenDetalle(){
+  const nc = state.ncs.find(x=>x.id===state.detailId);
+  if(!nc) return shell("Detalle","No encontrado","goTo('inicio')", `<div class="empty">No Conformidad no encontrada.</div>`, null);
+  const anulada = nc.estado==="Anulada";
+  const arts = nc.articulos.map(a=>`<div class="kv"><span class="k">${esc(a.nombre)}</span><span class="v">${a.cantidad} de ${a.rollos} rollos</span></div>`).join("");
+
+  let defectosHTML = "";
+  nc.articulos.forEach((a, ai) => {
+    defectosHTML += `<p class="hint" style="margin:${ai===0?'0':'12px'} 0 4px;"><b style="color:var(--dark);">${esc(a.nombre)}</b></p>`;
+    a.defectos.forEach((def, di) => {
+      const varName = `__detEvid_${ai}_${di}`;
+      window[varName] = def.evidencia;
+      const gcolor = def.isOtro ? "var(--amber)" : "var(--accent)";
+      const thumbs = def.evidencia.map((f,pi) => `
+        <div class="photo-box" style="width:56px;height:56px;cursor:pointer;" onclick="viewPhoto(window.${varName}, ${pi})">
+          ${f.dataUrl?`<img src="${f.dataUrl}">`:`<span style="font-size:8px;">foto</span>`}
+        </div>
+      `).join("");
+      defectosHTML += `
+        <div style="border-left:3px solid ${gcolor};padding-left:8px;margin-bottom:10px;">
+          <div class="kv"><span class="k">${esc(defectoLabel(def))}</span><span class="v">${def.isOtro?'🆕 Nuevo':''}</span></div>
+          <div class="kv"><span class="k">Área responsable</span><span class="v">${esc(defectoAreaFinal(def))}</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;align-items:center;">
+            ${thumbs}
+            ${!anulada ? `<div class="file-input-wrap">
+              <label class="photo-box photo-add" style="width:56px;height:56px;font-size:14px;" for="detf_${ai}_${di}">+</label>
+              <input type="file" id="detf_${ai}_${di}" accept="image/*" multiple onchange="handleDetalleDefectoFiles(${ai},${di},this.files)">
+            </div>` : ""}
+            ${def.evidencia.length===0 ? `<span class="hint" style="font-size:10px;margin:0;">Sin evidencia.</span>` : ""}
+          </div>
+        </div>
+      `;
+    });
+  });
+
+  const histRows = nc.historial.map(h=>`
+    <tr>
+      <td style="padding:5px 4px;border-bottom:1px solid var(--border);font-size:10px;white-space:nowrap;vertical-align:top;">${esc(h.fecha)}</td>
+      <td style="padding:5px 4px;border-bottom:1px solid var(--border);font-size:10.5px;font-weight:700;white-space:nowrap;vertical-align:top;">${esc(h.usuario)}</td>
+      <td style="padding:5px 4px;border-bottom:1px solid var(--border);font-size:10.5px;vertical-align:top;">${esc(h.accion)}</td>
+    </tr>
+  `).join("");
+  const hist = `
+    <table style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr style="background:var(--bg-soft);">
+          <th style="padding:5px 4px;text-align:left;font-size:9.5px;color:var(--grey);border-bottom:1px solid var(--border);">Fecha y hora</th>
+          <th style="padding:5px 4px;text-align:left;font-size:9.5px;color:var(--grey);border-bottom:1px solid var(--border);">Responsable</th>
+          <th style="padding:5px 4px;text-align:left;font-size:9.5px;color:var(--grey);border-bottom:1px solid var(--border);">Comentario / acción</th>
+        </tr>
+      </thead>
+      <tbody>${histRows}</tbody>
+    </table>
+  `;
+  return shell(`Detalle ${nc.id}`, `${esc(ncAreasResumen(nc))} · ${esc(ncMotivoResumen(nc))}`, "goTo('inicio')", `
+    ${successBannerHTML()}
+    <div class="top-actions">
+      <button class="btn btn-secondary" ${anulada?'disabled':''} onclick="editarNC('${nc.id}')">Editar</button>
+      <button class="btn btn-danger" ${anulada?'disabled':''} onclick="openAnular('${nc.id}')">Anular NC</button>
+    </div>
+    ${anulada ? `
+      <div class="card" style="border-color:var(--red);">
+        <b style="color:var(--red);font-size:12.5px;">Motivo de anulación</b>
+        <p style="font-size:12.5px;margin:6px 0;">${esc(nc.anulacion.motivo)}</p>
+        <p class="hint" style="margin:0;">Anulado por ${esc(nc.anulacion.usuario)} · ${esc(nc.anulacion.fecha)}</p>
+      </div>
+    ` : ""}
+    <div class="card-white">
+      <div class="accordion-header" onclick="toggleAccordion('general')">
+        <b style="font-size:13px;">Identificación y partida</b>
+        <span class="accordion-chevron ${state.detalleOpen.general?'open':''}">›</span>
+      </div>
+      ${state.detalleOpen.general ? `
+      <div style="margin-top:8px;">
+        <div class="kv"><span class="k">Registrado por</span><span class="v">${esc(nc.registradoPor)}</span></div>
+        <div class="kv"><span class="k">Fecha de registro</span><span class="v">${esc(nc.fecha)}</span></div>
+        ${nc.historial.length>1 ? `<div class="kv"><span class="k">Última actualización</span><span class="v">${esc(nc.historial[nc.historial.length-1].fecha)}</span></div>` : ""}
+        <div class="kv"><span class="k">Partida</span><span class="v">${esc(nc.partida)}</span></div>
+        <div class="kv"><span class="k">Cliente</span><span class="v">${esc(nc.cliente)}</span></div>
+        <div class="kv"><span class="k">Color</span><span class="v">${esc(nc.color)}</span></div>
+        <div style="margin-top:4px;border-top:1px solid var(--border);padding-top:4px;">
+          <p class="hint" style="margin:0 0 4px;font-weight:700;">Peso por artículo</p>
+          ${articulosPesoHTML(nc.articulos)}
+        </div>
+      </div>` : ""}
+    </div>
+    ${accSection('articulos', `Artículos afectados (${nc.articulos.length})`, arts)}
+    ${accSection('defectos', `Defectos y evidencia (${ncTotalDefectos(nc)})`, `
+      <p class="hint" style="margin:0 0 8px;">Toque una foto para verla en pantalla completa. ${ncTieneDefectoNuevo(nc) ? '<b style="color:var(--amber);">🆕 Contiene defecto(s) nuevo(s) pendientes de catalogar.</b>' : ''}</p>
+      ${defectosHTML}
+      <p class="hint" style="margin:8px 0 0;">${esc(nc.comentario||"(sin comentario)")}</p>
+    `)}
+    ${accSection('historial', 'Historial', hist)}
+  `, null);
+}
+function handleDetalleDefectoFiles(ai, di, files){
+  const nc = state.ncs.find(x=>x.id===state.detailId);
+  if(!nc) return;
+  Array.from(files).forEach(f => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      nc.articulos[ai].defectos[di].evidencia.push({ name:f.name, dataUrl:e.target.result });
+      nc.historial.push({ fecha:nowStr(), usuario:state.user.nombre, accion:`Agregó evidencia fotográfica al defecto "${defectoLabel(nc.articulos[ai].defectos[di])}" de "${nc.articulos[ai].nombre}"` });
+      state.detalleOpen.defectos = true;
+      render();
+    };
+    reader.readAsDataURL(f);
+  });
+}
+function editarNC(id){
+  const nc = state.ncs.find(x=>x.id===id);
+  state.editingId = id;
+  state.editForm = {
+    articulos: nc.articulos.map(a => ({
+      ...a, cantidad: String(a.cantidad), open:false,
+      defectos: a.defectos.map(d => ({ ...d, evidencia: d.evidencia.slice(), open:false })),
+    })),
+    comentario: nc.comentario,
+  };
+  state.editMotivo = { open:false, sel:"", otro:"", error:"" };
+  clearErrs();
+  goTo("editNC");
+}
+function toggleEditArticuloOpen(idx){
+  const a = state.editForm.articulos[idx];
+  a.open = !a.open;
+  render();
+}
+function screenEditarNC(){
+  const nc = state.ncs.find(x=>x.id===state.editingId);
+  const ef = state.editForm;
+  const nSeleccionados = ef.articulos.filter(a=>a.open).length;
+  const artHTML = ef.articulos.map((a,idx) => {
+    const errKey = `eart_${idx}`;
+    if(!a.open){
+      const nDef = a.defectos.length;
+      return `
+        <div class="art-card" style="cursor:pointer;padding:10px 12px;" onclick="toggleEditArticuloOpen(${idx})">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+              <div class="chk" style="flex:none;"></div>
+              <div style="min-width:0;">
+                <b style="font-size:13px;">${esc(a.nombre)}</b>
+                <div style="font-size:11px;color:var(--grey);margin-top:3px;">${esc(a.cantidad)} rollo(s) afectado(s) · ${nDef} defecto(s) — sin cambios</div>
+              </div>
+            </div>
+            <span style="font-size:16px;color:var(--grey);flex:none;">›</span>
+          </div>
+        </div>
+      `;
+    }
+    const defectosHTML = a.defectos.map((def, j) => defectoSummaryEditRow(idx, j, def, a.defectos.length>1)).join("");
+    return `
+      <div class="art-card checked" style="padding:10px 12px;margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="chk on">✓</div>
+            <div><b style="font-size:13px;">${esc(a.nombre)}</b></div>
+          </div>
+          <span class="linklike" onclick="toggleEditArticuloOpen(${idx})">Listo, no editar</span>
+        </div>
+        <p class="hint" style="margin:2px 0 8px 30px;color:var(--accent);font-weight:700;">Editar artículo</p>
+        <div class="art-grid" style="margin-left:30px;">
+          <div><span class="lbl">Cód. Tela</span><span class="val">${esc(a.codTela)}</span></div>
+          <div><span class="lbl">Talla</span><span class="val">${esc(a.talla)}</span></div>
+          <div><span class="lbl">Kg. Crudo</span><span class="val">${esc(a.kgCrudo)}</span></div>
+          <div><span class="lbl">Rollos</span><span class="val">${esc(a.rollos)}</span></div>
+        </div>
+        <div class="qty-wrap ${fieldClass(errKey)}" style="margin-left:30px;margin-top:8px;">
+          <label>Cantidad afectada <span class="req">*</span></label>
+          <input type="number" min="1" max="${a.rollos}" value="${esc(a.cantidad)}" oninput="updateEditCantidad(${idx}, this.value)">
+          ${errHTML(errKey)}
+        </div>
+        <h2 class="section" style="font-size:12.5px;margin:12px 0 6px 30px;">Defectos de este artículo</h2>
+        <div style="margin-left:30px;">
+          ${defectosHTML}
+          <div class="linklike" style="text-align:center;padding:6px 0 2px;" onclick="addEditDefecto(${idx})">+ Agregar otro defecto</div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  return shell(`Editar ${nc.id}`, "Marque los ítems que desea editar", "cancelEditarNC()", `
+    ${state.errors.summary ? `<div class="banner-error">${esc(state.errors.summary)}</div>` : ""}
+    <div class="card-white">
+      <b style="font-size:13px;">Identificación y partida</b>
+      <p class="hint" style="margin:4px 0 8px;">Estos datos no son editables; provienen de la partida.</p>
+      <div class="kv"><span class="k">Partida</span><span class="v">${esc(nc.partida)}</span></div>
+      <div class="kv"><span class="k">Cliente</span><span class="v">${esc(nc.cliente)}</span></div>
+      <div class="kv"><span class="k">Color</span><span class="v">${esc(nc.color)}</span></div>
+      <div style="margin-top:4px;border-top:1px solid var(--border);padding-top:4px;">
+        <p class="hint" style="margin:0 0 4px;font-weight:700;">Peso por artículo</p>
+        ${articulosPesoHTML(nc.articulos)}
+      </div>
+    </div>
+
+    <h2 class="section">Artículos afectados (${ef.articulos.length})</h2>
+    <p class="hint" style="margin-top:-4px;">Marque él/los artículo(s) que desea editar${nSeleccionados?` — ${nSeleccionados} seleccionado(s)`:''}. Los que no marque conservarán su información actual sin cambios.</p>
+    ${artHTML}
+
+    <h2 class="section">Datos generales</h2>
+    <p class="hint" style="margin:-4px 0 2px;color:var(--accent);font-weight:700;">Editar comentario</p>
+    <div class="field">
+      <label>Comentario / observación</label>
+      <textarea id="comentarioEditInput" oninput="state.editForm.comentario=this.value">${esc(ef.comentario)}</textarea>
+    </div>
+  `, `
+    <button class="btn btn-secondary" onclick="cancelEditarNC()">Cancelar</button>
+    <button class="btn btn-primary" onclick="iniciarGuardarEdicion()">Guardar cambios</button>
+  `);
+}
+function defectoSummaryEditRow(artIdx, defIdx, def, canRemove){
+  const isComplete = (def.isOtro ? !!(def.descripcionOtro && def.descripcionOtro.trim()) : !!def.motivo) && !!def.area && def.evidencia.length>0;
+  const summary = `${esc(defectoLabel(def))} · ${def.area?esc(defectoAreaFinal(def)):'sin área'} · ${def.evidencia.length} foto(s)`;
+  return `
+    <div style="border:1px solid ${isComplete?'var(--border)':'var(--red)'};border-radius:8px;padding:8px 10px;margin-bottom:8px;background:var(--bg-soft);">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="min-width:0;">
+          <b style="font-size:11px;color:var(--grey);">Defecto ${Number(defIdx)+1}</b>
+          <div style="font-size:11.5px;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${isComplete?'✓ ':''}${summary}</div>
+        </div>
+        <div style="display:flex;gap:10px;flex:none;">
+          <span class="linklike" onclick="openEditDefectoModal(${artIdx},${defIdx})">Editar</span>
+          ${canRemove ? `<span class="linklike" style="color:var(--red);" onclick="removeEditDefecto(${artIdx},${defIdx})">Quitar</span>` : ""}
+        </div>
+      </div>
+    </div>
+  `;
+}
+function openEditDefectoModal(artIdx, defIdx){
+  if(defIdx===null || defIdx===undefined){
+    state.editDefectoModal = { open:true, artIdx, defIdx:null, motivo:"", isOtro:false, descripcionOtro:"", area:"", areaOtro:"", evidencia:[], errors:{} };
+  } else {
+    const def = state.editForm.articulos[artIdx].defectos[defIdx];
+    state.editDefectoModal = {
+      open:true, artIdx, defIdx,
+      motivo: def.motivo, isOtro: def.isOtro, descripcionOtro: def.descripcionOtro||"",
+      area: def.area||"", areaOtro: def.areaOtro||"",
+      evidencia: def.evidencia.map(f=>({...f})),
+      errors: {},
+    };
+  }
+  render();
+}
+function closeEditDefectoModal(){
+  state.editDefectoModal.open = false;
+  render();
+}
+function updateModalDefMotivo(val){
+  const m = state.editDefectoModal;
+  if(val === DEFECTO_NUEVO){ m.motivo=""; m.isOtro=true; }
+  else { m.motivo=val; m.isOtro=false; }
+  render();
+}
+function updateModalDefDescOtro(val){ state.editDefectoModal.descripcionOtro = val; }
+function updateModalDefArea(val){ state.editDefectoModal.area = val; render(); }
+function updateModalDefAreaOtro(val){ state.editDefectoModal.areaOtro = val; }
+function handleModalDefFiles(files){
+  if(!files || !files.length) return;
+  Array.from(files).forEach(f => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      state.editDefectoModal.evidencia.push({ name:f.name, dataUrl:e.target.result });
+      delete state.editDefectoModal.errors.evidencia;
+      render();
+    };
+    reader.readAsDataURL(f);
+  });
+}
+function removeModalDefEvidencia(pi){
+  state.editDefectoModal.evidencia.splice(pi,1);
+  render();
+}
+function saveEditDefectoModal(){
+  const m = state.editDefectoModal;
+  m.errors = {};
+  let ok = true;
+  if(m.isOtro){
+    if(!m.descripcionOtro || !m.descripcionOtro.trim()){ m.errors.desc = "Describa el defecto encontrado."; ok=false; }
+  } else if(!m.motivo){ m.errors.motivo = "Seleccione el motivo de rechazo."; ok=false; }
+  if(!m.area){ m.errors.area = "Seleccione el área responsable."; ok=false; }
+  else if(m.area===OTRA_AREA && !(m.areaOtro||"").trim()){ m.errors.areaOtro = "Especifique el área responsable."; ok=false; }
+  if(!ok){ render(); return; }
+  const arr = state.editForm.articulos[m.artIdx].defectos;
+  const data = { motivo: m.isOtro?"":m.motivo, isOtro:m.isOtro, descripcionOtro:m.descripcionOtro, area:m.area, areaOtro:m.areaOtro, evidencia:m.evidencia, open:false };
+  if(m.defIdx===null) arr.push(data);
+  else arr[m.defIdx] = data;
+  state.editDefectoModal.open = false;
+  render();
+}
+function editDefectoModalHTML(){
+  const m = state.editDefectoModal;
+  if(!m.open) return "";
+  const a = state.editForm.articulos[m.artIdx];
+  const isNew = m.defIdx===null;
+  const isAreaOtra = m.area === OTRA_AREA;
+  const photos = m.evidencia.map((f,pi) => `
+    <div class="photo-box" style="width:56px;height:56px;">
+      ${f.dataUrl ? `<img src="${f.dataUrl}">` : `<span style="font-size:8px;">foto</span>`}
+      <div class="photo-x" onclick="removeModalDefEvidencia(${pi})">✕</div>
+    </div>
+  `).join("");
+  return `
+    <div class="overlay">
+      <div class="sheet">
+        <div class="grabber"></div>
+        <p class="hint" style="margin:0 0 2px;">${esc(a.nombre)}</p>
+        <h2 style="margin:0 0 10px;font-size:15px;">${isNew ? "Nuevo defecto" : "Editar defecto"}</h2>
+        <div class="${(m.errors.motivo||m.errors.desc)?'field error':'field'}">
+          <label>Motivo de rechazo <span class="req">*</span></label>
+          ${searchInput('modalDefMotivo', [...MOTIVOS, DEFECTO_NUEVO], m.isOtro?DEFECTO_NUEVO:m.motivo, `state.editDefectoModal.motivo=this.value`, `updateModalDefMotivo(this.value)`, "Escriba para buscar o seleccione...")}
+          ${m.errors.motivo ? `<div class="field-err">${esc(m.errors.motivo)}</div>` : ""}
+        </div>
+        ${m.isOtro ? `
+        <div class="${m.errors.desc?'field error':'field'}">
+          <label>Descripción del defecto nuevo <span class="req">*</span></label>
+          <input type="text" value="${esc(m.descripcionOtro)}" oninput="updateModalDefDescOtro(this.value)">
+          ${m.errors.desc ? `<div class="field-err">${esc(m.errors.desc)}</div>` : ""}
+        </div>` : ""}
+        <div class="${m.errors.area?'field error':'field'}">
+          <label>Área responsable <span class="req">*</span></label>
+          ${searchInput('modalDefArea', [...AREAS, OTRA_AREA], m.area, `state.editDefectoModal.area=this.value`, `updateModalDefArea(this.value)`, "Escriba para buscar el área...")}
+          ${m.errors.area ? `<div class="field-err">${esc(m.errors.area)}</div>` : ""}
+        </div>
+        ${isAreaOtra ? `
+        <div class="${m.errors.areaOtro?'field error':'field'}">
+          <label>Especifique el área <span class="req">*</span></label>
+          <input type="text" value="${esc(m.areaOtro)}" oninput="updateModalDefAreaOtro(this.value)">
+          ${m.errors.areaOtro ? `<div class="field-err">${esc(m.errors.areaOtro)}</div>` : ""}
+        </div>` : ""}
+        <label>Evidencia fotográfica</label>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;margin:4px 0 10px;">
+          <div class="file-input-wrap">
+            <label class="photo-box photo-add" style="width:56px;height:56px;font-size:14px;" for="modalDefFile">+</label>
+            <input type="file" id="modalDefFile" accept="image/*" multiple onchange="handleModalDefFiles(this.files)">
+          </div>
+          ${photos}
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-secondary" onclick="closeEditDefectoModal()">Cancelar</button>
+          <button class="btn btn-primary" onclick="saveEditDefectoModal()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function toggleEditDefectoOpen(artIdx, defIdx){
+  const def = state.editForm.articulos[artIdx].defectos[defIdx];
+  def.open = !def.open;
+  render();
+}
+function updateEditCantidad(idx, val){
+  state.editForm.articulos[idx].cantidad = val;
+  const a = state.editForm.articulos[idx];
+  const n = parseInt(val,10);
+  const key = `eart_${idx}`;
+  if(val!=="" && (isNaN(n) || n<=0)){ setErr(key, "Ingrese una cantidad numérica válida."); }
+  else if(n > a.rollos){ setErr(key, `La cantidad no puede superar el total disponible (${a.rollos}).`); }
+  else { delete state.errors[key]; }
+  render();
+}
+function updateEditDefectoMotivo(artIdx, defIdx, val){
+  const def = state.editForm.articulos[artIdx].defectos[defIdx];
+  if(val === DEFECTO_NUEVO){ def.motivo=""; def.isOtro=true; }
+  else { def.motivo=val; def.isOtro=false; }
+  render();
+}
+function updateEditDefectoDescripcionOtro(artIdx, defIdx, val){ state.editForm.articulos[artIdx].defectos[defIdx].descripcionOtro = val; }
+function updateEditDefectoArea(artIdx, defIdx, val){
+  state.editForm.articulos[artIdx].defectos[defIdx].area = val;
+  render();
+}
+function updateEditDefectoAreaOtro(artIdx, defIdx, val){
+  state.editForm.articulos[artIdx].defectos[defIdx].areaOtro = val;
+}
+function addEditDefecto(artIdx){
+  openEditDefectoModal(artIdx, null);
+}
+function removeEditDefecto(artIdx, defIdx){
+  const arr = state.editForm.articulos[artIdx].defectos;
+  if(arr.length<=1) return;
+  arr.splice(defIdx,1); render();
+}
+function handleEditDefectoFiles(artIdx, defIdx, files){
+  if(!files || !files.length) return;
+  Array.from(files).forEach(f => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      state.editForm.articulos[artIdx].defectos[defIdx].evidencia.push({ name:f.name, dataUrl:e.target.result });
+      delete state.errors[`eevid_${artIdx}_${defIdx}`];
+      render();
+    };
+    reader.readAsDataURL(f);
+  });
+}
+function removeEditDefectoEvidencia(artIdx, defIdx, photoIdx){
+  state.editForm.articulos[artIdx].defectos[defIdx].evidencia.splice(photoIdx,1);
+  render();
+}
+function editFormHasChanges(){
+  const nc = state.ncs.find(x=>x.id===state.editingId);
+  const ef = state.editForm;
+  if(!nc || !ef) return false;
+  if((nc.comentario||"")!==(ef.comentario||"")) return true;
+  const strip = arts => arts.map(a => ({
+    cantidad: String(a.cantidad),
+    defectos: a.defectos.map(d => ({ motivo:d.isOtro?"":d.motivo, isOtro:d.isOtro, descripcionOtro:d.descripcionOtro||"", area:d.area, areaOtro:d.areaOtro||"", nEvid:d.evidencia.length })),
+  }));
+  return JSON.stringify(strip(nc.articulos)) !== JSON.stringify(strip(ef.articulos));
+}
+function cancelEditarNC(){
+  const id = state.editingId;
+  if(editFormHasChanges()){
+    askConfirm("¿Desea cancelar la edición? Se perderán los cambios no guardados.", () => {
+      state.editForm = null; openDetalle(id);
+    }, "Sí, salir", "Cancelar");
+  } else {
+    state.editForm = null; openDetalle(id);
+  }
+}
+function iniciarGuardarEdicion(){
+  clearErrs();
+  const ef = state.editForm;
+  let ok = true;
+  const problemas = [];
+  ef.articulos.forEach((a,idx) => {
+    if(!a.open) return; // artículos no marcados para editar conservan su información sin validarse nuevamente
+    const n = parseInt(a.cantidad,10);
+    if(!a.cantidad || isNaN(n) || n<=0){ setErr(`eart_${idx}`, "Ingrese la cantidad afectada."); ok=false; problemas.push(`Cantidad afectada de "${a.nombre}"`); }
+    else if(n > a.rollos){ setErr(`eart_${idx}`, `La cantidad no puede superar el total disponible (${a.rollos}).`); ok=false; problemas.push(`Cantidad afectada de "${a.nombre}"`); }
+    a.defectos.forEach((def,j) => {
+      let defOk = true;
+      if(def.isOtro){ if(!def.descripcionOtro || !def.descripcionOtro.trim()) defOk = false; }
+      else if(!def.motivo || !MOTIVOS.includes(def.motivo)) defOk = false;
+      if(!def.area) defOk = false;
+      else if(def.area!==OTRA_AREA && !AREAS.includes(def.area)) defOk = false;
+      if(def.area===OTRA_AREA && !(def.areaOtro||"").trim()) defOk = false;
+      if(!def.evidencia || def.evidencia.length===0) defOk = false;
+      if(!defOk){ ok=false; problemas.push(`Defecto ${j+1} de "${a.nombre}"`); }
+    });
+  });
+  if(!ok){ setErr('summary', `Complete los datos obligatorios en: ${problemas.join("; ")}. Toque "Editar" en cada ítem para corregirlo.`); render(); return; }
+  const huboSeleccion = ef.articulos.some(a=>a.open);
+  const soloComentario = !huboSeleccion;
+  if(!editFormHasChanges()){ setErr('summary', soloComentario ? 'No se detectaron cambios para guardar. Marque un artículo para editarlo, o modifique el comentario.' : 'No se detectaron cambios para guardar.'); render(); return; }
+  state.editMotivo = { open:true, sel:"", otro:"", error:"" };
+  render();
+}
+function cancelEditMotivo(){ state.editMotivo = { open:false, sel:"", otro:"", error:"" }; render(); }
+function updateEditMotivoSel(val){ state.editMotivo.sel = val; state.editMotivo.error=""; render(); }
+function confirmEditMotivo(){
+  const em = state.editMotivo;
+  const motivoFinal = em.sel === "Otros" ? (em.otro||"").trim() : em.sel;
+  if(!em.sel){
+    em.error = "Seleccione el motivo de edición.";
+    render(); return;
+  }
+  if(em.sel === "Otros" && !motivoFinal){
+    em.error = "Especifique el motivo de la edición.";
+    render(); return;
+  }
+  const nc = state.ncs.find(x=>x.id===state.editingId);
+  const ef = state.editForm;
+  const changes = [];
+  if((nc.comentario||"") !== (ef.comentario||"")) changes.push("Comentario actualizado");
+  ef.articulos.forEach((a,idx) => {
+    const orig = nc.articulos[idx];
+    if(!orig) return;
+    if(String(orig.cantidad) !== String(a.cantidad)) changes.push(`Cantidad de "${a.nombre}": ${orig.cantidad} → ${a.cantidad}`);
+    if(orig.defectos.length !== a.defectos.length) changes.push(`N° de defectos de "${a.nombre}": ${orig.defectos.length} → ${a.defectos.length}`);
+    else {
+      a.defectos.forEach((d,j) => {
+        const o = orig.defectos[j];
+        if(!o) return;
+        if(defectoLabel(o) !== defectoLabel(d)) changes.push(`Defecto ${j+1} de "${a.nombre}": "${defectoLabel(o)}" → "${defectoLabel(d)}"`);
+        if(defectoAreaFinal(o) !== defectoAreaFinal(d)) changes.push(`Área del defecto ${j+1} de "${a.nombre}": "${defectoAreaFinal(o)}" → "${defectoAreaFinal(d)}"`);
+        if(o.evidencia.length !== d.evidencia.length) changes.push(`Evidencia del defecto ${j+1} de "${a.nombre}": ${o.evidencia.length} → ${d.evidencia.length} foto(s)`);
+      });
+    }
+  });
+  nc.comentario = ef.comentario;
+  nc.articulos = ef.articulos.map(a => ({
+    ...a, cantidad: parseInt(a.cantidad,10),
+    defectos: a.defectos.map(d => ({ ...d })),
+  }));
+  registrarDefectosNuevosPendientes(nc);
+  const resumen = changes.length ? changes.join("; ") : "sin cambios en los valores";
+  nc.historial.push({ fecha: nowStr(), usuario: state.user.nombre, accion: `Editó la No Conformidad. Motivo de edición: "${motivoFinal}". Cambios: ${resumen}.` });
+  state.editMotivo = { open:false, sel:"", otro:"", error:"" };
+  state.editForm = null;
+  state.lastMensajesInfo = { ncId: nc.id, tipo:"editada", extra:{ motivoEdicion: motivoFinal } };
+  goTo("inicio");
+  showSuccessMessage("La No Conformidad se editó correctamente.");
+}
+function editMotivoHTML(){
+  if(!state.editMotivo.open) return "";
+  const em = state.editMotivo;
+  const isOtros = em.sel === "Otros";
+  return `
+    <div class="overlay">
+      <div class="sheet">
+        <div class="grabber"></div>
+        <h2 style="margin:0 0 4px;font-size:15px;">Motivo de edición</h2>
+        <p class="hint" style="margin:0 0 10px;">Seleccione el motivo por el cual está modificando esta No Conformidad.</p>
+        <div class="${em.error ? 'field error' : 'field'}">
+          <label>Motivo de edición <span class="req">*</span></label>
+          <select id="motivoEdicionSel" onchange="updateEditMotivoSel(this.value)">
+            <option value="">Seleccionar...</option>
+            ${MOTIVOS_EDICION.map(m=>`<option ${em.sel===m?'selected':''}>${esc(m)}</option>`).join("")}
+          </select>
+          ${em.error ? `<div class="field-err">${esc(em.error)}</div>` : ""}
+        </div>
+        ${isOtros ? `
+        <div class="field">
+          <label>Especifique el motivo <span class="req">*</span></label>
+          <textarea id="motivoEdicionOtro" placeholder="Describa el motivo de la edición" oninput="state.editMotivo.otro=this.value">${esc(em.otro)}</textarea>
+        </div>` : ""}
+        <div style="display:flex;gap:10px;margin-top:6px;">
+          <button class="btn btn-secondary" onclick="cancelEditMotivo()">Cancelar</button>
+          <button class="btn btn-primary" onclick="confirmEditMotivo()">Confirmar edición</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* =========================================================
+   ANULAR (modal / bottom sheet)
+========================================================= */
+function openAnular(id){ state.anular = { open:true, ncId:id, step:1, sel:"", otro:"", error:"" }; render(); }
+function closeAnular(){ state.anular = { open:false, ncId:null, step:1, sel:"", otro:"", error:"" }; render(); }
+function updateAnularSel(val){ state.anular.sel = val; state.anular.error=""; render(); }
+function anularMotivoFinal(){
+  return state.anular.sel === "Otros" ? (state.anular.otro||"").trim() : state.anular.sel;
+}
+function anularModalHTML(){
+  const a = state.anular;
+  const nc = state.ncs.find(x=>x.id===a.ncId);
+  const isOtros = a.sel === "Otros";
+  if(a.step===1){
+    return `
+      <div class="overlay">
+        <div class="sheet">
+          <div class="grabber"></div>
+          <h2 style="margin:0 0 4px;font-size:15px;">Anular No Conformidad</h2>
+          <p class="hint" style="margin:0 0 10px;">Partida <b>${esc(nc.partida)}</b> · ${esc(nc.id)}</p>
+          <p class="hint">Esta acción no elimina el registro; quedará marcada como Anulada, con historial visible.</p>
+          <div class="${a.error ? 'field error' : 'field'}">
+            <label>Motivo de anulación <span class="req">*</span></label>
+            <select id="motivoAnularSel" onchange="updateAnularSel(this.value)">
+              <option value="">Seleccionar...</option>
+              ${MOTIVOS_ANULACION.map(m=>`<option ${a.sel===m?'selected':''}>${esc(m)}</option>`).join("")}
+            </select>
+            ${a.error ? `<div class="field-err">${esc(a.error)}</div>` : ""}
+          </div>
+          ${isOtros ? `
+          <div class="field">
+            <label>Especifique el motivo <span class="req">*</span></label>
+            <textarea id="motivoAnularOtro" placeholder="Describa el motivo de la anulación" oninput="state.anular.otro=this.value">${esc(a.otro)}</textarea>
+          </div>` : ""}
+          <div style="display:flex;gap:10px;margin-top:6px;">
+            <button class="btn btn-secondary" onclick="closeAnular()">Cancelar</button>
+            <button class="btn btn-danger-solid" onclick="continuarAnular()">Continuar</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  return `
+    <div class="overlay">
+      <div class="sheet">
+        <div class="grabber"></div>
+        <h2 style="margin:0 0 10px;font-size:15px;">¿Está seguro de anular la No Conformidad correspondiente a la Partida ${esc(nc.partida)}?</h2>
+        <p class="hint" style="margin-top:-6px;">${esc(nc.id)}</p>
+        <p class="hint">Se registrará usuario, fecha/hora y el motivo indicado.</p>
+        <p style="font-size:12.5px;background:var(--bg-soft);padding:8px 10px;border-radius:8px;">${esc(anularMotivoFinal())}</p>
+        <button class="btn btn-danger-solid btn-block" onclick="confirmarAnular()">Confirmar anulación</button>
+        <div style="height:10px;"></div>
+        <button class="btn btn-secondary btn-block" onclick="closeAnular()">Cancelar</button>
+      </div>
+    </div>
+  `;
+}
+function continuarAnular(){
+  if(!state.anular.sel){
+    state.anular.error = "Seleccione el motivo de anulación.";
+    render(); return;
+  }
+  if(state.anular.sel === "Otros" && !(state.anular.otro||"").trim()){
+    state.anular.error = "Especifique el motivo de la anulación.";
+    render(); return;
+  }
+  state.anular.error = ""; state.anular.step = 2; render();
+}
+function confirmarAnular(){
+  const nc = state.ncs.find(x=>x.id===state.anular.ncId);
+  const motivoFinal = anularMotivoFinal();
+  nc.estado = "Anulada";
+  nc.anulacion = { motivo: motivoFinal, usuario: state.user.nombre, fecha: nowStr() };
+  nc.historial.push({ fecha: nowStr(), usuario: state.user.nombre, accion: "Anuló la No Conformidad. Motivo: "+motivoFinal });
+  state.lastMensajesInfo = { ncId: nc.id, tipo:"anulada", extra:{ motivoAnulacion: motivoFinal } };
+  closeAnular();
+  goTo("inicio");
+  showSuccessMessage("La No Conformidad fue anulada correctamente.");
+}
+
+/* =========================================================
+   SEGUIMIENTO POR CRITICIDAD
+========================================================= */
+function screenSeguimiento(){
+  const filt = state.seguimientoFilter;
+  const active = state.ncs.filter(x=>x.estado!=="Anulada").map(nc => Object.assign({}, nc, { categoria: ncTieneDefectoNuevo(nc) ? "Nuevo" : "Catalogado" }));
+  const groups = [
+    { key:"Nuevo",      label:"Con defecto nuevo (requiere revisión)", color:"var(--amber)", cls:"chip-grave" },
+    { key:"Catalogado", label:"Catalogado",                             color:"var(--accent)", cls:"chip-all" },
+  ];
+  const visibleGroups = filt==="Todas" ? groups : groups.filter(g=>g.key===filt);
+
+  function card(nc){
+    const totalRollos = nc.articulos.reduce((s,a)=>s+a.cantidad,0);
+    const border = nc.categoria==="Nuevo" ? "var(--amber)" : "var(--accent)";
+    return `
+      <div class="list-card" style="border-left:4px solid ${border};cursor:pointer;" onclick="openDetalle('${nc.id}')">
+        <div class="list-top"><span>${esc(nc.id)}</span><span style="font-weight:400;color:var(--grey);font-size:11px;">${esc(nc.fecha.split(' ')[0])}</span></div>
+        <div class="list-sub"><b>Partida ${esc(nc.partida)}</b> · ${esc(ncAreasResumen(nc))}</div>
+        <div class="list-sub">${esc(ncMotivoResumen(nc))} · ${esc(nc.registradoPor)}</div>
+        <div class="list-bottom"><span class="list-sub">${totalRollos} rollo(s) afectado(s)</span><span class="linklike">Ver detalle ›</span></div>
+      </div>
+    `;
+  }
+
+  const sections = visibleGroups.map(g => {
+    const items = active.filter(nc => nc.categoria === g.key);
+    if(items.length===0 && filt==="Todas") return "";
+    const body = items.length ? items.map(card).join("") : `<div class="empty">Sin registros en esta categoría.</div>`;
+    return `
+      <div style="display:flex;align-items:center;gap:8px;margin:14px 0 8px;">
+        <span style="width:10px;height:10px;border-radius:50%;background:${g.color};display:inline-block;"></span>
+        <b style="font-size:13px;">${g.label}</b>
+        <span style="color:var(--grey);font-size:11.5px;">(${items.length})</span>
+      </div>
+      ${body}
+    `;
+  }).join("");
+
+  return shell("Seguimiento por Criticidad", "Priorización de NC para atención", "goTo('inicio')", `
+    <div class="banner-sim">Al eliminarse el campo "Grado de defecto", la priorización debe redefinirse con Usuario. Provisionalmente se agrupa según si la NC contiene un defecto "${esc(DEFECTO_NUEVO)}" pendiente de catalogar (mayor atención) o solo defectos ya catalogados.</div>
+    <b style="font-size:12px;">Filtrar:</b>
+    <div style="margin:8px 0 4px;">
+      ${["Todas","Nuevo","Catalogado"].map(p=>{
+        const cls = p==="Nuevo"?"chip-grave":p==="Catalogado"?"chip-all":"chip-all";
+        const label = p==="Nuevo" ? "Con defecto nuevo" : p;
+        return `<span class="chip ${cls} ${filt===p?'active':''}" onclick="setSeguimientoFilter('${p}')">${label}</span>`;
+      }).join("")}
+    </div>
+    ${sections || `<div class="empty">No hay No Conformidades para este filtro.</div>`}
+    <div class="small-note">Columna "Estado de atención": solo si se define el flujo de seguimiento (fase 2, pendiente con Usuario).</div>
+  `, null);
+}
+function setSeguimientoFilter(p){ state.seguimientoFilter = p; render(); }
+
+/* =========================================================
+   NAV FOOTER (accesos rápidos entre pantallas, ayuda de prueba)
+========================================================= */
+function quickNav(){
+  return `
+    <div style="position:fixed;bottom:8px;left:50%;transform:translateX(-50%);z-index:99;background:#111;color:#fff;border-radius:20px;padding:6px 10px;font-size:10px;display:flex;gap:8px;opacity:.85;">
+      <span onclick="goTo('inicio')" style="cursor:pointer;">Inicio</span>|
+      <span onclick="goTo('consulta')" style="cursor:pointer;">Consulta</span>|
+      <span onclick="goTo('seguimiento')" style="cursor:pointer;">Criticidad</span>
+    </div>
+  `;
+}
+
+/* INIT */
+render();
+</script>
+</body>
+</html>

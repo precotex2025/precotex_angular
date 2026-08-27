@@ -104,8 +104,26 @@ MuestraMenu(){
     this.Cod_Empresa
   ).subscribe(
     (result: any) => {
-      this.Menu  = result;
-      GlobalVariable.Global_menu = result;
+      this.Menu  = result || {};
+
+      // Asegurar que la opción 'No Conformidades' aparezca dentro del módulo 'Control de Calidad'
+      if (this.Menu) {
+        if (!this.Menu['Control de Calidad']) {
+          this.Menu['Control de Calidad'] = [];
+        }
+        const existe = this.Menu['Control de Calidad'].some((item: any) => 
+          item.Ruta_Opcion === '/NoConformidades' || item.Opcion === 'No Conformidades'
+        );
+        if (!existe) {
+          this.Menu['Control de Calidad'].push({
+            Opcion: 'No Conformidades',
+            Ruta_Opcion: '/NoConformidades',
+            Des_Opcion: 'No Conformidades'
+          });
+        }
+      }
+
+      GlobalVariable.Global_menu = this.Menu;
       console.log(GlobalVariable.Global_menu);
     },
     (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
