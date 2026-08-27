@@ -1145,7 +1145,7 @@ export class CotizacionesComponent implements OnInit {
       }
     });
 
-
+    this.habilitadoBtnGuardar = true;
   }
 
   recalcularUtilidad(row: any) {
@@ -1215,6 +1215,7 @@ export class CotizacionesComponent implements OnInit {
       }
     });
 
+    this.habilitadoBtnGuardar = true;
   }
 
   recalcularPrecioFinal(row: any) {
@@ -1234,6 +1235,7 @@ export class CotizacionesComponent implements OnInit {
       }
     });
 
+    this.habilitadoBtnGuardar = true;
   }
 
   getListaCentroCosto(): void {
@@ -1307,17 +1309,26 @@ export class CotizacionesComponent implements OnInit {
   }
 
   /* --- Guardado único: toda cotización guardada es inmutable, así que cualquier movimiento
-     se registra siempre con accion 'I' e idCotizacion_Cab = 0. El backend asigna el
-     Num_Version que corresponde a los siete criterios. --- */
+  /* --- Guardado de cotización:
+     - Si es una versión existente (esModificacionCotizacion): actualiza con accion 'U' e idCotizacion_Cab de la versión seleccionada.
+     - Si es una nueva versión o borrador: registra con accion 'I' e idCotizacion_Cab = 0. --- */
   onGuardar(){
-    const versionAGuardar = this.borrador?.version ?? 1;
+    const esModif = this.esModificacionCotizacion;
+    const versionAGuardar = esModif
+      ? (this.versionSeleccionada?.numVersion ?? 1)
+      : (this.borrador?.version ?? 1);
 
-    const confirmTitle = versionAGuardar > 1
-      ? `¿Registrar la Versión ${versionAGuardar} de esta cotización?`
-      : '¿Desea registrar esta cotización?';
-    const confirmText = versionAGuardar > 1
-      ? 'Se registrará una nueva versión conservando el historial previo.'
-      : 'Se guardará la cotización inicial en el sistema.';
+    const confirmTitle = esModif
+      ? `¿Desea actualizar la Versión ${versionAGuardar} de esta cotización?`
+      : (versionAGuardar > 1
+        ? `¿Registrar la Versión ${versionAGuardar} de esta cotización?`
+        : '¿Desea registrar esta cotización?');
+
+    const confirmText = esModif
+      ? 'Se guardarán los cambios sobre la versión seleccionada.'
+      : (versionAGuardar > 1
+        ? 'Se registrará una nueva versión conservando el historial previo.'
+        : 'Se guardará la cotización inicial en el sistema.');
 
     Swal.fire({
       title: confirmTitle,
@@ -1343,11 +1354,14 @@ export class CotizacionesComponent implements OnInit {
             this.dataDetalles = this.dataSource.data.map(item => this.mapToDetalle(item));
         }
 
-        // PASO 2 - VERSIONADO: siempre alta ('I'). El correlativo y el número de versión
-        // salen del borrador, que los obtuvo de getObtenerNuevoCorrelativoVersion.
-        const accion: 'I' = 'I';
-        const idCotizacionCab = 0;
-        const correlativo = this.borrador?.correlativo ?? '';
+        // PASO 2 - DETERMINACIÓN DE ACCIÓN Y DATOS DE CABECERA
+        const accion: 'I' | 'U' = esModif ? 'U' : 'I';
+        const idCotizacionCab = esModif
+          ? (this.global_idCotizacion_Cab || this.versionSeleccionada?.id || 0)
+          : 0;
+        const correlativo = esModif
+          ? (this.versionSeleccionada?.raw?.correlativo || this.global_SDC || (this.borrador?.correlativo ?? ''))
+          : (this.borrador?.correlativo ?? '');
         const version = versionAGuardar;
 
         // PASO 3 - OBTENEMOS LA CABECERA
@@ -1385,13 +1399,12 @@ export class CotizacionesComponent implements OnInit {
                 Swal.fire({
                   icon: 'success',
                   title: '¡Operación Exitosa!',
-                  text: response.message || 'La cotización se guardó correctamente.',
+                  text: response.message || (esModif ? 'La versión se actualizó correctamente.' : 'La cotización se guardó correctamente.'),
                   timer: 2500,
                   showConfirmButton: false
                 });
 
-                // La versión recién guardada ya existe en cabecera: se recarga el historial
-                // para que aparezca en el panel sin volver a pasar por el formulario.
+                // Recarga el historial para refrescar datos y tarjetas
                 if (this.ultimaBusqueda) {
                   this.borrador = null;
                   this.borradorActivo = false;
@@ -1437,26 +1450,96 @@ export class CotizacionesComponent implements OnInit {
     this.isDisabledBtnEdit = false;
   }
 
-  /** Eliminar una card del panel. Sin argumento = descarta el borrador local (sin backend,
-   *  nunca se guardó). Con VersionPrecio = cotización ya guardada; no hay endpoint de borrado
-   *  todavía, solo se avisa. */
+  /** Eliminar una card del panel.
+   *  - Sin argumento = descarta el borrador local.
+   *  - Con VersionPrecio = elimina la versión en BD mediante postProcesoCotizacion con accion 'D'. */
   onEliminar(v?: VersionPrecio){
     Swal.fire({
       title: '¿Eliminar esta cotización?',
-      text: v ? 'Esta acción no se puede deshacer.' : 'Se descartará el borrador sin guardar.',
+      text: v ? `Se eliminará la ${v.titulo}. Esta acción no se puede deshacer.` : 'Se descartará el borrador sin guardar.',
       icon: 'warning',
       showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (!result.isConfirmed) { return; }
 
       if (v) {
-        this.toastr.info('Eliminar cotización guardada aún no disponible', '', { timeOut: 2500 });
+        const _UndNego  = this.formulario.get('unidadNegocio')?.value   || 0;
+        const _tipo     = this.formulario.get('tipo')?.value            || '';
+        const _cliente  = this.formulario.get('cliente')?.value         || '';
+        const _tela     = this.formulario.get('codigoTela')?.value      || '';
+        const _ruta     = this.formulario.get('codigoRutaTela')?.value  || '';
+        const _color    = this.formulario.get('color')?.value           || '';
+
+        const data: ProcesoCotizacionRequest = {
+          idCotizacion_Cab: v.id,
+          pro_Id          : 0,
+          cen_Cos_Cod     : Number(_UndNego),
+          cod_Tipo        : _tipo,
+          cod_Cliente_Tex : _cliente,
+          cod_Tela        : _tela,
+          cod_Ruta        : _ruta,
+          cod_Color       : _color,
+          cod_RecetaAcabado : v.receta || this.global_CodReceta || '',
+          tiempo_Referencia : Number(this.global_Tiempo) || 0,
+          precio_Referencia : Number(v.precioReferencia) || Number(this.global_PrecioTinto) || 0,
+          sDC_Referencia    : this.global_SDC || '',
+          correlativo     : v.raw?.correlativo || this.global_SDC || '',
+          version         : v.numVersion,
+          flg_Estatus     : 'I',
+          usu_Registro    : this.sUsuario,
+          accion          : 'D',
+          detalles        : []
+        };
+
+        this.SpinnerService.show();
+        this.service.postProcesoCotizacion(data)
+          .pipe(finalize(() => { this.SpinnerService.hide(); }))
+          .subscribe({
+            next: (response: ServiceResponse<null>) => {
+              if (response.success) {
+                Swal.fire({
+                  icon: 'success',
+                  title: '¡Operación Exitosa!',
+                  text: response.message || `${v.titulo} eliminada correctamente.`,
+                  timer: 2000,
+                  showConfirmButton: false
+                });
+
+                if (this.versionSeleccionada?.id === v.id) {
+                  this.versionSeleccionada = null;
+                  this.global_idCotizacion_Cab = 0;
+                  this.dataSource.data = [];
+                  this.bMuestraMenuFlotante = false;
+                }
+
+                if (this.ultimaBusqueda) {
+                  this.cargarHistorialCotizaciones();
+                }
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error al eliminar',
+                  text: response.message || 'No se pudo eliminar la cotización.'
+                });
+              }
+            },
+            error: (error: any) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error de comunicación',
+                text: error?.message || 'No se pudo completar la eliminación.'
+              });
+            }
+          });
+
         return;
       }
 
-      // Borrador: solo vive en memoria, se puede descartar sin más.
+      // Borrador: solo vive en memoria, se descarta directamente
       this.borrador = null;
       this.borradorActivo = false;
       this.dataSource.data = [];
@@ -1745,7 +1828,7 @@ private mapToDetalle(item: any): ProcesoCotizacionDetalle {
           return;
         }
 
-        this.volcarPlanosEnGrilla(elementos, true);
+        this.volcarPlanosEnGrilla(elementos, false);
       },
       error: (error: any) => {
         this.dataSource.data = [];
@@ -1756,7 +1839,7 @@ private mapToDetalle(item: any): ProcesoCotizacionDetalle {
   }
 
   /** Marca la jerarquía padre/hijo de los procesos y los publica en la grilla.
-   *  soloLectura = true bloquea la columna Ajuste y el guardado (versión ya registrada). */
+   *  soloLectura = true bloquea la columna Ajuste y el guardado. */
   private volcarPlanosEnGrilla(elementos: ProcesoExportacionItem[], soloLectura: boolean): void {
     this.planos       = this.marcarJerarquiaPlanos(elementos);
     this.planosBackup = JSON.parse(JSON.stringify(elementos));
@@ -1807,6 +1890,8 @@ private mapToDetalle(item: any): ProcesoCotizacionDetalle {
       backupItem.pro_Aju     = ajuste;
       backupItem.observacion = row.observacion;
     }
+
+    this.habilitadoBtnGuardar = true;
 
     if (this.dialogRefAjuste) {
       this.dialogRefAjuste.close();

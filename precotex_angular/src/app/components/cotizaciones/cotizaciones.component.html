@@ -8,13 +8,15 @@
   </header>
 
   <!-- Zona de criterios: colapsa sección completa o alterna modo resumen (cartas vs formulario) -->
-  <section class="cot-criterios" [class.cot-criterios--colapsado]="seccionTotalmenteColapsada" [class.cot-criterios--compacto]="modoResumen">
+  <section class="cot-criterios" [class.cot-criterios--colapsado]="seccionTotalmenteColapsada"
+    [class.cot-criterios--compacto]="modoResumen">
 
     <div class="cot-criterios__header">
       <div class="cot-criterios__header-left">
         <div class="cot-section-title" (click)="toggleSeccionColapsada()"
-             [matTooltip]="seccionTotalmenteColapsada ? 'Desplegar sección de criterios' : 'Contraer toda la sección de criterios'">
-          <button mat-icon-button type="button" class="cot-section-title__chevron" (click)="$event.stopPropagation(); toggleSeccionColapsada()">
+          [matTooltip]="seccionTotalmenteColapsada ? 'Desplegar sección de criterios' : 'Contraer toda la sección de criterios'">
+          <button mat-icon-button type="button" class="cot-section-title__chevron"
+            (click)="$event.stopPropagation(); toggleSeccionColapsada()">
             <mat-icon>{{ seccionTotalmenteColapsada ? 'expand_more' : 'expand_less' }}</mat-icon>
           </button>
           <mat-icon class="cot-section-title__icon">tune</mat-icon>
@@ -22,12 +24,10 @@
         </div>
 
         <!-- Botón Solo Ícono Modo Vista / Modo Edición con Tooltip -->
-        <button mat-icon-button type="button"
-                class="cot-switch-btn"
-                [class.cot-switch-btn--active]="modoResumen"
-                (click)="toggleModoResumen()"
-                [matTooltip]="modoResumen ? 'Modo Vista (clic para cambiar a Modo Edición)' : 'Modo Edición (clic para cambiar a Modo Vista)'"
-                matTooltipPosition="above">
+        <button mat-icon-button type="button" class="cot-switch-btn" [class.cot-switch-btn--active]="modoResumen"
+          (click)="toggleModoResumen()"
+          [matTooltip]="modoResumen ? 'Modo Vista (clic para cambiar a Modo Edición)' : 'Modo Edición (clic para cambiar a Modo Vista)'"
+          matTooltipPosition="above">
           <mat-icon class="cot-switch-btn__icon">{{ modoResumen ? 'visibility' : 'edit' }}</mat-icon>
         </button>
       </div>
@@ -36,10 +36,12 @@
         <!-- Acciones en el extremo derecho cuando está en modo Vista Compacta -->
         <ng-container *ngIf="modoResumen && !seccionTotalmenteColapsada">
           <ng-container *ngTemplateOutlet="tplPinHistorial"></ng-container>
-          <button mat-stroked-button type="button" class="btn-ghost cot-btn-sm" (click)="onLimpiarFiltros()" matTooltip="Limpiar filtros" matTooltipPosition="above">
+          <button mat-stroked-button type="button" class="btn-ghost cot-btn-sm" (click)="onLimpiarFiltros()"
+            matTooltip="Limpiar filtros" matTooltipPosition="above">
             <mat-icon>refresh</mat-icon> <span class="cot-btn-label">Limpiar</span>
           </button>
-          <button mat-flat-button type="button" class="btn-azul cot-btn-sm" (click)="onBuscar()" matTooltip="Buscar cotización" matTooltipPosition="above">
+          <button mat-flat-button type="button" class="btn-azul cot-btn-sm" (click)="onBuscar()"
+            matTooltip="Buscar cotización" matTooltipPosition="above">
             <mat-icon>search</mat-icon> <span class="cot-btn-label">Buscar</span>
           </button>
         </ng-container>
@@ -48,13 +50,11 @@
 
     <!-- Botón de anclaje del panel de Historial -->
     <ng-template #tplPinHistorial>
-      <button mat-stroked-button type="button"
-              class="btn-ghost cot-btn-pin-filtro cot-btn-sm"
-              [class.cot-btn-pin-filtro--activo]="historialPineado"
-              *ngIf="puedeAnclarHistorial"
-              (click)="toggleHistorialPin()"
-              [matTooltip]="historialPineado ? 'Ocultar panel de historial' : 'Mostrar panel de historial'"
-              matTooltipPosition="above">
+      <button mat-stroked-button type="button" class="btn-ghost cot-btn-pin-filtro cot-btn-sm"
+        [class.cot-btn-pin-filtro--activo]="historialPineado" *ngIf="puedeAnclarHistorial"
+        (click)="toggleHistorialPin()"
+        [matTooltip]="historialPineado ? 'Ocultar panel de historial' : 'Mostrar panel de historial'"
+        matTooltipPosition="above">
         <mat-icon>push_pin</mat-icon> <span class="cot-btn-label">Historial</span>
       </button>
     </ng-template>
@@ -65,17 +65,16 @@
       <!-- Resumen de criterios en cartas -->
       <div class="cot-criterios__resumen" *ngIf="modoResumen">
         <div class="cot-criterios-cards">
-          <div class="cot-criterio-card"
-               [class.cot-criterio-card--vacio]="c.value === '—'"
-               *ngFor="let c of resumenCriterios"
-               [matTooltip]="c.label + ': ' + (c.value !== '—' ? c.value : 'Sin seleccionar')"
-               matTooltipPosition="above">
+          <div class="cot-criterio-card" [class.cot-criterio-card--vacio]="c.value === '—'"
+            *ngFor="let c of resumenCriterios"
+            [matTooltip]="c.label + ': ' + (c.value !== '—' ? c.value : 'Sin seleccionar')" matTooltipPosition="above">
             <div class="cot-criterio-card__icon">
               <mat-icon>{{ c.icon }}</mat-icon>
             </div>
             <div class="cot-criterio-card__body">
               <span class="cot-criterio-card__label">{{ c.label }}</span>
-              <span class="cot-criterio-card__value" [class.cot-criterio-card__value--vacio]="c.value === '—'">{{ c.value }}</span>
+              <span class="cot-criterio-card__value" [class.cot-criterio-card__value--vacio]="c.value === '—'">{{
+                c.value }}</span>
             </div>
           </div>
         </div>
@@ -88,20 +87,13 @@
           <!-- ********************** UNIDAD DE NEGOCIO ********************************* -->
           <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
             <mat-label>{{ COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.label }}</mat-label>
-            <mat-icon 
-              matPrefix class="cot-field-icon"
-              [matTooltip]="COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.label">
+            <mat-icon matPrefix class="cot-field-icon" [matTooltip]="COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.label">
               {{ COTIZACIONES_FIELDS.UNIDAD_NEGOCIO.icon }}
             </mat-icon>
-            <mat-select 
-              formControlName="unidadNegocio" 
-              placeholder="Seleccione..."
-              panelClass="cot-select-panel"
+            <mat-select formControlName="unidadNegocio" placeholder="Seleccione..." panelClass="cot-select-panel"
               (selectionChange)="chgUnidadNegocio()">
-              <mat-option 
-                *ngFor="let unidad of unidadesNegocio" 
-                [value]="unidad.codigo">
-                  {{ unidad.descripcion }}
+              <mat-option *ngFor="let unidad of unidadesNegocio" [value]="unidad.codigo">
+                {{ unidad.descripcion }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -109,17 +101,12 @@
           <!-- ********************** TIPO UNIDAD DE NEGOCIO ********************************* -->
           <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
             <mat-label>{{ COTIZACIONES_FIELDS.TIPO_UNIDAD.label }}</mat-label>
-            <mat-icon matPrefix class="cot-field-icon"
-              [matTooltip]="COTIZACIONES_FIELDS.TIPO_UNIDAD.label">
-                {{ COTIZACIONES_FIELDS.TIPO_UNIDAD.icon }}
+            <mat-icon matPrefix class="cot-field-icon" [matTooltip]="COTIZACIONES_FIELDS.TIPO_UNIDAD.label">
+              {{ COTIZACIONES_FIELDS.TIPO_UNIDAD.icon }}
             </mat-icon>
-            <mat-select 
-              formControlName="tipo" 
-              placeholder="Seleccione...">
-              <mat-option 
-                *ngFor="let t of tipoUnidadesNegocio" 
-                [value]="t.codigo">
-                  {{ t.descripcion }}
+            <mat-select formControlName="tipo" placeholder="Seleccione...">
+              <mat-option *ngFor="let t of tipoUnidadesNegocio" [value]="t.codigo">
+                {{ t.descripcion }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -130,22 +117,12 @@
               {{ COTIZACIONES_FIELDS.CLIENTE.label }}
             </label>
             <div class="cot-filter-select__control">
-              <mat-icon 
-                class="cot-filter-select__icon"
-                [matTooltip]="COTIZACIONES_FIELDS.CLIENTE.label" >
-                  {{ COTIZACIONES_FIELDS.CLIENTE.icon }}
+              <mat-icon class="cot-filter-select__icon" [matTooltip]="COTIZACIONES_FIELDS.CLIENTE.label">
+                {{ COTIZACIONES_FIELDS.CLIENTE.icon }}
               </mat-icon>
-              <ng-select
-                formControlName="cliente"
-                class="cot-ng-select cot-ng-select--filter"
-                bindLabel="label"
-                bindValue="cod_Cliente_Tex"
-                [items]="dataClientes"
-                [searchable]="true"
-                [clearable]="true"
-                appendTo="body"
-                placeholder="Buscar cliente..."
-                (change)="onChangeCliente()">
+              <ng-select formControlName="cliente" class="cot-ng-select cot-ng-select--filter" bindLabel="label"
+                bindValue="cod_Cliente_Tex" [items]="dataClientes" [searchable]="true" [clearable]="true"
+                appendTo="body" placeholder="Buscar cliente..." (change)="onChangeCliente()">
               </ng-select>
             </div>
           </div>
@@ -154,13 +131,8 @@
           <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
             <mat-label>{{ COTIZACIONES_FIELDS.TELA.label }}</mat-label>
             <mat-icon matPrefix class="cot-field-icon">{{ COTIZACIONES_FIELDS.TELA.icon }}</mat-icon>
-            <input 
-              [textMask]="{mask: maskCodigo}" 
-              matInput 
-              formControlName="codigoTela"
-              (keyup.enter)="buscarDescripcionTela()" 
-              placeholder="AA000000"
-              (blur)="buscarDescripcionTela()"  />
+            <input [textMask]="{mask: maskCodigo}" matInput formControlName="codigoTela"
+              (keyup.enter)="buscarDescripcionTela()" placeholder="AA000000" (blur)="buscarDescripcionTela()" />
           </mat-form-field>
 
           <!-- ********************** DESCRIPCION DE TELA ********************************* -->
@@ -187,21 +159,12 @@
               {{ COTIZACIONES_FIELDS.COLOR.label }}
             </label>
             <div class="cot-filter-select__control">
-              <mat-icon class="cot-filter-select__icon"
-                [matTooltip]="labelColor.textContent.trim()" >
+              <mat-icon class="cot-filter-select__icon" [matTooltip]="labelColor.textContent.trim()">
                 {{ COTIZACIONES_FIELDS.COLOR.icon }}
               </mat-icon>
-              <ng-select
-                formControlName="color"
-                class="cot-ng-select cot-ng-select--filter"
-                bindLabel="descripcion"
-                bindValue="codigo"
-                [items]="listaCodigoColor"
-                [searchable]="true"
-                [clearable]="true"
-                appendTo="body"
-                (change)="onChangeColor()"
-                placeholder="Buscar color...">
+              <ng-select formControlName="color" class="cot-ng-select cot-ng-select--filter" bindLabel="descripcion"
+                bindValue="codigo" [items]="listaCodigoColor" [searchable]="true" [clearable]="true" appendTo="body"
+                (change)="onChangeColor()" placeholder="Buscar color...">
               </ng-select>
             </div>
           </div>
@@ -210,10 +173,8 @@
           <mat-form-field appearance="outline" floatLabel="always" class="cot-field">
             <mat-label>Precio / SDC</mat-label>
             <mat-icon matPrefix class="cot-field-icon">payments</mat-icon>
-            <mat-select [value]="precioSeleccionado"
-                        [disabled]="!dataSource_Precios?.length"
-                        (selectionChange)="onChangePrecio($event.value)"
-                        placeholder="Elegir precio...">
+            <mat-select [value]="precioSeleccionado" [disabled]="!dataSource_Precios?.length"
+              (selectionChange)="onChangePrecio($event.value)" placeholder="Elegir precio...">
               <mat-option *ngFor="let p of dataSource_Precios" [value]="p">
                 {{ p.corR_CARTA }} — Tiempo {{ p.tiempo }} — {{ p.preC_TINTO }}
               </mat-option>
@@ -242,8 +203,7 @@
   </section>
 
   <!-- Zona de costeo: recibe toda la altura restante -->
-  <div class="cot-workspace-content"
-       *ngIf="codigoRutaTela && unidadNegocio=='1'">
+  <div class="cot-workspace-content" *ngIf="codigoRutaTela && unidadNegocio=='1'">
 
     <!-- Panel de Cotizaciones: alimentado por getListarProcesosExportacion + borrador en memoria (ver onBuscar / seleccionarBorrador en el .ts) -->
     <section class="cot-history-panel" *ngIf="historialPineado && busquedaRealizada">
@@ -255,18 +215,18 @@
             <p>Para los criterios aplicados</p>
           </div>
         </div>
-        <button class="cot-btn-pin" [class.cot-btn-pin--activo]="historialPineado"
-                (click)="toggleHistorialPin()" [matTooltip]="historialPineado ? 'Ocultar panel' : 'Mostrar panel'">
+        <button class="cot-btn-pin" [class.cot-btn-pin--activo]="historialPineado" (click)="toggleHistorialPin()"
+          [matTooltip]="historialPineado ? 'Ocultar panel' : 'Mostrar panel'">
           <mat-icon>push_pin</mat-icon>
         </button>
       </div>
       <button mat-flat-button class="btn-azul cot-history-panel__nuevo" (click)="nuevaCotizacionUI()">
-        <mat-icon>add_circle</mat-icon> Nueva Cotización
+        <mat-icon>add_circle</mat-icon> Nueva Version
       </button>
       <div class="cot-history-list">
         <div class="cot-history-card" *ngFor="let v of historialVersiones"
-             [class.cot-history-card--activa]="versionSeleccionada === v && !borradorActivo"
-             (click)="seleccionarVersion(v)">
+          [class.cot-history-card--activa]="versionSeleccionada === v && !borradorActivo"
+          (click)="seleccionarVersion(v)">
           <span class="cot-history-dot cot-dot--vigente"></span>
           <div class="cot-history-body">
             <div class="cot-history-header">
@@ -281,7 +241,8 @@
             </div>
           </div>
           <div class="cot-history-card__acciones">
-            <button mat-icon-button matTooltip="Crear nueva versión a partir de esta" (click)="onCrearNuevaVersion(v); $event.stopPropagation()">
+            <button mat-icon-button matTooltip="Crear nueva versión a partir de esta"
+              (click)="onCrearNuevaVersion(v); $event.stopPropagation()">
               <mat-icon>post_add</mat-icon>
             </button>
             <button mat-icon-button matTooltip="Eliminar" (click)="onEliminar(v); $event.stopPropagation()">
@@ -290,10 +251,8 @@
           </div>
         </div>
 
-        <div class="cot-history-card cot-history-card--nueva"
-             *ngIf="borrador"
-             [class.cot-history-card--activa]="borradorActivo"
-             (click)="seleccionarBorrador()">
+        <div class="cot-history-card cot-history-card--nueva" *ngIf="borrador"
+          [class.cot-history-card--activa]="borradorActivo" (click)="seleccionarBorrador()">
           <span class="cot-history-dot cot-dot--borrador"></span>
           <div class="cot-history-body">
             <div class="cot-history-header">
@@ -326,194 +285,197 @@
         <div class="cot-version-bar__info">
           <mat-icon>history</mat-icon>
           <span class="cot-version-bar__label">Cotización consultada:</span>
-          <span class="cot-version-bar__value" *ngIf="borradorActivo">Nueva cotización — sin guardar · sin precio de referencia</span>
-          <span class="cot-version-bar__value" *ngIf="!borradorActivo">SDC {{ global_SDC }} · Precio {{ global_PrecioTinto | number:'1.2-2' }} · Tiempo {{ global_Tiempo }}</span>
+          <span class="cot-version-bar__value" *ngIf="borradorActivo">
+            {{ borrador?.version ? ('Nueva Versión ' + borrador?.version + ' — en edición · sin guardar') : 'Nueva versión — sin guardar' }}
+          </span>
+          <span class="cot-version-bar__value" *ngIf="!borradorActivo">SDC {{ global_SDC }} · Precio {{
+            global_PrecioTinto | number:'1.2-2' }} · Tiempo {{ global_Tiempo }}</span>
         </div>
-        <button mat-stroked-button class="btn-ghost" (click)="nuevaCotizacionUI()">
-          <mat-icon>add</mat-icon> Nueva Cotización
-        </button>
       </div>
-    <div class="cot-tabla-scroll">
-      <table mat-table [dataSource]="dataSource" class="cot-tabla">
+      <div class="cot-tabla-scroll">
+        <table mat-table [dataSource]="dataSource" class="cot-tabla">
 
-        <!-- Hover / expandir-colapsar -->
-        <ng-container matColumnDef="hover">
-          <th mat-header-cell *matHeaderCellDef class="col-hover">/</th>
-          <td mat-cell *matCellDef="let row" class="col-hover"
-              (click)="toggleExpand(row)" [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">
-            <mat-icon *ngIf="row.isParent && row.tieneHijos">
-              {{ expandedRows.has(row.pro_Hover) ? 'expand_less' : 'expand_more' }}
-            </mat-icon>
-            <span class="cot-row-num" *ngIf="row.isParent && !row.tieneHijos && row.pro_Tip !== 'R'">{{ row.pro_Hover }}</span>
-            <ng-container *ngIf="!row.isParent || row.pro_Tip === 'R'">{{ row.pro_Hover }}</ng-container>
-          </td>
-        </ng-container>
-
-        <!-- Descripción -->
-        <ng-container matColumnDef="descripcion">
-          <th mat-header-cell *matHeaderCellDef class="col-descripcion">Descripción</th>
-          <td mat-cell *matCellDef="let row" class="col-descripcion"
+          <!-- Hover / expandir-colapsar -->
+          <ng-container matColumnDef="hover">
+            <th mat-header-cell *matHeaderCellDef class="col-hover">/</th>
+            <td mat-cell *matCellDef="let row" class="col-hover" (click)="toggleExpand(row)"
               [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">
-            <mat-icon class="cot-row-icon" *ngIf="row.isParent && row.pro_Tip !== 'R'">{{ iconoSeccion(row) }}</mat-icon>
-            <mat-icon class="cot-row-icon cot-row-icon--resumen" *ngIf="row.pro_Tip === 'R' && row.cod_Subtotal != 2 && row.cod_Subtotal != 4 && row.cod_Subtotal != 5">functions</mat-icon>
-            <mat-icon class="cot-row-icon cot-row-icon--resumen" *ngIf="row.cod_Subtotal == 2">trending_up</mat-icon>
-            <mat-icon class="cot-row-icon cot-row-icon--total" *ngIf="row.cod_Subtotal == 4">paid</mat-icon>
-            <mat-icon class="cot-row-icon cot-row-icon--total" *ngIf="row.cod_Subtotal == 5">show_chart</mat-icon>
-            {{ row.pro_Des }}
-            <span class="cot-group-badge" *ngIf="row.isParent && row.tieneHijos">{{ row.childCount }}</span>
-          </td>
-        </ng-container>
+              <mat-icon *ngIf="row.isParent && row.tieneHijos">
+                {{ expandedRows.has(row.pro_Hover) ? 'expand_less' : 'expand_more' }}
+              </mat-icon>
+              <span class="cot-row-num" *ngIf="row.isParent && !row.tieneHijos && row.pro_Tip !== 'R'">{{ row.pro_Hover
+                }}</span>
+              <ng-container *ngIf="!row.isParent || row.pro_Tip === 'R'">{{ row.pro_Hover }}</ng-container>
+            </td>
+          </ng-container>
 
-        <!-- Factor -->
-        <ng-container matColumnDef="factor">
-          <th mat-header-cell *matHeaderCellDef>Factor</th>
-          <td mat-cell *matCellDef="let row">
-            <span *ngIf="!(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-              {{ row.pro_Factor }}
-            </span>
-          </td>
-        </ng-container>
+          <!-- Descripción -->
+          <ng-container matColumnDef="descripcion">
+            <th mat-header-cell *matHeaderCellDef class="col-descripcion">Descripción</th>
+            <td mat-cell *matCellDef="let row" class="col-descripcion"
+              [ngClass]="{'descripcion-f': row.pro_Tip === 'F'}">
+              <mat-icon class="cot-row-icon" *ngIf="row.isParent && row.pro_Tip !== 'R'">{{ iconoSeccion(row)
+                }}</mat-icon>
+              <mat-icon class="cot-row-icon cot-row-icon--resumen"
+                *ngIf="row.pro_Tip === 'R' && row.cod_Subtotal != 2 && row.cod_Subtotal != 4 && row.cod_Subtotal != 5">functions</mat-icon>
+              <mat-icon class="cot-row-icon cot-row-icon--resumen" *ngIf="row.cod_Subtotal == 2">trending_up</mat-icon>
+              <mat-icon class="cot-row-icon cot-row-icon--total" *ngIf="row.cod_Subtotal == 4">paid</mat-icon>
+              <mat-icon class="cot-row-icon cot-row-icon--total" *ngIf="row.cod_Subtotal == 5">show_chart</mat-icon>
+              {{ row.pro_Des }}
+              <span class="cot-group-badge" *ngIf="row.isParent && row.tieneHijos">{{ row.childCount }}</span>
+            </td>
+          </ng-container>
 
-        <!-- Costo Kg -->
-        <ng-container matColumnDef="cosKg">
-          <th mat-header-cell *matHeaderCellDef>Costo Kg</th>
-          <td mat-cell *matCellDef="let row">
+          <!-- Factor -->
+          <ng-container matColumnDef="factor">
+            <th mat-header-cell *matHeaderCellDef>Factor</th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="!(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
+                {{ row.pro_Factor }}
+              </span>
+            </td>
+          </ng-container>
 
-            <!-- TIPO SUBTOTAL - "UTILIDAD": abre panel lateral, la tabla es solo lectura -->
-            <button type="button" class="cot-cell-editable" *ngIf="row.cod_Subtotal == 2"
-              [class.cot-cell-editable--activa]="filaEnEdicion === row && tipoEdicion === 'utilidad'"
-              (click)="abrirEdicion(row, 'utilidad')">
-              {{ row.pro_Cos_Kg }}%
-              <mat-icon>edit</mat-icon>
-            </button>
+          <!-- Costo Kg -->
+          <ng-container matColumnDef="cosKg">
+            <th mat-header-cell *matHeaderCellDef>Costo Kg</th>
+            <td mat-cell *matCellDef="let row">
 
-            <span *ngIf="row.cod_Subtotal != 2 && !(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-              {{ row.pro_Cos_Kg }}
-            </span>
-          </td>
-        </ng-container>
+              <!-- TIPO SUBTOTAL - "UTILIDAD": abre panel lateral, la tabla es solo lectura -->
+              <button type="button" class="cot-cell-editable" *ngIf="row.cod_Subtotal == 2"
+                [class.cot-cell-editable--activa]="filaEnEdicion === row && tipoEdicion === 'utilidad'"
+                (click)="abrirEdicion(row, 'utilidad')">
+                {{ row.pro_Cos_Kg }}%
+                <mat-icon>edit</mat-icon>
+              </button>
 
-        <!-- Total -->
-        <ng-container matColumnDef="total">
-          <th mat-header-cell *matHeaderCellDef>Total</th>
-          <td mat-cell *matCellDef="let row">
-            <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot }}</span>
-          </td>
-        </ng-container>
+              <span
+                *ngIf="row.cod_Subtotal != 2 && !(row.isParent && row.tieneHijos) && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
+                {{ row.pro_Cos_Kg }}
+              </span>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="totalComercial">
-          <th mat-header-cell *matHeaderCellDef>Total Comercial</th>
-          <td mat-cell *matCellDef="let row">
-            <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot_Com }}</span>
-          </td>
-        </ng-container>
+          <!-- Total -->
+          <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef>Total</th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot }}</span>
+            </td>
+          </ng-container>
 
-        <!-- Ajuste -->
-        <ng-container matColumnDef="ajuste">
-          <th mat-header-cell *matHeaderCellDef>Ajuste</th>
-          <td mat-cell *matCellDef="let row">
-            <button type="button" class="cot-cell-editable"
-              *ngIf="row.isParent && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'"
-              [class.cot-cell-editable--activa]="filaEnEdicion === row && tipoEdicion === 'ajuste'"
-              [disabled]="!row.pro_Tot_Com || row.pro_Tot_Com === 0"
-              (click)="abrirEdicion(row, 'ajuste')">
-              {{ row.pro_Aju || 0 }}
-              <mat-icon>edit</mat-icon>
-            </button>
-            <span *ngIf="row.isChild && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
-              {{ row.pro_Aju }}
-            </span>
-            <mat-icon class="cot-ajuste-comment-icon" *ngIf="row.observacion" [matTooltip]="row.observacion">chat</mat-icon>
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="totalComercial">
+            <th mat-header-cell *matHeaderCellDef>Total Comercial</th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.pro_Tip !== 'R'">{{ row.pro_Tot_Com }}</span>
+            </td>
+          </ng-container>
 
-        <!-- Cotización -->
-        <ng-container matColumnDef="cotizacion">
-          <th mat-header-cell *matHeaderCellDef>Cotización</th>
-          <td mat-cell *matCellDef="let row" class="cell-total">
+          <!-- Ajuste -->
+          <ng-container matColumnDef="ajuste">
+            <th mat-header-cell *matHeaderCellDef>Ajuste</th>
+            <td mat-cell *matCellDef="let row">
+              <button type="button" class="cot-cell-editable"
+                *ngIf="row.isParent && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'"
+                [class.cot-cell-editable--activa]="filaEnEdicion === row && tipoEdicion === 'ajuste'"
+                [disabled]="!row.pro_Tot_Com || row.pro_Tot_Com === 0" (click)="abrirEdicion(row, 'ajuste')">
+                {{ row.pro_Aju || 0 }}
+                <mat-icon>edit</mat-icon>
+              </button>
+              <span *ngIf="row.isChild && row.pro_Tip !== 'F' && row.pro_Tip !== 'R'">
+                {{ row.pro_Aju }}
+              </span>
+              <mat-icon class="cot-ajuste-comment-icon" *ngIf="row.observacion"
+                [matTooltip]="row.observacion">chat</mat-icon>
+            </td>
+          </ng-container>
 
-            <button type="button" class="cot-cell-editable cot-cell-editable--total" *ngIf="row.cod_Subtotal == 4"
-              [class.cot-cell-editable--activa]="filaEnEdicion === row && tipoEdicion === 'cotizacion'"
-              (click)="abrirEdicion(row, 'cotizacion')">
-              {{ row.pro_Cotizacion | number:'1.2-2' }}
-              <mat-icon>edit</mat-icon>
-            </button>
+          <!-- Cotización -->
+          <ng-container matColumnDef="cotizacion">
+            <th mat-header-cell *matHeaderCellDef>Cotización</th>
+            <td mat-cell *matCellDef="let row" class="cell-total">
 
-            <span *ngIf="row.cod_Subtotal != 4 && !row.isChild">
-              <ng-container *ngIf="row.cod_Subtotal == 5; else cotizacionNormal">
-                {{ row.pro_Por | number:'1.2-2' }} %
-              </ng-container>
-              <ng-template #cotizacionNormal>
+              <button type="button" class="cot-cell-editable cot-cell-editable--total" *ngIf="row.cod_Subtotal == 4"
+                [class.cot-cell-editable--activa]="filaEnEdicion === row && tipoEdicion === 'cotizacion'"
+                (click)="abrirEdicion(row, 'cotizacion')">
                 {{ row.pro_Cotizacion | number:'1.2-2' }}
-              </ng-template>
-            </span>
-          </td>
-        </ng-container>
+                <mat-icon>edit</mat-icon>
+              </button>
 
-        <ng-container matColumnDef="porcentaje">
-          <th mat-header-cell *matHeaderCellDef>Porcentaje</th>
-          <td mat-cell *matCellDef="let row">{{ row.pro_Por }}</td>
-        </ng-container>
+              <span *ngIf="row.cod_Subtotal != 4 && !row.isChild">
+                <ng-container *ngIf="row.cod_Subtotal == 5; else cotizacionNormal">
+                  {{ row.pro_Por | number:'1.2-2' }} %
+                </ng-container>
+                <ng-template #cotizacionNormal>
+                  {{ row.pro_Cotizacion | number:'1.2-2' }}
+                </ng-template>
+              </span>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="TipoUbicacion">
-          <th mat-header-cell *matHeaderCellDef>Tipo</th>
-          <td mat-cell *matCellDef="let row">{{ row.pro_Tip }}</td>
-        </ng-container>
+          <ng-container matColumnDef="porcentaje">
+            <th mat-header-cell *matHeaderCellDef>Porcentaje</th>
+            <td mat-cell *matCellDef="let row">{{ row.pro_Por }}</td>
+          </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <ng-container matColumnDef="TipoUbicacion">
+            <th mat-header-cell *matHeaderCellDef>Tipo</th>
+            <td mat-cell *matCellDef="let row">{{ row.pro_Tip }}</td>
+          </ng-container>
 
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"
-          [class.row-hidden]="row.isChild && !expandedRows.has(row.padreKey)"
-          [class.row--group]="row.isParent && row.tieneHijos"
-          [class.row--seccion]="row.isParent && row.pro_Tip !== 'R'"
-          [class.row-child]="row.isChild"
-          [class.row--seleccionada]="filaEnEdicion === row"
-          [ngClass]="{'row--subtotal': row.pro_Tip === 'R'}">
-        </tr>
-      </table>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
 
-      <div class="cot-empty" *ngIf="!dataSource.data?.length">
-        <mat-icon>inventory_2</mat-icon>
-        <p>No hay procesos para mostrar. Ajusta los criterios de búsqueda.</p>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"
+            [class.row-hidden]="row.isChild && !expandedRows.has(row.padreKey)"
+            [class.row--group]="row.isParent && row.tieneHijos"
+            [class.row--seccion]="row.isParent && row.pro_Tip !== 'R'" [class.row-child]="row.isChild"
+            [class.row--seleccionada]="filaEnEdicion === row" [ngClass]="{'row--subtotal': row.pro_Tip === 'R'}">
+          </tr>
+        </table>
+
+        <div class="cot-empty" *ngIf="!dataSource.data?.length">
+          <mat-icon>inventory_2</mat-icon>
+          <p>No hay procesos para mostrar. Ajusta los criterios de búsqueda.</p>
+        </div>
       </div>
-    </div>
 
-    <!-- Footer de acciones fijado al pie de la tabla de costeo -->
-    <div class="cot-costeo__footer" *ngIf="bMuestraMenuFlotante && dataSource.data?.length">
-      <div class="cot-costeo__footer-info">
-        <mat-icon class="cot-costeo__footer-info-icon">
-          {{ borradorActivo ? 'edit_note' : 'history_toggle_off' }}
-        </mat-icon>
-        <span *ngIf="borradorActivo">
-          {{ borrador?.version && borrador?.version! > 1 ? ('Nueva Versión ' + borrador?.version + ' en edición') : 'Nueva cotización pendiente de guardar' }}
-        </span>
-        <span *ngIf="!borradorActivo">
-          {{ versionSeleccionada ? (versionSeleccionada.titulo + ' (ID: ' + versionSeleccionada.id + ')') : 'Cotización existente' }}
-        </span>
+      <!-- Footer de acciones fijado al pie de la tabla de costeo -->
+      <div class="cot-costeo__footer" *ngIf="bMuestraMenuFlotante && dataSource.data?.length">
+        <div class="cot-costeo__footer-info">
+          <mat-icon class="cot-costeo__footer-info-icon">
+            {{ borradorActivo ? 'edit_note' : 'history_toggle_off' }}
+          </mat-icon>
+          <span *ngIf="borradorActivo">
+            {{ borrador?.version && borrador?.version! > 1 ? ('Nueva Versión ' + borrador?.version + ' en edición') :
+            'Nueva cotización pendiente de guardar' }}
+          </span>
+          <span *ngIf="!borradorActivo">
+            {{ versionSeleccionada ? (versionSeleccionada.titulo + ' (ID: ' + versionSeleccionada.id + ')') :
+            'Cotización existente' }}
+          </span>
+        </div>
+        <div class="cot-costeo__footer-actions">
+          <button mat-stroked-button type="button" class="btn-ghost" (click)="onCancelar()">
+            <mat-icon>close</mat-icon> Cancelar
+          </button>
+
+          <!-- Si es una versión guardada, permite también derivar una nueva versión si el usuario lo desea -->
+          <button mat-stroked-button type="button" class="btn-azul" *ngIf="esModificacionCotizacion"
+            (click)="onCrearNuevaVersion()"
+            matTooltip="Crear una nueva versión a partir de esta cotización">
+            <mat-icon>post_add</mat-icon> Nueva Versión
+          </button>
+
+          <!-- Botón Guardar: actualiza la versión activa (accion 'U') o registra una nueva (accion 'I') -->
+          <button mat-flat-button type="button" class="btn-azul"
+            [disabled]="!habilitadoBtnGuardar" (click)="onGuardar()">
+            <mat-icon>save</mat-icon>
+            {{ esModificacionCotizacion
+                ? (versionSeleccionada?.numVersion ? 'Guardar Cambios (Versión ' + versionSeleccionada?.numVersion + ')' : 'Guardar Cambios')
+                : (borrador?.version ? 'Guardar Versión ' + borrador?.version : 'Guardar Cotización') }}
+          </button>
+        </div>
       </div>
-      <div class="cot-costeo__footer-actions">
-        <button mat-stroked-button type="button" class="btn-ghost" (click)="onCancelar()">
-          <mat-icon>close</mat-icon> Cancelar
-        </button>
-
-        <!-- Sobre una versión guardada (inmutable) el botón deriva una versión nueva -->
-        <button mat-flat-button type="button" class="btn-azul"
-                *ngIf="esModificacionCotizacion"
-                (click)="onCrearNuevaVersion()"
-                matTooltip="Las cotizaciones guardadas no se modifican: se crea una versión nueva a partir de ésta">
-          <mat-icon>post_add</mat-icon> Crear nueva versión
-        </button>
-
-        <!-- Sobre el borrador: registra la versión con accion 'I' -->
-        <button mat-flat-button type="button" class="btn-azul"
-                *ngIf="!esModificacionCotizacion"
-                [disabled]="!habilitadoBtnGuardar"
-                (click)="onGuardar()">
-          <mat-icon>save</mat-icon>
-          {{ borrador?.version ? 'Guardar Versión ' + borrador?.version : 'Guardar Cotización' }}
-        </button>
-      </div>
-    </div>
     </section>
   </div>
 
@@ -523,10 +485,12 @@
       <div class="cot-modal__header">
         <div class="cot-modal__header-title">
           <div class="cot-modal__icon-circle">
-            <mat-icon>{{ data.tipo === 'utilidad' ? 'percent' : data.tipo === 'cotizacion' ? 'sell' : 'tune' }}</mat-icon>
+            <mat-icon>{{ data.tipo === 'utilidad' ? 'percent' : data.tipo === 'cotizacion' ? 'sell' : 'tune'
+              }}</mat-icon>
           </div>
           <div class="cot-modal__header-texts">
-            <span class="cot-modal__header-badge">{{ data.tipo === 'utilidad' ? 'Utilidad' : data.tipo === 'cotizacion' ? 'Precio Final' : 'Ajuste de Costo' }}</span>
+            <span class="cot-modal__header-badge">{{ data.tipo === 'utilidad' ? 'Utilidad' : data.tipo === 'cotizacion'
+              ? 'Precio Final' : 'Ajuste de Costo' }}</span>
             <h3 mat-dialog-title>{{ data.row.pro_Des }}</h3>
           </div>
         </div>
@@ -540,9 +504,10 @@
           <button type="button" class="cot-modal__accordion-header"
             (click)="datosGeneralesAbierto = !datosGeneralesAbierto">
             <span><mat-icon class="cot-modal__accordion-icon">info</mat-icon> Datos Generales</span>
-            <mat-icon class="cot-modal__chevron" [class.cot-modal__chevron--colapsado]="!datosGeneralesAbierto">expand_more</mat-icon>
+            <mat-icon class="cot-modal__chevron"
+              [class.cot-modal__chevron--colapsado]="!datosGeneralesAbierto">expand_more</mat-icon>
           </button>
-          
+
           <div class="cot-modal__datos-item cot-modal__datos-item--primary" *ngIf="!datosGeneralesAbierto">
             <span class="cot-modal__datos-label">Concepto</span>
             <strong class="cot-modal__datos-val">{{ data.row.pro_Des }}</strong>
@@ -569,11 +534,11 @@
         </div>
 
         <div class="cot-modal__form">
-          <mat-form-field appearance="outline" floatLabel="always" class="cot-modal__field" *ngIf="data.tipo === 'utilidad'">
+          <mat-form-field appearance="outline" floatLabel="always" class="cot-modal__field"
+            *ngIf="data.tipo === 'utilidad'">
             <mat-label>% Utilidad</mat-label>
             <mat-icon matPrefix class="cot-modal__field-icon">percent</mat-icon>
-            <input matInput type="number" [(ngModel)]="data.row.pro_Cos_Kg"
-              [ngModelOptions]="{standalone: true}"
+            <input matInput type="number" [(ngModel)]="data.row.pro_Cos_Kg" [ngModelOptions]="{standalone: true}"
               (ngModelChange)="recalcularUtilidad(data.row)" />
             <span matSuffix class="cot-modal__suffix">%</span>
           </mat-form-field>
@@ -582,24 +547,22 @@
             <mat-form-field appearance="outline" floatLabel="always" class="cot-modal__field">
               <mat-label>Cantidad de Ajuste</mat-label>
               <mat-icon matPrefix class="cot-modal__field-icon">tune</mat-icon>
-              <input matInput type="number" [(ngModel)]="data.row.pro_Aju"
-                [ngModelOptions]="{standalone: true}"
+              <input matInput type="number" [(ngModel)]="data.row.pro_Aju" [ngModelOptions]="{standalone: true}"
                 (ngModelChange)="recalcular(data.row)" />
             </mat-form-field>
 
             <mat-form-field appearance="outline" floatLabel="always" class="cot-modal__field cot-modal__field--area">
               <mat-label>Observación <span class="cot-modal__required">*</span></mat-label>
-              <textarea matInput rows="3"
-                [(ngModel)]="data.row.observacion" [ngModelOptions]="{standalone: true}"
+              <textarea matInput rows="3" [(ngModel)]="data.row.observacion" [ngModelOptions]="{standalone: true}"
                 placeholder="Escribe el motivo del ajuste..."></textarea>
             </mat-form-field>
           </ng-container>
 
-          <mat-form-field appearance="outline" floatLabel="always" class="cot-modal__field" *ngIf="data.tipo === 'cotizacion'">
+          <mat-form-field appearance="outline" floatLabel="always" class="cot-modal__field"
+            *ngIf="data.tipo === 'cotizacion'">
             <mat-label>Precio Final Cliente</mat-label>
             <mat-icon matPrefix class="cot-modal__field-icon">sell</mat-icon>
-            <input matInput type="number" [(ngModel)]="data.row.pro_Cotizacion"
-              [ngModelOptions]="{standalone: true}"
+            <input matInput type="number" [(ngModel)]="data.row.pro_Cotizacion" [ngModelOptions]="{standalone: true}"
               (ngModelChange)="recalcularPrecioFinal(data.row)" />
           </mat-form-field>
         </div>
@@ -609,10 +572,8 @@
         <button mat-stroked-button class="btn-ghost" mat-dialog-close>
           Cancelar
         </button>
-        <button mat-flat-button class="btn-azul"
-          *ngIf="data.tipo === 'ajuste'"
-          [disabled]="!!data.row.pro_Aju && !data.row.observacion?.trim()"
-          (click)="guardarAjuste(data.row)">
+        <button mat-flat-button class="btn-azul" *ngIf="data.tipo === 'ajuste'"
+          [disabled]="!!data.row.pro_Aju && !data.row.observacion?.trim()" (click)="guardarAjuste(data.row)">
           <mat-icon>save</mat-icon> Guardar Ajuste
         </button>
         <button mat-flat-button class="btn-azul" *ngIf="data.tipo !== 'ajuste'" mat-dialog-close>
