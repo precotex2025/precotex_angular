@@ -256,6 +256,11 @@ import { ProdTejeRectilineoComponent } from './components/tejeduria/prod-teje-re
 import { ProdTejeRectilineoRegistroComponent } from './components/tejeduria/prod-teje-rectilineo-registro/prod-teje-rectilineo-registro';
 import { DigitalizacionFichasComponent } from './components/digitalizacion-fichas/digitalizacion-fichas.component';
 import { CapacidadesComponent } from './components/tintoreria/capacidades.component';
+import { UbicacionesComponent } from './components/tintoreria/ubicaciones/ubicaciones.component';
+import { ConsultaUbicacionesComponent } from './components/tintoreria/ubicaciones/consulta-ubicaciones/consulta-ubicaciones.component';
+import { CrearAgrupamientoComponent } from './components/tintoreria/ubicaciones/crear-agrupamiento/crear-agrupamiento.component';
+import { ReubicaUbicaGrupoComponent } from './components/tintoreria/ubicaciones/reubica-ubica-grupo/reubica-ubica-grupo.component';
+import { DetalleAgrupamientoComponent } from './components/tintoreria/ubicaciones/detalle-agrupamiento/detalle-agrupamiento.component';
 import { AuditoriaModuloAcabadoComponent } from './components/auditoria-calidad/auditoria-modulo-acabado/auditoria-modulo-acabado.component';
 import { AuditoriaVaporizadoAcabadoComponent } from './components/auditoria-calidad/auditoria-vaporizado-acabado/auditoria-vaporizado-acabado.component';
 import { RegistroFirmasAuditoriaComponent } from './components/auditoria-externa/registro-firmas-auditoria/registro-firmas-auditoria.component';
@@ -519,6 +524,11 @@ const routes: Routes = [
   {path: "ProdTejeRectilineo", component:ProdTejeRectilineoComponent},
   {path: "ProdTejeRectilineoRegistro", component:ProdTejeRectilineoRegistroComponent},
   {path: "Capacidades", component:CapacidadesComponent},
+  {path: "Ubicaciones", component:UbicacionesComponent},
+  {path: "ConsultaUbicaciones", component:ConsultaUbicacionesComponent},
+  {path: "CrearAgrupamiento", component:CrearAgrupamientoComponent},
+  {path: "ReubicaUbicaGrupo", component:ReubicaUbicaGrupoComponent},
+  {path: "DetalleAgrupamiento", component:DetalleAgrupamientoComponent},
   {path: "rollospartida", component:BusquedaRollosPartidaComponent},
 
   //Cortes Encogimiento EIQ

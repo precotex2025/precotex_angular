@@ -1,0 +1,104 @@
+<div class="reubica-container">
+  <div class="reubica-card">
+
+    <div class="reubica-title">
+      <mat-icon>sync_alt</mat-icon>
+      <span>Almacén {{Cod_Almacen}} - Ubicar/Reubicar Grupo</span>
+    </div>
+
+    <div class="reubica-usuario">
+      <span><mat-icon>badge</mat-icon> Operario: <strong>{{operario}}</strong></span>
+      <span><mat-icon>store</mat-icon> Sede Activa: <strong>{{Cod_Almacen}}</strong></span>
+    </div>
+
+    <div class="reubica-body">
+
+      <div class="reubica-paso paso-activo" [class.paso-completado]="!!infoCarga">
+        <div class="paso-label">
+          <span class="paso-numero">1</span>
+          <mat-icon>qr_code_scanner</mat-icon>
+          <span>Escanee código de paleta (grupo)</span>
+        </div>
+        <mat-form-field appearance="fill" class="paso-input">
+          <input matInput #inputGrupo [(ngModel)]="Codigo_Barra_Grupo" placeholder="Escanea o ingresa el código"
+            (keyup.enter)="consultarGrupo()" [disabled]="!!infoCarga">
+        </mat-form-field>
+      </div>
+
+      <div class="reubica-vacio" *ngIf="!infoCarga">
+        <div class="reubica-vacio-icono">
+          <mat-icon>qr_code_scanner</mat-icon>
+        </div>
+        <span class="reubica-vacio-texto">Esperando escaneo de la paleta...</span>
+        <span class="reubica-vacio-subtexto">Al escanear se mostrará la información de carga y el paso 2</span>
+      </div>
+
+      <ng-container *ngIf="infoCarga">
+        <div class="reubica-info-carga">
+          <div class="info-carga-header">
+            <div class="info-titulo">
+              <mat-icon>inventory_2</mat-icon>
+              <span>Información de Carga</span>
+            </div>
+            <button mat-icon-button matTooltip="Cambiar paleta" (click)="cambiarPaleta()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Paleta</span>
+              <span class="info-valor">{{Codigo_Barra_Grupo}}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Ubicación Actual</span>
+              <span class="info-valor">{{infoCarga.ubicacionActual}}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Producto</span>
+              <span class="info-valor">{{infoCarga.producto}}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Lote</span>
+              <span class="info-valor">{{infoCarga.lote}}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Bultos</span>
+              <span class="info-valor">{{infoCarga.cantidadBultos}} cajas</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="reubica-paso paso-activo">
+          <div class="paso-label">
+            <span class="paso-numero">2</span>
+            <mat-icon>my_location</mat-icon>
+            <span>Escanee rack / ubicación destino</span>
+          </div>
+          <mat-form-field appearance="fill" class="paso-input">
+            <input matInput #inputDestino [(ngModel)]="Codigo_Rack_Destino" placeholder="Escanea el código del rack destino"
+              (keyup.enter)="confirmarMovimiento()" [disabled]="mostrarExito">
+          </mat-form-field>
+          <div class="paso-ayuda">
+            <mat-icon>qr_code_scanner</mat-icon>
+            <span>El movimiento se confirma automáticamente al escanear</span>
+          </div>
+        </div>
+      </ng-container>
+
+    </div>
+
+  </div>
+
+  <div class="notificacion-exito" *ngIf="mostrarExito">
+    <div class="notificacion-exito-check">
+      <mat-icon>check</mat-icon>
+    </div>
+    <span class="notificacion-exito-titulo">¡Movimiento realizado!</span>
+    <span class="notificacion-exito-mensaje">{{mensajeExito}}</span>
+  </div>
+</div>
+
+<button class="boton-flotante-volver" (click)="volverAUbicaciones()" matTooltip="Volver a Ubicaciones">
+  <mat-icon>arrow_back</mat-icon>
+</button>
