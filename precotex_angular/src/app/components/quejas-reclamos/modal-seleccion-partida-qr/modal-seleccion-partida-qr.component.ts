@@ -16,8 +16,8 @@ export  interface PartidaItem  {
 
         cod_Cliente_Tex : string;
         nom_Cliente : string;
-          
 
+        seleccionado?: boolean;
 
 }
 
@@ -67,15 +67,17 @@ export class ModalSeleccionPartidaQrComponent {
   }
 
   toggleSeleccion(item: any) {
-    item.seleccionado = !item.seleccionado;
+    const yaSeleccionado = item.seleccionado;
 
-    if (item.seleccionado) {
-      // ✅ Agregar si no está en la lista
-      this.seleccionados.push(item);
-    } else {
-      // ❌ Quitar si lo deselecciona
-      this.seleccionados = this.seleccionados.filter(x => x !== item);
-    }    
+    // Solo se permite 1 elemento seleccionado a la vez
+    this.data.forEach(i => i.seleccionado = false);
+    this.seleccionados = [];
+
+    if (!yaSeleccionado) {
+      item.seleccionado = true;
+      this.seleccionados = [item];
+    }
+
     console.log("Seleccionados:", this.seleccionados);
   }
 
