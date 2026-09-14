@@ -39,6 +39,9 @@ export interface ReclamoCliente {
   Cod_EstCli?: string,
   estilo?: string,
 
+  //Tipo de queja registrada: P = Partida, E = Estilo, S = Cliente
+  tipoQueja?: string,
+
 }
 
 export interface Cliente {
