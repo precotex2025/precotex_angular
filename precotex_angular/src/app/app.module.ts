@@ -615,6 +615,9 @@ import { GenerarQrComponent } from './components/control-activos-fijo/generar-qr
 //COTIZACIONES
 import { CotizacionesComponent } from './components/cotizaciones/cotizaciones.component';
 
+// NO CONFORMIDADES (CONTROL DE CALIDAD)
+import { NoConformidadesComponent } from './components/no-conformidades/no-conformidades.component';
+
 import { AprobacionDesarrolloTelasEditComponent } from './components/aprobacion-desarrollo-telas/aprobacion-desarrollo-telas-edit/aprobacion-desarrollo-telas-edit.component';
 import { RecoFacialComponent } from './components/reconocimientofacial/reco-facial/reco-facial.component';
 import { TomaFotoPersonasComponent } from './components/toma-foto-personas/toma-foto-personas.component';
@@ -1163,6 +1166,9 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
 
     //COTIZACIONES
     CotizacionesComponent,
+    
+    // NO CONFORMIDADES (CONTROL DE CALIDAD)
+    NoConformidadesComponent,
     
     TomaFotoPersonasComponent,
     ModalQuejaReclamoNuevoComponent,
