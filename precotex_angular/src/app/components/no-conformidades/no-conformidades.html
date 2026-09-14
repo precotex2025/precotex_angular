@@ -1,574 +1,824 @@
-<div class="nc-container">
+<div class="container">
 
   <!-- ==========================================
-       VISTA 1: INICIO / DASHBOARD PRINCIPAL
+       VISTA 1: INICIO / BANDEJA DE ENTRADA
   =========================================== -->
-  <div class="nc-view" *ngIf="currentScreen === 'inicio'">
-    <!-- Top Action Buttons -->
-    <div class="nc-main-actions">
-      <button mat-raised-button color="primary" class="nc-btn-hero" (click)="startNuevaNC()">
-        <mat-icon>add_circle_outline</mat-icon>
-        Registrar nueva No Conformidad
-      </button>
-
-      <div class="nc-action-row">
-        <button mat-flat-button class="nc-btn-amber" (click)="goTo('defectosPendientes')">
-          <mat-icon>new_releases</mat-icon>
-          Defectos por catalogar ({{ defectosPendientesCatalogo.length }})
-        </button>
-        <button mat-flat-button class="nc-btn-teal" (click)="goTo('evolutivo')">
-          <mat-icon>trending_up</mat-icon>
-          Evolutivo de NC
-        </button>
+  <div *ngIf="currentScreen === 'inicio'">
+    <div class="nc-module-header">
+      <div style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+        <mat-icon style="font-size: 22px; width: 22px; height: 22px; color: #0f172a;">assignment_turned_in</mat-icon>
+        <strong>No Conformidades</strong>
       </div>
     </div>
 
-    <!-- Filtros de búsqueda -->
-    <div class="nc-filtros-card">
-      <b class="nc-filtros-title">Filtros</b>
-      <div class="nc-filtros-body">
-        <div class="nc-filtros-row">
-          <div class="nc-filtros-col">
-            <label>N° de NC / Partida</label>
-            <input type="text" [(ngModel)]="inicioFilters.nc" (keyup.enter)="inicioBuscar()">
-          </div>
-          <div class="nc-filtros-col">
-            <label>Área</label>
-            <select [(ngModel)]="inicioFilters.area" (change)="inicioBuscar()">
-              <option value="">Todas</option>
-              <option *ngFor="let a of AREAS" [value]="a">{{ a }}</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="nc-filtros-row">
-          <div class="nc-filtros-col">
-            <label>Fecha inicio</label>
-            <input type="text" [(ngModel)]="inicioFilters.ini" placeholder="dd/mm/aaaa" (keyup.enter)="inicioBuscar()">
-          </div>
-          <div class="nc-filtros-col">
-            <label>Fecha fin</label>
-            <input type="text" [(ngModel)]="inicioFilters.fin" placeholder="dd/mm/aaaa" (keyup.enter)="inicioBuscar()">
-          </div>
-        </div>
-
-        <div class="nc-filtros-row">
-          <div class="nc-filtros-col">
-            <label>Responsable</label>
-            <input type="text" [(ngModel)]="inicioFilters.resp" placeholder="Ej. Ramirez" (keyup.enter)="inicioBuscar()">
-          </div>
-          <div class="nc-filtros-col nc-filtros-col-btn">
-            <button class="nc-btn-buscar" (click)="inicioBuscar()">Buscar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Lista de No Conformidades -->
-    <div class="nc-list-section">
-      <div class="nc-list-header">
-        <h3>{{ inicioResults !== null ? ('Resultados (' + inicioResults.length + ')') : 'Últimas NC registradas' }}</h3>
-        <div class="nc-report-link" (click)="openReporteModal()">
-          <span class="nc-report-icon">📊</span>
-          <span class="nc-report-text">Reporte</span>
-        </div>
-      </div>
-
-      <div class="nc-list-grid">
-        <div class="nc-item-card" *ngFor="let nc of (inicioResults !== null ? inicioResults : ncs)" (click)="openDetalle(nc.id)">
-          <div class="nc-item-top">
-            <div class="nc-item-id">
-              <span class="nc-id-badge">{{ nc.id }}</span>
-              <span class="nc-date">{{ nc.fecha }}</span>
-            </div>
-            <span class="nc-status-badge" [ngClass]="{'rejected': nc.status === 'Rechazado', 'cancelled': nc.status === 'Anulado'}">
-              {{ nc.status }}
-            </span>
-          </div>
-
-          <div class="nc-item-info">
-            <div class="nc-info-row">
-              <span class="lbl">Partida:</span>
-              <span class="val font-bold">{{ nc.partida }}</span>
-              <span class="sep">•</span>
-              <span class="lbl">Cliente:</span>
-              <span class="val">{{ nc.cliente }}</span>
-            </div>
-            <div class="nc-info-row">
-              <span class="lbl">Color:</span>
-              <span class="val">{{ nc.color }}</span>
-            </div>
-            <div class="nc-info-row">
-              <span class="lbl">Área(s):</span>
-              <span class="val text-area">{{ ncAreasResumen(nc) }}</span>
+    <!-- Acciones Principales -->
+    <mat-card style="margin-bottom: 16px;">
+      <mat-card-content>
+        <div class="form-actions-row">
+          <div class="button-group">
+            <button type="button" mat-flat-button class="btn-blue" (click)="startNuevaNC()">
+              <mat-icon>add_circle_outline</mat-icon> Registrar nueva No Conformidad
+            </button>
+            <button type="button" mat-flat-button class="btn-amber" (click)="goTo('defectosPendientes')">
+              <mat-icon>new_releases</mat-icon>
+              Defectos por catalogar ({{ defectosPendientesCatalogo.length }})
+            </button>
+            <div class="nc-action-buttons-row">
+              <button type="button" mat-flat-button class="btn-teal" (click)="goTo('evolutivo')">
+                <mat-icon>trending_up</mat-icon> Evolutivo de NC
+              </button>
+              <button type="button" mat-flat-button class="btn-blue" (click)="descargarReporteGeneral()">
+                <mat-icon>download</mat-icon> Reporte
+              </button>
             </div>
           </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
 
-          <div class="nc-item-bottom">
-            <span class="nc-author">Reg: {{ nc.registradoPor }}</span>
-            <span class="nc-link">Ver detalle <mat-icon>chevron_right</mat-icon></span>
+    <!-- Filtros de Búsqueda -->
+    <mat-card style="margin-bottom: 16px;">
+      <mat-card-content>
+        <div class="nc-filtros-grid">
+          <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
+            <mat-label>N° de NC / Partida</mat-label>
+            <input matInput [(ngModel)]="inicioFilters.nc" (keyup.enter)="inicioBuscar()"
+              placeholder="Ej. NC-000001 o 07825">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+
+          <div class="nc-dates-row">
+            <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
+              <mat-label>Fecha inicio</mat-label>
+              <input matInput [matDatepicker]="pickerIni" [(ngModel)]="inicioFilters.ini" placeholder="dd/mm/aaaa"
+                (keyup.enter)="inicioBuscar()" (dateChange)="inicioBuscar()">
+              <mat-datepicker-toggle matSuffix [for]="pickerIni"></mat-datepicker-toggle>
+              <mat-datepicker #pickerIni></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
+              <mat-label>Fecha fin</mat-label>
+              <input matInput [matDatepicker]="pickerFin" [(ngModel)]="inicioFilters.fin" placeholder="dd/mm/aaaa"
+                (keyup.enter)="inicioBuscar()" (dateChange)="inicioBuscar()">
+              <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+              <mat-datepicker #pickerFin></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
+            <mat-label>Responsable</mat-label>
+            <input matInput [(ngModel)]="inicioFilters.resp" placeholder="Ej. Ramirez" (keyup.enter)="inicioBuscar()">
+          </mat-form-field>
+
+          <div class="button-group-filters">
+            <button type="button" mat-flat-button class="btn-blue" (click)="inicioBuscar()">
+              <mat-icon>search</mat-icon> Buscar
+            </button>
+            <button type="button" mat-stroked-button (click)="inicioLimpiarFiltros()">
+              <mat-icon>clear</mat-icon> Limpiar
+            </button>
           </div>
         </div>
+      </mat-card-content>
+    </mat-card>
 
-        <div class="nc-empty" *ngIf="(inicioResults !== null ? inicioResults : ncs).length === 0">
-          <mat-icon>search_off</mat-icon>
-          <p>No se encontraron No Conformidades registradas con estos criterios.</p>
+    <!-- Tabla de No Conformidades -->
+    <mat-card>
+      <mat-card-content>
+        <div class="responsive-table">
+          <table mat-table [dataSource]="dataSourceNc" matSort #sortNc="matSort" class="mat-elevation-z2">
+
+            <!-- N° NC -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>N° NC</th>
+              <td mat-cell *matCellDef="let row" class="memo-cell">{{ row.id }}</td>
+            </ng-container>
+
+            <!-- Fecha -->
+            <ng-container matColumnDef="fecha">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+              <td mat-cell *matCellDef="let row">{{ row.fecha }}</td>
+            </ng-container>
+
+            <!-- Partida -->
+            <ng-container matColumnDef="partida">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Partida</th>
+              <td mat-cell *matCellDef="let row"><b>{{ row.partida }}</b></td>
+            </ng-container>
+
+            <!-- Cliente -->
+            <ng-container matColumnDef="cliente">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
+              <td mat-cell *matCellDef="let row">{{ row.cliente }}</td>
+            </ng-container>
+
+            <!-- Color -->
+            <ng-container matColumnDef="color">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Color</th>
+              <td mat-cell *matCellDef="let row">{{ row.color }}</td>
+            </ng-container>
+
+            <!-- Área(s) -->
+            <ng-container matColumnDef="areas">
+              <th mat-header-cell *matHeaderCellDef>Área(s)</th>
+              <td mat-cell *matCellDef="let row" class="cell-teal">{{ ncAreasResumen(row) }}</td>
+            </ng-container>
+
+            <!-- Acciones -->
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <td mat-cell *matCellDef="let row">
+                <button mat-icon-button color="primary" (click)="$event.stopPropagation(); openDetalle(row.id)"
+                  matTooltip="Ver detalle">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button color="primary" (click)="$event.stopPropagation(); editarNC(row)"
+                  matTooltip="Modificar" *ngIf="row.status !== 'Anulado'">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="$event.stopPropagation(); abrirAnularModal(row.id)"
+                  matTooltip="Anular" *ngIf="row.status !== 'Anulado'">
+                  <mat-icon>block</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsNc"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsNc;" style="cursor:pointer"
+              (click)="openDetalle(row.id)"></tr>
+
+            <!-- Empty state -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell empty-state-cell" colspan="7">
+                <mat-icon>search_off</mat-icon>
+                <span>No se encontraron No Conformidades con los criterios indicados.</span>
+              </td>
+            </tr>
+          </table>
+
+          <mat-paginator #paginatorNc [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
         </div>
-      </div>
-    </div>
+      </mat-card-content>
+    </mat-card>
   </div>
+
 
   <!-- ==========================================
        VISTA 2: WIZARD PASO 1 (Partida y Artículos)
   =========================================== -->
-  <div class="nc-view" *ngIf="currentScreen === 'paso1' && draft">
-    <!-- Stepper Progress Bar (Top) -->
-    <div class="nc-stepper-bar-top">
-      <div class="nc-stepper-fill-top" style="width: 33%"></div>
+  <div *ngIf="currentScreen === 'paso1' && draft">
+    <div class="vista-header">
+      <button mat-icon-button (click)="goTo('inicio')"><mat-icon>arrow_back</mat-icon></button>
+      <strong>Registrar No Conformidad</strong>
     </div>
 
-    <!-- Encabezado de la NC -->
-    <div class="nc-step-card">
-      <div class="nc-step-kv">
-        <span class="lbl">N° de No Conformidad</span>
-        <span class="val text-blue font-bold">{{ editingId || draft.ncPreview }}</span>
-      </div>
-      <div class="nc-step-kv">
-        <span class="lbl">Fecha y hora de registro</span>
-        <span class="val font-bold">{{ draft.fechaRegistro }}</span>
-      </div>
-    </div>
-
-    <!-- Formulario Partida -->
-    <div class="nc-field" [ngClass]="{'error': errors['partida']}">
-      <label>Partida <span class="req">*</span></label>
-      <input type="text" [ngModel]="draft.partida" (ngModelChange)="onPartidaInput($event)" placeholder="">
-      <div class="nc-field-error" *ngIf="errors['partida']">{{ errors['partida'] }}</div>
-    </div>
-
-    <!-- Datos autocompletados -->
-    <div class="nc-step-card" *ngIf="draft.cliente">
-      <div class="nc-step-kv">
-        <span class="lbl">Cliente</span>
-        <span class="val font-bold">{{ draft.cliente }}</span>
-      </div>
-      <div class="nc-step-kv">
-        <span class="lbl">Color</span>
-        <span class="val font-bold">{{ draft.color }}</span>
-      </div>
-    </div>
-    <div class="nc-hint-gray" *ngIf="draft.cliente">
-      Datos autocompletados desde la partida — no requieren digitación.
-    </div>
-
-    <!-- Artículos disponibles -->
-    <div class="nc-articulos-container" *ngIf="draft.articulosDisponibles.length">
-      <p class="nc-instruction-text">
-        Marque él/los artículos e indique la cantidad afectada. Toque un artículo ya completo para colapsarlo. <span class="req">*</span>
-      </p>
-
-      <div class="nc-field-error" *ngIf="errors['articulos']" style="margin-bottom: 8px;">{{ errors['articulos'] }}</div>
-
-      <div class="nc-article-card" *ngFor="let a of draft.articulosDisponibles; let i = index" [ngClass]="{'active': draft.seleccion[i]?.checked}">
-        <div class="nc-art-header" (click)="toggleArticulo(i)">
-          <div class="nc-art-chk" [ngClass]="{'on': draft.seleccion[i]?.checked}">
-            <mat-icon *ngIf="draft.seleccion[i]?.checked">check</mat-icon>
-          </div>
-          <span class="nc-art-title">{{ a.nombre }}</span>
+    <!-- Encabezado NC -->
+    <mat-card style="margin-bottom: 12px;">
+      <mat-card-content>
+        <div class="kv-row">
+          <span class="kv-lbl">N° de No Conformidad</span>
+          <span class="kv-val text-blue"><b>{{ editingId || draft.ncPreview }}</b></span>
         </div>
-
-        <div class="nc-art-info-grid">
-          <div class="nc-art-info-col">
-            <span class="lbl">Cód. Tela</span>
-            <span class="val font-bold">{{ a.codTela }}</span>
-          </div>
-          <div class="nc-art-info-col">
-            <span class="lbl">Talla</span>
-            <span class="val font-bold">{{ a.talla }}</span>
-          </div>
-          <div class="nc-art-info-col">
-            <span class="lbl">Kg. Crudo</span>
-            <span class="val font-bold">{{ a.kgCrudo }}</span>
-          </div>
-          <div class="nc-art-info-col">
-            <span class="lbl">Rollos</span>
-            <span class="val font-bold">{{ a.rollos }}</span>
-          </div>
+        <div class="kv-row">
+          <span class="kv-lbl">Fecha y hora de registro</span>
+          <span class="kv-val"><b>{{ draft.fechaRegistro }}</b></span>
         </div>
-
-        <!-- Cantidad afectada si está seleccionado -->
-        <div class="nc-art-qty-section" *ngIf="draft.seleccion[i]?.checked" [ngClass]="{'error': errors['art_' + i]}">
-          <label>Cantidad afectada <span class="req">*</span></label>
-          <input type="number" min="1" [max]="a.rollos" [(ngModel)]="draft.seleccion[i].cantidad">
-          <div class="nc-field-error" *ngIf="errors['art_' + i]">{{ errors['art_' + i] }}</div>
-        </div>
-      </div>
-
-      <p class="nc-footer-hint">
-        Puede seleccionar más de un artículo; la cantidad no puede superar el total de cada uno.
-      </p>
-    </div>
-
-    <!-- Footer Actions -->
-    <div class="nc-wizard-footer">
-      <button class="nc-btn-next" (click)="validatePaso1()">Siguiente paso ›</button>
-    </div>
-  </div>
-
-  <!-- ==========================================
-       VISTA 3: WIZARD PASO 2 (Clasificación & Evidencias)
-  =========================================== -->
-  <div class="nc-view" *ngIf="currentScreen === 'paso2' && draft">
-    <div class="nc-header-bar">
-      <button mat-icon-button (click)="goTo('paso1')"><mat-icon>arrow_back</mat-icon></button>
-      <div class="nc-header-titles">
-        <h2>Clasificación y Evidencias</h2>
-        <p>Paso 2 de 3: Motivo, Área responsable y Fotos</p>
-      </div>
-    </div>
-
-    <div class="nc-stepper">
-      <div class="nc-stepper-bar"><div class="nc-stepper-fill" style="width: 66%"></div></div>
-      <div class="nc-stepper-label">Paso 2 de 3</div>
-    </div>
-
-    <!-- Asignación Rápida Grupal -->
-    <mat-card class="nc-card nc-group-card">
-      <div class="nc-section-title">
-        <mat-icon>group_work</mat-icon>
-        <span>Asignación Rápida de Defecto</span>
-      </div>
-      <p class="nc-hint">Seleccione los artículos que comparten el mismo defecto para aplicarlo a todos:</p>
-
-      <!-- Checkboxes de artículos -->
-      <div class="nc-group-checks">
-        <ng-container *ngFor="let a of draft.articulosDisponibles; let i = index">
-          <div class="nc-check-pill" *ngIf="draft.seleccion[i]?.checked" (click)="toggleGrupoArticulo(i)" [ngClass]="{'active': draft.grupoDefecto.seleccion[i]}">
-            <mat-icon>{{ draft.grupoDefecto.seleccion[i] ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
-            <span>{{ a.nombre }}</span>
-          </div>
-        </ng-container>
-      </div>
-      <div class="nc-field-error" *ngIf="draft.grupoDefecto.errors['seleccion']">{{ draft.grupoDefecto.errors['seleccion'] }}</div>
-
-      <!-- Motivo de rechazo -->
-      <div class="nc-field" [ngClass]="{'error': draft.grupoDefecto.errors['motivo']}">
-        <label>Motivo de Rechazo <span class="req">*</span></label>
-        <select [ngModel]="draft.grupoDefecto.isOtro ? DEFECTO_NUEVO : draft.grupoDefecto.motivo" (ngModelChange)="onGrupoMotivoChange($event)">
-          <option value="">Seleccione motivo...</option>
-          <option [value]="DEFECTO_NUEVO">🆕 {{ DEFECTO_NUEVO }}</option>
-          <option *ngFor="let m of MOTIVOS" [value]="m">{{ m }}</option>
-        </select>
-        <div class="nc-field-error" *ngIf="draft.grupoDefecto.errors['motivo']">{{ draft.grupoDefecto.errors['motivo'] }}</div>
-      </div>
-
-      <!-- Si es defecto nuevo -->
-      <div class="nc-field" *ngIf="draft.grupoDefecto.isOtro" [ngClass]="{'error': draft.grupoDefecto.errors['desc']}">
-        <label>Descripción del Defecto Nuevo <span class="req">*</span></label>
-        <input type="text" [(ngModel)]="draft.grupoDefecto.descripcionOtro" placeholder="Describa el defecto encontrado...">
-        <div class="nc-field-error" *ngIf="draft.grupoDefecto.errors['desc']">{{ draft.grupoDefecto.errors['desc'] }}</div>
-      </div>
-
-      <!-- Área responsable -->
-      <div class="nc-field" [ngClass]="{'error': draft.grupoDefecto.errors['area']}">
-        <label>Área Responsable <span class="req">*</span></label>
-        <select [(ngModel)]="draft.grupoDefecto.area">
-          <option value="">Seleccione área...</option>
-          <option *ngFor="let ar of AREAS" [value]="ar">{{ ar }}</option>
-          <option [value]="OTRA_AREA">{{ OTRA_AREA }}</option>
-        </select>
-        <div class="nc-field-error" *ngIf="draft.grupoDefecto.errors['area']">{{ draft.grupoDefecto.errors['area'] }}</div>
-      </div>
-
-      <div class="nc-field" *ngIf="draft.grupoDefecto.area === OTRA_AREA" [ngClass]="{'error': draft.grupoDefecto.errors['areaOtro']}">
-        <label>Especifique Área Responsable <span class="req">*</span></label>
-        <input type="text" [(ngModel)]="draft.grupoDefecto.areaOtro" placeholder="Especifique el área...">
-        <div class="nc-field-error" *ngIf="draft.grupoDefecto.errors['areaOtro']">{{ draft.grupoDefecto.errors['areaOtro'] }}</div>
-      </div>
-
-      <!-- Evidencia fotográfica -->
-      <div class="nc-field">
-        <label>Evidencia Fotográfica</label>
-        <div class="nc-photo-uploader">
-          <label class="nc-photo-btn" title="Tomar foto / Subir">
-            <mat-icon>add_a_photo</mat-icon>
-            <span>Subir Fotos</span>
-            <input type="file" accept="image/*" multiple (change)="handleGrupoFiles($any($event.target).files)">
-          </label>
-
-          <div class="nc-photo-preview" *ngFor="let p of draft.grupoDefecto.evidencia; let pi = index">
-            <img [src]="p.dataUrl" *ngIf="p.dataUrl">
-            <span class="nc-photo-del" (click)="removeGrupoEvidencia(pi)"><mat-icon>close</mat-icon></span>
-          </div>
-        </div>
-      </div>
-
-      <button mat-raised-button color="accent" class="nc-btn-apply" (click)="aplicarGrupoDefecto()">
-        <mat-icon>done_all</mat-icon> Aplicar a artículos seleccionados
-      </button>
+      </mat-card-content>
     </mat-card>
 
-    <!-- Resumen de defectos por artículo -->
-    <div class="nc-def-review-section">
-      <div class="nc-section-title">
-        <mat-icon>checklist</mat-icon>
-        <span>Detalle de Defectos por Artículo</span>
-      </div>
+    <!-- Campo Partida -->
+    <mat-card style="margin-bottom: 12px;">
+      <mat-card-content>
+        <mat-form-field appearance="outline" style="width: 100%;"
+          [ngClass]="{'mat-form-field-invalid': errors['partida']}">
+          <mat-label>Partida <span style="color: red">*</span></mat-label>
+          <input matInput [ngModel]="draft.partida" (ngModelChange)="onPartidaInput($event)"
+            placeholder="Ingrese el número de partida">
+          <mat-icon matSuffix>inventory</mat-icon>
+          <mat-error *ngIf="errors['partida']">{{ errors['partida'] }}</mat-error>
+        </mat-form-field>
 
-      <div class="nc-field-error" *ngIf="errors['summary']">{{ errors['summary'] }}</div>
+        <!-- Datos autocompletados -->
+        <div *ngIf="draft.cliente" class="autofill-box">
+          <mat-icon
+            style="color: #16a34a; margin-right: 6px; font-size: 18px; vertical-align: middle;">check_circle</mat-icon>
+          <span style="font-size: 12px; color: #16a34a; font-weight: 600;">Datos autocompletados desde la partida</span>
+          <div class="kv-row" style="margin-top: 8px;">
+            <span class="kv-lbl">Cliente</span>
+            <span class="kv-val"><b>{{ draft.cliente }}</b></span>
+          </div>
+          <div class="kv-row">
+            <span class="kv-lbl">Color</span>
+            <span class="kv-val"><b>{{ draft.color }}</b></span>
+          </div>
+          <div class="kv-row">
+            <span class="kv-lbl">Peso Partida</span>
+            <span class="kv-val"><b>{{ draft.peso }}</b></span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
 
-      <div class="nc-card-article-def" *ngFor="let a of draft.articulosDisponibles; let i = index">
-        <div *ngIf="draft.seleccion[i]?.checked">
-          <div class="nc-art-def-header">
-            <b>{{ a.nombre }}</b>
-            <span class="nc-badge-qty">{{ draft.seleccion[i].cantidad }} rollos</span>
+    <!-- Artículos disponibles -->
+    <mat-card *ngIf="draft.articulosDisponibles.length" style="margin-bottom: 12px;">
+      <mat-card-content>
+        <p style="font-size: 13px; color: #374151; margin: 0 0 12px;">
+          Marque el/los artículos e indique la cantidad afectada. <span style="color: red;">*</span>
+        </p>
+        <div class="field-error-msg" *ngIf="errors['articulos']">{{ errors['articulos'] }}</div>
+
+        <div class="nc-article-card" *ngFor="let a of draft.articulosDisponibles; let i = index"
+          [ngClass]="{'nc-article-card--active': draft.seleccion[i]?.checked}">
+          <div class="nc-art-header" (click)="toggleArticulo(i)">
+            <div class="nc-art-chk" [ngClass]="{'nc-art-chk--on': draft.seleccion[i]?.checked}">
+              <mat-icon *ngIf="draft.seleccion[i]?.checked">check</mat-icon>
+            </div>
+            <span class="nc-art-title">{{ a.nombre }}</span>
           </div>
 
-          <div class="nc-def-row" *ngFor="let def of draft.seleccion[i].defectos; let j = index">
-            <div class="nc-def-info">
-              <span class="nc-def-label">{{ defectoLabel(def) }}</span>
-              <span class="nc-def-sub">Área: <b>{{ defectoAreaFinal(def) }}</b> • {{ def.evidencia.length }} fotos</span>
+          <div class="nc-art-info-grid">
+            <div class="nc-art-info-col">
+              <span class="kv-lbl">Cód. Tela</span>
+              <span class="kv-val"><b>{{ a.codTela }}</b></span>
             </div>
-            <div class="nc-def-actions">
-              <button mat-icon-button color="primary" (click)="openDraftDefectoModal(i, j)"><mat-icon>edit</mat-icon></button>
-              <button mat-icon-button color="warn" (click)="removeDefecto(i, j)" *ngIf="draft.seleccion[i].defectos.length > 1"><mat-icon>delete</mat-icon></button>
+            <div class="nc-art-info-col">
+              <span class="kv-lbl">Talla</span>
+              <span class="kv-val"><b>{{ a.talla }}</b></span>
+            </div>
+            <div class="nc-art-info-col">
+              <span class="kv-lbl">Kg. Crudo</span>
+              <span class="kv-val"><b>{{ a.kgCrudo }}</b></span>
+            </div>
+            <div class="nc-art-info-col">
+              <span class="kv-lbl">Rollos</span>
+              <span class="kv-val"><b>{{ a.rollos }}</b></span>
             </div>
           </div>
 
-          <button mat-stroked-button color="primary" class="nc-btn-add-def" (click)="openDraftDefectoModal(i, null)">
-            <mat-icon>add</mat-icon> Agregar otro defecto
-          </button>
+          <div *ngIf="draft.seleccion[i]?.checked" class="nc-qty-section" [ngClass]="{'error': errors['art_' + i]}">
+            <mat-form-field appearance="outline" style="width: 180px;">
+              <mat-label>Cantidad Afectados*</mat-label>
+              <input matInput type="number" min="1" [max]="a.rollos" [(ngModel)]="draft.seleccion[i].cantidad">
+              <mat-error *ngIf="errors['art_' + i]">{{ errors['art_' + i] }}</mat-error>
+            </mat-form-field>
+          </div>
         </div>
-      </div>
 
-      <!-- Comentario General -->
-      <mat-card class="nc-card" style="margin-top: 15px;">
-        <div class="nc-field">
-          <label>Observaciones / Comentario Adicional</label>
-          <textarea rows="3" [(ngModel)]="draft.comentario" placeholder="Detalle adicional sobre la No Conformidad..."></textarea>
-        </div>
-      </mat-card>
-    </div>
+        <p style="font-size: 11.5px; color: #6b7280; margin-top: 8px;">
+          Puede seleccionar más de un artículo; la cantidad no puede superar el total de cada uno.
+        </p>
+      </mat-card-content>
+    </mat-card>
 
-    <!-- Footer Actions -->
-    <div class="nc-footer-bar">
-      <button mat-button (click)="goTo('paso1')">‹ Anterior</button>
-      <button mat-raised-button color="primary" (click)="validatePaso2()">
+    <!-- Footer -->
+    <div class="wizard-footer">
+      <button mat-flat-button class="btn-blue" (click)="validatePaso1()">
         Siguiente <mat-icon>arrow_forward</mat-icon>
       </button>
     </div>
   </div>
 
+
+  <!-- ==========================================
+       VISTA 3: WIZARD PASO 2 (Clasificación & Evidencias)
+  =========================================== -->
+  <div *ngIf="currentScreen === 'paso2' && draft">
+    <div class="vista-header">
+      <button mat-icon-button (click)="goTo('paso1')"><mat-icon>arrow_back</mat-icon></button>
+      <strong>Clasificación y Evidencias</strong>
+    </div>
+
+    <!-- Asignación Rápida Grupal -->
+    <mat-card style="margin-bottom: 12px; border-left: 4px solid #1568D6;">
+      <mat-card-content>
+        <p style="font-weight: 700; font-size: 14px; margin: 0 0 8px; display: flex; align-items: center; gap: 6px;">
+          <mat-icon style="font-size: 18px; width: 18px; height: 18px; color: #1568D6;">group_work</mat-icon>
+          Asignación Defecto
+        </p>
+        <p style="font-size: 12.5px; color: #6b7280; margin: 0 0 12px;">
+          Seleccione los artículos<span style="color: red;">*</span>:
+        </p>
+
+        <div class="nc-group-checks">
+          <ng-container *ngFor="let a of draft.articulosDisponibles; let i = index">
+            <div class="nc-check-pill" *ngIf="draft.seleccion[i]?.checked" (click)="toggleGrupoArticulo(i)"
+              [ngClass]="{'nc-check-pill--active': draft.grupoDefecto.seleccion[i]}">
+              <mat-icon>{{ draft.grupoDefecto.seleccion[i] ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+              <span>{{ a.nombre }}</span>
+            </div>
+          </ng-container>
+        </div>
+        <div class="field-error-msg" *ngIf="draft.grupoDefecto.errors['seleccion']">{{
+          draft.grupoDefecto.errors['seleccion'] }}</div>
+
+        <!-- Motivo de rechazo -->
+        <mat-form-field appearance="outline" style="width: 100%; margin-top: 8px;"
+          [ngClass]="{'mat-form-field-invalid': draft.grupoDefecto.errors['motivo']}">
+          <mat-label>Motivo de Rechazo *</mat-label>
+          <mat-select [ngModel]="draft.grupoDefecto.isOtro ? DEFECTO_NUEVO : draft.grupoDefecto.motivo"
+            (ngModelChange)="onGrupoMotivoChange($event)">
+            <mat-option value="">Seleccione motivo...</mat-option>
+            <mat-option *ngFor="let m of MOTIVOS" [value]="m">{{ m }}</mat-option>
+            <mat-option [value]="DEFECTO_NUEVO">🆕 {{ DEFECTO_NUEVO }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="draft.grupoDefecto.errors['motivo']">{{ draft.grupoDefecto.errors['motivo'] }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width: 100%;" *ngIf="draft.grupoDefecto.isOtro"
+          [ngClass]="{'mat-form-field-invalid': draft.grupoDefecto.errors['desc']}">
+          <mat-label>Descripción del Defecto Nuevo *</mat-label>
+          <input matInput [(ngModel)]="draft.grupoDefecto.descripcionOtro"
+            placeholder="Describa el defecto encontrado...">
+          <mat-error *ngIf="draft.grupoDefecto.errors['desc']">{{ draft.grupoDefecto.errors['desc'] }}</mat-error>
+        </mat-form-field>
+
+        <!-- Área responsable -->
+        <mat-form-field appearance="outline" style="width: 100%;"
+          [ngClass]="{'mat-form-field-invalid': draft.grupoDefecto.errors['area']}">
+          <mat-label>Área Responsable *</mat-label>
+          <mat-select [(ngModel)]="draft.grupoDefecto.area">
+            <mat-option value="">Seleccione área...</mat-option>
+            <mat-option *ngFor="let ar of AREAS" [value]="ar">{{ ar }}</mat-option>
+            <mat-option [value]="OTRA_AREA">{{ OTRA_AREA }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="draft.grupoDefecto.errors['area']">{{ draft.grupoDefecto.errors['area'] }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width: 100%;" *ngIf="draft.grupoDefecto.area === OTRA_AREA"
+          [ngClass]="{'mat-form-field-invalid': draft.grupoDefecto.errors['areaOtro']}">
+          <mat-label>Especifique Área Responsable *</mat-label>
+          <input matInput [(ngModel)]="draft.grupoDefecto.areaOtro" placeholder="Especifique el área...">
+          <mat-error *ngIf="draft.grupoDefecto.errors['areaOtro']">{{ draft.grupoDefecto.errors['areaOtro']
+            }}</mat-error>
+        </mat-form-field>
+
+        <!-- Observaciones / Comentario Adicional -->
+        <mat-form-field appearance="outline" style="width: 100%;">
+          <mat-label>Observaciones / Comentario Adicional</mat-label>
+          <textarea matInput rows="3" [(ngModel)]="draft.comentario"
+            placeholder="Detalle adicional sobre la No Conformidad..."></textarea>
+        </mat-form-field>
+
+        <!-- Evidencia fotográfica -->
+        <div style="margin-bottom: 8px;">
+          <label
+            style="font-size: 12px; font-weight: 600; color: #374151; display: block; margin-bottom: 6px;">Evidencia
+            Fotográfica <span style="color: red;">*</span></label>
+          <div class="nc-photo-uploader">
+            <label class="nc-photo-btn" title="Subir desde galería o archivo">
+              <mat-icon>photo_library</mat-icon>
+              <span>Subir Fotos</span>
+              <input type="file" accept="image/*" multiple (change)="handleGrupoFiles($any($event.target).files)">
+            </label>
+            <div class="nc-photo-btn" title="Tomar foto con la cámara en tiempo real"
+              (click)="openCameraModal('grupo')">
+              <mat-icon>photo_camera</mat-icon>
+              <span>Tomar Foto</span>
+            </div>
+            <div class="nc-photo-preview" *ngFor="let p of draft.grupoDefecto.evidencia; let pi = index">
+              <img [src]="p.dataUrl" *ngIf="p.dataUrl">
+              <span class="nc-photo-del" (click)="removeGrupoEvidencia(pi)"><mat-icon>close</mat-icon></span>
+            </div>
+          </div>
+          <div class="field-error-msg" style="margin-top: 4px;" *ngIf="draft.grupoDefecto.errors['evidencia']">{{
+            draft.grupoDefecto.errors['evidencia'] }}</div>
+        </div>
+
+        <button mat-flat-button class="btn-blue" style="width: 100%;" (click)="aplicarGrupoDefecto()">
+          <mat-icon>done_all</mat-icon> Aplicar a artículos seleccionados
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Resumen de defectos por artículo -->
+    <mat-card style="margin-bottom: 12px;">
+      <mat-card-content>
+        <p style="font-weight: 700; font-size: 14px; margin: 0 0 12px; display: flex; align-items: center; gap: 6px;">
+          <mat-icon style="font-size: 18px; width: 18px; height: 18px; color: #1568D6;">checklist</mat-icon>
+          Detalle de Defectos por Artículo
+        </p>
+        <div class="field-error-msg" *ngIf="errors['summary']">{{ errors['summary'] }}</div>
+
+        <div *ngFor="let a of draft.articulosDisponibles; let i = index">
+          <div *ngIf="draft.seleccion[i]?.checked" class="nc-card-article-def">
+            <div class="nc-art-def-header">
+              <b>{{ a.nombre }}</b>
+              <span style="font-size: 11px; color: #6b7280; font-weight: 600;">{{ draft.seleccion[i].cantidad }}
+                rollos</span>
+            </div>
+
+            <div *ngIf="!draft.seleccion[i].defectos || draft.seleccion[i].defectos.length === 0" 
+              style="padding: 10px 14px; font-size: 12px; color: #94a3b8; font-style: italic;">
+              Sin defectos asignados aún. Seleccione este artículo en el panel de arriba para asignarle un defecto.
+            </div>
+
+            <div class="nc-def-row" *ngFor="let def of draft.seleccion[i].defectos; let j = index">
+              <div class="nc-def-info">
+                <span class="nc-def-label">{{ defectoLabel(def) }}</span>
+                <span class="nc-def-sub">Área: <b>{{ defectoAreaFinal(def) }}</b> • {{ def.evidencia.length }}
+                  fotos</span>
+                <div *ngIf="def.comentario" style="font-size: 11.5px; color: #334155; margin-top: 4px; display: flex; align-items: center; gap: 4px; background: #f8fafc; padding: 4px 8px; border-radius: 4px; border-left: 3px solid #1568D6;">
+                  <mat-icon style="font-size: 14px; width: 14px; height: 14px; color: #64748b;">comment</mat-icon>
+                  <span><b>Obs:</b> {{ def.comentario }}</span>
+                </div>
+              </div>
+              <div>
+                <button mat-icon-button color="primary"
+                  (click)="openDraftDefectoModal(i, j)"><mat-icon>edit</mat-icon></button>
+                <button mat-icon-button color="warn" (click)="removeDefecto(i, j)"><mat-icon>delete</mat-icon></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Footer -->
+    <div class="wizard-footer">
+      <button mat-button (click)="goTo('paso1')">‹ Anterior</button>
+      <button mat-flat-button class="btn-blue" (click)="validatePaso2()">
+        Siguiente <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+  </div>
+
+
   <!-- ==========================================
        VISTA 4: WIZARD PASO 3 (Confirmación)
   =========================================== -->
-  <div class="nc-view" *ngIf="currentScreen === 'paso3' && draft">
-    <div class="nc-header-bar">
+  <div *ngIf="currentScreen === 'paso3' && draft">
+    <div class="vista-header">
       <button mat-icon-button (click)="goTo('paso2')"><mat-icon>arrow_back</mat-icon></button>
-      <div class="nc-header-titles">
-        <h2>Confirmación de No Conformidad</h2>
-        <p>Paso 3 de 3: Verifique los datos antes de guardar</p>
-      </div>
-    </div>
-
-    <div class="nc-stepper">
-      <div class="nc-stepper-bar"><div class="nc-stepper-fill" style="width: 100%"></div></div>
-      <div class="nc-stepper-label">Paso 3 de 3</div>
+      <strong>Confirmación</strong>
     </div>
 
     <!-- Resumen General -->
-    <mat-card class="nc-card nc-summary-card">
-      <div class="nc-summary-header">
-        <span class="nc-id-badge large">{{ editingId || draft.ncPreview }}</span>
-        <span class="nc-date">{{ draft.fechaRegistro }}</span>
-      </div>
-
-      <div class="nc-summary-grid">
-        <div class="nc-kv"><span class="k">Partida:</span><span class="v font-bold">{{ draft.partida }}</span></div>
-        <div class="nc-kv"><span class="k">Cliente:</span><span class="v">{{ draft.cliente }}</span></div>
-        <div class="nc-kv"><span class="k">Color:</span><span class="v">{{ draft.color }}</span></div>
-        <div class="nc-kv"><span class="k">Peso total:</span><span class="v">{{ draft.peso }}</span></div>
-        <div class="nc-kv"><span class="k">Registrado por:</span><span class="v">{{ sUsuario }}</span></div>
-      </div>
+    <mat-card style="margin-bottom: 12px;">
+      <mat-card-content>
+        <div class="kv-row">
+          <span class="kv-lbl">N° de No Conformidad</span>
+          <span class="kv-val text-blue"><b>{{ editingId || draft.ncPreview }}</b></span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-lbl">Fecha</span>
+          <span class="kv-val"><b>{{ draft.fechaRegistro }}</b></span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-lbl">Partida</span>
+          <span class="kv-val"><b>{{ draft.partida }}</b></span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-lbl">Cliente</span>
+          <span class="kv-val">{{ draft.cliente }}</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-lbl">Color</span>
+          <span class="kv-val">{{ draft.color }}</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-lbl">Peso Partida</span>
+          <span class="kv-val">{{ draft.peso }}</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-lbl">Registrado por</span>
+          <span class="kv-val">{{ sUsuario }}</span>
+        </div>
+      </mat-card-content>
     </mat-card>
 
-    <!-- Artículos y Defectos Resumen -->
-    <mat-card class="nc-card">
-      <div class="nc-section-title">
-        <mat-icon>inventory</mat-icon>
-        <span>Detalle por Artículo</span>
-      </div>
-
-      <div class="nc-table-wrap">
-        <table class="nc-table">
-          <thead>
-            <tr>
-              <th>Artículo</th>
-              <th>Rollos Afectados</th>
-              <th>Kg Afectados (Estimado)</th>
-              <th>Defectos y Área</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let a of getArticulosResumenDraft()">
-              <td><b>{{ a.nombre }}</b> ({{ a.codTela }})</td>
-              <td>{{ a.cantidad }} de {{ a.rollos }} rollos</td>
-              <td>{{ calcularKgAfectados(a) }} kg</td>
-              <td>
-                <div *ngFor="let d of a.defectos">
-                  • <b>{{ defectoLabel(d) }}</b> <span class="text-area">({{ defectoAreaFinal(d) }})</span>
+    <!-- Artículos y Defectos -->
+    <mat-card style="margin-bottom: 12px;">
+      <mat-card-content>
+        <p style="font-weight: 700; font-size: 14px; margin: 0 0 12px; display: flex; align-items: center; gap: 6px;">
+          <mat-icon style="font-size: 18px; width: 18px; height: 18px; color: #1568D6;">inventory</mat-icon>
+          Detalle por Artículo
+        </p>
+        <div class="responsive-table">
+          <table mat-table [dataSource]="getArticulosResumenDraft()" class="mat-elevation-z2">
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef>Artículo</th>
+              <td mat-cell *matCellDef="let a"><b>{{ a.nombre }}</b> ({{ a.codTela }})</td>
+            </ng-container>
+            <ng-container matColumnDef="cantidad">
+              <th mat-header-cell *matHeaderCellDef>Rollos Afectados</th>
+              <td mat-cell *matCellDef="let a">{{ a.cantidad }} de {{ a.rollos }} rollos</td>
+            </ng-container>
+            <ng-container matColumnDef="kg">
+              <th mat-header-cell *matHeaderCellDef>Kg Afectados</th>
+              <td mat-cell *matCellDef="let a">{{ calcularKgAfectados(a) }} kg</td>
+            </ng-container>
+            <ng-container matColumnDef="defectos">
+              <th mat-header-cell *matHeaderCellDef>Defectos y Área</th>
+              <td mat-cell *matCellDef="let a">
+                <div *ngFor="let d of a.defectos" style="margin-bottom: 4px;">
+                  • <b>{{ defectoLabel(d) }}</b> <span class="cell-teal">({{ defectoAreaFinal(d) }})</span>
+                  <div *ngIf="d.comentario" style="font-size: 11px; color: #475569; font-style: italic; margin-left: 10px;">
+                    <b>Obs:</b> {{ d.comentario }}
+                  </div>
                 </div>
               </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['nombre','cantidad','kg','defectos']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['nombre','cantidad','kg','defectos'];"></tr>
+          </table>
+        </div>
+      </mat-card-content>
     </mat-card>
 
-    <!-- Mensajes Generados -->
-    <mat-card class="nc-card">
-      <div class="nc-section-title">
-        <mat-icon>forum</mat-icon>
-        <span>Mensajes Generados Automáticamente</span>
-      </div>
-
-      <div class="nc-msg-box">
-        <div class="nc-msg-title"><mat-icon color="primary">chat</mat-icon> Mensaje para WhatsApp</div>
-        <pre class="nc-msg-pre">{{ buildMensajeWhatsApp() }}</pre>
-      </div>
-
-      <div class="nc-msg-box" *ngIf="buildMensajeSIGE()">
-        <div class="nc-msg-title"><mat-icon color="accent">sync</mat-icon> Registro para SIGE</div>
-        <pre class="nc-msg-pre">{{ buildMensajeSIGE() }}</pre>
-      </div>
-
-      <div class="nc-banner-warn" *ngIf="tieneDefectoNuevoDraft()">
-        <mat-icon>warning</mat-icon>
-        <span>No se sincronizará con SIGE hasta que Gerencia de Calidad revise y asigne código al defecto nuevo.</span>
-      </div>
-    </mat-card>
-
-    <!-- Footer Actions -->
-    <div class="nc-footer-bar">
+    <!-- Footer -->
+    <div class="wizard-footer" style="justify-content: space-between;">
       <button mat-button (click)="goTo('paso2')">‹ Modificar</button>
-      <button mat-raised-button color="primary" class="nc-btn-save" (click)="confirmarRegistroNC()">
+      <button mat-flat-button class="btn-success" (click)="confirmarRegistroNC()">
         <mat-icon>save</mat-icon> Confirmar y Registrar
       </button>
     </div>
   </div>
 
+
+  <!-- ==========================================
+       VISTA DE EDICIÓN: MODIFICAR NO CONFORMIDAD
+  =========================================== -->
+  <div *ngIf="currentScreen === 'editar' && draft">
+    <div class="vista-header">
+      <button mat-icon-button (click)="cancelarEdicion()"><mat-icon>arrow_back</mat-icon></button>
+      <strong>Editar No Conformidad: {{ draft.ncPreview }}</strong>
+    </div>
+
+    <!-- Card 1: Identificación y partida (No editable) -->
+    <mat-card class="nc-edit-card" style="margin-bottom: 16px;">
+      <mat-card-content>
+        <p style="font-weight: 800; font-size: 15px; margin: 0 0 2px; color: #0f172a;">Identificación y partida</p>
+        <p style="font-size: 12px; color: #64748b; margin: 0 0 12px;">Estos datos no son editables; provienen de la
+          partida.</p>
+
+        <div class="kv-row"><span class="kv-lbl">Partida</span><span class="kv-val"><b>{{ draft.partida }}</b></span>
+        </div>
+        <div class="kv-row"><span class="kv-lbl">Cliente</span><span class="kv-val"><b>{{ draft.cliente }}</b></span>
+        </div>
+        <div class="kv-row"><span class="kv-lbl">Color</span><span class="kv-val"><b>{{ draft.color }}</b></span></div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Card 2: Artículos afectados -->
+    <mat-card class="nc-edit-card" style="margin-bottom: 16px;">
+      <mat-card-content>
+        <p style="font-weight: 800; font-size: 15px; margin: 0 0 2px; color: #0f172a;">
+          Artículos afectados ({{ draft.articulosDisponibles.length }})
+        </p>
+
+        <div *ngFor="let a of draft.articulosDisponibles; let i = index" style="margin-bottom: 12px;">
+          <!-- ESTADO 1: No marcado para editar (Tarjeta colapsada blanca) -->
+          <div *ngIf="!draft.seleccion[i]?.checked" class="nc-edit-art-collapsed">
+            <div class="nc-edit-art-chk" (click)="toggleArticulo(i)">
+              <mat-icon>check_box_outline_blank</mat-icon>
+            </div>
+            <div class="nc-edit-art-info" (click)="toggleArticulo(i)" style="cursor: pointer;">
+              <span class="nc-edit-art-title">{{ a.nombre }}</span>
+              <span class="nc-edit-art-sub">
+                {{ draft.seleccion[i]?.cantidad || 0 }} rollo(s) afectado(s) · {{ draft.seleccion[i]?.defectos?.length
+                || 0 }} defecto(s) — <span style="color: #64748b;">sin cambios</span>
+              </span>
+            </div>
+            <mat-icon style="color: #94a3b8; cursor: pointer;" (click)="toggleArticulo(i)">chevron_right</mat-icon>
+            <mat-icon *ngIf="draft.articulosDisponibles.length > 1" style="color: #dc2626; cursor: pointer; margin-left: 4px;" matTooltip="Eliminar artículo"
+              (click)="$event.stopPropagation(); removeArticuloEdicion(i)">delete</mat-icon>
+          </div>
+
+          <!-- ESTADO 2: Marcado para editar (Tarjeta azul expansible activa) -->
+          <div *ngIf="draft.seleccion[i]?.checked" class="nc-edit-art-expanded">
+            <div class="nc-edit-art-exp-header">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <mat-icon style="color: #1568D6;">check_box</mat-icon>
+                <span class="nc-edit-art-title" style="color: #1568D6;">{{ a.nombre }}</span>
+              </div>
+              <span class="nc-link-action" (click)="toggleArticulo(i)">Listo, no editar</span>
+            </div>
+
+            <div class="nc-edit-art-sublink" style="margin-bottom: 10px;">
+              <span style="font-size: 12px; color: #1568D6; font-weight: 600;">Editar artículo</span>
+            </div>
+
+            <!-- Fila de specs del artículo -->
+            <div class="nc-edit-specs-grid">
+              <div><span class="kv-lbl">Cód. Tela</span><span class="kv-val"><b>{{ a.codTela }}</b></span></div>
+              <div><span class="kv-lbl">Talla</span><span class="kv-val"><b>{{ a.talla }}</b></span></div>
+              <div><span class="kv-lbl">Kg. Crudo</span><span class="kv-val"><b>{{ a.kgCrudo }}</b></span></div>
+              <div><span class="kv-lbl">Rollos</span><span class="kv-val"><b>{{ a.rollos }}</b></span></div>
+            </div>
+
+            <!-- Cantidad afectada -->
+            <mat-form-field appearance="outline" style="width: 180px; margin-top: 10px;">
+              <mat-label>Cantidad afectada *</mat-label>
+              <input matInput type="number" [(ngModel)]="draft.seleccion[i].cantidad" min="1" [max]="a.rollos">
+            </mat-form-field>
+
+            <!-- Lista de defectos de este artículo -->
+            <div style="margin-top: 12px;">
+              <span style="display: block; font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">
+                Defectos de este artículo
+              </span>
+
+              <div *ngFor="let def of draft.seleccion[i].defectos; let j = index" class="nc-edit-def-item">
+                <div class="nc-edit-def-head">
+                  <span style="font-size: 12px; font-weight: 700; color: #64748b;">Defecto {{ j + 1 }}</span>
+                  <span class="nc-link-blue" (click)="openDraftDefectoModal(i, j)">Editar</span>
+                </div>
+                <div class="nc-edit-def-body">
+                  <mat-icon
+                    style="color: #16a34a; font-size: 16px; width: 16px; height: 16px; vertical-align: middle;">check</mat-icon>
+                  <span>{{ defectoLabel(def) }} · {{ defectoAreaFinal(def) }} · {{ def.evidencia.length }}
+                    foto(s)</span>
+                  <div *ngIf="def.comentario" style="font-size: 11.5px; color: #475569; margin-top: 3px; font-style: italic;">
+                    <b>Obs:</b> {{ def.comentario }}
+                  </div>
+                </div>
+              </div>
+
+              <button type="button" mat-button class="btn-add-defecto" (click)="openDraftDefectoModal(i, null)">
+                + Agregar otro defecto
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Card 3: Datos generales (Comentario) -->
+    <mat-card class="nc-edit-card" style="margin-bottom: 16px;">
+      <mat-card-content>
+        <p style="font-weight: 800; font-size: 15px; margin: 0 0 2px; color: #0f172a;">Datos generales</p>
+        <span style="font-size: 12px; color: #1568D6; font-weight: 600; display: block; margin-bottom: 6px;">Editar
+          comentario</span>
+        <mat-form-field appearance="outline" style="width: 100%;">
+          <mat-label>Comentario / observación</mat-label>
+          <textarea matInput rows="3" [(ngModel)]="draft.comentario"
+            placeholder="Manchas de tintura irregulares en el lote, turno noche."></textarea>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Footer de acciones -->
+    <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px;">
+      <button mat-stroked-button style="flex: 1; max-width: 200px; height: 44px; font-weight: 700;"
+        (click)="cancelarEdicion()">
+        Cancelar
+      </button>
+      <button mat-flat-button class="btn-blue" style="flex: 1; max-width: 200px; height: 44px; font-weight: 700;"
+        (click)="solicitarMotivoEdicion()">
+        Guardar cambios
+      </button>
+    </div>
+  </div>
+
+
   <!-- ==========================================
        VISTA 5: DETALLE DE NO CONFORMIDAD
   =========================================== -->
-  <div class="nc-view" *ngIf="currentScreen === 'detalle' && detalleNC">
-    <div class="nc-header-bar nc-detalle-header-bar">
+  <div *ngIf="currentScreen === 'detalle' && detalleNC">
+    <div class="vista-header">
       <button mat-icon-button (click)="goTo('inicio')"><mat-icon>arrow_back</mat-icon></button>
-      <div class="nc-header-titles">
-        <h2>Detalle de No Conformidad: {{ detalleNC.id }}</h2>
-        <div class="nc-detalle-actions" *ngIf="detalleNC.status !== 'Anulado'">
-          <button mat-stroked-button color="primary" class="nc-btn-modificar" (click)="editarNC(detalleNC)">
-            <mat-icon>edit</mat-icon> Modificar
-          </button>
-          <button mat-stroked-button color="warn" class="nc-btn-anular" (click)="abrirAnularModal(detalleNC.id)">
-            <mat-icon>block</mat-icon> Anular
-          </button>
-        </div>
-      </div>
+      <strong>Detalle: {{ detalleNC.id }}</strong>
     </div>
 
-    <!-- Anulación info si está anulada -->
-    <div class="nc-banner-warn" *ngIf="detalleNC.anulacion">
+    <!-- Botones de acción fuera de la caja azul -->
+    <div *ngIf="detalleNC.status !== 'Anulado'" style="display: flex; gap: 10px; margin: 12px 0 16px;">
+      <button mat-flat-button
+        style="flex: 1; height: 42px; font-weight: 700; border-radius: 8px; background: #1568D6; color: #fff;"
+        (click)="editarNC(detalleNC)">
+        <mat-icon>edit</mat-icon> Modificar
+      </button>
+      <button mat-flat-button
+        style="flex: 1; height: 42px; font-weight: 700; border-radius: 8px; background: #dc2626; color: #fff;"
+        (click)="abrirAnularModal(detalleNC.id)">
+        <mat-icon>block</mat-icon> Anular
+      </button>
+    </div>
+
+    <!-- Anulación banner -->
+    <div class="banner-warn" *ngIf="detalleNC.anulacion">
       <mat-icon>error</mat-icon>
       <div>
         <b>NO CONFORMIDAD ANULADA</b>
-        <p>Motivo: {{ detalleNC.anulacion.motivo }} • Por: {{ detalleNC.anulacion.usuario }} ({{ detalleNC.anulacion.fecha }})</p>
+        <p style="margin: 2px 0 0;">Motivo: {{ detalleNC.anulacion.motivo }} • Por: {{ detalleNC.anulacion.usuario }}
+          ({{ detalleNC.anulacion.fecha }})</p>
       </div>
     </div>
 
-    <!-- Acordeones -->
-    <mat-card class="nc-card nc-accordion">
-      <div class="nc-acc-header" (click)="detalleOpen.general = !detalleOpen.general">
-        <div class="nc-acc-title">
-          <mat-icon>info</mat-icon>
-          <span>Datos Generales</span>
+    <!-- Acordeón 1: Identificación y partida -->
+    <mat-card class="accordion-card" style="margin-bottom: 12px;">
+      <div class="acc-header" (click)="detalleOpen.general = !detalleOpen.general">
+        <div class="acc-title">
+          <span>Identificación y partida</span>
         </div>
         <mat-icon>{{ detalleOpen.general ? 'expand_less' : 'expand_more' }}</mat-icon>
       </div>
-      <div class="nc-acc-body" *ngIf="detalleOpen.general">
-        <div class="nc-summary-grid">
-          <div class="nc-kv"><span class="k">Partida:</span><span class="v font-bold">{{ detalleNC.partida }}</span></div>
-          <div class="nc-kv"><span class="k">Cliente:</span><span class="v">{{ detalleNC.cliente }}</span></div>
-          <div class="nc-kv"><span class="k">Color:</span><span class="v">{{ detalleNC.color }}</span></div>
-          <div class="nc-kv"><span class="k">Peso Partida:</span><span class="v">{{ detalleNC.peso }}</span></div>
-          <div class="nc-kv"><span class="k">Proceso:</span><span class="v">{{ detalleNC.proceso }}</span></div>
+      <div class="acc-body" *ngIf="detalleOpen.general">
+        <div class="kv-row">
+          <span class="kv-lbl">Registrado por</span>
+          <span class="kv-val"><b>{{ detalleNC.registradoPor }}</b></span>
         </div>
-        <div class="nc-comentario-box" *ngIf="detalleNC.comentario">
-          <span class="lbl">Comentario / Observación:</span>
-          <p>{{ detalleNC.comentario }}</p>
+        <div class="kv-row">
+          <span class="kv-lbl">Fecha de registro</span>
+          <span class="kv-val">{{ detalleNC.fecha }}</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-lbl">Partida</span>
+          <span class="kv-val"><b>{{ detalleNC.partida }}</b></span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-lbl">Cliente</span>
+          <span class="kv-val"><b>{{ detalleNC.cliente }}</b></span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-lbl">Color</span>
+          <span class="kv-val"><b>{{ detalleNC.color }}</b></span>
+        </div>
+
+        <div style="margin: 12px 0 6px; border-top: 1px solid #e2e8f0; padding-top: 10px;">
+          <span style="display: block; font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 8px;">Peso por
+            artículo</span>
+          <div class="kv-row" *ngFor="let a of getArticulosPartidaDetalle()">
+            <span class="kv-lbl" style="color: #64748b;">
+              {{ a.nombre }} <span *ngIf="a.talla && a.talla !== '-'" style="color: #64748b; font-size: 11px;">({{ a.talla }})</span>
+            </span>
+            <span class="kv-val"><b>{{ formatearKg(a.kgCrudo) }}</b></span>
+          </div>
+        </div>
+
+        <div *ngIf="detalleNC.comentario" style="margin-top: 10px; font-size: 13px; color: #374151;">
+          <span style="color: #6b7280; font-weight: 600;">Comentario:</span>
+          <p style="margin: 4px 0 0; font-weight: 500;">{{ detalleNC.comentario }}</p>
         </div>
       </div>
     </mat-card>
 
-    <mat-card class="nc-card nc-accordion">
-      <div class="nc-acc-header" (click)="detalleOpen.articulos = !detalleOpen.articulos">
-        <div class="nc-acc-title">
-          <mat-icon>inventory_2</mat-icon>
-          <span>Artículos Afectados ({{ detalleNC.articulos.length }})</span>
+    <!-- Acordeón 2: Artículos afectados -->
+    <mat-card class="accordion-card" style="margin-bottom: 12px;">
+      <div class="acc-header" (click)="detalleOpen.articulos = !detalleOpen.articulos">
+        <div class="acc-title">
+          <span>Artículos afectados ({{ detalleNC.articulos.length }})</span>
         </div>
         <mat-icon>{{ detalleOpen.articulos ? 'expand_less' : 'expand_more' }}</mat-icon>
       </div>
-      <div class="nc-acc-body" *ngIf="detalleOpen.articulos">
-        <table class="nc-table">
-          <thead>
-            <tr>
-              <th>Artículo</th>
-              <th>Cód. Tela</th>
-              <th>Talla</th>
-              <th>Rollos Afectados</th>
-              <th>Kg Afectados</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let a of detalleNC.articulos">
-              <td><b>{{ a.nombre }}</b></td>
-              <td>{{ a.codTela }}</td>
-              <td>{{ a.talla }}</td>
-              <td>{{ a.cantidad }} de {{ a.rollos }} rollos</td>
-              <td>{{ calcularKgAfectados(a) }} kg</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="acc-body" *ngIf="detalleOpen.articulos">
+        <div class="responsive-table">
+          <table mat-table [dataSource]="detalleNC.articulos" class="mat-elevation-z2">
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef>Artículo</th>
+              <td mat-cell *matCellDef="let a"><b>{{ a.nombre }}</b></td>
+            </ng-container>
+            <ng-container matColumnDef="codTela">
+              <th mat-header-cell *matHeaderCellDef>Cód. Tela</th>
+              <td mat-cell *matCellDef="let a">{{ a.codTela }}</td>
+            </ng-container>
+            <ng-container matColumnDef="talla">
+              <th mat-header-cell *matHeaderCellDef>Talla</th>
+              <td mat-cell *matCellDef="let a">{{ a.talla }}</td>
+            </ng-container>
+            <ng-container matColumnDef="rollos">
+              <th mat-header-cell *matHeaderCellDef>Rollos Afectados</th>
+              <td mat-cell *matCellDef="let a">{{ a.cantidad }} de {{ a.rollos }} rollos</td>
+            </ng-container>
+            <ng-container matColumnDef="kg">
+              <th mat-header-cell *matHeaderCellDef>Kg Afectados</th>
+              <td mat-cell *matCellDef="let a">{{ calcularKgAfectados(a) }} kg</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['nombre','codTela','talla','rollos','kg']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['nombre','codTela','talla','rollos','kg'];"></tr>
+          </table>
+        </div>
       </div>
     </mat-card>
 
-    <mat-card class="nc-card nc-accordion">
-      <div class="nc-acc-header" (click)="detalleOpen.defectos = !detalleOpen.defectos">
-        <div class="nc-acc-title">
-          <mat-icon>report_problem</mat-icon>
-          <span>Defectos y Evidencias Fotográficas</span>
+    <!-- Acordeón 3: Defectos y evidencia -->
+    <mat-card class="accordion-card" style="margin-bottom: 12px;">
+      <div class="acc-header" (click)="detalleOpen.defectos = !detalleOpen.defectos">
+        <div class="acc-title">
+          <span>Defectos y evidencia ({{ getTotalDefectosCount(detalleNC) }})</span>
         </div>
         <mat-icon>{{ detalleOpen.defectos ? 'expand_less' : 'expand_more' }}</mat-icon>
       </div>
-      <div class="nc-acc-body" *ngIf="detalleOpen.defectos">
+      <div class="acc-body" *ngIf="detalleOpen.defectos">
         <div *ngFor="let a of detalleNC.articulos" class="nc-art-def-block">
           <h4 class="nc-art-name">{{ a.nombre }}</h4>
           <div *ngFor="let d of a.defectos" class="nc-def-detail-row">
             <div class="nc-def-title">
-              <span class="nc-def-badge" [ngClass]="{'new': d.isOtro}">
+              <span class="estado-tag" [ngClass]="{'estado-tag--new': d.isOtro}">
                 {{ d.isOtro ? 'DEFECTO NUEVO' : 'CATALOGADO' }}
               </span>
-              <span class="nc-def-name font-bold">{{ defectoLabel(d) }}</span>
+              <span style="font-size: 13px; font-weight: 700; color: #1e293b;">{{ defectoLabel(d) }}</span>
             </div>
-            <div class="nc-def-sub">
-              <span>Área responsable: </span>
-              <span class="text-area font-bold">{{ defectoAreaFinal(d) }}</span>
+            <div style="font-size: 12px; color: #64748b; margin-bottom: 6px;">
+              Área responsable: <span class="cell-teal font-bold">{{ defectoAreaFinal(d) }}</span>
             </div>
-
-            <!-- Galería de fotos -->
+            <div *ngIf="d.comentario" style="font-size: 12px; color: #334155; margin-bottom: 6px; font-style: italic;">
+              <b>Obs:</b> {{ d.comentario }}
+            </div>
             <div class="nc-evidencia-galeria" *ngIf="d.evidencia && d.evidencia.length">
-              <div class="nc-ev-thumb" *ngFor="let f of d.evidencia; let fi = index" (click)="viewPhotos(d.evidencia, fi)">
-                <img [src]="f.dataUrl" *ngIf="f.dataUrl">
-                <mat-icon *ngIf="!f.dataUrl">image</mat-icon>
+              <div class="nc-ev-thumb" *ngFor="let f of d.evidencia; let fi = index"
+                (click)="viewPhotos(d.evidencia, fi)">
+                <img [src]="getFotoUrl(f)" *ngIf="f.dataUrl || f.name">
+                <mat-icon *ngIf="!f.dataUrl && !f.name">image</mat-icon>
               </div>
             </div>
           </div>
@@ -576,21 +826,22 @@
       </div>
     </mat-card>
 
-    <mat-card class="nc-card nc-accordion">
-      <div class="nc-acc-header" (click)="detalleOpen.historial = !detalleOpen.historial">
-        <div class="nc-acc-title">
-          <mat-icon>history</mat-icon>
-          <span>Historial de Eventos</span>
+    <!-- Acordeón 4: Historial -->
+    <mat-card class="accordion-card" style="margin-bottom: 12px;">
+      <div class="acc-header" (click)="detalleOpen.historial = !detalleOpen.historial">
+        <div class="acc-title">
+          <span>Historial</span>
         </div>
         <mat-icon>{{ detalleOpen.historial ? 'expand_less' : 'expand_more' }}</mat-icon>
       </div>
-      <div class="nc-acc-body" *ngIf="detalleOpen.historial">
+      <div class="acc-body" *ngIf="detalleOpen.historial">
         <div class="nc-timeline">
           <div class="nc-tl-item" *ngFor="let h of detalleNC.historial">
             <div class="nc-tl-dot"></div>
             <div class="nc-tl-content">
-              <span class="nc-tl-date">{{ h.fecha }} • {{ h.usuario }}</span>
-              <p class="nc-tl-action">{{ h.accion }}</p>
+              <span class="nc-tl-date">📅 {{ h.fecha }} &nbsp;•&nbsp; 👤 Usuario: <b style="color: #1568D6;">{{
+                  h.usuario }}</b></span>
+              <p style="margin-top: 4px; font-weight: 700; color: #1e293b;">{{ h.accion }}</p>
             </div>
           </div>
         </div>
@@ -598,189 +849,284 @@
     </mat-card>
   </div>
 
+
   <!-- ==========================================
        VISTA 6: DEFECTOS PENDIENTES POR CATALOGAR
   =========================================== -->
-  <div class="nc-view" *ngIf="currentScreen === 'defectosPendientes'">
-    <div class="nc-header-bar">
+  <div *ngIf="currentScreen === 'defectosPendientes'">
+    <div class="vista-header">
       <button mat-icon-button (click)="goTo('inicio')"><mat-icon>arrow_back</mat-icon></button>
-      <div class="nc-header-titles">
-        <h2>Defectos nuevos por catalogar</h2>
-        <p>Pendientes de incorporar al catálogo</p>
-      </div>
+      <strong>Defectos nuevos por catalogar</strong>
     </div>
 
-    <!-- Banner de Información -->
-    <div class="nc-banner-sim">
-      Cuando un supervisor registra un defecto como "DEFECTO NUEVO / NO REGISTRADO", queda listado aquí para que <b>Calidad</b> revise la descripción y decida si debe agregarse como un nuevo código al catálogo de Motivos de rechazo. Simulación – la incorporación definitiva al catálogo debe implementarse con TI; esta pantalla solo evita que el mismo defecto se pierda o se vuelva a registrar como "nuevo" sin ser revisado.
+    <!-- Banner informativo -->
+    <div class="banner-info" style="margin-bottom: 16px;">
+      <mat-icon>info</mat-icon>
+      <span>
+        Cuando un supervisor registra un defecto como "DEFECTO NUEVO / NO REGISTRADO", queda listado aquí para que
+        <b>Calidad</b> revise la descripción y decida si debe agregarse como nuevo código al catálogo de Motivos de
+        rechazo.
+      </span>
     </div>
 
-    <div class="nc-pendientes-section">
-      <b class="nc-pendientes-title">Pendientes ({{ defectosPendientesCatalogo.length }})</b>
-
-      <div class="nc-pend-card" *ngFor="let it of defectosPendientesCatalogo; let i = index">
-        <div class="nc-pend-top">
-          <span class="nc-pend-id">{{ it.ncId }}</span>
-          <span class="nc-pend-fecha">{{ it.fecha }}</span>
+    <mat-card>
+      <mat-card-content>
+        <div class="responsive-table">
+          <table mat-table [dataSource]="defectosPendientesCatalogo" class="mat-elevation-z2">
+            <ng-container matColumnDef="ncId">
+              <th mat-header-cell *matHeaderCellDef>N° NC</th>
+              <td mat-cell *matCellDef="let it" class="memo-cell">{{ it.ncId }}</td>
+            </ng-container>
+            <ng-container matColumnDef="descripcion">
+              <th mat-header-cell *matHeaderCellDef>Descripción Defecto</th>
+              <td mat-cell *matCellDef="let it"><b>{{ it.descripcion }}</b></td>
+            </ng-container>
+            <ng-container matColumnDef="partida">
+              <th mat-header-cell *matHeaderCellDef>Partida</th>
+              <td mat-cell *matCellDef="let it">{{ it.partida }}</td>
+            </ng-container>
+            <ng-container matColumnDef="articulo">
+              <th mat-header-cell *matHeaderCellDef>Artículo</th>
+              <td mat-cell *matCellDef="let it">{{ it.articulo }}</td>
+            </ng-container>
+            <ng-container matColumnDef="fecha">
+              <th mat-header-cell *matHeaderCellDef>Fecha</th>
+              <td mat-cell *matCellDef="let it">{{ it.fecha }}</td>
+            </ng-container>
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <td mat-cell *matCellDef="let it; let i = index">
+                <button mat-flat-button class="btn-blue btn-sm" (click)="abrirRevisarDefecto(i)">
+                  <mat-icon>assignment</mat-icon> Grabar motivo
+                </button>
+                <button mat-icon-button color="primary" (click)="openDetalle(it.ncId)" matTooltip="Ver NC">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['ncId','descripcion','partida','articulo','fecha','acciones']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['ncId','descripcion','partida','articulo','fecha','acciones'];">
+            </tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell empty-state-cell" colspan="6">
+                <mat-icon>verified</mat-icon>
+                <span>No hay defectos nuevos pendientes de catalogar.</span>
+              </td>
+            </tr>
+          </table>
         </div>
-        <div class="nc-pend-desc">
-          <b>{{ it.descripcion }}</b>
-        </div>
-        <div class="nc-pend-meta">
-          Partida {{ it.partida }} · {{ it.articulo }} · {{ it.usuario }}
-        </div>
-        <div class="nc-pend-bottom">
-          <span class="nc-link" (click)="abrirRevisarDefecto(i)">Grabar motivo</span>
-          <span class="nc-link" (click)="openDetalle(it.ncId)">Ver ›</span>
-        </div>
-      </div>
-
-      <div class="nc-empty" *ngIf="defectosPendientesCatalogo.length === 0">
-        <mat-icon>verified</mat-icon>
-        <p>No hay defectos nuevos pendientes de catalogar.</p>
-      </div>
-    </div>
+      </mat-card-content>
+    </mat-card>
   </div>
+
 
   <!-- ==========================================
        VISTA 7: GRABAR MOTIVO
   =========================================== -->
-  <div class="nc-view" *ngIf="(currentScreen === 'grabarMotivo' || currentScreen === 'revisarDefectoNuevo') && (defectosPendientesCatalogo[grabarMotivo.pendIndex] || { partida: '07825', ncId: 'NC-000001', articulo: 'Jersey Solido 20/1', descripcion: 'Olor extraño no catalogado en producto terminado' }) as it">
-    <div class="nc-header-bar">
+  <div
+    *ngIf="(currentScreen === 'grabarMotivo' || currentScreen === 'revisarDefectoNuevo') && (defectosPendientesCatalogo[grabarMotivo.pendIndex] || { partida: '07825', ncId: 'NC-000001', articulo: 'Jersey Solido 20/1', descripcion: 'Olor extraño no catalogado en producto terminado' }) as it">
+    <div class="vista-header">
       <button mat-icon-button (click)="goTo('defectosPendientes')"><mat-icon>arrow_back</mat-icon></button>
-      <div class="nc-header-titles">
-        <h2>Grabar motivo</h2>
-        <p>Asignar motivo del catálogo oficial</p>
-      </div>
+      <strong>Grabar motivo</strong>
     </div>
 
-    <!-- Card 1: Identificación -->
-    <div class="nc-grabar-card">
-      <div class="nc-grabar-kv">
-        <span class="lbl">Partida</span>
-        <span class="val font-bold">{{ it.partida }}</span>
-      </div>
-      <div class="nc-grabar-kv">
-        <span class="lbl">N° de NC</span>
-        <span class="val font-bold">{{ it.ncId }}</span>
-      </div>
-      <div class="nc-grabar-kv">
-        <span class="lbl">Artículo</span>
-        <span class="val font-bold">{{ it.articulo }}</span>
-      </div>
-    </div>
+    <!-- Card Identificación -->
+    <mat-card style="margin-bottom: 12px;">
+      <mat-card-content>
+        <div class="kv-row"><span class="kv-lbl">Partida</span><span class="kv-val"><b>{{ it.partida }}</b></span></div>
+        <div class="kv-row"><span class="kv-lbl">Artículo</span><span class="kv-val"><b>{{ it.articulo }}</b></span>
+        </div>
+      </mat-card-content>
+    </mat-card>
 
-    <!-- Card 2: Defecto nuevo registrado -->
-    <div class="nc-grabar-card nc-grabar-def-card">
-      <div class="nc-grabar-def-header">
-        <span class="nc-badge-new">NEW</span>
-        <b class="nc-grabar-def-title">Defecto nuevo registrado</b>
-      </div>
-      <p class="nc-grabar-def-desc">{{ it.descripcion }}</p>
-    </div>
+    <!-- Card Defecto Nuevo -->
+    <mat-card style="margin-bottom: 12px; border-left: 4px solid #d97706;">
+      <mat-card-content>
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <span
+            style="background: #0284c7; color: #fff; font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.5px;">NEW</span>
+          <b style="font-size: 14px; color: #b45309;">Defecto nuevo registrado</b>
+        </div>
+        <p style="font-size: 13.5px; color: #1e293b; margin: 0; line-height: 1.4;">{{ it.descripcion }}</p>
+      </mat-card-content>
+    </mat-card>
 
     <!-- Formulario -->
-    <div class="nc-grabar-form">
-      <div class="nc-field" [ngClass]="{'error': grabarMotivo.errors['motivo']}">
-        <label>Motivo de rechazo <span class="req">*</span></label>
-        <select [(ngModel)]="grabarMotivo.motivo">
-          <option value="">Escriba para buscar o seleccione...</option>
-          <option *ngFor="let m of MOTIVOS" [value]="m">{{ m }}</option>
-        </select>
-        <div class="nc-field-error" *ngIf="grabarMotivo.errors['motivo']">{{ grabarMotivo.errors['motivo'] }}</div>
-      </div>
+    <mat-card style="margin-bottom: 12px;">
+      <mat-card-content>
+        <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 8px;"
+          [ngClass]="{'mat-form-field-invalid': grabarMotivo.errors['motivo']}">
+          <mat-label>Motivo de rechazo *</mat-label>
+          <mat-select [(ngModel)]="grabarMotivo.motivo">
+            <mat-option value="">Seleccione motivo...</mat-option>
+            <mat-option *ngFor="let m of MOTIVOS" [value]="m">{{ m }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="grabarMotivo.errors['motivo']">{{ grabarMotivo.errors['motivo'] }}</mat-error>
+        </mat-form-field>
 
-      <div class="nc-field" [ngClass]="{'error': grabarMotivo.errors['area']}">
-        <label>Área responsable <span class="req">*</span></label>
-        <select [(ngModel)]="grabarMotivo.area">
-          <option value="">Seleccione área...</option>
-          <option *ngFor="let ar of AREAS" [value]="ar">{{ ar }}</option>
-        </select>
-        <div class="nc-field-error" *ngIf="grabarMotivo.errors['area']">{{ grabarMotivo.errors['area'] }}</div>
-      </div>
+        <mat-form-field appearance="outline" style="width: 100%;"
+          [ngClass]="{'mat-form-field-invalid': grabarMotivo.errors['area']}">
+          <mat-label>Área responsable *</mat-label>
+          <mat-select [(ngModel)]="grabarMotivo.area">
+            <mat-option value="">Seleccione área...</mat-option>
+            <mat-option *ngFor="let ar of AREAS" [value]="ar">{{ ar }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="grabarMotivo.errors['area']">{{ grabarMotivo.errors['area'] }}</mat-error>
+        </mat-form-field>
 
-      <div class="nc-grabar-actions">
-        <button class="nc-grabar-btn-cancel" (click)="goTo('defectosPendientes')">Cancelar</button>
-        <button class="nc-grabar-btn-save" (click)="guardarGrabarMotivo()">Guardar</button>
-      </div>
-    </div>
+        <div class="wizard-footer" style="margin-top: 16px;">
+          <button mat-stroked-button (click)="goTo('defectosPendientes')">Cancelar</button>
+          <button mat-flat-button class="btn-blue" (click)="guardarGrabarMotivo()">
+            <mat-icon>save</mat-icon> Guardar
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
+
 
   <!-- ==========================================
        VISTA 8: EVOLUTIVO DE NO CONFORMIDADES
   =========================================== -->
-  <div class="nc-view" *ngIf="currentScreen === 'evolutivo'">
-    <div class="nc-header-bar">
+  <div *ngIf="currentScreen === 'evolutivo'">
+    <div class="vista-header">
       <button mat-icon-button (click)="goTo('inicio')"><mat-icon>arrow_back</mat-icon></button>
-      <div class="nc-header-titles">
-        <h2>Evolutivo de No Conformidades</h2>
-        <p>Estadísticas y Reportes de Gestión</p>
-      </div>
+      <strong>Evolutivo de No Conformidades</strong>
     </div>
 
-    <!-- KPIs -->
-    <div class="nc-kpi-grid">
-      <div class="nc-kpi-card">
-        <span class="nc-kpi-num">{{ ncs.length }}</span>
-        <span class="nc-kpi-lbl">Total No Conformidades</span>
-      </div>
-      <div class="nc-kpi-card">
-        <span class="nc-kpi-num">{{ getTotalRollosAfectados() }}</span>
-        <span class="nc-kpi-lbl">Rollos Rechazados</span>
-      </div>
-      <div class="nc-kpi-card">
-        <span class="nc-kpi-num">{{ getTotalKgAfectados() }}</span>
-        <span class="nc-kpi-lbl">Kg Afectados Estimados</span>
-      </div>
-    </div>
 
-    <!-- Selector de Periodo -->
-    <div class="nc-evo-period-section">
-      <b class="nc-evo-period-title">Periodo</b>
-      <div class="nc-period-chips">
-        <span class="nc-chip" *ngFor="let p of evoPeriodos" [ngClass]="{'active': p === evoPeriod}" (click)="setEvoPeriod(p)">
-          {{ p }}
-        </span>
-      </div>
-    </div>
 
-    <!-- Gráfica 1: NC registradas por Periodo -->
-    <div class="nc-evo-card">
-      <b class="nc-evo-card-title">NC registradas — {{ evoPeriod }}</b>
-      
-      <div class="nc-barchart-container" *ngIf="getEvoData().length > 0">
-        <div class="nc-barchart-bars">
-          <div class="nc-barchart-col" *ngFor="let item of getEvoData()">
-            <span class="nc-bar-val">{{ item[1] }}</span>
-            <div class="nc-bar-fill" [style.height.%]="(item[1] / getEvoMax()) * 100"></div>
-            <span class="nc-bar-lbl">{{ item[0] }}</span>
+    <!-- Selector Periodo y Año -->
+    <mat-card style="margin: 16px 0;">
+      <mat-card-content>
+        <div class="evo-filter-row">
+          <div>
+            <p style="font-weight: 700; font-size: 13px; margin: 0 0 10px; color: #1e293b;">Periodo</p>
+            <div class="period-chips">
+              <span class="period-chip" *ngFor="let p of evoPeriodos" [ngClass]="{'period-chip--active': p === evoPeriod}"
+                (click)="setEvoPeriod(p)">{{ p }}</span>
+            </div>
+          </div>
+
+          <div class="evo-year-selector">
+            <label class="evo-year-label">Año a consultar:</label>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="evo-year-field">
+              <mat-select [(ngModel)]="evoSelectedYear" (selectionChange)="onEvoYearChange()">
+                <mat-option *ngFor="let y of evoAvailableYears" [value]="y">{{ y }}</mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
         </div>
-      </div>
-      <div class="nc-empty" *ngIf="getEvoData().length === 0">
-        Aún no hay No Conformidades registradas en este periodo.
-      </div>
-    </div>
+      </mat-card-content>
+    </mat-card>
 
-    <!-- Gráfica 2: Defectos por Área -->
-    <div class="nc-evo-card" *ngIf="getEvoAreaData().length > 0">
-      <b class="nc-evo-card-title">Defectos por área — total registrado</b>
-      
-      <div class="nc-barchart-container">
-        <div class="nc-barchart-bars">
-          <div class="nc-barchart-col" *ngFor="let item of getEvoAreaData()">
-            <span class="nc-bar-val">{{ item[1] }}</span>
-            <div class="nc-bar-fill area-fill" [style.height.%]="(item[1] / getEvoAreaMax()) * 100"></div>
-            <span class="nc-bar-lbl" [title]="item[0]">{{ item[0].length > 8 ? (item[0].slice(0, 7) + '.') : item[0] }}</span>
+    <!-- Gráfica 1 -->
+    <mat-card style="margin-bottom: 12px;">
+      <mat-card-content>
+        <div class="evo-chart-header">
+          <p class="evo-chart-title">
+            NC registradas — {{ evoPeriod }}
+            <span class="evo-chart-subtitle" *ngIf="evoPeriod === 'Año'">(2024 - 2026)</span>
+            <span class="evo-chart-subtitle" *ngIf="evoPeriod === 'Mes' || evoPeriod === 'Semanas'">({{ evoSelectedYear }})</span>
+            <span class="evo-chart-subtitle" *ngIf="evoPeriod === 'Días' && evoDiasModo === 'semana'">({{ getEvoWeekDateRangeLabel() }})</span>
+          </p>
+
+          <span *ngIf="loadingEvolutivo" style="font-size: 12px; color: #1568D6; display: flex; align-items: center; gap: 4px;">
+            <mat-icon style="font-size: 16px; width: 16px; height: 16px; animation: spin 1s linear infinite;">sync</mat-icon>
+            Cargando datos...
+          </span>
+        </div>
+
+        <!-- Barra de navegación y controles si es Días -->
+        <div class="evo-dias-controls" *ngIf="evoPeriod === 'Días'">
+          <div class="evo-week-stepper" *ngIf="evoDiasModo === 'semana'">
+            <button mat-stroked-button class="evo-stepper-btn" (click)="prevEvoWeek()" [disabled]="evoSelectedWeek <= 1">
+              <mat-icon>chevron_left</mat-icon> Sem {{ evoSelectedWeek - 1 }}
+            </button>
+            <span class="evo-stepper-badge">Semana {{ evoSelectedWeek }}</span>
+            <button mat-stroked-button class="evo-stepper-btn" (click)="nextEvoWeek()" [disabled]="evoSelectedWeek >= getISOWeeksInYear(evoSelectedYear)">
+              Sem {{ evoSelectedWeek + 1 }} <mat-icon>chevron_right</mat-icon>
+            </button>
+          </div>
+
+          <div class="evo-dias-toggle">
+            <button class="evo-toggle-btn" [ngClass]="{'evo-toggle-btn--active': evoDiasModo === 'semana'}" (click)="evoDiasModo = 'semana'">
+              Semana (Lun - Dom)
+            </button>
+            <button class="evo-toggle-btn" [ngClass]="{'evo-toggle-btn--active': evoDiasModo === 'ultimos7'}" (click)="evoDiasModo = 'ultimos7'">
+              Últimos 7 días
+            </button>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="nc-small-note">
-      La gráfica se calcula automáticamente a partir de todas las No Conformidades registradas en el aplicativo (incluye anuladas) y se actualiza con cada nuevo registro.
-    </div>
+        <!-- Contenedor Semanas (con Scroll Horizontal) -->
+        <div class="nc-barchart-container nc-barchart-scroll" *ngIf="evoPeriod === 'Semanas' && getEvoData().length > 0">
+          <div class="nc-barchart-bars nc-barchart-bars--semanas">
+            <div class="nc-barchart-col nc-barchart-col--semana" *ngFor="let item of getEvoData()"
+              [id]="'week-col-' + item[0].replace(' ', '')"
+              [ngClass]="{'nc-barchart-col--current': isCurrentWeek(item[0])}"
+              (click)="onWeekBarClick(item[0])"
+              [title]="'Haga clic para ver los días de la ' + item[0]">
+              <span class="nc-bar-val">{{ item[1] | number }}</span>
+              <div class="nc-bar-fill" [style.height.%]="(item[1] / getEvoMax()) * 100"></div>
+              <span class="nc-bar-lbl">{{ item[0] }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contenedor Días (Acomodados Lunes a Domingo) -->
+        <div class="nc-barchart-container" *ngIf="evoPeriod === 'Días' && getEvoData().length > 0">
+          <div class="nc-barchart-bars nc-barchart-bars--dias">
+            <div class="nc-barchart-col" *ngFor="let item of getEvoData()"
+              [ngClass]="{'nc-barchart-col--current': isCurrentDay(item[0])}">
+              <span class="nc-bar-val">{{ item[1] | number }}</span>
+              <div class="nc-bar-fill" [style.height.%]="(item[1] / getEvoMax()) * 100"></div>
+              <span class="nc-bar-lbl">{{ item[0] }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contenedor Meses y Años (Estándar 12 columnas o 3 columnas) -->
+        <div class="nc-barchart-container" *ngIf="(evoPeriod === 'Año' || evoPeriod === 'Mes') && getEvoData().length > 0">
+          <div class="nc-barchart-bars" [ngClass]="{'nc-barchart-bars--meses': evoPeriod === 'Mes', 'nc-barchart-bars--anios': evoPeriod === 'Año'}">
+            <div class="nc-barchart-col" *ngFor="let item of getEvoData()">
+              <span class="nc-bar-val">{{ item[1] | number }}</span>
+              <div class="nc-bar-fill" [style.height.%]="(item[1] / getEvoMax()) * 100"></div>
+              <span class="nc-bar-lbl">{{ item[0] }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="empty-state-cell" *ngIf="getEvoData().length === 0">
+          Aún no hay No Conformidades registradas en este periodo.
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Gráfica 2 -->
+    <mat-card style="margin-bottom: 12px;" *ngIf="getEvoAreaData().length > 0">
+      <mat-card-content>
+        <p style="font-weight: 700; font-size: 14px; margin: 0 0 14px;">
+          Defectos por área — {{ evoPeriod === 'Año' ? 'total registrado' : ('año ' + evoSelectedYear) }}
+        </p>
+        <div class="nc-barchart-container">
+          <div class="nc-barchart-bars">
+            <div class="nc-barchart-col" *ngFor="let item of getEvoAreaData()">
+              <span class="nc-bar-val">{{ item[1] | number }}</span>
+              <div class="nc-bar-fill area-fill" [style.height.%]="(item[1] / getEvoAreaMax()) * 100"></div>
+              <span class="nc-bar-lbl" [title]="item[0]">{{ item[0].length > 10 ? (item[0].slice(0, 9) + '.') : item[0] }}</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <p style="font-size: 11px; color: #94a3b8; margin: 10px 0 20px; line-height: 1.4;">
+      La gráfica se calcula automáticamente a partir de todas las No Conformidades registradas en el aplicativo (incluye
+      anuladas) y se actualiza con cada nuevo registro.
+    </p>
   </div>
+
 
   <!-- ==========================================
        MODAL: VISOR DE FOTOS
@@ -788,23 +1134,26 @@
   <div class="nc-photo-modal" *ngIf="photoViewModal.open">
     <div class="nc-pm-backdrop" (click)="photoViewModal.open = false"></div>
     <div class="nc-pm-content">
-      <button mat-icon-button class="nc-pm-close" (click)="photoViewModal.open = false"><mat-icon>close</mat-icon></button>
-      <button mat-icon-button class="nc-pm-nav left" (click)="photoPrev()" *ngIf="photoViewModal.photos.length > 1"><mat-icon>chevron_left</mat-icon></button>
-      
+      <button mat-icon-button class="nc-pm-close"
+        (click)="photoViewModal.open = false"><mat-icon>close</mat-icon></button>
+      <button mat-icon-button class="nc-pm-nav left" (click)="photoPrev()"
+        *ngIf="photoViewModal.photos.length > 1"><mat-icon>chevron_left</mat-icon></button>
       <div class="nc-pm-img-wrap">
-        <img [src]="photoViewModal.photos[photoViewModal.index]?.dataUrl" *ngIf="photoViewModal.photos[photoViewModal.index]?.dataUrl">
+        <img [src]="photoViewModal.photos[photoViewModal.index]?.dataUrl"
+          *ngIf="photoViewModal.photos[photoViewModal.index]?.dataUrl">
         <div class="nc-pm-placeholder" *ngIf="!photoViewModal.photos[photoViewModal.index]?.dataUrl">
           <mat-icon>image</mat-icon>
           <p>Evidencia fotográfica de muestra (Simulación)</p>
         </div>
       </div>
-
-      <button mat-icon-button class="nc-pm-nav right" (click)="photoNext()" *ngIf="photoViewModal.photos.length > 1"><mat-icon>chevron_right</mat-icon></button>
-      <div class="nc-pm-counter" *ngIf="photoViewModal.photos.length > 1">
+      <button mat-icon-button class="nc-pm-nav right" (click)="photoNext()"
+        *ngIf="photoViewModal.photos.length > 1"><mat-icon>chevron_right</mat-icon></button>
+      <div style="color: #fff; font-size: 12px; margin-top: 8px;" *ngIf="photoViewModal.photos.length > 1">
         Foto {{ photoViewModal.index + 1 }} de {{ photoViewModal.photos.length }}
       </div>
     </div>
   </div>
+
 
   <!-- ==========================================
        MODAL: ANULAR NO CONFORMIDAD
@@ -814,129 +1163,206 @@
     <div class="nc-modal-box">
       <h3>¿Anular No Conformidad?</h3>
       <p>Indique el motivo por el cual se anula la <b>{{ anularModal.ncId }}</b>:</p>
-
-      <div class="nc-field" [ngClass]="{'error': anularModal.error}">
-        <select [(ngModel)]="anularModal.motivo">
-          <option value="">Seleccione motivo...</option>
-          <option *ngFor="let m of MOTIVOS_ANULACION" [value]="m">{{ m }}</option>
-        </select>
-        <div class="nc-field-error" *ngIf="anularModal.error">{{ anularModal.error }}</div>
-      </div>
-
-      <div class="nc-field" *ngIf="anularModal.motivo === 'Otros'">
-        <label>Especifique motivo</label>
-        <input type="text" [(ngModel)]="anularModal.otro" placeholder="Detalle el motivo...">
-      </div>
-
-      <div class="nc-modal-actions">
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Motivo de anulación</mat-label>
+        <mat-select [(ngModel)]="anularModal.motivo">
+          <mat-option value="">Seleccione motivo...</mat-option>
+          <mat-option *ngFor="let m of MOTIVOS_ANULACION" [value]="m">{{ m }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="field-error-msg" *ngIf="anularModal.error">{{ anularModal.error }}</div>
+      <mat-form-field appearance="outline" style="width: 100%;" *ngIf="anularModal.motivo === 'Otros'">
+        <mat-label>Especifique motivo</mat-label>
+        <input matInput [(ngModel)]="anularModal.otro" placeholder="Detalle el motivo...">
+      </mat-form-field>
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px;">
         <button mat-button (click)="anularModal.open = false">Cancelar</button>
         <button mat-raised-button color="warn" (click)="confirmarAnulacion()">Anular Definitivamente</button>
       </div>
     </div>
   </div>
 
+
   <!-- ==========================================
        MODAL: EDITAR / REGISTRAR DEFECTO INDIVIDUAL
   =========================================== -->
   <div class="nc-photo-modal" *ngIf="draftDefModal.open">
     <div class="nc-pm-backdrop" (click)="draftDefModal.open = false"></div>
-    <div class="nc-modal-box large">
-      <h3>{{ draftDefModal.defIdx === null ? 'Agregar Defecto' : 'Editar Defecto' }}</h3>
+    <div class="nc-modal-box large" style="border-radius: 16px; padding: 20px 24px;">
+      <div style="width: 36px; height: 4px; background: #cbd5e1; border-radius: 2px; margin: 0 auto 12px;"></div>
 
-      <div class="nc-field" [ngClass]="{'error': draftDefModal.errors['motivo']}">
-        <label>Motivo de Rechazo <span class="req">*</span></label>
-        <select [ngModel]="draftDefModal.isOtro ? DEFECTO_NUEVO : draftDefModal.motivo" (ngModelChange)="draftDefModal.isOtro = ($event === DEFECTO_NUEVO); draftDefModal.motivo = $event">
-          <option value="">Seleccione motivo...</option>
-          <option [value]="DEFECTO_NUEVO">🆕 {{ DEFECTO_NUEVO }}</option>
-          <option *ngFor="let m of MOTIVOS" [value]="m">{{ m }}</option>
-        </select>
-        <div class="nc-field-error" *ngIf="draftDefModal.errors['motivo']">{{ draftDefModal.errors['motivo'] }}</div>
-      </div>
+      <span style="font-size: 12.5px; color: #64748b; font-weight: 600; display: block; margin-bottom: 2px;">
+        {{ draft ? draft.articulosDisponibles[draftDefModal.artIdx]?.nombre : '' }}
+      </span>
+      <h3 style="margin: 0 0 16px; font-size: 18px; font-weight: 800; color: #0f172a;">
+        {{ draftDefModal.defIdx === null ? 'Nuevo defecto' : 'Editar defecto' }}
+      </h3>
 
-      <div class="nc-field" *ngIf="draftDefModal.isOtro" [ngClass]="{'error': draftDefModal.errors['desc']}">
-        <label>Descripción del Defecto Nuevo <span class="req">*</span></label>
-        <input type="text" [(ngModel)]="draftDefModal.descripcionOtro" placeholder="Describa el defecto...">
-        <div class="nc-field-error" *ngIf="draftDefModal.errors['desc']">{{ draftDefModal.errors['desc'] }}</div>
-      </div>
+      <mat-form-field appearance="outline" style="width: 100%;"
+        [ngClass]="{'mat-form-field-invalid': draftDefModal.errors['motivo']}">
+        <mat-label>Motivo de rechazo *</mat-label>
+        <mat-select [ngModel]="draftDefModal.isOtro ? DEFECTO_NUEVO : draftDefModal.motivo"
+          (ngModelChange)="draftDefModal.isOtro = ($event === DEFECTO_NUEVO); draftDefModal.motivo = $event">
+          <mat-option value="">Escriba para buscar o seleccione...</mat-option>
+          <mat-option *ngFor="let m of MOTIVOS" [value]="m">{{ m }}</mat-option>
+          <mat-option [value]="DEFECTO_NUEVO">🆕 {{ DEFECTO_NUEVO }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="draftDefModal.errors['motivo']">{{ draftDefModal.errors['motivo'] }}</mat-error>
+      </mat-form-field>
 
-      <div class="nc-field" [ngClass]="{'error': draftDefModal.errors['area']}">
-        <label>Área Responsable <span class="req">*</span></label>
-        <select [(ngModel)]="draftDefModal.area">
-          <option value="">Seleccione área...</option>
-          <option *ngFor="let ar of AREAS" [value]="ar">{{ ar }}</option>
-          <option [value]="OTRA_AREA">{{ OTRA_AREA }}</option>
-        </select>
-        <div class="nc-field-error" *ngIf="draftDefModal.errors['area']">{{ draftDefModal.errors['area'] }}</div>
-      </div>
+      <mat-form-field appearance="outline" style="width: 100%;" *ngIf="draftDefModal.isOtro"
+        [ngClass]="{'mat-form-field-invalid': draftDefModal.errors['desc']}">
+        <mat-label>Descripción del Defecto Nuevo *</mat-label>
+        <input matInput [(ngModel)]="draftDefModal.descripcionOtro" placeholder="Describa el defecto...">
+        <mat-error *ngIf="draftDefModal.errors['desc']">{{ draftDefModal.errors['desc'] }}</mat-error>
+      </mat-form-field>
 
-      <div class="nc-field" *ngIf="draftDefModal.area === OTRA_AREA" [ngClass]="{'error': draftDefModal.errors['areaOtro']}">
-        <label>Especifique Área Responsable <span class="req">*</span></label>
-        <input type="text" [(ngModel)]="draftDefModal.areaOtro" placeholder="Especifique...">
-        <div class="nc-field-error" *ngIf="draftDefModal.errors['areaOtro']">{{ draftDefModal.errors['areaOtro'] }}</div>
-      </div>
+      <mat-form-field appearance="outline" style="width: 100%;"
+        [ngClass]="{'mat-form-field-invalid': draftDefModal.errors['area']}">
+        <mat-label>Área responsable *</mat-label>
+        <mat-select [(ngModel)]="draftDefModal.area">
+          <mat-option value="">Escriba para buscar el área...</mat-option>
+          <mat-option *ngFor="let ar of AREAS" [value]="ar">{{ ar }}</mat-option>
+          <mat-option [value]="OTRA_AREA">{{ OTRA_AREA }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="draftDefModal.errors['area']">{{ draftDefModal.errors['area'] }}</mat-error>
+      </mat-form-field>
 
-      <div class="nc-field">
-        <label>Evidencia Fotográfica</label>
-        <div class="nc-photo-uploader">
-          <label class="nc-photo-btn">
-            <mat-icon>add_a_photo</mat-icon>
-            <span>Subir Fotos</span>
-            <input type="file" accept="image/*" multiple (change)="handleModalFiles($any($event.target).files)">
+      <mat-form-field appearance="outline" style="width: 100%;" *ngIf="draftDefModal.area === OTRA_AREA"
+        [ngClass]="{'mat-form-field-invalid': draftDefModal.errors['areaOtro']}">
+        <mat-label>Especifique Área Responsable *</mat-label>
+        <input matInput [(ngModel)]="draftDefModal.areaOtro" placeholder="Especifique...">
+        <mat-error *ngIf="draftDefModal.errors['areaOtro']">{{ draftDefModal.errors['areaOtro'] }}</mat-error>
+      </mat-form-field>
+
+      <!-- Evidencia Fotográfica con botón "+" y botón de cámara -->
+      <div style="margin: 8px 0 16px;">
+        <label style="font-size: 13px; font-weight: 700; color: #1e293b; display: block; margin-bottom: 8px;">
+          Evidencia fotográfica
+        </label>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+          <label
+            style="width: 56px; height: 56px; border: 2px dashed #1568D6; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: #eff6ff;"
+            title="Subir foto desde archivo">
+            <mat-icon style="color: #1568D6; font-size: 24px;">add</mat-icon>
+            <input type="file" accept="image/*" multiple style="display: none;"
+              (change)="handleModalFiles($any($event.target).files)">
           </label>
-          <div class="nc-photo-preview" *ngFor="let p of draftDefModal.evidencia; let pi = index">
-            <img [src]="p.dataUrl" *ngIf="p.dataUrl">
-            <span class="nc-photo-del" (click)="removeModalEvidencia(pi)"><mat-icon>close</mat-icon></span>
+
+          <div
+            style="width: 56px; height: 56px; border: 2px dashed #16a34a; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: #f0fdf4;"
+            title="Tomar foto con la cámara" (click)="openCameraModal('modal')">
+            <mat-icon style="color: #16a34a; font-size: 24px;">photo_camera</mat-icon>
+          </div>
+
+          <div *ngFor="let f of draftDefModal.evidencia; let fi = index"
+            style="position: relative; width: 56px; height: 56px; border-radius: 8px; overflow: hidden; border: 1px solid #cbd5e1;">
+            <img [src]="f.dataUrl" style="width: 100%; height: 100%; object-fit: cover;" *ngIf="f.dataUrl">
+            <span
+              style="position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.7); color: #fff; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer;"
+              (click)="removeModalEvidencia(fi)">
+              <mat-icon style="font-size: 12px; width: 12px; height: 12px;">close</mat-icon>
+            </span>
           </div>
         </div>
       </div>
 
-      <div class="nc-modal-actions">
-        <button mat-button (click)="draftDefModal.open = false">Cancelar</button>
-        <button mat-raised-button color="primary" (click)="saveDraftDefectoModal()">Guardar Defecto</button>
+      <!-- Observaciones / Comentario Adicional -->
+      <mat-form-field appearance="outline" style="width: 100%; margin-top: 4px;">
+        <mat-label>Observaciones / Comentario Adicional</mat-label>
+        <textarea matInput rows="2" [(ngModel)]="draftDefModal.comentario"
+          placeholder="Detalle u observación del defecto..."></textarea>
+      </mat-form-field>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px;">
+        <button mat-stroked-button style="flex: 1; height: 42px; font-weight: 700;"
+          (click)="draftDefModal.open = false">Cancelar</button>
+        <button mat-flat-button class="btn-blue" style="flex: 1; height: 42px; font-weight: 700;"
+          (click)="saveDraftDefectoModal()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- ==========================================
+       MODAL: CÁMARA EN TIEMPO REAL (WEBRTC)
+  =========================================== -->
+  <div class="nc-photo-modal" *ngIf="cameraModal.open">
+    <div class="nc-pm-backdrop" (click)="closeCameraModal()"></div>
+    <div class="nc-modal-box large" style="text-align: center; max-width: 520px;">
+      <h3
+        style="margin: 0 0 12px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px;">
+        <mat-icon color="primary">photo_camera</mat-icon> Tomar Foto en Tiempo Real
+      </h3>
+
+      <div *ngIf="cameraModal.error" class="field-error-msg"
+        style="margin-bottom: 12px; padding: 8px; background: #fef2f2; border-radius: 6px;">
+        {{ cameraModal.error }}
+      </div>
+
+      <div
+        style="position: relative; background: #0f172a; border-radius: 8px; overflow: hidden; min-height: 240px; display: flex; align-items: center; justify-content: center;">
+        <video #cameraVideo autoplay playsinline style="width: 100%; max-height: 360px; object-fit: contain;"></video>
+        <div *ngIf="!cameraModal.stream && !cameraModal.error"
+          style="color: #fff; font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 20px;">
+          <mat-icon
+            style="font-size: 32px; width: 32px; height: 32px; animation: spin 1s linear infinite;">sync</mat-icon>
+          <span>Conectando cámara...</span>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; gap: 10px; margin-top: 16px;">
+        <button mat-stroked-button (click)="closeCameraModal()">Cancelar</button>
+        <button mat-flat-button class="btn-blue" (click)="captureCameraPhoto()" [disabled]="!cameraModal.stream">
+          <mat-icon>photo_camera</mat-icon> Capturar Foto
+        </button>
       </div>
     </div>
   </div>
 
   <!-- ==========================================
-       MODAL SHEET: DESCARGAR REPORTES
+       MODAL: MOTIVO DE EDICIÓN
   =========================================== -->
-  <div class="nc-photo-modal" *ngIf="reporteModal.open">
-    <div class="nc-pm-backdrop" (click)="closeReporteModal()"></div>
-    <div class="nc-modal-sheet">
-      <div class="nc-sheet-grabber"></div>
-      <h3 class="nc-sheet-title">Descargar reportes</h3>
-      <p class="nc-sheet-sub">Periodo: <b>Año</b>. Seleccione uno o varios reportes.</p>
+  <div class="nc-photo-modal" *ngIf="motivoEdicionModal.open">
+    <div class="nc-pm-backdrop" (click)="motivoEdicionModal.open = false"></div>
+    <div class="nc-modal-box" style="border-radius: 16px; padding: 20px 24px; max-width: 440px; width: 90%;">
+      <!-- Drag handle -->
+      <div style="width: 36px; height: 4px; background: #cbd5e1; border-radius: 2px; margin: 0 auto 12px;"></div>
 
-      <div class="nc-sheet-options">
-        <div class="nc-sheet-row" (click)="toggleReporteSel('nc1')">
-          <div class="nc-custom-chk" [ngClass]="{'on': reporteModal.sel.nc1}">
-            <mat-icon *ngIf="reporteModal.sel.nc1">check</mat-icon>
-          </div>
-          <span class="nc-sheet-lbl">No Conforme 1</span>
-        </div>
+      <h3 style="margin: 0 0 4px; font-size: 17px; font-weight: 800; color: #0f172a;">Motivo de edición</h3>
+      <p style="font-size: 12.5px; color: #64748b; margin: 0 0 16px;">
+        Seleccione el motivo por el cual está modificando esta No Conformidad.
+      </p>
 
-        <div class="nc-sheet-row" (click)="toggleReporteSel('nc2')">
-          <div class="nc-custom-chk" [ngClass]="{'on': reporteModal.sel.nc2}">
-            <mat-icon *ngIf="reporteModal.sel.nc2">check</mat-icon>
-          </div>
-          <span class="nc-sheet-lbl">No Conforme 2</span>
-        </div>
+      <mat-form-field appearance="outline" style="width: 100%;"
+        [ngClass]="{'mat-form-field-invalid': motivoEdicionModal.error}">
+        <mat-label>Motivo de edición *</mat-label>
+        <mat-select [(ngModel)]="motivoEdicionModal.motivo" placeholder="Seleccionar...">
+          <mat-option value="">Seleccionar...</mat-option>
+          <mat-option *ngFor="let m of MOTIVOS_EDICION" [value]="m">{{ m }}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-        <div class="nc-sheet-row" (click)="toggleReporteSel('informeCalidad')">
-          <div class="nc-custom-chk" [ngClass]="{'on': reporteModal.sel.informeCalidad}">
-            <mat-icon *ngIf="reporteModal.sel.informeCalidad">check</mat-icon>
-          </div>
-          <span class="nc-sheet-lbl">Informe Calidad</span>
-        </div>
+      <mat-form-field appearance="outline" style="width: 100%;" *ngIf="motivoEdicionModal.motivo === 'Otros'">
+        <mat-label>Especifique motivo *</mat-label>
+        <input matInput [(ngModel)]="motivoEdicionModal.otro" placeholder="Detalle el motivo de edición...">
+      </mat-form-field>
+
+      <div class="field-error-msg" *ngIf="motivoEdicionModal.error" style="margin-bottom: 12px;">
+        {{ motivoEdicionModal.error }}
       </div>
 
-      <div class="nc-field-error" *ngIf="reporteModal.error" style="margin-top: 8px;">
-        {{ reporteModal.error }}
-      </div>
-
-      <div class="nc-sheet-actions">
-        <button class="nc-sheet-btn-cancel" (click)="closeReporteModal()">Cancelar</button>
-        <button class="nc-sheet-btn-primary" (click)="confirmDescargarReportes()">Descargar reportes seleccionados</button>
+      <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px;">
+        <button mat-stroked-button style="flex: 1; height: 44px; font-weight: 700; border-radius: 8px;"
+          (click)="motivoEdicionModal.open = false">
+          Cancelar
+        </button>
+        <button mat-flat-button class="btn-blue" style="flex: 1; height: 44px; font-weight: 700; border-radius: 8px;"
+          (click)="confirmarEdicionConMotivo()">
+          Confirmar edición
+        </button>
       </div>
     </div>
   </div>

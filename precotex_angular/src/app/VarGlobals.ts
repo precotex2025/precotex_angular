@@ -6,19 +6,19 @@ export const GlobalVariable = {
 
 
   //----------------------------------------------LOCAL-----------------------------------------------
-  //baseUrl: "http://192.168.1.36/ws_android", //LOCAL <- FRONT
+  baseUrl: "http://192.168.1.36/ws_android", //LOCAL <- FRONT
 
-  //baseUrlProcesoTenido: "https://localhost:7093/api/", //LOCAL <- BACK
+  baseUrlProcesoTenido: "https://localhost:7093/api/", //LOCAL <- BACK
 
 
 
   //--------------------------------------------PRODUCCION--------------------------------------------
-  baseUrl: "/ws_android", //PRODUCCION <- FRONT 
-  
-  baseUrlProcesoTenido: "https://gestion.precotex.com:444/ubicaciones/api/", // PRODUCCION EIQ <- BACK
-  
-  
-  
+  //baseUrl: "/ws_android", //PRODUCCION <- FRONT 
+
+  //baseUrlProcesoTenido: "https://gestion.precotex.com:444/ubicaciones/api/", // PRODUCCION EIQ <- BACK
+
+
+
   //COMPLEMENTARIOS
   //baseUrl: "http://192.168.1.36/ws_android_dev", //LOCAL
   baseUrlLocal: "/ws_local",
@@ -27,7 +27,7 @@ export const GlobalVariable = {
   baseUrlVbTinto: "http://192.168.1.36/publicaWs2/",
   //Base URL BackEnd - ic.backend.precotex.web - HM
   //baseUrlProcesoTenido: "http://192.168.1.36:8062/api/",
-  
+
 
 
 
@@ -52,7 +52,7 @@ export const GlobalVariable = {
     COD_TIPORDTRA: ''
   },
 
-  start:{}, 
+  start: {},
   end: {},
   Orden_servicio: '',
   Cod_ClienteG: '',

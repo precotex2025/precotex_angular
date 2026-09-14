@@ -193,10 +193,11 @@ getInfoUsuarios(){
 
   CargarEspecialidad(dni: string) 
   {
-
     this.registromantemaquinastej.ListarEspecialidad(dni).subscribe(
       (result: any) => {
-        this.sCod_Espe = result[0].Cod_Espe;
+        if (result && Array.isArray(result) && result.length > 0 && result[0]) {
+          this.sCod_Espe = result[0].Cod_Espe;
+        }
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
   }  
