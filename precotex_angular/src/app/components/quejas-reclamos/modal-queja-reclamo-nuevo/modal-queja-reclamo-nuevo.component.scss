@@ -1,24 +1,541 @@
+// Paleta:
+// - Primario (marca / navegación): indigo #3f51b5 - #303f9f
+// - Alerta (identidad quejas/reclamos): ámbar #f9a825 / naranja #ef6c00
+// - Éxito (guardar): verde #2e7d32
+// - Peligro (cerrar/eliminar): rojo #c62828
+// - Neutro (limpiar): gris azulado #607d8b
+
+:host {
+    display: block;
+    font-family: corbel, arial;
+}
+
 .card {
+    position: relative;
     margin-top: 5px;
     margin-left: 5px;
     margin-right: 8px;
+    margin-bottom: 5%;
     min-width: 350px;
     min-height: 400px;
-    height: 640px; 
-}
-.card-header {
-    background-color: #3f51b5;
-    color: #ffffff;
-    padding: 8px 10px 10px 10px;
-    text-align: center;
-    /* border-bottom: 1px solid #337AB7; */
-    border-radius: 4px 4px 0px 0px;
-    border-bottom: 1px solid #337ab7;
-    font-family: corbel, arial;
-    font-size: 15px;    
-    font-weight: bold;
+    height: 640px;
+    display: flex;
+    flex-direction: column;
+    background-color: #f7f8fb;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(30, 42, 90, 0.16);
 }
 
-.modal-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 1rem; } .full-width { width: 100%; } @media (max-width: 1024px) { .modal-grid { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 768px) { .modal-grid { grid-template-columns: 1fr; } }
-.table-responsive { width: 100%; overflow-x: auto; /* permite scroll horizontal en pantallas pequeñas */ } table { width: 100%; min-width: 600px; /* asegura que las columnas no se colapsen demasiado */ border-collapse: collapse; } th, td { padding: 0.75rem; text-align: left; white-space: nowrap; /* evita que el texto se corte raro */ } tr.mat-row:hover { background-color: #f0f0f0; cursor: pointer; } /* Responsive tablet → reduce padding */ @media (max-width: 1024px) { th, td { padding: 0.5rem; } } /* Responsive móvil → tabla más compacta */ @media (max-width: 768px) { table { min-width: 100%; /* ocupa todo el ancho */ } th, td { font-size: 0.85rem; padding: 0.4rem; } }
-.botonera-horizontal { display: flex; gap: 12px; margin-top: 1rem; flex-wrap: wrap; }
+.card-header {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #1a3fa8;
+    color: #ffffff;
+    text-align: center;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+
+    mat-icon {
+        color: #ffe082;
+    }
+}
+
+::ng-deep .btn-cerrar-flotante {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    width: 34px !important;
+    height: 34px !important;
+    background-color: #ffffff !important;
+    color: #1a3fa8 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+
+    .mat-button-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+    }
+}
+
+.container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 4px 12px 16px;
+}
+
+// ---------- Formulario ----------
+
+.modal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 10px 14px;
+    align-items: start;
+    padding: 12px 14px;
+    margin-bottom: 4px;
+    background-color: #ffffff;
+    border: 1px solid #e6e9f2;
+    border-radius: 10px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #f9fafd;
+    border: 1px solid #e6e9f2;
+    border-radius: 8px;
+    padding: 4px 10px 0;
+    min-width: 0;
+}
+
+.col-doble {
+    grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+    .col-doble {
+        grid-column: span 1;
+    }
+}
+
+.col-tipo-registro {
+    grid-column: 1 / -1;
+    background-color: transparent;
+    border: none;
+    padding: 0 0 8px;
+    gap: 6px;
+    border-bottom: 1px dashed #dde3f2;
+}
+
+.grupo-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #78838f;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+// Selects / inputs con borde (outline) más presentable
+::ng-deep .campo-outline {
+    .mat-form-field-wrapper {
+        padding-bottom: 0.6em;
+    }
+
+    .mat-form-field-flex {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: none !important;
+    }
+
+    .mat-form-field-outline {
+        color: #cfd6ea;
+    }
+
+    &.mat-focused .mat-form-field-outline-thick {
+        color: #3f51b5;
+    }
+
+    .mat-form-field-label {
+        color: #78838f;
+        font-size: 13px;
+    }
+
+    &.mat-focused .mat-form-field-label {
+        color: #3f51b5;
+    }
+
+    .mat-select-value, input.mat-input-element, textarea.mat-input-element {
+        color: #263238;
+        font-size: 13.5px;
+    }
+
+    .mat-select-arrow {
+        color: #7986cb;
+    }
+
+    mat-icon[matPrefix] {
+        color: #7986cb;
+        font-size: 19px;
+        width: 19px;
+        height: 19px;
+        margin-right: 6px;
+    }
+}
+
+// Panel desplegable de mat-select sin sombra de elevación
+::ng-deep .cdk-overlay-pane .mat-select-panel {
+    box-shadow: none !important;
+    border: 1px solid #e6e9f2;
+}
+
+// Opción de filtro fija (no se desplaza al hacer scroll vertical en las opciones)
+::ng-deep .mat-select-panel .opcion-filtro-fija {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    height: auto;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e6e9f2;
+    padding: 6px 16px;
+
+    &.mat-option-disabled {
+        color: rgba(0, 0, 0, 0.87) !important;
+        opacity: 1 !important;
+        cursor: default;
+    }
+
+    .mat-input-element {
+        color: #263238 !important;
+        -webkit-text-fill-color: #263238 !important;
+    }
+}
+
+// Radio group como segmented control
+::ng-deep .segmented-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    .mat-radio-button {
+        border: 1px solid #dde3f2;
+        border-radius: 20px;
+        padding: 4px 14px 4px 8px;
+        background-color: #f7f9ff;
+        transition: background-color 0.15s ease, border-color 0.15s ease;
+
+        .mat-radio-label-content {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #37474f;
+            letter-spacing: 0.2px;
+        }
+
+        &.mat-radio-checked {
+            border-color: #3f51b5;
+            background-color: #e8eaf6;
+
+            .mat-radio-label-content {
+                color: #303f9f;
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .modal-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .modal-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+// ---------- Botonera de acciones ----------
+
+.botonera-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 2px 4px;
+}
+
+.btn-accion {
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    border-radius: 22px !important;
+    padding: 0 18px !important;
+    height: 40px;
+    border: none !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18) !important;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+
+    mat-icon {
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+
+    &:not(.mat-button-disabled):hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25) !important;
+    }
+}
+
+::ng-deep .btn-agregar {
+    background: linear-gradient(135deg, #4a5fd1, #303f9f) !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .btn-guardar {
+    background: linear-gradient(135deg, #43a047, #1b5e20) !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .btn-informar {
+    background: linear-gradient(135deg, #ff9800, #e65100) !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .btn-limpiar {
+    background: linear-gradient(135deg, #78909c, #455a64) !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .btn-accion.mat-button-disabled {
+    background: #dfe3ea !important;
+    color: #a3adb8 !important;
+    box-shadow: none !important;
+}
+
+// ---------- Estado vacío de la grilla ----------
+
+.grilla-vacia {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 32px 16px;
+    text-align: center;
+    background: repeating-linear-gradient(135deg, #fafbff, #fafbff 10px, #f4f6fc 10px, #f4f6fc 20px);
+    border: 1px dashed #c5cae9;
+    border-radius: 10px;
+
+    mat-icon {
+        font-size: 40px;
+        width: 40px;
+        height: 40px;
+        color: #9fa8da;
+        margin-bottom: 4px;
+    }
+}
+
+.grilla-vacia-texto {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #37474f;
+}
+
+.grilla-vacia-subtexto {
+    font-size: 11.5px;
+    color: #90a0b0;
+}
+
+// ---------- Tabla de detalle ----------
+
+.table-responsive {
+    width: 100%;
+    max-height: 260px;
+    overflow: auto;
+    border: 1px solid #e6e9f2;
+    border-radius: 10px;
+    background-color: #ffffff;
+}
+
+table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 0.45rem 0.65rem;
+    text-align: left;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+.texto-mayuscula {
+    text-transform: uppercase;
+}
+
+.celda-truncada {
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: help;
+}
+
+::ng-deep .table-responsive th.mat-header-cell {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: #eef1fb;
+    color: #303f9f;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-bottom: 2px solid #c5cae9;
+}
+
+tr.mat-row {
+    height: 38px;
+}
+
+tr.mat-row:nth-child(even) {
+    background-color: #fafbfe;
+}
+
+tr.mat-row:hover {
+    background-color: #eef1fb;
+}
+
+// ---------- Chip de estado ----------
+
+.estado-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+
+    mat-icon {
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+        line-height: 14px;
+    }
+}
+
+.estado-abierto {
+    background-color: #e3f2e3;
+    color: #1b5e20;
+}
+
+.estado-proceso {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+.estado-cerrado {
+    background-color: #e8eaf6;
+    color: #303f9f;
+}
+
+.estado-rechazado {
+    background-color: #fdecea;
+    color: #c62828;
+}
+
+.estado-default {
+    background-color: #eceff1;
+    color: #455a64;
+}
+
+// ---------- Botones de icono en tabla ----------
+
+.celda-archivo {
+    white-space: nowrap;
+}
+
+.archivo-subida {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.archivo-nombre {
+    font-size: 11px;
+    color: #2e7d32;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.btn-subir-archivo.archivo-ok {
+    color: #2e7d32 !important;
+}
+
+::ng-deep .btn-icono-tabla {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+
+    .mat-button-wrapper, .mat-icon-button .mat-button-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+    }
+}
+
+::ng-deep .btn-icono-archivo {
+    color: #3f51b5;
+}
+
+::ng-deep .btn-icono-eliminar {
+    color: #c62828;
+}
+
+.btn-subir-archivo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: #3f51b5;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+        background-color: rgba(63, 81, 181, 0.08);
+    }
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 1024px) {
+    th, td {
+        padding: 0.4rem 0.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    table {
+        min-width: 100%;
+    }
+
+    th, td {
+        font-size: 0.75rem;
+        padding: 0.35rem;
+    }
+}

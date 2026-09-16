@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { RegistroQuejasReclamosService } from 'src/app/services/quejas-reclamos.service';
@@ -28,6 +28,8 @@ interface data {
   styleUrls: ['./modal-queja-reclamo-nuevo.component.scss']
 })
 export class ModalQuejaReclamoNuevoComponent implements OnInit {
+  @ViewChild('inputPartida') inputPartida!: ElementRef;
+
   formulario = this.formBuilder.group({
     tipoRegistro  : ['PARTIDA'],
     partida: [''],
@@ -49,12 +51,12 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
   displayedColumns: string[] = []; // columnas activas
   displayedColumnsPartida: string[] = [
     // 'id'        ,
-    'partida'   , 
+    'partida'   ,
     'cliente'   ,
-       'unidad'  ,
-     'tela'      , 
+     'tela'      ,
      'color'     ,
-     'area'      , 
+       'unidad'  ,
+     'area'      ,
     'responsable' , 
  
     'motivo'  ,
@@ -68,14 +70,25 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
     'cliente'   ,
     'temporada',
     'estilo',
-    'area'      , 
-    'responsable' , 
+    'area'      ,
+    'responsable' ,
     'motivo'  ,
     'estado'  ,
     'observacion',
     'archivo',
     'acciones'
-  ];  
+  ];
+
+  displayedColumnsCliente: string[] = [
+    'cliente'   ,
+    'area'      ,
+    'responsable' ,
+    'motivo'  ,
+    'estado'  ,
+    'observacion',
+    'archivo',
+    'acciones'
+  ];
 
   dataSource: MatTableDataSource<ReclamoCliente> = new MatTableDataSource();  
 
@@ -149,10 +162,13 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
       this.formulario.get('tipoRegistro')?.disable();
       if(this.data.Datos.tipo == "ESTILO"){
         this.formulario.get('tipoRegistro')?.setValue('ESTILO_CLIENTE');
-        this.displayedColumns = [...this.displayedColumnsEstilo]; 
+        this.displayedColumns = [...this.displayedColumnsEstilo];
+      }else if(this.data.Datos.tipo == "CLIENTE"){
+        this.formulario.get('tipoRegistro')?.setValue('CLIENTE');
+        this.displayedColumns = [...this.displayedColumnsCliente];
       }else{
         this.formulario.get('tipoRegistro')?.setValue('PARTIDA');
-        this.displayedColumns = [...this.displayedColumnsPartida]; 
+        this.displayedColumns = [...this.displayedColumnsPartida];
       }
       
       //filtro
@@ -172,11 +188,16 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
                 const reclamoReg = this.construirReclamoEstilo(element);
                 this.reclamos.push(reclamoReg);
               });
+            }else if(this.data.Datos.tipo == "C"){
+              reclamos.elements.forEach(element => {
+                const reclamoReg = this.construirReclamoCliente(element);
+                this.reclamos.push(reclamoReg);
+              });
             }else {
               reclamos.elements.forEach(element => {
                 const reclamoReg = this.construirReclamoPartida(element);
                 this.reclamos.push(reclamoReg);
-              });              
+              });
             }
 
             this.dataSource.data = [...this.reclamos];
@@ -192,9 +213,10 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
       });
     } else {
       console.log('nuevo');
+      this.tipoSeleccionado = this.formulario.get('tipoRegistro')?.value;
       this.actualizarColumnas()
       this.formulario.get('tipoRegistro')?.valueChanges.subscribe(() => { this.actualizarColumnas(); });
-    }    
+    }
     console.log('this.sCodTrabajador', this.sCodTrabajador);
     this.onObtieneUsuarioArea(this.sCodTrabajador);
     this.onLoadCliente();
@@ -218,9 +240,25 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
       if (!valor || valor.length < 5) {
         this.formulario.patchValue({
           clientePartida: '',
-          unidadNegocio: ''
+          unidadNegocio: '',
+          areaResponsable: '',
+          usuarioResponsable: '',
+          motivo: '',
+          observacion: ''
         });
 
+        this.filtroMotivoCtrl.setValue('');
+
+        //Datos del escaneo de partida ya no son validos
+        this.cadenaCodOrdtra = '';
+        this.arrayArticulos = [];
+        this._glb_Cliente = '';
+        this._glb_id_area = 0;
+        this._glb_descripcion_area = '';
+        this._glb_id_Usuario = '';
+        this._glb_Usuario = '';
+        this._glb_id_motivo = '';
+        this._glb_motivo = '';
       }
     });
   }
@@ -382,9 +420,15 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
     this.tipoSeleccionado = valor;
     // Opcional: resetear campos específicos
     if (valor === 'PARTIDA') {
-      this.formulario.patchValue({ temporada: null, estiloCliente: null });
+      this.formulario.patchValue({ temporada: null, estilo: null });
+      this._glb_temporada = '';
+      this._glb_estilo = '';
     } else if (valor === 'ESTILO_CLIENTE') {
       this.formulario.patchValue({ partida: null, unidadNegocio: null });
+    } else if (valor === 'CLIENTE') {
+      this.formulario.patchValue({ partida: null, unidadNegocio: null, temporada: null, estilo: null });
+      this._glb_temporada = '';
+      this._glb_estilo = '';
     }
     this.actualizarColumnas();
   }
@@ -392,13 +436,15 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
   actualizarColumnas() { 
     const tipo = this.formulario.get('tipoRegistro')?.value; 
     
-    if (tipo === 'PARTIDA') { 
+    if (tipo === 'PARTIDA') {
       console.log('entro a partida');
-      this.displayedColumns = [...this.displayedColumnsPartida]; 
-    } else if (tipo === 'ESTILO_CLIENTE') { 
-      this.displayedColumns = [...this.displayedColumnsEstilo]; 
-    } 
-  }  
+      this.displayedColumns = [...this.displayedColumnsPartida];
+    } else if (tipo === 'ESTILO_CLIENTE') {
+      this.displayedColumns = [...this.displayedColumnsEstilo];
+    } else if (tipo === 'CLIENTE') {
+      this.displayedColumns = [...this.displayedColumnsCliente];
+    }
+  }
   
   onClienteSeleccionado(event: any){
     const valor = String(event.value); 
@@ -446,6 +492,15 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
 
             if (result){
 
+              const sCodCliente = result[0].cod_Cliente_Tex;
+
+              //Validar que la partida sea del mismo cliente que el detalle ya agregado
+              if (this.reclamos.length > 0 && this.reclamos[0].cod_Cliente_Tex !== String(sCodCliente)) {
+                this.alertaClienteDistinto(String(result[0].nom_Cliente), this.reclamos[0].cliente);
+                this.formulario.get('partida')?.setValue('');
+                return;
+              }
+
               //Agregamos la lista obtenida a nuestro array
               this.arrayArticulos.push(...result);
 
@@ -456,9 +511,8 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
               });
               //Une los articulos en una sola linea separado por coma(,)
               const articulosConcatenados = sArticulos.join(",");
-              const sCodCliente = result[0].cod_Cliente_Tex;
               const sCodUnidadMedida = result[0].id_Unidad_NegocioKey;
-              
+
               this.formulario.get('clientePartida')?.setValue(String(sCodCliente));
               this.formulario.get('unidadNegocio')?.setValue(String(sCodUnidadMedida));
 
@@ -510,19 +564,53 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
           verticalPosition: 'top',
           duration: 1500,
         });
-        return;          
+        return;
+      }
+
+      if (this.reclamos.length > 0 && this.reclamos[0].cod_Cliente_Tex !== sCliente) {
+        const nombreNuevoCliente = this.clientes.find(c => c.cod_Cliente_Tex === sCliente)?.nom_Cliente || sCliente;
+        this.alertaClienteDistinto(nombreNuevoCliente, this.reclamos[0].cliente);
+        return;
       }
 
     } else if (tipo === 'ESTILO_CLIENTE') {
 
       if (sClienteEst == '' || sTemporada == '' || sEstilo == ''){
-        this.matSnackBar.open("Seleccione datos validos para el tipo estilo.", 'Cerrar', {
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          duration: 1500,
-        });
-        return;          
-      }        
+        this.alertaAdvertencia('Seleccione datos válidos para el tipo estilo (cliente, temporada y estilo propio).');
+        return;
+      }
+
+      if (this.reclamos.length > 0 && this.reclamos[0].cod_Cliente_Tex !== sClienteEst) {
+        const nombreNuevoCliente = this.clientes.find(c => c.cod_Cliente_Tex === sClienteEst)?.nom_Cliente || sClienteEst;
+        this.alertaClienteDistinto(nombreNuevoCliente, this.reclamos[0].cliente);
+        return;
+      }
+
+      const yaExisteTemporada = this.reclamos.some(item => item.Cod_TemCli === sTemporada);
+      if (yaExisteTemporada) {
+        this.alertaAdvertencia(`Ya existe un detalle registrado para la temporada <b>${this._glb_temporada}</b>.<br><br>No se puede repetir la misma temporada en el mismo caso.`);
+        return;
+      }
+
+    } else if (tipo === 'CLIENTE') {
+
+      if (sClienteEst == '') {
+        this.alertaAdvertencia('Seleccione un cliente para el tipo cliente.');
+        return;
+      }
+
+      if (this.reclamos.length > 0 && this.reclamos[0].cod_Cliente_Tex !== sClienteEst) {
+        const nombreNuevoCliente = this.clientes.find(c => c.cod_Cliente_Tex === sClienteEst)?.nom_Cliente || sClienteEst;
+        this.alertaClienteDistinto(nombreNuevoCliente, this.reclamos[0].cliente);
+        return;
+      }
+
+      const sMotivoActual = this.formulario.get('motivo')?.value || '';
+      if (sMotivoActual !== '' && this.reclamos.some(item => item.cod_Motivo === sMotivoActual)) {
+        const nombreMotivo = this.motivos.find(m => m.cod_Motivo === sMotivoActual)?.descripcion || sMotivoActual;
+        this.alertaAdvertencia(`Ya existe un detalle registrado con el motivo <b>${nombreMotivo}</b>.<br><br>No se puede repetir el mismo motivo en el mismo caso.`);
+        return;
+      }
     }
 
     //VALIDACION     - 02
@@ -577,14 +665,10 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
     //2. Validar cada código contra la grilla actual 
     for (const codTela of codigosTela) { 
         const yaExiste = this.reclamos.some(item => item.cod_Tela === codTela); 
-        if (yaExiste) { 
-            this.matSnackBar.open(`El código de tela ${codTela} ya existe en el detalle.`, 'Cerrar', {
-              horizontalPosition: 'center',
-              verticalPosition: 'top',
-              duration: 1500,
-            });            
-            return; // corta el proceso si encuentra duplicado 
-            } 
+        if (yaExiste) {
+            this.alertaAdvertencia(`El código de tela <b>${codTela}</b> ya existe en el detalle.<br><br>No se puede repetir la misma tela en el mismo caso.`);
+            return; // corta el proceso si encuentra duplicado
+            }
     }        
 
 
@@ -599,8 +683,12 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
 
     //Motivo
     const motivo = this.formulario.get('motivo')?.value;
-    const sDesMotivo = this._glb_motivo;    
-    
+    const sDesMotivo = this._glb_motivo;
+
+    //Unidad de Negocio
+    const sDesUnidadNegocio = this.unidadNegocio.find(u => u.cod_Unidad_Negocio === sUnidadNegocio)?.des_Unidad_Negocio || '';
+
+
     //Llena Informacion segun el tipo Elegido
     if (tipo === 'PARTIDA'){
       this.arrayArticulos.forEach(element => {
@@ -614,16 +702,16 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
         const reclamoReg: ReclamoCliente = {
           id: 0,
           cliente: this._glb_Cliente,
-          cod_Ordtra: sNroPartida,    
-          unidadNegocio   : '',  
+          cod_Ordtra: sNroPartida,
+          unidadNegocio   : '',
 
           //Estilo
           Cod_TemCli: '',
-          Cod_EstCli: '',          
+          Cod_EstCli: '',
 
           tipoRegistro: sDesUserAsignado,//this.nuevoReclamo.tipoRegistro, //tmr este weon  crea variables atorrantes --> Tipo de Area no es?
           estadoSolicitud : 'Abierto',
-        
+
 
           responsable     : sDesArea,//this.nuevoReclamo.responsable,
           motivoRegistro  : sDesMotivo,
@@ -638,25 +726,65 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
           des_Color       : desColor,
           num_Secuencia   : numSecuencia,
           cod_Unidad_Negocio  : sUnidadNegocio,
-          des_Unidad_Negocio  : "UNIDAD PRUEBA",//cuando tegresoses mostrar la descripcion da la unidad de negocio.
+          des_Unidad_Negocio  : sDesUnidadNegocio,
           cod_Cliente_Tex     : sCliente,
           cod_Motivo          : motivo,
           idArea              : Number(area),
           idResponsable       : Number(userAsignado),
-          archivoAdjunto      : null
-        };      
+          archivoAdjunto      : null,
+          tipoQueja           : 'P'
+        };
         this.reclamos.push(reclamoReg);
       });
+    } else if (tipo === 'CLIENTE') {
+
+        //Tipo CLIENTE: no hay partida, unidad de negocio, temporada ni estilo -> se envian vacios/0 (nunca null)
+        const reclamoReg: ReclamoCliente = {
+          id: 0,
+          cliente: this._glb_Cliente,
+          cod_Ordtra: '',
+          unidadNegocio   : '',
+
+          Cod_TemCli: '',
+          temporada: '',
+          Cod_EstCli: '',
+          estilo: '',
+
+          tipoRegistro: this._glb_Usuario,
+          estadoSolicitud : 'Abierto',
+
+          responsable     : sDesArea,
+          motivoRegistro  : sDesMotivo,
+          usuarioRegistro : this.sCod_Usuario,
+          observacion     : sObservacion,
+
+          cadenaCodOrdtra : '',
+          cod_Tela        : '',
+          des_Tela        : '',
+          cod_Color       : '',
+          des_Color       : '',
+          num_Secuencia   : 0,
+          cod_Unidad_Negocio  : '0',
+          des_Unidad_Negocio  : '',
+          cod_Cliente_Tex     : sClienteEst,
+          cod_Motivo          : motivo,
+          idArea              : Number(area),
+          idResponsable       : Number(userAsignado),
+          archivoAdjunto      : null,
+          tipoQueja           : 'C'
+        };
+        this.reclamos.push(reclamoReg);
+
     } else {
 
         const reclamoReg: ReclamoCliente = {
           id: 0,
           cliente: this._glb_Cliente,
-          cod_Ordtra: ' ',    
-          unidadNegocio   : ' ', 
+          cod_Ordtra: ' ',
+          unidadNegocio   : ' ',
 
           //Temporada
-          Cod_TemCli :  sTemporada, 
+          Cod_TemCli :  sTemporada,
           temporada: this._glb_temporada,
           //Estilo
           Cod_EstCli: sEstilo,
@@ -678,18 +806,16 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
           des_Color       : ' ',
           num_Secuencia   : 0,
           cod_Unidad_Negocio  : sUnidadNegocio,
-          des_Unidad_Negocio  : "UNIDAD PRUEBA",//cuando tegresoses mostrar la descripcion da la unidad de negocio.
+          des_Unidad_Negocio  : sDesUnidadNegocio,
           cod_Cliente_Tex     : sClienteEst,
           cod_Motivo          : motivo,
           idArea              : Number(area),
           idResponsable       : Number(userAsignado),
-          archivoAdjunto      : null
-        };       
+          archivoAdjunto      : null,
+          tipoQueja           : 'E'
+        };
         this.reclamos.push(reclamoReg);
     }
-
-    //Limpia Cabeceras
-    this.limpiar();
 
     console.log('this.reclamos agregar', this.reclamos);
     if (this.data.Tipo == "E"){
@@ -697,6 +823,92 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
     }else{
       this.dataSource.data = [...this.reclamos];
     }
+
+    this.actualizarEstadoTipoRegistro();
+
+    if (tipo === 'PARTIDA') {
+      setTimeout(() => this.inputPartida?.nativeElement.focus(), 0);
+    }
+  }
+
+  private codigoTipoQueja(tipo: string): string {
+    if (tipo === 'PARTIDA') return 'P';
+    if (tipo === 'ESTILO_CLIENTE') return 'E';
+    if (tipo === 'CLIENTE') return 'C';
+    return '';
+  }
+
+  private mensajeExito(mensaje: string, alCerrar?: () => void): void {
+    Swal.fire({
+      icon: 'success',
+      title: '¡Listo!',
+      text: mensaje,
+      confirmButtonColor: '#2e7d32',
+      confirmButtonText: 'Aceptar'
+    }).then(() => {
+      if (alCerrar) {
+        alCerrar();
+      }
+    });
+  }
+
+  private mensajeError(mensaje: string): void {
+    Swal.fire({
+      icon: 'error',
+      title: 'Ocurrió un problema',
+      text: mensaje,
+      confirmButtonColor: '#c62828',
+      confirmButtonText: 'Entendido'
+    });
+  }
+
+  private alertaAdvertencia(mensaje: string): void {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Atención',
+      html: mensaje,
+      confirmButtonColor: '#3f51b5',
+      confirmButtonText: 'Entendido'
+    });
+  }
+
+  private alertaClienteDistinto(clienteNuevo: string, clienteExistente: string): void {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Cliente diferente',
+      html: `Esta partida pertenece a <b>${clienteNuevo}</b>, pero este caso ya tiene detalles del cliente <b>${clienteExistente}</b>.<br><br>No se pueden mezclar partidas de distintos clientes en el mismo caso.`,
+      confirmButtonColor: '#3f51b5',
+      confirmButtonText: 'Entendido'
+    });
+  }
+
+  private actualizarEstadoTipoRegistro(): void {
+    if (this.data.Tipo == "E") {
+      return;
+    }
+    if (this.reclamos.length > 0) {
+      this.formulario.get('tipoRegistro')?.disable();
+    } else {
+      this.formulario.get('tipoRegistro')?.enable();
+    }
+  }
+
+  claseEstado(estado: string): string {
+    const valor = String(estado || '').toLowerCase();
+    if (valor.includes('abiert')) return 'estado-abierto';
+    if (valor.includes('proceso') || valor.includes('pendient')) return 'estado-proceso';
+    if (valor.includes('cerrad') || valor.includes('resuelt') || valor.includes('finaliz')) return 'estado-cerrado';
+    if (valor.includes('rechaz') || valor.includes('anulad')) return 'estado-rechazado';
+    return 'estado-default';
+  }
+
+  iconoEstado(estado: string): string {
+    const valor = String(estado || '').toLowerCase();
+    if (valor.includes('abiert')) return 'lock_open';
+    if (valor.includes('proceso') || valor.includes('pendient')) return 'hourglass_top';
+    if (valor.includes('cerrad') || valor.includes('resuelt') || valor.includes('finaliz')) return 'check_circle';
+    if (valor.includes('rechaz') || valor.includes('anulad')) return 'cancel';
+    return 'radio_button_checked';
   }
 
   cerrarModal(){
@@ -717,57 +929,54 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
          if (result.isConfirmed) {
 
             const formData = new FormData();
+            formData.append('tipoQueja', this.codigoTipoQueja(this.tipoSeleccionado));
             this.reclamos.forEach((reclamo, index) => {
 
 
-              formData.append(`reclamos[${index}][id]`, reclamo.id);
+              formData.append(`reclamos[${index}][id]`, reclamo.id ?? 0);
               formData.append(`reclamos[${index}][nroCaso]`, reclamo.nroCaso);
-              formData.append(`reclamos[${index}][cliente]`, reclamo.cliente);
+              formData.append(`reclamos[${index}][cliente]`, reclamo.cliente || '');
               //formData.append(`reclamos[${index}][tipoRegistro]`, reclamo.tipoRegistro);
               formData.append(`reclamos[${index}][tipoRegistro]`, reclamo.tipoRegistro  || '');
               formData.append(`reclamos[${index}][unidadNegocio]`, reclamo.unidadNegocio || '');
+              formData.append(`reclamos[${index}][tipoQueja]`, reclamo.tipoQueja || '');
               formData.append(`reclamos[${index}][usuarioRegistro]`, reclamo.usuarioRegistro  || '');
               //formData.append(`reclamos[${index}][responsable]`, reclamo.responsable || '');
               formData.append(`reclamos[${index}][responsable]`, reclamo.responsable || '');
               formData.append(`reclamos[${index}][motivoRegistro]`, reclamo.motivoRegistro || '');
               formData.append(`reclamos[${index}][estadoSolicitud]`, reclamo.estadoSolicitud || 'Abierto');
-              formData.append(`reclamos[${index}][observacion]`, reclamo.observacion);   
-              formData.append(`reclamos[${index}][archivoAdjunto]`, reclamo.archivoAdjunto);
+              formData.append(`reclamos[${index}][observacion]`, reclamo.observacion || '');
+              formData.append(`reclamos[${index}][archivoAdjunto]`, reclamo.archivoAdjunto || '');
               
               /*if (reclamo.archivoAdjunto) {
                 formData.append(`reclamos[${index}][archivoAdjunto]`, this.nuevoReclamo.archivoAdjunto);
               }*/
 
               //CAMPOS NUEVOS
-              formData.append(`reclamos[${index}][cod_Cliente_Tex]`, reclamo.cod_Cliente_Tex);
-              formData.append(`reclamos[${index}][cod_Ordtra]`     , reclamo.cod_Ordtra);
-              formData.append(`reclamos[${index}][cod_Tela]`       , reclamo.cod_Tela);
-              formData.append(`reclamos[${index}][cod_Color]`      , reclamo.cod_Color);
+              formData.append(`reclamos[${index}][cod_Cliente_Tex]`, reclamo.cod_Cliente_Tex || '');
+              formData.append(`reclamos[${index}][cod_Ordtra]`     , reclamo.cod_Ordtra || '');
+              formData.append(`reclamos[${index}][cod_Tela]`       , reclamo.cod_Tela || '');
+              formData.append(`reclamos[${index}][cod_Color]`      , reclamo.cod_Color || '');
               formData.append(`reclamos[${index}][cod_Unidad_Negocio]`, reclamo.cod_Unidad_Negocio || 0);
-              formData.append(`reclamos[${index}][cod_Motivo]`        , reclamo.cod_Motivo);
-              formData.append(`reclamos[${index}][idArea]`        , String(reclamo.idArea));
-              formData.append(`reclamos[${index}][idResponsable]`        , String(reclamo.idResponsable));
+              formData.append(`reclamos[${index}][cod_Motivo]`        , reclamo.cod_Motivo || '');
+              formData.append(`reclamos[${index}][idArea]`        , String(reclamo.idArea ?? 0));
+              formData.append(`reclamos[${index}][idResponsable]`        , String(reclamo.idResponsable ?? 0));
               //Nuevos Campos
-              formData.append(`reclamos[${index}][Cod_TemCli]`        , reclamo.Cod_TemCli);
-              formData.append(`reclamos[${index}][Cod_EstCli]`        , reclamo.Cod_EstCli);
+              formData.append(`reclamos[${index}][Cod_TemCli]`        , reclamo.Cod_TemCli || '');
+              formData.append(`reclamos[${index}][Cod_EstCli]`        , reclamo.Cod_EstCli || '');
               
               //Falta Pasar el Area y responsable asignarle el valor.
 
             });
             this.registroQuejasReclamosService.enviarReclamo(formData).subscribe({
               next: () => {
-                //alert('✅ Todos los reclamos fueron enviados correctamente.');
-               this.toastr.success('Todos los reclamos fueron enviados correctamente.', '', {
-                      timeOut: 2500,
-                    });
-
-                this.reclamos = []; // Limpiar lista si quieres
-                this.dialogRef.close();
-                //this.nuevoReclamo = {};
-                //this.buscar()
-                //this.ActivarFormulario = true;
-
-              },              
+                this.reclamos = [];
+                this.mensajeExito('El caso / reclamo se generó correctamente.', () => this.dialogRef.close());
+              },
+              error: (err) => {
+                console.error('Error al guardar el reclamo:', err);
+                this.mensajeError('Ocurrió un problema al guardar el caso. Intenta nuevamente.');
+              }
             });
 
          }
@@ -779,6 +988,7 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
       const sCodTela: string = String(row.cod_Tela);
       this.reclamos = this.reclamos.filter(item => item.cod_Tela !== sCodTela);
       this.dataSource.data = [...this.reclamos]; // refresca la grilla
+      this.actualizarEstadoTipoRegistro();
   }
   
   limpiar(){
@@ -807,6 +1017,25 @@ export class ModalQuejaReclamoNuevoComponent implements OnInit {
     
     this._glb_temporada = '';
     this._glb_estilo = '';
+
+    //LIMPIA FILTROS DE BUSQUEDA (CLIENTE Y MOTIVO)
+    this.filtroClienteCtrl.setValue('');
+    this.filtroMotivoCtrl.setValue('');
+  }
+
+  limpiarTodo(){
+    this.limpiar();
+
+    //REINICIA LA GRILLA Y ARTICULOS SELECCIONADOS
+    this.reclamos = [];
+    this.dataSource.data = [];
+    this.arrayArticulos = [];
+
+    //REINICIA EL TIPO DE REGISTRO AL VALOR INICIAL
+    this.formulario.get('tipoRegistro')?.setValue('PARTIDA');
+
+    //RE-HABILITA EL TIPO DE REGISTRO (por si quedó bloqueado)
+    this.actualizarEstadoTipoRegistro();
   }
 
   verArchivo(nombreArchivo: string) {
@@ -947,37 +1176,62 @@ construirReclamoEstilo(element: any): ReclamoCliente {
   };
 }
 
+construirReclamoCliente(element: any): ReclamoCliente {
+  return {
+    id: Number(element.id),
+    cliente: String(element.cliente),
+    cod_Ordtra: '',
+    unidadNegocio: '',
+    Cod_TemCli: '',
+    temporada: '',
+    Cod_EstCli: '',
+    estilo: '',
+    tipoRegistro: String(element.tipoRegistro),
+    estadoSolicitud: String(element.estadoSolicitud),
+    responsable: String(element.responsable),
+    motivoRegistro: String(element.motivoRegistro),
+    usuarioRegistro: String(element.usuarioRegistro),
+    observacion: String(element.observacion),
+    cadenaCodOrdtra: '',
+    cod_Tela: '',
+    des_Tela: '',
+    cod_Color: '',
+    des_Color: '',
+    num_Secuencia: 0,
+    cod_Unidad_Negocio: '',
+    des_Unidad_Negocio: '',
+    cod_Cliente_Tex: String(element.cod_Cliente_Tex),
+    cod_Motivo: String(element.cod_Motivo),
+    idArea: Number(element.idArea),
+    idResponsable: Number(element.idResponsable),
+    archivoAdjunto: element.archivoAdjunto,
+    tipoQueja: 'S'
+  };
+}
+
 avanzaEstadoReclamo(sTipo: string, id: Number){
   this.SpinnerService.show();
   this.registroQuejasReclamosService.AvanzaEstadoReclamo(String(sTipo), Number(id)).subscribe({
     next: (response: any) => {
+          this.SpinnerService.hide();
           if(response.success){
             if (response.codeResult == 200){
-              this.toastr.success(response.message, '', {
-                timeOut: 2500,
-              });
-              this.dialogRef.close();
-              //this.buscar()        
-
+              this.mensajeExito(response.message || 'El caso se actualizó correctamente.', () => this.dialogRef.close());
             }else if(response.codeResult == 201){
               this.toastr.info(response.message, '', {
                 timeOut: 2500,
               });
             }
-            this.SpinnerService.hide();
           }else{
-            this.toastr.error(response.message, 'Cerrar', {
-              timeOut: 2500,
-            });
-            this.SpinnerService.hide();
+            this.mensajeError(response.message || 'No se pudo actualizar el caso.');
           }
-
     },
     error: (err) => {
-      console.error('❌ Al intentar cambiar de estado recepcionado:', err);
-      alert('Error ❌ Al intentar cambiar de estado recepcionado.');
+      this.SpinnerService.hide();
+      console.error('Error al intentar cambiar de estado:', err);
+      this.mensajeError('Ocurrió un problema al actualizar el caso. Intenta nuevamente.');
     }
-  }); 
+  });
 }
 
 enviarComercial(){

@@ -1,28 +1,38 @@
-      <!--MODAL PARA LISTAR RESULTADOS DE BUSQUEDA DE LA PARTIDA INICIO -->
-      <h2>Seleccionar partida</h2>
+<div class="psel-card">
 
-      <ul>
-        <li *ngFor="let item of data; let i = index"
-            [class.seleccionado]="item === seleccionado"
-            class="fila">
+  <div class="psel-header">
+    <mat-icon>inventory_2</mat-icon>
+    <span>Seleccionar Artículos de la Partida</span>
+  </div>
 
-            <!-- Checkbox -->
-            <input type="checkbox" 
-                    (change)="toggleSeleccion(item)" 
-                    class="columna-check"
-                    />
+  <div class="psel-subheader">
+    <span *ngIf="seleccionados.length === 0">Marca uno o más artículos para continuar</span>
+    <span *ngIf="seleccionados.length > 0" class="psel-contador">{{ seleccionados.length }} artículo{{ seleccionados.length === 1 ? '' : 's' }} seleccionado{{ seleccionados.length === 1 ? '' : 's' }}</span>
+  </div>
 
-            <span class="columna-info">{{ item.cod_Tela }} - {{ item.des_Tela }} - {{ item.cod_Color }}</span>
-            <span *ngIf="item === seleccionado">✔️</span>
-        </li>
-      </ul>
-
-      <div style="display: flex; gap: 10px;">
-        <button (click)="agregar()">Aceptar</button>
-        <button (click)="cerrar()">Cancelar</button>
+  <div class="psel-lista" *ngIf="data && data.length > 0">
+    <div class="psel-fila" *ngFor="let item of data; let i = index" [class.psel-fila-activa]="item.seleccionado" (click)="toggleSeleccion(item)">
+      <mat-radio-button [checked]="item.seleccionado" (click)="$event.stopPropagation()" (change)="toggleSeleccion(item)" color="primary"></mat-radio-button>
+      <div class="psel-info">
+        <span class="psel-tela">{{ item.cod_Tela }} <span class="psel-tela-desc">- {{ item.des_Tela }}</span></span>
+        <span class="psel-color">Color: <strong>{{ item.cod_Color }}</strong> - {{ item.des_Color }}</span>
       </div>
+      <mat-icon class="psel-check-icono" *ngIf="item.seleccionado">check_circle</mat-icon>
+    </div>
+  </div>
 
+  <div class="psel-vacio" *ngIf="!data || data.length === 0">
+    <mat-icon>search_off</mat-icon>
+    <span>No se encontraron artículos para esta partida</span>
+  </div>
 
+  <div class="psel-acciones">
+    <button mat-stroked-button class="psel-btn-cancelar" (click)="cerrar()">
+      <mat-icon>close</mat-icon> Cancelar
+    </button>
+    <button mat-raised-button class="psel-btn-aceptar" [disabled]="seleccionados.length === 0" (click)="agregar()">
+      <mat-icon>check</mat-icon> Aceptar
+    </button>
+  </div>
 
-
-      <!--MODAL PARA LISTAR RESULTADOS DE BUSQUEDA DE LA PARTIDA FIN -->
+</div>

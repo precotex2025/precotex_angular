@@ -29,13 +29,21 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
+            "allowedCommonJsDependencies": [
+              "canvg",
+              "core-js",
+              "raf",
+              "angular2-text-mask",
+              "rgbcolor",
+              "stackblur-canvas"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets",
               {
                 "glob": "**/*",
                 "input": "node_modules/pdfjs-dist/build",
-                "output": "/pdfjs"                  
+                "output": "/pdfjs"
               }
             ],
             "styles": [
@@ -47,9 +55,7 @@
               "./assets/css/content2.min.css",
               "./assets/css/skin.min.css",
               "src/styles.scss",
-              
               "node_modules/ngx-toastr/toastr.css"
-              
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",

@@ -442,7 +442,7 @@ openVisorPdf(data:TiProcesosTintoreria){
       this.Arraydata = [];
 
       this.SpinnerService.show();
-      this.serviceTiProcesoTintoreria.getObtieneMuestraControlProceso(sPartida1, fecha_start1, fecha_end1).subscribe({
+      this.serviceTiProcesoTintoreria.getObtieneMuestraControlProceso(sPartida1, fecha_start1, fecha_end1, '').subscribe({
         next: (response: any)=> {
           if(response.success){
             if (response.totalElements > 0){
