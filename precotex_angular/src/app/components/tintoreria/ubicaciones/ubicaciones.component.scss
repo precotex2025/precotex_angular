@@ -1,0 +1,304 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.ubicaciones-container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    font-family: corbel, arial;
+    background-color: #f2f4f7;
+}
+
+.ubicaciones-card {
+    box-sizing: border-box;
+    width: 95%;
+    height: 95%;
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.ubicaciones-title {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #37419c, #3f51b5);
+    color: #ffffff;
+    text-align: center;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 0.3px;
+    padding: 18px 16px;
+}
+
+.ubicaciones-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 28px 24px 32px 24px;
+}
+
+.ubicaciones-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.ubicaciones-hero-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #eef1fb, #dfe4fa);
+    box-shadow: 0 8px 20px rgba(63, 81, 181, 0.2);
+    animation: flotar-suave 3.2s ease-in-out infinite;
+}
+
+.ubicaciones-hero-icono mat-icon {
+    font-size: 42px;
+    width: 42px;
+    height: 42px;
+    color: #3f51b5;
+}
+
+.ubicaciones-hero-texto {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #78838f;
+    letter-spacing: 0.2px;
+}
+
+@keyframes flotar-suave {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.ubicaciones-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+}
+
+.tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 14px 6px;
+    background-color: #ffffff;
+    border: 1px solid #e6e9ef;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 2px 6px rgba(30, 42, 90, 0.06);
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.tile:hover {
+    box-shadow: 0 4px 12px rgba(30, 42, 90, 0.12);
+    transform: translateY(-2px);
+}
+
+.tile:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(30, 42, 90, 0.08);
+}
+
+.tile-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.tile-icono mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.tile-texto {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #37474f;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.tile-consulta .tile-icono {
+    background-color: #eef1fb;
+    color: #3f51b5;
+}
+
+.tile-crear .tile-icono {
+    background-color: #e9f6e9;
+    color: #0e740e;
+}
+
+.tile-reubica .tile-icono {
+    background-color: #fdf1e0;
+    color: #e07b00;
+}
+
+@media screen and (min-width: 900px) {
+    .ubicaciones-card {
+        max-width: 480px;
+    }
+
+    .ubicaciones-title {
+        font-size: 20px;
+        padding: 22px 20px;
+    }
+
+    .ubicaciones-body {
+        padding: 36px 32px 40px 32px;
+        gap: 20px;
+    }
+
+    .tile {
+        padding: 18px 8px;
+    }
+
+    .tile-icono {
+        width: 46px;
+        height: 46px;
+    }
+
+    .tile-icono mat-icon {
+        font-size: 22px;
+        width: 22px;
+        height: 22px;
+    }
+
+    .tile-texto {
+        font-size: 12.5px;
+    }
+}
+
+@media screen and (max-width: 599px) {
+    .ubicaciones-container {
+        padding: 10px;
+    }
+
+    .ubicaciones-card {
+        width: 100%;
+        height: 100%;
+    }
+
+    .ubicaciones-title {
+        font-size: 15px;
+        padding: 10px 8px;
+        gap: 6px;
+    }
+
+    .ubicaciones-title mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .ubicaciones-body {
+        gap: 10px;
+        padding: 12px 14px;
+    }
+
+    .ubicaciones-hero {
+        margin-bottom: 4px;
+        gap: 8px;
+    }
+
+    .ubicaciones-hero-icono {
+        width: 60px;
+        height: 60px;
+    }
+
+    .ubicaciones-hero-icono mat-icon {
+        font-size: 30px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .ubicaciones-hero-texto {
+        font-size: 12.5px;
+    }
+
+    .ubicaciones-grid {
+        gap: 8px;
+    }
+
+    .tile {
+        padding: 10px 4px;
+        border-radius: 10px;
+        gap: 4px;
+    }
+
+    .tile-icono {
+        width: 32px;
+        height: 32px;
+    }
+
+    .tile-icono mat-icon {
+        font-size: 17px;
+        width: 17px;
+        height: 17px;
+    }
+
+    .tile-texto {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .ubicaciones-title {
+        font-size: 13px;
+        padding: 8px 6px;
+    }
+
+    .tile {
+        padding: 8px 2px;
+    }
+
+    .tile-icono {
+        width: 28px;
+        height: 28px;
+    }
+
+    .tile-icono mat-icon {
+        font-size: 15px;
+        width: 15px;
+        height: 15px;
+    }
+
+    .tile-texto {
+        font-size: 9px;
+    }
+}

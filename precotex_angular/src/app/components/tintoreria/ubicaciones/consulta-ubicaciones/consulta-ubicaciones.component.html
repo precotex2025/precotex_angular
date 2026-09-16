@@ -1,0 +1,106 @@
+<div class="kardex-container">
+  <div class="kardex-card">
+
+    <div class="kardex-title">
+      <mat-icon>manage_search</mat-icon>
+      <span>Almacén {{Cod_Almacen}} - Consulta de Kárdex</span>
+    </div>
+
+    <div class="kardex-usuario">
+      <span><mat-icon>badge</mat-icon> Operario: <strong>{{operario}}</strong></span>
+      <span><mat-icon>store</mat-icon> Sede Activa: <strong>{{Cod_Almacen}}</strong></span>
+    </div>
+
+    <div class="kardex-body">
+
+      <div class="kardex-paso" [class.paso-completado]="!!resultado">
+        <div class="paso-label">
+          <mat-icon>qr_code_scanner</mat-icon>
+          <span>Escanee paleta o caja</span>
+        </div>
+        <mat-form-field appearance="fill" class="paso-input">
+          <input matInput #inputScan [(ngModel)]="Codigo_Escaneado" placeholder="Escanea o ingresa el código"
+            (keyup.enter)="consultarKardex()" [disabled]="!!resultado">
+        </mat-form-field>
+      </div>
+
+      <div class="kardex-vacio" *ngIf="!resultado">
+        <div class="kardex-vacio-icono">
+          <mat-icon>qr_code_scanner</mat-icon>
+        </div>
+        <span class="kardex-vacio-texto">Esperando escaneo de la paleta o caja...</span>
+        <span class="kardex-vacio-subtexto">Al escanear se mostrará el estado actual y el kárdex de movimientos</span>
+      </div>
+
+      <ng-container *ngIf="resultado">
+
+        <div class="kardex-estado">
+          <div class="estado-header">
+            <mat-icon>inventory_2</mat-icon>
+            <span>Estado Actual (Solo Lectura)</span>
+          </div>
+
+          <div class="estado-grid">
+            <div class="estado-item">
+              <span class="estado-label">Tipo</span>
+              <span class="estado-valor">{{resultado.cabecera.tipo_Elemento}}</span>
+            </div>
+            <div class="estado-item">
+              <span class="estado-label">Código</span>
+              <span class="estado-valor">{{resultado.cabecera.identificador}}</span>
+            </div>
+            <div class="estado-item">
+              <span class="estado-label">Ubicación</span>
+              <span class="estado-valor">{{resultado.cabecera.ubicacion_Fisica}}</span>
+            </div>
+            <div class="estado-item">
+              <span class="estado-label">Estado</span>
+              <span class="estado-valor">{{resultado.cabecera.estado_Actual}}</span>
+            </div>
+            <div class="estado-item estado-item-full">
+              <span class="estado-label">Contenido</span>
+              <span class="estado-valor">{{resultado.cabecera.cantidad_Actual}} / {{resultado.cabecera.capacidad}} bultos activos</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kardex-movimientos">
+          <div class="movimientos-header">
+            <mat-icon>history</mat-icon>
+            <span>Últimos Movimientos (Kárdex PDA)</span>
+          </div>
+
+          <div class="movimiento-item" *ngFor="let mov of resultado.movimientos; let i = index">
+            <div class="movimiento-indice">{{i + 1}}</div>
+            <div class="movimiento-detalle">
+              <div class="movimiento-linea1">
+                <span class="movimiento-fecha">{{mov.fecha_Hora | date:'dd/MM HH:mm'}}</span>
+                <span class="movimiento-tipo">{{etiquetaOperacion(mov.tipo_Operacion)}}</span>
+              </div>
+              <div class="movimiento-linea2">
+                <span *ngIf="mov.origen">Origen: <strong>{{mov.origen}}</strong></span>
+                <span *ngIf="mov.destino">Destino: <strong>{{mov.destino}}</strong></span>
+                <span>Por: <strong>{{mov.operario?.trim()}}</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="movimientos-vacio" *ngIf="!resultado.movimientos?.length">
+            Sin movimientos registrados
+          </div>
+        </div>
+
+        <button mat-flat-button color="primary" class="boton-nueva-consulta" (click)="nuevaConsulta()">
+          NUEVA CONSULTA
+        </button>
+
+      </ng-container>
+
+    </div>
+
+  </div>
+</div>
+
+<button class="boton-flotante-volver" (click)="volverAUbicaciones()" matTooltip="Volver a Ubicaciones">
+  <mat-icon>arrow_back</mat-icon>
+</button>

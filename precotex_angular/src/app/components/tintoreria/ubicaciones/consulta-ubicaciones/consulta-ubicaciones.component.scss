@@ -1,0 +1,360 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.kardex-container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 16px;
+    font-family: corbel, arial;
+    background-color: #f2f4f7;
+}
+
+.kardex-card {
+    box-sizing: border-box;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(30, 42, 90, 0.12);
+    overflow: auto;
+}
+
+.kardex-title {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #37419c, #3f51b5);
+    color: #ffffff;
+    text-align: center;
+    font-weight: 600;
+    font-size: 17px;
+    letter-spacing: 0.3px;
+    padding: 16px;
+}
+
+.kardex-usuario {
+    flex: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 20px;
+    background-color: #eef1fb;
+    color: #37474f;
+    font-size: 13.5px;
+    border-bottom: 1px solid #e6e9ef;
+}
+
+.kardex-usuario span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.kardex-usuario mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #3f51b5;
+}
+
+.kardex-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 20px;
+}
+
+.kardex-paso {
+    background-color: #f7f9ff;
+    border: 1px solid #dde3f7;
+    border-left: 4px solid #3f51b5;
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+
+.paso-completado {
+    border-left-color: #0e740e;
+    background-color: #f4faf4;
+}
+
+.paso-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #37474f;
+    margin-bottom: 8px;
+}
+
+.paso-label mat-icon {
+    color: #3f51b5;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.paso-input {
+    width: 100%;
+}
+
+.paso-input input {
+    font-size: 16px;
+    letter-spacing: 0.5px;
+}
+
+.kardex-vacio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 28px 16px;
+    text-align: center;
+    background: repeating-linear-gradient(135deg, #fafbff, #fafbff 10px, #f4f6fc 10px, #f4f6fc 20px);
+    border: 1px dashed #c5cae9;
+    border-radius: 10px;
+}
+
+.kardex-vacio-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background-color: #eef1fb;
+    color: #3f51b5;
+    animation: pulso-suave 1.8s ease-in-out infinite;
+}
+
+.kardex-vacio-icono mat-icon {
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+}
+
+.kardex-vacio-texto {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #37474f;
+}
+
+.kardex-vacio-subtexto {
+    font-size: 11.5px;
+    color: #90a0b0;
+}
+
+@keyframes pulso-suave {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(63, 81, 181, 0.25);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(63, 81, 181, 0);
+    }
+}
+
+.kardex-estado {
+    background-color: #f4f7ff;
+    border: 1px solid #c5cae9;
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+
+.estado-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 12px;
+    color: #3f51b5;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+}
+
+.estado-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 12px;
+}
+
+.estado-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #e0e5f5;
+}
+
+.estado-item-full {
+    grid-column: 1 / -1;
+}
+
+.estado-label {
+    font-size: 10.5px;
+    color: #78838f;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+}
+
+.estado-valor {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #263238;
+}
+
+.kardex-movimientos {
+    background-color: #ffffff;
+    border: 1px solid #e6e9ef;
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+
+.movimientos-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 12px;
+    color: #37474f;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+}
+
+.movimiento-item {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #eef1fb;
+}
+
+.movimiento-item:last-child {
+    border-bottom: none;
+}
+
+.movimiento-indice {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #37419c, #3f51b5);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+.movimiento-detalle {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.movimiento-linea1 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #263238;
+}
+
+.movimiento-tipo {
+    color: #3f51b5;
+}
+
+.movimiento-linea2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 11.5px;
+    color: #78838f;
+}
+
+.movimientos-vacio {
+    padding: 12px 0;
+    text-align: center;
+    font-size: 12px;
+    color: #90a0b0;
+}
+
+.boton-nueva-consulta {
+    width: 100%;
+    height: 44px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.boton-flotante-volver {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background-color: #3f51b5;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+@media screen and (max-width: 599px) {
+    .kardex-container {
+        padding: 8px;
+    }
+
+    .kardex-title {
+        font-size: 15px;
+        padding: 10px;
+    }
+
+    .kardex-usuario {
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .kardex-body {
+        padding: 12px;
+        gap: 14px;
+    }
+
+    .estado-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .movimiento-linea2 {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .boton-flotante-volver {
+        width: 44px;
+        height: 44px;
+        bottom: 14px;
+        right: 14px;
+    }
+}

@@ -434,6 +434,11 @@ import { DigitalizacionFichasComponent } from './components/digitalizacion-ficha
 import { DialogVisorFichasComponent } from './components/digitalizacion-fichas/dialog-visor-fichas/dialog-visor-fichas.component';
 import { SafeUrlPipe } from './pipes/safe-url.pipe';
 import { CapacidadesComponent } from './components/tintoreria/capacidades.component';
+import { UbicacionesComponent } from './components/tintoreria/ubicaciones/ubicaciones.component';
+import { ConsultaUbicacionesComponent } from './components/tintoreria/ubicaciones/consulta-ubicaciones/consulta-ubicaciones.component';
+import { CrearAgrupamientoComponent } from './components/tintoreria/ubicaciones/crear-agrupamiento/crear-agrupamiento.component';
+import { ReubicaUbicaGrupoComponent } from './components/tintoreria/ubicaciones/reubica-ubica-grupo/reubica-ubica-grupo.component';
+import { DetalleAgrupamientoComponent } from './components/tintoreria/ubicaciones/detalle-agrupamiento/detalle-agrupamiento.component';
 import { DialogAddCapacidadesComponent } from './components/tintoreria/dialog-capacidades/dialog-add-capacidades.component';
 import { AuditoriaModuloAcabadoComponent } from './components/auditoria-calidad/auditoria-modulo-acabado/auditoria-modulo-acabado.component';
 import { DialogCabeceraModuloAcabadoComponent } from './components/auditoria-calidad/auditoria-modulo-acabado/dialog-cabecera-modulo-acabado/dialog-cabecera-modulo-acabado.component';
@@ -1020,6 +1025,11 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     DialogAddProdTejeRectilineoComponent,
     CapacidadesComponent,
     DialogAddCapacidadesComponent,
+    UbicacionesComponent,
+    ConsultaUbicacionesComponent,
+    CrearAgrupamientoComponent,
+    ReubicaUbicaGrupoComponent,
+    DetalleAgrupamientoComponent,
     AuditoriaModuloAcabadoComponent,
     DialogCabeceraModuloAcabadoComponent,
     DialogDetalleModuloAcabadoComponent,

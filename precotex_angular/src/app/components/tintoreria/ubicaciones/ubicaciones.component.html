@@ -1,0 +1,38 @@
+<div class="ubicaciones-container">
+  <div class="ubicaciones-card">
+
+    <div class="ubicaciones-title">
+      <mat-icon>place</mat-icon>
+      <span>Agrupamiento/Ubicaciones Q2</span>
+    </div>
+
+    <div class="ubicaciones-body">
+
+      <div class="ubicaciones-hero">
+        <div class="ubicaciones-hero-icono">
+          <mat-icon>inventory_2</mat-icon>
+        </div>
+        <span class="ubicaciones-hero-texto">¿Qué deseas hacer hoy?</span>
+      </div>
+
+      <div class="ubicaciones-grid">
+        <button class="tile tile-consulta" (click)="irConsultaUbicaciones()">
+          <span class="tile-icono"><mat-icon>search</mat-icon></span>
+          <span class="tile-texto">Consultar</span>
+        </button>
+
+        <button class="tile tile-crear" (click)="irCrearAgrupamiento()">
+          <span class="tile-icono"><mat-icon>add_box</mat-icon></span>
+          <span class="tile-texto">Crear Grupo</span>
+        </button>
+
+        <button class="tile tile-reubica" (click)="irReubicaUbicaGrupo()">
+          <span class="tile-icono"><mat-icon>sync_alt</mat-icon></span>
+          <span class="tile-texto">Reubicar</span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
