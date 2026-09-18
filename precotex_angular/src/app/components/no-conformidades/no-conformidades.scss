@@ -617,6 +617,19 @@
    SECCIÓN 9 — TARJETAS DE ARTÍCULO EN WIZARD (Paso 1)
    ============================================================ */
 
+  .btn-seleccionar-todos {
+    border-color: #1568D6 !important;
+    color: #1568D6 !important;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+    background-color: #f8faff;
+
+    &:hover {
+      background-color: #1568D6 !important;
+      color: #ffffff !important;
+    }
+  }
+
   .nc-article-card {
     border: 1.5px solid #e2e8f0;
     border-radius: 10px;
@@ -1733,6 +1746,15 @@
   &:hover {
     border-color: #1568D6;
     background: #f8fafc;
+  }
+
+  &.is-selected {
+    border-color: #93c5fd;
+    background: #eff6ff;
+
+    .nc-edit-art-chk {
+      color: #1568D6;
+    }
   }
 
   .nc-edit-art-chk {

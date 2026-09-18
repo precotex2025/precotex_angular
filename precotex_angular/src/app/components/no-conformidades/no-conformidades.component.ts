@@ -861,7 +861,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         const articulosRaw = resp?.articulos || (Array.isArray(resp) ? resp : []);
         if (Array.isArray(articulosRaw) && articulosRaw.length > 0) {
           this.draft!.articulosDisponibles = articulosRaw.map((a: any, idx: number) => ({
-            id: a.Num_Secuencia || a.num_Secuencia || (idx + 1),
+            id: a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1))),
             tipo: (a.Talla || a.talla || '').trim() && (a.Talla || a.talla || '').trim() !== '-' ? 'Complemento' : 'Cuerpo',
             nombre: (a.Tela || a.tela || a.CodTela || `Artículo ${idx + 1}`).trim(),
             codTela: (a.CodTela || a.codTela || '').trim(),
@@ -915,11 +915,38 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     if (!this.draft) return;
     const cur = this.draft.seleccion[idx] || { checked: false, cantidad: '', open: true, defectos: [] };
     cur.checked = !cur.checked;
-    cur.open = true;
+    cur.open = cur.checked;
     if (cur.checked && !cur.defectos) {
       cur.defectos = [];
     }
     this.draft.seleccion[idx] = cur;
+  }
+
+  sonTodosArticulosSeleccionados(): boolean {
+    if (!this.draft || !this.draft.articulosDisponibles || this.draft.articulosDisponibles.length === 0) {
+      return false;
+    }
+    return this.draft.articulosDisponibles.every((_, idx) => this.draft!.seleccion[idx]?.checked);
+  }
+
+  toggleTodosArticulos(): void {
+    if (!this.draft || !this.draft.articulosDisponibles || this.draft.articulosDisponibles.length === 0) {
+      return;
+    }
+    const nuevoEstado = !this.sonTodosArticulosSeleccionados();
+    this.draft.articulosDisponibles.forEach((_, idx) => {
+      const cur = this.draft!.seleccion[idx] || { checked: false, cantidad: '', open: true, defectos: [] };
+      cur.checked = nuevoEstado;
+      cur.open = nuevoEstado;
+      if (nuevoEstado && !cur.defectos) {
+        cur.defectos = [];
+      }
+      this.draft!.seleccion[idx] = cur;
+    });
+
+    if (nuevoEstado && this.errors['articulos']) {
+      delete this.errors['articulos'];
+    }
   }
 
   toggleArticuloOpen(idx: number): void {
@@ -991,9 +1018,39 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
   }
 
   // Wizard Paso 2: Grupo de defectos
+  getArticulosChequeadosPaso1(): number {
+    if (!this.draft || !this.draft.articulosDisponibles) return 0;
+    return this.draft.articulosDisponibles.filter((_, i) => !!this.draft!.seleccion[i]?.checked).length;
+  }
+
+  sonTodosGrupoArticulosSeleccionados(): boolean {
+    if (!this.draft || !this.draft.articulosDisponibles) return false;
+    const checkedIndices = this.draft.articulosDisponibles
+      .map((_, i) => i)
+      .filter(i => !!this.draft!.seleccion[i]?.checked);
+    if (checkedIndices.length === 0) return false;
+    return checkedIndices.every(i => !!this.draft!.grupoDefecto.seleccion[i]);
+  }
+
+  toggleTodosGrupoArticulos(): void {
+    if (!this.draft || !this.draft.articulosDisponibles) return;
+    const nuevoEstado = !this.sonTodosGrupoArticulosSeleccionados();
+    this.draft.articulosDisponibles.forEach((_, i) => {
+      if (this.draft!.seleccion[i]?.checked) {
+        this.draft!.grupoDefecto.seleccion[i] = nuevoEstado;
+      }
+    });
+    if (nuevoEstado && this.draft.grupoDefecto.errors['seleccion']) {
+      delete this.draft.grupoDefecto.errors['seleccion'];
+    }
+  }
+
   toggleGrupoArticulo(idx: number): void {
     if (!this.draft) return;
     this.draft.grupoDefecto.seleccion[idx] = !this.draft.grupoDefecto.seleccion[idx];
+    if (this.draft.grupoDefecto.seleccion[idx] && this.draft.grupoDefecto.errors['seleccion']) {
+      delete this.draft.grupoDefecto.errors['seleccion'];
+    }
   }
 
   onGrupoMotivoChange(val: string): void {
@@ -1130,6 +1187,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
 
         // Agregar el nuevo defecto a la lista del artículo
         sel.defectos.push(nuevoDefecto);
+        sel.checked = true;
+        sel.open = true;
       }
     });
 
@@ -1377,15 +1436,76 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
 
   solicitarMotivoEdicion(): void {
     if (!this.draft) return;
-    const articulos = this.getArticulosResumenDraft();
-    if (articulos.length === 0) {
+
+    // Obtener los artículos seleccionados / afectados
+    const artsAfectados: { a: any, sel: any, idx: number }[] = [];
+    Object.keys(this.draft.seleccion).forEach(k => {
+      const idx = Number(k);
+      const a = this.draft!.articulosDisponibles[idx];
+      const sel = this.draft!.seleccion[idx];
+      if (a && sel && (sel.checked || (Number(sel.cantidad) > 0) || (sel.defectos && sel.defectos.length > 0))) {
+        artsAfectados.push({ a, sel, idx });
+      }
+    });
+
+    if (artsAfectados.length === 0) {
       Swal.fire({
         icon: 'warning',
         title: 'Atención',
-        text: 'Indique la cantidad afectada y defectos para al menos un artículo.'
+        text: 'Seleccione al menos un artículo e indique la cantidad afectada y sus motivos de rechazo.'
       });
       return;
     }
+
+    // Validar que cada artículo afectado tenga cantidad > 0 y defectos válidos
+    for (const item of artsAfectados) {
+      const cant = Number(item.sel.cantidad);
+      const maxRollos = Number(item.a.rollos) || 0;
+      if (isNaN(cant) || cant <= 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Cantidad requerida',
+          text: `Debe ingresar una cantidad afectada mayor a 0 para el artículo: "${item.a.nombre}".`
+        });
+        item.sel.checked = true;
+        item.sel.open = true;
+        return;
+      }
+      if (maxRollos > 0 && cant > maxRollos) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Cantidad excedida',
+          text: `La cantidad afectada (${cant}) no puede superar los rollos disponibles (${maxRollos}) para el artículo: "${item.a.nombre}".`
+        });
+        item.sel.checked = true;
+        item.sel.open = true;
+        return;
+      }
+      if (!item.sel.defectos || item.sel.defectos.length === 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Defecto requerido',
+          text: `Debe asignar al menos un motivo de rechazo y área responsable para el artículo: "${item.a.nombre}".`
+        });
+        item.sel.checked = true;
+        item.sel.open = true;
+        return;
+      }
+      const tieneDefInvalido = item.sel.defectos.some((d: DefectoItem) => 
+        (!d.motivo && !d.isOtro) || (d.isOtro && !d.descripcionOtro?.trim()) || !d.area?.trim()
+      );
+      if (tieneDefInvalido) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Defecto incompleto',
+          text: `Complete el motivo y área responsable en todos los defectos del artículo: "${item.a.nombre}".`
+        });
+        item.sel.checked = true;
+        item.sel.open = true;
+        return;
+      }
+    }
+
     this.motivoEdicionModal = {
       open: true,
       motivo: '',
@@ -1485,12 +1605,19 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       motivo_Edicion: motivoFinal,
       detalle_Cambios: detalleCambios,
       articulos: Object.keys(this.draft.seleccion)
-        .filter(k => this.draft!.seleccion[Number(k)].checked)
+        .filter(k => {
+          const sel = this.draft!.seleccion[Number(k)];
+          return sel && (sel.checked || (Number(sel.cantidad) > 0) || (sel.defectos && sel.defectos.length > 0));
+        })
+        .filter(k => {
+          const sel = this.draft!.seleccion[Number(k)];
+          return (Number(sel.cantidad) || 0) > 0;
+        })
         .map(k => {
           const idx = Number(k);
           const a = this.draft!.articulosDisponibles[idx];
           const sel = this.draft!.seleccion[idx];
-          const itemSec = a.id ? String(a.id) : String(idx + 1);
+          const itemSec = (a.id !== undefined && a.id !== null) ? String(a.id) : String(idx + 1);
           const cantRech = Number(sel.cantidad) || 0;
           const rollosAsig = Number(a.rollos) || 0;
           const kgsVal = parseFloat(a.kgCrudo) || 0;
@@ -1619,7 +1746,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
           const idx = Number(k);
           const a = this.draft!.articulosDisponibles[idx];
           const sel = this.draft!.seleccion[idx];
-          const itemSec = a.id ? String(a.id) : String(idx + 1);
+          const itemSec = (a.id !== undefined && a.id !== null) ? String(a.id) : String(idx + 1);
           const cantRech = Number(sel.cantidad) || 0;
           const rollosAsig = Number(a.rollos) || 0;
           const kgsVal = parseFloat(a.kgCrudo) || 0;
@@ -1723,10 +1850,10 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       if (rech !== null && !isNaN(rech)) {
         return rech > 0;
       }
-      const sec = a.Num_Secuencia || a.num_Secuencia || a.Item;
+      const sec = a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : a.Item);
       const aCodTela = (a.CodTela || a.codTela || '').trim().toUpperCase();
       const hasDef = (motivosRaw || []).some((m: any) => {
-        const mSec = m.Num_Secuencia || m.num_Secuencia || m.Item;
+        const mSec = m.Num_Secuencia !== undefined && m.Num_Secuencia !== null ? Number(m.Num_Secuencia) : (m.num_Secuencia !== undefined && m.num_Secuencia !== null ? Number(m.num_Secuencia) : m.Item);
         if (mSec !== undefined && mSec !== null && mSec !== '') {
           return String(mSec) === String(sec);
         }
@@ -1739,11 +1866,11 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     const listaAProcesar = itemsAfectados.length > 0 ? itemsAfectados : articulosRaw;
 
     return listaAProcesar.map((a: any, idx: number) => {
-      const sec = a.Num_Secuencia || a.num_Secuencia || a.Item || (idx + 1);
+      const sec = a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1)));
       const aCodTela = (a.CodTela || a.codTela || '').trim().toUpperCase();
 
       const defs = (motivosRaw || []).filter((m: any) => {
-        const mSec = m.Num_Secuencia || m.num_Secuencia || m.Item;
+        const mSec = m.Num_Secuencia !== undefined && m.Num_Secuencia !== null ? Number(m.Num_Secuencia) : (m.num_Secuencia !== undefined && m.num_Secuencia !== null ? Number(m.num_Secuencia) : m.Item);
         if (mSec !== undefined && mSec !== null && mSec !== '') {
           return String(mSec) === String(sec);
         }
@@ -1837,7 +1964,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
           const articulosPartidaRaw = res?.articulos || (Array.isArray(res) ? res : []);
           if (Array.isArray(articulosPartidaRaw) && articulosPartidaRaw.length > 0) {
             nc.articulosPartida = articulosPartidaRaw.map((a: any, idx: number) => ({
-              id: a.Num_Secuencia || a.num_Secuencia || (idx + 1),
+              id: a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1))),
               tipo: (a.Talla || a.talla || '').trim() && (a.Talla || a.talla || '').trim() !== '-' ? 'Complemento' : 'Cuerpo',
               nombre: (a.Tela || a.tela || a.CodTela || `Artículo ${idx + 1}`).trim(),
               codTela: (a.CodTela || a.codTela || '').trim(),
@@ -1933,7 +2060,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
             const articulosPartidaRaw = partida?.articulos || (Array.isArray(partida) ? partida : []);
             if (Array.isArray(articulosPartidaRaw) && articulosPartidaRaw.length > 0) {
               nc.articulosPartida = articulosPartidaRaw.map((a: any, idx: number) => ({
-                id: a.Num_Secuencia || a.num_Secuencia || (idx + 1),
+                id: a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1))),
                 tipo: (a.Talla || a.talla || '').trim() && (a.Talla || a.talla || '').trim() !== '-' ? 'Complemento' : 'Cuerpo',
                 nombre: (a.Tela || a.tela || a.CodTela || `Artículo ${idx + 1}`).trim(),
                 codTela: (a.CodTela || a.codTela || '').trim(),

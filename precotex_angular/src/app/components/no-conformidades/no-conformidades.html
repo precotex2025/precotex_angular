@@ -222,9 +222,18 @@
     <!-- Artículos disponibles -->
     <mat-card *ngIf="draft.articulosDisponibles.length" style="margin-bottom: 12px;">
       <mat-card-content>
-        <p style="font-size: 13px; color: #374151; margin: 0 0 12px;">
-          Marque el/los artículos e indique la cantidad afectada. <span style="color: red;">*</span>
-        </p>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin: 0 0 12px;">
+          <p style="font-size: 13px; color: #374151; margin: 0;">
+            Marque el/los artículos e indique la cantidad afectada. <span style="color: red;">*</span>
+          </p>
+          <button type="button" mat-stroked-button color="primary" class="btn-seleccionar-todos" (click)="toggleTodosArticulos()"
+            style="font-size: 12.5px; height: 32px; line-height: 32px; padding: 0 12px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px;">
+            <mat-icon style="font-size: 18px; width: 18px; height: 18px; line-height: 18px;">
+              {{ sonTodosArticulosSeleccionados() ? 'check_box' : 'select_all' }}
+            </mat-icon>
+            <span>{{ sonTodosArticulosSeleccionados() ? 'Deseleccionar todos' : 'Seleccionar todos' }}</span>
+          </button>
+        </div>
         <div class="field-error-msg" *ngIf="errors['articulos']">{{ errors['articulos'] }}</div>
 
         <div class="nc-article-card" *ngFor="let a of draft.articulosDisponibles; let i = index"
@@ -295,9 +304,19 @@
           <mat-icon style="font-size: 18px; width: 18px; height: 18px; color: #1568D6;">group_work</mat-icon>
           Asignación Defecto
         </p>
-        <p style="font-size: 12.5px; color: #6b7280; margin: 0 0 12px;">
-          Seleccione los artículos<span style="color: red;">*</span>:
-        </p>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin: 0 0 10px;">
+          <p style="font-size: 12.5px; color: #6b7280; margin: 0;">
+            Seleccione los artículos<span style="color: red;">*</span>:
+          </p>
+          <button *ngIf="getArticulosChequeadosPaso1() > 1" type="button" mat-stroked-button color="primary" class="btn-seleccionar-todos"
+            (click)="toggleTodosGrupoArticulos()"
+            style="font-size: 12px; height: 30px; line-height: 30px; padding: 0 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
+            <mat-icon style="font-size: 16px; width: 16px; height: 16px; line-height: 16px;">
+              {{ sonTodosGrupoArticulosSeleccionados() ? 'check_box' : 'select_all' }}
+            </mat-icon>
+            <span>{{ sonTodosGrupoArticulosSeleccionados() ? 'Deseleccionar todos' : 'Seleccionar todos' }}</span>
+          </button>
+        </div>
 
         <div class="nc-group-checks">
           <ng-container *ngFor="let a of draft.articulosDisponibles; let i = index">
@@ -562,36 +581,58 @@
     <!-- Card 2: Artículos afectados -->
     <mat-card class="nc-edit-card" style="margin-bottom: 16px;">
       <mat-card-content>
-        <p style="font-weight: 800; font-size: 15px; margin: 0 0 2px; color: #0f172a;">
-          Artículos afectados ({{ draft.articulosDisponibles.length }})
-        </p>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin: 0 0 10px;">
+          <p style="font-weight: 800; font-size: 15px; margin: 0; color: #0f172a;">
+            Artículos afectados ({{ draft.articulosDisponibles.length }})
+          </p>
+          <button type="button" mat-stroked-button color="primary" (click)="toggleTodosArticulos()"
+            style="font-size: 12.5px; height: 30px; line-height: 30px; padding: 0 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
+            <mat-icon style="font-size: 17px; width: 17px; height: 17px; line-height: 17px;">
+              {{ sonTodosArticulosSeleccionados() ? 'check_box' : 'select_all' }}
+            </mat-icon>
+            <span>{{ sonTodosArticulosSeleccionados() ? 'Deseleccionar todos' : 'Seleccionar todos' }}</span>
+          </button>
+        </div>
 
         <div *ngFor="let a of draft.articulosDisponibles; let i = index" style="margin-bottom: 12px;">
           <!-- ESTADO 1: No marcado para editar (Tarjeta colapsada blanca) -->
-          <div *ngIf="!draft.seleccion[i]?.checked" class="nc-edit-art-collapsed">
-            <div class="nc-edit-art-chk" (click)="toggleArticulo(i)">
+          <div *ngIf="!draft.seleccion[i]?.checked" class="nc-edit-art-collapsed" (click)="toggleArticulo(i)">
+            <div class="nc-edit-art-chk">
               <mat-icon>check_box_outline_blank</mat-icon>
             </div>
-            <div class="nc-edit-art-info" (click)="toggleArticulo(i)" style="cursor: pointer;">
+            <div class="nc-edit-art-info">
               <span class="nc-edit-art-title">{{ a.nombre }}</span>
-              <span class="nc-edit-art-sub">
-                {{ draft.seleccion[i]?.cantidad || 0 }} rollo(s) afectado(s) · {{ draft.seleccion[i]?.defectos?.length
-                || 0 }} defecto(s) — <span style="color: #64748b;">sin cambios</span>
-              </span>
+              <span class="nc-edit-art-sub">No seleccionado para esta No Conformidad</span>
             </div>
-            <mat-icon style="color: #94a3b8; cursor: pointer;" (click)="toggleArticulo(i)">chevron_right</mat-icon>
+            <mat-icon style="color: #94a3b8;">chevron_right</mat-icon>
             <mat-icon *ngIf="draft.articulosDisponibles.length > 1" style="color: #dc2626; cursor: pointer; margin-left: 4px;" matTooltip="Eliminar artículo"
               (click)="$event.stopPropagation(); removeArticuloEdicion(i)">delete</mat-icon>
           </div>
 
-          <!-- ESTADO 2: Marcado para editar (Tarjeta azul expansible activa) -->
-          <div *ngIf="draft.seleccion[i]?.checked" class="nc-edit-art-expanded">
+          <!-- ESTADO 2: Seleccionado pero colapsado (Tarjeta azul suave con resumen) -->
+          <div *ngIf="draft.seleccion[i]?.checked && !draft.seleccion[i]?.open" class="nc-edit-art-collapsed is-selected" (click)="toggleArticuloOpen(i)">
+            <div class="nc-edit-art-chk" (click)="$event.stopPropagation(); toggleArticulo(i)">
+              <mat-icon style="color: #1568D6;">check_box</mat-icon>
+            </div>
+            <div class="nc-edit-art-info">
+              <span class="nc-edit-art-title" style="color: #1568D6;">{{ a.nombre }}</span>
+              <span class="nc-edit-art-sub" style="color: #1e40af; font-weight: 500;">
+                {{ draft.seleccion[i]?.cantidad || 0 }} rollo(s) afectado(s) de {{ a.rollos }} · {{ draft.seleccion[i]?.defectos?.length || 0 }} defecto(s)
+              </span>
+            </div>
+            <mat-icon style="color: #1568D6;">expand_more</mat-icon>
+            <mat-icon *ngIf="draft.articulosDisponibles.length > 1" style="color: #dc2626; cursor: pointer; margin-left: 4px;" matTooltip="Eliminar artículo"
+              (click)="$event.stopPropagation(); removeArticuloEdicion(i)">delete</mat-icon>
+          </div>
+
+          <!-- ESTADO 3: Seleccionado y abierto para editar (Tarjeta azul expansible activa) -->
+          <div *ngIf="draft.seleccion[i]?.checked && draft.seleccion[i]?.open" class="nc-edit-art-expanded">
             <div class="nc-edit-art-exp-header">
-              <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px; cursor: pointer;" (click)="toggleArticulo(i)">
                 <mat-icon style="color: #1568D6;">check_box</mat-icon>
                 <span class="nc-edit-art-title" style="color: #1568D6;">{{ a.nombre }}</span>
               </div>
-              <span class="nc-link-action" (click)="toggleArticulo(i)">Listo, no editar</span>
+              <span class="nc-link-action" (click)="toggleArticuloOpen(i)">Listo, colapsar</span>
             </div>
 
             <div class="nc-edit-art-sublink" style="margin-bottom: 10px;">
