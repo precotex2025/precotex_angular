@@ -1880,3 +1880,17 @@
     text-decoration: underline;
   }
 }
+
+::ng-deep .nc-motivo-option {
+  height: auto !important;
+  min-height: 38px !important;
+  line-height: 1.35 !important;
+  padding: 8px 14px !important;
+  white-space: normal !important;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 12.5px !important;
+
+  &:hover {
+    background-color: #eff6ff !important;
+  }
+}

@@ -330,16 +330,46 @@
         <div class="field-error-msg" *ngIf="draft.grupoDefecto.errors['seleccion']">{{
           draft.grupoDefecto.errors['seleccion'] }}</div>
 
-        <!-- Motivo de rechazo -->
+        <!-- Motivo de rechazo con autocompletado y búsqueda al escribir -->
         <mat-form-field appearance="outline" style="width: 100%; margin-top: 8px;"
           [ngClass]="{'mat-form-field-invalid': draft.grupoDefecto.errors['motivo']}">
           <mat-label>Motivo de Rechazo *</mat-label>
-          <mat-select [ngModel]="draft.grupoDefecto.isOtro ? DEFECTO_NUEVO : draft.grupoDefecto.motivo"
-            (ngModelChange)="onGrupoMotivoChange($event)">
-            <mat-option value="">Seleccione motivo...</mat-option>
-            <mat-option *ngFor="let m of MOTIVOS" [value]="m">{{ m }}</mat-option>
-            <mat-option [value]="DEFECTO_NUEVO">🆕 {{ DEFECTO_NUEVO }}</mat-option>
-          </mat-select>
+          <input matInput
+            type="text"
+            #triggerGrupoMotivo="matAutocompleteTrigger"
+            [matAutocomplete]="autoGrupoMotivo"
+            [(ngModel)]="filtroGrupoMotivo"
+            (ngModelChange)="onGrupoMotivoInput($event)"
+            (focus)="onGrupoMotivoFocus(triggerGrupoMotivo)"
+            (click)="onGrupoMotivoFocus(triggerGrupoMotivo)"
+            placeholder="Escriba para buscar o seleccione..."
+            autocomplete="off" />
+          
+          <button *ngIf="filtroGrupoMotivo" mat-icon-button matSuffix type="button"
+            (click)="limpiarGrupoMotivo($event, triggerGrupoMotivo)"
+            title="Limpiar motivo"
+            style="width: 24px; height: 24px; line-height: 24px;">
+            <mat-icon style="font-size: 16px; width: 16px; height: 16px; line-height: 16px;">close</mat-icon>
+          </button>
+          <button mat-icon-button matSuffix type="button"
+            (click)="toggleGrupoMotivoPanel(triggerGrupoMotivo, $event)"
+            title="Mostrar lista de motivos"
+            style="width: 24px; height: 24px; line-height: 24px; color: #64748b;">
+            <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">arrow_drop_down</mat-icon>
+          </button>
+
+          <mat-autocomplete #autoGrupoMotivo="matAutocomplete"
+            (optionSelected)="onGrupoMotivoSelected($event.option.value)">
+            <mat-option [value]="DEFECTO_NUEVO" class="nc-motivo-option" style="color: #1568D6; font-weight: 700; border-bottom: 1px solid #e2e8f0;">
+              🆕 {{ DEFECTO_NUEVO }}
+            </mat-option>
+            <mat-option *ngFor="let m of motivosFiltradosGrupo" [value]="m" class="nc-motivo-option">
+              {{ m }}
+            </mat-option>
+            <mat-option *ngIf="motivosFiltradosGrupo.length === 0" disabled style="font-size: 12px; color: #94a3b8; font-style: italic;">
+              No se encontraron motivos coincidentes
+            </mat-option>
+          </mat-autocomplete>
           <mat-error *ngIf="draft.grupoDefecto.errors['motivo']">{{ draft.grupoDefecto.errors['motivo'] }}</mat-error>
         </mat-form-field>
 
@@ -998,10 +1028,39 @@
         <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 8px;"
           [ngClass]="{'mat-form-field-invalid': grabarMotivo.errors['motivo']}">
           <mat-label>Motivo de rechazo *</mat-label>
-          <mat-select [(ngModel)]="grabarMotivo.motivo">
-            <mat-option value="">Seleccione motivo...</mat-option>
-            <mat-option *ngFor="let m of MOTIVOS" [value]="m">{{ m }}</mat-option>
-          </mat-select>
+          <input matInput
+            type="text"
+            #triggerGrabarMotivo="matAutocompleteTrigger"
+            [matAutocomplete]="autoGrabarMotivo"
+            [(ngModel)]="filtroGrabarMotivo"
+            (ngModelChange)="onGrabarMotivoInput($event)"
+            (focus)="onGrabarMotivoFocus(triggerGrabarMotivo)"
+            (click)="onGrabarMotivoFocus(triggerGrabarMotivo)"
+            placeholder="Escriba para buscar o seleccione..."
+            autocomplete="off" />
+
+          <button *ngIf="filtroGrabarMotivo" mat-icon-button matSuffix type="button"
+            (click)="limpiarGrabarMotivo($event, triggerGrabarMotivo)"
+            title="Limpiar motivo"
+            style="width: 24px; height: 24px; line-height: 24px;">
+            <mat-icon style="font-size: 16px; width: 16px; height: 16px; line-height: 16px;">close</mat-icon>
+          </button>
+          <button mat-icon-button matSuffix type="button"
+            (click)="toggleGrabarMotivoPanel(triggerGrabarMotivo, $event)"
+            title="Mostrar lista de motivos"
+            style="width: 24px; height: 24px; line-height: 24px; color: #64748b;">
+            <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">arrow_drop_down</mat-icon>
+          </button>
+
+          <mat-autocomplete #autoGrabarMotivo="matAutocomplete"
+            (optionSelected)="onGrabarMotivoSelected($event.option.value)">
+            <mat-option *ngFor="let m of motivosFiltradosGrabar" [value]="m" class="nc-motivo-option">
+              {{ m }}
+            </mat-option>
+            <mat-option *ngIf="motivosFiltradosGrabar.length === 0" disabled style="font-size: 12px; color: #94a3b8; font-style: italic;">
+              No se encontraron motivos coincidentes
+            </mat-option>
+          </mat-autocomplete>
           <mat-error *ngIf="grabarMotivo.errors['motivo']">{{ grabarMotivo.errors['motivo'] }}</mat-error>
         </mat-form-field>
 
@@ -1242,12 +1301,42 @@
       <mat-form-field appearance="outline" style="width: 100%;"
         [ngClass]="{'mat-form-field-invalid': draftDefModal.errors['motivo']}">
         <mat-label>Motivo de rechazo *</mat-label>
-        <mat-select [ngModel]="draftDefModal.isOtro ? DEFECTO_NUEVO : draftDefModal.motivo"
-          (ngModelChange)="draftDefModal.isOtro = ($event === DEFECTO_NUEVO); draftDefModal.motivo = $event">
-          <mat-option value="">Escriba para buscar o seleccione...</mat-option>
-          <mat-option *ngFor="let m of MOTIVOS" [value]="m">{{ m }}</mat-option>
-          <mat-option [value]="DEFECTO_NUEVO">🆕 {{ DEFECTO_NUEVO }}</mat-option>
-        </mat-select>
+        <input matInput
+          type="text"
+          #triggerModalMotivo="matAutocompleteTrigger"
+          [matAutocomplete]="autoModalMotivo"
+          [(ngModel)]="filtroModalMotivo"
+          (ngModelChange)="onModalMotivoInput($event)"
+          (focus)="onModalMotivoFocus(triggerModalMotivo)"
+          (click)="onModalMotivoFocus(triggerModalMotivo)"
+          placeholder="Escriba para buscar o seleccione..."
+          autocomplete="off" />
+
+        <button *ngIf="filtroModalMotivo" mat-icon-button matSuffix type="button"
+          (click)="limpiarModalMotivo($event, triggerModalMotivo)"
+          title="Limpiar motivo"
+          style="width: 24px; height: 24px; line-height: 24px;">
+          <mat-icon style="font-size: 16px; width: 16px; height: 16px; line-height: 16px;">close</mat-icon>
+        </button>
+        <button mat-icon-button matSuffix type="button"
+          (click)="toggleModalMotivoPanel(triggerModalMotivo, $event)"
+          title="Mostrar lista de motivos"
+          style="width: 24px; height: 24px; line-height: 24px; color: #64748b;">
+          <mat-icon style="font-size: 20px; width: 20px; height: 20px; line-height: 20px;">arrow_drop_down</mat-icon>
+        </button>
+
+        <mat-autocomplete #autoModalMotivo="matAutocomplete"
+          (optionSelected)="onModalMotivoSelected($event.option.value)">
+          <mat-option [value]="DEFECTO_NUEVO" class="nc-motivo-option" style="color: #1568D6; font-weight: 700; border-bottom: 1px solid #e2e8f0;">
+            🆕 {{ DEFECTO_NUEVO }}
+          </mat-option>
+          <mat-option *ngFor="let m of motivosFiltradosModal" [value]="m" class="nc-motivo-option">
+            {{ m }}
+          </mat-option>
+          <mat-option *ngIf="motivosFiltradosModal.length === 0" disabled style="font-size: 12px; color: #94a3b8; font-style: italic;">
+            No se encontraron motivos coincidentes
+          </mat-option>
+        </mat-autocomplete>
         <mat-error *ngIf="draftDefModal.errors['motivo']">{{ draftDefModal.errors['motivo'] }}</mat-error>
       </mat-form-field>
 

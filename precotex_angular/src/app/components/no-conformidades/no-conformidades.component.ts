@@ -417,6 +417,16 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     errors: {} as { [key: string]: string }
   };
 
+  // Autocomplete para Motivos de Rechazo
+  filtroGrupoMotivo: string = '';
+  motivosFiltradosGrupo: string[] = [];
+
+  filtroModalMotivo: string = '';
+  motivosFiltradosModal: string[] = [];
+
+  filtroGrabarMotivo: string = '';
+  motivosFiltradosGrabar: string[] = [];
+
   loadingNc: boolean = false;
 
   constructor(private ncService: NoConformidadesService) { }
@@ -425,6 +435,9 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     this.cargarInformesCabecera();
     this.cargarCatalogos();
     this.cargarEvolutivo();
+    this.filtrarMotivosGrupo('');
+    this.filtrarMotivosModal('');
+    this.filtrarMotivosGrabar('');
   }
 
   cargarInformesCabecera(numInforme: string = '', fIni: string = '', fFin: string = '', partida: string = ''): void {
@@ -508,6 +521,9 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
           }).filter(Boolean);
           if (motivosDb.length > 0) {
             this.MOTIVOS = Array.from(new Set(motivosDb));
+            this.filtrarMotivosGrupo(this.filtroGrupoMotivo);
+            this.filtrarMotivosModal(this.filtroModalMotivo);
+            this.filtrarMotivosGrabar(this.filtroGrabarMotivo);
           }
         }
       },
@@ -716,6 +732,10 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
   goTo(screen: string): void {
     this.currentScreen = screen;
     this.errors = {};
+    if (screen === 'paso2') {
+      this.filtroGrupoMotivo = this.draft?.grupoDefecto?.isOtro ? this.DEFECTO_NUEVO : (this.draft?.grupoDefecto?.motivo || '');
+      this.filtrarMotivosGrupo(this.filtroGrupoMotivo);
+    }
     if (screen === 'evolutivo' && (!this.evolutivoRawData || this.evolutivoRawData.length === 0)) {
       this.cargarEvolutivo();
     }
@@ -816,6 +836,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     };
     this.wizardEditMode = false;
     this.editingId = null;
+    this.filtroGrupoMotivo = '';
+    this.filtrarMotivosGrupo('');
     this.goTo('paso1');
   }
 
@@ -1064,6 +1086,234 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // ============================================================
+  // AUTOCOMPLETE MOTIVOS DE RECHAZO (Búsqueda predictiva y escritura)
+  // ============================================================
+  normalizarTexto(texto: string): string {
+    return (texto || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+  }
+
+  // Paso 2 - Asignación Defecto
+  filtrarMotivosGrupo(texto?: string): void {
+    const query = this.normalizarTexto(texto !== undefined ? texto : (this.filtroGrupoMotivo || ''));
+    if (!query) {
+      this.motivosFiltradosGrupo = this.MOTIVOS.slice(0, 100);
+    } else {
+      this.motivosFiltradosGrupo = this.MOTIVOS
+        .filter(m => this.normalizarTexto(m).includes(query))
+        .slice(0, 100);
+    }
+  }
+
+  onGrupoMotivoFocus(trigger: any): void {
+    this.filtrarMotivosGrupo(this.filtroGrupoMotivo);
+    if (trigger && typeof trigger.openPanel === 'function') {
+      setTimeout(() => trigger.openPanel(), 0);
+    }
+  }
+
+  toggleGrupoMotivoPanel(trigger: any, event: MouseEvent): void {
+    event.stopPropagation();
+    if (trigger) {
+      if (trigger.panelOpen) {
+        trigger.closePanel();
+      } else {
+        this.filtrarMotivosGrupo(this.filtroGrupoMotivo);
+        trigger.openPanel();
+      }
+    }
+  }
+
+  onGrupoMotivoInput(val: string): void {
+    if (!this.draft) return;
+    this.filtroGrupoMotivo = val;
+    this.filtrarMotivosGrupo(val);
+
+    const cleanVal = (val || '').trim();
+    if (cleanVal === this.DEFECTO_NUEVO) {
+      this.draft.grupoDefecto.motivo = '';
+      this.draft.grupoDefecto.isOtro = true;
+    } else {
+      const match = this.MOTIVOS.find(m => this.normalizarTexto(m) === this.normalizarTexto(cleanVal));
+      this.draft.grupoDefecto.motivo = match || cleanVal;
+      this.draft.grupoDefecto.isOtro = false;
+    }
+
+    if (cleanVal && this.draft.grupoDefecto.errors['motivo']) {
+      delete this.draft.grupoDefecto.errors['motivo'];
+    }
+  }
+
+  onGrupoMotivoSelected(val: string): void {
+    if (!this.draft) return;
+    if (val === this.DEFECTO_NUEVO) {
+      this.filtroGrupoMotivo = this.DEFECTO_NUEVO;
+      this.draft.grupoDefecto.motivo = '';
+      this.draft.grupoDefecto.isOtro = true;
+    } else {
+      this.filtroGrupoMotivo = val;
+      this.draft.grupoDefecto.motivo = val;
+      this.draft.grupoDefecto.isOtro = false;
+    }
+    if (this.draft.grupoDefecto.errors['motivo']) {
+      delete this.draft.grupoDefecto.errors['motivo'];
+    }
+  }
+
+  limpiarGrupoMotivo(event?: MouseEvent, trigger?: any): void {
+    if (event) event.stopPropagation();
+    this.filtroGrupoMotivo = '';
+    if (this.draft) {
+      this.draft.grupoDefecto.motivo = '';
+      this.draft.grupoDefecto.isOtro = false;
+      this.draft.grupoDefecto.descripcionOtro = '';
+    }
+    this.filtrarMotivosGrupo('');
+    if (trigger && typeof trigger.openPanel === 'function') {
+      setTimeout(() => trigger.openPanel(), 0);
+    }
+  }
+
+  // Modal Defecto (Edición o Creación Individual)
+  filtrarMotivosModal(texto?: string): void {
+    const query = this.normalizarTexto(texto !== undefined ? texto : (this.filtroModalMotivo || ''));
+    if (!query) {
+      this.motivosFiltradosModal = this.MOTIVOS.slice(0, 100);
+    } else {
+      this.motivosFiltradosModal = this.MOTIVOS
+        .filter(m => this.normalizarTexto(m).includes(query))
+        .slice(0, 100);
+    }
+  }
+
+  onModalMotivoFocus(trigger: any): void {
+    this.filtrarMotivosModal(this.filtroModalMotivo);
+    if (trigger && typeof trigger.openPanel === 'function') {
+      setTimeout(() => trigger.openPanel(), 0);
+    }
+  }
+
+  toggleModalMotivoPanel(trigger: any, event: MouseEvent): void {
+    event.stopPropagation();
+    if (trigger) {
+      if (trigger.panelOpen) {
+        trigger.closePanel();
+      } else {
+        this.filtrarMotivosModal(this.filtroModalMotivo);
+        trigger.openPanel();
+      }
+    }
+  }
+
+  onModalMotivoInput(val: string): void {
+    this.filtroModalMotivo = val;
+    this.filtrarMotivosModal(val);
+
+    const cleanVal = (val || '').trim();
+    if (cleanVal === this.DEFECTO_NUEVO) {
+      this.draftDefModal.isOtro = true;
+      this.draftDefModal.motivo = '';
+    } else {
+      const match = this.MOTIVOS.find(m => this.normalizarTexto(m) === this.normalizarTexto(cleanVal));
+      this.draftDefModal.isOtro = false;
+      this.draftDefModal.motivo = match || cleanVal;
+    }
+
+    if (cleanVal && this.draftDefModal.errors['motivo']) {
+      delete this.draftDefModal.errors['motivo'];
+    }
+  }
+
+  onModalMotivoSelected(val: string): void {
+    if (val === this.DEFECTO_NUEVO) {
+      this.filtroModalMotivo = this.DEFECTO_NUEVO;
+      this.draftDefModal.isOtro = true;
+      this.draftDefModal.motivo = '';
+    } else {
+      this.filtroModalMotivo = val;
+      this.draftDefModal.isOtro = false;
+      this.draftDefModal.motivo = val;
+    }
+    if (this.draftDefModal.errors['motivo']) {
+      delete this.draftDefModal.errors['motivo'];
+    }
+  }
+
+  limpiarModalMotivo(event?: MouseEvent, trigger?: any): void {
+    if (event) event.stopPropagation();
+    this.filtroModalMotivo = '';
+    this.draftDefModal.motivo = '';
+    this.draftDefModal.isOtro = false;
+    this.draftDefModal.descripcionOtro = '';
+    this.filtrarMotivosModal('');
+    if (trigger && typeof trigger.openPanel === 'function') {
+      setTimeout(() => trigger.openPanel(), 0);
+    }
+  }
+
+  // Grabar Motivo Pendiente
+  filtrarMotivosGrabar(texto?: string): void {
+    const query = this.normalizarTexto(texto !== undefined ? texto : (this.filtroGrabarMotivo || ''));
+    if (!query) {
+      this.motivosFiltradosGrabar = this.MOTIVOS.slice(0, 100);
+    } else {
+      this.motivosFiltradosGrabar = this.MOTIVOS
+        .filter(m => this.normalizarTexto(m).includes(query))
+        .slice(0, 100);
+    }
+  }
+
+  onGrabarMotivoFocus(trigger: any): void {
+    this.filtrarMotivosGrabar(this.filtroGrabarMotivo);
+    if (trigger && typeof trigger.openPanel === 'function') {
+      setTimeout(() => trigger.openPanel(), 0);
+    }
+  }
+
+  toggleGrabarMotivoPanel(trigger: any, event: MouseEvent): void {
+    event.stopPropagation();
+    if (trigger) {
+      if (trigger.panelOpen) {
+        trigger.closePanel();
+      } else {
+        this.filtrarMotivosGrabar(this.filtroGrabarMotivo);
+        trigger.openPanel();
+      }
+    }
+  }
+
+  onGrabarMotivoInput(val: string): void {
+    this.filtroGrabarMotivo = val;
+    this.filtrarMotivosGrabar(val);
+    const cleanVal = (val || '').trim();
+    const match = this.MOTIVOS.find(m => this.normalizarTexto(m) === this.normalizarTexto(cleanVal));
+    this.grabarMotivo.motivo = match || cleanVal;
+    if (cleanVal && this.grabarMotivo.errors['motivo']) {
+      delete this.grabarMotivo.errors['motivo'];
+    }
+  }
+
+  onGrabarMotivoSelected(val: string): void {
+    this.filtroGrabarMotivo = val;
+    this.grabarMotivo.motivo = val;
+    if (this.grabarMotivo.errors['motivo']) {
+      delete this.grabarMotivo.errors['motivo'];
+    }
+  }
+
+  limpiarGrabarMotivo(event?: MouseEvent, trigger?: any): void {
+    if (event) event.stopPropagation();
+    this.filtroGrabarMotivo = '';
+    this.grabarMotivo.motivo = '';
+    this.filtrarMotivosGrabar('');
+    if (trigger && typeof trigger.openPanel === 'function') {
+      setTimeout(() => trigger.openPanel(), 0);
+    }
+  }
+
   handleGrupoFiles(files: FileList | null): void {
     if (!files || !files.length || !this.draft) return;
     Array.from(files).forEach(f => {
@@ -1203,6 +1453,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       evidencia: [],
       errors: {}
     };
+    this.filtroGrupoMotivo = '';
+    this.filtrarMotivosGrupo('');
     this.draft.comentario = '';
 
     Swal.fire({
@@ -1231,6 +1483,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         comentario: '',
         errors: {}
       };
+      this.filtroModalMotivo = '';
+      this.filtrarMotivosModal('');
     } else {
       const def = this.draft.seleccion[artIdx].defectos[defIdx];
       this.draftDefModal = {
@@ -1246,6 +1500,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         comentario: def.comentario || '',
         errors: {}
       };
+      this.filtroModalMotivo = def.isOtro ? this.DEFECTO_NUEVO : (def.motivo || '');
+      this.filtrarMotivosModal(this.filtroModalMotivo);
     }
   }
 
@@ -2168,6 +2424,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       this.draft.grupoDefecto.area = fd.area || '';
       this.draft.grupoDefecto.areaOtro = fd.areaOtro || '';
       this.draft.grupoDefecto.evidencia = fd.evidencia ? fd.evidencia.map(f => ({ ...f })) : [];
+      this.filtroGrupoMotivo = this.draft.grupoDefecto.isOtro ? this.DEFECTO_NUEVO : (this.draft.grupoDefecto.motivo || '');
+      this.filtrarMotivosGrupo(this.filtroGrupoMotivo);
     }
 
     this.editingId = nc.id;
@@ -2342,6 +2600,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       areaOtro: '',
       errors: {}
     };
+    this.filtroGrabarMotivo = '';
+    this.filtrarMotivosGrabar('');
     this.goTo('grabarMotivo');
   }
 
