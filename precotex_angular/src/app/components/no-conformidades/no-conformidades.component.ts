@@ -417,6 +417,16 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     errors: {} as { [key: string]: string }
   };
 
+  // Autocomplete para Motivos de Rechazo
+  filtroGrupoMotivo: string = '';
+  motivosFiltradosGrupo: string[] = [];
+
+  filtroModalMotivo: string = '';
+  motivosFiltradosModal: string[] = [];
+
+  filtroGrabarMotivo: string = '';
+  motivosFiltradosGrabar: string[] = [];
+
   loadingNc: boolean = false;
 
   constructor(private ncService: NoConformidadesService) { }
@@ -425,6 +435,9 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     this.cargarInformesCabecera();
     this.cargarCatalogos();
     this.cargarEvolutivo();
+    this.filtrarMotivosGrupo('');
+    this.filtrarMotivosModal('');
+    this.filtrarMotivosGrabar('');
   }
 
   cargarInformesCabecera(numInforme: string = '', fIni: string = '', fFin: string = '', partida: string = ''): void {
@@ -508,6 +521,9 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
           }).filter(Boolean);
           if (motivosDb.length > 0) {
             this.MOTIVOS = Array.from(new Set(motivosDb));
+            this.filtrarMotivosGrupo(this.filtroGrupoMotivo);
+            this.filtrarMotivosModal(this.filtroModalMotivo);
+            this.filtrarMotivosGrabar(this.filtroGrabarMotivo);
           }
         }
       },
@@ -716,6 +732,10 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
   goTo(screen: string): void {
     this.currentScreen = screen;
     this.errors = {};
+    if (screen === 'paso2') {
+      this.filtroGrupoMotivo = this.draft?.grupoDefecto?.isOtro ? this.DEFECTO_NUEVO : (this.draft?.grupoDefecto?.motivo || '');
+      this.filtrarMotivosGrupo(this.filtroGrupoMotivo);
+    }
     if (screen === 'evolutivo' && (!this.evolutivoRawData || this.evolutivoRawData.length === 0)) {
       this.cargarEvolutivo();
     }
@@ -816,6 +836,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     };
     this.wizardEditMode = false;
     this.editingId = null;
+    this.filtroGrupoMotivo = '';
+    this.filtrarMotivosGrupo('');
     this.goTo('paso1');
   }
 
@@ -861,7 +883,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         const articulosRaw = resp?.articulos || (Array.isArray(resp) ? resp : []);
         if (Array.isArray(articulosRaw) && articulosRaw.length > 0) {
           this.draft!.articulosDisponibles = articulosRaw.map((a: any, idx: number) => ({
-            id: a.Num_Secuencia || a.num_Secuencia || (idx + 1),
+            id: a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1))),
             tipo: (a.Talla || a.talla || '').trim() && (a.Talla || a.talla || '').trim() !== '-' ? 'Complemento' : 'Cuerpo',
             nombre: (a.Tela || a.tela || a.CodTela || `Artículo ${idx + 1}`).trim(),
             codTela: (a.CodTela || a.codTela || '').trim(),
@@ -915,11 +937,38 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     if (!this.draft) return;
     const cur = this.draft.seleccion[idx] || { checked: false, cantidad: '', open: true, defectos: [] };
     cur.checked = !cur.checked;
-    cur.open = true;
+    cur.open = cur.checked;
     if (cur.checked && !cur.defectos) {
       cur.defectos = [];
     }
     this.draft.seleccion[idx] = cur;
+  }
+
+  sonTodosArticulosSeleccionados(): boolean {
+    if (!this.draft || !this.draft.articulosDisponibles || this.draft.articulosDisponibles.length === 0) {
+      return false;
+    }
+    return this.draft.articulosDisponibles.every((_, idx) => this.draft!.seleccion[idx]?.checked);
+  }
+
+  toggleTodosArticulos(): void {
+    if (!this.draft || !this.draft.articulosDisponibles || this.draft.articulosDisponibles.length === 0) {
+      return;
+    }
+    const nuevoEstado = !this.sonTodosArticulosSeleccionados();
+    this.draft.articulosDisponibles.forEach((_, idx) => {
+      const cur = this.draft!.seleccion[idx] || { checked: false, cantidad: '', open: true, defectos: [] };
+      cur.checked = nuevoEstado;
+      cur.open = nuevoEstado;
+      if (nuevoEstado && !cur.defectos) {
+        cur.defectos = [];
+      }
+      this.draft!.seleccion[idx] = cur;
+    });
+
+    if (nuevoEstado && this.errors['articulos']) {
+      delete this.errors['articulos'];
+    }
   }
 
   toggleArticuloOpen(idx: number): void {
@@ -991,9 +1040,39 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
   }
 
   // Wizard Paso 2: Grupo de defectos
+  getArticulosChequeadosPaso1(): number {
+    if (!this.draft || !this.draft.articulosDisponibles) return 0;
+    return this.draft.articulosDisponibles.filter((_, i) => !!this.draft!.seleccion[i]?.checked).length;
+  }
+
+  sonTodosGrupoArticulosSeleccionados(): boolean {
+    if (!this.draft || !this.draft.articulosDisponibles) return false;
+    const checkedIndices = this.draft.articulosDisponibles
+      .map((_, i) => i)
+      .filter(i => !!this.draft!.seleccion[i]?.checked);
+    if (checkedIndices.length === 0) return false;
+    return checkedIndices.every(i => !!this.draft!.grupoDefecto.seleccion[i]);
+  }
+
+  toggleTodosGrupoArticulos(): void {
+    if (!this.draft || !this.draft.articulosDisponibles) return;
+    const nuevoEstado = !this.sonTodosGrupoArticulosSeleccionados();
+    this.draft.articulosDisponibles.forEach((_, i) => {
+      if (this.draft!.seleccion[i]?.checked) {
+        this.draft!.grupoDefecto.seleccion[i] = nuevoEstado;
+      }
+    });
+    if (nuevoEstado && this.draft.grupoDefecto.errors['seleccion']) {
+      delete this.draft.grupoDefecto.errors['seleccion'];
+    }
+  }
+
   toggleGrupoArticulo(idx: number): void {
     if (!this.draft) return;
     this.draft.grupoDefecto.seleccion[idx] = !this.draft.grupoDefecto.seleccion[idx];
+    if (this.draft.grupoDefecto.seleccion[idx] && this.draft.grupoDefecto.errors['seleccion']) {
+      delete this.draft.grupoDefecto.errors['seleccion'];
+    }
   }
 
   onGrupoMotivoChange(val: string): void {
@@ -1004,6 +1083,234 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     } else {
       this.draft.grupoDefecto.motivo = val;
       this.draft.grupoDefecto.isOtro = false;
+    }
+  }
+
+  // ============================================================
+  // AUTOCOMPLETE MOTIVOS DE RECHAZO (Búsqueda predictiva y escritura)
+  // ============================================================
+  normalizarTexto(texto: string): string {
+    return (texto || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+  }
+
+  // Paso 2 - Asignación Defecto
+  filtrarMotivosGrupo(texto?: string): void {
+    const query = this.normalizarTexto(texto !== undefined ? texto : (this.filtroGrupoMotivo || ''));
+    if (!query) {
+      this.motivosFiltradosGrupo = this.MOTIVOS.slice(0, 100);
+    } else {
+      this.motivosFiltradosGrupo = this.MOTIVOS
+        .filter(m => this.normalizarTexto(m).includes(query))
+        .slice(0, 100);
+    }
+  }
+
+  onGrupoMotivoFocus(trigger: any): void {
+    this.filtrarMotivosGrupo(this.filtroGrupoMotivo);
+    if (trigger && typeof trigger.openPanel === 'function') {
+      setTimeout(() => trigger.openPanel(), 0);
+    }
+  }
+
+  toggleGrupoMotivoPanel(trigger: any, event: MouseEvent): void {
+    event.stopPropagation();
+    if (trigger) {
+      if (trigger.panelOpen) {
+        trigger.closePanel();
+      } else {
+        this.filtrarMotivosGrupo(this.filtroGrupoMotivo);
+        trigger.openPanel();
+      }
+    }
+  }
+
+  onGrupoMotivoInput(val: string): void {
+    if (!this.draft) return;
+    this.filtroGrupoMotivo = val;
+    this.filtrarMotivosGrupo(val);
+
+    const cleanVal = (val || '').trim();
+    if (cleanVal === this.DEFECTO_NUEVO) {
+      this.draft.grupoDefecto.motivo = '';
+      this.draft.grupoDefecto.isOtro = true;
+    } else {
+      const match = this.MOTIVOS.find(m => this.normalizarTexto(m) === this.normalizarTexto(cleanVal));
+      this.draft.grupoDefecto.motivo = match || cleanVal;
+      this.draft.grupoDefecto.isOtro = false;
+    }
+
+    if (cleanVal && this.draft.grupoDefecto.errors['motivo']) {
+      delete this.draft.grupoDefecto.errors['motivo'];
+    }
+  }
+
+  onGrupoMotivoSelected(val: string): void {
+    if (!this.draft) return;
+    if (val === this.DEFECTO_NUEVO) {
+      this.filtroGrupoMotivo = this.DEFECTO_NUEVO;
+      this.draft.grupoDefecto.motivo = '';
+      this.draft.grupoDefecto.isOtro = true;
+    } else {
+      this.filtroGrupoMotivo = val;
+      this.draft.grupoDefecto.motivo = val;
+      this.draft.grupoDefecto.isOtro = false;
+    }
+    if (this.draft.grupoDefecto.errors['motivo']) {
+      delete this.draft.grupoDefecto.errors['motivo'];
+    }
+  }
+
+  limpiarGrupoMotivo(event?: MouseEvent, trigger?: any): void {
+    if (event) event.stopPropagation();
+    this.filtroGrupoMotivo = '';
+    if (this.draft) {
+      this.draft.grupoDefecto.motivo = '';
+      this.draft.grupoDefecto.isOtro = false;
+      this.draft.grupoDefecto.descripcionOtro = '';
+    }
+    this.filtrarMotivosGrupo('');
+    if (trigger && typeof trigger.openPanel === 'function') {
+      setTimeout(() => trigger.openPanel(), 0);
+    }
+  }
+
+  // Modal Defecto (Edición o Creación Individual)
+  filtrarMotivosModal(texto?: string): void {
+    const query = this.normalizarTexto(texto !== undefined ? texto : (this.filtroModalMotivo || ''));
+    if (!query) {
+      this.motivosFiltradosModal = this.MOTIVOS.slice(0, 100);
+    } else {
+      this.motivosFiltradosModal = this.MOTIVOS
+        .filter(m => this.normalizarTexto(m).includes(query))
+        .slice(0, 100);
+    }
+  }
+
+  onModalMotivoFocus(trigger: any): void {
+    this.filtrarMotivosModal(this.filtroModalMotivo);
+    if (trigger && typeof trigger.openPanel === 'function') {
+      setTimeout(() => trigger.openPanel(), 0);
+    }
+  }
+
+  toggleModalMotivoPanel(trigger: any, event: MouseEvent): void {
+    event.stopPropagation();
+    if (trigger) {
+      if (trigger.panelOpen) {
+        trigger.closePanel();
+      } else {
+        this.filtrarMotivosModal(this.filtroModalMotivo);
+        trigger.openPanel();
+      }
+    }
+  }
+
+  onModalMotivoInput(val: string): void {
+    this.filtroModalMotivo = val;
+    this.filtrarMotivosModal(val);
+
+    const cleanVal = (val || '').trim();
+    if (cleanVal === this.DEFECTO_NUEVO) {
+      this.draftDefModal.isOtro = true;
+      this.draftDefModal.motivo = '';
+    } else {
+      const match = this.MOTIVOS.find(m => this.normalizarTexto(m) === this.normalizarTexto(cleanVal));
+      this.draftDefModal.isOtro = false;
+      this.draftDefModal.motivo = match || cleanVal;
+    }
+
+    if (cleanVal && this.draftDefModal.errors['motivo']) {
+      delete this.draftDefModal.errors['motivo'];
+    }
+  }
+
+  onModalMotivoSelected(val: string): void {
+    if (val === this.DEFECTO_NUEVO) {
+      this.filtroModalMotivo = this.DEFECTO_NUEVO;
+      this.draftDefModal.isOtro = true;
+      this.draftDefModal.motivo = '';
+    } else {
+      this.filtroModalMotivo = val;
+      this.draftDefModal.isOtro = false;
+      this.draftDefModal.motivo = val;
+    }
+    if (this.draftDefModal.errors['motivo']) {
+      delete this.draftDefModal.errors['motivo'];
+    }
+  }
+
+  limpiarModalMotivo(event?: MouseEvent, trigger?: any): void {
+    if (event) event.stopPropagation();
+    this.filtroModalMotivo = '';
+    this.draftDefModal.motivo = '';
+    this.draftDefModal.isOtro = false;
+    this.draftDefModal.descripcionOtro = '';
+    this.filtrarMotivosModal('');
+    if (trigger && typeof trigger.openPanel === 'function') {
+      setTimeout(() => trigger.openPanel(), 0);
+    }
+  }
+
+  // Grabar Motivo Pendiente
+  filtrarMotivosGrabar(texto?: string): void {
+    const query = this.normalizarTexto(texto !== undefined ? texto : (this.filtroGrabarMotivo || ''));
+    if (!query) {
+      this.motivosFiltradosGrabar = this.MOTIVOS.slice(0, 100);
+    } else {
+      this.motivosFiltradosGrabar = this.MOTIVOS
+        .filter(m => this.normalizarTexto(m).includes(query))
+        .slice(0, 100);
+    }
+  }
+
+  onGrabarMotivoFocus(trigger: any): void {
+    this.filtrarMotivosGrabar(this.filtroGrabarMotivo);
+    if (trigger && typeof trigger.openPanel === 'function') {
+      setTimeout(() => trigger.openPanel(), 0);
+    }
+  }
+
+  toggleGrabarMotivoPanel(trigger: any, event: MouseEvent): void {
+    event.stopPropagation();
+    if (trigger) {
+      if (trigger.panelOpen) {
+        trigger.closePanel();
+      } else {
+        this.filtrarMotivosGrabar(this.filtroGrabarMotivo);
+        trigger.openPanel();
+      }
+    }
+  }
+
+  onGrabarMotivoInput(val: string): void {
+    this.filtroGrabarMotivo = val;
+    this.filtrarMotivosGrabar(val);
+    const cleanVal = (val || '').trim();
+    const match = this.MOTIVOS.find(m => this.normalizarTexto(m) === this.normalizarTexto(cleanVal));
+    this.grabarMotivo.motivo = match || cleanVal;
+    if (cleanVal && this.grabarMotivo.errors['motivo']) {
+      delete this.grabarMotivo.errors['motivo'];
+    }
+  }
+
+  onGrabarMotivoSelected(val: string): void {
+    this.filtroGrabarMotivo = val;
+    this.grabarMotivo.motivo = val;
+    if (this.grabarMotivo.errors['motivo']) {
+      delete this.grabarMotivo.errors['motivo'];
+    }
+  }
+
+  limpiarGrabarMotivo(event?: MouseEvent, trigger?: any): void {
+    if (event) event.stopPropagation();
+    this.filtroGrabarMotivo = '';
+    this.grabarMotivo.motivo = '';
+    this.filtrarMotivosGrabar('');
+    if (trigger && typeof trigger.openPanel === 'function') {
+      setTimeout(() => trigger.openPanel(), 0);
     }
   }
 
@@ -1130,6 +1437,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
 
         // Agregar el nuevo defecto a la lista del artículo
         sel.defectos.push(nuevoDefecto);
+        sel.checked = true;
+        sel.open = true;
       }
     });
 
@@ -1144,6 +1453,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       evidencia: [],
       errors: {}
     };
+    this.filtroGrupoMotivo = '';
+    this.filtrarMotivosGrupo('');
     this.draft.comentario = '';
 
     Swal.fire({
@@ -1172,6 +1483,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         comentario: '',
         errors: {}
       };
+      this.filtroModalMotivo = '';
+      this.filtrarMotivosModal('');
     } else {
       const def = this.draft.seleccion[artIdx].defectos[defIdx];
       this.draftDefModal = {
@@ -1187,6 +1500,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         comentario: def.comentario || '',
         errors: {}
       };
+      this.filtroModalMotivo = def.isOtro ? this.DEFECTO_NUEVO : (def.motivo || '');
+      this.filtrarMotivosModal(this.filtroModalMotivo);
     }
   }
 
@@ -1377,15 +1692,76 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
 
   solicitarMotivoEdicion(): void {
     if (!this.draft) return;
-    const articulos = this.getArticulosResumenDraft();
-    if (articulos.length === 0) {
+
+    // Obtener los artículos seleccionados / afectados
+    const artsAfectados: { a: any, sel: any, idx: number }[] = [];
+    Object.keys(this.draft.seleccion).forEach(k => {
+      const idx = Number(k);
+      const a = this.draft!.articulosDisponibles[idx];
+      const sel = this.draft!.seleccion[idx];
+      if (a && sel && (sel.checked || (Number(sel.cantidad) > 0) || (sel.defectos && sel.defectos.length > 0))) {
+        artsAfectados.push({ a, sel, idx });
+      }
+    });
+
+    if (artsAfectados.length === 0) {
       Swal.fire({
         icon: 'warning',
         title: 'Atención',
-        text: 'Indique la cantidad afectada y defectos para al menos un artículo.'
+        text: 'Seleccione al menos un artículo e indique la cantidad afectada y sus motivos de rechazo.'
       });
       return;
     }
+
+    // Validar que cada artículo afectado tenga cantidad > 0 y defectos válidos
+    for (const item of artsAfectados) {
+      const cant = Number(item.sel.cantidad);
+      const maxRollos = Number(item.a.rollos) || 0;
+      if (isNaN(cant) || cant <= 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Cantidad requerida',
+          text: `Debe ingresar una cantidad afectada mayor a 0 para el artículo: "${item.a.nombre}".`
+        });
+        item.sel.checked = true;
+        item.sel.open = true;
+        return;
+      }
+      if (maxRollos > 0 && cant > maxRollos) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Cantidad excedida',
+          text: `La cantidad afectada (${cant}) no puede superar los rollos disponibles (${maxRollos}) para el artículo: "${item.a.nombre}".`
+        });
+        item.sel.checked = true;
+        item.sel.open = true;
+        return;
+      }
+      if (!item.sel.defectos || item.sel.defectos.length === 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Defecto requerido',
+          text: `Debe asignar al menos un motivo de rechazo y área responsable para el artículo: "${item.a.nombre}".`
+        });
+        item.sel.checked = true;
+        item.sel.open = true;
+        return;
+      }
+      const tieneDefInvalido = item.sel.defectos.some((d: DefectoItem) => 
+        (!d.motivo && !d.isOtro) || (d.isOtro && !d.descripcionOtro?.trim()) || !d.area?.trim()
+      );
+      if (tieneDefInvalido) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Defecto incompleto',
+          text: `Complete el motivo y área responsable en todos los defectos del artículo: "${item.a.nombre}".`
+        });
+        item.sel.checked = true;
+        item.sel.open = true;
+        return;
+      }
+    }
+
     this.motivoEdicionModal = {
       open: true,
       motivo: '',
@@ -1485,12 +1861,19 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       motivo_Edicion: motivoFinal,
       detalle_Cambios: detalleCambios,
       articulos: Object.keys(this.draft.seleccion)
-        .filter(k => this.draft!.seleccion[Number(k)].checked)
+        .filter(k => {
+          const sel = this.draft!.seleccion[Number(k)];
+          return sel && (sel.checked || (Number(sel.cantidad) > 0) || (sel.defectos && sel.defectos.length > 0));
+        })
+        .filter(k => {
+          const sel = this.draft!.seleccion[Number(k)];
+          return (Number(sel.cantidad) || 0) > 0;
+        })
         .map(k => {
           const idx = Number(k);
           const a = this.draft!.articulosDisponibles[idx];
           const sel = this.draft!.seleccion[idx];
-          const itemSec = a.id ? String(a.id) : String(idx + 1);
+          const itemSec = (a.id !== undefined && a.id !== null) ? String(a.id) : String(idx + 1);
           const cantRech = Number(sel.cantidad) || 0;
           const rollosAsig = Number(a.rollos) || 0;
           const kgsVal = parseFloat(a.kgCrudo) || 0;
@@ -1619,7 +2002,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
           const idx = Number(k);
           const a = this.draft!.articulosDisponibles[idx];
           const sel = this.draft!.seleccion[idx];
-          const itemSec = a.id ? String(a.id) : String(idx + 1);
+          const itemSec = (a.id !== undefined && a.id !== null) ? String(a.id) : String(idx + 1);
           const cantRech = Number(sel.cantidad) || 0;
           const rollosAsig = Number(a.rollos) || 0;
           const kgsVal = parseFloat(a.kgCrudo) || 0;
@@ -1723,10 +2106,10 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       if (rech !== null && !isNaN(rech)) {
         return rech > 0;
       }
-      const sec = a.Num_Secuencia || a.num_Secuencia || a.Item;
+      const sec = a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : a.Item);
       const aCodTela = (a.CodTela || a.codTela || '').trim().toUpperCase();
       const hasDef = (motivosRaw || []).some((m: any) => {
-        const mSec = m.Num_Secuencia || m.num_Secuencia || m.Item;
+        const mSec = m.Num_Secuencia !== undefined && m.Num_Secuencia !== null ? Number(m.Num_Secuencia) : (m.num_Secuencia !== undefined && m.num_Secuencia !== null ? Number(m.num_Secuencia) : m.Item);
         if (mSec !== undefined && mSec !== null && mSec !== '') {
           return String(mSec) === String(sec);
         }
@@ -1739,11 +2122,11 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     const listaAProcesar = itemsAfectados.length > 0 ? itemsAfectados : articulosRaw;
 
     return listaAProcesar.map((a: any, idx: number) => {
-      const sec = a.Num_Secuencia || a.num_Secuencia || a.Item || (idx + 1);
+      const sec = a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1)));
       const aCodTela = (a.CodTela || a.codTela || '').trim().toUpperCase();
 
       const defs = (motivosRaw || []).filter((m: any) => {
-        const mSec = m.Num_Secuencia || m.num_Secuencia || m.Item;
+        const mSec = m.Num_Secuencia !== undefined && m.Num_Secuencia !== null ? Number(m.Num_Secuencia) : (m.num_Secuencia !== undefined && m.num_Secuencia !== null ? Number(m.num_Secuencia) : m.Item);
         if (mSec !== undefined && mSec !== null && mSec !== '') {
           return String(mSec) === String(sec);
         }
@@ -1837,7 +2220,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
           const articulosPartidaRaw = res?.articulos || (Array.isArray(res) ? res : []);
           if (Array.isArray(articulosPartidaRaw) && articulosPartidaRaw.length > 0) {
             nc.articulosPartida = articulosPartidaRaw.map((a: any, idx: number) => ({
-              id: a.Num_Secuencia || a.num_Secuencia || (idx + 1),
+              id: a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1))),
               tipo: (a.Talla || a.talla || '').trim() && (a.Talla || a.talla || '').trim() !== '-' ? 'Complemento' : 'Cuerpo',
               nombre: (a.Tela || a.tela || a.CodTela || `Artículo ${idx + 1}`).trim(),
               codTela: (a.CodTela || a.codTela || '').trim(),
@@ -1933,7 +2316,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
             const articulosPartidaRaw = partida?.articulos || (Array.isArray(partida) ? partida : []);
             if (Array.isArray(articulosPartidaRaw) && articulosPartidaRaw.length > 0) {
               nc.articulosPartida = articulosPartidaRaw.map((a: any, idx: number) => ({
-                id: a.Num_Secuencia || a.num_Secuencia || (idx + 1),
+                id: a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1))),
                 tipo: (a.Talla || a.talla || '').trim() && (a.Talla || a.talla || '').trim() !== '-' ? 'Complemento' : 'Cuerpo',
                 nombre: (a.Tela || a.tela || a.CodTela || `Artículo ${idx + 1}`).trim(),
                 codTela: (a.CodTela || a.codTela || '').trim(),
@@ -2041,6 +2424,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       this.draft.grupoDefecto.area = fd.area || '';
       this.draft.grupoDefecto.areaOtro = fd.areaOtro || '';
       this.draft.grupoDefecto.evidencia = fd.evidencia ? fd.evidencia.map(f => ({ ...f })) : [];
+      this.filtroGrupoMotivo = this.draft.grupoDefecto.isOtro ? this.DEFECTO_NUEVO : (this.draft.grupoDefecto.motivo || '');
+      this.filtrarMotivosGrupo(this.filtroGrupoMotivo);
     }
 
     this.editingId = nc.id;
@@ -2215,6 +2600,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       areaOtro: '',
       errors: {}
     };
+    this.filtroGrabarMotivo = '';
+    this.filtrarMotivosGrabar('');
     this.goTo('grabarMotivo');
   }
 
