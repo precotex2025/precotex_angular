@@ -226,13 +226,24 @@
           <p style="font-size: 13px; color: #374151; margin: 0;">
             Marque el/los artículos e indique la cantidad afectada. <span style="color: red;">*</span>
           </p>
-          <button type="button" mat-stroked-button color="primary" class="btn-seleccionar-todos" (click)="toggleTodosArticulos()"
-            style="font-size: 12.5px; height: 32px; line-height: 32px; padding: 0 12px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px;">
-            <mat-icon style="font-size: 18px; width: 18px; height: 18px; line-height: 18px;">
-              {{ sonTodosArticulosSeleccionados() ? 'check_box' : 'select_all' }}
-            </mat-icon>
-            <span>{{ sonTodosArticulosSeleccionados() ? 'Deseleccionar todos' : 'Seleccionar todos' }}</span>
-          </button>
+          <div style="display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <div style="display: inline-flex; align-items: center; gap: 6px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 2px 8px; height: 32px;"
+              title="Ingrese la cantidad de rollos que desea asignar a todos los artículos">
+              <mat-icon style="font-size: 16px; width: 16px; height: 16px; line-height: 16px; color: #64748b;">layers</mat-icon>
+              <span style="font-size: 12px; font-weight: 600; color: #475569;">Cant. Rollos:</span>
+              <input type="number" min="1" [(ngModel)]="cantidadRollosTodos" (ngModelChange)="onCantidadRollosTodosChange($event)"
+                (keyup.enter)="aplicarCantidadRollosATodos()"
+                placeholder="Ej. 1"
+                style="width: 52px; height: 24px; border: 1px solid #94a3b8; border-radius: 4px; padding: 0 6px; font-size: 12px; font-weight: 700; color: #0f172a; text-align: center; outline: none; background: #ffffff;" />
+            </div>
+            <button type="button" mat-stroked-button color="primary" class="btn-seleccionar-todos" (click)="toggleTodosArticulos()"
+              style="font-size: 12.5px; height: 32px; line-height: 32px; padding: 0 12px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px;">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px; line-height: 18px;">
+                {{ sonTodosArticulosSeleccionados() ? 'check_box' : 'select_all' }}
+              </mat-icon>
+              <span>{{ sonTodosArticulosSeleccionados() ? 'Deseleccionar todos' : 'Seleccionar todos' }}</span>
+            </button>
+          </div>
         </div>
         <div class="field-error-msg" *ngIf="errors['articulos']">{{ errors['articulos'] }}</div>
 
@@ -615,13 +626,24 @@
           <p style="font-weight: 800; font-size: 15px; margin: 0; color: #0f172a;">
             Artículos afectados ({{ draft.articulosDisponibles.length }})
           </p>
-          <button type="button" mat-stroked-button color="primary" (click)="toggleTodosArticulos()"
-            style="font-size: 12.5px; height: 30px; line-height: 30px; padding: 0 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
-            <mat-icon style="font-size: 17px; width: 17px; height: 17px; line-height: 17px;">
-              {{ sonTodosArticulosSeleccionados() ? 'check_box' : 'select_all' }}
-            </mat-icon>
-            <span>{{ sonTodosArticulosSeleccionados() ? 'Deseleccionar todos' : 'Seleccionar todos' }}</span>
-          </button>
+          <div style="display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <div style="display: inline-flex; align-items: center; gap: 6px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 2px 8px; height: 30px;"
+              title="Ingrese la cantidad de rollos que desea asignar a todos los artículos">
+              <mat-icon style="font-size: 15px; width: 15px; height: 15px; line-height: 15px; color: #64748b;">layers</mat-icon>
+              <span style="font-size: 12px; font-weight: 600; color: #475569;">Cant. Rollos:</span>
+              <input type="number" min="1" [(ngModel)]="cantidadRollosTodos" (ngModelChange)="onCantidadRollosTodosChange($event)"
+                (keyup.enter)="aplicarCantidadRollosATodos()"
+                placeholder="Ej. 1"
+                style="width: 50px; height: 22px; border: 1px solid #94a3b8; border-radius: 4px; padding: 0 6px; font-size: 12px; font-weight: 700; color: #0f172a; text-align: center; outline: none; background: #ffffff;" />
+            </div>
+            <button type="button" mat-stroked-button color="primary" (click)="toggleTodosArticulos()"
+              style="font-size: 12.5px; height: 30px; line-height: 30px; padding: 0 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
+              <mat-icon style="font-size: 17px; width: 17px; height: 17px; line-height: 17px;">
+                {{ sonTodosArticulosSeleccionados() ? 'check_box' : 'select_all' }}
+              </mat-icon>
+              <span>{{ sonTodosArticulosSeleccionados() ? 'Deseleccionar todos' : 'Seleccionar todos' }}</span>
+            </button>
+          </div>
         </div>
 
         <div *ngFor="let a of draft.articulosDisponibles; let i = index" style="margin-bottom: 12px;">

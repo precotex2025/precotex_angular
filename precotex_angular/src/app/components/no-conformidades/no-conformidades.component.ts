@@ -145,7 +145,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
   };
 
   // Catálogos
-  MOTIVOS: string[] = [
+  readonly CATALOGO_MOTIVOS_BASE: string[] = [
     "HI001 - ANILLADO POR HILO GRUESO/DELGADO",
     "HI002 - ANILLOSPOR LOTES DE HILO (UV)",
     "HI003 - BARRADO POR HILO TEÑIDO",
@@ -304,6 +304,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     "ACA136 - LÍNEA DE FRICCIÓN"
   ];
 
+  MOTIVOS: string[] = [];
+
   AREAS: string[] = [
     "ACABADOS", "BORDADO", "CALIDAD MANUFACTURA", "CALIDAD TEXTIL", "COMERCIAL", "CORTE",
     "ESTAMPADO DIGITAL", "LAVANDERÍA", "PCP ACABADO", "PCP ESTAMPADO DIGITAL", "PCP MANUFACTURA",
@@ -417,6 +419,9 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     errors: {} as { [key: string]: string }
   };
 
+  // Selección masiva de rollos para artículos
+  cantidadRollosTodos: number | string = '';
+
   // Autocomplete para Motivos de Rechazo
   filtroGrupoMotivo: string = '';
   motivosFiltradosGrupo: string[] = [];
@@ -429,7 +434,9 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
 
   loadingNc: boolean = false;
 
-  constructor(private ncService: NoConformidadesService) { }
+  constructor(private ncService: NoConformidadesService) {
+    this.MOTIVOS = [...this.CATALOGO_MOTIVOS_BASE];
+  }
 
   ngOnInit(): void {
     this.cargarInformesCabecera();
@@ -504,7 +511,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
           });
           const areasDb = data.map((x: any) => (x.Descripcion || x.Nom_Area || x.Area || x.DES_AREA || '').trim()).filter(Boolean);
           if (areasDb.length > 0) {
-            this.AREAS = Array.from(new Set(areasDb));
+            this.AREAS = Array.from(new Set([...this.AREAS, ...areasDb]));
           }
         }
       },
@@ -520,7 +527,13 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
             return cod && desc ? `${cod} - ${desc}` : (desc || cod);
           }).filter(Boolean);
           if (motivosDb.length > 0) {
-            this.MOTIVOS = Array.from(new Set(motivosDb));
+            const todosLosMotivos = [...this.CATALOGO_MOTIVOS_BASE];
+            for (const m of motivosDb) {
+              if (!todosLosMotivos.some(base => this.normalizarTexto(base) === this.normalizarTexto(m))) {
+                todosLosMotivos.push(m);
+              }
+            }
+            this.MOTIVOS = todosLosMotivos;
             this.filtrarMotivosGrupo(this.filtroGrupoMotivo);
             this.filtrarMotivosModal(this.filtroModalMotivo);
             this.filtrarMotivosGrabar(this.filtroGrabarMotivo);
@@ -838,6 +851,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     this.editingId = null;
     this.filtroGrupoMotivo = '';
     this.filtrarMotivosGrupo('');
+    this.cantidadRollosTodos = '';
     this.goTo('paso1');
   }
 
@@ -855,6 +869,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       this.draft.fechaPartida = '';
       this.draft.articulosDisponibles = [];
       this.draft.seleccion = {};
+      this.cantidadRollosTodos = '';
       return;
     }
 
@@ -956,19 +971,66 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       return;
     }
     const nuevoEstado = !this.sonTodosArticulosSeleccionados();
-    this.draft.articulosDisponibles.forEach((_, idx) => {
+    const cantVal = Number(this.cantidadRollosTodos);
+    const tieneCantidad = !isNaN(cantVal) && cantVal > 0;
+
+    this.draft.articulosDisponibles.forEach((a, idx) => {
       const cur = this.draft!.seleccion[idx] || { checked: false, cantidad: '', open: true, defectos: [] };
       cur.checked = nuevoEstado;
       cur.open = nuevoEstado;
-      if (nuevoEstado && !cur.defectos) {
-        cur.defectos = [];
+      if (nuevoEstado) {
+        if (tieneCantidad) {
+          const maxRollos = Number(a.rollos) || 9999;
+          cur.cantidad = Math.min(cantVal, maxRollos);
+        }
+        if (!cur.defectos) {
+          cur.defectos = [];
+        }
       }
       this.draft!.seleccion[idx] = cur;
+      if (this.errors['art_' + idx]) {
+        delete this.errors['art_' + idx];
+      }
     });
 
     if (nuevoEstado && this.errors['articulos']) {
       delete this.errors['articulos'];
     }
+  }
+
+  onCantidadRollosTodosChange(val: any): void {
+    this.cantidadRollosTodos = val;
+    const num = Number(val);
+    if (!isNaN(num) && num > 0 && this.draft && this.draft.articulosDisponibles) {
+      this.draft.articulosDisponibles.forEach((a, idx) => {
+        const cur = this.draft!.seleccion[idx];
+        if (cur && cur.checked) {
+          const maxRollos = Number(a.rollos) || 9999;
+          cur.cantidad = Math.min(num, maxRollos);
+          if (this.errors['art_' + idx]) {
+            delete this.errors['art_' + idx];
+          }
+        }
+      });
+    }
+  }
+
+  aplicarCantidadRollosATodos(): void {
+    if (!this.draft || !this.draft.articulosDisponibles || this.draft.articulosDisponibles.length === 0) {
+      return;
+    }
+    const num = Number(this.cantidadRollosTodos);
+    if (isNaN(num) || num <= 0) return;
+    this.draft.articulosDisponibles.forEach((a, idx) => {
+      const cur = this.draft!.seleccion[idx];
+      if (cur && cur.checked) {
+        const maxRollos = Number(a.rollos) || 9999;
+        cur.cantidad = Math.min(num, maxRollos);
+        if (this.errors['art_' + idx]) {
+          delete this.errors['art_' + idx];
+        }
+      }
+    });
   }
 
   toggleArticuloOpen(idx: number): void {
@@ -1100,11 +1162,10 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
   filtrarMotivosGrupo(texto?: string): void {
     const query = this.normalizarTexto(texto !== undefined ? texto : (this.filtroGrupoMotivo || ''));
     if (!query) {
-      this.motivosFiltradosGrupo = this.MOTIVOS.slice(0, 100);
+      this.motivosFiltradosGrupo = [...this.MOTIVOS];
     } else {
       this.motivosFiltradosGrupo = this.MOTIVOS
-        .filter(m => this.normalizarTexto(m).includes(query))
-        .slice(0, 100);
+        .filter(m => this.normalizarTexto(m).includes(query));
     }
   }
 
@@ -1121,7 +1182,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       if (trigger.panelOpen) {
         trigger.closePanel();
       } else {
-        this.filtrarMotivosGrupo(this.filtroGrupoMotivo);
+        this.filtrarMotivosGrupo('');
         trigger.openPanel();
       }
     }
@@ -1181,11 +1242,10 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
   filtrarMotivosModal(texto?: string): void {
     const query = this.normalizarTexto(texto !== undefined ? texto : (this.filtroModalMotivo || ''));
     if (!query) {
-      this.motivosFiltradosModal = this.MOTIVOS.slice(0, 100);
+      this.motivosFiltradosModal = [...this.MOTIVOS];
     } else {
       this.motivosFiltradosModal = this.MOTIVOS
-        .filter(m => this.normalizarTexto(m).includes(query))
-        .slice(0, 100);
+        .filter(m => this.normalizarTexto(m).includes(query));
     }
   }
 
@@ -1202,7 +1262,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       if (trigger.panelOpen) {
         trigger.closePanel();
       } else {
-        this.filtrarMotivosModal(this.filtroModalMotivo);
+        this.filtrarMotivosModal('');
         trigger.openPanel();
       }
     }
@@ -1258,11 +1318,10 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
   filtrarMotivosGrabar(texto?: string): void {
     const query = this.normalizarTexto(texto !== undefined ? texto : (this.filtroGrabarMotivo || ''));
     if (!query) {
-      this.motivosFiltradosGrabar = this.MOTIVOS.slice(0, 100);
+      this.motivosFiltradosGrabar = [...this.MOTIVOS];
     } else {
       this.motivosFiltradosGrabar = this.MOTIVOS
-        .filter(m => this.normalizarTexto(m).includes(query))
-        .slice(0, 100);
+        .filter(m => this.normalizarTexto(m).includes(query));
     }
   }
 
@@ -1279,7 +1338,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       if (trigger.panelOpen) {
         trigger.closePanel();
       } else {
-        this.filtrarMotivosGrabar(this.filtroGrabarMotivo);
+        this.filtrarMotivosGrabar('');
         trigger.openPanel();
       }
     }
