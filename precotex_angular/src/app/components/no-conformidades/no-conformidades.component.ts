@@ -1137,6 +1137,23 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     }
   }
 
+  articuloTieneDefectosAsignados(idx: number): boolean {
+    if (!this.draft || !this.draft.seleccion || !this.draft.seleccion[idx]) return false;
+    const sel = this.draft.seleccion[idx];
+    if (!sel.defectos || sel.defectos.length === 0) return false;
+    return sel.defectos.some(d => (d.motivo && d.motivo.trim() !== '') || (d.isOtro && d.descripcionOtro && d.descripcionOtro.trim() !== ''));
+  }
+
+  getCantidadDefectosArticulo(idx: number): number {
+    if (!this.draft || !this.draft.seleccion || !this.draft.seleccion[idx] || !this.draft.seleccion[idx].defectos) return 0;
+    return this.draft.seleccion[idx].defectos.filter(d => (d.motivo && d.motivo.trim() !== '') || (d.isOtro && d.descripcionOtro && d.descripcionOtro.trim() !== '')).length;
+  }
+
+  getTotalArticulosConDefectos(): number {
+    if (!this.draft || !this.draft.articulosDisponibles) return 0;
+    return this.draft.articulosDisponibles.filter((_, i) => !!this.draft!.seleccion[i]?.checked && this.articuloTieneDefectosAsignados(i)).length;
+  }
+
   onGrupoMotivoChange(val: string): void {
     if (!this.draft) return;
     if (val === this.DEFECTO_NUEVO) {
@@ -1519,8 +1536,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     Swal.fire({
       icon: 'success',
       title: 'Defecto asignado',
-      text: 'Se aplicó el defecto a los artículos seleccionados. El formulario quedó libre para asignar otros defectos.',
-      timer: 1600,
+      text: 'Se aplicó el defecto a los artículos seleccionados. Ahora se muestran resaltados en verde.',
+      timer: 1700,
       showConfirmButton: false
     });
   }

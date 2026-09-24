@@ -714,33 +714,110 @@
     margin-bottom: 12px;
 
     .nc-check-pill {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 4px;
-      padding: 5px 10px;
+      gap: 6px;
+      padding: 6px 12px;
       border-radius: 8px;
       border: 1px solid #d1d5db;
-      background: #fff;
+      background: #ffffff;
+      color: #374151;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.15s;
+      user-select: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+
+      &:hover {
+        border-color: #94a3b8;
+        background: #f8fafc;
+      }
 
       mat-icon {
         font-size: 16px;
         width: 16px;
         height: 16px;
+        line-height: 16px;
         color: #9ca3af;
+        transition: color 0.15s;
       }
 
+      // Estado 1: Seleccionado en la ronda actual (sin defectos previos) -> Azul
       &--active {
         border-color: #1568D6;
         background: #eff6ff;
         color: #1568D6;
+        box-shadow: 0 0 0 1px #1568D6, 0 2px 4px rgba(21, 104, 214, 0.15);
 
         mat-icon {
           color: #1568D6;
         }
+
+        &:hover {
+          background: #dbeafe;
+        }
+      }
+
+      // Estado 2: Ya aplicado / asignado con defecto -> VERDE
+      &--assigned {
+        border-color: #16a34a;
+        background: #ecfdf5;
+        color: #166534;
+        box-shadow: 0 1px 3px rgba(22, 163, 74, 0.12);
+
+        mat-icon {
+          color: #16a34a;
+        }
+
+        &:hover {
+          background: #d1fae5;
+          border-color: #15803d;
+        }
+
+        .nc-pill-badge {
+          background: #dcfce7;
+          color: #15803d;
+          border: 1px solid #86efac;
+        }
+      }
+
+      // Estado 3: Asignado Y actualmente seleccionado para otra asignación -> VERDE INTENSO ACTIVO
+      &--assigned.nc-check-pill--active,
+      &--assigned-active {
+        border-color: #15803d;
+        background: #dcfce7;
+        color: #14532d;
+        box-shadow: 0 0 0 2px #16a34a, 0 2px 6px rgba(22, 163, 74, 0.25);
+        font-weight: 700;
+
+        mat-icon {
+          color: #15803d;
+        }
+
+        &:hover {
+          background: #bbf7d0;
+        }
+
+        .nc-pill-badge {
+          background: #16a34a;
+          color: #ffffff;
+          border: 1px solid #15803d;
+        }
+      }
+
+      .nc-pill-badge {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 1px 7px;
+        border-radius: 9999px;
+        margin-left: 4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        letter-spacing: 0.2px;
+        line-height: 16px;
+        transition: all 0.15s;
       }
     }
   }
@@ -751,6 +828,11 @@
     padding: 12px;
     background: #fff;
     margin-bottom: 10px;
+    transition: all 0.2s ease;
+
+    &--assigned {
+      border-left: 4px solid #16a34a;
+    }
 
     .nc-art-def-header {
       display: flex;

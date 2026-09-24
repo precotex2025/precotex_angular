@@ -316,9 +316,16 @@
           Asignación Defecto
         </p>
         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin: 0 0 10px;">
-          <p style="font-size: 12.5px; color: #6b7280; margin: 0;">
-            Seleccione los artículos<span style="color: red;">*</span>:
-          </p>
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <p style="font-size: 12.5px; color: #6b7280; margin: 0; font-weight: 500;">
+              Seleccione los artículos<span style="color: red;">*</span>:
+            </p>
+            <span *ngIf="getTotalArticulosConDefectos() > 0" 
+              style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #15803d; background: #ecfdf5; padding: 2px 8px; border-radius: 9999px; border: 1px solid #86efac;">
+              <mat-icon style="font-size: 13px; width: 13px; height: 13px; line-height: 13px; color: #16a34a;">check_circle</mat-icon>
+              {{ getTotalArticulosConDefectos() }} de {{ getArticulosChequeadosPaso1() }} asignados
+            </span>
+          </div>
           <button *ngIf="getArticulosChequeadosPaso1() > 1" type="button" mat-stroked-button color="primary" class="btn-seleccionar-todos"
             (click)="toggleTodosGrupoArticulos()"
             style="font-size: 12px; height: 30px; line-height: 30px; padding: 0 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
@@ -332,9 +339,18 @@
         <div class="nc-group-checks">
           <ng-container *ngFor="let a of draft.articulosDisponibles; let i = index">
             <div class="nc-check-pill" *ngIf="draft.seleccion[i]?.checked" (click)="toggleGrupoArticulo(i)"
-              [ngClass]="{'nc-check-pill--active': draft.grupoDefecto.seleccion[i]}">
-              <mat-icon>{{ draft.grupoDefecto.seleccion[i] ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+              [ngClass]="{
+                'nc-check-pill--active': draft.grupoDefecto.seleccion[i],
+                'nc-check-pill--assigned': articuloTieneDefectosAsignados(i),
+                'nc-check-pill--assigned-active': articuloTieneDefectosAsignados(i) && draft.grupoDefecto.seleccion[i]
+              }">
+              <mat-icon *ngIf="draft.grupoDefecto.seleccion[i]">check_box</mat-icon>
+              <mat-icon *ngIf="!draft.grupoDefecto.seleccion[i] && articuloTieneDefectosAsignados(i)">check_circle</mat-icon>
+              <mat-icon *ngIf="!draft.grupoDefecto.seleccion[i] && !articuloTieneDefectosAsignados(i)">check_box_outline_blank</mat-icon>
               <span>{{ a.nombre }}</span>
+              <span class="nc-pill-badge" *ngIf="articuloTieneDefectosAsignados(i)">
+                ✓ Asignado<span *ngIf="getCantidadDefectosArticulo(i) > 1"> ({{ getCantidadDefectosArticulo(i) }})</span>
+              </span>
             </div>
           </ng-container>
         </div>
@@ -460,9 +476,22 @@
         <div class="field-error-msg" *ngIf="errors['summary']">{{ errors['summary'] }}</div>
 
         <div *ngFor="let a of draft.articulosDisponibles; let i = index">
-          <div *ngIf="draft.seleccion[i]?.checked" class="nc-card-article-def">
+          <div *ngIf="draft.seleccion[i]?.checked" class="nc-card-article-def"
+            [ngClass]="{'nc-card-article-def--assigned': articuloTieneDefectosAsignados(i)}">
             <div class="nc-art-def-header">
-              <b>{{ a.nombre }}</b>
+              <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                <mat-icon *ngIf="articuloTieneDefectosAsignados(i)" style="color: #16a34a; font-size: 18px; width: 18px; height: 18px; line-height: 18px;">check_circle</mat-icon>
+                <mat-icon *ngIf="!articuloTieneDefectosAsignados(i)" style="color: #94a3b8; font-size: 18px; width: 18px; height: 18px; line-height: 18px;">radio_button_unchecked</mat-icon>
+                <b>{{ a.nombre }}</b>
+                <span *ngIf="articuloTieneDefectosAsignados(i)" 
+                  style="font-size: 10.5px; font-weight: 700; color: #15803d; background: #ecfdf5; border: 1px solid #86efac; border-radius: 4px; padding: 1px 6px;">
+                  Asignado
+                </span>
+                <span *ngIf="!articuloTieneDefectosAsignados(i)" 
+                  style="font-size: 10.5px; font-weight: 600; color: #64748b; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px; padding: 1px 6px;">
+                  Sin defecto
+                </span>
+              </div>
               <span style="font-size: 11px; color: #6b7280; font-weight: 600;">{{ draft.seleccion[i].cantidad }}
                 rollos</span>
             </div>
