@@ -26,6 +26,7 @@ export interface DefectoItem {
   descripcionOtro: string;
   area: string;
   areaOtro: string;
+  escala?: string;
   evidencia: { name: string; dataUrl: string }[];
   comentario?: string;
   open?: boolean;
@@ -168,103 +169,103 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     "HI020 - CONT. AMBIENTE",
     "HI023 - MIGRACIÓN DE HILO",
     "HI024 - MALA SOLIDEZ",
-    "TEJ021 - AGUJEROS MENORES A 1CM",
-    "TEJ022 - ANILLOS POR MEZCLA DE TÍTULOS",
-    "TEJ023 - ANILLOS POR TENSIÓN DE MÁQUINA",
-    "TEJ024 - CORDONES DE HILOS DOBLES",
-    "TEJ025 - CONT. FIBRILLA HILO COLOR",
-    "TEJ026 - CONTAMINACIÓN DE COLITAS",
-    "TEJ027 - CONTAMINACIÓN DE AMBIENTE",
-    "TEJ028 - CAÍDAS DE TEJIDO",
-    "TEJ029 - DISEÑO DE RAPPORT EQUIVOCADO",
-    "TEJ030 - ESCAPE DE LYCRA",
-    "TEJ031 - FUGAS DE PUNTO",
-    "TEJ032 - FALLA DE AGUJA ROTA",
-    "TEJ033 - FLOTANTES SUELTOS",
-    "TEJ034 - LYCRA ROTA",
-    "TEJ035 - LÍNEAS DE ACEITE",
-    "TEJ036 - LÍNEAS VERTICALES DE PLATINA",
-    "TEJ037 - LONGITUD DE MALLA F/ STD",
-    "TEJ038 - MANCHAS EN GOTAS DE ACEITE",
-    "TEJ039 - MARCA DE DOBLES DE CHUCO",
-    "TEJ040 - MANCHAS DE GRASA",
-    "TEJ041 - PATA DE GALLO (AGUJA FORZADA)",
-    "TEJ042 - RAPPORT F/STD",
-    "TEJ043 - TRASPASO O ANILLOS DE HILO ROTO",
-    "TEJ044 - MOTAS DE TEJIDO",
-    "TEJ045 - CARRETE DIRECTO",
-    "TEJ046 - MARCA DE AGUJA",
-    "TEJ047 - ARAÑONES",
-    "TEJ048 - ANILLADO POR LYCRA ROTA",
-    "TEJ049 - LYCRA NO VANIZADA (JALONES)",
-    "TEJ050 - PARADA DE MÁQUINA",
-    "TEJ051 - SEGUNDA DE TELA",
-    "TEJ052 - MANCHAS DE MARCADOR DE TELA",
-    "TEJ053 - CABO FALTANTE",
-    "TEJ054 - BARRADO DE MÁQUINA",
-    "TEJ055 - AGLOBADO",
-    "TEJ056 - QUEBRADURAS",
-    "TEJ058 - DISEÑO DE TEJIDO INCORRECTO",
-    "TEJ059 - DESPACHO DE TELA INCORRECTA",
-    "TEJ060 - ERROR DE DESPACHO DE TELA CRUDA",
-    "TIN051 - BAJA RESISTENCIA",
-    "TIN052 - DEGRADÉ",
-    "TIN053 - FUERA DE TONO",
-    "TIN054 - FUERA DE MATCHING",
-    "TIN055 - HUECOS POR PROCESO",
-    "TIN056 - JALADURAS",
-    "TIN057 - MANCHAS DE COLORANTE",
-    "TIN058 - MANCHAS DE SUCIEDAD",
-    "TIN059 - MALA SOLIDEZ AL LAVADO",
-    "TIN060 - MALA SOLIDEZ AL AGUA",
-    "TIN061 - MALA SOLIDEZ A LA TRANSPIRACIÓN",
-    "TIN062 - MALA SOLIDEZ AL FROTE SECO",
-    "TIN063 - MALA SOLIDEZ AL FROTE HÚMEDO",
-    "TIN064 - MALA IGUALACIÓN",
-    "TIN065 - MAL DESMONTADO",
-    "TIN066 - MANCHAS BLANCAS",
-    "TIN067 - MANCHAS DE ÓPTICO",
-    "TIN068 - ÓXIDO METÁLICO",
-    "TIN069 - PH FUERA DE STD",
-    "TIN070 - PUNTOS DE SILICONA",
-    "TIN071 - PILLING ELEVADO",
-    "TIN072 - QUEBRADURAS",
-    "TIN073 - RASPADURAS",
-    "TIN074 - REMALLES",
-    "TIN075 - TEÑIDO VETEADO",
-    "TIN076 - LÍNEAS GIRATORIAS",
-    "TIN077 - PICADURAS",
-    "TIN078 - PUNTOS DE COLORANTE",
-    "TIN079 - MANCHAS DE PRODUCTO",
-    "TIN080 - LÍNEA VERTICAL",
-    "TIN081 - MIGRACIÓN",
-    "TIN082 - BORDES REVENTADOS",
-    "TIN083 - RECT. DEFORMADOS",
-    "TIN084 - INCREMENTO DE PEDIDO",
-    "TIN085 - MAL ANÁLISIS TEXTIL",
-    "TIN087 - COMBINACIÓN NO APROBADA POR CLIENTE",
-    "TIN088 - RECETA INCORRECTA",
-    "TIN089 - COD COLOR INCORRECTO",
-    "TIN090 - NO DESCARGA DISCHARGE",
-    "ACA081 - ANCHO F/STD",
-    "ACA082 - APARIENCIA F/STD",
-    "ACA083 - BAJA RESISTENCIA",
-    "ACA084 - CALAMINADO",
-    "ACA085 - DENSIDAD F/STD",
-    "ACA086 - ENCOGIMIENTO F/STD",
-    "ACA087 - EMPALMES",
-    "ACA088 - HUECOS POR PROCESO",
-    "ACA089 - JALADURAS",
-    "ACA090 - LÍNEAS VERTICALES DE ESMERILADO",
-    "ACA091 - LYCRA QUEMADA",
-    "ACA092 - MAL OLOR",
-    "ACA093 - MANCHAS DE SUAVIZANTE",
-    "ACA094 - MAL ESMERILADO",
-    "ACA095 - MALA HIDROFILIDAD",
-    "ACA096 - MAL CORTE DE ORILLOS",
-    "ACA097 - MAL ENROLLADO",
-    "ACA098 - MARCAS DE AGUJA DE RAMA",
-    "ACA099 - MIGRACIÓN",
+    "TEJ21 - AGUJEROS MENORES A 1CM",
+    "TEJ22 - ANILLOS POR MEZCLA DE TÍTULOS",
+    "TEJ23 - ANILLOS POR TENSIÓN DE MÁQUINA",
+    "TEJ24 - CORDONES DE HILOS DOBLES",
+    "TEJ25 - CONT. FIBRILLA HILO COLOR",
+    "TEJ26 - CONTAMINACIÓN DE COLITAS",
+    "TEJ27 - CONTAMINACIÓN DE AMBIENTE",
+    "TEJ28 - CAÍDAS DE TEJIDO",
+    "TEJ29 - DISEÑO DE RAPPORT EQUIVOCADO",
+    "TEJ30 - ESCAPE DE LYCRA",
+    "TEJ31 - FUGAS DE PUNTO",
+    "TEJ32 - FALLA DE AGUJA ROTA",
+    "TEJ33 - FLOTANTES SUELTOS",
+    "TEJ34 - LYCRA ROTA",
+    "TEJ35 - LÍNEAS DE ACEITE",
+    "TEJ36 - LÍNEAS VERTICALES DE PLATINA",
+    "TEJ37 - LONGITUD DE MALLA F/ STD",
+    "TEJ38 - MANCHAS EN GOTAS DE ACEITE",
+    "TEJ39 - MARCA DE DOBLES DE CHUCO",
+    "TEJ40 - MANCHAS DE GRASA",
+    "TEJ41 - PATA DE GALLO (AGUJA FORZADA)",
+    "TEJ42 - RAPPORT F/STD",
+    "TEJ43 - TRASPASO O ANILLOS DE HILO ROTO",
+    "TEJ44 - MOTAS DE TEJIDO",
+    "TEJ45 - CARRETE DIRECTO",
+    "TEJ46 - MARCA DE AGUJA",
+    "TEJ47 - ARAÑONES",
+    "TEJ48 - ANILLADO POR LYCRA ROTA",
+    "TEJ49 - LYCRA NO VANIZADA (JALONES)",
+    "TEJ50 - PARADA DE MÁQUINA",
+    "TEJ51 - SEGUNDA DE TELA",
+    "TEJ52 - MANCHAS DE MARCADOR DE TELA",
+    "TEJ53 - CABO FALTANTE",
+    "TEJ54 - BARRADO DE MÁQUINA",
+    "TEJ55 - AGLOBADO",
+    "TEJ56 - QUEBRADURAS",
+    "TEJ58 - DISEÑO DE TEJIDO INCORRECTO",
+    "TEJ59 - DESPACHO DE TELA INCORRECTA",
+    "TEJ60 - ERROR DE DESPACHO DE TELA CRUDA",
+    "TIN51 - BAJA RESISTENCIA",
+    "TIN52 - DEGRADÉ",
+    "TIN53 - FUERA DE TONO",
+    "TIN54 - FUERA DE MATCHING",
+    "TIN55 - HUECOS POR PROCESO",
+    "TIN56 - JALADURAS",
+    "TIN57 - MANCHAS DE COLORANTE",
+    "TIN58 - MANCHAS DE SUCIEDAD",
+    "TIN59 - MALA SOLIDEZ AL LAVADO",
+    "TIN60 - MALA SOLIDEZ AL AGUA",
+    "TIN61 - MALA SOLIDEZ A LA TRANSPIRACIÓN",
+    "TIN62 - MALA SOLIDEZ AL FROTE SECO",
+    "TIN63 - MALA SOLIDEZ AL FROTE HÚMEDO",
+    "TIN64 - MALA IGUALACIÓN",
+    "TIN65 - MAL DESMONTADO",
+    "TIN66 - MANCHAS BLANCAS",
+    "TIN67 - MANCHAS DE ÓPTICO",
+    "TIN68 - ÓXIDO METÁLICO",
+    "TIN69 - PH FUERA DE STD",
+    "TIN70 - PUNTOS DE SILICONA",
+    "TIN71 - PILLING ELEVADO",
+    "TIN72 - QUEBRADURAS",
+    "TIN73 - RASPADURAS",
+    "TIN74 - REMALLES",
+    "TIN75 - TEÑIDO VETEADO",
+    "TIN76 - LÍNEAS GIRATORIAS",
+    "TIN77 - PICADURAS",
+    "TIN78 - PUNTOS DE COLORANTE",
+    "TIN79 - MANCHAS DE PRODUCTO",
+    "TIN80 - LÍNEA VERTICAL",
+    "TIN81 - MIGRACIÓN",
+    "TIN82 - BORDES REVENTADOS",
+    "TIN83 - RECT. DEFORMADOS",
+    "TIN84 - INCREMENTO DE PEDIDO",
+    "TIN85 - MAL ANÁLISIS TEXTIL",
+    "TIN87 - COMBINACIÓN NO APROBADA POR CLIENTE",
+    "TIN88 - RECETA INCORRECTA",
+    "TIN89 - COD COLOR INCORRECTO",
+    "TIN90 - NO DESCARGA DISCHARGE",
+    "ACA81 - ANCHO F/STD",
+    "ACA82 - APARIENCIA F/STD",
+    "ACA83 - BAJA RESISTENCIA",
+    "ACA84 - CALAMINADO",
+    "ACA85 - DENSIDAD F/STD",
+    "ACA86 - ENCOGIMIENTO F/STD",
+    "ACA87 - EMPALMES",
+    "ACA88 - HUECOS POR PROCESO",
+    "ACA89 - JALADURAS",
+    "ACA90 - LÍNEAS VERTICALES DE ESMERILADO",
+    "ACA91 - LYCRA QUEMADA",
+    "ACA92 - MAL OLOR",
+    "ACA93 - MANCHAS DE SUAVIZANTE",
+    "ACA94 - MAL ESMERILADO",
+    "ACA95 - MALA HIDROFILIDAD",
+    "ACA96 - MAL CORTE DE ORILLOS",
+    "ACA97 - MAL ENROLLADO",
+    "ACA98 - MARCAS DE AGUJA DE RAMA",
+    "ACA99 - MIGRACIÓN",
     "ACA100 - MAL PERCHADO",
     "ACA101 - MAL ABIERTO",
     "ACA102 - MANCHAS DE GRASA",
@@ -346,6 +347,19 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     "Otros"
   ];
 
+  readonly ESCALAS: { codigo: string; descripcion: string }[] = [
+    { codigo: '01', descripcion: 'Grave' },
+    { codigo: '02', descripcion: 'Medio' },
+    { codigo: '03', descripcion: 'Leve' }
+  ];
+
+  getEscalaLabel(cod?: string): string {
+    if (!cod) return 'Grave';
+    const clean = cod.trim();
+    const found = this.ESCALAS.find(e => e.codigo === clean || e.codigo === clean.padStart(2, '0'));
+    return found ? found.descripcion : (clean === '01' ? 'Grave' : clean === '02' ? 'Medio' : clean === '03' ? 'Leve' : clean);
+  }
+
   // Lista de NCs
   ncs: NoConformidad[] = [];
   nextNum: number = 5;
@@ -373,6 +387,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       descripcionOtro: string;
       area: string;
       areaOtro: string;
+      escala: string;
+      comentario: string;
       evidencia: { name: string; dataUrl: string }[];
       errors: { [key: string]: string };
     };
@@ -414,6 +430,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     descripcionOtro: '',
     area: '',
     areaOtro: '',
+    escala: '01',
     evidencia: [] as { name: string; dataUrl: string }[],
     comentario: '',
     errors: {} as { [key: string]: string }
@@ -527,8 +544,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
             return cod && desc ? `${cod} - ${desc}` : (desc || cod);
           }).filter(Boolean);
           if (motivosDb.length > 0) {
-            const todosLosMotivos = [...this.CATALOGO_MOTIVOS_BASE];
-            for (const m of motivosDb) {
+            const todosLosMotivos = [...motivosDb];
+            for (const m of this.CATALOGO_MOTIVOS_BASE) {
               if (!todosLosMotivos.some(base => this.normalizarTexto(base) === this.normalizarTexto(m))) {
                 todosLosMotivos.push(m);
               }
@@ -752,7 +769,45 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     if (screen === 'evolutivo' && (!this.evolutivoRawData || this.evolutivoRawData.length === 0)) {
       this.cargarEvolutivo();
     }
-    window.scrollTo(0, 0);
+    this.scrollToTop();
+  }
+
+  scrollToTop(): void {
+    const doScroll = () => {
+      try {
+        window.scrollTo(0, 0);
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        if (document.documentElement) document.documentElement.scrollTop = 0;
+        if (document.body) document.body.scrollTop = 0;
+
+        const sidenavContent = document.querySelector('mat-sidenav-content');
+        if (sidenavContent) {
+          sidenavContent.scrollTop = 0;
+          if (typeof (sidenavContent as any).scrollTo === 'function') {
+            (sidenavContent as any).scrollTo({ top: 0, left: 0, behavior: 'auto' });
+          }
+        }
+
+        const targets = document.querySelectorAll('mat-sidenav-content, .mat-drawer-content, .container, main, app-root');
+        targets.forEach((el: any) => {
+          if (el && el.scrollTop !== undefined && el.scrollTop > 0) {
+            el.scrollTop = 0;
+          }
+        });
+
+        const topEl = document.getElementById('nc-top') || document.querySelector('.vista-header, .nc-module-header, .container');
+        if (topEl && typeof topEl.scrollIntoView === 'function') {
+          topEl.scrollIntoView({ behavior: 'auto', block: 'start' });
+        }
+      } catch (e) {
+        // Silencioso
+      }
+    };
+
+    doScroll();
+    setTimeout(doScroll, 0);
+    setTimeout(doScroll, 50);
+    setTimeout(doScroll, 150);
   }
 
   nowStr(): string {
@@ -843,6 +898,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         descripcionOtro: '',
         area: '',
         areaOtro: '',
+        escala: '01',
+        comentario: '',
         evidencia: [],
         errors: {}
       }
@@ -1500,14 +1557,16 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         // Limpiar defectos vacíos/iniciales sin motivo asignado
         sel.defectos = sel.defectos.filter(d => (d.motivo && d.motivo.trim() !== '') || (d.isOtro && d.descripcionOtro && d.descripcionOtro.trim() !== ''));
 
+        const obsDefecto = (g.comentario || this.draft!.comentario || '').trim();
         const nuevoDefecto: DefectoItem = {
           motivo: g.isOtro ? '' : g.motivo,
           isOtro: g.isOtro,
           descripcionOtro: g.descripcionOtro || '',
           area: g.area,
           areaOtro: g.areaOtro || '',
+          escala: g.escala || '01',
           evidencia: [...g.evidencia],
-          comentario: this.draft!.comentario || '',
+          comentario: obsDefecto,
           open: false
         };
 
@@ -1526,6 +1585,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       descripcionOtro: '',
       area: '',
       areaOtro: '',
+      escala: '01',
+      comentario: '',
       evidencia: [],
       errors: {}
     };
@@ -1555,6 +1616,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         descripcionOtro: '',
         area: '',
         areaOtro: '',
+        escala: '01',
         evidencia: [],
         comentario: '',
         errors: {}
@@ -1572,6 +1634,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         descripcionOtro: def.descripcionOtro || '',
         area: def.area || '',
         areaOtro: def.areaOtro || '',
+        escala: def.escala || '01',
         evidencia: def.evidencia.map(f => ({ ...f })),
         comentario: def.comentario || '',
         errors: {}
@@ -1611,6 +1674,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       descripcionOtro: m.descripcionOtro,
       area: m.area,
       areaOtro: m.areaOtro,
+      escala: m.escala || '01',
       evidencia: m.evidencia,
       comentario: m.comentario,
       open: false
@@ -1729,7 +1793,16 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     const arts = this.getArticulosResumenDraft();
     const areas = this.getAreasDraft();
     const motivos = this.getMotivosDraft();
-    let msg = `🔴 *NUEVA NO CONFORMIDAD*\nN° NC: ${this.draft.ncPreview}\nPartida: ${this.draft.partida} | Cliente: ${this.draft.cliente}\nColor: ${this.draft.color}\nÁrea(s): ${areas}\nMotivo(s): ${motivos}\nRegistrado por: ${this.sUsuario}\nFecha: ${this.draft.fechaRegistro}`;
+
+    // Agrupar por código de artículo / tela por única vez
+    const uniqueMap = new Map<string, string>();
+    arts.forEach(a => {
+      const key = (a.codTela || a.nombre || '').trim().toUpperCase();
+      if (!uniqueMap.has(key)) uniqueMap.set(key, a.nombre);
+    });
+    const detalleArts = Array.from(uniqueMap.values()).map(nom => `* ${nom}`).join('\n\n');
+
+    let msg = `🔴 *NUEVA NO CONFORMIDAD*\n\n${this.draft.ncPreview}\n\nPartida: ${this.draft.partida} | Cliente: ${this.draft.cliente}\n\nColor: ${this.draft.color} | Peso: ${this.draft.peso}\n\nMotivo: ${motivos}\n\nÁrea: ${areas}\n\nDetalle por artículo:\n\n${detalleArts}\n\nRegistrado por: ${this.sUsuario}\nFecha: ${this.draft.fechaRegistro}`;
     if (this.tieneDefectoNuevoDraft()) {
       msg += `\n\n⚠️ *ALERTA:* Contiene defecto nuevo pendiente de validación por Calidad. No se envía a SIGE hasta su revisión.`;
     }
@@ -1967,8 +2040,17 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
             cant_Rollos_Rech: cantRech,
             defectos: (sel.defectos || []).map(d => {
               const matchMotivo = (d.motivo || '').match(/^([A-Z0-9]+)\s*-\s*(.*)$/);
-              const codMotivo = matchMotivo ? matchMotivo[1] : (d.motivo || '');
+              let codMotivo = matchMotivo ? matchMotivo[1] : (d.motivo || '');
               const desMotivo = matchMotivo ? matchMotivo[2].trim() : (d.motivo || '');
+
+              const padMatch = codMotivo.match(/^([A-Z]+)0([1-9][0-9])$/i);
+              if (padMatch) {
+                codMotivo = padMatch[1].toUpperCase() + padMatch[2];
+              }
+              if (d.isOtro && !codMotivo) {
+                codMotivo = 'TX293';
+              }
+
               const matchArea = (d.area || '').match(/^([A-Z0-9]+)\s*-\s*(.*)$/);
               let rawArea = matchArea ? matchArea[1] : (d.area === this.OTRA_AREA ? (d.areaOtro || '') : d.area);
               const codArea = this.mapaCodigosArea[(rawArea || '').trim().toUpperCase()] || rawArea || '';
@@ -1978,6 +2060,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
                 .map(f => f.dataUrl)
                 .filter(url => url && url.startsWith('data:image'));
 
+              const obsDef = (d.comentario || '').trim() || (d.isOtro ? (d.descripcionOtro || '') : '') || (this.draft?.comentario || '').trim();
+
               return {
                 accion: 'I',
                 item: itemSec,
@@ -1985,7 +2069,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
                 nom_Area: nomArea || '',
                 cod_Motivo: codMotivo || '',
                 des_Motivo: desMotivo || '',
-                observacion: d.isOtro ? d.descripcionOtro : (d.comentario || ''),
+                cod_Escala: d.escala || '01',
+                observacion: obsDef,
                 fotosBase64: fotosBase64
               };
             })
@@ -2096,14 +2181,25 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
             cant_Rollos_Rech: cantRech,
             defectos: (sel.defectos || []).map(d => {
               const matchMotivo = (d.motivo || '').match(/^([A-Z0-9]+)\s*-\s*(.*)$/);
-              const codMotivo = matchMotivo ? matchMotivo[1] : (d.motivo || '');
+              let codMotivo = matchMotivo ? matchMotivo[1] : (d.motivo || '');
               const desMotivo = matchMotivo ? matchMotivo[2].trim() : (d.motivo || '');
+
+              const padMatch = codMotivo.match(/^([A-Z]+)0([1-9][0-9])$/i);
+              if (padMatch) {
+                codMotivo = padMatch[1].toUpperCase() + padMatch[2];
+              }
+              if (d.isOtro && !codMotivo) {
+                codMotivo = 'TX293';
+              }
+
               const matchArea = (d.area || '').match(/^([A-Z0-9]+)\s*-\s*(.*)$/);
               let rawArea = matchArea ? matchArea[1] : (d.area === this.OTRA_AREA ? (d.areaOtro || '') : d.area);
               const codArea = this.mapaCodigosArea[(rawArea || '').trim().toUpperCase()] || rawArea || '';
               const nomArea = (d.area === this.OTRA_AREA ? (d.areaOtro || '') : (matchArea ? matchArea[2].trim() : d.area)) || '';
 
               const fotosBase64 = (d.evidencia || []).map(f => f.dataUrl).filter(Boolean);
+
+              const obsDef = (d.comentario || '').trim() || (d.isOtro ? (d.descripcionOtro || '') : '') || (this.draft?.comentario || '').trim();
 
               return {
                 accion: 'I',
@@ -2112,7 +2208,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
                 nom_Area: nomArea || '',
                 cod_Motivo: codMotivo || '',
                 des_Motivo: desMotivo || '',
-                observacion: d.isOtro ? d.descripcionOtro : (d.comentario || ''),
+                cod_Escala: d.escala || '01',
+                observacion: obsDef,
                 fotosBase64: fotosBase64
               };
             })
@@ -2176,55 +2273,60 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
   mapearArticulosYDefectos(articulosRaw: any[], motivosRaw: any[]): ArticuloSeleccionado[] {
     if (!Array.isArray(articulosRaw) || articulosRaw.length === 0) return [];
 
-    // Filtrar para mostrar únicamente los registros afectados (rollos rechazados > 0 o con defectos asignados)
-    const itemsAfectados = articulosRaw.filter((a: any) => {
-      const rech = a.Rollos_Rechazados !== undefined ? Number(a.Rollos_Rechazados) : (a.rollos_Rechazados !== undefined ? Number(a.rollos_Rechazados) : null);
-      if (rech !== null && !isNaN(rech)) {
-        return rech > 0;
-      }
-      const sec = a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : a.Item);
-      const aCodTela = (a.CodTela || a.codTela || '').trim().toUpperCase();
-      const hasDef = (motivosRaw || []).some((m: any) => {
-        const mSec = m.Num_Secuencia !== undefined && m.Num_Secuencia !== null ? Number(m.Num_Secuencia) : (m.num_Secuencia !== undefined && m.num_Secuencia !== null ? Number(m.num_Secuencia) : m.Item);
-        if (mSec !== undefined && mSec !== null && mSec !== '') {
-          return String(mSec) === String(sec);
-        }
-        const mCodTela = (m.Cod_Tela || m.cod_Tela || '').trim().toUpperCase();
-        return mCodTela && aCodTela && mCodTela === aCodTela;
-      });
-      return hasDef;
+    const hasSecuenciaEnMotivos = (motivosRaw || []).some((m: any) => {
+      const s = m.Num_Secuencia !== undefined ? m.Num_Secuencia : (m.num_Secuencia !== undefined ? m.num_Secuencia : m.Item);
+      return s !== undefined && s !== null && s !== '';
     });
 
-    const listaAProcesar = itemsAfectados.length > 0 ? itemsAfectados : articulosRaw;
-
-    return listaAProcesar.map((a: any, idx: number) => {
+    const resultado = articulosRaw.map((a: any, idx: number) => {
       const sec = a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1)));
       const aCodTela = (a.CodTela || a.codTela || '').trim().toUpperCase();
 
-      const defs = (motivosRaw || []).filter((m: any) => {
-        const mSec = m.Num_Secuencia !== undefined && m.Num_Secuencia !== null ? Number(m.Num_Secuencia) : (m.num_Secuencia !== undefined && m.num_Secuencia !== null ? Number(m.num_Secuencia) : m.Item);
-        if (mSec !== undefined && mSec !== null && mSec !== '') {
-          return String(mSec) === String(sec);
-        }
-        const mCodTela = (m.Cod_Tela || m.cod_Tela || '').trim().toUpperCase();
-        return mCodTela && aCodTela && mCodTela === aCodTela;
-      }).map((m: any) => {
+      let matchedMotivos: any[] = [];
+      if (hasSecuenciaEnMotivos) {
+        matchedMotivos = (motivosRaw || []).filter((m: any) => {
+          const mSec = m.Num_Secuencia !== undefined && m.Num_Secuencia !== null ? Number(m.Num_Secuencia) : (m.num_Secuencia !== undefined && m.num_Secuencia !== null ? Number(m.num_Secuencia) : m.Item);
+          return mSec !== undefined && mSec !== null && String(mSec) === String(sec);
+        });
+      } else {
+        matchedMotivos = (motivosRaw || []).filter((m: any) => {
+          const mCodTela = (m.Cod_Tela || m.cod_Tela || '').trim().toUpperCase();
+          return mCodTela && aCodTela && mCodTela === aCodTela;
+        });
+      }
+
+      const rawDefs = matchedMotivos.map((m: any) => {
         const fotosList: string[] = m.Fotos || m.fotos || [];
         const evidencia = fotosList.map((fotoName: string) => ({
           name: fotoName,
           dataUrl: this.ncService.getUrlImagen(fotoName)
         }));
 
+        const codEscala = (m.CC_Codigo_Escala || m.Cod_Escala || m.cod_Escala || '01').trim();
+        const obsMotivo = (m.CC_Observacion || m.Observacion || m.observacion || '').trim();
+
         return {
           motivo: m.Motivo || m.motivo || m.Des_Motivo || m.Cod_Motivo || '',
           isOtro: false,
-          descripcionOtro: m.Observacion || m.observacion || '',
+          descripcionOtro: obsMotivo,
           area: m.Area || m.area || m.Nom_Area || m.Cod_Area || '',
           areaOtro: '',
+          escala: codEscala,
           evidencia: evidencia,
-          comentario: m.Observacion || m.observacion || '',
+          comentario: obsMotivo,
           open: false
         };
+      });
+
+      // Deduplicar defectos exactamente iguales (mismo motivo, área, escala y comentario)
+      const defs: DefectoItem[] = [];
+      const seenDefs = new Set<string>();
+      rawDefs.forEach((d: DefectoItem) => {
+        const key = `${d.motivo}|${d.area}|${d.escala}|${d.comentario}`.trim().toUpperCase();
+        if (!seenDefs.has(key)) {
+          seenDefs.add(key);
+          defs.push(d);
+        }
       });
 
       const talla = (a.Talla || a.talla || '-').trim() || '-';
@@ -2243,6 +2345,10 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         defectos: defs
       };
     });
+
+    // Retornar solo artículos con rollos rechazados o con defectos asignados
+    const afectados = resultado.filter(a => (a.cantidad && a.cantidad > 0) || (a.defectos && a.defectos.length > 0));
+    return afectados.length > 0 ? afectados : resultado;
   }
 
   // Detalle de NC
@@ -2267,8 +2373,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
               nc.peso = `${totalKg.toFixed(2)} kg`;
             }
             if (!nc.comentario) {
-              const obs = (motivosRaw || []).find((m: any) => m.Observacion || m.observacion);
-              if (obs) nc.comentario = (obs.Observacion || obs.observacion || '').trim();
+              const obs = (motivosRaw || []).find((m: any) => m.Observacion || m.observacion || m.CC_Observacion);
+              if (obs) nc.comentario = (obs.Observacion || obs.observacion || obs.CC_Observacion || '').trim();
             }
           }
 
@@ -2382,8 +2488,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
             if (Array.isArray(articulosRaw) && articulosRaw.length > 0) {
               nc.articulos = this.mapearArticulosYDefectos(articulosRaw, motivosRaw);
               if (!nc.comentario) {
-                const obs = (motivosRaw || []).find((m: any) => m.Observacion || m.observacion);
-                if (obs) nc.comentario = (obs.Observacion || obs.observacion || '').trim();
+                const obs = (motivosRaw || []).find((m: any) => m.Observacion || m.observacion || m.CC_Observacion);
+                if (obs) nc.comentario = (obs.Observacion || obs.observacion || obs.CC_Observacion || '').trim();
               }
             }
           }
@@ -2454,6 +2560,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         descripcionOtro: '',
         area: '',
         areaOtro: '',
+        escala: '01',
+        comentario: '',
         evidencia: [],
         errors: {}
       }
@@ -2499,6 +2607,8 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       this.draft.grupoDefecto.descripcionOtro = fd.descripcionOtro || '';
       this.draft.grupoDefecto.area = fd.area || '';
       this.draft.grupoDefecto.areaOtro = fd.areaOtro || '';
+      this.draft.grupoDefecto.escala = fd.escala || '01';
+      this.draft.grupoDefecto.comentario = fd.comentario || '';
       this.draft.grupoDefecto.evidencia = fd.evidencia ? fd.evidencia.map(f => ({ ...f })) : [];
       this.filtroGrupoMotivo = this.draft.grupoDefecto.isOtro ? this.DEFECTO_NUEVO : (this.draft.grupoDefecto.motivo || '');
       this.filtrarMotivosGrupo(this.filtroGrupoMotivo);
@@ -2532,20 +2642,19 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
 
     const numInfClean = (nc.numero || nc.id || '').replace(/^NC\s*-\s*/i, '').trim();
 
-    // Resumen de artículos para la notificación WhatsApp
+    // Resumen de artículos agrupados por código de artículo para la notificación WhatsApp
     let detalleArticulos = '';
     if (nc.articulos && nc.articulos.length > 0) {
-      detalleArticulos = nc.articulos.map(a => {
-        const def = a.defectos?.[0];
-        const nomMotivo = def?.motivo || 'No especificado';
-        const nomArea = def?.area || 'PRODUCCIÓN';
-        const talla = a.talla || '-';
-        const rech = a.cantidad || 0;
-        const tot = a.rollos || 0;
-        return `• ${a.nombre} (Talla ${talla}, ${rech} de ${tot} rollos) — Motivo: ${nomMotivo} — Área: ${nomArea}`;
-      }).join('\n');
+      const uniqueArticulosMap = new Map<string, string>();
+      nc.articulos.forEach(a => {
+        const key = (a.codTela || a.nombre || '').trim().toUpperCase();
+        if (!uniqueArticulosMap.has(key)) {
+          uniqueArticulosMap.set(key, a.nombre);
+        }
+      });
+      detalleArticulos = Array.from(uniqueArticulosMap.values()).map(nom => `* ${nom}`).join('\n\n');
     } else {
-      detalleArticulos = `• Partida ${nc.partida}`;
+      detalleArticulos = `* Partida ${nc.partida}`;
     }
 
     let totalKgAfectado = 0;

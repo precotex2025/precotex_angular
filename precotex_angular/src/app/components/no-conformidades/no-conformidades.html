@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" id="nc-top">
 
   <!-- ==========================================
        VISTA 1: INICIO / BANDEJA DE ENTRADA
@@ -428,11 +428,21 @@
             }}</mat-error>
         </mat-form-field>
 
+        <!-- Escala del Defecto -->
+        <mat-form-field appearance="outline" style="width: 100%;">
+          <mat-label>Escala del Defecto *</mat-label>
+          <mat-select [(ngModel)]="draft.grupoDefecto.escala">
+            <mat-option *ngFor="let esc of ESCALAS" [value]="esc.codigo">
+              {{ esc.codigo }} - {{ esc.descripcion }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <!-- Observaciones / Comentario Adicional -->
         <mat-form-field appearance="outline" style="width: 100%;">
-          <mat-label>Observaciones / Comentario Adicional</mat-label>
-          <textarea matInput rows="3" [(ngModel)]="draft.comentario"
-            placeholder="Detalle adicional sobre la No Conformidad..."></textarea>
+          <mat-label>Observaciones del Defecto</mat-label>
+          <textarea matInput rows="2" [(ngModel)]="draft.grupoDefecto.comentario"
+            placeholder="Detalle u observación específica de este defecto..."></textarea>
         </mat-form-field>
 
         <!-- Evidencia fotográfica -->
@@ -504,7 +514,7 @@
             <div class="nc-def-row" *ngFor="let def of draft.seleccion[i].defectos; let j = index">
               <div class="nc-def-info">
                 <span class="nc-def-label">{{ defectoLabel(def) }}</span>
-                <span class="nc-def-sub">Área: <b>{{ defectoAreaFinal(def) }}</b> • {{ def.evidencia.length }}
+                <span class="nc-def-sub">Área: <b>{{ defectoAreaFinal(def) }}</b> • Escala: <b>{{ getEscalaLabel(def.escala) }}</b> • {{ def.evidencia.length }}
                   fotos</span>
                 <div *ngIf="def.comentario" style="font-size: 11.5px; color: #334155; margin-top: 4px; display: flex; align-items: center; gap: 4px; background: #f8fafc; padding: 4px 8px; border-radius: 4px; border-left: 3px solid #1568D6;">
                   <mat-icon style="font-size: 14px; width: 14px; height: 14px; color: #64748b;">comment</mat-icon>
@@ -600,7 +610,7 @@
               <th mat-header-cell *matHeaderCellDef>Defectos y Área</th>
               <td mat-cell *matCellDef="let a">
                 <div *ngFor="let d of a.defectos" style="margin-bottom: 4px;">
-                  • <b>{{ defectoLabel(d) }}</b> <span class="cell-teal">({{ defectoAreaFinal(d) }})</span>
+                  • <b>{{ defectoLabel(d) }}</b> <span class="cell-teal">({{ defectoAreaFinal(d) }} · {{ getEscalaLabel(d.escala) }})</span>
                   <div *ngIf="d.comentario" style="font-size: 11px; color: #475569; font-style: italic; margin-left: 10px;">
                     <b>Obs:</b> {{ d.comentario }}
                   </div>
@@ -748,7 +758,7 @@
                 <div class="nc-edit-def-body">
                   <mat-icon
                     style="color: #16a34a; font-size: 16px; width: 16px; height: 16px; vertical-align: middle;">check</mat-icon>
-                  <span>{{ defectoLabel(def) }} · {{ defectoAreaFinal(def) }} · {{ def.evidencia.length }}
+                  <span>{{ defectoLabel(def) }} · {{ defectoAreaFinal(def) }} · {{ getEscalaLabel(def.escala) }} · {{ def.evidencia.length }}
                     foto(s)</span>
                   <div *ngIf="def.comentario" style="font-size: 11.5px; color: #475569; margin-top: 3px; font-style: italic;">
                     <b>Obs:</b> {{ def.comentario }}
@@ -921,17 +931,18 @@
         <mat-icon>{{ detalleOpen.defectos ? 'expand_less' : 'expand_more' }}</mat-icon>
       </div>
       <div class="acc-body" *ngIf="detalleOpen.defectos">
-        <div *ngFor="let a of detalleNC.articulos" class="nc-art-def-block">
-          <h4 class="nc-art-name">{{ a.nombre }}</h4>
-          <div *ngFor="let d of a.defectos" class="nc-def-detail-row">
-            <div class="nc-def-title">
-              <span class="estado-tag" [ngClass]="{'estado-tag--new': d.isOtro}">
-                {{ d.isOtro ? 'DEFECTO NUEVO' : 'CATALOGADO' }}
+        <ng-container *ngFor="let a of detalleNC.articulos">
+          <div class="nc-art-def-block" *ngIf="a.defectos && a.defectos.length > 0">
+            <h4 class="nc-art-name">{{ a.nombre }}</h4>
+            <div *ngFor="let d of a.defectos" class="nc-def-detail-row">
+              <div class="nc-def-title">
+              <span class="estado-tag estado-tag--new" *ngIf="d.isOtro">
+                DEFECTO NUEVO
               </span>
               <span style="font-size: 13px; font-weight: 700; color: #1e293b;">{{ defectoLabel(d) }}</span>
             </div>
             <div style="font-size: 12px; color: #64748b; margin-bottom: 6px;">
-              Área responsable: <span class="cell-teal font-bold">{{ defectoAreaFinal(d) }}</span>
+              Área responsable: <span class="cell-teal font-bold">{{ defectoAreaFinal(d) }}</span> • Escala: <span class="font-bold" style="color: #b91c1c;">{{ getEscalaLabel(d.escala) }}</span>
             </div>
             <div *ngIf="d.comentario" style="font-size: 12px; color: #334155; margin-bottom: 6px; font-style: italic;">
               <b>Obs:</b> {{ d.comentario }}
@@ -945,6 +956,7 @@
             </div>
           </div>
         </div>
+      </ng-container>
       </div>
     </mat-card>
 
@@ -1414,6 +1426,16 @@
         <mat-label>Especifique Área Responsable *</mat-label>
         <input matInput [(ngModel)]="draftDefModal.areaOtro" placeholder="Especifique...">
         <mat-error *ngIf="draftDefModal.errors['areaOtro']">{{ draftDefModal.errors['areaOtro'] }}</mat-error>
+      </mat-form-field>
+
+      <!-- Escala del Defecto -->
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Escala del defecto *</mat-label>
+        <mat-select [(ngModel)]="draftDefModal.escala">
+          <mat-option *ngFor="let esc of ESCALAS" [value]="esc.codigo">
+            {{ esc.codigo }} - {{ esc.descripcion }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <!-- Evidencia Fotográfica con botón "+" y botón de cámara -->
