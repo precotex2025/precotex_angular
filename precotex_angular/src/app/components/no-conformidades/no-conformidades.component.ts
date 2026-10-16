@@ -14,6 +14,7 @@ export interface ArticuloPartida {
   id?: number;
   tipo: string;
   nombre: string;
+  abrTela?: string;
   codTela: string;
   talla: string;
   kgCrudo: string;
@@ -36,6 +37,7 @@ export interface ArticuloSeleccionado {
   id?: number | string;
   tipo: string;
   nombre: string;
+  abrTela?: string;
   codTela: string;
   talla: string;
   kgCrudo: string;
@@ -954,15 +956,20 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       next: (resp: any) => {
         const articulosRaw = resp?.articulos || (Array.isArray(resp) ? resp : []);
         if (Array.isArray(articulosRaw) && articulosRaw.length > 0) {
-          this.draft!.articulosDisponibles = articulosRaw.map((a: any, idx: number) => ({
-            id: a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1))),
-            tipo: (a.Talla || a.talla || '').trim() && (a.Talla || a.talla || '').trim() !== '-' ? 'Complemento' : 'Cuerpo',
-            nombre: (a.Tela || a.tela || a.CodTela || `Artículo ${idx + 1}`).trim(),
-            codTela: (a.CodTela || a.codTela || '').trim(),
-            talla: (a.Talla || a.talla || '-').trim() || '-',
-            kgCrudo: String(a.Kgs || a.kgs || '0'),
-            rollos: Number(a.Rollos || a.rollos || 0)
-          }));
+          this.draft!.articulosDisponibles = articulosRaw.map((a: any, idx: number) => {
+            const nomTela = (a.Tela || a.tela || a.CodTela || `Artículo ${idx + 1}`).trim();
+            const abrTela = (a.Abr_Tela || a.abr_Tela || a.abrTela || nomTela).trim();
+            return {
+              id: a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1))),
+              tipo: (a.Talla || a.talla || '').trim() && (a.Talla || a.talla || '').trim() !== '-' ? 'Complemento' : 'Cuerpo',
+              nombre: nomTela,
+              abrTela: abrTela,
+              codTela: (a.CodTela || a.codTela || '').trim(),
+              talla: (a.Talla || a.talla || '-').trim() || '-',
+              kgCrudo: String(a.Kgs || a.kgs || '0'),
+              rollos: Number(a.Rollos || a.rollos || 0)
+            };
+          });
 
           this.draft!.seleccion = {};
           this.draft!.articulosDisponibles.forEach((_, idx) => {
@@ -1558,6 +1565,9 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         sel.defectos = sel.defectos.filter(d => (d.motivo && d.motivo.trim() !== '') || (d.isOtro && d.descripcionOtro && d.descripcionOtro.trim() !== ''));
 
         const obsDefecto = (g.comentario || this.draft!.comentario || '').trim();
+        if (!this.draft!.comentario && obsDefecto) {
+          this.draft!.comentario = obsDefecto;
+        }
         const nuevoDefecto: DefectoItem = {
           motivo: g.isOtro ? '' : g.motivo,
           isOtro: g.isOtro,
@@ -1754,6 +1764,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         list.push({
           tipo: a.tipo,
           nombre: a.nombre,
+          abrTela: a.abrTela,
           codTela: a.codTela,
           talla: a.talla,
           kgCrudo: a.kgCrudo,
@@ -1794,15 +1805,32 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     const areas = this.getAreasDraft();
     const motivos = this.getMotivosDraft();
 
-    // Agrupar por código de artículo / tela por única vez
-    const uniqueMap = new Map<string, string>();
+    // Agrupar por código de artículo / tela sumando rollos afectados y totales
+    const uniqueMap = new Map<string, { desc: string, cant: number, tot: number }>();
     arts.forEach(a => {
       const key = (a.codTela || a.nombre || '').trim().toUpperCase();
-      if (!uniqueMap.has(key)) uniqueMap.set(key, a.nombre);
+      const descTela = (a.abrTela || a.nombre || '').trim();
+      const cant = Number(a.cantidad) || 0;
+      const tot = Number(a.rollos) || 0;
+      if (uniqueMap.has(key)) {
+        const ex = uniqueMap.get(key)!;
+        uniqueMap.set(key, { desc: ex.desc, cant: ex.cant + cant, tot: ex.tot + tot });
+      } else {
+        uniqueMap.set(key, { desc: descTela, cant, tot });
+      }
     });
-    const detalleArts = Array.from(uniqueMap.values()).map(nom => `* ${nom}`).join('\n\n');
+    const detalleArts = Array.from(uniqueMap.values()).map(item => {
+      const labelRollo = item.cant === 1 ? 'ROLLO AFECTADO' : 'ROLLOS AFECTADOS';
+      const rollosTexto = item.tot > 0 ? `${item.cant} de ${item.tot} rollos` : `${item.cant} rollos`;
+      return ` • ${item.desc} - ${labelRollo}: ${rollosTexto}`;
+    }).join('\n\n');
 
-    let msg = `🔴 *NUEVA NO CONFORMIDAD*\n\n${this.draft.ncPreview}\n\nPartida: ${this.draft.partida} | Cliente: ${this.draft.cliente}\n\nColor: ${this.draft.color} | Peso: ${this.draft.peso}\n\nMotivo: ${motivos}\n\nÁrea: ${areas}\n\nDetalle por artículo:\n\n${detalleArts}\n\nRegistrado por: ${this.sUsuario}\nFecha: ${this.draft.fechaRegistro}`;
+    const comentarioMsg = (this.draft.comentario || '').trim();
+    let msg = `🔴 *NUEVA NO CONFORMIDAD*\n\n${this.draft.ncPreview}\n\nPartida: ${this.draft.partida} | Cliente: ${this.draft.cliente}\n\nColor: ${this.draft.color}\n\nMotivo: ${motivos}\n\nÁrea: ${areas}\n\nDetalle por artículo:\n\n${detalleArts}\n\nRegistrado por: ${this.sUsuario}\nFecha: ${this.draft.fechaRegistro}`;
+    if (comentarioMsg) {
+      msg += `\n\nComentarios: ${comentarioMsg}`;
+    }
+    msg += `\n\nEvidencia:`;
     if (this.tieneDefectoNuevoDraft()) {
       msg += `\n\n⚠️ *ALERTA:* Contiene defecto nuevo pendiente de validación por Calidad. No se envía a SIGE hasta su revisión.`;
     }
@@ -2027,11 +2055,14 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
           const rollosAsig = Number(a.rollos) || 0;
           const kgsVal = parseFloat(a.kgCrudo) || 0;
 
+          const descParaWsp = (a.abrTela || a.nombre || a.codTela || '').trim();
+
           return {
             accion: 'U',
             item: itemSec,
             cod_Tela: a.codTela || '',
-            nom_Tela: a.nombre || a.codTela || '',
+            nom_Tela: descParaWsp,
+            abr_Tela: descParaWsp,
             comb: '',
             cod_Color: '',
             talla: a.talla === '-' ? '' : (a.talla || ''),
@@ -2043,10 +2074,6 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
               let codMotivo = matchMotivo ? matchMotivo[1] : (d.motivo || '');
               const desMotivo = matchMotivo ? matchMotivo[2].trim() : (d.motivo || '');
 
-              const padMatch = codMotivo.match(/^([A-Z]+)0([1-9][0-9])$/i);
-              if (padMatch) {
-                codMotivo = padMatch[1].toUpperCase() + padMatch[2];
-              }
               if (d.isOtro && !codMotivo) {
                 codMotivo = 'TX293';
               }
@@ -2145,6 +2172,29 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       ? kgTotalAfectado
       : (parseFloat((this.draft.peso || '').replace(/[^0-9.]/g, '')) || 0);
 
+    // Recolectar comentarios si draft.comentario está vacío
+    let comentarioFinal = (this.draft.comentario || '').trim();
+    if (!comentarioFinal) {
+      const obsList: string[] = [];
+      Object.keys(this.draft.seleccion).forEach(k => {
+        const sel = this.draft!.seleccion[Number(k)];
+        if (sel && sel.checked && sel.defectos) {
+          sel.defectos.forEach(d => {
+            const obs = (d.comentario || '').trim();
+            if (obs && !obsList.includes(obs)) {
+              obsList.push(obs);
+            }
+          });
+        }
+      });
+      if (obsList.length === 0 && this.draft.grupoDefecto && this.draft.grupoDefecto.comentario) {
+        const gObs = (this.draft.grupoDefecto.comentario || '').trim();
+        if (gObs) obsList.push(gObs);
+      }
+      comentarioFinal = obsList.join('; ');
+    }
+    this.draft.comentario = comentarioFinal;
+
     const payload = {
       accion: 'I',
       num_Informe: '',
@@ -2154,7 +2204,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       cod_Color: '',
       color: this.draft.color,
       kg_Total: kgTotalFinal,
-      observacion: this.draft.comentario || '',
+      observacion: comentarioFinal,
       cod_Usuario: this.sUsuario || GlobalVariable.vusu || 'SISTEMAS',
       nom_Usuario: this.sUsuario || GlobalVariable.vusu || 'SISTEMAS',
       articulos: Object.keys(this.draft.seleccion)
@@ -2168,11 +2218,14 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
           const rollosAsig = Number(a.rollos) || 0;
           const kgsVal = parseFloat(a.kgCrudo) || 0;
 
+          const descParaWsp = (a.abrTela || a.nombre || a.codTela || '').trim();
+
           return {
             accion: 'U',
             item: itemSec,
             cod_Tela: a.codTela || '',
-            nom_Tela: a.nombre || a.codTela || '',
+            nom_Tela: descParaWsp,
+            abr_Tela: descParaWsp,
             comb: '',
             cod_Color: '',
             talla: a.talla === '-' ? '' : (a.talla || ''),
@@ -2184,10 +2237,6 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
               let codMotivo = matchMotivo ? matchMotivo[1] : (d.motivo || '');
               const desMotivo = matchMotivo ? matchMotivo[2].trim() : (d.motivo || '');
 
-              const padMatch = codMotivo.match(/^([A-Z]+)0([1-9][0-9])$/i);
-              if (padMatch) {
-                codMotivo = padMatch[1].toUpperCase() + padMatch[2];
-              }
               if (d.isOtro && !codMotivo) {
                 codMotivo = 'TX293';
               }
@@ -2280,7 +2329,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
 
     const resultado = articulosRaw.map((a: any, idx: number) => {
       const sec = a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1)));
-      const aCodTela = (a.CodTela || a.codTela || '').trim().toUpperCase();
+      const aCodTela = (a.CodTela || a.codTela || a.Cod_Tela || a.cod_Tela || '').trim().toUpperCase();
 
       let matchedMotivos: any[] = [];
       if (hasSecuenciaEnMotivos) {
@@ -2290,7 +2339,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         });
       } else {
         matchedMotivos = (motivosRaw || []).filter((m: any) => {
-          const mCodTela = (m.Cod_Tela || m.cod_Tela || '').trim().toUpperCase();
+          const mCodTela = (m.Cod_Tela || m.cod_Tela || m.CodTela || m.codTela || '').trim().toUpperCase();
           return mCodTela && aCodTela && mCodTela === aCodTela;
         });
       }
@@ -2306,10 +2355,10 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         const obsMotivo = (m.CC_Observacion || m.Observacion || m.observacion || '').trim();
 
         return {
-          motivo: m.Motivo || m.motivo || m.Des_Motivo || m.Cod_Motivo || '',
+          motivo: (m.Motivo || m.motivo || m.Des_Motivo || m.Cod_Motivo || '').trim(),
           isOtro: false,
           descripcionOtro: obsMotivo,
-          area: m.Area || m.area || m.Nom_Area || m.Cod_Area || '',
+          area: (m.Area || m.area || m.Nom_Area || m.Cod_Area || '').trim(),
           areaOtro: '',
           escala: codEscala,
           evidencia: evidencia,
@@ -2333,11 +2382,15 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
       const tipo = talla !== '-' ? 'Complemento' : 'Cuerpo';
       const cantAfectada = Number(a.Rollos_Rechazados !== undefined ? a.Rollos_Rechazados : (a.rollos_Rechazados !== undefined ? a.rollos_Rechazados : (a.Rollos || 0)));
 
+      const nomTela = (a.Tela || a.tela || a.CodTela || `Artículo ${sec}`).trim();
+      const abrTela = (a.Abr_Tela || a.abr_Tela || a.abrTela || nomTela).trim();
+
       return {
         id: sec,
         tipo: tipo,
-        nombre: (a.Tela || a.tela || a.CodTela || `Artículo ${sec}`).trim(),
-        codTela: (a.CodTela || a.codTela || '').trim(),
+        nombre: nomTela,
+        abrTela: abrTela,
+        codTela: (a.CodTela || a.codTela || a.Cod_Tela || a.cod_Tela || '').trim(),
         talla: talla,
         kgCrudo: String(a.Kgs || a.kgs || '0'),
         rollos: Number(a.Rollos || a.rollos || 0),
@@ -2345,6 +2398,32 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         defectos: defs
       };
     });
+
+    // Seguridad: si los motivos no hicieron match por secuencia/tela, asignarlos a los artículos afectados para no perderlos
+    const allMatchedDefsCount = resultado.reduce((acc, a) => acc + (a.defectos?.length || 0), 0);
+    if (allMatchedDefsCount === 0 && (motivosRaw || []).length > 0 && resultado.length > 0) {
+      const fallbackDefs: DefectoItem[] = (motivosRaw || []).map((m: any) => {
+        const fotosList: string[] = m.Fotos || m.fotos || [];
+        const evidencia = fotosList.map((fotoName: string) => ({
+          name: fotoName,
+          dataUrl: this.ncService.getUrlImagen(fotoName)
+        }));
+        const codEscala = (m.CC_Codigo_Escala || m.Cod_Escala || m.cod_Escala || '01').trim();
+        const obsMotivo = (m.CC_Observacion || m.Observacion || m.observacion || '').trim();
+        return {
+          motivo: (m.Motivo || m.motivo || m.Des_Motivo || m.Cod_Motivo || '').trim(),
+          isOtro: false,
+          descripcionOtro: obsMotivo,
+          area: (m.Area || m.area || m.Nom_Area || m.Cod_Area || '').trim(),
+          areaOtro: '',
+          escala: codEscala,
+          evidencia: evidencia,
+          comentario: obsMotivo,
+          open: false
+        };
+      });
+      resultado[0].defectos = fallbackDefs;
+    }
 
     // Retornar solo artículos con rollos rechazados o con defectos asignados
     const afectados = resultado.filter(a => (a.cantidad && a.cantidad > 0) || (a.defectos && a.defectos.length > 0));
@@ -2401,15 +2480,20 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         next: (res: any) => {
           const articulosPartidaRaw = res?.articulos || (Array.isArray(res) ? res : []);
           if (Array.isArray(articulosPartidaRaw) && articulosPartidaRaw.length > 0) {
-            nc.articulosPartida = articulosPartidaRaw.map((a: any, idx: number) => ({
-              id: a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1))),
-              tipo: (a.Talla || a.talla || '').trim() && (a.Talla || a.talla || '').trim() !== '-' ? 'Complemento' : 'Cuerpo',
-              nombre: (a.Tela || a.tela || a.CodTela || `Artículo ${idx + 1}`).trim(),
-              codTela: (a.CodTela || a.codTela || '').trim(),
-              talla: (a.Talla || a.talla || '-').trim() || '-',
-              kgCrudo: String(a.Kgs || a.kgs || '0'),
-              rollos: Number(a.Rollos || a.rollos || 0)
-            }));
+            nc.articulosPartida = articulosPartidaRaw.map((a: any, idx: number) => {
+              const nomTela = (a.Tela || a.tela || a.CodTela || `Artículo ${idx + 1}`).trim();
+              const abrTela = (a.Abr_Tela || a.abr_Tela || a.abrTela || nomTela).trim();
+              return {
+                id: a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1))),
+                tipo: (a.Talla || a.talla || '').trim() && (a.Talla || a.talla || '').trim() !== '-' ? 'Complemento' : 'Cuerpo',
+                nombre: nomTela,
+                abrTela: abrTela,
+                codTela: (a.CodTela || a.codTela || '').trim(),
+                talla: (a.Talla || a.talla || '-').trim() || '-',
+                kgCrudo: String(a.Kgs || a.kgs || '0'),
+                rollos: Number(a.Rollos || a.rollos || 0)
+              };
+            });
           } else if (this.PARTIDAS_DB[nc.partida]) {
             nc.articulosPartida = this.PARTIDAS_DB[nc.partida].articulos;
           }
@@ -2497,15 +2581,20 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
           if (partida) {
             const articulosPartidaRaw = partida?.articulos || (Array.isArray(partida) ? partida : []);
             if (Array.isArray(articulosPartidaRaw) && articulosPartidaRaw.length > 0) {
-              nc.articulosPartida = articulosPartidaRaw.map((a: any, idx: number) => ({
-                id: a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1))),
-                tipo: (a.Talla || a.talla || '').trim() && (a.Talla || a.talla || '').trim() !== '-' ? 'Complemento' : 'Cuerpo',
-                nombre: (a.Tela || a.tela || a.CodTela || `Artículo ${idx + 1}`).trim(),
-                codTela: (a.CodTela || a.codTela || '').trim(),
-                talla: (a.Talla || a.talla || '-').trim() || '-',
-                kgCrudo: String(a.Kgs || a.kgs || '0'),
-                rollos: Number(a.Rollos || a.rollos || 0)
-              }));
+              nc.articulosPartida = articulosPartidaRaw.map((a: any, idx: number) => {
+                const nomTela = (a.Tela || a.tela || a.CodTela || `Artículo ${idx + 1}`).trim();
+                const abrTela = (a.Abr_Tela || a.abr_Tela || a.abrTela || nomTela).trim();
+                return {
+                  id: a.Num_Secuencia !== undefined && a.Num_Secuencia !== null ? Number(a.Num_Secuencia) : (a.num_Secuencia !== undefined && a.num_Secuencia !== null ? Number(a.num_Secuencia) : (a.Item || (idx + 1))),
+                  tipo: (a.Talla || a.talla || '').trim() && (a.Talla || a.talla || '').trim() !== '-' ? 'Complemento' : 'Cuerpo',
+                  nombre: nomTela,
+                  abrTela: abrTela,
+                  codTela: (a.CodTela || a.codTela || '').trim(),
+                  talla: (a.Talla || a.talla || '-').trim() || '-',
+                  kgCrudo: String(a.Kgs || a.kgs || '0'),
+                  rollos: Number(a.Rollos || a.rollos || 0)
+                };
+              });
             } else if (this.PARTIDAS_DB[nc.partida]) {
               nc.articulosPartida = this.PARTIDAS_DB[nc.partida].articulos;
             }
@@ -2536,6 +2625,7 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
         id: i + 1,
         tipo: a.tipo || 'Cuerpo',
         nombre: a.nombre,
+        abrTela: a.abrTela,
         codTela: a.codTela,
         talla: a.talla,
         kgCrudo: a.kgCrudo,
@@ -2645,16 +2735,27 @@ export class NoConformidadesComponent implements OnInit, AfterViewInit {
     // Resumen de artículos agrupados por código de artículo para la notificación WhatsApp
     let detalleArticulos = '';
     if (nc.articulos && nc.articulos.length > 0) {
-      const uniqueArticulosMap = new Map<string, string>();
+      const uniqueArticulosMap = new Map<string, { nombre: string; cantRech: number; totalRollos: number }>();
       nc.articulos.forEach(a => {
         const key = (a.codTela || a.nombre || '').trim().toUpperCase();
-        if (!uniqueArticulosMap.has(key)) {
-          uniqueArticulosMap.set(key, a.nombre);
+        const nom = (a.abrTela || a.nombre || a.codTela || 'Artículo').trim();
+        const cant = Number(a.cantidad) || 0;
+        const tot = Number(a.rollos) || 0;
+        if (uniqueArticulosMap.has(key)) {
+          const curr = uniqueArticulosMap.get(key)!;
+          curr.cantRech += cant;
+          curr.totalRollos += tot;
+        } else {
+          uniqueArticulosMap.set(key, { nombre: nom, cantRech: cant, totalRollos: tot });
         }
       });
-      detalleArticulos = Array.from(uniqueArticulosMap.values()).map(nom => `* ${nom}`).join('\n\n');
+      detalleArticulos = Array.from(uniqueArticulosMap.values()).map(item => {
+        const label = item.cantRech === 1 ? 'ROLLO AFECTADO' : 'ROLLOS AFECTADOS';
+        const txtRollos = item.totalRollos > 0 ? `${item.cantRech} de ${item.totalRollos} rollos` : `${item.cantRech} rollos`;
+        return ` • ${item.nombre} - ${label}: ${txtRollos}`;
+      }).join('\n\n');
     } else {
-      detalleArticulos = `* Partida ${nc.partida}`;
+      detalleArticulos = ` • Partida ${nc.partida}`;
     }
 
     let totalKgAfectado = 0;
