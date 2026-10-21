@@ -1,5 +1,7 @@
 
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { Subscription } from 'rxjs';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { SolicitudMantenimientoService } from 'src/app/services/SolicitudMantenimiento/solicitud-mantenimiento.service';
@@ -57,7 +59,7 @@ export interface SolicitudMantenimiento {
   templateUrl: './solicitud-mantenimiento-maquina-visor.component.html',
   styleUrls: ['./solicitud-mantenimiento-maquina-visor.component.scss']
 })
-export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
+export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Paleta de colores (mismo estilo del reporte "DIR. DE HILO")
   private readonly COLOR_HEADER_BANNER = 'FF1A5F63';   // Banner título (teal oscuro)
@@ -73,7 +75,10 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
   
 
   //RUTA -> SolicitudMantenimientoMaquinaVisor
-  @ViewChild(MatSort) sort!: MatSort;  
+  // Setter: la tabla vive bajo *ngIf (solo escritorio), el sort aparece/desaparece con ella
+  @ViewChild(MatSort) set sort(value: MatSort) {
+    if (value) { this.dataSource.sort = value; }
+  }
   @ViewChild('visorFoto') visorFoto!: TemplateRef<any>;
 
   constructor(
@@ -85,6 +90,8 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
     private matSnackBar    : MatSnackBar      ,
     private registromantemaquinastej: RegistroManteMaquinasTejService   ,
     private toastr      : ToastrService ,
+    private breakpointObserver: BreakpointObserver,
+    private host: ElementRef,
   ) { }
 
   sCod_Trabajador = GlobalVariable.vcodtra;
@@ -97,21 +104,111 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
 
   intervalId: any;
 
+  // Vista móvil (lista de cards en vez de tabla)
+  esMovil = false;
+  limiteMovil = 30;
+  private readonly PASO_MOVIL = 30;
+  private subs = new Subscription();
+
+  // Cards de totales por estado
+  readonly estadosDef = [
+    { cod: '01', nombre: 'Reportado', clase: 'estado-reportado' },
+    { cod: '02', nombre: 'En Atención', clase: 'estado-atencion' },
+    { cod: '03', nombre: 'Pendiente', clase: 'estado-pendiente' },
+    { cod: '04', nombre: 'Cerrado', clase: 'estado-cerrado' },
+    { cod: '05', nombre: 'Rechazado', clase: 'estado-rechazado' },
+  ];
+  resumenEstados: { cod: string, nombre: string, clase: string, total: number }[] = [];
+  estadoSeleccionado: string | null = null;   // null = Todos
+  cargado = false;   // true tras la primera respuesta del servicio (evita mostrar "vacío" mientras carga)
+
+  get mensajeVacio(): string {
+    if (this.estadoSeleccionado === null) {
+      return 'No hay solicitudes registradas en este momento.';
+    }
+    const e = this.estadosDef.find(x => x.cod === this.estadoSeleccionado);
+    return `No hay solicitudes en estado "${e ? e.nombre : ''}".`;
+  }
+
   ngOnInit(): void {
-    
+
+    this.subs.add(
+      this.breakpointObserver.observe('(max-width: 768px)').subscribe(r => {
+        this.esMovil = r.matches;
+        this.limiteMovil = this.PASO_MOVIL;
+      })
+    );
+
+    // La carga principal no depende de las demás: se lanza primero y sin esperar.
+    this.ObtenerDatosVisor(true);
     this.getInfoUsuarios()  ;
     this.mostrarTejedor()   ;
     this.ObtieneSedeByUser();
-    this.ObtenerDatosVisor();
 
-    //Refrescar cada 60 segundos
+    //Refrescar cada 60 segundos (silencioso, sin spinner)
     this.intervalId = setInterval(() => {
-      this.ObtenerDatosVisor();
-    }, 60000);    
+      this.ObtenerDatosVisor(false);
+    }, 60000);
 
   }
-  
-  dataSource: MatTableDataSource<data_visor> = new MatTableDataSource();
+
+  // Alto del área de tabla/panel: desde debajo de las cards hasta el borde inferior de la ventana (5px de margen)
+  alturaTabla = 400;
+  private readonly MARGEN_INFERIOR = 5;
+
+  ngAfterViewInit(): void {
+    setTimeout(() => this.ajustarAltura());
+  }
+
+  @HostListener('window:resize')
+  ajustarAltura(): void {
+    const cards = (this.host.nativeElement as HTMLElement).querySelector(this.esMovil ? '.rango-fechas' : '.cards-estado');
+    if (!cards) { return; }
+    const margenCards = this.esMovil ? 8 : 16;   // margin-bottom de cada bloque
+    const alto = window.innerHeight - cards.getBoundingClientRect().bottom - margenCards - this.MARGEN_INFERIOR;
+    this.alturaTabla = Math.max(alto, 240);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.intervalId);
+    this.subs.unsubscribe();
+  }
+
+  trackBySolicitud(_: number, item: any) {
+    return item.cod_Solicitud;
+  }
+
+  seleccionarEstado(cod: string | null) {
+    this.estadoSeleccionado = (cod === this.estadoSeleccionado) ? null : cod;
+    this.limiteMovil = this.PASO_MOVIL;
+    this.aplicarFiltroEstado();
+  }
+
+  verMasMovil() {
+    this.limiteMovil += this.PASO_MOVIL;
+  }
+
+  private aplicarFiltroEstado() {
+    this.dataSource.data = this.estadoSeleccionado
+      ? this.solicitudesLst.filter((x: any) => x.cod_Estado_Mant === this.estadoSeleccionado)
+      : this.solicitudesLst;
+  }
+
+  private calcularResumen() {
+    const conteo: { [k: string]: number } = {};
+    this.solicitudesLst.forEach((x: any) => {
+      conteo[x.cod_Estado_Mant] = (conteo[x.cod_Estado_Mant] || 0) + 1;
+    });
+    this.resumenEstados = this.estadosDef.map(e => ({ ...e, total: conteo[e.cod] || 0 }));
+  }
+
+  private ocultarAtenderSiPerfil23() {
+    if (this.sCod_Espe === "23") {
+      this.displayedColumns = this.displayedColumns.filter(c => c !== 'atender');
+    }
+  }
+
+  dataSource: MatTableDataSource<any> = new MatTableDataSource();
   displayedColumns: string[] = [
     'atender'       ,
     'cod_Solicitud' , 
@@ -159,47 +256,71 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
       }))        
   }   
 
-  solicitudesLst = [];
-  ObtenerDatosVisor(): void{
-    const sCod_Usuario  : string = GlobalVariable.vusu;   
+  solicitudesLst: any[] = [];      // dentro del rango de fechas
+  private solicitudesRaw: any[] = [];   // todo lo que trae el servicio
+  private cargandoVisor = false;
 
-    this.SpinnerService.show();
+  // Rango de fechas (yyyy-MM-dd, formato del input date): por defecto 1° del mes anterior -> hoy
+  fechaDesde = this.fmtFecha(new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1));
+  fechaHasta = this.fmtFecha(new Date());
+
+  private fmtFecha(d: Date): string {
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${d.getFullYear()}-${m}-${dd}`;
+  }
+
+  onCambioRango() {
+    this.limiteMovil = this.PASO_MOVIL;
+    this.aplicarRango();
+    setTimeout(() => this.ajustarAltura());
+  }
+
+  private aplicarRango() {
+    const desde = this.fechaDesde;
+    const hasta = this.fechaHasta;
+    this.solicitudesLst = this.solicitudesRaw.filter((x: any) => {
+      // Si viene como yyyy-MM-dd[...] se toma tal cual (new Date lo leería en UTC y corre un día)
+      const raw = String(x.fec_Registro ?? '');
+      const f = /^\d{4}-\d{2}-\d{2}/.test(raw) ? raw.substring(0, 10) : this.fmtFecha(new Date(raw));
+      return (!desde || f >= desde) && (!hasta || f <= hasta);
+    });
+    this.calcularResumen();
+    this.aplicarFiltroEstado();
+  }
+
+  // conSpinner=false en refrescos automáticos: no tapa la pantalla cada 60 s
+  ObtenerDatosVisor(conSpinner: boolean = true): void{
+    if (this.cargandoVisor) { return; }   // evita llamadas superpuestas si el servicio demora
+    const sCod_Usuario  : string = GlobalVariable.vusu;
+
+    this.cargandoVisor = true;
+    if (conSpinner) { this.SpinnerService.show(); }
     this.solicitudService.getObtieneInformacionSolicitudesVisor(sCod_Usuario).subscribe({
       next: (response: any) => {
-        if(response.success){
-
-          if (response.totalElements > 0){
-
-            this.solicitudesLst = response.elements.map((item: any) => ({
+        this.cargandoVisor = false;
+        this.cargado = true;
+        this.SpinnerService.hide();
+        if(response.success && response.totalElements > 0){
+          this.solicitudesRaw = response.elements
+            .map((item: any) => ({
               ...item,
               paro_Maquina: item.paro_Maquina ? 'SI' : 'NO'
             }));
-            this.dataSource.data = this.solicitudesLst;
-            this.dataSource.sort = this.sort;
-            this.SpinnerService.hide();
-
-            // Ocultar la columna 'atender' si el perfil es 23
-            if (this.sCod_Espe === "23") {
-              this.displayedColumns = this.displayedColumns.filter(c => c !== 'atender');
-            }   
-            
-          }else{
-            this.solicitudesLst = [];
-            this.dataSource.data = [];            
-            this.SpinnerService.hide();            
-          }
-
         }else{
-          this.solicitudesLst = [];
-          this.dataSource.data = [];
-          this.SpinnerService.hide();
+          this.solicitudesRaw = [];
         }
+        this.aplicarRango();
+        this.ocultarAtenderSiPerfil23();
+        setTimeout(() => this.ajustarAltura());
       },
       error: (error) => {
-        this.solicitudesLst = [];
-        this.dataSource.data = [];        
+        this.cargandoVisor = false;
+        this.cargado = true;
         this.SpinnerService.hide();
-        console.log(error.error.message, 'Cerrar', {
+        this.solicitudesRaw = [];
+        this.aplicarRango();
+        console.log(error?.error?.message, 'Cerrar', {
           timeout: 2500
         })
       }
@@ -209,15 +330,15 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
   dataForExcel = [];
   solicitudesLstExcel = [];
   onExportarExcel() {
-    const sCod_Usuario  : string = GlobalVariable.vusu;   
+    const sCod_Usuario  : string = GlobalVariable.vusu;
 
     this.dataForExcel = [];
     this.solicitudesLstExcel = [];
     this.SpinnerService.show();
-  
+
     this.solicitudService.getObtieneInformacionSolicitudesVisor(sCod_Usuario).subscribe({
       next: (response: any) => {
-        
+
           this.solicitudesLstExcel = response.elements;
           
           
@@ -310,31 +431,29 @@ export class SolicitudMantenimientoMaquinaVisorComponent implements OnInit {
     this.registromantemaquinastej.ListarEspecialidad(dni).subscribe(
       (result: any) => {
         this.sCod_Espe = result[0].Cod_Espe;
+        this.ocultarAtenderSiPerfil23();   // la especialidad puede llegar después de la lista
       },
       (err: HttpErrorResponse) => this.matSnackBar.open(err.message, 'Cerrar', { horizontalPosition: 'center', verticalPosition: 'top', duration: 1500 }))
   }    
 
   ObtieneSedeByUser(){
 
-    this.SpinnerService.show();
+    // Carga de fondo: sin spinner propio para no ocultar el spinner de la carga principal
     this.registromantemaquinastej.getListaUsuarioSedeByUser().subscribe({
       next: (response: any)=> {
         if(response.success){
           if (response.totalElements > 0){
             this.sCod_Planta = response.elements[0].num_Planta;
-            this.SpinnerService.hide();
           }
           else{
             //Deshabilita los botones
             this.toastr.warning("Usuario sin configuración de SEDE.", 'Cerrar', {
             timeOut: 2500,
-             });            
-             this.SpinnerService.hide();
+             });
           }
-        }        
+        }
       },
       error: (error) => {
-        this.SpinnerService.hide();
         this.toastr.error(error.error.message, 'Cerrar', {
         timeOut: 2500,
          });

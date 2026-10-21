@@ -1,13 +1,107 @@
 <div class="admin-container mat-elevation-z2">
-  <!-- 🔹 Encabezado con título + botón alineados -->
+  <!-- Encabezado: título + botón exportar -->
   <div class="header-container">
-    <div class="title">MÓDULO ADMINISTRADOR DE SOLICITUDES</div>
-    <button mat-raised-button color="accent" (click)="exportarExcel()">
-      EXPORTAR EXCEL
+    <h2 class="titulo">Módulo Administrador de Solicitudes</h2>
+    <div class="header-acciones">
+      <!-- Escritorio: rango de fechas a la izquierda del botón -->
+      <ng-container *ngIf="!esMovil" [ngTemplateOutlet]="rangoFechas"></ng-container>
+      <button mat-raised-button class="btn-exportar" (click)="exportarExcel()">
+        <mat-icon>table_view</mat-icon> EXPORTAR EXCEL
+      </button>
+    </div>
+  </div>
+
+  <!-- Cards de totales por estado (click = filtra, otro click = quita filtro) -->
+  <div class="cards-estado">
+    <div class="card-estado card-todos" [class.activa]="estadoSeleccionado === null"
+         (click)="seleccionarEstado(null)">
+      <span class="card-total">{{ solicitudesLst.length }}</span>
+      <span class="card-nombre">Todos</span>
+    </div>
+    <div *ngFor="let e of resumenEstados" class="card-estado" [ngClass]="e.clase"
+         [class.activa]="estadoSeleccionado === e.cod" (click)="seleccionarEstado(e.cod)">
+      <span class="card-total">{{ e.total }}</span>
+      <span class="card-nombre">{{ e.nombre }}</span>
+    </div>
+  </div>
+
+  <!-- Móvil: rango de fechas debajo de las cards -->
+  <ng-container *ngIf="esMovil" [ngTemplateOutlet]="rangoFechas"></ng-container>
+
+  <!-- Rango de fechas (fecha de reporte) -->
+  <ng-template #rangoFechas>
+    <div class="rango-fechas">
+      <mat-icon class="rango-icono">date_range</mat-icon>
+      <label>
+        <span>Desde</span>
+        <input type="date" [(ngModel)]="fechaDesde" [max]="fechaHasta" (change)="onCambioRango()">
+      </label>
+      <mat-icon class="rango-flecha">arrow_forward</mat-icon>
+      <label>
+        <span>Hasta</span>
+        <input type="date" [(ngModel)]="fechaHasta" [min]="fechaDesde" (change)="onCambioRango()">
+      </label>
+    </div>
+  </ng-template>
+
+  <!-- Vista móvil: lista de cards -->
+  <div class="lista-movil" *ngIf="esMovil && dataSource.data.length > 0">
+
+    <div class="item-solicitud" *ngFor="let visor of dataSource.data | slice:0:limiteMovil; trackBy: trackBySolicitud">
+      <div class="item-top">
+        <span class="item-codigo">#{{ visor.cod_Solicitud }}</span>
+        <span [ngClass]="getEstadoClass(visor.cod_Estado_Mant)">{{ visor.nombre_Estado }}</span>
+      </div>
+
+      <div class="item-fila"><b>Fecha:</b> {{ visor.fec_Registro | date:'dd/MM/yyyy' }} {{ visor.hora_Reporte }}</div>
+      <div class="item-fila"><b>Área:</b> {{ visor.area }}</div>
+      <div class="item-fila"><b>Máquina:</b> {{ visor.cod_Maquina }}</div>
+      <div class="item-fila" *ngIf="visor.nombre_Tarea"><b>Tarea:</b> {{ visor.nombre_Tarea }}</div>
+      <div class="item-fila" *ngIf="visor.desc_TipFall"><b>Falla:</b> {{ visor.desc_TipFall }}</div>
+      <div class="item-fila"><b>Supervisor:</b> {{ visor.supervisor }}</div>
+      <div class="item-fila" *ngIf="visor.des_Usuario_Tecnico"><b>Técnico:</b> {{ visor.des_Usuario_Tecnico }}</div>
+      <div class="item-fila item-obs" *ngIf="visor.observacion">{{ visor.observacion }}</div>
+
+      <div class="item-badges">
+        <span [ngClass]="getPrioridadClass(visor.prioridad_Des)">{{ visor.prioridad_Des }}</span>
+        <span [ngClass]="visor.paro_Maquina == 'SI' ? 'paro-activo' : 'paro-inactivo'">Paro: {{ visor.paro_Maquina }}</span>
+      </div>
+
+      <div class="item-tiempos" *ngIf="visor.t1_Tiempo_Espera_Min_Des || visor.t2_Tiempo_Interv_Min_Des || visor.t3_Tiempo_VB_Min_Des">
+        <span *ngIf="visor.t1_Tiempo_Espera_Min_Des">Resp: {{ visor.t1_Tiempo_Espera_Min_Des }}</span>
+        <span *ngIf="visor.t2_Tiempo_Interv_Min_Des">Interv: {{ visor.t2_Tiempo_Interv_Min_Des }}</span>
+        <span *ngIf="visor.t3_Tiempo_VB_Min_Des">Valid: {{ visor.t3_Tiempo_VB_Min_Des }}</span>
+      </div>
+
+      <div class="item-acciones">
+        <button mat-stroked-button color="primary" *ngIf="visor.cod_Estado_Mant === '01' && sCod_Espe !== '23'" (click)="onInforme(visor)">
+          <mat-icon>handyman</mat-icon> Atender
+        </button>
+        <button mat-stroked-button color="primary" *ngIf="visor.ruta_Fotografia"
+                (click)="verFoto(solicitudService.getImagenUrl(visor.ruta_Fotografia))">
+          <mat-icon>photo</mat-icon> Foto
+        </button>
+      </div>
+    </div>
+
+    <button mat-stroked-button class="btn-ver-mas" *ngIf="dataSource.data.length > limiteMovil" (click)="verMasMovil()">
+      Ver más ({{ dataSource.data.length - limiteMovil }} restantes)
     </button>
   </div>
 
-<div class="table-wrapper">
+<!-- Panel sin información -->
+<div class="panel-vacio" *ngIf="cargado && dataSource.data.length === 0" [style.height.px]="alturaTabla">
+  <div class="panel-vacio-icono">
+    <mat-icon>inbox</mat-icon>
+  </div>
+  <div class="panel-vacio-titulo">Sin solicitudes para mostrar</div>
+  <div class="panel-vacio-texto">{{ mensajeVacio }}</div>
+  <button mat-stroked-button color="primary" *ngIf="estadoSeleccionado !== null" (click)="seleccionarEstado(null)">
+    <mat-icon>filter_alt_off</mat-icon> Ver todos
+  </button>
+</div>
+
+<div class="table-wrapper" *ngIf="!esMovil && dataSource.data.length > 0" [style.height.px]="alturaTabla">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z1" matSort>
 
     <!-- Opciones de Atender -->
@@ -79,7 +173,7 @@
     </ng-container> -->
 
     <ng-container matColumnDef="paro_Maquina">
-    <th mat-header-cell *matHeaderCellDef>PARO MQ</th>
+    <th mat-header-cell *matHeaderCellDef>PARO<br>MAQUINA</th>
     <td mat-cell *matCellDef="let visor">
         <span [ngClass]="visor.paro_Maquina == 'SI' ? 'paro-activo' : 'paro-inactivo'">
         {{ visor.paro_Maquina }}
@@ -103,25 +197,25 @@
       <td mat-cell *matCellDef="let visor">{{ visor.hora_Reporte }}</td>
     </ng-container> -->
     <ng-container matColumnDef="hora_Inicio">
-      <th mat-header-cell *matHeaderCellDef>HORA INICIO</th>
+      <th mat-header-cell *matHeaderCellDef>HORA<br>INICIO</th>
       <td mat-cell *matCellDef="let visor">{{ visor.hora_Reporte }}</td>
     </ng-container>
     <ng-container matColumnDef="t1_Tiempo_Espera_Min_Des">
-      <th mat-header-cell *matHeaderCellDef>TIEMPO RESPUESTA</th>
+      <th mat-header-cell *matHeaderCellDef>TIEMPO<br>RESPUESTA</th>
       <td mat-cell *matCellDef="let visor">
          <span class="text-right">{{ visor.t1_Tiempo_Espera_Min_Des }}</span>
         <!-- {{ visor.t1_Tiempo_Espera_Min_Des || '-' }} -->
       </td>
     </ng-container>
     <ng-container matColumnDef="t2_Tiempo_Interv_Min_Des">
-      <th mat-header-cell *matHeaderCellDef>TIEMPO INTERVEN.</th>
+      <th mat-header-cell *matHeaderCellDef>TIEMPO<br>INTERVEN.</th>
       <td mat-cell *matCellDef="let visor">
         <span class="text-right">{{ visor.t2_Tiempo_Interv_Min_Des }}</span>
         <!-- {{ visor.t2_Tiempo_Interv_Min_Des }} -->
       </td>
     </ng-container>
     <ng-container matColumnDef="t3_Tiempo_VB_Min_Des">
-      <th mat-header-cell *matHeaderCellDef>TIEMPO VALIDACION</th>
+      <th mat-header-cell *matHeaderCellDef>TIEMPO<br>VALIDACION</th>
       <td mat-cell *matCellDef="let visor">
         <span class="text-right">{{ visor.t3_Tiempo_VB_Min_Des }}</span>
         <!-- {{ visor.t3_Tiempo_VB_Min_Des }} -->
@@ -169,7 +263,7 @@
       </td>
     </ng-container>    
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"
     ></tr>
 </table>

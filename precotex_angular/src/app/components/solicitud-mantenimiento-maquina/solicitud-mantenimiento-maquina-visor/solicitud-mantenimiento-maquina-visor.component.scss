@@ -19,27 +19,110 @@ overflow-x: auto;
 
 .table-wrapper {
     width: 100%;
-    overflow-x: auto;
+    overflow: auto;
+    // el alto lo fija el componente (ajustarAltura): cabecera fija, solo hace scroll el cuerpo
+    min-height: 240px;
+    border: 1px solid #dfe6e9;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
     table {
     width: 100%;
-    min-width: 1200px;
+    min-width: 0;   // las columnas se ajustan al ancho; si no caben, scroll horizontal
+    border-collapse: separate;
+    border-spacing: 0;
 
-    th {
-        background-color: #f5f5f5;
+    th.mat-header-cell {
+        background-color: #1a5f63;
+        color: #fff;
+        font-size: 12px;
         font-weight: 600;
-        color: #444;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        padding: 10px 6px;
+        border-bottom: none;
+        white-space: nowrap;
+        line-height: 1.3;
+
+        &.mat-sort-header-sorted { color: #fff; }
+
+        // Encabezados de tiempo/hora en dos líneas, centrados
+        &.mat-column-hora_Inicio,
+        &.mat-column-t1_Tiempo_Espera_Min_Des,
+        &.mat-column-t2_Tiempo_Interv_Min_Des,
+        &.mat-column-t3_Tiempo_VB_Min_Des { text-align: center; }
     }
 
-    td {
-        color: #555;
+    td.mat-cell {
+        color: #455a64;
+        padding: 8px 6px;
+        font-size: 12.5px;
+        border-bottom: 1px solid #eceff1;
+        vertical-align: middle;
     }
 
-    tr.mat-row:hover {
-        background-color: #f0f0f0;
+    tr.mat-row:nth-child(even) td.mat-cell { background-color: #f7fafa; }
+
+    tr.mat-row:hover td.mat-cell { background-color: #e3f2f1; }
+
+    tr.mat-row:last-child td.mat-cell { border-bottom: none; }
+
+    // Observación: ancho acotado y legible
+    td.mat-column-observacion {
+        min-width: 180px;
+        max-width: 260px;
+        white-space: normal;
+        line-height: 1.35;
+    }
+
+    // Estado / prioridad / paro como "píldoras" centradas
+    td.mat-column-nombre_Estado,
+    td.mat-column-prioridad,
+    td.mat-column-paro_Maquina,
+    th.mat-column-nombre_Estado,
+    th.mat-column-paro_Maquina { text-align: center; }
+
+    td.mat-column-nombre_Estado span,
+    td.mat-column-prioridad span,
+    td.mat-column-paro_Maquina span {
+        display: inline-block;
+        min-width: 70px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        font-size: 11.5px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    // Paro máquina: columna angosta con SI/NO pequeño
+    th.mat-column-paro_Maquina,
+    td.mat-column-paro_Maquina {
+        width: 64px;
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+    td.mat-column-paro_Maquina span {
+        min-width: 32px;
+        padding: 2px 8px;
+    }
+
+    // Columnas angostas: código, hora y tiempos
+    th.mat-column-cod_Solicitud, td.mat-column-cod_Solicitud { width: 70px; }
+    th.mat-column-hora_Inicio, td.mat-column-hora_Inicio,
+    th.mat-column-t1_Tiempo_Espera_Min_Des, td.mat-column-t1_Tiempo_Espera_Min_Des,
+    th.mat-column-t2_Tiempo_Interv_Min_Des, td.mat-column-t2_Tiempo_Interv_Min_Des,
+    th.mat-column-t3_Tiempo_VB_Min_Des, td.mat-column-t3_Tiempo_VB_Min_Des {
+        width: 76px;
+        text-align: center;
     }
     }
 }
+
+// Flecha de ordenamiento visible sobre el encabezado oscuro
+.table-wrapper ::ng-deep .mat-sort-header-arrow { color: #fff; }
+
+.table-wrapper::-webkit-scrollbar { height: 8px; width: 8px; }
+.table-wrapper::-webkit-scrollbar-thumb { background: #b0bec5; border-radius: 4px; }
 
 .export-button {
     display: flex;
@@ -113,19 +196,265 @@ table.mat-table {
 
 .header-container {
   display: flex;
-  justify-content: space-between; /* Título a la izquierda, botón a la derecha */
+  justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-bottom: 1rem;
-}
+  padding-bottom: 10px;
+  border-bottom: 2px solid #01579b;
 
-.title {
-  margin: 0;
-  font-weight: 600;
-  color: #2b2b2b;
+  .titulo {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1.25;
+  }
+
+  .btn-exportar {
+    white-space: nowrap;
+    background-color: #1d6f42;   // verde Excel
+    color: #fff;
+    &:hover { background-color: #185c37; }
+    mat-icon { margin-right: 4px; }
+  }
 }
 
 .admin-container {
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 0;   // sin padding inferior: la tabla llega al borde con 5px de margen
+}
+
+// Cards de totales por estado
+.cards-estado {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.card-estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 6px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: transform .1s, border-color .1s;
+
+  &:active { transform: scale(0.97); }
+  &.activa { border-color: #01579b; box-shadow: 0 0 0 2px rgba(1, 87, 155, 0.25); }
+
+  .card-total { font-size: 26px; font-weight: 700; line-height: 1.1; }
+  .card-nombre { font-size: 12px; font-weight: 600; text-transform: uppercase; }
+}
+
+// En las cards el color de estado cubre toda la tarjeta (sin el padding del badge de tabla)
+.card-estado.estado-reportado,
+.card-estado.estado-atencion,
+.card-estado.estado-pendiente,
+.card-estado.estado-cerrado,
+.card-estado.estado-rechazado {
+  padding: 10px 6px;
+  border-radius: 8px;
+}
+
+.card-todos { background-color: #eceff1; color: #263238; }
+
+// Rango de fechas bajo las cards
+.header-acciones {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+// Selector de rango moderno: una sola "píldora" con icono, dos fechas y flecha
+.rango-fechas {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 16px 0 12px;
+  background: #fff;
+  border: 1px solid #cfd8dc;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: border-color .15s, box-shadow .15s;
+
+  &:focus-within {
+    border-color: #1a5f63;
+    box-shadow: 0 0 0 3px rgba(26, 95, 99, 0.18);
+  }
+
+  .rango-icono { color: #1a5f63; font-size: 22px; width: 22px; height: 22px; }
+  .rango-flecha { color: #90a4ae; font-size: 18px; width: 18px; height: 18px; }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.1;
+    cursor: pointer;
+
+    span {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: #78909c;
+    }
+  }
+
+  input[type="date"] {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    color: #263238;
+    cursor: pointer;
+    min-width: 112px;
+
+    &::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.55; }
+    &::-webkit-calendar-picker-indicator:hover { opacity: 1; }
+  }
+}
+
+// Panel sin información
+.panel-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  justify-content: center;
+  min-height: 240px;   // el alto real lo fija el componente (ajustarAltura)
+  box-sizing: border-box;
+  padding: 40px 16px;
+  border: 1px dashed #b0bec5;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fafcfc 0%, #f1f6f6 100%);
+
+  .panel-vacio-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #e0eeee;
+    color: #1a5f63;
+    margin-bottom: 4px;
+
+    mat-icon { font-size: 38px; width: 38px; height: 38px; }
+  }
+  .panel-vacio-titulo { font-size: 17px; font-weight: 600; color: #37474f; }
+  .panel-vacio-texto { font-size: 13.5px; color: #78909c; max-width: 320px; }
+  button { margin-top: 10px; }
+}
+
+// Vista móvil: lista de cards
+.lista-movil {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item-solicitud {
+  border: 1px solid #e0e0e0;
+  border-left: 4px solid #01579b;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  font-size: 13.5px;
+  color: #37474f;
+
+  .item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .item-codigo { font-weight: 700; color: blue; font-size: 15px; }
+  .item-fila { margin: 2px 0; word-break: break-word; }
+  .item-obs { font-style: italic; color: #546e7a; }
+  .item-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; font-size: 12px; }
+  .item-tiempos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #01579b;
+  }
+  .item-acciones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+}
+
+.btn-ver-mas { width: 100%; margin-top: 4px; }
+
+@media screen and (max-width: 768px) {
+  .admin-container { padding: 0.75rem; }
+
+  .header-container {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+
+    .titulo { font-size: 16px; }
+    .btn-exportar { width: 100%; }
+  }
+
+  // Cards de totales más compactas
+  .cards-estado {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .card-estado,
+  .card-estado.estado-reportado,
+  .card-estado.estado-atencion,
+  .card-estado.estado-pendiente {
+    flex-direction: row;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 6px;
+
+    .card-total { font-size: 18px; }
+    .card-nombre { font-size: 11px; }
+  }
+
+  .rango-fechas {
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    height: 40px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    padding: 0 12px 0 10px;
+    gap: 6px;
+    label { flex: 1 1 0; min-width: 0; }
+    input[type="date"] { width: 100%; min-width: 0; font-size: 13px; }
+  }
+
+  .header-acciones { flex-direction: column; align-items: stretch; }
+
+  // Cards de solicitud más compactas
+  .item-solicitud {
+    padding: 8px 10px;
+    font-size: 12.5px;
+    .item-codigo { font-size: 14px; }
+    .item-fila { margin: 1px 0; }
+  }
 }
 
 .export-button {
