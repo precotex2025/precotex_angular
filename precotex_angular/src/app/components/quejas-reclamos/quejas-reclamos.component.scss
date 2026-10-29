@@ -1,32 +1,442 @@
+:host {
+    display: block;
+    font-family: corbel, arial;
+}
+
 .card {
     margin-top: 5px;
     margin-left: 5px;
     margin-right: 8px;
     min-width: 350px;
     min-height: 400px;
-    height: 640px; 
+    height: 640px;
+    display: flex;
+    flex-direction: column;
+    background-color: #f7f8fb;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(30, 42, 90, 0.16);
 }
+
 .card-header {
-    background-color: #3f51b5;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #1a3fa8;
     color: #ffffff;
-    padding: 8px 10px 10px 10px;
     text-align: center;
-    /* border-bottom: 1px solid #337AB7; */
-    border-radius: 4px 4px 0px 0px;
-    border-bottom: 1px solid #337ab7;
-    font-family: corbel, arial;
+    padding: 12px 16px;
     font-size: 15px;
-    font-weight: bold;
+    font-weight: 700;
+    letter-spacing: 0.3px;
 }
 
-
-
-
+.container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 4px 12px 16px;
+}
 
 /************************************/
-/*NUEVOS ESTILOS*/
+/* Filtros */
 /************************************/
-.grid-filtros { display: grid; grid-template-columns: repeat(4, 1fr); /* 4 columnas por fila */ gap: 16px; padding: 1rem; } mat-form-field { width: 100%; } .btn-action { display: flex; gap: 12px; justify-content: flex-start; align-items: center; } /* Responsive tablet → 2 columnas */ @media (max-width: 1024px) { .grid-filtros { grid-template-columns: repeat(2, 1fr); } } /* Responsive móvil → 1 columna */ @media (max-width: 768px) { .grid-filtros { grid-template-columns: 1fr; } }
-.btn-group { display: flex; gap: 12px; justify-content: space-between; /* distribuye uniformemente */ } .btn-group button { flex: 1; /* cada botón ocupa el mismo ancho */ min-width: 0; /* evita que se rompa el layout */ text-align: center; /* centra el contenido */ }
-.boton-buscar { background-color: #1565c0; /* azul intenso */ color: #fff; } .boton-nuevo { background-color: #2e7d32; /* verde */ color: #fff; } .boton-excel { background-color: #f9a825; /* amarillo/mostaza */ color: #fff; } button mat-icon { margin-right: 6px; font-size: 20px; vertical-align: middle; }
-.table-responsive { width: 100%; overflow-x: auto; /* permite scroll horizontal en pantallas pequeñas */ } table { width: 100%; min-width: 600px; /* asegura que las columnas no se colapsen demasiado */ border-collapse: collapse; } th, td { padding: 0.75rem; text-align: left; white-space: nowrap; /* evita que el texto se corte raro */ } tr.mat-row:hover { background-color: #f0f0f0; cursor: pointer; } /* Responsive tablet → reduce padding */ @media (max-width: 1024px) { th, td { padding: 0.5rem; } } /* Responsive móvil → tabla más compacta */ @media (max-width: 768px) { table { min-width: 100%; /* ocupa todo el ancho */ } th, td { font-size: 0.85rem; padding: 0.4rem; } }
+
+.grid-filtros {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px 14px;
+    padding: 14px;
+    margin-bottom: 4px;
+    background-color: #ffffff;
+    border: 1px solid #e6e9f2;
+    border-radius: 10px;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #f9fafd;
+    border: 1px solid #e6e9f2;
+    border-radius: 8px;
+    padding: 4px 10px 0;
+    min-width: 0;
+}
+
+.full-width {
+    width: 100%;
+}
+
+::ng-deep .campo-outline {
+    .mat-form-field-wrapper {
+        padding-bottom: 0.6em;
+    }
+
+    .mat-form-field-flex {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: none !important;
+        align-items: center;
+    }
+
+    .mat-form-field-outline {
+        color: #cfd6ea;
+    }
+
+    &.mat-focused .mat-form-field-outline-thick {
+        color: #3f51b5;
+    }
+
+    .mat-form-field-label {
+        color: #78838f;
+        font-size: 13px;
+    }
+
+    &.mat-focused .mat-form-field-label {
+        color: #3f51b5;
+    }
+
+    .mat-select-value, input.mat-input-element {
+        color: #263238;
+        font-size: 13.5px;
+    }
+
+    .mat-select-arrow {
+        color: #7986cb;
+    }
+
+    mat-icon[matPrefix] {
+        color: #7986cb;
+        font-size: 19px;
+        width: 19px;
+        height: 19px;
+        margin-right: 6px;
+    }
+}
+
+.icono-limpiar-fecha {
+    cursor: pointer;
+    color: #90a0b0;
+    font-size: 18px;
+
+    &:hover {
+        color: #c62828;
+    }
+}
+
+// Panel desplegable de mat-select sin sombra de elevación
+::ng-deep .cdk-overlay-pane .mat-select-panel {
+    box-shadow: none !important;
+    border: 1px solid #e6e9f2;
+}
+
+// Opción de filtro fija (no se desplaza al hacer scroll vertical en las opciones)
+::ng-deep .mat-select-panel .opcion-filtro-fija {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    height: auto;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e6e9f2;
+    padding: 6px 16px;
+
+    &.mat-option-disabled {
+        color: rgba(0, 0, 0, 0.87) !important;
+        opacity: 1 !important;
+        cursor: default;
+    }
+
+    .mat-input-element {
+        color: #263238 !important;
+        -webkit-text-fill-color: #263238 !important;
+    }
+}
+
+@media (max-width: 1024px) {
+    .grid-filtros {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .grid-filtros {
+        grid-template-columns: 1fr;
+    }
+}
+
+/************************************/
+/* Botonera */
+/************************************/
+
+.btn-group {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 4px 0 2px;
+}
+
+.btn-accion {
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    border-radius: 22px !important;
+    padding: 0 18px !important;
+    height: 40px;
+    border: none !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18) !important;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+
+    mat-icon {
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+
+    &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25) !important;
+    }
+}
+
+::ng-deep .boton-buscar {
+    background: linear-gradient(135deg, #4a5fd1, #303f9f) !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .boton-nuevo {
+    background: linear-gradient(135deg, #43a047, #1b5e20) !important;
+    color: #ffffff !important;
+}
+
+::ng-deep .boton-excel {
+    background: linear-gradient(135deg, #ff9800, #e65100) !important;
+    color: #ffffff !important;
+}
+
+/************************************/
+/* Estado vacío */
+/************************************/
+
+.grilla-vacia {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 32px 16px;
+    text-align: center;
+    background: repeating-linear-gradient(135deg, #fafbff, #fafbff 10px, #f4f6fc 10px, #f4f6fc 20px);
+    border: 1px dashed #c5cae9;
+    border-radius: 10px;
+
+    mat-icon {
+        font-size: 40px;
+        width: 40px;
+        height: 40px;
+        color: #9fa8da;
+        margin-bottom: 4px;
+    }
+}
+
+.grilla-vacia-texto {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #37474f;
+}
+
+.grilla-vacia-subtexto {
+    font-size: 11.5px;
+    color: #90a0b0;
+}
+
+/************************************/
+/* Tabla */
+/************************************/
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e6e9f2;
+    border-radius: 10px;
+    background-color: #ffffff;
+}
+
+table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 0.55rem 0.7rem;
+    text-align: left;
+    white-space: nowrap;
+    font-size: 12.5px;
+}
+
+.celda-truncada {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: help;
+}
+
+.celda-icono {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.icono-celda {
+    flex: none;
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.icono-caso { color: #607d8b; }
+.icono-fecha { color: #7b1fa2; }
+.icono-cliente { color: #3f51b5; }
+.icono-asignado { color: #00897b; }
+.icono-registro { color: #ad1457; }
+
+::ng-deep .table-responsive th.mat-header-cell {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: #eef1fb;
+    color: #303f9f;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-bottom: 2px solid #c5cae9;
+}
+
+tr.mat-row {
+    height: 42px;
+}
+
+tr.mat-row:nth-child(even) {
+    background-color: #fafbfe;
+}
+
+tr.mat-row:hover {
+    background-color: #eef1fb;
+    cursor: pointer;
+}
+
+// ---------- Chip de Tipo ----------
+
+.tipo-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+
+    mat-icon {
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+    }
+}
+
+.tipo-partida { background-color: #e8eaf6; color: #303f9f; }
+.tipo-estilo { background-color: #fff3e0; color: #e65100; }
+.tipo-cliente { background-color: #e0f2f1; color: #00695c; }
+.tipo-default { background-color: #eceff1; color: #455a64; }
+
+// ---------- Chip de estado ----------
+
+.estado-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+
+    mat-icon {
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+    }
+}
+
+.estado-abierto { background-color: #e3f2e3; color: #1b5e20; }
+.estado-proceso { background-color: #fff3e0; color: #e65100; }
+.estado-cerrado { background-color: #e8eaf6; color: #303f9f; }
+.estado-rechazado { background-color: #fdecea; color: #c62828; }
+.estado-default { background-color: #eceff1; color: #455a64; }
+
+// ---------- Indicador de urgencia ----------
+
+.indicador-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: help;
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+    }
+}
+
+// Colores exactos de la lógica original (no cambiar): comercial=blue, atendido=lightblue,
+// critico=red, alerta=yellow, normal=green. Solo cambia el ícono/figura, no el color.
+.indicador-comercial { background-color: blue; color: #ffffff; }
+.indicador-atendido { background-color: lightblue; color: #01579b; }
+.indicador-critico { background-color: red; color: #ffffff; }
+.indicador-alerta { background-color: yellow; color: #5d4a00; }
+.indicador-normal { background-color: green; color: #ffffff; }
+
+// ---------- Botones de icono en tabla ----------
+
+::ng-deep .btn-icono-tabla {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+    }
+}
+
+::ng-deep .btn-icono-informe { color: #3f51b5; }
+::ng-deep .btn-icono-cerrar { color: #c62828; }
+::ng-deep .btn-icono-editar { color: #00897b; }
+
+@media (max-width: 1024px) {
+    th, td {
+        padding: 0.45rem 0.55rem;
+    }
+}
+
+@media (max-width: 768px) {
+    table {
+        min-width: 100%;
+    }
+
+    th, td {
+        font-size: 0.78rem;
+        padding: 0.35rem;
+    }
+}

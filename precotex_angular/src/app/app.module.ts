@@ -434,6 +434,11 @@ import { DigitalizacionFichasComponent } from './components/digitalizacion-ficha
 import { DialogVisorFichasComponent } from './components/digitalizacion-fichas/dialog-visor-fichas/dialog-visor-fichas.component';
 import { SafeUrlPipe } from './pipes/safe-url.pipe';
 import { CapacidadesComponent } from './components/tintoreria/capacidades.component';
+import { UbicacionesComponent } from './components/tintoreria/ubicaciones/ubicaciones.component';
+import { ConsultaUbicacionesComponent } from './components/tintoreria/ubicaciones/consulta-ubicaciones/consulta-ubicaciones.component';
+import { CrearAgrupamientoComponent } from './components/tintoreria/ubicaciones/crear-agrupamiento/crear-agrupamiento.component';
+import { ReubicaUbicaGrupoComponent } from './components/tintoreria/ubicaciones/reubica-ubica-grupo/reubica-ubica-grupo.component';
+import { DetalleAgrupamientoComponent } from './components/tintoreria/ubicaciones/detalle-agrupamiento/detalle-agrupamiento.component';
 import { DialogAddCapacidadesComponent } from './components/tintoreria/dialog-capacidades/dialog-add-capacidades.component';
 import { AuditoriaModuloAcabadoComponent } from './components/auditoria-calidad/auditoria-modulo-acabado/auditoria-modulo-acabado.component';
 import { DialogCabeceraModuloAcabadoComponent } from './components/auditoria-calidad/auditoria-modulo-acabado/dialog-cabecera-modulo-acabado/dialog-cabecera-modulo-acabado.component';
@@ -614,6 +619,9 @@ import { GenerarQrComponent } from './components/control-activos-fijo/generar-qr
 
 //COTIZACIONES
 import { CotizacionesComponent } from './components/cotizaciones/cotizaciones.component';
+
+// NO CONFORMIDADES (CONTROL DE CALIDAD)
+import { NoConformidadesComponent } from './components/no-conformidades/no-conformidades.component';
 
 import { AprobacionDesarrolloTelasEditComponent } from './components/aprobacion-desarrollo-telas/aprobacion-desarrollo-telas-edit/aprobacion-desarrollo-telas-edit.component';
 import { RecoFacialComponent } from './components/reconocimientofacial/reco-facial/reco-facial.component';
@@ -1017,6 +1025,11 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     DialogAddProdTejeRectilineoComponent,
     CapacidadesComponent,
     DialogAddCapacidadesComponent,
+    UbicacionesComponent,
+    ConsultaUbicacionesComponent,
+    CrearAgrupamientoComponent,
+    ReubicaUbicaGrupoComponent,
+    DetalleAgrupamientoComponent,
     AuditoriaModuloAcabadoComponent,
     DialogCabeceraModuloAcabadoComponent,
     DialogDetalleModuloAcabadoComponent,
@@ -1163,6 +1176,9 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
 
     //COTIZACIONES
     CotizacionesComponent,
+    
+    // NO CONFORMIDADES (CONTROL DE CALIDAD)
+    NoConformidadesComponent,
     
     TomaFotoPersonasComponent,
     ModalQuejaReclamoNuevoComponent,

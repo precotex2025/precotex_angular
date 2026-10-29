@@ -40,13 +40,14 @@ export class TiProcesosTintoreriaService {
       return this.http.get(this.UrlBase + 'getListaEstatusControlTenido', { headers, params });
     }
 
-    getObtieneMuestraControlProceso(sCodPartida: string, sFecha_Inicio: Date, sFecha_Fin: Date){
+    getObtieneMuestraControlProceso(sCodPartida: string, sFecha_Inicio: Date, sFecha_Fin: Date, Numero_Referencia: string){
       const headers = this.Header;
       let params = new HttpParams();
 
       params = params.append('Cod_Ordtra', sCodPartida!);
       params = params.append('Fecha_Ini', _moment(sFecha_Inicio.valueOf()).format('YYYY-MM-DD'));
       params = params.append('Fecha_Fin', _moment(sFecha_Fin.valueOf()).format('YYYY-MM-DD'));
+      params = params.append('Numero_Referencia', Numero_Referencia!);
 
       return this.http.get(this.UrlBase + 'getObtieneMuestraControlProceso', { headers, params });
     }

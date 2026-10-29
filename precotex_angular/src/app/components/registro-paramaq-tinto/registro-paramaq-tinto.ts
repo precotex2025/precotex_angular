@@ -1103,9 +1103,13 @@ data.forEach((row, rowIndex) => {
         const fecha_start1  : Date   = dFecha;
         const fecha_end1    : Date   = dFecha;    
         this.Arraydata = [];      
+
+        //Obtieene el codigo de Referencia
+        const nroReferencia = this.formulario.get('Nro_Referencia')?.value;
+        console.log('nroReferencia:', nroReferencia);
    
         this.SpinnerService.show();
-        this.serviceTiProcesoTintoreria.getObtieneMuestraControlProceso(sPartida1, fecha_start1, fecha_end1).subscribe({
+        this.serviceTiProcesoTintoreria.getObtieneMuestraControlProceso(sPartida1, fecha_start1, fecha_end1, nroReferencia).subscribe({
           next: (response: any)=> {
             if(response.success){
               if (response.totalElements > 0){

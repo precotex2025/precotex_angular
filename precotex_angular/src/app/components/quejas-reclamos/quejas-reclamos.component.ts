@@ -560,7 +560,7 @@ filtros
     console.log('Nuevo Reclamo - Nuevo', this.nuevoReclamo);
 
 
-    this.SpinnerService.show();
+    this.SpinnerService.show('spinnerBuscarQuejas');
     //this.dataSource.data = [];
     this.registroQuejasReclamosService.obtenerReclamos(this.nuevoReclamo).subscribe({
       next: (resp) => {
@@ -570,35 +570,37 @@ filtros
             //console.log('obtenerReclamos:', this.filtro);
 
             this.dataSource.data = resp.elements
-            this.SpinnerService.hide();
+            this.SpinnerService.hide('spinnerBuscarQuejas');
           }
           else{
             this.dataSource.data = [];
             this.filtro = [];
             console.warn('No se encontraron datos.');
-            this.SpinnerService.hide();
+            this.SpinnerService.hide('spinnerBuscarQuejas');
           };
 
         } else {
           this.dataSource.data = [];
           this.filtro = [];
           console.warn('No se encontraron datos.');
-          this.SpinnerService.hide();
+          this.SpinnerService.hide('spinnerBuscarQuejas');
         }
       },
       error: (err) => {
         this.dataSource.data = [];
         this.filtro = [];
         console.error('Error al buscar reclamos:', err);
-        this.SpinnerService.hide();
+        this.SpinnerService.hide('spinnerBuscarQuejas');
       }
     });
   }
 
   nuevo2(){
     const dialogRef = this.dialog.open(ModalQuejaReclamoNuevoComponent, {
-      width: '80%', 
-      height: '80%',
+    width: '95vw',
+    height: '95vh',
+    maxWidth: '95vw',
+    maxHeight: '95vh',
        data: {
          Tipo     : "I",
          Titulo  : "Generación de Nuevo Caso",
@@ -733,8 +735,10 @@ filtros
   editar2(item: any){
 
     const dialogRef = this.dialog.open(ModalQuejaReclamoNuevoComponent, {
-      width: '80%', 
-      height: '80%',
+      width: '95%', 
+      height: '95%',
+    maxWidth: '95vw',
+    maxHeight: '95vh',      
        data: {
          Tipo     : "E",
          Titulo   : "Edición de Nuevo Caso",
@@ -975,6 +979,64 @@ filtros
     //console.log("isBetween differenceInHours " + differenceInHours);
     //console.log("isBetween lowerHours " + lowerHours);
     return differenceInHours > lowerHours && differenceInHours < upperHours;
+  }
+
+  claseTipo(tipo: string): string {
+    const valor = String(tipo || '').toUpperCase();
+    if (valor.includes('PARTIDA')) return 'tipo-partida';
+    if (valor.includes('ESTILO')) return 'tipo-estilo';
+    if (valor === 'C' || valor.includes('CLIENTE')) return 'tipo-cliente';
+    return 'tipo-default';
+  }
+
+  iconoTipo(tipo: string): string {
+    const valor = String(tipo || '').toUpperCase();
+    if (valor.includes('PARTIDA')) return 'inventory_2';
+    if (valor.includes('ESTILO')) return 'styler';
+    if (valor === 'C' || valor.includes('CLIENTE')) return 'person';
+    return 'label';
+  }
+
+  claseEstado(estado: string): string {
+    const valor = String(estado || '').toLowerCase();
+    if (valor.includes('abiert')) return 'estado-abierto';
+    if (valor.includes('proceso') || valor.includes('pendient')) return 'estado-proceso';
+    if (valor.includes('cerrad') || valor.includes('resuelt') || valor.includes('finaliz') || valor.includes('atendid')) return 'estado-cerrado';
+    if (valor.includes('rechaz') || valor.includes('anulad')) return 'estado-rechazado';
+    return 'estado-default';
+  }
+
+  iconoEstado(estado: string): string {
+    const valor = String(estado || '').toLowerCase();
+    if (valor.includes('abiert')) return 'lock_open';
+    if (valor.includes('proceso') || valor.includes('pendient')) return 'hourglass_top';
+    if (valor.includes('cerrad') || valor.includes('resuelt') || valor.includes('finaliz') || valor.includes('atendid')) return 'check_circle';
+    if (valor.includes('rechaz') || valor.includes('anulad')) return 'cancel';
+    return 'radio_button_checked';
+  }
+
+  claseIndicador(row: any): string {
+    if (row.cod_Estado === '03') return 'indicador-comercial';
+    if (row.cod_Estado === '04') return 'indicador-atendido';
+    if (this.isOlderThan(row.fechaRegistro, 48)) return 'indicador-critico';
+    if (this.isBetween(row.fechaRegistro, 24, 48)) return 'indicador-alerta';
+    return 'indicador-normal';
+  }
+
+  iconoIndicador(row: any): string {
+    if (row.cod_Estado === '03') return 'campaign';
+    if (row.cod_Estado === '04') return 'task_alt';
+    if (this.isOlderThan(row.fechaRegistro, 48)) return 'priority_high';
+    if (this.isBetween(row.fechaRegistro, 24, 48)) return 'warning';
+    return 'check_circle';
+  }
+
+  textoIndicador(row: any): string {
+    if (row.cod_Estado === '03') return 'En comercial';
+    if (row.cod_Estado === '04') return 'Atendido';
+    if (this.isOlderThan(row.fechaRegistro, 48)) return 'Más de 48 horas sin atender';
+    if (this.isBetween(row.fechaRegistro, 24, 48)) return 'Entre 24 y 48 horas sin atender';
+    return 'Menos de 24 horas';
   }
 
   _filter(value: string): Cliente[] {
