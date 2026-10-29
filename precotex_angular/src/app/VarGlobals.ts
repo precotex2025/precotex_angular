@@ -13,7 +13,7 @@ export const GlobalVariable = {
 
 
   //--------------------------------------------PRODUCCION--------------------------------------------
-  baseUrl: "/ws_android", //PRODUCCION <- FRONT 
+  //baseUrl: "/ws_android", //PRODUCCION <- FRONT 
   
   baseUrlProcesoTenido: "https://gestion.precotex.com:444/ubicaciones/api/", // PRODUCCION EIQ <- BACK
   
@@ -22,7 +22,7 @@ export const GlobalVariable = {
 
 
   //COMPLEMENTARIOS
-  //baseUrl: "http://192.168.1.36/ws_android_dev", //LOCAL
+  baseUrl: "http://192.168.1.36/ws_android_dev", //LOCAL
   baseUrlLocal: "/ws_local",
   //baseUrlVb: "http://192.168.5.105/publicaWs/",
   baseUrlVb: "http://192.168.1.36/publicaWs/",
