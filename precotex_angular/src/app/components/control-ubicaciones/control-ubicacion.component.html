@@ -1,0 +1,335 @@
+<div class="container-fluid" id="nc-top">
+    <!-- Contenedor estilo Precotex -->
+    <div class="grid-container" *ngIf="currentScreen === 'inicio'">
+
+        <!-- Título Principal Superior -->
+        <div class="title">Control de ubicaciones Tela Terminada</div>
+
+        <div class="container-cuerpo">
+
+            <!-- Fila 1: Filtro de Escaneo y Botón Buscar -->
+            <div class="container-cuerpo-fila1">
+                <mat-form-field class="fila1-codigo" appearance="outline">
+                    <mat-label><mat-icon>qr_code</mat-icon> Código de Barra</mat-label>
+                    <input matInput #inputScan [(ngModel)]="codigoEscaneado" autocomplete="off"
+                        (keyup.enter)="onScanCodigo()">
+                    <button type="button" mat-icon-button matSuffix *ngIf="codigoEscaneado" (click)="limpiarEscaneo()"
+                        title="Limpiar">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="onScanCodigo()">
+                    <mat-icon>search</mat-icon> Buscar
+                </button>
+            </div>
+
+            <!-- Tarjeta de Información de Ubicación Escaneada (Diseño PDA) -->
+            <div class="card-ubicacion-info" *ngIf="infoEscaneo">
+                <div class="card-ubicacion-header">
+                    <span class="badge-lectura">Lectura: {{ infoEscaneo.tipoLectura }}</span>
+                    <span class="subtitulo-lectura">{{ infoEscaneo.mensaje }}</span>
+                </div>
+
+                <div class="banner-ubicacion-azul">
+                    <div class="banner-col-izq">
+                        <span class="lbl-ubicacion">UBICACIÓN</span>
+                        <div class="codigo-ubicacion">{{ infoEscaneo.codigoUbicacion }}</div>
+                        <div class="desc-ubicacion">{{ infoEscaneo.descripcionUbicacion }}</div>
+                    </div>
+                    <div class="banner-col-der">
+                        <span class="lbl-peso-titulo">ROLLOS</span>
+                        <div class="conteo-rollos">{{ infoEscaneo.rollosActuales }}</div>
+                        <span class="lbl-rollos">Peso: {{ infoEscaneo.pesoTotal }} kg</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fila 2: Tabla de Datos con Paginador -->
+            <div class="container-cuerpo-fila2">
+                <table mat-table class="mat-elevation-z8" [dataSource]="dataSourceNc" matSort #sortNc="matSort">
+
+                    <!-- Rollo -->
+                    <ng-container matColumnDef="rollo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell">ROLLO</th>
+                        <td mat-cell *matCellDef="let row"> {{ row.rollo }} </td>
+                    </ng-container>
+
+                    <!-- Partida -->
+                    <ng-container matColumnDef="partida">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell">PARTIDA</th>
+                        <td mat-cell *matCellDef="let row">{{ row.partida }}</td>
+                    </ng-container>
+
+                    <!-- Color -->
+                    <ng-container matColumnDef="color">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell">COLOR</th>
+                        <td mat-cell *matCellDef="let row" [title]="row.color"> {{ row.color }} </td>
+                    </ng-container>
+
+                    <!-- Peso KG -->
+                    <ng-container matColumnDef="peso">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-header-cell">KG</th>
+                        <td mat-cell *matCellDef="let row"> {{ row.peso }} </td>
+                    </ng-container>
+
+                    <!-- Filas de cabecera y datos -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                        [class.fila-resaltada]="row.rollo === rolloResaltado"></tr>
+                </table>
+            </div>
+
+            <!-- Fila Foot: Botones Ubicar y Reubicar al Final -->
+            <div class="container-cuerpo-foot">
+                <button type="button" class="button-ubicar" mat-flat-button (click)="startNuevaUbicacion()">
+                    <mat-icon>download</mat-icon> Ubicar
+                </button>
+
+                <button type="button" class="button-reubicar" mat-flat-button (click)="startReubicacion()">
+                    <mat-icon>sync_alt</mat-icon> Reubicar
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Pantalla 2: Ubicar Bultos (Estilo Precotex)    -->
+
+    <div class="grid-container" *ngIf="currentScreen === 'ubicar'">
+
+        <!-- Título Superior con botón Volver -->
+        <div class="title title-con-retorno">
+            <button type="button" mat-icon-button class="btn-retorno" (click)="goTo('inicio')" title="Volver al inicio">
+                <mat-icon>chevron_left</mat-icon>
+            </button>
+            <span class="txt-titulo-pantalla">Ubicar bultos</span>
+        </div>
+
+        <div class="container-cuerpo">
+
+            <!-- Sección: Guía de Remisión -->
+            <div class="form-seccion">
+                <label class="seccion-label">N.° DE GUÍA DE REMISIÓN</label>
+                <div class="box-input-guia">
+                    <input type="text" #inputGuia id="inputGuia" [(ngModel)]="guiaRemision"
+                        (input)="onGuiaInputChange()" (keyup.enter)="consultarGuiaActual()"
+                        placeholder="Escanea la guía" class="input-guia" autocomplete="off">
+                </div>
+            </div>
+
+            <!-- Resumen de Estados: 3 Tarjetas -->
+            <div class="stats-grid">
+                <!-- Enviados -->
+                <div class="stat-card stat-enviados">
+                    <div class="stat-numero">{{ totEnviados }}</div>
+                    <div class="stat-texto">Enviados</div>
+                </div>
+
+                <!-- Ubicados -->
+                <div class="stat-card stat-ubicados">
+                    <div class="stat-numero">{{ totUbicados }}</div>
+                    <div class="stat-texto">Ubicados</div>
+                </div>
+
+                <!-- Pendientes -->
+                <div class="stat-card stat-pendientes">
+                    <div class="stat-numero">{{ totPendientes }}</div>
+                    <div class="stat-texto">Pendientes</div>
+                </div>
+            </div>
+
+            <!-- Sección: Lectura de Bulto con borde punteado -->
+            <div class="form-seccion">
+                <label class="seccion-label">LECTURA DE BULTO</label>
+                <div class="box-scan-punteado" (click)="enfocarInputBulto()">
+                    <mat-icon class="icon-barcode">qr_code</mat-icon>
+                    <input type="text" #inputBulto id="inputBulto" [(ngModel)]="inputBultoScan"
+                        placeholder="Escanee el bulto" (input)="onBultoInputChange()" (keyup.enter)="forzarScanBulto()"
+                        autocomplete="off" autofocus>
+                </div>
+            </div>
+
+            <!-- Tabla de Bultos Lecturados -->
+            <div class="wrapper-tabla-bultos">
+                <table class="tabla-bultos">
+                    <thead>
+                        <tr>
+                            <th class="col-bulto">BULTO</th>
+                            <th class="col-partida">PARTIDA</th>
+                            <th class="col-kg">KG</th>
+                            <th class="col-accion"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of bultosLecturados; let i = index">
+                            <td class="col-bulto">{{ item.bulto }}</td>
+                            <td class="col-partida">{{ item.partida }}</td>
+                            <td class="col-kg">{{ item.kg }}</td>
+                            <td class="col-accion">
+                                <button type="button" class="btn-eliminar-item" (click)="removeBulto(i)"
+                                    title="Eliminar">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="bultosLecturados.length === 0">
+                            <td colspan="4" class="td-vacio">No hay bultos lecturados</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Barra Total Lecturados y Botón Vaciar -->
+            <div class="barra-totales-lectura">
+                <div class="txt-totales">
+                    Total: <strong>{{ bultosLecturados.length }}</strong> Bultos · <strong>{{ totalKgLecturados }}
+                        kg</strong>
+                </div>
+                <button type="button" class="btn-vaciar" (click)="vaciarBultos()" title="Limpiar lista">
+                    <mat-icon>delete_outline</mat-icon> Vaciar
+                </button>
+            </div>
+
+            <!-- Sección: Ubicación Destino -->
+            <div class="form-seccion">
+                <label class="seccion-label">UBICACIÓN DESTINO</label>
+                <div class="box-ubicacion-destino">
+                    <mat-icon class="icon-pin">location_on</mat-icon>
+                    <input type="text" [(ngModel)]="ubicacionDestino" placeholder="Ubicación" class="input-destino"
+                        autocomplete="off">
+                </div>
+            </div>
+
+            <!-- Fila Foot: Botones Cancelar y Guardar -->
+            <div class="container-cuerpo-foot">
+                <button type="button" class="button-cancelar" mat-flat-button (click)="goTo('inicio')">
+                    Cancelar
+                </button>
+
+                <button type="button" class="button-guardar" mat-flat-button (click)="guardarUbicacion()">
+                    Guardar
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Pantalla 3: Reubicar Bultos (Estilo Precotex) -->
+
+    <div class="grid-container" *ngIf="currentScreen === 'reubicar'">
+
+        <!-- Título Superior con botón Volver -->
+        <div class="title title-con-retorno">
+            <button type="button" mat-icon-button class="btn-retorno" (click)="goTo('inicio')" title="Volver al inicio">
+                <mat-icon>chevron_left</mat-icon>
+            </button>
+            <span class="txt-titulo-pantalla">Reubicar bultos</span>
+        </div>
+
+        <div class="container-cuerpo">
+
+            <!-- Sección: Lectura de Bulto con borde punteado -->
+            <div class="form-seccion">
+                <label class="seccion-label">LECTURA DE BULTO</label>
+                <div class="box-scan-punteado" (click)="enfocarInputBultoReubicar()">
+                    <mat-icon class="icon-barcode">qr_code</mat-icon>
+                    <input type="text" #inputBultoReubicar id="inputBultoReubicar" [(ngModel)]="inputBultoReubicarScan"
+                        placeholder="Escanee el bulto (Enter)" (input)="onBultoReubicarInputChange()"
+                        (keyup.enter)="forzarScanBultoReubicar()" autocomplete="off" autofocus>
+                </div>
+            </div>
+
+            <!-- Tarjeta: ÚLTIMO BULTO LECTURADO -->
+            <div class="card-ultimo-bulto" *ngIf="ultimoBultoReubicado">
+                <div class="header-ultimo-bulto">
+                    <span>ÚLTIMO BULTO LECTURADO</span>
+                </div>
+                <div class="grid-ultimo-bulto">
+                    <div class="item-ultimo-bulto">
+                        <span class="lbl-dato">N.° de bulto</span>
+                        <span class="val-dato val-bulto">{{ ultimoBultoReubicado.bulto }}</span>
+                    </div>
+                    <div class="item-ultimo-bulto">
+                        <span class="lbl-dato">Ubicación actual</span>
+                        <span class="val-dato val-ubicacion">{{ ultimoBultoReubicado.ubicacionActual }}</span>
+                    </div>
+                    <div class="item-ultimo-bulto">
+                        <span class="lbl-dato">Partida</span>
+                        <span class="val-dato val-partida">{{ ultimoBultoReubicado.partida }}</span>
+                    </div>
+                    <div class="item-ultimo-bulto">
+                        <span class="lbl-dato">Peso</span>
+                        <span class="val-dato val-peso">{{ ultimoBultoReubicado.peso }} kg</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla de Bultos a Reubicar -->
+            <div class="wrapper-tabla-bultos">
+                <table class="tabla-bultos tabla-reubicar">
+                    <thead>
+                        <tr>
+                            <th class="col-bulto">BULTO</th>
+                            <th class="col-partida">PARTIDA</th>
+                            <th class="col-kg">KG</th>
+                            <th class="col-accion"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of bultosReubicar; let i = index">
+                            <td class="col-bulto">{{ item.bulto }}</td>
+                            <td class="col-partida">{{ item.partida }}</td>
+                            <td class="col-kg">{{ item.kg }}</td>
+                            <td class="col-accion">
+                                <button type="button" class="btn-eliminar-item" (click)="removeBultoReubicar(i)"
+                                    title="Eliminar">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="bultosReubicar.length === 0">
+                            <td colspan="5" class="td-vacio">No hay bultos lecturados</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Barra Total Lecturados y Botón Vaciar -->
+            <div class="barra-totales-lectura">
+                <div class="txt-totales">
+                    Total: <strong>{{ bultosReubicar.length }}</strong> bultos · <strong>{{ totalKgReubicar }}
+                        kg</strong>
+                </div>
+                <button type="button" class="btn-vaciar" (click)="vaciarBultosReubicar()" title="Limpiar lista">
+                    <mat-icon>delete_outline</mat-icon> Vaciar
+                </button>
+            </div>
+
+            <!-- Sección: Nueva Ubicación -->
+            <div class="form-seccion">
+                <label class="seccion-label">NUEVA UBICACIÓN</label>
+                <div class="box-ubicacion-destino">
+                    <mat-icon class="icon-pin">location_on</mat-icon>
+                    <input type="text" [(ngModel)]="nuevaUbicacionDestino" placeholder="Ubicación" class="input-destino"
+                        autocomplete="off">
+                </div>
+            </div>
+
+            <!-- Fila Foot: Botones Cancelar y Guardar -->
+            <div class="container-cuerpo-foot">
+                <button type="button" class="button-cancelar" mat-flat-button (click)="goTo('inicio')">
+                    Cancelar
+                </button>
+
+                <button type="button" class="button-guardar" mat-flat-button (click)="guardarReubicacion()">
+                    Guardar
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+</div>

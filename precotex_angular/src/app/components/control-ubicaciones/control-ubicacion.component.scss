@@ -1,0 +1,903 @@
+.container-fluid {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 8px 10px;
+    font-size: 14px;
+    margin: 0;
+}
+
+.grid-container {
+    border-radius: 4px;
+    width: 100%;
+    height: auto;
+    border: 1px solid #337ab7;
+    margin: 0;
+    padding: 0;
+    min-height: 600px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    background-color: #3f51b5;
+    color: #ffffff;
+    padding: 10px 12px;
+    text-align: center;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #337ab7;
+    font-size: 16px;
+    letter-spacing: 0.3px;
+}
+
+.container-cuerpo {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 10px 10px 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Fila 1: Input de Búsqueda y Botón buscar */
+.container-cuerpo-fila1 {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 6px;
+
+    mat-form-field.fila1-codigo {
+        max-width: 100%;
+
+        input {
+            font-size: 14px;
+        }
+
+        ::ng-deep {
+            .mat-form-field-wrapper {
+                padding-bottom: 0 !important;
+                margin-bottom: 0 !important;
+            }
+
+            .mat-form-field-subscript-wrapper {
+                display: none !important;
+            }
+        }
+    }
+
+    .fila1-buscar {
+        height: 50px;
+        background-color: #3f51b5;
+        color: #ffffff;
+        font-weight: 600;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0 18px;
+        font-size: 13.5px;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+
+        &:hover {
+            background-color: #303f9f;
+        }
+
+        mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
+
+/* Tarjeta Azul de Ubicación (diseño pda) */
+.card-ubicacion-info {
+    margin-bottom: 15px;
+    border-radius: 8px;
+    padding: 16px 8px;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+
+    .card-ubicacion-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        flex-wrap: wrap;
+        gap: 8px;
+
+        .badge-lectura {
+            background-color: #e0ecfb;
+            color: #1e3a8a;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 14px;
+            letter-spacing: 0.2px;
+        }
+
+        .subtitulo-lectura {
+            color: #64748b;
+            font-size: 12.5px;
+            font-weight: 500;
+        }
+    }
+
+    .banner-ubicacion-azul {
+        background: linear-gradient(135deg, #1568d6 0%, #0d47a1 100%);
+        border-radius: 8px;
+        padding: 10px 9.7px;
+        color: #ffffff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 3px 8px rgba(21, 104, 214, 0.22);
+
+        .banner-col-izq {
+            display: flex;
+            flex-direction: column;
+
+            .lbl-ubicacion {
+                font-size: 10.5px;
+                font-weight: 700;
+                letter-spacing: 1.2px;
+                color: #93c5fd;
+                text-transform: uppercase;
+            }
+
+            .codigo-ubicacion {
+                font-size: 26px;
+                font-weight: 800;
+                color: #ffffff;
+            }
+
+            .desc-ubicacion {
+                font-size: 12.5px;
+                color: #dbeafe;
+                font-weight: 400;
+            }
+        }
+
+        .banner-col-der {
+            text-align: right;
+
+            .lbl-peso-titulo {
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 1.2px;
+                color: #93c5fd;
+                text-transform: uppercase;
+                display: block;
+            }
+
+            .conteo-rollos {
+                font-size: 26px;
+                font-weight: 800;
+                color: #ffffff;
+
+                .lbl-unidad {
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: #bfdbfe;
+                }
+            }
+
+            .lbl-rollos {
+                font-size: 12.5px;
+                color: #dbeafe;
+                font-weight: 400;
+                margin-top: 2px;
+                display: block;
+            }
+        }
+    }
+}
+
+/* Fila 2: Tabla (Estilo Liquidación de Corte con scroll interno) */
+.container-cuerpo-fila2 {
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+
+    /* Scrollbar sutil para PDA y escritorio */
+    &::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f5f9;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+
+    table.mat-elevation-z8 {
+        width: 100%;
+        table-layout: fixed;
+        font-size: 12px;
+        box-shadow: none;
+        border-collapse: collapse;
+
+        tr.mat-header-row {
+            height: 36px;
+            min-height: 36px;
+            background-color: #f1f5f9;
+        }
+
+        th.mat-header-cell {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            height: 36px;
+            padding: 4px 3px;
+            font-weight: 700;
+            color: #334155;
+            font-size: 11.5px;
+            background-color: #f1f5f9;
+            border-bottom: 2px solid #cbd5e1;
+            border-right: 1px solid #e2e8f0;
+
+            &:last-child {
+                border-right: none;
+            }
+
+            ::ng-deep .mat-sort-header-arrow {
+                margin-left: 2px !important;
+            }
+        }
+
+        td.mat-cell {
+            padding: 7px 3px;
+            color: #1e293b;
+            font-size: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            border-right: 1px solid #f1f5f9;
+
+            &:last-child {
+                border-right: none;
+            }
+        }
+
+        /* Estilos y anchos específicos por columna (suman 100% exacto para evitar scroll horizontal) */
+        .mat-column-rollo {
+            width: 28%;
+            text-align: center;
+            font-weight: 600;
+            white-space: nowrap;
+
+            ::ng-deep .mat-sort-header-container {
+                justify-content: center;
+            }
+        }
+
+        .mat-column-partida {
+            width: 18%;
+            text-align: center;
+            font-weight: 600;
+            white-space: nowrap;
+
+            ::ng-deep .mat-sort-header-container {
+                justify-content: center;
+            }
+        }
+
+        .mat-column-color {
+            width: 30%;
+            text-align: left;
+            padding-left: 5px;
+            padding-right: 4px;
+            font-size: 11px;
+            line-height: 1.15;
+            white-space: normal;
+            word-break: break-word;
+
+            ::ng-deep .mat-sort-header-container {
+                justify-content: flex-start;
+            }
+        }
+
+        .mat-column-peso {
+            width: 24%;
+            text-align: right;
+            padding-right: 8px;
+            font-weight: 700;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+            font-size: 12.5px;
+
+            ::ng-deep .mat-sort-header-container {
+                justify-content: flex-end;
+            }
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        tr.fila-resaltada {
+            background-color: #dbeafe !important;
+
+            td {
+                font-weight: 700 !important;
+                color: #1e40af !important;
+            }
+        }
+    }
+}
+
+/* Fila footer: botones ubicar y reubicar */
+.container-cuerpo-foot {
+    border-top: 1px solid #337ab7;
+    margin-top: auto;
+    padding-top: 18px;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    button {
+        height: 50px;
+        min-width: 160px;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        font-size: 16.5px;
+        padding: 0 12px;
+        letter-spacing: 0.2px;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.18);
+        }
+
+        mat-icon {
+            font-size: 17px;
+            width: 17px;
+            height: 17px;
+        }
+    }
+
+    .button-ubicar {
+        background-color: #1568d6;
+        color: #ffffff;
+
+        &:hover {
+            background-color: #0f52ad;
+        }
+    }
+
+    .button-reubicar {
+        background-color: #d97706;
+        color: #ffffff;
+
+        &:hover {
+            background-color: #b45309;
+        }
+    }
+
+    .button-cancelar {
+        border: 1.5px solid #cbd5e1;
+        background-color: #ffffff;
+        color: #334155;
+        font-weight: 700;
+
+        &:hover {
+            background-color: #f1f5f9;
+        }
+    }
+
+    .button-guardar {
+        background-color: #1568d6;
+        color: #ffffff;
+        font-weight: 700;
+
+        &:hover {
+            background-color: #0f52ad;
+        }
+    }
+}
+
+/* ESTILOS: Pantalla 2 - Ubicar Bultos (Diseño Precotex) */
+
+.title.title-con-retorno {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    color: #ffffff;
+    padding: 8px 10px;
+    border-radius: 4px 4px 0 0;
+
+    .btn-retorno {
+        color: #ffffff;
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+        padding: 0;
+
+        mat-icon {
+            font-size: 28px;
+            width: 28px;
+            height: 28px;
+        }
+    }
+
+    .txt-titulo-pantalla {
+        font-size: 17px;
+        letter-spacing: 0.2px;
+    }
+}
+
+.form-seccion {
+    margin-bottom: 8px;
+
+    .seccion-label {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.6px;
+        color: #1e3a8a;
+        display: block;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+    }
+}
+
+.box-input-guia {
+    .input-guia {
+        width: 100%;
+        box-sizing: border-box;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 9px 12px;
+        font-size: 15px;
+        color: #1e293b;
+        background-color: #ffffff;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+
+        &:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+    }
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+
+    .stat-card {
+        border-radius: 10px;
+        padding: 8px 4px;
+        text-align: center;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+
+        .stat-numero {
+            font-size: 22px;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .stat-texto {
+            font-size: 11px;
+            font-weight: 500;
+            margin-top: 3px;
+        }
+
+        &.stat-enviados {
+            background-color: #ffffff;
+            border-color: #e2e8f0;
+
+            .stat-numero {
+                color: #1e293b;
+            }
+
+            .stat-texto {
+                color: #64748b;
+            }
+        }
+
+        &.stat-ubicados {
+            background-color: #eafaf1;
+            border-color: #bbf7d0;
+
+            .stat-numero {
+                color: #047857;
+            }
+
+            .stat-texto {
+                color: #166534;
+            }
+        }
+
+        &.stat-pendientes {
+            background-color: #fef8ee;
+            border-color: #fde68a;
+
+            .stat-numero {
+                color: #b45309;
+            }
+
+            .stat-texto {
+                color: #92400e;
+            }
+        }
+    }
+}
+
+.box-scan-punteado {
+    border: 1.5px dashed #93c5fd;
+    background-color: #f0f7ff;
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: text;
+    transition: border-color 0.2s, background-color 0.2s;
+
+    &:hover,
+    &:focus-within {
+        border-color: #2563eb;
+        background-color: #eff6ff;
+    }
+
+    .icon-barcode {
+        color: #2563eb;
+        font-size: 22px;
+        width: 22px;
+        height: 22px;
+    }
+
+    input {
+        border: none;
+        background: transparent;
+        font-family: monospace;
+        font-size: 13.5px;
+        font-weight: 600;
+        width: 100%;
+        outline: none;
+        color: #1e293b;
+
+        &::placeholder {
+            color: #64748b;
+            font-weight: 400;
+        }
+    }
+}
+
+.wrapper-tabla-bultos {
+    max-height: 125px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #94a3b8 #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background-color: #ffffff;
+    margin-top: 4px;
+
+    /* Scrollbar estilizada */
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 3px;
+
+        &:hover {
+            background: #64748b;
+        }
+    }
+
+    table.tabla-bultos {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-size: 12px;
+        table-layout: fixed;
+
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: #475569;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px 4px;
+            text-align: center;
+            border-bottom: 1.5px solid #cbd5e1;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        td {
+            padding: 5px 4px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #1e293b;
+            font-size: 12px;
+            background-color: #ffffff;
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        .col-bulto {
+            width: 48%;
+            text-align: left;
+            padding-left: 10px;
+            font-weight: 700;
+            color: #1e293b;
+            white-space: nowrap;
+        }
+
+        .col-partida {
+            width: 22%;
+            text-align: center;
+            color: #334155;
+            white-space: nowrap;
+        }
+
+        .col-kg {
+            width: 20%;
+            text-align: right;
+            padding-right: 6px;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+
+        .col-accion {
+            width: 10%;
+            text-align: center;
+
+            .btn-eliminar-item {
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                padding: 2px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 4px;
+                transition: background-color 0.15s;
+
+                mat-icon {
+                    font-size: 16px;
+                    width: 16px;
+                    height: 16px;
+                    color: #94a3b8;
+                }
+
+                &:hover {
+                    background-color: #fee2e2;
+
+                    mat-icon {
+                        color: #ef4444;
+                    }
+                }
+            }
+        }
+
+        .td-vacio {
+            text-align: center;
+            padding: 20px 8px;
+            color: #94a3b8;
+            font-style: italic;
+        }
+    }
+}
+
+.barra-totales-lectura {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 2px 8px 2px;
+
+    .txt-totales {
+        font-size: 12.5px;
+        color: #334155;
+
+        strong {
+            color: #0f172a;
+            font-weight: 700;
+        }
+    }
+
+    .btn-vaciar {
+        border: 1px solid #fed7aa;
+        background-color: #fffaf5;
+        color: #c2410c;
+        border-radius: 6px;
+        padding: 4px 10px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: background-color 0.15s, border-color 0.15s;
+
+        mat-icon {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+        }
+
+        &:hover {
+            background-color: #ffedd5;
+            border-color: #fdba74;
+        }
+    }
+}
+
+.box-ubicacion-destino {
+    border: 2px solid #2563eb;
+    border-radius: 8px;
+    padding: 7px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #ffffff;
+
+    .icon-pin {
+        color: #2563eb;
+        font-size: 22px;
+        width: 22px;
+        height: 22px;
+    }
+
+    .input-destino {
+        border: none;
+        outline: none;
+        font-size: 16.5px;
+        font-weight: 800;
+        color: #1e3a8a;
+        width: 100%;
+        letter-spacing: 0.5px;
+        background: transparent;
+
+        &::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+        }
+    }
+}
+
+/* Card: Último Bulto Lecturado (Pantalla Reubicar) */
+.card-ultimo-bulto {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+    .header-ultimo-bulto {
+        font-size: 10.5px;
+        font-weight: 800;
+        letter-spacing: 0.6px;
+        color: #475569;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+    }
+
+    .grid-ultimo-bulto {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px 14px;
+
+        .item-ultimo-bulto {
+            display: flex;
+            flex-direction: column;
+
+            .lbl-dato {
+                font-size: 11px;
+                color: #64748b;
+                font-weight: 500;
+            }
+
+            .val-dato {
+                font-size: 13.5px;
+                font-weight: 700;
+                color: #0f172a;
+                margin-top: 1px;
+
+                &.val-bulto {
+                    color: #0f172a;
+                }
+
+                &.val-ubicacion {
+                    color: #b45309;
+                    font-weight: 800;
+                }
+
+                &.val-partida {
+                    color: #334155;
+                }
+
+                &.val-peso {
+                    color: #0f172a;
+                }
+            }
+        }
+    }
+}
+
+/* Tabla Reubicar */
+table.tabla-reubicar {
+    .col-num {
+        width: 10%;
+        text-align: center;
+        color: #64748b;
+        font-weight: 600;
+    }
+
+    .col-bulto {
+        width: 42%;
+        text-align: left;
+        padding-left: 8px;
+        font-weight: 700;
+        color: #1e293b;
+        white-space: nowrap;
+    }
+
+    .col-partida {
+        width: 24%;
+        text-align: center;
+        color: #334155;
+        white-space: nowrap;
+    }
+
+    .col-kg {
+        width: 16%;
+        text-align: right;
+        padding-right: 6px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .col-accion {
+        width: 8%;
+        text-align: center;
+    }
+}
