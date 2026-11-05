@@ -4,6 +4,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GlobalVariable } from 'src/app/VarGlobals';
 import { SeguridadVisitasService } from 'src/app/services/seguridad-visitas.service';
+import { MatDialog } from '@angular/material/dialog';
+
+import { DialogFirmaDigitalComponent } from 'src/app/components/auditoria-externa/registro-firmas-auditoria/dialog-firma-digital/dialog-firma-digital.component';
 
 @Component({
   selector: 'app-consulta-visita',
@@ -32,8 +35,9 @@ export class ConsultaVisitaComponent implements OnInit {
   dataAreas: Array<any> = [];
   dataPersonas: Array<any> = [];
 
+  lc_img64: string = "";
 
-  constructor(private seguridadVisitasService: SeguridadVisitasService, private matSnackBar: MatSnackBar,
+  constructor(private seguridadVisitasService: SeguridadVisitasService, private matSnackBar: MatSnackBar, private dialog: MatDialog,
     private SpinnerService: NgxSpinnerService) { }
 
   ngOnInit(): void {
@@ -66,7 +70,30 @@ export class ConsultaVisitaComponent implements OnInit {
     if (GlobalVariable.num_planta > 0) {
 
       this.SpinnerService.show();
-      this.seguridadVisitasService.SEG_CREAR_VISITA_PLANTA(
+
+
+      const formData = new FormData();
+                formData.append('Opcion', 'S');
+                formData.append('Id', this.Id);
+                formData.append('Cod_Empresa', this.Cod_Empresa);
+                formData.append('Num_Planta', GlobalVariable.num_planta.toString());
+                formData.append('Tipo_Documento', this.Tipo_Documento);
+                formData.append('Nro_DNI', this.Nro_DNI);
+                formData.append('Nombres_Visita', this.Nombres_Visita);
+                formData.append('Empresa', this.Empresa);
+                formData.append('Hora_Ingreso', '01/01/1990');
+                formData.append('Hora_Salida', '01/01/1990');
+                formData.append('Horas_Planta', '');
+                formData.append('RH_Cod_Area', this.Rh_Cod_Area);
+                formData.append('Area_Visitada', this.Area_Visitada);
+                formData.append('Motivo_Visita', this.Motivo_Visita);
+                formData.append('Persona_Visitada', this.Persona_Visitada);
+                formData.append('Observaciones', this.Observaciones);
+                formData.append('Fec_Registro', '01/01/1990');
+                formData.append('Cod_Usuario', GlobalVariable.vusu);
+                formData.append('Imagen64', this.lc_img64);
+
+      /*this.seguridadVisitasService.SEG_CREAR_VISITA_PLANTA(
         'S',
         this.Id,
         this.Cod_Empresa,
@@ -84,13 +111,16 @@ export class ConsultaVisitaComponent implements OnInit {
         this.Persona_Visitada,
         this.Observaciones,
         '01/01/1990',
-        GlobalVariable.vusu
-      ).subscribe((res: any) => {
+        GlobalVariable.vusu)*/
+      this.seguridadVisitasService.SEG_CREAR_VISITA_PLANTA2(formData)
+      .subscribe((res: any) => {
         this.SpinnerService.hide();
         if (res[0].Respuesta == 'OK') {
           this.matSnackBar.open('Se actualizo la hora de salida correctamente.', 'Cerrar', {
             duration: 2500,
           });
+
+          this.onLimpiarFirma();
           this.changeDni();
         } else {
           this.matSnackBar.open('Ha ocurrido un error al guardar la hora de salida.', 'Cerrar', {
@@ -211,6 +241,32 @@ export class ConsultaVisitaComponent implements OnInit {
 
 
   }
+
+  // Registro de firmar
+
+  onRegistrarFirma(){
+        //console.log(window.innerWidth)
+        //console.log(window.innerHeight)
+        let ln_width: number = 500;
+        let ln_height: number = 350;
+        //this.ln_cols = 3;
+    
+    
+        let dialogRef = this.dialog.open(DialogFirmaDigitalComponent, {
+          disableClose: true,
+          data: {Nombre: 'firma', Width: ln_width, Height: ln_height}
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          console.log(result)
+          this.lc_img64 = result;      
+        });
+      }
+  
+    onLimpiarFirma(){
+      this.lc_img64 = '';
+  //    this.ll_nuevo = false;
+    }
 
 
 }
