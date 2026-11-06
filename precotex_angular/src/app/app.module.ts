@@ -340,7 +340,6 @@ import { CtrlJabaServicioComponent } from './components/seguridad/ctrl-jaba-serv
 
 
 
-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { RegistroParaMaqTinto } from './components/registro-paramaq-tinto/registro-paramaq-tinto';
 import { AuditoriaLineaExternaComponent } from './components/auditoria-externa/auditoria-linea-externa/auditoria-linea-externa.component';
@@ -644,6 +643,9 @@ import { SaldoHiloTelaProgramadaComponent } from './components/tejeduria/saldo-h
 import { SolicitudMantenimientoMaquinaReporteComponent } from './solicitud-mantenimiento-maquina-reporte/solicitud-mantenimiento-maquina-reporte.component';
 import { SaldoPruebaComponent } from './components/tejeduria/auditoria-devol-de-hilo-tej/auditoria-devol-hilo-component';
 import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/auditoria-devol-de-hilo-tej/auditoria-devol-de-hilo-programada/auditoria-devol-de-hilo-programada.component';
+
+//CONTROL UBICACIONES
+import { ControlUbicacionComponent } from './components/control-ubicaciones/control-ubicacion.component';
 
 @NgModule({
   declarations: [
@@ -1123,7 +1125,7 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     DialogEncogimientoPrendaMedidasComponent, DialogEncogimientoPrendaValorComponent, RegistroFirmasComponent, RegistroEventosComponent, DialogRegistroComponent, ConsultaRequisitoriaComponent,
     EntregaEventosComponent, RegistroRondasComponent, DialogDetalleOcurrenciaComponent, DialogRegistoOcurrenciaComponent, ModalEditarDesgloseComponent, ConfirmDialogComponent,
     GenerarQrComponent, ConsultaValesComponent, ContratosComponent,
-    
+
     //Memorandum en GRAL
     MemorandumGralComponent,
     DialogMemorandumGralComponent,
@@ -1139,14 +1141,14 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     QuejasReclamosv2Component,
     ActivarSalidaComponent, ValidarSalidaComponent, ComiteEmergenciaComponent, DialogRegistarActaComponent, ValidaCorteDespachoComponent, SalidaTiendaComponent,
     DialogPendienteEmpaqueCajasComponent,
-    
+
     //RETIRO DE REPUESTOS
     RetiroRepuestosComponent,
     DialogRetiroRepuestosComponent,
     DialogRetiroRepuestosCierreComponent,
     DialogRetiroRepuestosDetalleComponent,
     DialogRetiroRepuestosDetalleNuevoComponent,
-  
+
     LiberaOpColorComponent, DialogColorComponent, DialogEvidenciaEmpaqueCajaComponent, DialogEvidenciaPackingCajaComponent,
     EvidenciaEmpaqueCajaComponent,
     DialogCapturarFotoCajaComponent,
@@ -1170,16 +1172,16 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
     DialogSolicitudMntoInformeComponent,
     SolicitudMantenimientoMaquinaVisorComponent,
     ReporteVehiculoInmovilizadoComponent,
-    
+
     //TIEMPOS IMPRODUCTIVOS V3
     TiemposImproductivosv3Component,
 
     //COTIZACIONES
     CotizacionesComponent,
-    
+
     // NO CONFORMIDADES (CONTROL DE CALIDAD)
     NoConformidadesComponent,
-    
+
     TomaFotoPersonasComponent,
     ModalQuejaReclamoNuevoComponent,
     StatusReqAlmacenComponent,
@@ -1205,9 +1207,12 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
 
     //MANTENIMIENTO DE MAQUINAS REPORTE
     SolicitudMantenimientoMaquinaReporteComponent,
-  
+
     SaldoPruebaComponent,
     AuditoriaDevolDeHiloProgramadaComponent,
+
+    //CONTROL DE UBICACIONES
+    ControlUbicacionComponent,
   ],
   entryComponents: [DialogJabaComponent],
   imports: [
@@ -1252,8 +1257,8 @@ import { AuditoriaDevolDeHiloProgramadaComponent } from './components/tejeduria/
 
   providers: [
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
-    { provide: LocationStrategy, useClass: HashLocationStrategy},
-    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true},
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     { provide: MatPaginatorIntl, useValue: getCustomPaginatorIntl() },
     DatePipe
   ],

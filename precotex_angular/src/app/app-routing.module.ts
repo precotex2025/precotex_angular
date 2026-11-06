@@ -5,8 +5,8 @@ import { AppComponent } from './app.component';
 import { MenuComponent } from './components/menu/menu.component';
 
 import { AuditoriaLineaCosturaComponent } from './components/auditoria-calidad/auditoria-linea-costura/auditoria-linea-costura.component';
-import { SeguridadControlGuiaComponent } from  './components/seguridad/seguridad-control-guia/seguridad-control-guia.component';
-import { SeguridadControlGuiaAccionComponent} from './components/seguridad/seguridad-control-guia/seguridad-control-guia-accion/seguridad-control-guia-accion.component';
+import { SeguridadControlGuiaComponent } from './components/seguridad/seguridad-control-guia/seguridad-control-guia.component';
+import { SeguridadControlGuiaAccionComponent } from './components/seguridad/seguridad-control-guia/seguridad-control-guia-accion/seguridad-control-guia-accion.component';
 import { SeguridadControlGuiaSalidaComponent } from './components/seguridad/seguridad-control-guia/seguridad-control-guia-salida/seguridad-control-guia-salida.component'
 import { SeguridadControlGuiaInternoComponent } from './components/seguridad/seguridad-control-guia/seguridad-control-guia-interno/seguridad-control-guia-interno.component'
 import { SeguridadControlGuiaExternoComponent } from './components/seguridad/seguridad-control-guia/seguridad-control-guia-externo/seguridad-control-guia-externo.component'
@@ -38,34 +38,34 @@ import { TiemposImproductivosv2Component } from './components/tiempos-improducti
 
 import { DefectosAlmacenDerivadosComponent } from './components/auditoria-calidad/defectos-almacen-derivados/defectos-almacen-derivados.component';
 import { ReporteDefectosAlmacenDerivadosComponent } from './components/auditoria-calidad/defectos-almacen-derivados/reporte-almacen-derivado/reporte-defectos-almacen-derivados/reporte-defectos-almacen-derivados.component';
-import { ReporteDefectosTotalesDerivadosComponent} from  './components/auditoria-calidad/defectos-almacen-derivados/reporte-almacen-derivado/reporte-defectos-totales-derivados/reporte-defectos-totales-derivados.component'
-import { AuditoriaDefectoDerivadoComponent} from './components/auditoria-calidad/auditoria-defecto-derivado/auditoria-defecto-derivado.component'
+import { ReporteDefectosTotalesDerivadosComponent } from './components/auditoria-calidad/defectos-almacen-derivados/reporte-almacen-derivado/reporte-defectos-totales-derivados/reporte-defectos-totales-derivados.component'
+import { AuditoriaDefectoDerivadoComponent } from './components/auditoria-calidad/auditoria-defecto-derivado/auditoria-defecto-derivado.component'
 
 import { MovimientoInspeccionComponent } from './components/inspeccion/movimiento-inspeccion/movimiento-inspeccion.component';
 import { AuditoriaInspeccionCosturaComponent } from './components/auditoria-calidad/auditoria-inspeccion-costura/auditoria-inspeccion-costura.component';
 
-import { IngresoRolloTejidoComponent} from './components/ingreso-rollo-tejido/ingreso-rollo-tejido.component'
-import { IngresoRolloTejidoDetalleComponent} from './components/ingreso-rollo-tejido/ingreso-rollo-tejido-detalle/ingreso-rollo-tejido-detalle.component';
+import { IngresoRolloTejidoComponent } from './components/ingreso-rollo-tejido/ingreso-rollo-tejido.component'
+import { IngresoRolloTejidoDetalleComponent } from './components/ingreso-rollo-tejido/ingreso-rollo-tejido-detalle/ingreso-rollo-tejido-detalle.component';
 
-import { AuditoriaHojaMedidaComponent} from './components/auditoria-calidad/auditoria-hoja-medida/auditoria-hoja-medida.component'
+import { AuditoriaHojaMedidaComponent } from './components/auditoria-calidad/auditoria-hoja-medida/auditoria-hoja-medida.component'
 import { AuditoriaHojaMedidaDetalleComponent } from './components/auditoria-calidad/auditoria-hoja-medida/auditoria-hoja-medida-detalle/auditoria-hoja-medida-detalle.component';
 
-import { SeguridadControlJabaComponent} from './components/seguridad/seguridad-control-jaba/seguridad-control-jaba.component'
-import { RegistrarSeguridadControlJabaComponent} from './components/seguridad/seguridad-control-jaba/registrar-seguridad-control-jaba/registrar-seguridad-control-jaba.component'
-import { RegistrarDetalleSeguridadControlJabaComponent} from './components/seguridad/seguridad-control-jaba/registrar-detalle-seguridad-control-jaba/registrar-detalle-seguridad-control-jaba.component'
-import { SeguridadControlMovimientosJabasComponent} from './components/seguridad/seguridad-control-movimientos-jabas/seguridad-control-movimientos-jabas.component'
-import { SeguridadControlMovimientosJabasAccionComponent} from './components/seguridad/seguridad-control-movimientos-jabas/seguridad-control-movimientos-jabas-accion/seguridad-control-movimientos-jabas-accion.component'
+import { SeguridadControlJabaComponent } from './components/seguridad/seguridad-control-jaba/seguridad-control-jaba.component'
+import { RegistrarSeguridadControlJabaComponent } from './components/seguridad/seguridad-control-jaba/registrar-seguridad-control-jaba/registrar-seguridad-control-jaba.component'
+import { RegistrarDetalleSeguridadControlJabaComponent } from './components/seguridad/seguridad-control-jaba/registrar-detalle-seguridad-control-jaba/registrar-detalle-seguridad-control-jaba.component'
+import { SeguridadControlMovimientosJabasComponent } from './components/seguridad/seguridad-control-movimientos-jabas/seguridad-control-movimientos-jabas.component'
+import { SeguridadControlMovimientosJabasAccionComponent } from './components/seguridad/seguridad-control-movimientos-jabas/seguridad-control-movimientos-jabas-accion/seguridad-control-movimientos-jabas-accion.component'
 
-import { DespachoOpIncompletaComponent} from './components/despacho-op-incompleta/despacho-op-incompleta.component'
+import { DespachoOpIncompletaComponent } from './components/despacho-op-incompleta/despacho-op-incompleta.component'
 import { GenerarQrComponent } from './components/control-activos-fijo/generar-qr/generar-qr.component';
-import { ControlActivoFijoComponent} from './components/control-activo-fijo/control-activo-fijo.component'
+import { ControlActivoFijoComponent } from './components/control-activo-fijo/control-activo-fijo.component'
 
-import { InspeccionPrendaComponent} from './components/inspeccion/inspeccion-prenda/inspeccion-prenda.component'
-import { ReinspeccionPrendaComponent} from './components/inspeccion/reinspeccion-prenda/reinspeccion-prenda.component'
-import { InspeccionPrendaHabilitadorComponent} from './components/inspeccion/inspeccion-prenda-habilitador/inspeccion-prenda-habilitador.component'
-import { DerivadoInspeccionPrendaComponent} from './components/auditoria-calidad/derivado-inspeccion-prenda/derivado-inspeccion-prenda.component'
+import { InspeccionPrendaComponent } from './components/inspeccion/inspeccion-prenda/inspeccion-prenda.component'
+import { ReinspeccionPrendaComponent } from './components/inspeccion/reinspeccion-prenda/reinspeccion-prenda.component'
+import { InspeccionPrendaHabilitadorComponent } from './components/inspeccion/inspeccion-prenda-habilitador/inspeccion-prenda-habilitador.component'
+import { DerivadoInspeccionPrendaComponent } from './components/auditoria-calidad/derivado-inspeccion-prenda/derivado-inspeccion-prenda.component'
 
-import { PermitirGiradoOpComponent} from './components/confecciones/permitir-girado-op/permitir-girado-op.component'
+import { PermitirGiradoOpComponent } from './components/confecciones/permitir-girado-op/permitir-girado-op.component'
 import { RegistrarPermisosComponent } from './components/seguridad/registrar-permisos/registrar-permisos.component'
 import { TiposPermisosComponent } from './components/seguridad/registrar-permisos/tipos-permisos/tipos-permisos.component'
 
@@ -76,19 +76,19 @@ import { TelasComponent } from './components/telas/telas.component';
 import { CortesEncogimientoComponent } from './components/cortes-encogimiento/cortes-encogimiento.component';
 
 //mantenimiento general web - rol- opciones- usuarios
-import { MantenimientoWebComponent} from './components/mantenimiento-web/mantenimiento-web.component'
-import { AccesosUsuariosComponent} from './components/accesos-usuarios/accesos-usuarios.component'
+import { MantenimientoWebComponent } from './components/mantenimiento-web/mantenimiento-web.component'
+import { AccesosUsuariosComponent } from './components/accesos-usuarios/accesos-usuarios.component'
 import { ActivarSalidaComponent } from './components/control-activos-fijo/activar-salida/activar-salida.component';
 import { ValidarSalidaComponent } from './components/control-activos-fijo/validar-salida/validar-salida.component';
 
 //dashboard estilos por liquidar
-import {EstilosLiquidarComponent} from './components/estilos-liquidar/estilos-liquidar.component'
+import { EstilosLiquidarComponent } from './components/estilos-liquidar/estilos-liquidar.component'
 import { DialogIngresoEmpleadoComponent } from './components/seguridad/registrar-permisos/form-permisos/dialog-ingreso-empleado/dialog-ingreso-empleado.component'
 import { DialogIngresoEmpleadoComisionComponent } from './components/seguridad/registrar-permisos/form-comisiones/dialog-ingreso-empleado-comision/dialog-ingreso-empleado-comision.component'
 import { DialogIngresoEmpleadorefrigerioComponent } from './components/seguridad/registrar-permisos/form-refrigerio/dialog-ingreso-empleadorefrigerio/dialog-ingreso-empleadorefrigerio.component'
 
 //mantenimiento de jabas
-import { MantenimientoJabasComponent} from './components/mantenimiento-jabas/mantenimiento-jabas.component'
+import { MantenimientoJabasComponent } from './components/mantenimiento-jabas/mantenimiento-jabas.component'
 import { DialogTiemposImproductivosComponent } from './components/tiempos-improductivos/dialog-tiempos-improductivos/dialog-tiempos-improductivos.component';
 import { DialogModificaTiemposImproductivosComponent } from './components/tiempos-improductivos/dialog-modifica-tiempos-improductivos/dialog-modifica-tiempos-improductivos.component';
 import { DialogModificaTelasComponent } from './components/confecciones/liquidacion-corte/dialog-modifica-telas/dialog-modifica-telas.component';
@@ -339,6 +339,7 @@ import { LecturaBultosComponent } from './components/lectura-bultos/lectura-bult
 import { LecturaBultosDetComponent } from './components/lectura-bultos/lectura-bultos-det/lectura-bultos-det.component';
 import { SaldoHiloTelaComponent } from './components/tejeduria/saldo-hilo-tela/saldo-hilo-tela.component';
 import { SaldoPruebaComponent } from './components/tejeduria/auditoria-devol-de-hilo-tej/auditoria-devol-hilo-component';
+import { ControlUbicacionComponent } from './components/control-ubicaciones/control-ubicacion.component';
 
 const routes: Routes = [
   { path: "root", component: AppComponent },
@@ -355,7 +356,7 @@ const routes: Routes = [
   { path: "AuditoriaSalidaAcabados", component: AuditoriaSalidaAcabadoComponent },
   { path: "AuditoriaEmpaqueAcabados", component: AuditoriaEmpaqueAcabadoComponent },
   { path: "AuditoriaEmpaqueCajas", component: AuditoriaEmpaqueCajasComponent },
-  { path: "EvidenciaEmpaqueCajas", component: EvidenciaEmpaqueCajaComponent},
+  { path: "EvidenciaEmpaqueCajas", component: EvidenciaEmpaqueCajaComponent },
 
   { path: "SeguridadControlGuia", component: SeguridadControlGuiaComponent },
   { path: "SeguridadControlGuiaAccion", component: SeguridadControlGuiaAccionComponent },
@@ -367,237 +368,237 @@ const routes: Routes = [
   { path: "SeguridadControlGuiaHistorial", component: SeguridadControlGuiaHistorialComponent },
 
   { path: "DespachoTelaCruda", component: DespachoTelaCrudaComponent },
-  { path: "DespachoTelaCrudaDetalle/:almacen", component: DespachoTelaCrudaDetalleComponent},
+  { path: "DespachoTelaCrudaDetalle/:almacen", component: DespachoTelaCrudaDetalleComponent },
 
-  { path: "SeguridadControlVehiculo", component: SeguridadControlVehiculoComponent},
-  { path: "SeguridadControlVehiculoAccion", component: SeguridadControlVehiculoAccionComponent},
-  { path: "SeguridadControlVehiculoIngreso", component: SeguridadControlVehiculoIngresoComponent},
-  { path: "SeguridadControlVehiculoSalida", component: SeguridadControlVehiculoSalidaComponent},
-  { path: "SeguridadControlVehiculoHistorial", component: SeguridadControlVehiculoHistorialComponent},
-  { path: "SeguridadControlVehiculoRegistroVehiculo", component: SeguridadControlVehiculoRegistroVehiculoComponent},
-  { path: "SeguridadControlVehiculoRegistroConductor", component: SeguridadControlVehiculoRegistroConductorComponent},
-  { path: "SeguridadControlVehiculoReporte", component: SeguridadControlVehiculoReporteComponent},
-  { path: "ConsultaRequisitoria", component: ConsultaRequisitoriaComponent},
-  { path: "SeguridadControlJabas", component: SeguridadControlJabasComponent},
-  { path: "SeguridadControlJabaAccion", component:  SeguridadControlJabasAccionComponent},
-  { path: "SeguridadControlJabaSalida", component:  SeguridadControlJabasSalidaComponent},
-  { path: "SeguridadControlJabaInterno", component: SeguridadControlJabasInternoComponent},
-  { path: "SeguridadControlJabaExterno", component: SeguridadControlJabasExternoComponent},
-  { path: "SeguridadControlJabaHistorial", component: SeguridadControlJabasHistorialComponent},
+  { path: "SeguridadControlVehiculo", component: SeguridadControlVehiculoComponent },
+  { path: "SeguridadControlVehiculoAccion", component: SeguridadControlVehiculoAccionComponent },
+  { path: "SeguridadControlVehiculoIngreso", component: SeguridadControlVehiculoIngresoComponent },
+  { path: "SeguridadControlVehiculoSalida", component: SeguridadControlVehiculoSalidaComponent },
+  { path: "SeguridadControlVehiculoHistorial", component: SeguridadControlVehiculoHistorialComponent },
+  { path: "SeguridadControlVehiculoRegistroVehiculo", component: SeguridadControlVehiculoRegistroVehiculoComponent },
+  { path: "SeguridadControlVehiculoRegistroConductor", component: SeguridadControlVehiculoRegistroConductorComponent },
+  { path: "SeguridadControlVehiculoReporte", component: SeguridadControlVehiculoReporteComponent },
+  { path: "ConsultaRequisitoria", component: ConsultaRequisitoriaComponent },
+  { path: "SeguridadControlJabas", component: SeguridadControlJabasComponent },
+  { path: "SeguridadControlJabaAccion", component: SeguridadControlJabasAccionComponent },
+  { path: "SeguridadControlJabaSalida", component: SeguridadControlJabasSalidaComponent },
+  { path: "SeguridadControlJabaInterno", component: SeguridadControlJabasInternoComponent },
+  { path: "SeguridadControlJabaExterno", component: SeguridadControlJabasExternoComponent },
+  { path: "SeguridadControlJabaHistorial", component: SeguridadControlJabasHistorialComponent },
 
-  { path: "DefectosAlamacenDerivados", component:DefectosAlmacenDerivadosComponent},
-  { path: "ReporteDefectosAlmacenDerivados", component:ReporteDefectosAlmacenDerivadosComponent},
-  { path: "ReporteDefectosTotalesDerivados", component:ReporteDefectosTotalesDerivadosComponent},
-  { path: "AuditoriaDefectoDerivado", component: AuditoriaDefectoDerivadoComponent},
+  { path: "DefectosAlamacenDerivados", component: DefectosAlmacenDerivadosComponent },
+  { path: "ReporteDefectosAlmacenDerivados", component: ReporteDefectosAlmacenDerivadosComponent },
+  { path: "ReporteDefectosTotalesDerivados", component: ReporteDefectosTotalesDerivadosComponent },
+  { path: "AuditoriaDefectoDerivado", component: AuditoriaDefectoDerivadoComponent },
 
-  { path: "MovimientoInspeccion" , component:MovimientoInspeccionComponent},
-  { path: "AuditoriaInspeccionCostura", component: AuditoriaInspeccionCosturaComponent},
+  { path: "MovimientoInspeccion", component: MovimientoInspeccionComponent },
+  { path: "AuditoriaInspeccionCostura", component: AuditoriaInspeccionCosturaComponent },
 
-  { path: "IngresoRolloTejido", component: IngresoRolloTejidoComponent},
-  { path: "IngresoRolloTejidoDetalle/:almacen", component: IngresoRolloTejidoDetalleComponent},
+  { path: "IngresoRolloTejido", component: IngresoRolloTejidoComponent },
+  { path: "IngresoRolloTejidoDetalle/:almacen", component: IngresoRolloTejidoDetalleComponent },
 
-  { path: "AuditoriaHojaMedida", component: AuditoriaHojaMedidaComponent},
-  { path: "AuditoriaHojaMedidaDetalle", component: AuditoriaHojaMedidaDetalleComponent},
-  { path: "AuditoriaHojaMedidaDetalleInsp", component: AuditoriaHojaMedidaDetalleInspComponent},
+  { path: "AuditoriaHojaMedida", component: AuditoriaHojaMedidaComponent },
+  { path: "AuditoriaHojaMedidaDetalle", component: AuditoriaHojaMedidaDetalleComponent },
+  { path: "AuditoriaHojaMedidaDetalleInsp", component: AuditoriaHojaMedidaDetalleInspComponent },
 
-  { path: "SeguridadControlJaba", component: SeguridadControlJabaComponent},
-  { path: "RegistrarSeguridadControlJaba", component: RegistrarSeguridadControlJabaComponent},
-  { path: "RegistrarDetalleSeguridadControlJaba", component: RegistrarDetalleSeguridadControlJabaComponent},
-  { path: "SeguridadControlMovimientosJabas", component: SeguridadControlMovimientosJabasComponent},
-  { path: "SeguridadControlMovimientosJabasAccion", component: SeguridadControlMovimientosJabasAccionComponent},
+  { path: "SeguridadControlJaba", component: SeguridadControlJabaComponent },
+  { path: "RegistrarSeguridadControlJaba", component: RegistrarSeguridadControlJabaComponent },
+  { path: "RegistrarDetalleSeguridadControlJaba", component: RegistrarDetalleSeguridadControlJabaComponent },
+  { path: "SeguridadControlMovimientosJabas", component: SeguridadControlMovimientosJabasComponent },
+  { path: "SeguridadControlMovimientosJabasAccion", component: SeguridadControlMovimientosJabasAccionComponent },
 
-  { path: "GiradoPartidaIncompleta", component: DespachoOpIncompletaComponent},
-  { path: "ControlActivoFijo", component: ControlActivoFijoComponent},
-  { path: "qrActivoFijo", component: GenerarQrComponent},
-  { path: "ComiteEmergencia", component: ComiteEmergenciaComponent},
+  { path: "GiradoPartidaIncompleta", component: DespachoOpIncompletaComponent },
+  { path: "ControlActivoFijo", component: ControlActivoFijoComponent },
+  { path: "qrActivoFijo", component: GenerarQrComponent },
+  { path: "ComiteEmergencia", component: ComiteEmergenciaComponent },
 
-  {path: "InspeccionPrenda", component: InspeccionPrendaComponent},
-  {path: "InspeccionLecturaDerivados", component: InspeccionLecturaDerivadosComponent},
-  {path: "AuditoriainspeccionPrenda", component: ReinspeccionPrendaComponent},
-  {path: "InspeccionPrendaHabilitador", component: InspeccionPrendaHabilitadorComponent},
-  {path: "DerivadoInspeccionPrenda", component: DerivadoInspeccionPrendaComponent},
-  {path: "InspeccionPrendaLiberacionPaquete", component: InspeccionLiberacionPaqueteComponent},
+  { path: "InspeccionPrenda", component: InspeccionPrendaComponent },
+  { path: "InspeccionLecturaDerivados", component: InspeccionLecturaDerivadosComponent },
+  { path: "AuditoriainspeccionPrenda", component: ReinspeccionPrendaComponent },
+  { path: "InspeccionPrendaHabilitador", component: InspeccionPrendaHabilitadorComponent },
+  { path: "DerivadoInspeccionPrenda", component: DerivadoInspeccionPrendaComponent },
+  { path: "InspeccionPrendaLiberacionPaquete", component: InspeccionLiberacionPaqueteComponent },
 
-  { path: "PermitirGiradoOp", component: PermitirGiradoOpComponent},
-  { path: "ConfeccionesAperturaTextil", component: ConfeccionesAperturaTextilComponent},
-  { path: "ver-avances", component: VerAvancesComponent},
-  { path: "ver-ratio-consumo", component: VerRatioConsumoComponent},
+  { path: "PermitirGiradoOp", component: PermitirGiradoOpComponent },
+  { path: "ConfeccionesAperturaTextil", component: ConfeccionesAperturaTextilComponent },
+  { path: "ver-avances", component: VerAvancesComponent },
+  { path: "ver-ratio-consumo", component: VerRatioConsumoComponent },
 
-  { path: "SaldoDevolver", component: SaldoDevolverComponent},
-  { path: "SaldoDevolverIndicador", component: SaldoDevolverIndicadorComponent},
-  { path: "liquidacionesPendientes", component: LiquidacionPendientesComponent},
-  { path: "FormatoCheckList", component: FormatoCheckListComponent},
-  { path: "AuditoriaMedida", component: AuditoriaHojaMedidaInspComponent},
-  { path: "ProduccionArtesList", component: ProduccionArtesListComponent},
-  { path: "DialogProduccionArtesCrear", component: DialogProduccionArtesCrearComponent},
-  { path: "ProduccionInspeccionList", component: ProduccionInspeccionListComponent},
-  { path: "DialogProduccionInspeccionCrear", component: DialogProduccionInspeccionCrearComponent},
-  { path: "ProduccionInspeccionSalidaList", component: ProduccionInspeccionSalidaListComponent},
-  { path: "DialogProduccionInspeccionSalidaCrear", component: DialogProduccionInspeccionSalidaCrearComponent},
+  { path: "SaldoDevolver", component: SaldoDevolverComponent },
+  { path: "SaldoDevolverIndicador", component: SaldoDevolverIndicadorComponent },
+  { path: "liquidacionesPendientes", component: LiquidacionPendientesComponent },
+  { path: "FormatoCheckList", component: FormatoCheckListComponent },
+  { path: "AuditoriaMedida", component: AuditoriaHojaMedidaInspComponent },
+  { path: "ProduccionArtesList", component: ProduccionArtesListComponent },
+  { path: "DialogProduccionArtesCrear", component: DialogProduccionArtesCrearComponent },
+  { path: "ProduccionInspeccionList", component: ProduccionInspeccionListComponent },
+  { path: "DialogProduccionInspeccionCrear", component: DialogProduccionInspeccionCrearComponent },
+  { path: "ProduccionInspeccionSalidaList", component: ProduccionInspeccionSalidaListComponent },
+  { path: "DialogProduccionInspeccionSalidaCrear", component: DialogProduccionInspeccionSalidaCrearComponent },
 
-  { path: "SeguridadActivoFijoReporte", component: SeguridadActivoFijoReporteComponent},
-  { path: "TiemposImproductivos", component: TiemposImproductivosComponent},
-  { path: "TiemposImproductivosv2", component: TiemposImproductivosv2Component},
-  { path: "DialogTiemposImproductivos", component: DialogTiemposImproductivosComponent},
-  { path: "DialogModificaTiemposImproductivos", component: DialogModificaTiemposImproductivosComponent},
-  { path: "DialogModificaTelas", component: DialogModificaTelasComponent},
+  { path: "SeguridadActivoFijoReporte", component: SeguridadActivoFijoReporteComponent },
+  { path: "TiemposImproductivos", component: TiemposImproductivosComponent },
+  { path: "TiemposImproductivosv2", component: TiemposImproductivosv2Component },
+  { path: "DialogTiemposImproductivos", component: DialogTiemposImproductivosComponent },
+  { path: "DialogModificaTiemposImproductivos", component: DialogModificaTiemposImproductivosComponent },
+  { path: "DialogModificaTelas", component: DialogModificaTelasComponent },
 
-  { path: "eficienciaMaquinaTurno", component: EficienciaMaquinaTurnoComponent},
-  { path: "LiquidacionCorte", component: LiquidacionCorteComponent},
-  { path: "RegistrarPermisos", component: RegistrarPermisosComponent},
-  { path: "TiposPermisos" ,component:TiposPermisosComponent},
-  { path: 'LecturaPermisos', component: SeleccionarSedeComponent},
-  { path: 'ReporteLecturaPermisos', component: ReporteLecturaPermisosComponent},
-  { path: 'LecturaPermisosAccion', component: LecturaPermisosComponent},
-  { path: 'LecturaRefrigerioAccion', component: LecturaRefrigerioComponent},
-  { path: 'LecturaComisionesAccion', component: LecturaComisionesComponent},
-  { path: 'SeleccionarSedeAccion', component: SeleccionarSedeAccionComponent},
-  { path: 'SeguimientoOrdenesAtencion', component: SeguimientoOrdenesAtencionComponent},
-  { path: "FormPermisos" ,component:FormPermisosComponent},
-  { path: "FormPermisoDia" ,component:FormPermisoDiaComponent},
+  { path: "eficienciaMaquinaTurno", component: EficienciaMaquinaTurnoComponent },
+  { path: "LiquidacionCorte", component: LiquidacionCorteComponent },
+  { path: "RegistrarPermisos", component: RegistrarPermisosComponent },
+  { path: "TiposPermisos", component: TiposPermisosComponent },
+  { path: 'LecturaPermisos', component: SeleccionarSedeComponent },
+  { path: 'ReporteLecturaPermisos', component: ReporteLecturaPermisosComponent },
+  { path: 'LecturaPermisosAccion', component: LecturaPermisosComponent },
+  { path: 'LecturaRefrigerioAccion', component: LecturaRefrigerioComponent },
+  { path: 'LecturaComisionesAccion', component: LecturaComisionesComponent },
+  { path: 'SeleccionarSedeAccion', component: SeleccionarSedeAccionComponent },
+  { path: 'SeguimientoOrdenesAtencion', component: SeguimientoOrdenesAtencionComponent },
+  { path: "FormPermisos", component: FormPermisosComponent },
+  { path: "FormPermisoDia", component: FormPermisoDiaComponent },
 
-  { path: "FormAprobacionPermisos" ,component:FormAprobacionPermisosComponent},
-  { path: "FormTrabajadoresPermisos" ,component:FormTrabajadoresPermisosComponent},
+  { path: "FormAprobacionPermisos", component: FormAprobacionPermisosComponent },
+  { path: "FormTrabajadoresPermisos", component: FormTrabajadoresPermisosComponent },
 
-  { path: "DialogIngresoEmpleado",component:DialogIngresoEmpleadoComponent},
-  { path: "DialogIngresoEmpleadoComision",component:DialogIngresoEmpleadoComisionComponent},
-  { path: "DialogIngresoEmpleadorefrigerio",component:DialogIngresoEmpleadorefrigerioComponent},
-  { path: "AsignarAreasUsuariosPermisos",component: AsignarAreasUsuariosPermisosComponent},
-  { path: "OperatividadFichaMuestreo",component: OperatividadFichaTecnicaComponent},
-  { path: "DetallesOperatividadFicha",component: DetallesOperatividadFichaComponent},
+  { path: "DialogIngresoEmpleado", component: DialogIngresoEmpleadoComponent },
+  { path: "DialogIngresoEmpleadoComision", component: DialogIngresoEmpleadoComisionComponent },
+  { path: "DialogIngresoEmpleadorefrigerio", component: DialogIngresoEmpleadorefrigerioComponent },
+  { path: "AsignarAreasUsuariosPermisos", component: AsignarAreasUsuariosPermisosComponent },
+  { path: "OperatividadFichaMuestreo", component: OperatividadFichaTecnicaComponent },
+  { path: "DetallesOperatividadFicha", component: DetallesOperatividadFichaComponent },
 
-  { path: "Memoddt",component: MemoddtComponent},
+  { path: "Memoddt", component: MemoddtComponent },
 
-  { path: "rolesUsuarioWeb",component: RolesUsuarioWebComponent},
-  { path: "asignarRolesUsuario",component: AsignarRolesUsuarioComponent},
+  { path: "rolesUsuarioWeb", component: RolesUsuarioWebComponent },
+  { path: "asignarRolesUsuario", component: AsignarRolesUsuarioComponent },
 
-  { path: "FormComisiones",component:FormComisionesComponent},
-  { path: "FormRefrigerio",component:FormRefrigerioComponent},
+  { path: "FormComisiones", component: FormComisionesComponent },
+  { path: "FormRefrigerio", component: FormRefrigerioComponent },
 
-  { path: "ProgramacionVacaciones",component:ProgramacionVacacionesComponent},
-  { path: "historial-vacaciones",component:HistorialVacacionesComponent},
+  { path: "ProgramacionVacaciones", component: ProgramacionVacacionesComponent },
+  { path: "historial-vacaciones", component: HistorialVacacionesComponent },
 
-  { path: "RProgramacionVacaciones",component:RecursosProgramacionVacacionesComponent},
-  { path: "Rhistorial-vacaciones",component:HistorialVacacionesRecursosComponent},
-  { path: "formatosRh",component:FormatosRhComponent},
+  { path: "RProgramacionVacaciones", component: RecursosProgramacionVacacionesComponent },
+  { path: "Rhistorial-vacaciones", component: HistorialVacacionesRecursosComponent },
+  { path: "formatosRh", component: FormatosRhComponent },
 
-  { path: "ClaseActivos",component:ClaseActivosComponent},
-  { path: "ColorActivos",component:ColorActivosComponent},
-  { path: "ControlActivosFijo",component:ControlActivosFijoComponent},
-  { path: "ActualizarActivosFijo",component:ActualizarActivoFijoComponent},
-  { path: "HistorialActivosFijos",component:HistorialControlActivosComponent},
+  { path: "ClaseActivos", component: ClaseActivosComponent },
+  { path: "ColorActivos", component: ColorActivosComponent },
+  { path: "ControlActivosFijo", component: ControlActivosFijoComponent },
+  { path: "ActualizarActivosFijo", component: ActualizarActivoFijoComponent },
+  { path: "HistorialActivosFijos", component: HistorialControlActivosComponent },
 
-  { path: "RegistroMerma",component:RegistroMermaComponent},
-  { path: "ControlMerma",component:ControlMermaComponent},
-  { path: "AgregarRegistroMerma",component:AgregarRegistroMermaComponent},
-  { path: "ActualizarControlMerma",component:ActualizarControlInternoComponent},
+  { path: "RegistroMerma", component: RegistroMermaComponent },
+  { path: "ControlMerma", component: ControlMermaComponent },
+  { path: "AgregarRegistroMerma", component: AgregarRegistroMermaComponent },
+  { path: "ActualizarControlMerma", component: ActualizarControlInternoComponent },
 
-  { path: "ActasAcuerdo",component:ActasAcuerdoComponent},
-  { path: "CrearActasAcuerdo",component:CrearNuevoActaComponent},
-  { path: "CrearParticipantesActas",component:CrearParticipantesActaComponent},
+  { path: "ActasAcuerdo", component: ActasAcuerdoComponent },
+  { path: "CrearActasAcuerdo", component: CrearNuevoActaComponent },
+  { path: "CrearParticipantesActas", component: CrearParticipantesActaComponent },
 
   //COMERCIAL
-  {path: "CargaFotosEstilo",component:ComercialCargaImagenesComponent},
-  {path: "GrupoTextilImagenes",component:ComercialImgHuachipaComponent},
-  {path: "AprobacionMuestraAte",component:AprobacionmuestraateComponent},
-  {path: "ValidaCorteDespacho",component:ValidaCorteDespachoComponent},
-  {path: "LiberaOPColor",component:LiberaOpColorComponent},
+  { path: "CargaFotosEstilo", component: ComercialCargaImagenesComponent },
+  { path: "GrupoTextilImagenes", component: ComercialImgHuachipaComponent },
+  { path: "AprobacionMuestraAte", component: AprobacionmuestraateComponent },
+  { path: "ValidaCorteDespacho", component: ValidaCorteDespachoComponent },
+  { path: "LiberaOPColor", component: LiberaOpColorComponent },
 
   //huachipa
-  {path:'proceso1', component:TelasComponent},
-  {path:'reprocesopartida', component:ReprocesoPartidaComponent},
-  {path:'ubicacionalmacenhilos', component:UbicacionHilosAlmacenComponent},
-  {path:'lecturaubicacionbultos', component:LecturaBultosAlmacenComponent},
-  {path:'mantemaquinastej', component: RegistroManteMaquinasHilosComponent},
-  {path:'calidadtejeduria', component: RegistroCalidadTejeduriaComponent},
-  {path:'guiacontingencia', component: GuiaContingenciaComponent},
-  {path: 'hipocampo',component:HipocampoComponent},
-  {path: 'fabriccard',component:FabriccardComponent},
-  {path: 'arranquetejeduria',component:ArranquetejeduriaComponent},
-  {path: 'regparamaqtinto',component:RegistroParaMaqTinto},
-  {path: 'pendestref',component:PartidasPendientesEstadoRefComponent},
-  {path: 'CalificacionRolloCalidad',component:CalificacionRolloCalComponent},
-  {path: "solicitudagujas", component:SolicitudAgujasComponent},
-  {path: "particionrollos", component:ParticionRolloCalComponent},
-  {path: "registrocalidadot", component:RegistroCalidadOtComponent},
-  {path: "liberarpartidacalidad", component:LiberarPartidaCalidadComponent},
-  {path: "lecturarolloexportacion", component:LecturaRolloDespachoComponent},
-  {path: "ProdTejeRectilineo", component:ProdTejeRectilineoComponent},
-  {path: "ProdTejeRectilineoRegistro", component:ProdTejeRectilineoRegistroComponent},
-  {path: "Capacidades", component:CapacidadesComponent},
-  {path: "Ubicaciones", component:UbicacionesComponent},
-  {path: "ConsultaUbicaciones", component:ConsultaUbicacionesComponent},
-  {path: "CrearAgrupamiento", component:CrearAgrupamientoComponent},
-  {path: "ReubicaUbicaGrupo", component:ReubicaUbicaGrupoComponent},
-  {path: "DetalleAgrupamiento", component:DetalleAgrupamientoComponent},
-  {path: "rollospartida", component:BusquedaRollosPartidaComponent},
+  { path: 'proceso1', component: TelasComponent },
+  { path: 'reprocesopartida', component: ReprocesoPartidaComponent },
+  { path: 'ubicacionalmacenhilos', component: UbicacionHilosAlmacenComponent },
+  { path: 'lecturaubicacionbultos', component: LecturaBultosAlmacenComponent },
+  { path: 'mantemaquinastej', component: RegistroManteMaquinasHilosComponent },
+  { path: 'calidadtejeduria', component: RegistroCalidadTejeduriaComponent },
+  { path: 'guiacontingencia', component: GuiaContingenciaComponent },
+  { path: 'hipocampo', component: HipocampoComponent },
+  { path: 'fabriccard', component: FabriccardComponent },
+  { path: 'arranquetejeduria', component: ArranquetejeduriaComponent },
+  { path: 'regparamaqtinto', component: RegistroParaMaqTinto },
+  { path: 'pendestref', component: PartidasPendientesEstadoRefComponent },
+  { path: 'CalificacionRolloCalidad', component: CalificacionRolloCalComponent },
+  { path: "solicitudagujas", component: SolicitudAgujasComponent },
+  { path: "particionrollos", component: ParticionRolloCalComponent },
+  { path: "registrocalidadot", component: RegistroCalidadOtComponent },
+  { path: "liberarpartidacalidad", component: LiberarPartidaCalidadComponent },
+  { path: "lecturarolloexportacion", component: LecturaRolloDespachoComponent },
+  { path: "ProdTejeRectilineo", component: ProdTejeRectilineoComponent },
+  { path: "ProdTejeRectilineoRegistro", component: ProdTejeRectilineoRegistroComponent },
+  { path: "Capacidades", component: CapacidadesComponent },
+  { path: "Ubicaciones", component: UbicacionesComponent },
+  { path: "ConsultaUbicaciones", component: ConsultaUbicacionesComponent },
+  { path: "CrearAgrupamiento", component: CrearAgrupamientoComponent },
+  { path: "ReubicaUbicaGrupo", component: ReubicaUbicaGrupoComponent },
+  { path: "DetalleAgrupamiento", component: DetalleAgrupamientoComponent },
+  { path: "rollospartida", component: BusquedaRollosPartidaComponent },
 
   //Cortes Encogimiento EIQ
-  {path:"CortesEncogimiento",component:CortesEncogimientoComponent},
-  {path:"RegistroPartidas",component:RegistroPartidaParihuelaComponent},
-  {path:"RealizarDespacho",component:RealizarDespachoComponent},
+  { path: "CortesEncogimiento", component: CortesEncogimientoComponent },
+  { path: "RegistroPartidas", component: RegistroPartidaParihuelaComponent },
+  { path: "RealizarDespacho", component: RealizarDespachoComponent },
   //{path:"QuejasReclamos",component:QuejasReclamosv2Component}, // version 2
-  {path:"QuejasReclamos",component:QuejasReclamosComponent}, // version 1
-  {path:"CalificacionRollosEnProceso",component:CalificacionRollosProcesoComponent},
-  {path:"LecturaRolloEmbalaje",component:LecturaRollosEmbalajeComponent},
-  {path:"CalificacionRollosFinal",component:CalificacionRollosFinalComponent},
+  { path: "QuejasReclamos", component: QuejasReclamosComponent }, // version 1
+  { path: "CalificacionRollosEnProceso", component: CalificacionRollosProcesoComponent },
+  { path: "LecturaRolloEmbalaje", component: LecturaRollosEmbalajeComponent },
+  { path: "CalificacionRollosFinal", component: CalificacionRollosFinalComponent },
   //{path:"lecturaregistroqr",component:LecturaRergistroQreComponent},
 
   //Movimientos
-  {path: "lecturaq2h4", component:LecturaQ2H4Component},
+  { path: "lecturaq2h4", component: LecturaQ2H4Component },
 
   //Estampado Digital
-  {path:'ProgramaEmpastado', component:ProgramaEmpastadoComponent},
+  { path: 'ProgramaEmpastado', component: ProgramaEmpastadoComponent },
 
   //mantenimiento general web - rol- opciones- usuarios
-  { path: 'MantenimientoWeb', component: MantenimientoWebComponent},
-  { path: 'AccesosUsuarios', component: AccesosUsuariosComponent},
-  { path: 'ActivarSalida', component: ActivarSalidaComponent},
-  { path: 'ValidarSalida', component: ValidarSalidaComponent},
+  { path: 'MantenimientoWeb', component: MantenimientoWebComponent },
+  { path: 'AccesosUsuarios', component: AccesosUsuariosComponent },
+  { path: 'ActivarSalida', component: ActivarSalidaComponent },
+  { path: 'ValidarSalida', component: ValidarSalidaComponent },
 
- //dashboard estilos por liquidar
- { path: 'EstilosLiquidar', component: EstilosLiquidarComponent},
+  //dashboard estilos por liquidar
+  { path: 'EstilosLiquidar', component: EstilosLiquidarComponent },
 
- //mantenimiento jabas
- { path: 'MantenimientoJabas', component: MantenimientoJabasComponent},
+  //mantenimiento jabas
+  { path: 'MantenimientoJabas', component: MantenimientoJabasComponent },
 
- //laboratorio
- {path:'lecturarecetas', component:LaboratorioLecturaRecetasComponent},
+  //laboratorio
+  { path: 'lecturarecetas', component: LaboratorioLecturaRecetasComponent },
 
- //Seguimiento de toberas
- {path:'seguimientotobera', component:SeguimientoToberaComponent},
+  //Seguimiento de toberas
+  { path: 'seguimientotobera', component: SeguimientoToberaComponent },
 
   //SEGURIDAD
-  {path:'gestionVisitas', component:GestionVisitasComponent},
-  {path:'reporteVisitas', component:ReporteVisitasComponent},
-  {path:'seleccionarTipoVisita', component:SeleccionarTipoVisitaComponent},
-  {path:'registroRondas', component:RegistroRondasComponent},
-  {path:'crearVisita', component:CrearVisitaComponent},
-  {path:'consultaVisita', component:ConsultaVisitaComponent},
-  {path:'reporteKardexJabas', component:ReporteKardexJabasComponent},
-  {path:'SalidaTienda', component:SalidaTiendaComponent},
-  {path:'VehiculoInmovilizado', component:ReporteVehiculoInmovilizadoComponent},
+  { path: 'gestionVisitas', component: GestionVisitasComponent },
+  { path: 'reporteVisitas', component: ReporteVisitasComponent },
+  { path: 'seleccionarTipoVisita', component: SeleccionarTipoVisitaComponent },
+  { path: 'registroRondas', component: RegistroRondasComponent },
+  { path: 'crearVisita', component: CrearVisitaComponent },
+  { path: 'consultaVisita', component: ConsultaVisitaComponent },
+  { path: 'reporteKardexJabas', component: ReporteKardexJabasComponent },
+  { path: 'SalidaTienda', component: SalidaTiendaComponent },
+  { path: 'VehiculoInmovilizado', component: ReporteVehiculoInmovilizadoComponent },
 
   //COMEDOR
-  { path: 'MantenimientoCorreos', component: MantenimientosCorreosComponent},
+  { path: 'MantenimientoCorreos', component: MantenimientosCorreosComponent },
   { path: 'mantenimiento-preguntas-det', component: MantenimientoPreguntasDetComponent },
-  { path: 'comedor-encuesta', component: ComedorEncuestaUsuarioComponent},
-  { path: 'reporteComedorEncuesta', component: ReporteEncuestaComponent},
-  { path: 'bonosSeguridad', component: SeguridadRecalcularBonosComponent},
+  { path: 'comedor-encuesta', component: ComedorEncuestaUsuarioComponent },
+  { path: 'reporteComedorEncuesta', component: ReporteEncuestaComponent },
+  { path: 'bonosSeguridad', component: SeguridadRecalcularBonosComponent },
 
   //REPOSICIONES
-  { path: 'historialReposicion', component: HistorialReposicionComponent},
-  { path: 'aprobacionReposicion', component: AprobacionReposicionComponent},
-  { path: 'aprobacionCalidad', component: AprobacionReposicionCalidadComponent},
-  { path: 'aprobacionCorte', component: AprobacionReposicionCorteComponent},
-  { path: 'generarDespacho', component: GenerarDespachoComponent},
-  { path: 'lecturaReposiciones', component: LecturaReposicionComponent},
-  { path: 'pantallaReposiciones', component: PantallaReposicionesComponent},
-  { path: 'registroTransitoCostura', component: RegistrarTransitoCosturaComponent},
-  { path: 'registroTransitoCorte', component: RegistrarTransitoCorteComponent},
-  { path: 'registroAlmacenTelas', component: AlmacenTelasCorteComponent},
-  { path: 'aprobacionCalidadCorte', component: AprobacionCalidadCorteComponent},
-  { path: 'resposicionControlInterno', component: AprobControlInternoComponent},
+  { path: 'historialReposicion', component: HistorialReposicionComponent },
+  { path: 'aprobacionReposicion', component: AprobacionReposicionComponent },
+  { path: 'aprobacionCalidad', component: AprobacionReposicionCalidadComponent },
+  { path: 'aprobacionCorte', component: AprobacionReposicionCorteComponent },
+  { path: 'generarDespacho', component: GenerarDespachoComponent },
+  { path: 'lecturaReposiciones', component: LecturaReposicionComponent },
+  { path: 'pantallaReposiciones', component: PantallaReposicionesComponent },
+  { path: 'registroTransitoCostura', component: RegistrarTransitoCosturaComponent },
+  { path: 'registroTransitoCorte', component: RegistrarTransitoCorteComponent },
+  { path: 'registroAlmacenTelas', component: AlmacenTelasCorteComponent },
+  { path: 'aprobacionCalidadCorte', component: AprobacionCalidadCorteComponent },
+  { path: 'resposicionControlInterno', component: AprobControlInternoComponent },
 
   //MODULAR
   { path: 'modularInspeccionPrenda', component: ModularInspeccionPrendaComponent },
@@ -626,59 +627,59 @@ const routes: Routes = [
   { path: 'reporteBolsasArte', component: ReporteBolsasArteComponent },
 
   //BOLSA - PROYECTO ARTES
-  {path:"MantMaestroBolsa", component: MantMaestroBolsaComponent },
-  {path:"MantMaestroBolsaItem", component: MantMaestroBolsaItemComponent },
-  {path:"MantMaestroBolsaItem", component: MantMaestroBolsaItemComponent },
-  {path:"MantMaestroBolsaItemDet", component: MantMaestroBolsaItemDetComponent },
-  {path:"LiberarPaqueteMod", component: ModularLiberarPaqueteComponent },
-  {path:"ReimpresionModular", component: ModularReimpresionTicketComponent },
-  {path:"mantlecturaticket", component: MantLecturaTicketComponent },
-  {path:"reporteBarraOp", component: ReporteJabasOpComponent },
-  {path:"reporteAlmacenArte", component: ReporteAlmacenArteComponent },
+  { path: "MantMaestroBolsa", component: MantMaestroBolsaComponent },
+  { path: "MantMaestroBolsaItem", component: MantMaestroBolsaItemComponent },
+  { path: "MantMaestroBolsaItem", component: MantMaestroBolsaItemComponent },
+  { path: "MantMaestroBolsaItemDet", component: MantMaestroBolsaItemDetComponent },
+  { path: "LiberarPaqueteMod", component: ModularLiberarPaqueteComponent },
+  { path: "ReimpresionModular", component: ModularReimpresionTicketComponent },
+  { path: "mantlecturaticket", component: MantLecturaTicketComponent },
+  { path: "reporteBarraOp", component: ReporteJabasOpComponent },
+  { path: "reporteAlmacenArte", component: ReporteAlmacenArteComponent },
 
   //JABAS - COCHES
-  { path:"mantenimiento-jabas-coches", component: MantenimientoJabaCocheComponent },
-  { path:"controlJabasCoches", component: ControlJabaCochesComponent  },
-  { path:"controlJabaServicio", component: CtrlJabaServicioComponent },
-  { path:"packingControlJaba", component: PackingJabaGuiaComponent },
-  { path:"historialPackingJaba", component: HistorialPackJabaComponent },
+  { path: "mantenimiento-jabas-coches", component: MantenimientoJabaCocheComponent },
+  { path: "controlJabasCoches", component: ControlJabaCochesComponent },
+  { path: "controlJabaServicio", component: CtrlJabaServicioComponent },
+  { path: "packingControlJaba", component: PackingJabaGuiaComponent },
+  { path: "historialPackingJaba", component: HistorialPackJabaComponent },
 
   //AUDITORIA LINEA EXTERNA
-  { path:"auditoriaLineaExterna", component: AuditoriaLineaExternaComponent },
-  { path:"auditoriaFInalExterno", component: AuditoriaFinalExternaComponent },
-  { path:"reversionAuditoriaFInalExterna", component: ReversionAuditoriaFinalExternaComponent },
+  { path: "auditoriaLineaExterna", component: AuditoriaLineaExternaComponent },
+  { path: "auditoriaFInalExterno", component: AuditoriaFinalExternaComponent },
+  { path: "reversionAuditoriaFInalExterna", component: ReversionAuditoriaFinalExternaComponent },
 
-  { path:"auditoriaMedidaServicios", component: AuditoriaHojaMediaExtComponent },
-  { path:"AuditoriaHojaMedidaDetalleExt", component: AuditoriaMedidaDetalleExtComponent },
+  { path: "auditoriaMedidaServicios", component: AuditoriaHojaMediaExtComponent },
+  { path: "AuditoriaHojaMedidaDetalleExt", component: AuditoriaMedidaDetalleExtComponent },
 
-  { path:"RegistroFirmasAuditoria", component: RegistroFirmasAuditoriaComponent},
+  { path: "RegistroFirmasAuditoria", component: RegistroFirmasAuditoriaComponent },
 
   //MANTENIMIENTO HORA
-  { path:"MantenimientoHora", component: MantenimientoHoraComponent },
-  { path:"liquidacionAviosCostura", component: LiquidacionAviosCosturaComponent },
+  { path: "MantenimientoHora", component: MantenimientoHoraComponent },
+  { path: "liquidacionAviosCostura", component: LiquidacionAviosCosturaComponent },
 
   //AUDITORIA CORTE
-  { path:"AuditoriaIngresoCorte", component: AuditoriaIngresoCorteComponent },
-  { path:"AuditoriaProcesoCorte", component: AuditoriaProcesoCorteComponent },
-  { path:"AuditoriaFinalCorte", component: AuditoriaFinalCorteComponent },
+  { path: "AuditoriaIngresoCorte", component: AuditoriaIngresoCorteComponent },
+  { path: "AuditoriaProcesoCorte", component: AuditoriaProcesoCorteComponent },
+  { path: "AuditoriaFinalCorte", component: AuditoriaFinalCorteComponent },
 
   //AUDITORIA MOLDES
-  { path:"HojaMedidaMolde", component: AuditoriaHojaMoldeComponent },
-  { path:"HojaMedidaMoldeFinal", component: AuditoriaHojaMoldeFinalComponent },
-  { path:"EncogimientoPrenda", component: EncogimientoPrendaComponent},
+  { path: "HojaMedidaMolde", component: AuditoriaHojaMoldeComponent },
+  { path: "HojaMedidaMoldeFinal", component: AuditoriaHojaMoldeFinalComponent },
+  { path: "EncogimientoPrenda", component: EncogimientoPrendaComponent },
 
   // PROGRAMACION AUDITORIAS
-  { path:"ProgramarAuditoria/:id", component: ProgramacionAuditoriaComponent },
-  { path:"SeguimientoAuditoria", component: ProgramacionAuditoriaSeguimientoComponent },
-  { path:"DigitalizacionFichas", component: DigitalizacionFichasComponent },
+  { path: "ProgramarAuditoria/:id", component: ProgramacionAuditoriaComponent },
+  { path: "SeguimientoAuditoria", component: ProgramacionAuditoriaSeguimientoComponent },
+  { path: "DigitalizacionFichas", component: DigitalizacionFichasComponent },
 
   //EVENTOS
-  { path:"RegistroFirmaEventos", component: RegistroFirmasComponent },
-  { path:"RegistroEventos", component: RegistroEventosComponent },
-  { path:"LecturaEntregaEventos", component: EntregaEventosComponent},
-  { path:"ConsultaVales", component: ConsultaValesComponent},
-  { path:"GestioPO", component: ContratosComponent},
-  
+  { path: "RegistroFirmaEventos", component: RegistroFirmasComponent },
+  { path: "RegistroEventos", component: RegistroEventosComponent },
+  { path: "LecturaEntregaEventos", component: EntregaEventosComponent },
+  { path: "ConsultaVales", component: ConsultaValesComponent },
+  { path: "GestioPO", component: ContratosComponent },
+
   //ESTATUS CONTROL TEÑIDO - 03122024 - HMEDINA
   { path: "EstatusControlTenido", component: EstatusControlTenidoComponent },
 
@@ -701,56 +702,59 @@ const routes: Routes = [
   { path: "MemorandumGral", component: MemorandumGralComponent },
 
   //RETIRO DE REPUESTOS
-  {path: 'RetiroRepuestos', component: RetiroRepuestosComponent},
-  {path: 'DialogRetiroRepuestos', component: DialogRetiroRepuestosComponent},
+  { path: 'RetiroRepuestos', component: RetiroRepuestosComponent },
+  { path: 'DialogRetiroRepuestos', component: DialogRetiroRepuestosComponent },
 
   //LIBERAR OP TENDIDO
   { path: 'liberacionOP', component: LiberarOpComponent },
 
   //REPORTE-NC SSOMA
-  {path: 'ReporteNC', component: ReporteNCComponent},
-  {path: 'ReporteNCResolvedor', component: ReporteNcResolvedorComponent},
-  {path: 'ReporteNCListado', component: ReporteNcLstComponent},
-  {path: 'MantenimientoAreaXSede', component: MantenimientoSedeXAreaComponent},
-  {path: 'DialogAreaNuevo', component: DialogAreaNuevoComponent},
-  {path: 'MantenimientoResponsables', component: MantenimientoResponsablesComponent},
-  {path: 'DialogResponsablesNuevo', component: DialogResponsablesNuevoComponent},
-  {path: 'ReporteNCCierre', component: ReporteNcCierreComponent},
+  { path: 'ReporteNC', component: ReporteNCComponent },
+  { path: 'ReporteNCResolvedor', component: ReporteNcResolvedorComponent },
+  { path: 'ReporteNCListado', component: ReporteNcLstComponent },
+  { path: 'MantenimientoAreaXSede', component: MantenimientoSedeXAreaComponent },
+  { path: 'DialogAreaNuevo', component: DialogAreaNuevoComponent },
+  { path: 'MantenimientoResponsables', component: MantenimientoResponsablesComponent },
+  { path: 'DialogResponsablesNuevo', component: DialogResponsablesNuevoComponent },
+  { path: 'ReporteNCCierre', component: ReporteNcCierreComponent },
   //PARIHUELA V2
-  {path: 'RegistroParihuelaV2', component: RegistroPartidaParihuelaV2Component},
+  { path: 'RegistroParihuelaV2', component: RegistroPartidaParihuelaV2Component },
 
   //SOLICITUD DE MANTENIMIENTO DE MAQUINA
-  {path: 'SolicitudMantenientoMaquina', component: SolicitudMantenimientoMaquinaComponent },
-  {path: 'SolicitudMantenimientoMaquinaVisor', component: SolicitudMantenimientoMaquinaVisorComponent},
-  
-  { path:"checkListIngresoCostura", component: CheckListIngresoCosturaComponent },
+  { path: 'SolicitudMantenientoMaquina', component: SolicitudMantenimientoMaquinaComponent },
+  { path: 'SolicitudMantenimientoMaquinaVisor', component: SolicitudMantenimientoMaquinaVisorComponent },
+
+  { path: "checkListIngresoCostura", component: CheckListIngresoCosturaComponent },
 
   //TIEMPOS IMPRODUCTIVOS V3
   { path: "TiemposImproductivosv3", component: TiemposImproductivosv3Component },
 
   //APROBACION DE DESARROLLO DE TELAS
   { path: "AprobacionDesarrolloTelas", component: AprobacionDesarrolloTelasComponent },
-  { path: "TomaFotos", component: TomaFotoPersonasComponent},
-  { path: "ReconocimientoFacial", component: RecoFacialComponent},
+  { path: "TomaFotos", component: TomaFotoPersonasComponent },
+  { path: "ReconocimientoFacial", component: RecoFacialComponent },
   //COTIZACIONES
-  {path: "Cotizaciones", component:CotizacionesComponent},
+  { path: "Cotizaciones", component: CotizacionesComponent },
 
   //NO CONFORMIDADES (CONTROL DE CALIDAD)
   { path: "NoConformidades", component: NoConformidadesComponent },
   { path: "no-conformidades", component: NoConformidadesComponent },
 
   //Status Req Almacen
-  {path: "StatusReqAlmacen", component:StatusReqAlmacenComponent},  
+  { path: "StatusReqAlmacen", component: StatusReqAlmacenComponent },
 
   //Agenda Telefonica
-  { path: "AgendaTelefonica", component: AgendaTelefonicaComponent},
+  { path: "AgendaTelefonica", component: AgendaTelefonicaComponent },
 
   //Control Primera Partida
-  { path: "PrimeraPartida", component: ControlPrimeraPartidaComponent  },
+  { path: "PrimeraPartida", component: ControlPrimeraPartidaComponent },
+
+  //Control De Ubicaciones
+  { path: "control-ubicaciones", component: ControlUbicacionComponent },
 
   //LECTURA BULTOS
-  { path: "LecturaBultosListado", component: LecturaBultosComponent},
-  { path: "LecturaBultosListadoDetalle", component: LecturaBultosDetComponent},
+  { path: "LecturaBultosListado", component: LecturaBultosComponent },
+  { path: "LecturaBultosListadoDetalle", component: LecturaBultosDetComponent },
 
   //SALDO HILO TELA
   { path: "SaldoHiloTela", component: SaldoHiloTelaComponent },
