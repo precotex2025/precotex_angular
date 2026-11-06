@@ -104,43 +104,7 @@ export class MenuComponent implements OnInit {
       this.Cod_Empresa
     ).subscribe(
       (result: any) => {
-        this.Menu = result || {};
-
-        // Asegurar que la opción 'No Conformidades' aparezca dentro del módulo 'Control de Calidad'
-        if (this.Menu) {
-          if (!this.Menu['Control de Calidad']) {
-            this.Menu['Control de Calidad'] = [];
-          }
-          const existe = this.Menu['Control de Calidad'].some((item: any) =>
-            item.Ruta_Opcion === '/NoConformidades' || item.Opcion === 'No Conformidades'
-          );
-          if (!existe) {
-            this.Menu['Control de Calidad'].push({
-              Opcion: 'No Conformidades',
-              Ruta_Opcion: '/NoConformidades',
-              Des_Opcion: 'No Conformidades'
-            });
-          }
-
-          // Asegurar que la opción 'Control Ubicaciones' aparezca dentro del módulo 'Almacen'
-          if (this.Menu) {
-            if (!this.Menu['Almacen']) {
-              this.Menu['Almacen'] = [];
-            }
-            const existeUbicacion = this.Menu['Almacen'].some((item: any) =>
-              item.Ruta_Opcion === '/control-ubicaciones' || item.Opcion === 'Control Ubicaciones Tela Terminada'
-            );
-            if (!existeUbicacion) {
-              this.Menu['Almacen'].push({
-                Opcion: 'Control Ubicaciones Tela Terminada',
-                Ruta_Opcion: '/control-ubicaciones',
-                Des_Opcion: 'Control Ubicaciones Tela Terminada'
-              });
-            }
-          }
-
-        }
-
+        this.Menu = result;
         GlobalVariable.Global_menu = this.Menu;
         console.log(GlobalVariable.Global_menu);
       },
