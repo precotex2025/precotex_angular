@@ -12,14 +12,14 @@
                 <mat-form-field class="fila1-codigo" appearance="outline">
                     <mat-label><mat-icon>qr_code</mat-icon> Código de Barra</mat-label>
                     <input matInput #inputScan [(ngModel)]="codigoEscaneado" autocomplete="off"
-                        (keyup.enter)="onScanCodigo()">
+                        (input)="onScanCodigoInputChange()" (keyup.enter)="forzarScanCodigo()">
                     <button type="button" mat-icon-button matSuffix *ngIf="codigoEscaneado" (click)="limpiarEscaneo()"
                         title="Limpiar">
                         <mat-icon>close</mat-icon>
                     </button>
                 </mat-form-field>
 
-                <button type="button" class="fila1-buscar" mat-flat-button (click)="onScanCodigo()">
+                <button type="button" class="fila1-buscar" mat-flat-button (click)="forzarScanCodigo()">
                     <mat-icon>search</mat-icon> Buscar
                 </button>
             </div>
@@ -195,10 +195,13 @@
             <!-- Sección: Ubicación Destino -->
             <div class="form-seccion">
                 <label class="seccion-label">UBICACIÓN DESTINO</label>
-                <div class="box-ubicacion-destino">
+                <div class="box-ubicacion-destino" (click)="enfocarUbicacionDestino()">
                     <mat-icon class="icon-pin">location_on</mat-icon>
-                    <input type="text" [(ngModel)]="ubicacionDestino" placeholder="Ubicación" class="input-destino"
+                    <input type="text" #inputUbicacionDestino id="inputUbicacionDestino"
+                        [(ngModel)]="ubicacionDestino" placeholder="Escanee la ubicación" class="input-destino"
+                        (input)="onUbicacionDestinoInputChange()" (keyup.enter)="forzarScanUbicacionDestino()"
                         autocomplete="off">
+                    <mat-icon class="icon-scan-suffix" (click)="enfocarUbicacionDestino()" title="Escanear ubicación">qr_code_scanner</mat-icon>
                 </div>
             </div>
 
@@ -311,10 +314,13 @@
             <!-- Sección: Nueva Ubicación -->
             <div class="form-seccion">
                 <label class="seccion-label">NUEVA UBICACIÓN</label>
-                <div class="box-ubicacion-destino">
+                <div class="box-ubicacion-destino" (click)="enfocarNuevaUbicacionDestino()">
                     <mat-icon class="icon-pin">location_on</mat-icon>
-                    <input type="text" [(ngModel)]="nuevaUbicacionDestino" placeholder="Ubicación" class="input-destino"
+                    <input type="text" #inputNuevaUbicacionDestino id="inputNuevaUbicacionDestino"
+                        [(ngModel)]="nuevaUbicacionDestino" placeholder="Escanee la ubicación" class="input-destino"
+                        (input)="onNuevaUbicacionInputChange()" (keyup.enter)="forzarScanNuevaUbicacion()"
                         autocomplete="off">
+                    <mat-icon class="icon-scan-suffix" (click)="enfocarNuevaUbicacionDestino()" title="Escanear ubicación">qr_code_scanner</mat-icon>
                 </div>
             </div>
 

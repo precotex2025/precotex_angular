@@ -54,6 +54,47 @@ export interface ControlUbicacionGuardarRequest {
   codUsuario?: string;
 }
 
+export interface ControlUbicacionReubicacionBulto {
+  iD_Rollo_X_Anio: string;
+  cod_Ordtra: string;
+  peso_Neto: number;
+}
+
+export interface ControlUbicacionReubicacionTotales {
+  tot_Bulto: number;
+  tot_Peso_Neto: number;
+}
+
+export interface ControlUbicacionUltimoBulto {
+  iD_Rollo_X_Anio: string;
+  des_Ubicacion: string;
+  cod_Ordtra: string;
+  peso_Neto: number;
+}
+
+export interface ControlUbicacionReubicacionResponse {
+  cod: number;
+  msg: string;
+  totales: ControlUbicacionReubicacionTotales;
+  bultos: ControlUbicacionReubicacionBulto[];
+  ultimoBulto?: ControlUbicacionUltimoBulto;
+}
+
+export interface ControlUbicacionReubicacionLecturaRequest {
+  idRollo: string;
+  codUsuario?: string;
+}
+
+export interface ControlUbicacionGuardarReubicacionRequest {
+  desUbicacion: string;
+  codUsuario?: string;
+}
+
+export interface ControlUbicacionGuardarReubicacionResponse {
+  cod: number;
+  msg: string;
+}
+
 export interface ServiceResponse<T> {
   success: boolean;
   codeResult: number;
@@ -114,5 +155,43 @@ export class ControlUbicacionesService {
     };
 
     return this.http.post<ServiceResponse<ControlUbicacionGuiaResponse>>(`${this.baseUrl}/guardarUbicacionGuia`, payload);
+  }
+
+  // ==========================================
+  // METODOS DE REUBICACION
+  // ==========================================
+
+  limpiarTemporalReubicacion(codUsuario?: string): Observable<ServiceResponse<boolean>> {
+    let params = new HttpParams()
+      .set('codUsuario', (codUsuario || GlobalVariable.vusu || 'sistemas').trim());
+
+    return this.http.post<ServiceResponse<boolean>>(`${this.baseUrl}/limpiarTemporalReubicacion`, null, { params });
+  }
+
+  consultarReubicacion(codUsuario?: string): Observable<ServiceResponse<ControlUbicacionReubicacionResponse>> {
+    let params = new HttpParams()
+      .set('codUsuario', (codUsuario || GlobalVariable.vusu || 'sistemas').trim());
+
+    return this.http.get<ServiceResponse<ControlUbicacionReubicacionResponse>>(`${this.baseUrl}/consultarReubicacion`, { params });
+  }
+
+  insertarBultoReubicacion(request: ControlUbicacionReubicacionLecturaRequest): Observable<ServiceResponse<ControlUbicacionReubicacionResponse>> {
+    const payload = {
+      ...request,
+      idRollo: (request.idRollo || '').trim(),
+      codUsuario: (request.codUsuario || GlobalVariable.vusu || 'sistemas').trim()
+    };
+
+    return this.http.post<ServiceResponse<ControlUbicacionReubicacionResponse>>(`${this.baseUrl}/insertarBultoReubicacion`, payload);
+  }
+
+  guardarReubicacion(request: ControlUbicacionGuardarReubicacionRequest): Observable<ServiceResponse<ControlUbicacionGuardarReubicacionResponse>> {
+    const payload = {
+      ...request,
+      desUbicacion: (request.desUbicacion || '').trim(),
+      codUsuario: (request.codUsuario || GlobalVariable.vusu || 'sistemas').trim()
+    };
+
+    return this.http.post<ServiceResponse<ControlUbicacionGuardarReubicacionResponse>>(`${this.baseUrl}/guardarReubicacion`, payload);
   }
 }

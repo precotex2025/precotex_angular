@@ -278,7 +278,6 @@
         .mat-column-rollo {
             width: 28%;
             text-align: center;
-            font-weight: 600;
             white-space: nowrap;
 
             ::ng-deep .mat-sort-header-container {
@@ -289,7 +288,6 @@
         .mat-column-partida {
             width: 18%;
             text-align: center;
-            font-weight: 600;
             white-space: nowrap;
 
             ::ng-deep .mat-sort-header-container {
@@ -316,7 +314,6 @@
             width: 24%;
             text-align: right;
             padding-right: 8px;
-            font-weight: 700;
             white-space: nowrap;
             font-variant-numeric: tabular-nums;
             font-size: 12.5px;
@@ -328,15 +325,6 @@
 
         tr:hover {
             background-color: #f8fafc;
-        }
-
-        tr.fila-resaltada {
-            background-color: #dbeafe !important;
-
-            td {
-                font-weight: 700 !important;
-                color: #1e40af !important;
-            }
         }
     }
 }
@@ -778,19 +766,29 @@
     align-items: center;
     gap: 8px;
     background-color: #ffffff;
+    cursor: text;
+    transition: all 0.2s ease-in-out;
+
+    &:hover,
+    &:focus-within {
+        border-color: #1d4ed8;
+        background-color: #f8faff;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
 
     .icon-pin {
         color: #2563eb;
         font-size: 22px;
         width: 22px;
         height: 22px;
+        flex-shrink: 0;
     }
 
     .input-destino {
         border: none;
         outline: none;
-        font-size: 16.5px;
-        font-weight: 800;
+        font-size: 15px;
+        font-weight: 700;
         color: #1e3a8a;
         width: 100%;
         letter-spacing: 0.5px;
@@ -799,6 +797,24 @@
         &::placeholder {
             color: #94a3b8;
             font-weight: 400;
+            font-size: 13.5px;
+            letter-spacing: normal;
+        }
+    }
+
+    .icon-scan-suffix {
+        color: #2563eb;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        opacity: 0.75;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: opacity 0.2s, transform 0.2s;
+
+        &:hover {
+            opacity: 1;
+            transform: scale(1.12);
         }
     }
 }

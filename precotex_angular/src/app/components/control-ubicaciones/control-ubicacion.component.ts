@@ -15,6 +15,8 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
     @ViewChild('inputScan') inputScan!: ElementRef;
     @ViewChild('inputGuia') inputGuia!: ElementRef;
     @ViewChild('inputBulto') inputBulto!: ElementRef;
+    @ViewChild('inputUbicacionDestino') inputUbicacionDestino!: ElementRef;
+    @ViewChild('inputNuevaUbicacionDestino') inputNuevaUbicacionDestino!: ElementRef;
 
     currentScreen: string = 'inicio';
     displayedColumns: string[] = ['rollo', 'partida', 'color', 'peso'];
@@ -54,8 +56,53 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
         this.enfocarScan();
     }
 
+    ReproducirOk(): void {
+        try {
+            const audio = new Audio('assets/aceptado.mp3');
+            audio.play().catch(e => console.warn('Audio play error:', e));
+        } catch (e) {
+            console.warn('Audio play error:', e);
+        }
+    }
+
+    ReproducirError(): void {
+        try {
+            const audio = new Audio('assets/error.mp3');
+            audio.play().catch(e => console.warn('Audio play error:', e));
+        } catch (e) {
+            console.warn('Audio play error:', e);
+        }
+    }
+
+    private scanCodigoTimer: any = null;
+
+    onScanCodigoInputChange(): void {
+        if (this.scanCodigoTimer) {
+            clearTimeout(this.scanCodigoTimer);
+        }
+        const val = (this.codigoEscaneado || '').trim();
+        if (!val) return;
+
+        this.scanCodigoTimer = setTimeout(() => {
+            this.onScanCodigo();
+        }, 220);
+    }
+
+    forzarScanCodigo(): void {
+        if (this.scanCodigoTimer) {
+            clearTimeout(this.scanCodigoTimer);
+            this.scanCodigoTimer = null;
+        }
+        this.onScanCodigo();
+    }
+
     // Acción ejecutada al presionar Enter o gatillar el lector de barras del PDA
     onScanCodigo(): void {
+        if (this.scanCodigoTimer) {
+            clearTimeout(this.scanCodigoTimer);
+            this.scanCodigoTimer = null;
+        }
+
         const codigo = (this.codigoEscaneado || '').trim();
         if (!codigo) {
             return;
@@ -109,9 +156,13 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
                     }
 
                     if (listaRollos.length === 0) {
+                        this.ReproducirError();
                         this.matSnackBar.open('No se encontraron rollos para esta consulta', 'Cerrar', { duration: 3000 });
+                    } else {
+                        this.ReproducirOk();
                     }
                 } else {
+                    this.ReproducirError();
                     this.matSnackBar.open(res?.message || 'No se encontró información', 'Cerrar', { duration: 3000 });
                 }
 
@@ -119,6 +170,7 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
                 this.enfocarScan();
             },
             error: (err) => {
+                this.ReproducirError();
                 console.error(err);
                 const msg = err.error?.message || err.message || 'Error al conectar con el servidor';
                 this.matSnackBar.open('Error: ' + msg, 'Cerrar', { duration: 4000 });
@@ -186,7 +238,12 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
         ubicacionActual?: string;
     }> = [];
 
+    totPesoReubicar: number = 0;
+
     get totalKgReubicar(): string {
+        if (this.totPesoReubicar > 0) {
+            return this.totPesoReubicar.toFixed(1);
+        }
         const sum = this.bultosReubicar.reduce((acc, curr) => acc + (Number(curr.kg) || 0), 0);
         return sum.toFixed(1);
     }
@@ -216,6 +273,30 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
         }, 120);
     }
 
+    enfocarUbicacionDestino(): void {
+        setTimeout(() => {
+            if (this.inputUbicacionDestino && this.inputUbicacionDestino.nativeElement) {
+                this.inputUbicacionDestino.nativeElement.focus();
+                this.inputUbicacionDestino.nativeElement.select();
+            } else {
+                const el = document.getElementById('inputUbicacionDestino');
+                if (el) (el as HTMLInputElement).focus();
+            }
+        }, 120);
+    }
+
+    enfocarNuevaUbicacionDestino(): void {
+        setTimeout(() => {
+            if (this.inputNuevaUbicacionDestino && this.inputNuevaUbicacionDestino.nativeElement) {
+                this.inputNuevaUbicacionDestino.nativeElement.focus();
+                this.inputNuevaUbicacionDestino.nativeElement.select();
+            } else {
+                const el = document.getElementById('inputNuevaUbicacionDestino');
+                if (el) (el as HTMLInputElement).focus();
+            }
+        }, 120);
+    }
+
     onGuiaInputChange(): void {
         if (this.scanGuiaTimer) {
             clearTimeout(this.scanGuiaTimer);
@@ -236,6 +317,7 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
 
         const guia = (this.guiaRemision || '').trim().replace(/\s+/g, '-');
         if (!guia) {
+            this.ReproducirError();
             this.matSnackBar.open('Ingrese o escanee el N.° de Guía', 'Cerrar', { duration: 2500 });
             return;
         }
@@ -257,16 +339,20 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
                     }));
 
                     if (this.totEnviados > 0) {
+                        this.ReproducirOk();
                         this.matSnackBar.open(`Guía cargada: ${this.totEnviados} bultos enviados`, 'OK', { duration: 2500 });
                         this.enfocarInputBulto();
                     } else {
+                        this.ReproducirError();
                         this.matSnackBar.open('La guía no registra movimientos de almacén', 'Cerrar', { duration: 3000 });
                     }
                 } else {
+                    this.ReproducirError();
                     this.matSnackBar.open(res?.message || 'No se pudo consultar la guía', 'Cerrar', { duration: 3000 });
                 }
             },
             error: (err) => {
+                this.ReproducirError();
                 console.error(err);
                 const msg = err.error?.message || err.message || 'Error al consultar la guía';
                 this.matSnackBar.open('Error: ' + msg, 'Cerrar', { duration: 3500 });
@@ -306,8 +392,19 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
         const codigo = (this.inputBultoScan || '').trim();
         if (!codigo) return;
 
+        // Si el operario escanea directamente el código de una ubicación (ej: R20A01-01) en lugar de un bulto:
+        const matchUbicacion = codigo.match(/^R(\d+)([A-Za-z])(\d+)-(\d+)$/i);
+        if (matchUbicacion) {
+            this.inputBultoScan = '';
+            this.ubicacionDestino = codigo.toUpperCase();
+            this.validarUbicacionDestino();
+            this.enfocarUbicacionDestino();
+            return;
+        }
+
         const guia = (this.guiaRemision || '').trim().replace(/\s+/g, '-');
         if (!guia) {
+            this.ReproducirError();
             this.matSnackBar.open('Primero debe escanear o ingresar el N.° de Guía', 'Cerrar', { duration: 3000 });
             this.enfocarInputGuia();
             return;
@@ -315,6 +412,7 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
 
         const yaExiste = this.bultosLecturados.some(b => b.bulto.toUpperCase() === codigo.toUpperCase());
         if (yaExiste) {
+            this.ReproducirError();
             this.matSnackBar.open('El bulto ya fue lecturado en esta guía', 'Cerrar', { duration: 2500 });
             this.inputBultoScan = '';
             this.enfocarInputBulto();
@@ -340,12 +438,13 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
                     }));
 
                     if (data.cod === 1) {
-                        // Lectura e inserción exitosa
+                        this.ReproducirOk();
                     } else {
-                        // Mensaje de validación del Stored Procedure
+                        this.ReproducirError();
                         this.matSnackBar.open(data.msg || res.message || 'No se pudo lecturar el bulto', 'Cerrar', { duration: 3500 });
                     }
                 } else if (!res.success) {
+                    this.ReproducirError();
                     this.matSnackBar.open(res.message || 'No se pudo lecturar el bulto', 'Cerrar', { duration: 3500 });
                 }
 
@@ -353,11 +452,65 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
                 this.enfocarInputBulto();
             },
             error: (err) => {
+                this.ReproducirError();
                 console.error(err);
                 const msg = err.error?.message || err.message || 'Error al registrar el bulto';
                 this.matSnackBar.open('Error: ' + msg, 'Cerrar', { duration: 3500 });
                 this.inputBultoScan = '';
                 this.enfocarInputBulto();
+            }
+        });
+    }
+
+    private scanUbicacionTimer: any = null;
+
+    onUbicacionDestinoInputChange(): void {
+        if (this.scanUbicacionTimer) {
+            clearTimeout(this.scanUbicacionTimer);
+        }
+        const val = (this.ubicacionDestino || '').trim();
+        if (!val) return;
+
+        this.scanUbicacionTimer = setTimeout(() => {
+            this.validarUbicacionDestino();
+        }, 220);
+    }
+
+    forzarScanUbicacionDestino(): void {
+        if (this.scanUbicacionTimer) {
+            clearTimeout(this.scanUbicacionTimer);
+            this.scanUbicacionTimer = null;
+        }
+        this.validarUbicacionDestino();
+    }
+
+    validarUbicacionDestino(): void {
+        const ubicacion = (this.ubicacionDestino || '').trim().toUpperCase();
+        if (!ubicacion) return;
+
+        const matchUbic = ubicacion.match(/^R(\d+)([A-Za-z])(\d+)-(\d+)$/i);
+
+        this.controlUbicacionesService.obtenerDetalleUbicacion(ubicacion, '').subscribe({
+            next: (res) => {
+                if (res && res.success && (res.element?.resumen?.des_Ubicacion || matchUbic)) {
+                    this.ReproducirOk();
+                    this.matSnackBar.open(`Ubicación escaneada: ${ubicacion}`, 'OK', { duration: 2500 });
+                } else if (matchUbic) {
+                    this.ReproducirOk();
+                    this.matSnackBar.open(`Ubicación escaneada: ${ubicacion}`, 'OK', { duration: 2500 });
+                } else {
+                    this.ReproducirError();
+                    this.matSnackBar.open(`La ubicación ${ubicacion} no existe o no es válida`, 'Cerrar', { duration: 3000 });
+                }
+            },
+            error: () => {
+                if (matchUbic) {
+                    this.ReproducirOk();
+                    this.matSnackBar.open(`Ubicación escaneada: ${ubicacion}`, 'OK', { duration: 2500 });
+                } else {
+                    this.ReproducirError();
+                    this.matSnackBar.open(`Error al validar ubicación ${ubicacion}`, 'Cerrar', { duration: 3000 });
+                }
             }
         });
     }
@@ -388,16 +541,19 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
         const ubicacion = (this.ubicacionDestino || '').trim().toUpperCase();
 
         if (!guia) {
+            this.ReproducirError();
             this.matSnackBar.open('Ingrese o escanee el N.° de Guía', 'Cerrar', { duration: 2500 });
             this.enfocarInputGuia();
             return;
         }
         if (this.bultosLecturados.length === 0) {
+            this.ReproducirError();
             this.matSnackBar.open('Debe escanear al menos un bulto para ubicar', 'Cerrar', { duration: 2500 });
             this.enfocarInputBulto();
             return;
         }
         if (!ubicacion) {
+            this.ReproducirError();
             this.matSnackBar.open('Ingrese la ubicación de destino', 'Cerrar', { duration: 2500 });
             return;
         }
@@ -410,6 +566,7 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
                 if (res && res.element) {
                     const data = res.element;
                     if (data.cod === 1) {
+                        this.ReproducirOk();
                         this.totEnviados = data.totales?.tot_Enviados ?? this.totEnviados;
                         this.totUbicados = data.totales?.tot_Ubicados ?? this.totUbicados;
                         this.totPendientes = data.totales?.tot_Pendientes ?? this.totPendientes;
@@ -420,13 +577,16 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
                         this.matSnackBar.open(`Bultos guardados correctamente en la ubicación ${ubicacion}`, 'OK', { duration: 3500 });
                         this.enfocarInputBulto();
                     } else {
+                        this.ReproducirError();
                         this.matSnackBar.open(data.msg || res.message || 'No se pudo guardar la ubicación', 'Cerrar', { duration: 3500 });
                     }
                 } else {
+                    this.ReproducirError();
                     this.matSnackBar.open(res?.message || 'Error al guardar la ubicación', 'Cerrar', { duration: 3500 });
                 }
             },
             error: (err) => {
+                this.ReproducirError();
                 console.error(err);
                 const msg = err.error?.message || err.message || 'Error al conectar con el servidor';
                 this.matSnackBar.open('Error: ' + msg, 'Cerrar', { duration: 3500 });
@@ -483,11 +643,24 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
 
     // Iniciar reubicación
     startReubicacion(): void {
+        this.controlUbicacionesService.limpiarTemporalReubicacion().subscribe({
+            next: () => {
+                this.resetearDatosReubicacion();
+                this.goTo('reubicar');
+            },
+            error: () => {
+                this.resetearDatosReubicacion();
+                this.goTo('reubicar');
+            }
+        });
+    }
+
+    resetearDatosReubicacion(): void {
         this.inputBultoReubicarScan = '';
         this.nuevaUbicacionDestino = '';
         this.ultimoBultoReubicado = null;
         this.bultosReubicar = [];
-        this.goTo('reubicar');
+        this.totPesoReubicar = 0;
     }
 
     enfocarInputBultoReubicar(): void {
@@ -501,118 +674,214 @@ export class ControlUbicacionComponent implements OnInit, AfterViewInit {
         }, 120);
     }
 
+    private scanBultoReubicarTimer: any = null;
+
     onBultoReubicarInputChange(): void {
-        if (this.scanBultoTimer) {
-            clearTimeout(this.scanBultoTimer);
+        if (this.scanBultoReubicarTimer) {
+            clearTimeout(this.scanBultoReubicarTimer);
         }
         const val = (this.inputBultoReubicarScan || '').trim();
         if (!val) return;
 
-        this.scanBultoTimer = setTimeout(() => {
+        this.scanBultoReubicarTimer = setTimeout(() => {
             this.onScanBultoReubicar();
         }, 220);
     }
 
     forzarScanBultoReubicar(): void {
-        if (this.scanBultoTimer) {
-            clearTimeout(this.scanBultoTimer);
-            this.scanBultoTimer = null;
+        if (this.scanBultoReubicarTimer) {
+            clearTimeout(this.scanBultoReubicarTimer);
+            this.scanBultoReubicarTimer = null;
         }
         this.onScanBultoReubicar();
     }
 
     onScanBultoReubicar(): void {
+        if (this.scanBultoReubicarTimer) {
+            clearTimeout(this.scanBultoReubicarTimer);
+            this.scanBultoReubicarTimer = null;
+        }
+
         const codigo = (this.inputBultoReubicarScan || '').trim();
         if (!codigo) return;
 
+        // Si el operario escanea directamente el código de una ubicación (ej: R01A02-02) en lugar de un bulto:
+        const matchUbicacion = codigo.match(/^R(\d+)([A-Za-z])(\d+)-(\d+)$/i);
+        if (matchUbicacion) {
+            this.inputBultoReubicarScan = '';
+            this.nuevaUbicacionDestino = codigo.toUpperCase();
+            this.validarNuevaUbicacionDestino();
+            this.enfocarNuevaUbicacionDestino();
+            return;
+        }
+
         const yaExiste = this.bultosReubicar.some(b => b.bulto.toUpperCase() === codigo.toUpperCase());
         if (yaExiste) {
+            this.ReproducirError();
             this.matSnackBar.open('El bulto ya fue lecturado en esta lista', 'Cerrar', { duration: 2500 });
             this.inputBultoReubicarScan = '';
             this.enfocarInputBultoReubicar();
             return;
         }
 
-        // Consultar detalle del rollo actual para mostrar su ubicación de origen, partida y peso
-        this.controlUbicacionesService.obtenerDetalleUbicacion('', codigo).subscribe({
+        this.controlUbicacionesService.insertarBultoReubicacion({ idRollo: codigo }).subscribe({
             next: (res) => {
                 if (res && res.element) {
                     const data = res.element;
-                    const resumen = data.resumen;
-                    const detalle = data.detalle || [];
-                    const itemDetalle = detalle.find(d => (d.iD_Rollo_X_Anio || '').trim() === codigo) || detalle[0];
-
-                    const ubicacion = (resumen?.des_Ubicacion || '').trim() || 'Sin ubicación';
-                    const partida = (itemDetalle?.cod_Ordtra || '').trim() || '---';
-                    const peso = itemDetalle?.peso_Neto ? this.formatearPeso(itemDetalle.peso_Neto) : '0.000';
-
-                    this.ultimoBultoReubicado = {
-                        bulto: codigo,
-                        ubicacionActual: ubicacion,
-                        partida: partida,
-                        peso: peso
-                    };
-
-                    this.bultosReubicar.unshift({
-                        bulto: codigo,
-                        partida: partida,
-                        kg: peso,
-                        ubicacionActual: ubicacion
-                    });
-
-                    this.inputBultoReubicarScan = '';
-                    this.enfocarInputBultoReubicar();
+                    if (data.cod === 1) {
+                        this.ReproducirOk();
+                        if (data.ultimoBulto) {
+                            this.ultimoBultoReubicado = {
+                                bulto: data.ultimoBulto.iD_Rollo_X_Anio || codigo,
+                                ubicacionActual: data.ultimoBulto.des_Ubicacion || 'Sin ubicación',
+                                partida: data.ultimoBulto.cod_Ordtra || '---',
+                                peso: this.formatearPeso(data.ultimoBulto.peso_Neto)
+                            };
+                        }
+                        this.totPesoReubicar = data.totales?.tot_Peso_Neto ?? 0;
+                        this.bultosReubicar = (data.bultos || []).map(b => ({
+                            bulto: b.iD_Rollo_X_Anio,
+                            partida: b.cod_Ordtra,
+                            kg: this.formatearPeso(b.peso_Neto)
+                        }));
+                    } else {
+                        this.ReproducirError();
+                        this.matSnackBar.open(data.msg || res.message || 'No se pudo lecturar el bulto', 'Cerrar', { duration: 3500 });
+                    }
                 } else {
-                    this.matSnackBar.open('No se encontró información del bulto ' + codigo, 'Cerrar', { duration: 3000 });
-                    this.inputBultoReubicarScan = '';
-                    this.enfocarInputBultoReubicar();
+                    this.ReproducirError();
+                    this.matSnackBar.open(res?.message || 'No se pudo lecturar el bulto', 'Cerrar', { duration: 3500 });
                 }
+                this.inputBultoReubicarScan = '';
+                this.enfocarInputBultoReubicar();
             },
             error: (err) => {
+                this.ReproducirError();
                 console.error(err);
-                this.matSnackBar.open('Error al consultar el bulto', 'Cerrar', { duration: 3000 });
+                const msg = err.error?.message || err.message || 'Error al registrar el bulto para reubicación';
+                this.matSnackBar.open('Error: ' + msg, 'Cerrar', { duration: 3500 });
                 this.inputBultoReubicarScan = '';
                 this.enfocarInputBultoReubicar();
             }
         });
     }
 
-    removeBultoReubicar(index: number): void {
-        this.bultosReubicar.splice(index, 1);
-        if (this.bultosReubicar.length > 0) {
-            const primero = this.bultosReubicar[0];
-            this.ultimoBultoReubicado = {
-                bulto: primero.bulto,
-                ubicacionActual: primero.ubicacionActual || '',
-                partida: primero.partida,
-                peso: primero.kg
-            };
-        } else {
-            this.ultimoBultoReubicado = null;
+    private scanNuevaUbicacionTimer: any = null;
+
+    onNuevaUbicacionInputChange(): void {
+        if (this.scanNuevaUbicacionTimer) {
+            clearTimeout(this.scanNuevaUbicacionTimer);
         }
+        const val = (this.nuevaUbicacionDestino || '').trim();
+        if (!val) return;
+
+        this.scanNuevaUbicacionTimer = setTimeout(() => {
+            this.validarNuevaUbicacionDestino();
+        }, 220);
+    }
+
+    forzarScanNuevaUbicacion(): void {
+        if (this.scanNuevaUbicacionTimer) {
+            clearTimeout(this.scanNuevaUbicacionTimer);
+            this.scanNuevaUbicacionTimer = null;
+        }
+        this.validarNuevaUbicacionDestino();
+    }
+
+    validarNuevaUbicacionDestino(): void {
+        const ubicacion = (this.nuevaUbicacionDestino || '').trim().toUpperCase();
+        if (!ubicacion) return;
+
+        const matchUbic = ubicacion.match(/^R(\d+)([A-Za-z])(\d+)-(\d+)$/i);
+
+        this.controlUbicacionesService.obtenerDetalleUbicacion(ubicacion, '').subscribe({
+            next: (res) => {
+                if (res && res.success && (res.element?.resumen?.des_Ubicacion || matchUbic)) {
+                    this.ReproducirOk();
+                    this.matSnackBar.open(`Nueva ubicación escaneada: ${ubicacion}`, 'OK', { duration: 2500 });
+                } else if (matchUbic) {
+                    this.ReproducirOk();
+                    this.matSnackBar.open(`Nueva ubicación escaneada: ${ubicacion}`, 'OK', { duration: 2500 });
+                } else {
+                    this.ReproducirError();
+                    this.matSnackBar.open(`La ubicación ${ubicacion} no existe o no es válida`, 'Cerrar', { duration: 3000 });
+                }
+            },
+            error: () => {
+                if (matchUbic) {
+                    this.ReproducirOk();
+                    this.matSnackBar.open(`Nueva ubicación escaneada: ${ubicacion}`, 'OK', { duration: 2500 });
+                } else {
+                    this.ReproducirError();
+                    this.matSnackBar.open(`Error al validar ubicación ${ubicacion}`, 'Cerrar', { duration: 3000 });
+                }
+            }
+        });
+    }
+
+    removeBultoReubicar(index: number): void {
+        this.matSnackBar.open('Eliminación individual no disponible. Utilice el botón Vaciar para reiniciar.', 'Cerrar', { duration: 2500 });
         this.enfocarInputBultoReubicar();
     }
 
     vaciarBultosReubicar(): void {
-        this.bultosReubicar = [];
-        this.ultimoBultoReubicado = null;
-        this.matSnackBar.open('Lista de reubicación vaciada', 'OK', { duration: 2000 });
-        this.enfocarInputBultoReubicar();
+        this.controlUbicacionesService.limpiarTemporalReubicacion().subscribe({
+            next: () => {
+                this.resetearDatosReubicacion();
+                this.matSnackBar.open('Lista de reubicación vaciada', 'OK', { duration: 2000 });
+                this.enfocarInputBultoReubicar();
+            },
+            error: () => {
+                this.resetearDatosReubicacion();
+                this.matSnackBar.open('Lista de reubicación vaciada', 'OK', { duration: 2000 });
+                this.enfocarInputBultoReubicar();
+            }
+        });
     }
 
     guardarReubicacion(): void {
         const ubicacion = (this.nuevaUbicacionDestino || '').trim().toUpperCase();
         if (this.bultosReubicar.length === 0) {
+            this.ReproducirError();
             this.matSnackBar.open('Debe escanear al menos un bulto para reubicar', 'Cerrar', { duration: 2500 });
             this.enfocarInputBultoReubicar();
             return;
         }
         if (!ubicacion) {
+            this.ReproducirError();
             this.matSnackBar.open('Ingrese la nueva ubicación', 'Cerrar', { duration: 2500 });
             return;
         }
 
-        this.matSnackBar.open(`Reubicación lista para procesar en ${ubicacion} (${this.bultosReubicar.length} bultos)`, 'OK', { duration: 3500 });
+        const cantidadBultos = this.bultosReubicar.length;
+
+        this.controlUbicacionesService.guardarReubicacion({
+            desUbicacion: ubicacion
+        }).subscribe({
+            next: (res) => {
+                if (res && res.element) {
+                    const data = res.element;
+                    if (data.cod === 1) {
+                        this.ReproducirOk();
+                        this.matSnackBar.open(`Reubicación de ${cantidadBultos} bulto(s) en ${ubicacion} guardada exitosamente`, 'OK', { duration: 3500 });
+                        this.resetearDatosReubicacion();
+                        this.goTo('inicio');
+                    } else {
+                        this.ReproducirError();
+                        this.matSnackBar.open(data.msg || res.message || 'No se pudo guardar la reubicación', 'Cerrar', { duration: 3500 });
+                    }
+                } else {
+                    this.ReproducirError();
+                    this.matSnackBar.open(res?.message || 'Error al guardar la reubicación', 'Cerrar', { duration: 3500 });
+                }
+            },
+            error: (err) => {
+                this.ReproducirError();
+                console.error(err);
+                const msg = err.error?.message || err.message || 'Error al conectar con el servidor';
+                this.matSnackBar.open('Error: ' + msg, 'Cerrar', { duration: 3500 });
+            }
+        });
     }
 
 }
