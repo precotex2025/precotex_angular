@@ -71,15 +71,18 @@
                     <ng-container matColumnDef="Firma">
                         <th mat-header-cell *matHeaderCellDef class="mat-header-cell"> Firma</th>
                         <td mat-cell *matCellDef="let element">
-                            <ng-container *ngIf="local && element.Firma != null">
+                            <!--<ng-container *ngIf="local && element.Firma != null">
                                 <img src="http://192.168.1.36/ws_android/{{element.Firma}}" width="100" height="100"
                                     alt="" srcset="">
                             </ng-container>
                             <ng-container *ngIf="!local && element.Firma != null">
                                 <img src="https://gestion.precotex.com/ws_android/{{element.Firma}}" width="100"
                                     height="100" alt="" srcset="">
-                            </ng-container>
+                            </ng-container>-->
 
+                            <ng-container>
+                                <img [src]="element.Imagen" style="max-width: 60px;" alt="">
+                            </ng-container>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="acciones">
