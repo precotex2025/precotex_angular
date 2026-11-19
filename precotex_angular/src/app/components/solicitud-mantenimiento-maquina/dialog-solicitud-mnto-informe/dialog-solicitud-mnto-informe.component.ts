@@ -333,9 +333,9 @@ ngOnInit(): void {
   }  
 
   CargarTareasSedes(Cod_Tarea: string){
-
+    let iCodPlanta = Number(this.data.sCod_Planta);
     this.listaTareas = [];
-    this.registromantemaquinastej.ListarTareaByArea(String(this.data.Datos.num_Planta), Cod_Tarea).subscribe({
+    this.registromantemaquinastej.ListarTareaByArea(String(iCodPlanta), Cod_Tarea).subscribe({
 
       next: (result:any) => {
 
